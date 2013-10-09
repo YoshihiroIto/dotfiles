@@ -147,13 +147,13 @@ nnoremap [unite]    <Nop>
 nmap     <Leader>u [unite]
 
 " grep検索
-nnoremap <silent> <Leader>g  :<C-u>Unite grep:. -auto-preview -buffer-name=search-buffer<CR>
+nnoremap <silent> [unite]g :<C-u>Unite grep:. -auto-preview -buffer-name=search-buffer<CR>
 
 " カーソル位置の単語をgrep検索
-nnoremap <silent> <Leader>cg :<C-u>Unite grep:. -auto-preview -buffer-name=search-buffer<CR><C-R><C-W><CR>
+nnoremap <silent> [unite]cg :<C-u>Unite grep:. -auto-preview -buffer-name=search-buffer<CR><C-R><C-W><CR>
 
 " grep検索結果の再呼出
-nnoremap <silent> <Leader>r  :<C-u>UniteResume search-buffer<CR>
+nnoremap <silent> [unite]r :<C-u>UniteResume search-buffer<CR>
 
 " アウトライン
 nnoremap <silent> [unite]o :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow -no-quit outline<CR>
@@ -167,12 +167,13 @@ nnoremap <silent> [unite]m :<C-u>Unite file_mru<CR>
 nnoremap <silent> [unite]b :<C-u>Unite buffer<CR>
 
 " unite grep に ag(The Silver Searcher) を使う
-if executable('ag')
-	let g:unite_source_grep_command       = 'ag'
-	let g:unite_source_grep_default_opts  = '--nogroup --nocolor --column'
-	let g:unite_source_grep_recursive_opt = ''
+if s:isMac
+	if executable('ag')
+		let g:unite_source_grep_command       = 'ag'
+		let g:unite_source_grep_default_opts  = '--nogroup --nocolor --column'
+		let g:unite_source_grep_recursive_opt = ''
+	endif
 endif
-
 "}}}
 "VimFiler {{{
 
@@ -669,8 +670,8 @@ vnoremap	>		>gv
 "折り畳み {{{
 
 " http://vim.g.hatena.ne.jp/ka-nacht/20080630/1214799208
-map <expr> h col('.') == 1 && foldlevel(line('.')) > 0 ? 'zc' : 'h'
-map <expr> l foldclosed(line('.')) != -1 ? 'zo' : 'l'
+map <expr> <C-h> col('.') == 1 && foldlevel(line('.')) > 0 ? 'zc' : '<C-h>'
+" map <expr> l foldclosed(line('.')) != -1 ? 'zo' : 'l'
 
 "}}}
 "ファイル操作 {{{
