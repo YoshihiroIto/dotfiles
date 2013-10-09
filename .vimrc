@@ -9,6 +9,7 @@ let s:isMac       = has('mac')
 let s:metaKey     = s:isWindows ? 'M' : 'D'
 let g:baseColumns = s:isWindows ? 140 : 100
 let $DOTVIM       = s:isWindows ? expand('~/vimfiles') : expand('~/.vim')
+let mapleader     = ","
 
 "}}}
 "プラグイン {{{
@@ -143,16 +144,16 @@ endif
 let g:unite_enable_start_insert = 1
 
 " grep検索
-nnoremap <silent> ,g  :<C-u>Unite grep:. -auto-preview -buffer-name=search-buffer<CR>
+nnoremap <silent> <Leader>g  :<C-u>Unite grep:. -auto-preview -buffer-name=search-buffer<CR>
 
 " カーソル位置の単語をgrep検索
-nnoremap <silent> ,cg :<C-u>Unite grep:. -auto-preview -buffer-name=search-buffer<CR><C-R><C-W><CR>
+nnoremap <silent> <Leader>cg :<C-u>Unite grep:. -auto-preview -buffer-name=search-buffer<CR><C-R><C-W><CR>
 
 " grep検索結果の再呼出
-nnoremap <silent> ,r  :<C-u>UniteResume search-buffer<CR>
+nnoremap <silent> <Leader>r  :<C-u>UniteResume search-buffer<CR>
 
 " アウトライン
-nnoremap <silent> ,o :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow -no-quit outline<CR>
+nnoremap <silent> <Leader>o :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow -no-quit outline<CR>
 
 " MRU リスト
 exe 'nmap <silent> <'.s:metaKey.'-1> :Unite file_mru<CR>'
@@ -498,6 +499,7 @@ filetype plugin on                " ファイルタイプごとのプラグイ�
 if has('migemo')
 	set migemo                        " 日本語インクリメンタルサーチ
 endif
+
 "}}}
 "ファイルタイプごとの設定 {{{
 augroup file-setting
@@ -613,14 +615,14 @@ exe 'map  <silent> <'.s:metaKey.'-w> :call SmartClose()<CR>'
 
 " アプリウィンドウの移動とリサイズ
 if has('gui_running')
-	noremap			<silent>,H	:call ResizeWin()<CR>
-	noremap			<silent>,J	:call ResizeWin()<CR>
-	noremap			<silent>,K	:call ResizeWin()<CR>
-	noremap			<silent>,L	:call ResizeWin()<CR>
-	noremap			<silent>,h	:MoveWin<CR>
-	noremap			<silent>,j	:MoveWin<CR>
-	noremap			<silent>,k	:MoveWin<CR>
-	noremap			<silent>,l	:MoveWin<CR>
+	noremap			<silent><Leader>H	:call ResizeWin()<CR>
+	noremap			<silent><Leader>J	:call ResizeWin()<CR>
+	noremap			<silent><Leader>K	:call ResizeWin()<CR>
+	noremap			<silent><Leader>L	:call ResizeWin()<CR>
+	noremap			<silent><Leader>h	:MoveWin<CR>
+	noremap			<silent><Leader>j	:MoveWin<CR>
+	noremap			<silent><Leader>k	:MoveWin<CR>
+	noremap			<silent><Leader>l	:MoveWin<CR>
 	exe 'noremap  <silent> <'.s:metaKey.'-f> :call FullWindow()<CR>'
 endif
 
@@ -679,7 +681,7 @@ exe 'map  <silent> <'.s:metaKey.'-s> :write<cr>'
 
 " http://qiita.com/wadako111/items/755e753677dd72d8036d
 nnoremap    [Tab]   <Nop>
-nmap   ,t  [Tab]
+nmap   <Leader>t  [Tab]
 
 nnoremap <silent> [Tab]c :tabnew<CR>
 nnoremap <silent> [Tab]x :tabclose<CR>
@@ -692,7 +694,7 @@ endfor
 "バッファ {{{
 
 nnoremap    [Buffer]   <Nop>
-nmap   ,b  [Buffer]
+nmap   <Leader>b  [Buffer]
 
 nnoremap <silent>[Buffer]x	:bdelete<CR>
 
