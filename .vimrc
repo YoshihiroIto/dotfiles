@@ -143,6 +143,9 @@ endif
 " insert modeで開始
 let g:unite_enable_start_insert = 1
 
+nnoremap [unite]    <Nop>
+nmap     <Leader>u [unite]
+
 " grep検索
 nnoremap <silent> <Leader>g  :<C-u>Unite grep:. -auto-preview -buffer-name=search-buffer<CR>
 
@@ -153,13 +156,15 @@ nnoremap <silent> <Leader>cg :<C-u>Unite grep:. -auto-preview -buffer-name=searc
 nnoremap <silent> <Leader>r  :<C-u>UniteResume search-buffer<CR>
 
 " アウトライン
-nnoremap <silent> <Leader>o :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow -no-quit outline<CR>
+nnoremap <silent> [unite]o :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow -no-quit outline<CR>
 
 " MRU リスト
-exe 'nmap <silent> <'.s:metaKey.'-1> :Unite file_mru<CR>'
+" exe 'nmap <silent> <'.s:metaKey.'-1> :Unite file_mru<CR>'
+nnoremap <silent> [unite]m :<C-u>Unite file_mru<CR>
 
 " バッファ
-exe 'nmap <silent> <'.s:metaKey.'-2> :Unite buffer<CR>'
+" exe 'nmap <silent> <'.s:metaKey.'-2> :Unite buffer<CR>'
+nnoremap <silent> [unite]b :<C-u>Unite buffer<CR>
 
 " unite grep に ag(The Silver Searcher) を使う
 if executable('ag')
