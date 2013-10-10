@@ -9,7 +9,7 @@ let s:isMac       = has('mac')
 let s:metaKey     = s:isWindows ? 'M' : 'D'
 let g:baseColumns = s:isWindows ? 140 : 100
 let $DOTVIM       = s:isWindows ? expand('~/vimfiles') : expand('~/.vim')
-let mapleader     = ","
+let mapleader     = ','
 
 "}}}
 "プラグイン {{{
@@ -36,6 +36,7 @@ NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'tpope/vim-repeat'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'LeafCage/foldCC'
+
 NeoBundle 'Shougo/vimproc', {
 			\	'build' : {
 			\		'windows' : 'make -f make_mingw32.mak',
@@ -118,6 +119,17 @@ NeoBundleLazy 'majutsushi/tagbar', {
 			\   }
 			\ }
 
+NeoBundleLazy 'basyura/TweetVim', {
+			\   'depends' : [ "Shougo/unite.vim", 'basyura/twibill.vim', 'tyru/open-browser.vim', 'mattn/webapi-vim', 'Shougo/unite-outline'],
+			\   'autoload' : {
+			\       'commands' : [ "TweetVimHomeTimeline", "TweetVimMentions", "TweetVimListStatuses", "TweetVimUserTimeline", "TweetVimSay", "TweetVimSearch" ]
+			\   }
+			\ }
+
+NeoBundleLazy 'tyru/open-browser.vim'
+NeoBundleLazy 'basyura/twibill.vim'
+NeoBundleLazy 'mattn/webapi-vim'
+
 if s:isMac 
 	NeoBundleLazy 'itchyny/dictionary.vim', {
 				\   'autoload' : {
@@ -146,25 +158,13 @@ let g:unite_enable_start_insert = 1
 nnoremap [unite]    <Nop>
 nmap     <Leader>u [unite]
 
-" grep検索
-nnoremap <silent> [unite]g :<C-u>Unite grep:. -auto-preview -buffer-name=search-buffer<CR>
-
-" カーソル位置の単語をgrep検索
+nnoremap <silent> [unite]g  :<C-u>Unite grep:. -auto-preview -buffer-name=search-buffer<CR>
 nnoremap <silent> [unite]cg :<C-u>Unite grep:. -auto-preview -buffer-name=search-buffer<CR><C-R><C-W><CR>
+nnoremap <silent> [unite]r  :<C-u>UniteResume search-buffer<CR>
 
-" grep検索結果の再呼出
-nnoremap <silent> [unite]r :<C-u>UniteResume search-buffer<CR>
-
-" アウトライン
-nnoremap <silent> [unite]o :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow -no-quit outline<CR>
-
-" MRU リスト
-" exe 'nmap <silent> <'.s:metaKey.'-1> :Unite file_mru<CR>'
-nnoremap <silent> [unite]m :<C-u>Unite file_mru<CR>
-
-" バッファ
-" exe 'nmap <silent> <'.s:metaKey.'-2> :Unite buffer<CR>'
-nnoremap <silent> [unite]b :<C-u>Unite buffer<CR>
+nnoremap <silent> [unite]o  :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow -no-quit outline<CR>
+nnoremap <silent> [unite]m  :<C-u>Unite file_mru<CR>
+nnoremap <silent> [unite]b  :<C-u>Unite buffer<CR>
 
 " unite grep に ag(The Silver Searcher) を使う
 if s:isMac
@@ -243,6 +243,34 @@ let g:EasyMotiselect_phrase = 0
 hi EasyMotionTarget ctermbg=none ctermfg=red
 hi easymotionshade  ctermbg=none ctermfg=blue
 
+"}}}
+"Tweetvim {{{
+
+noremap		<silent><F10>		:call FlipTweetVim()<cr>
+
+augroup tweetvim-vim
+	autocmd!
+
+	let g:isOpendTweetVim = 0
+	function! FlipTweetVim()
+		if g:isOpendTweetVim == 1
+			call ExitTweetVim()
+			let g:isOpendTweetVim = 0
+		else
+			call LaunchTweetVim()
+			let g:isOpendTweetVim = 1
+		endif
+	endfunction
+
+	function! LaunchTweetVim()
+		tabnew
+		TweetVimHomeTimeline
+	endfunction
+
+	function! ExitTweetVim()
+		tabclose
+	endfunction
+augroup END
 "}}}
 "lingr.vim {{{
 
@@ -437,8 +465,8 @@ endfunction
 "}}}
 "vim-anzu {{{
 "http://qiita.com/shiena/items/f53959d62085b7980cb5
-nmap n <Plug>(anzu-n)zz
-nmap N <Plug>(anzu-N)zz
+nmap n <Plug>(anzu-n)zOzz
+nmap N <Plug>(anzu-N)zOzz
 nmap * <Plug>(anzu-star)
 nmap # <Plug>(anzu-sharp)
 
@@ -636,7 +664,7 @@ endif
 "検索 {{{
 
 "検索時のハイライトを解除
-nnoremap	<silent>,/		:nohlsearch<CR>
+nnoremap	<silent><Leader>/		:nohlsearch<CR>
 
 "}}}
 "カーソル移動 {{{
@@ -658,7 +686,8 @@ vnoremap	<silent><C-y>	<C-y>k
 "補間 {{{
 
 "中括弧補間
-imap		<silent>{<CR>	{<CR>}<UP><CR>		"}
+imap		<silent>{<CR>	{<CR>}<UP><CR>
+"}
 
 "}}}
 "インデント {{{
@@ -670,8 +699,10 @@ vnoremap	>		>gv
 "折り畳み {{{
 
 " http://vim.g.hatena.ne.jp/ka-nacht/20080630/1214799208
-map <expr> <C-h> col('.') == 1 && foldlevel(line('.')) > 0 ? 'zc' : '<C-h>'
+" map <expr> <C-h> col('.') == 1 && foldlevel(line('.')) > 0 ? 'zc' : '<C-h>'
 " map <expr> l foldclosed(line('.')) != -1 ? 'zo' : 'l'
+map <expr> <C-h> foldlevel(line('.')) > 0 ? 'zc' : '<C-h>'
+map <expr> <C-l> foldclosed(line('.')) != -1 ? 'zo' : '<C-l>'
 
 "}}}
 "ファイル操作 {{{
