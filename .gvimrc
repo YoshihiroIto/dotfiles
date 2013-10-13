@@ -1,5 +1,7 @@
-" カラースキーマ
+"カラースキーマ{{{
+
 colorscheme molokai
+
 hi Comment         guifg=#AEDEDE
 hi DiffText                      guibg=#4C4745 gui=bold
 hi Macro           guifg=#C4BE89               gui=none
@@ -12,8 +14,8 @@ hi FoldColumn      guifg=#465457 guibg=#242526
 hi Folded          guifg=#465457 guibg=#242526
 hi VertSplit       guifg=#202020 guibg=#202020 gui=bold	"見えなくする
 
-" 幅
-let &columns=g:baseColumns
+"}}}
+"GUI見た目{{{
 
 " ツールバー削除
 set guioptions-=T
@@ -31,7 +33,9 @@ set guioptions-=L
 "テキストベースタブ
 set guioptions-=e
 
-" フォント
+"}}}
+"フォント設定{{{
+
 if has("gui_win32")
 	" set ambiwidth=single
 	" set rop=type:directx
@@ -47,21 +51,20 @@ elseif has("gui_macvim")
 	set antialias
 endif
 
-" 日本語入力中のカーソルの色
+"}}}
+"日本語入力中のカーソルの色{{{
+
 highlight CursorIM guifg=NONE guibg=Red
 
-" ビープをならさない
-set visualbell t_vb=
+"}}}
+"ウィンドウの位置とサイズを記憶する{{{
 
-" タブラインを常時表示
-set showtabline=2
-
-" ウィンドウの位置とサイズを記憶する
 " http://vim-users.jp/2010/01/hack120/
 let g:save_window_file = expand('~/.vimwinpos')
 augroup SaveWindow
 	autocmd!
 	autocmd VimLeavePre * call s:save_window()
+
 	function! s:save_window()
 		let options = [
 					\ 'set columns=' . &columns,
@@ -73,10 +76,11 @@ augroup SaveWindow
 augroup END
 
 if filereadable(g:save_window_file)
-	execute 'source' g:save_window_file
+	exe 'source' g:save_window_file
 endif
 
-" コマンドキーのショートカットを削除する
+" }}}
+"コマンドキーのショートカットを削除する{{{
 if has('gui_macvim')
 	macm File.New\ Window								key=<nop>
 	macm File.New\ Tab									key=<nop>
@@ -124,4 +128,5 @@ if has('gui_macvim')
 
 	macm Help.MacVim\ Help								key=<nop>
 endif
+" }}}
 
