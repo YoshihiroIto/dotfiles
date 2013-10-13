@@ -184,6 +184,12 @@ nnoremap <silent> [Unite]o  :<C-u>Unite -vertical -winwidth=40 -direction=rightb
 nnoremap <silent> [Unite]m  :<C-u>Unite file_mru<CR>
 nnoremap <silent> [Unite]b  :<C-u>Unite buffer<CR>
 
+" 無指定にすることで高速化
+let g:unite_source_file_mru_filename_format = ''
+
+" most recently used のリストサイズ
+let g:unite_source_file_mru_limit = 100
+
 " unite grep に ag(The Silver Searcher) を使う
 if s:isMac
     if executable('ag')
@@ -582,6 +588,7 @@ augroup file-setting
     autocmd!
     autocmd BufEnter            *           call s:SetCurrentDir()
     autocmd BufNewFile,BufRead  *.xaml      setf xml
+    autocmd FileType            *           setlocal formatoptions-=ro      " コメント補完しない
     autocmd FileType            ruby        setlocal foldmethod=syntax tabstop=2 shiftwidth=2 softtabstop=2
     autocmd FileType            c,cpp,cs    setlocal foldmethod=syntax
     autocmd FileType            vim         setlocal foldmethod=marker foldlevel=0 foldcolumn=3
@@ -613,7 +620,7 @@ filetype indent on                " ファイルタイプごとのインデン�
 set autoindent
 set smartindent
 set cindent                       " Cプログラムファイルの自動インデントを始める
-  
+
 vnoremap    <       <gv
 vnoremap    >       >gv
 
@@ -1103,13 +1110,13 @@ endfunction
 "ファイルコピー{{{
 function! s:CopyFile(sourceFilepath, targetFilepath)
 
-    let esource = shellescape(expand(a:sourceFilepath))
-    let etarget = shellescape(expand(a:targetFilepath))
+    let esource = vimproc#shellescape(expand(a:sourceFilepath))
+    let etarget = vimproc#shellescape(expand(a:targetFilepath))
     
     if s:isWindows
-        call vimproc#system('copy ' . esource . ' ' . etarget)
+        call vimproc#system_bg('copy ' . esource . ' ' . etarget)
     else
-        call vimproc#system('cp ' . esource . ' ' . etarget)
+        call vimproc#system_bg('cp ' . esource . ' ' . etarget)
     endif
 endfunction
 "}}}
@@ -1124,13 +1131,13 @@ endfunction
 "ディレクトリ削除{{{
 function! s:RemoveDir(path)
 
-    let epath = shellescape(expand(a:path)) 
+    let epath = vimproc#shellescape(expand(a:path)) 
 
     if isdirectory(a:path)
         if s:isWindows
-            call vimproc#system('rd /S /Q ' . epath)
+            call vimproc#system_bg('rd /S /Q ' . epath)
         else
-            call vimproc#system('rm -rf ' . epath)
+            call vimproc#system_bg('rm -rf ' . epath)
         endif
     endif
 endfunction
