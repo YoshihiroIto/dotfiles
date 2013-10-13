@@ -38,9 +38,9 @@ NeoBundle 'tpope/vim-repeat'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'othree/eregex.vim'
 
-NeoBundleLazy 'tyru/open-browser.vim'
 NeoBundleLazy 'basyura/twibill.vim'
 NeoBundleLazy 'mattn/webapi-vim'
+NeoBundleLazy 'tyru/open-browser.vim'
 
 NeoBundle 'Shougo/vimproc', {
             \   'build' : {
@@ -173,16 +173,16 @@ endif
 " insert modeで開始
 let g:unite_enable_start_insert = 1
 
-nnoremap [unite]    <Nop>
-nmap     <Leader>u  [unite]
+nnoremap [Unite]    <Nop>
+nmap     <Leader>u  [Unite]
 
-nnoremap <silent> [unite]g  :<C-u>Unite grep:. -auto-preview -buffer-name=search-buffer<CR>
-nnoremap <silent> [unite]cg :<C-u>Unite grep:. -auto-preview -buffer-name=search-buffer<CR><C-R><C-W><CR>
-nnoremap <silent> [unite]r  :<C-u>UniteResume search-buffer<CR>
+nnoremap <silent> [Unite]g  :<C-u>Unite grep:. -auto-preview -buffer-name=search-buffer<CR>
+nnoremap <silent> [Unite]cg :<C-u>Unite grep:. -auto-preview -buffer-name=search-buffer<CR><C-R><C-W><CR>
+nnoremap <silent> [Unite]r  :<C-u>UniteResume search-buffer<CR>
 
-nnoremap <silent> [unite]o  :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow -no-quit outline<CR>
-nnoremap <silent> [unite]m  :<C-u>Unite file_mru<CR>
-nnoremap <silent> [unite]b  :<C-u>Unite buffer<CR>
+nnoremap <silent> [Unite]o  :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow -no-quit outline<CR>
+nnoremap <silent> [Unite]m  :<C-u>Unite file_mru<CR>
+nnoremap <silent> [Unite]b  :<C-u>Unite buffer<CR>
 
 " unite grep に ag(The Silver Searcher) を使う
 if s:isMac
@@ -290,6 +290,8 @@ augroup lingr-vim
 
     function! s:SetLingrSetting()
         let b:disableSmartClose = 0
+
+        exe 'map  <buffer><silent> <' . s:metaKey . '-w> :<C-u>call <SID>ToggleLingr()<CR>'
     endfunction
 augroup END
 
@@ -685,7 +687,8 @@ if has('migemo')
 endif
 
 "検索時のハイライトを解除
-nnoremap    <silent><Leader>/       :nohlsearch<CR>
+nnoremap    <silent><Leader>/   :nohlsearch<CR>
+" cnoremap    <silent><CR>        <CR>zOzz:<C-u>call <SID>ForceShowCursolLine()<CR>
 
 "}}}
 "表示{{{
@@ -705,6 +708,7 @@ set t_vb=                         " ビープをならさない
 set lazyredraw                    " スクリプト実行中に画面を描画しない
 set wildmenu
 set wildmode=list:full            " コマンドライン補完を便利に
+set wildignorecase                " 補完時に大文字小文字を区別しない
 
 "全角スペースをハイライト {{{
 
