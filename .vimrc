@@ -242,7 +242,6 @@ unlet s:bundle
 "}}}
 "FoldCC {{{
 
-set foldtext=foldCC#foldtext()
 let g:foldCCtext_enable_autofdc_adjuster = 1
 
 "}}}
@@ -775,6 +774,7 @@ augroup END
 
 set foldcolumn=1
 set foldlevel=99
+set foldtext=foldCC#foldtext()
 
 nnoremap    [Folding]       <Nop>
 nmap        <Leader>f   [Folding]
