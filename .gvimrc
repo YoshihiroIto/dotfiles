@@ -82,51 +82,51 @@ endif
 " }}}
 "コマンドキーのショートカットを削除する{{{
 if has('gui_macvim')
-    macm File.New\ Window                               key=<nop>
-    macm File.New\ Tab                                  key=<nop>
-    macm File.Open\.\.\.                                key=<nop>
-    macm File.Open\ Tab\.\.\.<Tab>:tabnew               key=<nop>
-    macm File.Close\ Window<Tab>:qa                     key=<nop>
-    macm File.Close                                     key=<nop>
-    macm File.Save<Tab>:w                               key=<nop>
-    macm File.Save\ All                                 key=<nop>
-    macm File.Save\ As\.\.\.<Tab>:sav                   key=<nop>
-    macm File.Print                                     key=<nop>
+    macm File.New\ Window                               key=<Nop>
+    macm File.New\ Tab                                  key=<Nop>
+    macm File.Open\.\.\.                                key=<Nop>
+    macm File.Open\ Tab\.\.\.<Tab>:tabnew               key=<Nop>
+    macm File.Close\ Window<Tab>:qa                     key=<Nop>
+    macm File.Close                                     key=<Nop>
+    macm File.Save<Tab>:w                               key=<Nop>
+    macm File.Save\ All                                 key=<Nop>
+    macm File.Save\ As\.\.\.<Tab>:sav                   key=<Nop>
+    macm File.Print                                     key=<Nop>
 
-    macm Edit.Undo<Tab>u                                key=<nop>
-    macm Edit.Redo<Tab>^R                               key=<nop>
-    macm Edit.Cut<Tab>"+x                               key=<nop>
-    macm Edit.Copy<Tab>"+y                              key=<nop>
-    macm Edit.Paste<Tab>"+gP                            key=<nop>
-    macm Edit.Select\ All<Tab>ggVG                      key=<nop>
-    macm Edit.Find.Find\.\.\.                           key=<nop>
-    macm Edit.Find.Find\ Next                           key=<nop>
-    macm Edit.Find.Find\ Previous                       key=<nop>
-    macm Edit.Find.Use\ Selection\ for\ Find            key=<nop>
-    macm Edit.Font.Bigger                               key=<nop>
-    macm Edit.Font.Smaller                              key=<nop>
-    macm Edit.Special\ Characters\.\.\.                 key=<nop>
+    macm Edit.Undo<Tab>u                                key=<Nop>
+    macm Edit.Redo<Tab>^R                               key=<Nop>
+    macm Edit.Cut<Tab>"+x                               key=<Nop>
+    macm Edit.Copy<Tab>"+y                              key=<Nop>
+    macm Edit.Paste<Tab>"+gP                            key=<Nop>
+    macm Edit.Select\ All<Tab>ggVG                      key=<Nop>
+    macm Edit.Find.Find\.\.\.                           key=<Nop>
+    macm Edit.Find.Find\ Next                           key=<Nop>
+    macm Edit.Find.Find\ Previous                       key=<Nop>
+    macm Edit.Find.Use\ Selection\ for\ Find            key=<Nop>
+    macm Edit.Font.Bigger                               key=<Nop>
+    macm Edit.Font.Smaller                              key=<Nop>
+    macm Edit.Special\ Characters\.\.\.                 key=<Nop>
 
-    macm Tools.Spelling.To\ Next\ error<Tab>]s          key=<nop>
-    macm Tools.Spelling.Suggest\ Corrections<Tab>z=     key=<nop>
-    macm Tools.Make<Tab>:make                           key=<nop>
-    macm Tools.List\ Errors<Tab>:cl                     key=<nop>
-    macm Tools.Next\ Error<Tab>:cn                      key=<nop>
-    macm Tools.Previous\ Error<Tab>:cp                  key=<nop>
-    macm Tools.Older\ List<Tab>:cold                    key=<nop>
-    macm Tools.Newer\ List<Tab>:cnew                    key=<nop>
+    macm Tools.Spelling.To\ Next\ error<Tab>]s          key=<Nop>
+    macm Tools.Spelling.Suggest\ Corrections<Tab>z=     key=<Nop>
+    macm Tools.Make<Tab>:make                           key=<Nop>
+    macm Tools.List\ Errors<Tab>:cl                     key=<Nop>
+    macm Tools.Next\ Error<Tab>:cn                      key=<Nop>
+    macm Tools.Previous\ Error<Tab>:cp                  key=<Nop>
+    macm Tools.Older\ List<Tab>:cold                    key=<Nop>
+    macm Tools.Newer\ List<Tab>:cnew                    key=<Nop>
 
-    macm Window.Minimize                                key=<nop>
-    macm Window.Minimize\ All                           key=<nop>
-    macm Window.Zoom                                    key=<nop>
-    macm Window.Zoom\ All                               key=<nop>
-    macm Window.Toggle\ Full\ Screen\ Mode              key=<nop>
-    macm Window.Select\ Next\ Tab                       key=<nop>
-    macm Window.Select\ Previous\ Tab                   key=<nop>
-    macm ウインドウ.前のウインドウ                      key=<nop>
-    macm ウインドウ.次のウインドウ                      key=<nop>
+    macm Window.Minimize                                key=<Nop>
+    macm Window.Minimize\ All                           key=<Nop>
+    macm Window.Zoom                                    key=<Nop>
+    macm Window.Zoom\ All                               key=<Nop>
+    macm Window.Toggle\ Full\ Screen\ Mode              key=<Nop>
+    macm Window.Select\ Next\ Tab                       key=<Nop>
+    macm Window.Select\ Previous\ Tab                   key=<Nop>
+    macm ウインドウ.前のウインドウ                      key=<Nop>
+    macm ウインドウ.次のウインドウ                      key=<Nop>
 
-    macm Help.MacVim\ Help                              key=<nop>
+    macm Help.MacVim\ Help                              key=<Nop>
 endif
 " }}}
 

@@ -213,7 +213,7 @@ function! s:bundle.hooks.on_source(bundle)
 endfunction
 unlet s:bundle
 
-exe 'map  <silent> <'.s:metaKey.'-o> :VimFilerBufferDir<CR>'
+exe 'map  <silent> <' . s:metaKey . '-o> :VimFilerBufferDir<CR>'
 
 "}}}
 "Omnisharp {{{
@@ -268,7 +268,7 @@ hi easymotionshade  ctermbg=none ctermfg=blue
 "}}}
 "lingr.vim {{{
 
-noremap     <silent><F9>        :<C-u>call <SID>ToggleLingr()<cr>
+noremap     <silent><F9>        :<C-u>call <SID>ToggleLingr()<CR>
 
 let g:lingr_vim_say_buffer_height = 15
 
@@ -305,7 +305,7 @@ endfunction
 "}}}
 "Tweetvim {{{
 
-noremap     <silent><F10>       :<C-u>call <SID>ToggleTweetVim()<cr>
+noremap     <silent><F10>       :<C-u>call <SID>ToggleTweetVim()<CR>
 
 let g:tweetvim_include_rts       = 1
 let g:tweetvim_display_separator = 0
@@ -464,10 +464,10 @@ endfunction
 "vim-anzu {{{
 
 "http://qiita.com/shiena/items/f53959d62085b7980cb5
-nmap <silent> n <Plug>(anzu-n)zOzz:<C-u>call <SID>ForceShowCursolLine()<cr>
-nmap <silent> N <Plug>(anzu-N)zOzz:<C-u>call <SID>ForceShowCursolLine()<cr>
-nmap <silent> * <Plug>(anzu-star)zOzz:<C-u>call <SID>ForceShowCursolLine()<cr>
-nmap <silent> # <Plug>(anzu-sharp)zOzz:<C-u>call <SID>ForceShowCursolLine()<cr>
+nmap <silent> n <Plug>(anzu-n)zOzz:<C-u>call <SID>ForceShowCursolLine()<CR>
+nmap <silent> N <Plug>(anzu-N)zOzz:<C-u>call <SID>ForceShowCursolLine()<CR>
+nmap <silent> * <Plug>(anzu-star)zOzz:<C-u>call <SID>ForceShowCursolLine()<CR>
+nmap <silent> # <Plug>(anzu-sharp)zOzz:<C-u>call <SID>ForceShowCursolLine()<CR>
 
 augroup vim-anzu
     " 一定時間キー入力がないとき、ウインドウを移動したとき、タブを移動したときに
@@ -798,9 +798,9 @@ vnoremap        <C-j>       <Esc>
 set splitbelow                    " 縦分割したら新しいウィンドウは下に
 set splitright                    " 横分割したら新しいウィンドウは右に
 
-exe 'map  <silent> <'.s:metaKey.'-e> :<C-u>call <SID>CloseVSplitWide()<cr>'
-exe 'map  <silent> <'.s:metaKey.'-E> :<C-u>call <SID>OpenVSplitWide()<cr>'
-exe 'map  <silent> <'.s:metaKey.'-w> :<C-u>call <SID>SmartClose()<CR>'
+exe 'map  <silent> <' . s:metaKey . '-e> :<C-u>call <SID>CloseVSplitWide()<CR>'
+exe 'map  <silent> <' . s:metaKey . '-E> :<C-u>call <SID>OpenVSplitWide()<CR>'
+exe 'map  <silent> <' . s:metaKey . '-w> :<C-u>call <SID>SmartClose()<CR>'
 
 " アプリウィンドウの移動とリサイズ
 if has('gui_running')
@@ -812,7 +812,7 @@ if has('gui_running')
     noremap         <silent><Leader>j   :MoveWin<CR>
     noremap         <silent><Leader>k   :MoveWin<CR>
     noremap         <silent><Leader>l   :MoveWin<CR>
-    exe 'noremap  <silent> <'.s:metaKey.'-f> :<C-u>call <SID>FullWindow()<CR>'
+    exe 'noremap  <silent> <' . s:metaKey . '-f> :<C-u>call <SID>FullWindow()<CR>'
 endif
 
 "}}}
@@ -830,8 +830,8 @@ nnoremap    <silent><C-e>   <C-e>j
 nnoremap    <silent><C-y>   <C-y>k
 vnoremap    <silent><C-e>   <C-e>j
 vnoremap    <silent><C-y>   <C-y>k
-nmap        <silent>gg      ggzOzz:<C-u>call <SID>ForceShowCursolLine()<cr>
-nmap        <silent>GG      GGzOzz:<C-u>call <SID>ForceShowCursolLine()<cr>
+nmap        <silent>gg      ggzOzz:<C-u>call <SID>ForceShowCursolLine()<CR>
+nmap        <silent>GG      GGzOzz:<C-u>call <SID>ForceShowCursolLine()<CR>
 
 "}}}
 "タブライン操作 {{{
@@ -868,7 +868,7 @@ endfor
 nnoremap    <silent><F1>    :<C-u>call <SID>SmartOpen($MYVIMRC)<CR>
 nnoremap    <silent><F2>    :<C-u>call <SID>SmartOpen($MYGVIMRC)<CR>
 
-exe 'map  <silent> <'.s:metaKey.'-s> :write<cr>'
+exe 'map  <silent> <' . s:metaKey . '-s> :write<cr>'
 
 "}}}
 "ヘルプ {{{
