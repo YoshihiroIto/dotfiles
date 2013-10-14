@@ -530,6 +530,8 @@ function! s:bundle.hooks.on_source(bundle)
     inoremap <expr> != smartchr#loop(' != ')
     inoremap <expr> &= smartchr#loop(' &= ')
     inoremap <expr> ^= smartchr#loop(' ^= ')
+    inoremap <expr> >= smartchr#loop(' >= ')
+    inoremap <expr> <= smartchr#loop(' <= ')
     inoremap <expr> <Bar>= smartchr#loop(' <Bar>= ')
 
     " inoremap <expr> <  smartchr#loop(' < ', ' << ', '<')
@@ -611,6 +613,9 @@ set imsearch=0                    " 検索モードでのデフォルトのIME�
 
 inoremap    ¥   \
 inoremap    \   ¥
+
+" 最後に編集したところを選択
+nnoremap gt     `[v`]
 
 "}}}
 "インデント {{{
@@ -856,6 +861,9 @@ nmap        <Leader>t   [Tab]
 nnoremap <silent> [Tab]c :tabnew<CR>
 nnoremap <silent> [Tab]x :tabclose<CR>
 
+nnoremap <C-J>       :tabnext<CR>  
+nnoremap <C-K>       :tabprev<CR>
+
 for n in range(1, 9)
     exe 'nnoremap <silent> [Tab]'.n  ':<C-u>tabnext'.n.'<CR>'
 endfor
@@ -867,6 +875,9 @@ nnoremap    [Buffer]    <Nop>
 nmap        <Leader>b   [Buffer]
 
 nnoremap <silent>[Buffer]x  :bdelete<CR>
+
+exe 'noremap  <' . s:metaKey . '-j> :bnext<CR>'
+exe 'noremap  <' . s:metaKey . '-k> :bprev<CR>'
 
 for n in range(1, 9)
     exe 'nnoremap <silent> [Buffer]'.n  ':<C-u>b'.n.'<CR>'
@@ -884,8 +895,10 @@ exe 'map  <silent> <' . s:metaKey . '-s> :write<cr>'
 "}}}
 "ヘルプ {{{
 
-set keywordprg=                   " Kでhelpを開く
 set helplang=ja,en
+
+nnoremap    K   :<C-u>help 
+nnoremap    KK  :<C-u>help <C-r><C-w><CR>
 
 "}}}
 "汎用関数 {{{
@@ -1130,8 +1143,7 @@ endfunction
 "}}}
 "ディレクトリ削除{{{
 function! s:RemoveDir(path)
-
-    let epath = vimproc#shellescape(expand(a:path)) 
+   let epath = vimproc#shellescape(expand(a:path)) 
 
     if isdirectory(a:path)
         if s:isWindows
