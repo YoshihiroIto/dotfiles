@@ -77,7 +77,8 @@ NeoBundleLazy 'kana/vim-smartinput', {
 
 NeoBundleLazy 'h1mesuke/vim-alignta', {
             \   'autoload' : {
-            \       'commands' : [ 'Alignta' ]
+            \       'unite_sources' : [ 'alignta' ],
+            \       'commands'      : [ 'Alignta' ]
             \   }
             \ }
 
@@ -96,7 +97,7 @@ NeoBundleLazy 'rking/ag.vim', {
 
 NeoBundleLazy 'Shougo/unite-outline', {
             \   'autoload' : {
-            \       'unite_sources': [ 'outline' ],
+            \       'unite_sources' : [ 'outline' ],
             \   }
             \ }
 
@@ -185,7 +186,7 @@ nnoremap <silent> [Unite]r  :<C-u>UniteResume search-buffer<CR>
 nnoremap <silent> [Unite]o  :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow -no-quit outline<CR>
 nnoremap <silent> [Unite]m  :<C-u>Unite file_mru<CR>
 nnoremap <silent> [Unite]b  :<C-u>Unite buffer<CR>
-
+nnoremap <silent> [Unite]l  :<C-u>Unite -auto-preview line<CR>
 xnoremap <silent> [Unite]a  :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow alignta:arguments<CR>
 
 " 無指定にすることで高速化
@@ -550,7 +551,7 @@ unlet s:bundle
 
 let g:unite_source_alignta_preset_arguments = [
             \     ["Align at '='", '=>\='],
-            \     ["Align at ':'", '01 :'],
+            \     ["Align at ':'", ':'],
             \     ["Align at '|'", '|'],
             \     ["Align at '/'", '/\//'],
             \     ["Align at ','", ','],
