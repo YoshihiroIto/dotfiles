@@ -889,6 +889,7 @@ endfor
 "vimrc / gvimrc の編集 
 nnoremap    <silent><F1>    :<C-u>call <SID>SmartOpen($MYVIMRC)<CR>
 nnoremap    <silent><F2>    :<C-u>call <SID>SmartOpen($MYGVIMRC)<CR>
+nnoremap    <silent><F3>    :<C-u>source $MYVIMRC<CR>:source $MYGVIMRC<CR>
 
 exe 'map  <silent> <' . s:metaKey . '-s> :write<cr>'
 
@@ -1155,4 +1156,3 @@ function! s:RemoveDir(path)
 endfunction
 "}}}
 "}}}
-
