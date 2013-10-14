@@ -629,6 +629,8 @@ set imsearch=0                    " 検索モードでのデフォルトのIME�
 
 inoremap    ¥   \
 inoremap    \   ¥
+cnoremap    ¥   \
+cnoremap    \   ¥
 
 " 最後に編集したところを選択
 nnoremap gt     `[v`]
@@ -880,8 +882,8 @@ nnoremap <silent> [Tab]x :tabclose<CR>
 nnoremap <C-J>       :tabnext<CR>  
 nnoremap <C-K>       :tabprev<CR>
 
-for n in range(1, 9)
-    exe 'nnoremap <silent> [Tab]'.n  ':<C-u>tabnext'.n.'<CR>'
+for s:n in range(1, 9)
+    exe 'nnoremap <silent> [Tab]' . s:n  ':<C-u>tabnext' . s:n . '<CR>'
 endfor
 
 "}}}
@@ -895,8 +897,8 @@ nnoremap <silent>[Buffer]x  :bdelete<CR>
 exe 'noremap  <' . s:metaKey . '-j> :bnext<CR>'
 exe 'noremap  <' . s:metaKey . '-k> :bprev<CR>'
 
-for n in range(1, 9)
-    exe 'nnoremap <silent> [Buffer]'.n  ':<C-u>b'.n.'<CR>'
+for s:n in range(1, 9)
+    exe 'nnoremap <silent> [Buffer]' . s:n  ':<C-u>b' . s:n . '<CR>'
 endfor
 
 "}}}
