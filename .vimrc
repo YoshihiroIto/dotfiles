@@ -906,8 +906,13 @@ endfor
 
 "vimrc / gvimrc の編集 
 nnoremap    <silent><F1>    :<C-u>call <SID>SmartOpen($MYVIMRC)<CR>
-nnoremap    <silent><F2>    :<C-u>call <SID>SmartOpen($MYGVIMRC)<CR>
-nnoremap    <silent><F3>    :<C-u>source $MYVIMRC<CR>:source $MYGVIMRC<CR>
+
+if has('gui_running')
+    nnoremap    <silent><F2>    :<C-u>call <SID>SmartOpen($MYGVIMRC)<CR>
+    nnoremap    <silent><F3>    :<C-u>source $MYVIMRC<CR>:source $MYGVIMRC<CR>
+else
+    nnoremap    <silent><F3>    :<C-u>source $MYVIMRC<CR>
+endif
 
 exe 'map  <silent> <' . s:metaKey . '-s> :write<cr>'
 
