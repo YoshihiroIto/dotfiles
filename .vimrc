@@ -224,7 +224,7 @@ function! s:bundle.hooks.on_source(bundle)
 endfunction
 unlet s:bundle
 
-exe 'map  <silent> <' . s:metaKey . '-o> :VimFilerBufferDir<CR>'
+exe 'noremap  <silent> <' . s:metaKey . '-o> :VimFilerBufferDir<CR>'
 
 "}}}
 "Omnisharp {{{
@@ -258,7 +258,7 @@ let g:foldCCtext_enable_autofdc_adjuster = 1
 "}}}
 "TagBar {{{
 
-nmap        <F8>            :TagbarToggle<CR>
+noremap        <F8>            :TagbarToggle<CR>
 
 "}}}
 "vim-easymotion {{{
@@ -301,7 +301,7 @@ augroup lingr-vim
     function! s:SetLingrSetting()
         let b:disableSmartClose = 0
 
-        exe 'map  <buffer><silent> <' . s:metaKey . '-w> :<C-u>call <SID>ToggleLingr()<CR>'
+        exe 'noremap  <buffer><silent> <' . s:metaKey . '-w> :<C-u>call <SID>ToggleLingr()<CR>'
     endfunction
 augroup END
 
@@ -832,9 +832,9 @@ vnoremap        <C-j>       <Esc>
 set splitbelow                    " 縦分割したら新しいウィンドウは下に
 set splitright                    " 横分割したら新しいウィンドウは右に
 
-exe 'map  <silent> <' . s:metaKey . '-e> :<C-u>call <SID>CloseVSplitWide()<CR>'
-exe 'map  <silent> <' . s:metaKey . '-E> :<C-u>call <SID>OpenVSplitWide()<CR>'
-exe 'map  <silent> <' . s:metaKey . '-w> :<C-u>call <SID>SmartClose()<CR>'
+exe 'noremap  <silent> <' . s:metaKey . '-e> :<C-u>call <SID>CloseVSplitWide()<CR>'
+exe 'noremap  <silent> <' . s:metaKey . '-E> :<C-u>call <SID>OpenVSplitWide()<CR>'
+exe 'noremap  <silent> <' . s:metaKey . '-w> :<C-u>call <SID>SmartClose()<CR>'
 
 " アプリウィンドウの移動とリサイズ
 if has('gui_running')
@@ -914,7 +914,7 @@ else
     nnoremap    <silent><F3>    :<C-u>source $MYVIMRC<CR>
 endif
 
-exe 'map  <silent> <' . s:metaKey . '-s> :write<cr>'
+exe 'noremap  <silent> <' . s:metaKey . '-s> :write<cr>'
 
 "}}}
 "ヘルプ {{{
@@ -1082,7 +1082,7 @@ function! s:SmartOpen(filepath)
     "   exe 'tabnew' a:filepath
     " endif
 
-    exe ':edit ' . a:filepath
+    exe ':edit' a:filepath
     call s:CleanEmptyBuffers()
 endfunction
 "}}}
@@ -1132,7 +1132,7 @@ function! s:CleanEmptyBuffers()
 
     let buffers = filter(range(1, bufnr('$')), 'buflisted(v:val) && empty(bufname(v:val)) && bufwinnr(v:val)<0')
     if !empty(buffers)
-        exe 'bd '.join(buffers, ' ')
+        exe 'bd ' join(buffers, ' ')
     endif
 endfunction
 "}}}
