@@ -1114,9 +1114,9 @@ function! s:CopyFile(sourceFilepath, targetFilepath)
     let etarget = vimproc#shellescape(expand(a:targetFilepath))
     
     if s:isWindows
-        call vimproc#system_bg('copy ' . esource . ' ' . etarget)
+        call vimproc#system('copy ' . esource . ' ' . etarget)
     else
-        call vimproc#system_bg('cp ' . esource . ' ' . etarget)
+        call vimproc#system('cp ' . esource . ' ' . etarget)
     endif
 endfunction
 "}}}
