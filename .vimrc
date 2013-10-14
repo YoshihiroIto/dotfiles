@@ -174,7 +174,9 @@ endif
 let g:unite_enable_start_insert = 1
 
 nnoremap [Unite]    <Nop>
+xnoremap [Unite]    <Nop>
 nmap     <Leader>u  [Unite]
+xmap     <Leader>u  [Unite]
 
 nnoremap <silent> [Unite]g  :<C-u>Unite grep:. -auto-preview -buffer-name=search-buffer<CR>
 nnoremap <silent> [Unite]cg :<C-u>Unite grep:. -auto-preview -buffer-name=search-buffer<CR><C-R><C-W><CR>
@@ -183,6 +185,8 @@ nnoremap <silent> [Unite]r  :<C-u>UniteResume search-buffer<CR>
 nnoremap <silent> [Unite]o  :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow -no-quit outline<CR>
 nnoremap <silent> [Unite]m  :<C-u>Unite file_mru<CR>
 nnoremap <silent> [Unite]b  :<C-u>Unite buffer<CR>
+
+xnoremap <silent> [Unite]a  :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow alignta:arguments<CR>
 
 " 無指定にすることで高速化
 let g:unite_source_file_mru_filename_format = ''
@@ -540,6 +544,17 @@ function! s:bundle.hooks.on_source(bundle)
     " inoremap <expr> <<= smartchr#loop(' <<= ', '<<=')
 endfunction
 unlet s:bundle
+
+"}}}
+"vim-alignta{{{
+
+let g:unite_source_alignta_preset_arguments = [
+            \     ["Align at '='", '=>\='],
+            \     ["Align at ':'", '01 :'],
+            \     ["Align at '|'", '|'],
+            \     ["Align at '/'", '/\//'],
+            \     ["Align at ','", ','],
+            \ ]
 
 "}}}
 "}}}
