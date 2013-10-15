@@ -1150,11 +1150,13 @@ function! s:CopyFile(sourceFilepath, targetFilepath)
 
     let esource = vimproc#shellescape(expand(a:sourceFilepath))
     let etarget = vimproc#shellescape(expand(a:targetFilepath))
-    
+
     if s:isWindows
         call vimproc#system('copy ' . esource . ' ' . etarget)
-    else
+    elseif s:isMac
         call vimproc#system('cp ' . esource . ' ' . etarget)
+    else
+        throw 'Not supported.' 
     endif
 endfunction
 "}}}
@@ -1168,13 +1170,15 @@ endfunction
 "}}}
 "ディレクトリ削除{{{
 function! s:RemoveDir(path)
-   let epath = vimproc#shellescape(expand(a:path)) 
+    let epath = vimproc#shellescape(expand(a:path)) 
 
     if isdirectory(a:path)
         if s:isWindows
             call vimproc#system_bg('rd /S /Q ' . epath)
-        else
+        elseif s:isMac
             call vimproc#system_bg('rm -rf ' . epath)
+        else
+            throw 'Not supported.' 
         endif
     endif
 endfunction
