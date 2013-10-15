@@ -664,19 +664,32 @@ set backup                        " バックアップファイルを使う
 set backupdir=~/.vimbackup        " バックアップファイルをホームディレクトリに保存
 
 "自動ミラーリング{{{
-let g:mirrorDir = expand('~/vimmirror')
-let g:mirrorMaxHistory = 7
+let s:mirrorDir = expand('~/vimmirror')
+let s:mirrorMaxHistory = 7
 augroup auto-mirror
     autocmd!
+    autocmd VimEnter    * call s:TrimMirrorDirs()
     autocmd BufWritePre * call s:MirrorCurrentFile()
 
+    "古いミラーディレクトリを削除する 
+    function! s:TrimMirrorDirs()
+
+        let mirrorDirs = sort(split(glob(s:mirrorDir . '/*'),  '\n'))
+
+        while len(mirrorDirs) > s:mirrorMaxHistory 
+            let dir = remove(mirrorDirs, 0)
+            call s:RemoveDir(dir)
+        endwhile
+    endfunction
+
+    "カレントファイルをミラーリングする
     function! s:MirrorCurrentFile()
 
         let sourceFilepath = expand('%:p') 
 
         if filereadable(sourceFilepath)
             " ファイルパス作成
-            let currentMirrorDir = g:mirrorDir . '/' . strftime('%Y%m%d')
+            let currentMirrorDir = s:mirrorDir . '/' . strftime('%Y%m%d')
             let currentPostfix   = strftime('%H%M%S')
             let filename = expand('%:p:t:r')
             let ext      = expand('%:p:t:e')
@@ -686,16 +699,6 @@ augroup auto-mirror
             let outputFilepath = currentMirrorDir . '/' . filename . currentPostfix . ext
 
             " ミラー先ディレクトリを確認
-            call s:MakeDir(currentMirrorDir)
-
-            " 古いミラーディレクトリを削除する 
-            let mirrorDirs = sort(split(glob(g:mirrorDir . '/*'),  '\n'))
-            while len(mirrorDirs) > g:mirrorMaxHistory 
-                let dir = remove(mirrorDirs, 0)
-                call s:RemoveDir(dir)
-            endwhile
-
-            " ミラー先ディレクトリを確認(削除されている可能性あり)
             call s:MakeDir(currentMirrorDir)
 
             " 保存直前状態をミラー先にコピーする
