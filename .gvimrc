@@ -33,6 +33,9 @@ set guioptions-=L
 "テキストベースタブ
 set guioptions-=e
 
+" ビープをならさない
+set visualbell
+set t_vb=
 "}}}
 "フォント設定{{{
 

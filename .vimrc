@@ -732,8 +732,6 @@ set showmatch                     " 括弧の対応をハイライト
 set wrap                          " ウィンドウの幅より長い行は折り返して、次の行に続けて表示する
 set noshowmode                    " モードを表示しない（ステータスラインで表示するため）
 set shortmess+=I                  " 起動時のメッセージを表示しない
-set visualbell
-set t_vb=                         " ビープをならさない
 set lazyredraw                    " スクリプト実行中に画面を描画しない
 set wildmenu
 set wildmode=list:full            " コマンドライン補完を便利に
