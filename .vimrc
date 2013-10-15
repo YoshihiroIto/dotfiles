@@ -18,6 +18,9 @@ set viminfo+=!
 
 if has('vim_starting')
     set runtimepath+=$DOTVIM/bundle/neobundle.vim/
+
+    " 開発中
+    set runtimepath+=$DOTVIM/dev/vim-icondrag/  
 endif
 
 call neobundle#rc(expand('$DOTVIM/bundle/'))
