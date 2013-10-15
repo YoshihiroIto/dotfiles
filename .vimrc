@@ -18,9 +18,6 @@ set viminfo+=!
 
 if has('vim_starting')
     set runtimepath+=$DOTVIM/bundle/neobundle.vim/
-
-    " 開発中
-    set runtimepath+=$DOTVIM/dev/vim-icondrag/  
 endif
 
 call neobundle#rc(expand('$DOTVIM/bundle/'))
@@ -40,6 +37,7 @@ NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'tpope/vim-repeat'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'othree/eregex.vim'
+NeoBundle 'YoshihiroIto/vim-icondrag'
 
 NeoBundleLazy 'basyura/twibill.vim'
 NeoBundleLazy 'mattn/webapi-vim'
