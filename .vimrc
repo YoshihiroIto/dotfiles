@@ -493,17 +493,44 @@ augroup END
 "tomtom/tcomment_vim {{{
 
 " http://lsifrontend.hatenablog.com/entry/2013/10/11/052640
-nmap <silent> <C-Enter> yy:<C-u>TComment<CR>p
+nmap <silent> <C-CR> yy:<C-u>TComment<CR>p
+vnoremap <silent> <C-CR> :call CopyAddComment()<CR>
 
+" http://qiita.com/akira-hamada/items/2417d0bcb563475deddb をもとに調整
+function! CopyAddComment() range
+    let selectedCount = line("'>") - line("'<")
+
+    " 選択中の行をyank
+    normal! ""gvy
+
+    " yankした物をPする
+    normal P
+
+    " 元のコードを選択
+    if selectedCount == 0
+        exe 'normal V'
+    else
+        exe 'normal V' . selectedCount . 'j'
+    endif
+
+    " コメントアウトする
+    normal gc  
+
+    " ビジュアルモードからエスケープ
+    exe "normal! \e\e"
+
+    " 元の位置に戻る
+    exe 'normal ' . (selectedCount + 1) . 'j'
+endfunction
 "}}}
 "othree/eregex.vim{{{
 
 let g:eregex_default_enable = 0
 
-nnoremap [eregex]    <Nop>
-nmap     <Leader>e [eregex]
+nnoremap [eregex]    <nop>
+nmap     <leader>e [eregex]
 
-nnoremap [eregex]t :<C-u>call eregex#toggle()<CR>
+nnoremap [eregex]t :<c-u>call eregex#toggle()<cr>
 
 "}}}
 "vim-smartchr{{{
@@ -1185,3 +1212,4 @@ function! s:RemoveDir(path)
 endfunction
 "}}}
 "}}}
+
