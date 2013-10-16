@@ -371,7 +371,7 @@ let g:lightline = {
             \                   [ 'charcode', 'fileformat', 'fileencoding', 'filetype' ] ]
             \   },
             \   'component': {
-            \       'lineinfo' : s:lightline_symbol_line . '%3l:%-3v',
+            \       'lineinfo' : s:lightline_symbol_line . '%4l:%-3v',
             \   },
             \   'component_function': {
             \       'modified'          : 'MyModified',
