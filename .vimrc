@@ -241,7 +241,7 @@ nnoremap <F12>      :OmniSharpGotoDefinition<CR>zz
 nnoremap <S-F12>    :OmniSharpFindUsages<CR>
 
 "}}}
-"Neocomplete {{{
+"neocomplete{{{
 
 let s:bundle = neobundle#get('neocomplete.vim')
 function! s:bundle.hooks.on_source(bundle)
@@ -257,12 +257,20 @@ function! s:bundle.hooks.on_source(bundle)
     let g:neocomplete#force_omni_input_patterns.cs = '[^.]\.\%(\u\{2,}\)\?'
 endfunction
 unlet s:bundle
-
 "}}}
-"FoldCC {{{
+"neosnippet{{{
+" Plugin key-mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 
-let g:foldCCtext_enable_autofdc_adjuster = 1
+" SuperTab like snippets behavior.
+imap <expr><TAB> neosnippet#expandable() <Bar><bar> neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable() <Bar><bar> neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 
+" For snippet_complete marker.
+if has('conceal')
+    set conceallevel=2 concealcursor=i
+endif
 "}}}
 "TagBar {{{
 
@@ -497,39 +505,6 @@ augroup vim-anzu
 augroup END
 
 "}}}
-"tomtom/tcomment_vim {{{
-
-" http://lsifrontend.hatenablog.com/entry/2013/10/11/052640
-nmap <silent> <C-CR> yy:<C-u>TComment<CR>p
-vnoremap <silent> <C-CR> :call CopyAddComment()<CR>
-
-" http://qiita.com/akira-hamada/items/2417d0bcb563475deddb をもとに調整
-function! CopyAddComment() range
-    let selectedCount = line("'>") - line("'<")
-
-    " 選択中の行をyank
-    normal! ""gvy
-
-    " yankした物をPする
-    normal P
-
-    " 元のコードを選択
-    if selectedCount == 0
-        exe 'normal V'
-    else
-        exe 'normal V' . selectedCount . 'j'
-    endif
-
-    " コメントアウトする
-    normal gc  
-
-    " ビジュアルモードからエスケープ
-    exe "normal! \e\e"
-
-    " 元の位置に戻る
-    exe 'normal ' . (selectedCount + 1) . 'j'
-endfunction
-"}}}
 "othree/eregex.vim{{{
 
 let g:eregex_default_enable = 0
@@ -670,6 +645,36 @@ cnoremap    \   ¥
 " 最後に編集したところを選択
 nnoremap gt     `[v`]
 
+" http://lsifrontend.hatenablog.com/entry/2013/10/11/052640
+nmap <silent> <C-CR> yy:<C-u>TComment<CR>p
+vnoremap <silent> <C-CR> :call CopyAddComment()<CR>
+
+" http://qiita.com/akira-hamada/items/2417d0bcb563475deddb をもとに調整
+function! CopyAddComment() range
+    let selectedCount = line("'>") - line("'<")
+
+    " 選択中の行をyank
+    normal! ""gvy
+
+    " yankした物をPする
+    normal P
+
+    " 元のコードを選択
+    if selectedCount == 0
+        exe 'normal V'
+    else
+        exe 'normal V' . selectedCount . 'j'
+    endif
+
+    " コメントアウトする
+    normal gc  
+
+    " ビジュアルモードからエスケープ
+    exe "normal! \e\e"
+
+    " 元の位置に戻る
+    exe 'normal ' . (selectedCount + 1) . 'j'
+endfunction
 "}}}
 "インデント {{{
 
@@ -837,6 +842,8 @@ augroup END
 "}}}
 "}}}
 "折り畳み {{{
+
+let g:foldCCtext_enable_autofdc_adjuster = 1
 
 set foldcolumn=1
 set foldlevel=99
