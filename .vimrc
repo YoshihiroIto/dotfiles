@@ -38,7 +38,6 @@ NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'tpope/vim-repeat'
 NeoBundle 'tpope/vim-surround'
-NeoBundle 'tsukkee/unite-help'
 
 NeoBundleLazy 'basyura/twibill.vim'
 NeoBundleLazy 'mattn/webapi-vim'
@@ -100,6 +99,12 @@ NeoBundleLazy 'rking/ag.vim', {
 NeoBundleLazy 'Shougo/unite-outline', {
             \   'autoload' : {
             \       'unite_sources' : [ 'outline' ],
+            \   }
+            \ }
+
+NeoBundleLazy 'tsukkee/unite-help', { 
+            \   'autoload' : {
+            \       'unite_sources' : [ 'help' ],
             \   }
             \ }
 
