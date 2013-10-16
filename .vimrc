@@ -26,18 +26,19 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 
 NeoBundle 'LeafCage/foldCC'
 NeoBundle 'YankRing.vim'
+NeoBundle 'YoshihiroIto/vim-icondrag'
 NeoBundle 'bling/vim-bufferline'
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'movewin.vim'
 NeoBundle 'osyo-manga/vim-anzu'
+NeoBundle 'othree/eregex.vim'
 NeoBundle 'supasorn/vim-easymotion'
 NeoBundle 'tomasr/molokai'
 NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'tpope/vim-repeat'
 NeoBundle 'tpope/vim-surround'
-NeoBundle 'othree/eregex.vim'
-NeoBundle 'YoshihiroIto/vim-icondrag'
+NeoBundle 'tsukkee/unite-help'
 
 NeoBundleLazy 'basyura/twibill.vim'
 NeoBundleLazy 'mattn/webapi-vim'
@@ -187,6 +188,7 @@ nnoremap <silent> [Unite]r  :<C-u>UniteResume search-buffer<CR>
 nnoremap <silent> [Unite]o  :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow -no-quit outline<CR>
 nnoremap <silent> [Unite]m  :<C-u>Unite file_mru<CR>
 nnoremap <silent> [Unite]b  :<C-u>Unite buffer<CR>
+nnoremap <silent> [Unite]h  :<C-u>Unite help<CR>
 nnoremap <silent> [Unite]l  :<C-u>Unite -auto-preview line<CR>
 xnoremap <silent> [Unite]a  :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow alignta:arguments<CR>
 
