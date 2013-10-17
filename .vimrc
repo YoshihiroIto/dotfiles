@@ -12,6 +12,8 @@ let $DOTVIM       = s:isWindows ? expand('~/vimfiles') : expand('~/.vim')
 let mapleader     = ','
 set viminfo+=!
 
+set updatetime=1000
+
 "}}}
 "プラグイン {{{
 "インストール{{{
@@ -26,7 +28,6 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 
 NeoBundle 'LeafCage/foldCC'
 NeoBundle 'YankRing.vim'
-NeoBundle 'YoshihiroIto/vim-icondrag'
 NeoBundle 'bling/vim-bufferline'
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'movewin.vim'
@@ -38,10 +39,12 @@ NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'tpope/vim-repeat'
 NeoBundle 'tpope/vim-surround'
+NeoBundle 'thinca/vim-visualstar'
 
 NeoBundleLazy 'basyura/twibill.vim'
 NeoBundleLazy 'mattn/webapi-vim'
 NeoBundleLazy 'tyru/open-browser.vim'
+NeoBundleLazy 'honza/vim-snippets'
 
 NeoBundle 'Shougo/vimproc', {
             \   'build' : {
@@ -59,6 +62,7 @@ NeoBundleLazy 'Shougo/neocomplete.vim', {
             \ }
 
 NeoBundleLazy 'Shougo/neosnippet', {
+            \   'depends' : [ 'honza/vim-snippets' ],
             \   'autoload' : {
             \       'insert' : 1,
             \   }
@@ -76,16 +80,15 @@ NeoBundleLazy 'kana/vim-smartinput', {
             \   }
             \ }
 
-NeoBundleLazy 'h1mesuke/vim-alignta', {
-            \   'autoload' : {
-            \       'unite_sources' : [ 'alignta' ],
-            \       'commands'      : [ 'Alignta' ]
-            \   }
-            \ }
-
 NeoBundleLazy 'tsukkee/lingr-vim', {
             \   'autoload' : {
             \       'commands' : [ 'LingrLaunch' ]
+            \   }
+            \ }
+
+NeoBundleLazy 'Shougo/unite.vim', {
+            \   'autoload' : {
+            \       'commands' : [ 'Unite', 'UniteResume' ]
             \   }
             \ }
 
@@ -108,6 +111,13 @@ NeoBundleLazy 'tsukkee/unite-help', {
             \   }
             \ }
 
+NeoBundleLazy 'h1mesuke/vim-alignta', {
+            \   'autoload' : {
+            \       'unite_sources' : [ 'alignta' ],
+            \       'commands'      : [ 'Alignta' ]
+            \   }
+            \ }
+
 NeoBundleLazy 'mattn/benchvimrc-vim', {
             \   'autoload' : {
             \       'commands' : [ 'BenchVimrc' ]
@@ -117,12 +127,6 @@ NeoBundleLazy 'mattn/benchvimrc-vim', {
 NeoBundleLazy 'vim-jp/vimdoc-ja', {
             \   'autoload' : {
             \       'commands' : [ 'Help' ]
-            \   }
-            \ }
-
-NeoBundleLazy 'Shougo/unite.vim', {
-            \   'autoload' : {
-            \       'commands' : [ 'Unite' ]
             \   }
             \ }
 
@@ -156,6 +160,12 @@ NeoBundleLazy 'basyura/TweetVim', {
             \   }
             \ }
 
+NeoBundleLazy 'YoshihiroIto/vim-icondrag', {
+            \   'autoload' : {
+            \       'commands' : [ 'IconDragEnable', 'IconDragDisable' ]
+            \   }
+            \ }
+
 if s:isMac 
     NeoBundleLazy 'itchyny/dictionary.vim', {
                 \   'autoload' : {
@@ -178,9 +188,6 @@ endif
 "}}}
 "Unite {{{
 
-" insert modeで開始
-let g:unite_enable_start_insert = 1
-
 nnoremap [Unite]    <Nop>
 xnoremap [Unite]    <Nop>
 nmap     <Leader>u  [Unite]
@@ -197,23 +204,32 @@ nnoremap <silent> [Unite]h  :<C-u>Unite help<CR>
 nnoremap <silent> [Unite]l  :<C-u>Unite -auto-preview line<CR>
 xnoremap <silent> [Unite]a  :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow alignta:arguments<CR>
 
-" 無指定にすることで高速化
-let g:unite_source_file_mru_filename_format = ''
+let s:bundle = neobundle#get('unite.vim')
+function! s:bundle.hooks.on_source(bundle)
+    " insert modeで開始
+    let g:unite_enable_start_insert = 1
 
-" most recently used のリストサイズ
-let g:unite_source_file_mru_limit = 100
+    " 無指定にすることで高速化
+    let g:unite_source_file_mru_filename_format = ''
 
-" unite grep に ag(The Silver Searcher) を使う
-if s:isMac
-    if executable('ag')
-        let g:unite_source_grep_command       = 'ag'
-        let g:unite_source_grep_default_opts  = '--nogroup --nocolor --column'
-        let g:unite_source_grep_recursive_opt = ''
+    " most recently used のリストサイズ
+    let g:unite_source_file_mru_limit = 100
+
+    " unite grep に ag(The Silver Searcher) を使う
+    if s:isMac
+        if executable('ag')
+            let g:unite_source_grep_command       = 'ag'
+            let g:unite_source_grep_default_opts  = '--nogroup --nocolor --column'
+            let g:unite_source_grep_recursive_opt = ''
+        endif
     endif
-endif
+endfunction
+unlet s:bundle
 
 "}}}
 "VimFiler {{{
+
+exe 'noremap  <silent> <' . s:metaKey . '-o> :VimFilerBufferDir<CR>'
 
 let s:bundle = neobundle#get('vimfiler')
 function! s:bundle.hooks.on_source(bundle)
@@ -231,8 +247,6 @@ function! s:bundle.hooks.on_source(bundle)
     let g:vimfiler_as_default_explorer = 1
 endfunction
 unlet s:bundle
-
-exe 'noremap  <silent> <' . s:metaKey . '-o> :VimFilerBufferDir<CR>'
 
 "}}}
 "Omnisharp {{{
@@ -257,20 +271,34 @@ function! s:bundle.hooks.on_source(bundle)
     let g:neocomplete#force_omni_input_patterns.cs = '[^.]\.\%(\u\{2,}\)\?'
 endfunction
 unlet s:bundle
+
 "}}}
 "neosnippet{{{
-" Plugin key-mappings.
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 
-" SuperTab like snippets behavior.
-imap <expr><TAB> neosnippet#expandable() <Bar><bar> neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
-smap <expr><TAB> neosnippet#expandable() <Bar><bar> neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+let s:bundle = neobundle#get('neosnippet')
+function! s:bundle.hooks.on_source(bundle)
 
-" For snippet_complete marker.
-if has('conceal')
-    set conceallevel=2 concealcursor=i
-endif
+    " Enable snipMate compatibility feature.
+    let g:neosnippet#enable_snipmate_compatibility = 1
+
+    " Tell Neosnippet about the other snippets
+    let g:neosnippet#snippets_directory='$DOTVIM/bundle/vim-snippets/snippets'
+
+    " Plugin key-mappings.
+    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    smap <c-k>     <plug>(neosnippet_expand_or_jump)
+
+    " supertab like snippets behavior.
+    imap <expr><tab> neosnippet#expandable() <bar><bar> neosnippet#jumpable() ? "\<plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<c-n>" : "\<tab>"
+    smap <expr><tab> neosnippet#expandable() <bar><bar> neosnippet#jumpable() ? "\<plug>(neosnippet_expand_or_jump)" : "\<tab>"
+
+    " for snippet_complete marker.
+    if has('conceal')
+        set conceallevel=2 concealcursor=i
+    endif
+endfunction
+unlet s:bundle
+
 "}}}
 "TagBar {{{
 
@@ -296,30 +324,31 @@ hi easymotionshade  ctermbg=none ctermfg=blue
 
 noremap     <silent><F9>        :<C-u>call <SID>ToggleLingr()<CR>
 
-let g:lingr_vim_say_buffer_height = 15
-
 let s:bundle = neobundle#get('lingr-vim')
 function! s:bundle.hooks.on_source(bundle)
+
+    let g:lingr_vim_say_buffer_height = 15
+
     let g:vimrc_pass_file = expand('~/.vimrc_pass')
 
     if filereadable(g:vimrc_pass_file)
         exe 'source' g:vimrc_pass_file
     endif
+
+    augroup lingr-vim
+        autocmd!
+        autocmd FileType lingr-rooms    call s:SetLingrSetting()
+        autocmd FileType lingr-members  call s:SetLingrSetting()
+        autocmd FileType lingr-messages call s:SetLingrSetting()
+
+        function! s:SetLingrSetting()
+            let b:disableSmartClose = 0
+
+            exe 'noremap  <buffer><silent> <' . s:metaKey . '-w> :<C-u>call <SID>ToggleLingr()<CR>'
+        endfunction
+    augroup END
 endfunction
 unlet s:bundle
-
-augroup lingr-vim
-    autocmd!
-    autocmd FileType lingr-rooms    call s:SetLingrSetting()
-    autocmd FileType lingr-members  call s:SetLingrSetting()
-    autocmd FileType lingr-messages call s:SetLingrSetting()
-
-    function! s:SetLingrSetting()
-        let b:disableSmartClose = 0
-
-        exe 'noremap  <buffer><silent> <' . s:metaKey . '-w> :<C-u>call <SID>ToggleLingr()<CR>'
-    endfunction
-augroup END
 
 function! s:ToggleLingr()
     if bufnr('lingr-messages') == -1
@@ -697,9 +726,9 @@ set expandtab                     " Insertモードで <Tab> を挿入すると�
 "}}}
 "バックアップ・スワップファイル {{{
 
-set updatetime=1000               " スワップファイルが更新される時間
-set swapfile                      " スワップファイルを使う
-set directory=~/.vimswap          " スワップファイルをホームディレクトリに保存
+" set swapfile                      " スワップファイルを使う
+" set directory=~/.vimswap          " スワップファイルをホームディレクトリに保存
+set noswapfile                    " スワップファイルを作らない
 set backup                        " バックアップファイルを使う
 set backupdir=~/.vimbackup        " バックアップファイルをホームディレクトリに保存
 
