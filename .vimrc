@@ -194,7 +194,7 @@ nnoremap <silent> [Unite]r  :<C-u>UniteResume search-buffer<CR>
 
 nnoremap <silent> [Unite]o  :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow -no-quit outline<CR>
 nnoremap <silent> [Unite]m  :<C-u>Unite file_mru<CR>
-nnoremap <silent> [Unite]b  :<C-u>Unite buffer<CR>
+nnoremap <silent> [Unite]b  :<C-u>Unite bookmark<CR>
 nnoremap <silent> [Unite]h  :<C-u>Unite help<CR>
 nnoremap <silent> [Unite]l  :<C-u>Unite -auto-preview line<CR>
 xnoremap <silent> [Unite]a  :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow alignta:arguments<CR>
@@ -704,6 +704,14 @@ function! CopyAddComment() range
     " 元の位置に戻る
     exe 'normal ' . (selectedCount + 1) . 'j'
 endfunction
+"}}}
+"短縮入力{{{
+
+inoreabbrev <expr> :cp:  expand('%:p:t')
+inoreabbrev <expr> :cfp: expand('%:p')
+cnoreabbrev <expr> :cp:  expand('%:p:t')
+cnoreabbrev <expr> :cfp: expand('%:p')
+
 "}}}
 "インデント {{{
 
