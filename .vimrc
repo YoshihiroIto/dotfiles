@@ -40,6 +40,7 @@ NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'tpope/vim-repeat'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'thinca/vim-visualstar'
+NeoBundle 'YoshihiroIto/vim-icondrag'
 
 NeoBundleLazy 'basyura/twibill.vim'
 NeoBundleLazy 'mattn/webapi-vim'
@@ -68,11 +69,11 @@ NeoBundleLazy 'Shougo/neosnippet', {
             \   }
             \ }
 
-NeoBundleLazy 'kana/vim-smartchr', {
-            \   'autoload' : {
-            \       'insert' : 1,
-            \   }
-            \ }
+" NeoBundleLazy 'kana/vim-smartchr', {
+"             \   'autoload' : {
+"             \       'insert' : 1,
+"             \   }
+"             \ }
 
 NeoBundleLazy 'kana/vim-smartinput', {
             \   'autoload' : {
@@ -157,12 +158,6 @@ NeoBundleLazy 'basyura/TweetVim', {
             \   ],
             \   'autoload' : {
             \       'commands' : [ 'TweetVimHomeTimeline' ]
-            \   }
-            \ }
-
-NeoBundleLazy 'YoshihiroIto/vim-icondrag', {
-            \   'autoload' : {
-            \       'commands' : [ 'IconDragEnable', 'IconDragDisable' ]
             \   }
             \ }
 
@@ -534,7 +529,7 @@ augroup vim-anzu
 augroup END
 
 "}}}
-"othree/eregex.vim{{{
+"eregex.vim{{{
 
 let g:eregex_default_enable = 0
 
@@ -546,44 +541,44 @@ nnoremap [eregex]t :<c-u>call eregex#toggle()<cr>
 "}}}
 "vim-smartchr{{{
 
-let s:bundle = neobundle#get('vim-smartchr')
-function! s:bundle.hooks.on_source(bundle)
-    " http://labs.timedia.co.jp/2012/09/vim-smartinput.html
-
-    inoremap <expr> ,  smartchr#loop(', ', ',')
-
-    inoremap <expr> ^  smartchr#loop(' ^ ', '^')
-    inoremap <expr> %  smartchr#loop(' % ', '%')
-    inoremap <expr> ?  smartchr#loop(' ? ', '?')
-
-    inoremap <expr> :  smartchr#loop(' : ', ':', ' :: ')
-    inoremap <expr> =  smartchr#loop(' = ', ' == ', '=')
-    inoremap <expr> &  smartchr#loop(' & ', '&', ' && ')
-    inoremap <expr> <Bar> smartchr#loop(' <Bar> ', ' <Bar><Bar> ', '<Bar>')
-
-    inoremap <expr> +  smartchr#loop(' + ', '++ ', '+', ' ++')
-    inoremap <expr> -  smartchr#loop(' - ', '-- ', '-', ' --')
-
-    inoremap <expr> /  smartchr#loop(' / ', '// ', '/', '//')
-
-    inoremap <expr> -> smartchr#loop('->')
-    inoremap <expr> += smartchr#loop(' += ')
-    inoremap <expr> -= smartchr#loop(' -= ')
-    inoremap <expr> *= smartchr#loop(' *= ')
-    inoremap <expr> /= smartchr#loop(' /= ')
-    inoremap <expr> != smartchr#loop(' != ')
-    inoremap <expr> &= smartchr#loop(' &= ')
-    inoremap <expr> ^= smartchr#loop(' ^= ')
-    inoremap <expr> >= smartchr#loop(' >= ')
-    inoremap <expr> <= smartchr#loop(' <= ')
-    inoremap <expr> <Bar>= smartchr#loop(' <Bar>= ')
-
-    " inoremap <expr> <  smartchr#loop(' < ', ' << ', '<')
-    " inoremap <expr> >  smartchr#loop(' > ', ' >> ', '>')
-    " inoremap <expr> >>= smartchr#loop(' >>= ', '>>=')
-    " inoremap <expr> <<= smartchr#loop(' <<= ', '<<=')
-endfunction
-unlet s:bundle
+" let s:bundle = neobundle#get('vim-smartchr')
+" function! s:bundle.hooks.on_source(bundle)
+"     " http://labs.timedia.co.jp/2012/09/vim-smartinput.html
+" 
+"     inoremap <expr> ,  smartchr#loop(', ', ',')
+" 
+"     inoremap <expr> ^  smartchr#loop(' ^ ', '^')
+"     inoremap <expr> %  smartchr#loop(' % ', '%')
+"     inoremap <expr> ?  smartchr#loop(' ? ', '?')
+" 
+"     inoremap <expr> :  smartchr#loop(' : ', ':', ' :: ')
+"     inoremap <expr> =  smartchr#loop(' = ', ' == ', '=')
+"     inoremap <expr> &  smartchr#loop(' & ', '&', ' && ')
+"     inoremap <expr> <Bar> smartchr#loop(' <Bar> ', ' <Bar><Bar> ', '<Bar>')
+" 
+"     inoremap <expr> +  smartchr#loop(' + ', '++ ', '+', ' ++')
+"     inoremap <expr> -  smartchr#loop(' - ', '-- ', '-', ' --')
+" 
+"     inoremap <expr> /  smartchr#loop(' / ', '// ', '/', '//')
+" 
+"     inoremap <expr> -> smartchr#loop('->')
+"     inoremap <expr> += smartchr#loop(' += ')
+"     inoremap <expr> -= smartchr#loop(' -= ')
+"     inoremap <expr> *= smartchr#loop(' *= ')
+"     inoremap <expr> /= smartchr#loop(' /= ')
+"     inoremap <expr> != smartchr#loop(' != ')
+"     inoremap <expr> &= smartchr#loop(' &= ')
+"     inoremap <expr> ^= smartchr#loop(' ^= ')
+"     inoremap <expr> >= smartchr#loop(' >= ')
+"     inoremap <expr> <= smartchr#loop(' <= ')
+"     inoremap <expr> <Bar>= smartchr#loop(' <Bar>= ')
+" 
+"     " inoremap <expr> <  smartchr#loop(' < ', ' << ', '<')
+"     " inoremap <expr> >  smartchr#loop(' > ', ' >> ', '>')
+"     " inoremap <expr> >>= smartchr#loop(' >>= ', '>>=')
+"     " inoremap <expr> <<= smartchr#loop(' <<= ', '<<=')
+" endfunction
+" unlet s:bundle
 
 "}}}
 "vim-alignta{{{
@@ -597,6 +592,11 @@ let g:unite_source_alignta_preset_arguments = [
             \ ]
 
 "}}}
+"icondrag{{{
+
+let g:icondrag_auto_start = 1
+
+}}}
 "}}}
 "キー無効{{{
 
