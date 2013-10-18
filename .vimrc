@@ -596,7 +596,7 @@ let g:unite_source_alignta_preset_arguments = [
 
 let g:icondrag_auto_start = 1
 
-}}}
+"}}}
 "}}}
 "キー無効{{{
 
