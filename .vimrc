@@ -89,7 +89,7 @@ NeoBundleLazy 'tsukkee/lingr-vim', {
 
 NeoBundleLazy 'Shougo/unite.vim', {
             \   'autoload' : {
-            \       'commands' : [ 'Unite', 'UniteResume' ]
+            \       'commands' : [ 'Unite', 'UniteResume', 'UniteWithCursorWord' ]
             \   }
             \ }
 
@@ -188,16 +188,17 @@ xnoremap [Unite]    <Nop>
 nmap     <Leader>u  [Unite]
 xmap     <Leader>u  [Unite]
 
-nnoremap <silent> [Unite]g  :<C-u>Unite grep:. -auto-preview -buffer-name=search-buffer<CR>
-nnoremap <silent> [Unite]cg :<C-u>Unite grep:. -auto-preview -buffer-name=search-buffer<CR><C-R><C-W><CR>
-nnoremap <silent> [Unite]r  :<C-u>UniteResume search-buffer<CR>
+nnoremap <silent> [Unite]g    :<C-u>Unite grep:. -auto-preview -buffer-name=search-buffer<CR>
+nnoremap <silent> [Unite]cg   :<C-u>Unite grep:. -auto-preview -buffer-name=search-buffer<CR><C-R><C-W><CR>
+nnoremap <silent> [Unite]r    :<C-u>UniteResume search-buffer<CR>
 
-nnoremap <silent> [Unite]o  :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow -no-quit outline<CR>
-nnoremap <silent> [Unite]m  :<C-u>Unite file_mru<CR>
-nnoremap <silent> [Unite]b  :<C-u>Unite bookmark<CR>
-nnoremap <silent> [Unite]h  :<C-u>Unite help<CR>
-nnoremap <silent> [Unite]l  :<C-u>Unite -auto-preview line<CR>
-xnoremap <silent> [Unite]a  :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow alignta:arguments<CR>
+nnoremap <silent> [Unite]o    :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow -no-quit outline<CR>
+nnoremap <silent> [Unite]m    :<C-u>Unite file_mru<CR>
+nnoremap <silent> [Unite]b    :<C-u>Unite bookmark<CR>
+nnoremap <silent> [Unite]h    :<C-u>UniteWithCursorWord help<CR>
+nnoremap <silent> [Unite]l    :<C-u>Unite -auto-preview line<CR>
+xnoremap <silent> [Unite]a    :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow alignta:arguments<CR>
+nnoremap <silent> [Unite]f    :<C-u>Unite menu:fix<CR>
 
 let s:bundle = neobundle#get('unite.vim')
 function! s:bundle.hooks.on_source(bundle)
@@ -665,6 +666,7 @@ set hidden                        " 変更中のファイルでも、保存し�
 set timeoutlen=2000
 set iminsert=0                    " 挿入モードでのデフォルトのIME状態設定
 set imsearch=0                    " 検索モードでのデフォルトのIME状態設定
+set formatexpr=autofmt#japanese#formatexpr()
 
 inoremap    ¥   \
 inoremap    \   ¥
@@ -704,13 +706,36 @@ function! CopyAddComment() range
     " 元の位置に戻る
     exe 'normal ' . (selectedCount + 1) . 'j'
 endfunction
-"}}}
-"短縮入力{{{
 
-inoreabbrev <expr> :cp:  expand('%:p:t')
-inoreabbrev <expr> :cfp: expand('%:p')
-cnoreabbrev <expr> :cp:  expand('%:p:t')
-cnoreabbrev <expr> :cfp: expand('%:p')
+" 自動的にディレクトリを作成する
+" http://vim-users.jp/2011/02/hack202/
+augroup vimrc-auto-mkdir
+    autocmd!
+    autocmd BufWritePre * call s:auto_mkdir(expand('<afile>:p:h'), v:cmdbang)
+    function! s:auto_mkdir(dir, force)
+        if !isdirectory(a:dir) && (a:force ||
+                    \    input(printf('"%s" does not exist. Create? [y/N]', a:dir)) =~? '^y\%[es]$')
+            call mkdir(iconv(a:dir, &encoding, &termencoding), 'p')
+        endif
+    endfunction
+augroup END
+
+"}}}
+"定型文{{{
+
+command! -nargs=0 -bar InsertCurrentFilepath      call s:InsertTextAtCurrent(expand('%:p:t'))
+command! -nargs=0 -bar InsertCurrentFilefullpath  call s:InsertTextAtCurrent(expand('%:p'))
+
+let g:unite_source_menu_menus = {}
+
+let g:unite_source_menu_menus.fix = {
+      \     'description' : '定型文',
+      \ } 
+
+let g:unite_source_menu_menus.fix.command_candidates = [
+      \       ['カレントファイルパス',     'InsertCurrentFilepath'],
+      \       ['カレントファイルフルパス', 'InsertCurrentFilefullpath'],
+      \     ]
 
 "}}}
 "インデント {{{
@@ -816,6 +841,12 @@ set lazyredraw                    " スクリプト実行中に画面を描画�
 set wildmenu
 set wildmode=list:full            " コマンドライン補完を便利に
 set wildignorecase                " 補完時に大文字小文字を区別しない
+set showfulltag
+set wildoptions=tagfile
+
+" 長い行の表示
+set linebreak
+set breakat=\ \	;:,!?
 
 "全角スペースをハイライト {{{
 
@@ -1249,6 +1280,7 @@ endfunction
 "}}}
 "ディレクトリ削除{{{
 function! s:RemoveDir(path)
+
     let epath = vimproc#shellescape(expand(a:path)) 
 
     if isdirectory(a:path)
@@ -1260,6 +1292,14 @@ function! s:RemoveDir(path)
             throw 'Not supported.' 
         endif
     endif
+endfunction
+"}}}
+"現在位置にテキストを挿入する{{{
+function! s:InsertTextAtCurrent(text)
+
+    let pos = getpos('.')
+    exe ':normal i' . a:text
+    call setpos('.', pos)
 endfunction
 "}}}
 "}}}
