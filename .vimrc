@@ -12,8 +12,6 @@ let $DOTVIM       = s:isWindows ? expand('~/vimfiles') : expand('~/.vim')
 let mapleader     = ','
 set viminfo+=!
 
-set updatetime=1000
-
 "}}}
 "プラグイン {{{
 "インストール{{{
@@ -517,10 +515,10 @@ endfunction
 "vim-anzu {{{
 
 "http://qiita.com/shiena/items/f53959d62085b7980cb5
-nmap <silent> n <Plug>(anzu-n)zOzz:<C-u>call <SID>ForceShowCursolLine()<CR>
-nmap <silent> N <Plug>(anzu-N)zOzz:<C-u>call <SID>ForceShowCursolLine()<CR>
-nmap <silent> * <Plug>(anzu-star)zOzz:<C-u>call <SID>ForceShowCursolLine()<CR>
-nmap <silent> # <Plug>(anzu-sharp)zOzz:<C-u>call <SID>ForceShowCursolLine()<CR>
+nmap <silent> n <Plug>(anzu-n)zOzz:<C-u>call <SID>RefreshScreen()<CR>
+nmap <silent> N <Plug>(anzu-N)zOzz:<C-u>call <SID>RefreshScreen()<CR>
+nmap <silent> * <Plug>(anzu-star)zOzz:<C-u>call <SID>RefreshScreen()<CR>
+nmap <silent> # <Plug>(anzu-sharp)zOzz:<C-u>call <SID>RefreshScreen()<CR>
 
 augroup vim-anzu
     " 一定時間キー入力がないとき、ウインドウを移動したとき、タブを移動したときに
@@ -667,6 +665,8 @@ set timeoutlen=2000
 set iminsert=0                    " 挿入モードでのデフォルトのIME状態設定
 set imsearch=0                    " 検索モードでのデフォルトのIME状態設定
 set formatexpr=autofmt#japanese#formatexpr()
+set nrformats-=octal
+set nrformats+=alpha
 
 inoremap    ¥   \
 inoremap    \   ¥
@@ -729,13 +729,12 @@ command! -nargs=0 -bar InsertCurrentFilefullpath  call s:InsertTextAtCurrent(exp
 let g:unite_source_menu_menus = {}
 
 let g:unite_source_menu_menus.fix = {
-      \     'description' : '定型文',
-      \ } 
-
-let g:unite_source_menu_menus.fix.command_candidates = [
-      \       ['カレントファイルパス',     'InsertCurrentFilepath'],
-      \       ['カレントファイルフルパス', 'InsertCurrentFilefullpath'],
+      \     'description'        : '定型文',
+      \     'command_candidates' : [
+      \         ['Current Filename Only',     'InsertCurrentFilepath'     ],
+      \         ['Current Filename Fullpath', 'InsertCurrentFilefullpath' ],
       \     ]
+      \ } 
 
 "}}}
 "インデント {{{
@@ -822,7 +821,6 @@ endif
 
 "検索時のハイライトを解除
 nnoremap    <silent><Leader>/   :nohlsearch<CR>
-" cnoremap    <silent><CR>        <CR>zOzz:<C-u>call <SID>ForceShowCursolLine()<CR>
 
 "}}}
 "表示{{{
@@ -843,6 +841,7 @@ set wildmode=list:full            " コマンドライン補完を便利に
 set wildignorecase                " 補完時に大文字小文字を区別しない
 set showfulltag
 set wildoptions=tagfile
+set updatetime=1000
 
 " 長い行の表示
 set linebreak
@@ -975,8 +974,8 @@ nnoremap    <silent><C-e>   <C-e>j
 nnoremap    <silent><C-y>   <C-y>k
 vnoremap    <silent><C-e>   <C-e>j
 vnoremap    <silent><C-y>   <C-y>k
-nmap        <silent>gg      ggzOzz:<C-u>call <SID>ForceShowCursolLine()<CR>
-nmap        <silent>GG      GGzOzz:<C-u>call <SID>ForceShowCursolLine()<CR>
+nmap        <silent>gg      ggzOzz:<C-u>call <SID>RefreshScreen()<CR>
+nmap        <silent>GG      GGzOzz:<C-u>call <SID>RefreshScreen()<CR>
 
 "}}}
 "タブライン操作 {{{
@@ -1134,6 +1133,16 @@ function! s:CloseVSplitWide()
         exe 'winpos' s:opendLeftVsp s:opendTopVsp
     end
 endf
+"}}}
+"画面リフレッシュ{{{
+function! s:RefreshScreen()
+
+    " ステータスライン上のanzuが更新されなくなる
+    " silent doautocmd CursorHold <buffer>
+
+    call s:ForceShowCursolLine()
+
+endfunction
 "}}}
 "賢いクローズ {{{
 " ウィンドウが１つかつバッファが一つかつ&columns が g:baseColumns            :quit
