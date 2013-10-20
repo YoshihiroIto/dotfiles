@@ -10,7 +10,6 @@ let s:isGuiRunning = has('gui_running')
 " let s:metaKey      = s:isWindows ? 'M' : 'D'
 let g:baseColumns  = s:isWindows ? 140 : 100
 let $DOTVIM        = s:isWindows ? expand('~/vimfiles') : expand('~/.vim')
-let mapleader      = ','
 let mapleader      = ' '
 set viminfo+=!
 
@@ -164,7 +163,7 @@ NeoBundleLazy 'basyura/TweetVim', {
             \       'mattn/webapi-vim',
             \   ],
             \   'autoload' : {
-            \       'commands' : [ 'TweetVimHomeTimeline' ]
+            \       'commands' : [ 'TweetVimHomeTimeline', 'TweetVimUserStream' ]
             \   }
             \ }
 
@@ -411,6 +410,11 @@ function! s:ToggleTweetVim()
         silent! exe 'bwipeout tweetvim'
     endif
 endfunction
+
+augroup TweetVimSetting
+    autocmd!
+    autocmd FileType tweetvim     nmap     <buffer>rr        <Plug>(tweetvim_action_reload)
+augroup END
 
 "}}}
 "lightline {{{
@@ -886,11 +890,9 @@ set wildmode=list:full            " コマンドライン補完を便利に
 set wildignorecase                " 補完時に大文字小文字を区別しない
 set showfulltag
 set wildoptions=tagfile
-set updatetime=1000
+set fillchars=vert:\              " 縦分割の境界線
 
-" 長い行の表示
-set linebreak
-set breakat=\ \	;:,!?
+set updatetime=1000
 
 "全角スペースをハイライト {{{
 
