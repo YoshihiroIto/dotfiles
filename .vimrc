@@ -4,13 +4,18 @@ set nocompatible                " VI互換をオフ
 set encoding=utf-8
 scriptencoding utf-8            " スクリプト内でutf-8を使用する
 
-let s:isWindows   = has('win32') || has('win64')
-let s:isMac       = has('mac')
-let s:metaKey     = s:isWindows ? 'M' : 'D'
-let g:baseColumns = s:isWindows ? 140 : 100
-let $DOTVIM       = s:isWindows ? expand('~/vimfiles') : expand('~/.vim')
-let mapleader     = ','
+let s:isWindows    = has('win32') || has('win64')
+let s:isMac        = has('mac')
+let s:isGuiRunning = has('gui_running')
+let s:metaKey      = s:isWindows ? 'M' : 'D'
+let g:baseColumns  = s:isWindows ? 140 : 100
+let $DOTVIM        = s:isWindows ? expand('~/vimfiles') : expand('~/.vim')
+let mapleader      = ','
 set viminfo+=!
+
+if !s:isGuiRunning
+    let $MYGVIMRC = expand('~/.gvimrc')
+endif
 
 "}}}
 "プラグイン {{{
@@ -855,10 +860,10 @@ if has('syntax')
         syntax match InvisibleJISX0208Space '　' display containedin=ALL
         highlight InvisibleJISX0208Space term=underline guibg=#112233 
 
-        if has('gui_running')
+        " if s:isGuiRunning
             syntax match InvisibleTab '\t' display containedin=ALL
             highlight InvisibleTab term=underline ctermbg=Gray guibg=#121212
-        endif
+        " endif
     endf
 
     augroup invisible
@@ -947,7 +952,7 @@ exe 'noremap  <silent> <' . s:metaKey . '-E> :<C-u>call <SID>OpenVSplitWide()<CR
 exe 'noremap  <silent> <' . s:metaKey . '-w> :<C-u>call <SID>SmartClose()<CR>'
 
 " アプリウィンドウの移動とリサイズ
-if has('gui_running')
+if s:isGuiRunning
     noremap         <silent><Leader>H   :<C-u>call <SID>ResizeWin()<CR>
     noremap         <silent><Leader>J   :<C-u>call <SID>ResizeWin()<CR>
     noremap         <silent><Leader>K   :<C-u>call <SID>ResizeWin()<CR>
@@ -1017,12 +1022,8 @@ endfor
 "vimrc / gvimrc の編集 
 nnoremap    <silent><F1>    :<C-u>call <SID>SmartOpen($MYVIMRC)<CR>
 
-if has('gui_running')
-    nnoremap    <silent><F2>    :<C-u>call <SID>SmartOpen($MYGVIMRC)<CR>
-    nnoremap    <silent><F3>    :<C-u>source $MYVIMRC<CR>:source $MYGVIMRC<CR>
-else
-    nnoremap    <silent><F3>    :<C-u>source $MYVIMRC<CR>
-endif
+nnoremap    <silent><F2>    :<C-u>call <SID>SmartOpen($MYGVIMRC)<CR>
+nnoremap    <silent><F3>    :<C-u>source $MYVIMRC<CR>:source $MYGVIMRC<CR>
 
 exe 'noremap  <silent> <' . s:metaKey . '-s> :write<cr>'
 
@@ -1311,5 +1312,10 @@ function! s:InsertTextAtCurrent(text)
     call setpos('.', pos)
 endfunction
 "}}}
+"}}}
+"コンソール用{{{
+if !s:isGuiRunning
+    source $MYGVIMRC 
+endif
 "}}}
 
