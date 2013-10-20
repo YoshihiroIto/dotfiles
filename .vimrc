@@ -7,10 +7,11 @@ scriptencoding utf-8            " スクリプト内でutf-8を使用する
 let s:isWindows    = has('win32') || has('win64')
 let s:isMac        = has('mac')
 let s:isGuiRunning = has('gui_running')
-let s:metaKey      = s:isWindows ? 'M' : 'D'
+" let s:metaKey      = s:isWindows ? 'M' : 'D'
 let g:baseColumns  = s:isWindows ? 140 : 100
 let $DOTVIM        = s:isWindows ? expand('~/vimfiles') : expand('~/.vim')
 let mapleader      = ','
+let mapleader      = ' '
 set viminfo+=!
 
 if !s:isGuiRunning
@@ -31,24 +32,32 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 
 NeoBundle 'LeafCage/foldCC'
 NeoBundle 'YankRing.vim'
+NeoBundle 'YoshihiroIto/vim-icondrag'
 NeoBundle 'bling/vim-bufferline'
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'movewin.vim'
 NeoBundle 'osyo-manga/vim-anzu'
 NeoBundle 'othree/eregex.vim'
-NeoBundle 'supasorn/vim-easymotion'
-NeoBundle 'tomasr/molokai'
-NeoBundle 'tomtom/tcomment_vim'
-NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'tpope/vim-repeat'
-NeoBundle 'tpope/vim-surround'
 NeoBundle 'thinca/vim-visualstar'
-NeoBundle 'YoshihiroIto/vim-icondrag'
+NeoBundle 'tmhedberg/matchit'
+NeoBundle 'tomasr/molokai'
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'tpope/vim-surround'
+NeoBundle 'tpope/vim-repeat'
+NeoBundle 'tomtom/tcomment_vim'
+
+" http://qiita.com/rbtnn/items/a47ed6684f1f0bc52906
+NeoBundle 'kana/vim-operator-user'
+NeoBundle 'tyru/operator-camelize.vim'
+
+" http://d.hatena.ne.jp/osyo-manga/20130717/1374069987
+NeoBundle 'kana/vim-textobj-user'
+NeoBundle 'kana/vim-textobj-indent'
+NeoBundle 'kana/vim-textobj-function'
 
 NeoBundleLazy 'basyura/twibill.vim'
-NeoBundleLazy 'mattn/webapi-vim'
-NeoBundleLazy 'tyru/open-browser.vim'
 NeoBundleLazy 'honza/vim-snippets'
+NeoBundleLazy 'mattn/webapi-vim'
 
 NeoBundle 'Shougo/vimproc', {
             \   'build' : {
@@ -71,12 +80,6 @@ NeoBundleLazy 'Shougo/neosnippet', {
             \       'insert' : 1,
             \   }
             \ }
-
-" NeoBundleLazy 'kana/vim-smartchr', {
-"             \   'autoload' : {
-"             \       'insert' : 1,
-"             \   }
-"             \ }
 
 NeoBundleLazy 'kana/vim-smartinput', {
             \   'autoload' : {
@@ -135,7 +138,7 @@ NeoBundleLazy 'vim-jp/vimdoc-ja', {
             \ }
 
 NeoBundleLazy 'Shougo/vimfiler', {
-            \   'depends' : [ 'Shougo/unite.vim' ],
+            \   'depends' : [ 'Shougo/unite.vim', 'Shougo/vimshell.vim' ],
             \   'autoload' : {
             \       'commands' : [ 'VimFilerBufferDir' ]
             \   }
@@ -164,6 +167,15 @@ NeoBundleLazy 'basyura/TweetVim', {
             \   }
             \ }
 
+NeoBundleLazy 'open-browser.vim', {
+            \   'autoload' : {
+            \        'mappings'        : ['<Plug>(open-browser-wwwsearch)', '<Plug>(openbrowser-open)'],
+            \        'function_prefix' : 'openbrowser',
+            \        'functions'       : ['openbrowser#open'],
+            \        'commands'        : ['OpenBrowserSearch', 'OpenBrowser', 'OpenBrowserSmartSearch']
+            \   }
+            \ }
+
 if s:isMac 
     NeoBundleLazy 'itchyny/dictionary.vim', {
                 \   'autoload' : {
@@ -182,6 +194,15 @@ if s:isMac
                 \   }
                 \ }
 endif
+
+" NeoBundle 'supasorn/vim-easymotion'
+
+" NeoBundleLazy 'kana/vim-smartchr', {
+"             \   'autoload' : {
+"             \       'insert' : 1,
+"             \   }
+"             \ }
+
 
 "}}}
 "Unite {{{
@@ -228,7 +249,8 @@ unlet s:bundle
 "}}}
 "VimFiler {{{
 
-exe 'noremap  <silent> <' . s:metaKey . '-o> :VimFilerBufferDir<CR>'
+" exe 'noremap  <silent> <' . s:metaKey . '-o> :VimFilerBufferDir<CR>'
+noremap  <silent> <Leader>o :VimFilerBufferDir<CR>
 
 let s:bundle = neobundle#get('vimfiler')
 function! s:bundle.hooks.on_source(bundle)
@@ -241,9 +263,23 @@ function! s:bundle.hooks.on_source(bundle)
         nmap <buffer><expr> <Enter> vimfiler#smart_cursor_map(
             \  "\<Plug>(vimfiler_cd_file)",
             \  "\<Plug>(vimfiler_edit_file)")
+
+        nmap <buffer><expr> <S-Space> vimfiler#smart_cursor_map(
+            \  "\<Plug>(vimfiler_toggle_mark_current_line)",
+            \  "\<Plug>(vimfiler_toggle_mark_current_line)")
     endfunction
 
     let g:vimfiler_as_default_explorer = 1
+endfunction
+unlet s:bundle
+
+"}}}
+"VimShell{{{
+
+let s:bundle = neobundle#get('vimshell.vim')
+function! s:bundle.hooks.on_source(bundle)
+    let g:vimshell_prompt_expr = 'getcwd().">"'
+    let g:vimshell_prompt_pattern = '^\f\+>'
 endfunction
 unlet s:bundle
 
@@ -309,14 +345,14 @@ noremap        <F8>            :TagbarToggle<CR>
 " http://haya14busa.com/change-vim-easymotion-from-lokaltog-to-forked/
 " https://github.com/supasorn/vim-easymotion
 
-let g:EasyMotion_leader_key='<Space><Space>'
-let g:EasyMotion_keys='hjklasdyuiopqwertnmzxcvb4738291056gf'
-let g:EasyMotion_special_select_line = 0
-let g:EasyMotiselect_phrase = 0
+" let g:EasyMotion_leader_key          = ',,' 
+" let g:EasyMotion_keys                = 'hjklasdyuiopqwertnmzxcvb4738291056gf'
+" let g:EasyMotion_special_select_line = 0
+" let g:EasyMotiselect_phrase          = 0
 
 " カラー設定変更
-hi EasyMotionTarget ctermbg=none ctermfg=red
-hi easymotionshade  ctermbg=none ctermfg=blue
+" hi EasyMotionTarget ctermbg=none ctermfg=red
+" hi easymotionshade  ctermbg=none ctermfg=blue
 
 "}}}
 "lingr.vim {{{
@@ -343,7 +379,8 @@ function! s:bundle.hooks.on_source(bundle)
         function! s:SetLingrSetting()
             let b:disableSmartClose = 0
 
-            exe 'noremap  <buffer><silent> <' . s:metaKey . '-w> :<C-u>call <SID>ToggleLingr()<CR>'
+            " exe 'noremap  <buffer><silent> <' . s:metaKey . '-w> :<C-u>call <SID>ToggleLingr()<CR>'
+            noremap  <buffer><silent> <Leader>w :<C-u>call <SID>ToggleLingr()<CR>
         endfunction
     augroup END
 endfunction
@@ -599,6 +636,11 @@ let g:unite_source_alignta_preset_arguments = [
 "icondrag{{{
 
 let g:icondrag_auto_start = 1
+
+"}}}
+"operator-camelize.vim{{{
+
+map <Leader>c <Plug>(operator-camelize-toggle)
 
 "}}}
 "}}}
@@ -947,9 +989,10 @@ vnoremap        <C-j>       <Esc>
 set splitbelow                    " 縦分割したら新しいウィンドウは下に
 set splitright                    " 横分割したら新しいウィンドウは右に
 
-exe 'noremap  <silent> <' . s:metaKey . '-e> :<C-u>call <SID>CloseVSplitWide()<CR>'
-exe 'noremap  <silent> <' . s:metaKey . '-E> :<C-u>call <SID>OpenVSplitWide()<CR>'
-exe 'noremap  <silent> <' . s:metaKey . '-w> :<C-u>call <SID>SmartClose()<CR>'
+" exe 'noremap  <silent> <' . s:metaKey . '-e> :<C-u>call <SID>ToggleVSplitWide()<CR>'
+" exe 'noremap  <silent> <' . s:metaKey . '-w> :<C-u>call <SID>SmartClose()<CR>'
+noremap  <silent> <Leader>e :<C-u>call <SID>ToggleVSplitWide()<CR>
+noremap  <silent> <Leader>w :<C-u>call <SID>SmartClose()<CR>
 
 " アプリウィンドウの移動とリサイズ
 if s:isGuiRunning
@@ -961,7 +1004,8 @@ if s:isGuiRunning
     noremap         <silent><Leader>j   :MoveWin<CR>
     noremap         <silent><Leader>k   :MoveWin<CR>
     noremap         <silent><Leader>l   :MoveWin<CR>
-    exe 'noremap  <silent> <' . s:metaKey . '-f> :<C-u>call <SID>FullWindow()<CR>'
+    " exe 'noremap  <silent> <' . s:metaKey . '-f> :<C-u>call <SID>FullWindow()<CR>'
+    noremap  <silent> <Leader>ff :<C-u>call <SID>FullWindow()<CR>
 endif
 
 "}}}
@@ -1009,8 +1053,10 @@ nmap        <Leader>b   [Buffer]
 
 nnoremap <silent>[Buffer]x  :bdelete<CR>
 
-exe 'noremap  <' . s:metaKey . '-j> :bnext<CR>'
-exe 'noremap  <' . s:metaKey . '-k> :bprev<CR>'
+" exe 'noremap  <' . s:metaKey . '-j> :bnext<CR>'
+" exe 'noremap  <' . s:metaKey . '-k> :bprev<CR>'
+noremap  <Leader>j :bnext<CR>
+noremap  <Leader>k :bprev<CR>
 
 for s:n in range(1, 9)
     exe 'nnoremap <silent> [Buffer]' . s:n  ':<C-u>b' . s:n . '<CR>'
@@ -1021,13 +1067,10 @@ endfor
 
 "vimrc / gvimrc の編集 
 nnoremap    <silent><F1>    :<C-u>call <SID>SmartOpen($MYVIMRC)<CR>
-
 nnoremap    <silent><F2>    :<C-u>call <SID>SmartOpen($MYGVIMRC)<CR>
 nnoremap    <silent><F3>    :<C-u>source $MYVIMRC<CR>:source $MYGVIMRC<CR>
 
-exe 'noremap  <silent> <' . s:metaKey . '-s> :write<cr>'
-
-"}}}
+" }}}
 "ヘルプ {{{
 
 set helplang=ja,en
@@ -1109,7 +1152,16 @@ let s:depthVsp     = 1
 let s:opendLeftVsp = 0
 let s:opendTopVsp  = 0
 
+function! s:ToggleVSplitWide()
+    if s:depthVsp <= 1
+        call s:OpenVSplitWide()
+    else
+        call s:CloseVSplitWide()
+    endif
+endfunction
+
 function! s:OpenVSplitWide()
+
     if s:depthVsp == 1
         let s:opendLeftVsp = getwinposx()
         let s:opendTopVsp  = getwinposy()
@@ -1121,10 +1173,6 @@ function! s:OpenVSplitWide()
 endf
 
 function! s:CloseVSplitWide()
-    if s:depthVsp <= 1
-        call s:OpenVSplitWide()
-        return
-    endif
 
     let s:depthVsp -= 1
     let &columns = g:baseColumns * s:depthVsp
@@ -1138,7 +1186,7 @@ endf
 "画面リフレッシュ{{{
 function! s:RefreshScreen()
 
-    " ステータスライン上のanzuが更新されなくなる
+    " ステータスライン上のanzuが更新されない
     " silent doautocmd CursorHold <buffer>
 
     call s:ForceShowCursolLine()
@@ -1314,8 +1362,10 @@ endfunction
 "}}}
 "}}}
 "コンソール用{{{
+
 if !s:isGuiRunning
     source $MYGVIMRC 
 endif
+
 "}}}
 

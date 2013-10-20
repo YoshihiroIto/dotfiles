@@ -6,6 +6,7 @@ let s:isGuiRunning = has('gui_running')
 
 "}}}
 "カラースキーマ{{{
+
 set t_Co=256
 colorscheme molokai
 
