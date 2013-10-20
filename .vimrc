@@ -45,6 +45,7 @@ NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-repeat'
 NeoBundle 'tomtom/tcomment_vim'
+NeoBundle 'supasorn/vim-easymotion'
 
 " http://qiita.com/rbtnn/items/a47ed6684f1f0bc52906
 NeoBundle 'kana/vim-operator-user'
@@ -195,14 +196,11 @@ if s:isMac
                 \ }
 endif
 
-" NeoBundle 'supasorn/vim-easymotion'
-
 " NeoBundleLazy 'kana/vim-smartchr', {
 "             \   'autoload' : {
 "             \       'insert' : 1,
 "             \   }
 "             \ }
-
 
 "}}}
 "Unite {{{
@@ -345,14 +343,14 @@ noremap        <F8>            :TagbarToggle<CR>
 " http://haya14busa.com/change-vim-easymotion-from-lokaltog-to-forked/
 " https://github.com/supasorn/vim-easymotion
 
-" let g:EasyMotion_leader_key          = ',,' 
-" let g:EasyMotion_keys                = 'hjklasdyuiopqwertnmzxcvb4738291056gf'
-" let g:EasyMotion_special_select_line = 0
-" let g:EasyMotiselect_phrase          = 0
+let g:EasyMotion_leader_key          = '<Space><Space>' 
+let g:EasyMotion_keys                = 'hjklasdyuiopqwertnmzxcvb4738291056gf'
+let g:EasyMotion_special_select_line = 0
+let g:EasyMotiselect_phrase          = 0
 
 " カラー設定変更
-" hi EasyMotionTarget ctermbg=none ctermfg=red
-" hi easymotionshade  ctermbg=none ctermfg=blue
+hi EasyMotionTarget ctermbg=none ctermfg=red
+hi easymotionshade  ctermbg=none ctermfg=blue
 
 "}}}
 "lingr.vim {{{
@@ -1299,7 +1297,7 @@ endfunction
 " http://stackoverflow.com/questions/6552295/deleting-all-empty-buffers-in-vim
 function! s:CleanEmptyBuffers()
 
-    let buffers = filter(range(1, bufnr('$')), 'buflisted(v:val) && empty(bufname(v:val)) && bufwinnr(v:val)<0')
+    let buffers = filter(range(1, bufnr('$')), "buflisted(v:val) && empty(bufname(v:val)) && bufwinnr(v:val)<0 && getbufvar(v:val, '&modified', 0)==0")
     if !empty(buffers)
         exe 'bd ' join(buffers, ' ')
     endif
@@ -1320,11 +1318,11 @@ function! s:CopyFile(sourceFilepath, targetFilepath)
     let etarget = vimproc#shellescape(expand(a:targetFilepath))
 
     if s:isWindows
-        call vimproc#system('copy ' . esource . ' ' . etarget)
+        call vimproc#cmd#system('copy ' . esource . ' ' . etarget)
     elseif s:isMac
         call vimproc#system('cp ' . esource . ' ' . etarget)
     else
-        throw 'Not supported.' 
+        throw 'Not supported. 
     endif
 endfunction
 "}}}
