@@ -98,7 +98,7 @@ endif
 " }}}
 "コマンドキーのショートカットを削除する{{{
 
-if s:isGuiRunning
+if s:isGuiRunning && s:isMac
     macm File.New\ Window                               key=<Nop>
     macm File.New\ Tab                                  key=<Nop>
     macm File.Open\.\.\.                                key=<Nop>

@@ -54,6 +54,8 @@ NeoBundle 'tyru/operator-camelize.vim'
 NeoBundle 'kana/vim-textobj-user'
 NeoBundle 'kana/vim-textobj-indent'
 NeoBundle 'kana/vim-textobj-function'
+NeoBundle 'kana/vim-textobj-line'
+NeoBundle 'osyo-manga/textobj-multiblock'
 
 NeoBundleLazy 'basyura/twibill.vim'
 NeoBundleLazy 'honza/vim-snippets'
@@ -959,7 +961,7 @@ augroup END
 
 let g:foldCCtext_enable_autofdc_adjuster = 1
 
-set foldcolumn=1
+set foldcolumn=0
 set foldlevel=99
 set foldtext=foldCC#foldtext()
 
@@ -1320,7 +1322,7 @@ function! s:CopyFile(sourceFilepath, targetFilepath)
     let etarget = vimproc#shellescape(expand(a:targetFilepath))
 
     if s:isWindows
-        call vimproc#cmd#system('copy ' . esource . ' ' . etarget)
+        call vimproc#system('copy ' . esource . ' ' . etarget)
     elseif s:isMac
         call vimproc#system('cp ' . esource . ' ' . etarget)
     else
