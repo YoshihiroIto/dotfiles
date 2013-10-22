@@ -1,11 +1,11 @@
-"基本 {{{
+" 基本 {{{
 
 let s:isWindows    = has('win32') || has('win64')
 let s:isMac        = has('mac')
 let s:isGuiRunning = has('gui_running')
 
-"}}}
-"カラースキーマ{{{
+" }}}
+" カラースキーマ {{{
 
 set t_Co=256
 colorscheme molokai
@@ -22,8 +22,8 @@ hi FoldColumn      guifg=#465457 guibg=#242526
 hi Folded          guifg=#465457 guibg=#242526
 hi VertSplit       guifg=#202020 guibg=#202020 gui=bold "見えなくする
 
-"}}}
-"見た目{{{
+" }}}
+" 見た目 {{{
 
 " ツールバー削除
 set guioptions-=T
@@ -45,8 +45,8 @@ set guioptions-=e
 set visualbell
 set t_vb=
 
-"}}}
-"フォント設定{{{
+" }}}
+" フォント設定 {{{
 
 if s:isGuiRunning
     if s:isWindows
@@ -65,13 +65,13 @@ if s:isGuiRunning
     endif
 endif
 
-"}}}
-"日本語入力中のカーソルの色{{{
+" }}}
+" 日本語入力中のカーソルの色 {{{
 
 highlight CursorIM guifg=NONE guibg=Red
 
-"}}}
-"ウィンドウの位置とサイズを記憶する{{{
+" }}}
+" ウィンドウの位置とサイズを記憶する {{{
 
 if s:isGuiRunning
     " http://vim-users.jp/2010/01/hack120/
@@ -96,7 +96,7 @@ if s:isGuiRunning
 endif
 
 " }}}
-"コマンドキーのショートカットを削除する{{{
+" コマンドキーのショートカットを削除する {{{
 
 if s:isGuiRunning && s:isMac
     macm File.New\ Window                               key=<Nop>

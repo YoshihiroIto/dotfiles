@@ -1,4 +1,4 @@
-"基本 {{{
+" 基本 {{{
 
 set nocompatible                " VI互換をオフ
 set encoding=utf-8
@@ -17,9 +17,9 @@ if !s:isGuiRunning
     let $MYGVIMRC = expand('~/.gvimrc')
 endif
 
-"}}}
-"プラグイン {{{
-"インストール{{{
+" }}}
+" プラグイン {{{
+" インストール {{{
 
 if has('vim_starting')
     set runtimepath+=$DOTVIM/bundle/neobundle.vim/
@@ -29,78 +29,66 @@ call neobundle#rc(expand('$DOTVIM/bundle/'))
 
 NeoBundleFetch 'Shougo/neobundle.vim'
 
-NeoBundle 'LeafCage/foldCC'
-NeoBundle 'YankRing.vim'
-NeoBundle 'YoshihiroIto/vim-icondrag'
+" 表示 {{{
+
+NeoBundle 'tomasr/molokai'
 NeoBundle 'bling/vim-bufferline'
 NeoBundle 'itchyny/lightline.vim'
-NeoBundle 'movewin.vim'
-NeoBundle 'osyo-manga/vim-anzu'
-NeoBundle 'othree/eregex.vim'
-NeoBundle 'thinca/vim-visualstar'
-NeoBundle 'tmhedberg/matchit'
-NeoBundle 'tomasr/molokai'
-NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'tpope/vim-surround'
-NeoBundle 'tpope/vim-repeat'
-NeoBundle 'tomtom/tcomment_vim'
-NeoBundle 'supasorn/vim-easymotion'
-
-" http://qiita.com/rbtnn/items/a47ed6684f1f0bc52906
-NeoBundle 'kana/vim-operator-user'
-NeoBundle 'tyru/operator-camelize.vim'
-
-" http://d.hatena.ne.jp/osyo-manga/20130717/1374069987
-NeoBundle 'kana/vim-textobj-user'
-NeoBundle 'kana/vim-textobj-indent'
-NeoBundle 'kana/vim-textobj-function'
-NeoBundle 'kana/vim-textobj-line'
-NeoBundle 'osyo-manga/textobj-multiblock'
-
-NeoBundleLazy 'basyura/twibill.vim'
-NeoBundleLazy 'honza/vim-snippets'
-NeoBundleLazy 'mattn/webapi-vim'
-
-NeoBundle 'Shougo/vimproc', {
-            \   'build' : {
-            \       'windows' : 'make -f make_mingw32.mak',
-            \       'cygwin'  : 'make -f make_cygwin.mak',
-            \       'mac'     : 'make -f make_mac.mak',
-            \       'unix'    : 'make -f make_unix.mak',
-            \   },
+NeoBundle 'LeafCage/foldCC'
+NeoBundleLazy 'Shougo/unite-outline', {
+            \   'autoload' : {
+            \       'unite_sources' : [ 'outline' ],
+            \   }
+            \ }
+NeoBundleLazy 'majutsushi/tagbar', {
+            \   'autoload' : {
+            \       'commands' : [ 'TagbarToggle' ]
+            \   }
             \ }
 
+" }}}
+" 編集 {{{
+
+NeoBundle 'tomtom/tcomment_vim'
+NeoBundle 'YankRing.vim'
 NeoBundleLazy 'Shougo/neocomplete.vim', {
             \   'autoload' : {
             \       'insert' : 1,
             \   }
             \ }
-
+NeoBundleLazy 'honza/vim-snippets'
 NeoBundleLazy 'Shougo/neosnippet', {
             \   'depends' : [ 'honza/vim-snippets' ],
             \   'autoload' : {
             \       'insert' : 1,
             \   }
             \ }
-
 NeoBundleLazy 'kana/vim-smartinput', {
             \   'autoload' : {
             \       'insert' : 1,
             \   }
             \ }
-
-NeoBundleLazy 'tsukkee/lingr-vim', {
+NeoBundleLazy 'h1mesuke/vim-alignta', {
             \   'autoload' : {
-            \       'commands' : [ 'LingrLaunch' ]
+            \       'unite_sources' : [ 'alignta' ],
+            \       'commands'      : [ 'Alignta' ]
+            \   }
+            \ }
+NeoBundleLazy 'rhysd/vim-clang-format', {
+            \   'depends'  : 'kana/vim-operator-user',
+            \   'autoload' : {
+            \       'filetypes' : ['c', 'cpp', 'objc']
             \   }
             \ }
 
-NeoBundleLazy 'Shougo/unite.vim', {
-            \   'autoload' : {
-            \       'commands' : [ 'Unite', 'UniteResume', 'UniteWithCursorWord' ]
-            \   }
-            \ }
+" }}}
+" 検索 {{{
 
+NeoBundle 'supasorn/vim-easymotion'
+NeoBundle 'tmhedberg/matchit'
+NeoBundle 'thinca/vim-visualstar'
+NeoBundle 'osyo-manga/vim-anzu'
+NeoBundle 'othree/eregex.vim'
 NeoBundleLazy 'rking/ag.vim', {
             \   'depends' : [ 'Shougo/unite.vim' ],
             \   'autoload' : {
@@ -108,56 +96,54 @@ NeoBundleLazy 'rking/ag.vim', {
             \   }
             \ }
 
-NeoBundleLazy 'Shougo/unite-outline', {
+" }}}
+" オペレータ {{{
+" http://qiita.com/rbtnn/items/a47ed6684f1f0bc52906
+
+NeoBundle 'kana/vim-operator-user'
+NeoBundle 'tyru/operator-camelize.vim'
+NeoBundle 'kana/vim-operator-replace'
+
+" }}}
+" テキストオブジェクト {{{
+" http://d.hatena.ne.jp/osyo-manga/20130717/1374069987
+
+NeoBundle 'kana/vim-textobj-user'
+NeoBundle 'kana/vim-textobj-indent'
+NeoBundle 'kana/vim-textobj-function'
+NeoBundle 'kana/vim-textobj-line'
+NeoBundle 'kana/vim-textobj-entire'
+NeoBundle 'osyo-manga/vim-textobj-multiblock'
+NeoBundle 'anyakichi/vim-textobj-ifdef'
+NeoBundle 'tpope/vim-surround'
+NeoBundle 'tpope/vim-repeat'
+
+" }}}
+" アプリ {{{
+
+NeoBundle 'tpope/vim-fugitive'
+NeoBundleLazy 'basyura/twibill.vim'
+NeoBundleLazy 'tsukkee/lingr-vim', {
             \   'autoload' : {
-            \       'unite_sources' : [ 'outline' ],
+            \       'commands' : [ 'LingrLaunch' ]
             \   }
             \ }
-
-NeoBundleLazy 'tsukkee/unite-help', { 
-            \   'autoload' : {
-            \       'unite_sources' : [ 'help' ],
-            \   }
-            \ }
-
-NeoBundleLazy 'h1mesuke/vim-alignta', {
-            \   'autoload' : {
-            \       'unite_sources' : [ 'alignta' ],
-            \       'commands'      : [ 'Alignta' ]
-            \   }
-            \ }
-
 NeoBundleLazy 'mattn/benchvimrc-vim', {
             \   'autoload' : {
             \       'commands' : [ 'BenchVimrc' ]
             \   }
             \ }
-
-NeoBundleLazy 'vim-jp/vimdoc-ja', {
-            \   'autoload' : {
-            \       'commands' : [ 'Help' ]
-            \   }
-            \ }
-
 NeoBundleLazy 'Shougo/vimfiler', {
             \   'depends' : [ 'Shougo/unite.vim', 'Shougo/vimshell.vim' ],
             \   'autoload' : {
             \       'commands' : [ 'VimFilerBufferDir' ]
             \   }
             \ }
-
 NeoBundleLazy 'Shougo/vimshell.vim', {
             \   'autoload' : {
             \       'commands' : [ 'VimShell' ]
             \   }
             \ }
-
-NeoBundleLazy 'majutsushi/tagbar', {
-            \   'autoload' : {
-            \       'commands' : [ 'TagbarToggle' ]
-            \   }
-            \ }
-
 NeoBundleLazy 'basyura/TweetVim', {
             \   'depends' : [ 
             \       'basyura/twibill.vim',
@@ -169,6 +155,39 @@ NeoBundleLazy 'basyura/TweetVim', {
             \   }
             \ }
 
+" }}}
+" ヘルプ {{{
+
+NeoBundleLazy 'vim-jp/vimdoc-ja', {
+            \   'autoload' : {
+            \       'commands' : [ 'Help' ]
+            \   }
+            \ }
+NeoBundleLazy 'tsukkee/unite-help', { 
+            \   'autoload' : {
+            \       'unite_sources' : [ 'help' ],
+            \   }
+            \ }
+
+" }}}
+" その他 {{{
+
+NeoBundle 'YoshihiroIto/vim-icondrag'
+NeoBundle 'movewin.vim'
+NeoBundle 'Shougo/vimproc', {
+            \   'build' : {
+            \       'windows' : 'make -f make_mingw32.mak',
+            \       'cygwin'  : 'make -f make_cygwin.mak',
+            \       'mac'     : 'make -f make_mac.mak',
+            \       'unix'    : 'make -f make_unix.mak',
+            \   },
+            \ }
+NeoBundleLazy 'Shougo/unite.vim', {
+            \   'autoload' : {
+            \       'commands' : [ 'Unite', 'UniteResume', 'UniteWithCursorWord' ]
+            \   }
+            \ }
+NeoBundleLazy 'mattn/webapi-vim'
 NeoBundleLazy 'open-browser.vim', {
             \   'autoload' : {
             \        'mappings'        : ['<Plug>(open-browser-wwwsearch)', '<Plug>(openbrowser-open)'],
@@ -177,7 +196,6 @@ NeoBundleLazy 'open-browser.vim', {
             \        'commands'        : ['OpenBrowserSearch', 'OpenBrowser', 'OpenBrowserSmartSearch']
             \   }
             \ }
-
 if s:isMac 
     NeoBundleLazy 'itchyny/dictionary.vim', {
                 \   'autoload' : {
@@ -196,15 +214,9 @@ if s:isMac
                 \   }
                 \ }
 endif
-
-" NeoBundleLazy 'kana/vim-smartchr', {
-"             \   'autoload' : {
-"             \       'insert' : 1,
-"             \   }
-"             \ }
-
-"}}}
-"Unite {{{
+" }}}
+" }}}
+" Unite {{{
 
 nnoremap [Unite]    <Nop>
 xnoremap [Unite]    <Nop>
@@ -245,8 +257,8 @@ function! s:bundle.hooks.on_source(bundle)
 endfunction
 unlet s:bundle
 
-"}}}
-"VimFiler {{{
+" }}}
+" VimFiler {{{
 
 " exe 'noremap  <silent> <' . s:metaKey . '-o> :VimFilerBufferDir<CR>'
 noremap  <silent> <Leader>o :VimFilerBufferDir<CR>
@@ -272,8 +284,8 @@ function! s:bundle.hooks.on_source(bundle)
 endfunction
 unlet s:bundle
 
-"}}}
-"VimShell{{{
+" }}}
+" VimShell {{{
 
 let s:bundle = neobundle#get('vimshell.vim')
 function! s:bundle.hooks.on_source(bundle)
@@ -282,14 +294,14 @@ function! s:bundle.hooks.on_source(bundle)
 endfunction
 unlet s:bundle
 
-"}}}
-"Omnisharp {{{
+" }}}
+" Omnisharp {{{
 
 nnoremap <F12>      :OmniSharpGotoDefinition<CR>zz
 nnoremap <S-F12>    :OmniSharpFindUsages<CR>
 
-"}}}
-"neocomplete{{{
+" }}}
+" neocomplete {{{
 
 let s:bundle = neobundle#get('neocomplete.vim')
 function! s:bundle.hooks.on_source(bundle)
@@ -306,8 +318,8 @@ function! s:bundle.hooks.on_source(bundle)
 endfunction
 unlet s:bundle
 
-"}}}
-"neosnippet{{{
+" }}}
+" neosnippet {{{
 
 let s:bundle = neobundle#get('neosnippet')
 function! s:bundle.hooks.on_source(bundle)
@@ -333,13 +345,13 @@ function! s:bundle.hooks.on_source(bundle)
 endfunction
 unlet s:bundle
 
-"}}}
-"TagBar {{{
+" }}}
+" TagBar {{{
 
 noremap        <F8>            :TagbarToggle<CR>
 
-"}}}
-"vim-easymotion {{{
+" }}}
+" vim-easymotion {{{
 
 " http://haya14busa.com/change-vim-easymotion-from-lokaltog-to-forked/
 " https://github.com/supasorn/vim-easymotion
@@ -353,8 +365,8 @@ let g:EasyMotiselect_phrase          = 0
 hi EasyMotionTarget ctermbg=none ctermfg=red
 hi easymotionshade  ctermbg=none ctermfg=blue
 
-"}}}
-"lingr.vim {{{
+" }}}
+" lingr.vim {{{
 
 noremap     <silent><F9>        :<C-u>call <SID>ToggleLingr()<CR>
 
@@ -394,8 +406,8 @@ function! s:ToggleLingr()
     endif
 endfunction
 
-"}}}
-"Tweetvim {{{
+" }}}
+" Tweetvim {{{
 
 noremap     <silent><F10>       :<C-u>call <SID>ToggleTweetVim()<CR>
 
@@ -418,8 +430,8 @@ augroup TweetVimSetting
     autocmd FileType tweetvim     nmap     <buffer>rr        <Plug>(tweetvim_action_reload)
 augroup END
 
-"}}}
-"lightline {{{
+" }}}
+" lightline {{{
 
 " lightline用シンボル
 let s:lightline_symbol_separator_left     = s:isWindows ? ''   : '⮀'
@@ -557,13 +569,13 @@ function! MyCharCode()
 
     return "'". char ."' ". nr
 endfunction
-"}}}
-"vim-anzu {{{
+" }}}
+" vim-anzu {{{
 
-"http://qiita.com/shiena/items/f53959d62085b7980cb5
-nmap <silent> n <Plug>(anzu-n)zOzz:<C-u>call <SID>RefreshScreen()<CR>
-nmap <silent> N <Plug>(anzu-N)zOzz:<C-u>call <SID>RefreshScreen()<CR>
-nmap <silent> * <Plug>(anzu-star)zOzz:<C-u>call <SID>RefreshScreen()<CR>
+" http://qiita.com/shiena/items/f53959d62085b7980cb5
+nmap <silent> n <Plug>(anzu-n)zOzz:<C-u>call     <SID>RefreshScreen()<CR>
+nmap <silent> N <Plug>(anzu-N)zOzz:<C-u>call     <SID>RefreshScreen()<CR>
+nmap <silent> * <Plug>(anzu-star)zOzz:<C-u>call  <SID>RefreshScreen()<CR>
 nmap <silent> # <Plug>(anzu-sharp)zOzz:<C-u>call <SID>RefreshScreen()<CR>
 
 augroup vim-anzu
@@ -573,8 +585,8 @@ augroup vim-anzu
     autocmd CursorHold,CursorHoldI,WinLeave,TabLeave * call anzu#clear_search_status()
 augroup END
 
-"}}}
-"eregex.vim{{{
+" }}}
+" eregex.vim {{{
 
 let g:eregex_default_enable = 0
 
@@ -583,50 +595,8 @@ nmap     <leader>e [eregex]
 
 nnoremap [eregex]t :<c-u>call eregex#toggle()<cr>
 
-"}}}
-"vim-smartchr{{{
-
-" let s:bundle = neobundle#get('vim-smartchr')
-" function! s:bundle.hooks.on_source(bundle)
-"     " http://labs.timedia.co.jp/2012/09/vim-smartinput.html
-" 
-"     inoremap <expr> ,  smartchr#loop(', ', ',')
-" 
-"     inoremap <expr> ^  smartchr#loop(' ^ ', '^')
-"     inoremap <expr> %  smartchr#loop(' % ', '%')
-"     inoremap <expr> ?  smartchr#loop(' ? ', '?')
-" 
-"     inoremap <expr> :  smartchr#loop(' : ', ':', ' :: ')
-"     inoremap <expr> =  smartchr#loop(' = ', ' == ', '=')
-"     inoremap <expr> &  smartchr#loop(' & ', '&', ' && ')
-"     inoremap <expr> <Bar> smartchr#loop(' <Bar> ', ' <Bar><Bar> ', '<Bar>')
-" 
-"     inoremap <expr> +  smartchr#loop(' + ', '++ ', '+', ' ++')
-"     inoremap <expr> -  smartchr#loop(' - ', '-- ', '-', ' --')
-" 
-"     inoremap <expr> /  smartchr#loop(' / ', '// ', '/', '//')
-" 
-"     inoremap <expr> -> smartchr#loop('->')
-"     inoremap <expr> += smartchr#loop(' += ')
-"     inoremap <expr> -= smartchr#loop(' -= ')
-"     inoremap <expr> *= smartchr#loop(' *= ')
-"     inoremap <expr> /= smartchr#loop(' /= ')
-"     inoremap <expr> != smartchr#loop(' != ')
-"     inoremap <expr> &= smartchr#loop(' &= ')
-"     inoremap <expr> ^= smartchr#loop(' ^= ')
-"     inoremap <expr> >= smartchr#loop(' >= ')
-"     inoremap <expr> <= smartchr#loop(' <= ')
-"     inoremap <expr> <Bar>= smartchr#loop(' <Bar>= ')
-" 
-"     " inoremap <expr> <  smartchr#loop(' < ', ' << ', '<')
-"     " inoremap <expr> >  smartchr#loop(' > ', ' >> ', '>')
-"     " inoremap <expr> >>= smartchr#loop(' >>= ', '>>=')
-"     " inoremap <expr> <<= smartchr#loop(' <<= ', '<<=')
-" endfunction
-" unlet s:bundle
-
-"}}}
-"vim-alignta{{{
+" }}}
+" vim-alignta {{{
 
 let g:unite_source_alignta_preset_arguments = [
             \     ["Align at '='", '=>\='],
@@ -636,21 +606,57 @@ let g:unite_source_alignta_preset_arguments = [
             \     ["Align at ','", ','],
             \ ]
 
-"}}}
-"icondrag{{{
+" }}}
+" icondrag {{{
 
 let g:icondrag_auto_start = 1
 
-"}}}
-"operator-camelize.vim{{{
+" }}}
+" operator-camelize.vim {{{
 
 map <Leader>c <Plug>(operator-camelize-toggle)
 
-"}}}
-"}}}
-"キー無効{{{
+" }}}
+" vim-operator-replace {{{
 
-"Vimっぽさ矯正
+map R  <Plug>(operator-replace)
+
+" }}}
+" vim-clang-format {{{
+
+let s:bundle = neobundle#get('vim-clang-format')
+function! s:bundle.hooks.on_source(bundle)
+
+    if s:isWindows
+        let g:clang_format#command = "C:/Development/llvm/build/bin/Release/clang-format"
+    else
+        let g:clang_format#command = '/Users/BaB/llvm/build/Release/bin/clang-format'
+    endif
+
+    let g:clang_format#style_options = {
+                \ 'AccessModifierOffset'                : -4,
+                \ 'ColumnLimit'                         : 120,
+                \ 'AllowShortIfStatementsOnASingleLine' : 'true',
+                \ 'AlwaysBreakTemplateDeclarations'     : 'true',
+                \ 'Standard'                            : 'C++11',
+                \ 'BreakBeforeBraces'                   : 'Stroustrup',
+                \ }
+
+    let g:clang_format#code_style = "Chromium"
+
+    augroup clang-format-setting
+        autocmd!
+        autocmd FileType c,cpp map <buffer><Leader>x <Plug>(operator-clang-format)
+    augroup END
+
+endfunction
+unlet s:bundle
+
+" }}}
+" }}}
+" キー無効 {{{
+
+" Vimっぽさ矯正
 nnoremap    <Up>        <Nop>
 nnoremap    <Down>      <Nop>
 nnoremap    <Left>      <Nop>
@@ -675,18 +681,18 @@ vnoremap    <BS>        <Nop>
 " inoremap  <Right>     <Nop>
 " inoremap  <BS>        <Nop>
 
-"Vimを閉じない
+" Vimを閉じない
 nnoremap    ZZ          <Nop>
 nnoremap    ZQ          <Nop>
 
-"ミス操作で削除してしまうため
+" ミス操作で削除してしまうため
 nnoremap    dh          <Nop>
 nnoremap    dj          <Nop>
 nnoremap    dk          <Nop>
 nnoremap    dl          <Nop>
 
-"}}}
-"ファイルタイプごとの設定 {{{
+" }}}
+" ファイルタイプごとの設定 {{{
 
 filetype on                       " ファイルタイプごとの処理を有効
 filetype plugin on                " ファイルタイプごとのプラグインを有効
@@ -701,8 +707,8 @@ augroup file-setting
     autocmd FileType            vim         setlocal foldmethod=marker foldlevel=0 foldcolumn=3
 augroup END
 
-"}}}
-"編集 {{{
+" }}}
+" 編集 {{{
 
 set browsedir=buffer              " バッファで開いているファイルのディレクトリ
 set clipboard=unnamedplus,unnamed " クリップボードを使う
@@ -771,8 +777,8 @@ augroup vimrc-auto-mkdir
     endfunction
 augroup END
 
-"}}}
-"定型文{{{
+" }}}
+" 定型文 {{{
 
 command! -nargs=0 -bar InsertCurrentFilepath      call s:InsertTextAtCurrent(expand('%:p:t'))
 command! -nargs=0 -bar InsertCurrentFilefullpath  call s:InsertTextAtCurrent(expand('%:p'))
@@ -787,8 +793,8 @@ let g:unite_source_menu_menus.fix = {
       \     ]
       \ } 
 
-"}}}
-"インデント {{{
+" }}}
+" インデント {{{
 
 filetype indent on                " ファイルタイプごとのインデントを有効
 
@@ -799,23 +805,21 @@ set cindent                       " Cプログラムファイルの自動イン�
 vnoremap    <       <gv
 vnoremap    >       >gv
 
-"}}}
-"タブ{{{
+" }}}
+" タブ {{{
 
 set tabstop=4                     " ファイル内の <Tab> が対応する空白の数。
 set softtabstop=4                 " <Tab> の挿入や <BS> の使用等の編集操作をするときに、<Tab> が対応する空白の数。
 set expandtab                     " Insertモードで <Tab> を挿入するとき、代わりに適切な数の空白を使う。
 
-"}}}
-"バックアップ・スワップファイル {{{
+" }}}
+" バックアップ・スワップファイル {{{
 
-" set swapfile                      " スワップファイルを使う
-" set directory=~/.vimswap          " スワップファイルをホームディレクトリに保存
 set noswapfile                    " スワップファイルを作らない
 set backup                        " バックアップファイルを使う
 set backupdir=~/.vimbackup        " バックアップファイルをホームディレクトリに保存
 
-"自動ミラーリング{{{
+" 自動ミラーリング {{{
 let s:mirrorDir = expand('~/vimmirror')
 let s:mirrorMaxHistory = 7
 augroup auto-mirror
@@ -858,23 +862,24 @@ augroup auto-mirror
         endif
     endfunction
 augroup END
-"}}}
-"}}}
-"検索 {{{
+" }}}
+" }}}
+" 検索 {{{
 
 set incsearch                     " インクリメンタルサーチ
 set ignorecase                    " 検索パターンにおいて大文字と小文字を区別しない。
 set smartcase                     " 検索パターンが大文字を含んでいたらオプション 'ignorecase' を上書きする。
+set nowrapscan                    " 検索をファイルの先頭へループしない
 
 if has('migemo')
     set migemo                        " 日本語インクリメンタルサーチ
 endif
 
-"検索時のハイライトを解除
+" 検索時のハイライトを解除
 nnoremap    <silent><Leader>/   :nohlsearch<CR>
 
-"}}}
-"表示{{{
+" }}}
+" 表示{{{
 
 syntax on                         " 構文ごとに色分けをする
 
@@ -896,7 +901,7 @@ set fillchars=vert:\              " 縦分割の境界線
 
 set updatetime=1000
 
-"全角スペースをハイライト {{{
+" 全角スペースをハイライト {{{
 
 " http://fifnel.com/2009/04/07/2300/
 if has('syntax')
@@ -916,8 +921,8 @@ if has('syntax')
     augroup END
 endif
 
-"}}}
-"カレントウィンドウにのみ罫線を引く {{{
+" }}}
+" カレントウィンドウにのみ罫線を引く {{{
 
 " http://d.hatena.ne.jp/thinca/20090530/1243615055
 augroup vimrc-auto-cursorline
@@ -955,9 +960,9 @@ augroup vimrc-auto-cursorline
     endfunction
 augroup END
 
-"}}}
-"}}}
-"折り畳み {{{
+" }}}
+" }}}
+" 折り畳み {{{
 
 let g:foldCCtext_enable_autofdc_adjuster = 1
 
@@ -977,16 +982,15 @@ nmap <expr> <C-l> foldclosed(line('.')) != -1 ? 'zo' : '<C-l>'
 " 折り畳み外であれば何もしない
 nnoremap <expr> zO foldclosed(line('.')) != -1 ? 'zO' : ''
 
-
-"}}}
-"モード移行 {{{
+" }}}
+" モード移行 {{{
 
 inoremap        <C-j>       <Esc>
 nnoremap        <C-j>       <Esc>
 vnoremap        <C-j>       <Esc>
 
-"}}}
-"ウィンドウ操作 {{{
+" }}}
+" ウィンドウ操作 {{{
 
 set splitbelow                    " 縦分割したら新しいウィンドウは下に
 set splitright                    " 横分割したら新しいウィンドウは右に
@@ -1010,8 +1014,8 @@ if s:isGuiRunning
     noremap  <silent> <Leader>ff :<C-u>call <SID>FullWindow()<CR>
 endif
 
-"}}}
-"カーソル移動 {{{
+" }}}
+" カーソル移動 {{{
 
 nnoremap    <silent>k       gk
 nnoremap    <silent>j       gj
@@ -1028,8 +1032,8 @@ vnoremap    <silent><C-y>   <C-y>k
 nmap        <silent>gg      ggzOzz:<C-u>call <SID>RefreshScreen()<CR>
 nmap        <silent>GG      GGzOzz:<C-u>call <SID>RefreshScreen()<CR>
 
-"}}}
-"タブライン操作 {{{
+" }}}
+" タブライン操作 {{{
 
 " タブライン常時表示
 set showtabline=2
@@ -1047,8 +1051,8 @@ for s:n in range(1, 9)
     exe 'nnoremap <silent> [Tab]' . s:n  ':<C-u>tabnext' . s:n . '<CR>'
 endfor
 
-"}}}
-"バッファ操作 {{{
+" }}}
+" バッファ操作 {{{
 
 nnoremap    [Buffer]    <Nop>
 nmap        <Leader>b   [Buffer]
@@ -1064,30 +1068,30 @@ for s:n in range(1, 9)
     exe 'nnoremap <silent> [Buffer]' . s:n  ':<C-u>b' . s:n . '<CR>'
 endfor
 
-"}}}
-"ファイル操作 {{{
+" }}}
+" ファイル操作 {{{
 
-"vimrc / gvimrc の編集 
+" vimrc / gvimrc の編集 
 nnoremap    <silent><F1>    :<C-u>call <SID>SmartOpen($MYVIMRC)<CR>
 nnoremap    <silent><F2>    :<C-u>call <SID>SmartOpen($MYGVIMRC)<CR>
 nnoremap    <silent><F3>    :<C-u>source $MYVIMRC<CR>:source $MYGVIMRC<CR>
 
 " }}}
-"ヘルプ {{{
+" ヘルプ {{{
 
 set helplang=ja,en
 
 nnoremap    K   :<C-u>help 
 nnoremap    KK  :<C-u>help <C-r><C-w><CR>
 
-"}}}
-"汎用関数 {{{
-"SID取得 {{{
+" }}}
+" 汎用関数 {{{
+" SID取得 {{{
 function! s:SID()
     return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID$')
 endfunction
-"}}}
-"アプリケーションウィンドウサイズの変更 {{{
+" }}}
+" アプリケーションウィンドウサイズの変更 {{{
 function! s:ResizeWin()
 
     let d1 = 1
@@ -1142,14 +1146,14 @@ function! s:ResizeWin()
 
     let &titlestring = t
 endfunction
-"}}}
-"アプリケーションウィンドウを最大高さにする {{{
+" }}}
+" アプリケーションウィンドウを最大高さにする {{{
 function! s:FullWindow()
     exe 'winpos' getwinposx() '0'
     exe 'set lines=9999'
-endf
-"}}}
-"縦分割する {{{
+endfunction
+" }}}
+" 縦分割する {{{
 let s:depthVsp     = 1
 let s:opendLeftVsp = 0
 let s:opendTopVsp  = 0
@@ -1184,8 +1188,8 @@ function! s:CloseVSplitWide()
         exe 'winpos' s:opendLeftVsp s:opendTopVsp
     end
 endf
-"}}}
-"画面リフレッシュ{{{
+" }}}
+" 画面リフレッシュ{{{
 function! s:RefreshScreen()
 
     " ステータスライン上のanzuが更新されない
@@ -1194,8 +1198,8 @@ function! s:RefreshScreen()
     call s:ForceShowCursolLine()
 
 endfunction
-"}}}
-"賢いクローズ {{{
+" }}}
+" 賢いクローズ {{{
 " ウィンドウが１つかつバッファが一つかつ&columns が g:baseColumns            :quit
 " ウィンドウが１つかつバッファが一つかつ&columns が g:baseColumnsでない      &columns = g:baseColumns
 " 現在のウィンドウに表示しているバッファが他のウィンドウでも表示されてる     :close
@@ -1242,8 +1246,8 @@ function! s:SmartClose()
         endif
     endif
 endfunction
-"}}}
-"賢いファイルオープン {{{
+" }}}
+" 賢いファイルオープン {{{
 function! s:SmartOpen(filepath)
 
     " 新規タブであればそこに開く、そうでなければ新規新規タブに開く
@@ -1256,8 +1260,8 @@ function! s:SmartOpen(filepath)
     exe ':edit' a:filepath
     call s:CleanEmptyBuffers()
 endfunction
-"}}}
-"読み込み済みのバッファ数を得る {{{
+" }}}
+" 読み込み済みのバッファ数を得る {{{
 function! s:GetListedBufferCount()
 
     let bufferCount = 0
@@ -1275,8 +1279,8 @@ function! s:GetListedBufferCount()
 
     return bufferCount
 endfunction
-"}}}
-"現在のバッファが編集済みか？ {{{
+" }}}
+" 現在のバッファが編集済みか？ {{{
 function! s:GetIsCurrentBufferModified()
 
     let currentWindow           = winnr()
@@ -1285,8 +1289,8 @@ function! s:GetIsCurrentBufferModified()
 
     return isCurrentBufferModified
 endfunction
-"}}}
-"カレントバッファのサイズを取得 {{{
+" }}}
+" カレントバッファのサイズを取得 {{{
 function! s:GetCurrentBufferSize()
 
     let byte = line2byte(line('$') + 1)
@@ -1296,8 +1300,8 @@ function! s:GetCurrentBufferSize()
         return byte - 1
     endif
 endfunction
-"}}}
-"空バッファを削除 {{{
+" }}}
+" 空バッファを削除 {{{
 " http://stackoverflow.com/questions/6552295/deleting-all-empty-buffers-in-vim
 function! s:CleanEmptyBuffers()
 
@@ -1306,16 +1310,16 @@ function! s:CleanEmptyBuffers()
         exe 'bd ' join(buffers, ' ')
     endif
 endfunction
-"}}}
-"ファイルの場所をカレントにする{{{
+" }}}
+" ファイルの場所をカレントにする{{{
 function! s:SetCurrentDir()
 
-    if &ft != '' && &ft != 'vimfiler'
+    if &ft != '' && &ft != 'vimfilere'
         exe 'lcd'  fnameescape(expand('%:p:h'))
     endif
 endfunction
-"}}}
-"ファイルコピー{{{
+" }}}
+" ファイルコピー{{{
 function! s:CopyFile(sourceFilepath, targetFilepath)
 
     let esource = vimproc#shellescape(expand(a:sourceFilepath))
@@ -1329,16 +1333,16 @@ function! s:CopyFile(sourceFilepath, targetFilepath)
         throw 'Not supported. 
     endif
 endfunction
-"}}}
-"ディレクトリ作成{{{
+" }}}
+" ディレクトリ作成 {{{
 function! s:MakeDir(path)
 
     if isdirectory(a:path) == 0
         call mkdir(a:path, 'p')
     endif
 endfunction
-"}}}
-"ディレクトリ削除{{{
+" }}}
+" ディレクトリ削除 {{{
 function! s:RemoveDir(path)
 
     let epath = vimproc#shellescape(expand(a:path)) 
@@ -1353,21 +1357,21 @@ function! s:RemoveDir(path)
         endif
     endif
 endfunction
-"}}}
-"現在位置にテキストを挿入する{{{
+" }}}
+" 現在位置にテキストを挿入する {{{
 function! s:InsertTextAtCurrent(text)
 
     let pos = getpos('.')
     exe ':normal i' . a:text
     call setpos('.', pos)
 endfunction
-"}}}
-"}}}
-"コンソール用{{{
+" }}}
+" }}}
+" コンソール用 {{{
 
 if !s:isGuiRunning
     source $MYGVIMRC 
 endif
 
-"}}}
+" }}}
 
