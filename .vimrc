@@ -628,9 +628,9 @@ let s:bundle = neobundle#get('vim-clang-format')
 function! s:bundle.hooks.on_source(bundle)
 
     if s:isWindows
-        let g:clang_format#command = "C:/Development/llvm/build/bin/Release/clang-format"
+        let g:clang_format#command = 'C:/Development/llvm/build/bin/Release/clang-format'
     else
-        let g:clang_format#command = '/Users/BaB/llvm/build/Release/bin/clang-format'
+        let g:clang_format#command = 'clang-format-3.4'
     endif
 
     let g:clang_format#style_options = {
