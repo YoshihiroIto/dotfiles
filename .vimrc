@@ -416,6 +416,15 @@ endfunction
 
 noremap     <silent><F10>       :<C-u>call <SID>ToggleTweetVim()<CR>
 
+function! s:ToggleTweetVim()
+    if bufnr("tweetvim") == -1
+        tabnew
+        TweetVimHomeTimeline
+    else
+        silent! exe 'bwipeout tweetvim'
+    endif
+endfunction
+
 let s:bundle = neobundle#get('TweetVim')
 function! s:bundle.hooks.on_source(bundle)
 
@@ -423,15 +432,6 @@ function! s:bundle.hooks.on_source(bundle)
     let g:tweetvim_display_separator = 0
     let g:tweetvim_tweet_per_page    = 35
     let g:tweetvim_display_icon      = 1
-
-    function! s:ToggleTweetVim()
-        if bufnr("tweetvim") == -1
-            tabnew
-            TweetVimHomeTimeline
-        else
-            silent! exe 'bwipeout tweetvim'
-        endif
-    endfunction
 
     augroup TweetVimSetting
         autocmd!
