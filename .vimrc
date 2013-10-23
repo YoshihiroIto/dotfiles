@@ -88,7 +88,8 @@ NeoBundleLazy 'Rip-Rip/clang_complete', {
 " }}}
 " 検索 {{{
 
-NeoBundle 'supasorn/vim-easymotion'
+" NeoBundle 'supasorn/vim-easymotion'
+NeoBundle 'haya14busa/vim-easymotion'
 NeoBundle 'tmhedberg/matchit'
 NeoBundle 'thinca/vim-visualstar'
 NeoBundle 'osyo-manga/vim-anzu'
@@ -242,6 +243,7 @@ nnoremap <silent> [Unite]f    :<C-u>Unite menu:fix<CR>
 
 let s:bundle = neobundle#get('unite.vim')
 function! s:bundle.hooks.on_source(bundle)
+
     " insert modeで開始
     let g:unite_enable_start_insert = 1
 
@@ -269,6 +271,7 @@ noremap  <silent> <Leader>o :VimFilerBufferDir<CR>
 
 let s:bundle = neobundle#get('vimfiler')
 function! s:bundle.hooks.on_source(bundle)
+
     augroup vimrc
         autocmd!
         autocmd FileType vimfiler call s:vimfiler_my_settings()
@@ -296,7 +299,6 @@ function! s:bundle.hooks.on_source(bundle)
 
     let g:vimshell_prompt_expr = 'getcwd().">"'
     let g:vimshell_prompt_pattern = '^\f\+>'
-
 endfunction
 unlet s:bundle
 
@@ -365,15 +367,15 @@ function! s:bundle.hooks.on_source(bundle)
     " http://haya14busa.com/change-vim-easymotion-from-lokaltog-to-forked/
     " https://github.com/supasorn/vim-easymotion
 
-    let g:EasyMotion_leader_key          = '<Space><Space>' 
+    let g:EasyMotion_leader_key          = '<Space><Space>'
     let g:EasyMotion_keys                = 'hjklasdyuiopqwertnmzxcvb4738291056gf'
     let g:EasyMotion_special_select_line = 0
     let g:EasyMotiselect_phrase          = 0
+    let g:EasyMotion_use_migemo          = 1
 
     " カラー設定変更
     hi EasyMotionTarget ctermbg=none ctermfg=red
     hi easymotionshade  ctermbg=none ctermfg=blue
-
 endfunction
 unlet s:bundle
 
@@ -422,7 +424,7 @@ endfunction
 
 noremap     <silent><F10>       :<C-u>call <SID>ToggleTweetVim()<CR>
 
-let s:bundle = neobundle#get('Tweetvim')
+let s:bundle = neobundle#get('TweetVim')
 function! s:bundle.hooks.on_source(bundle)
 
     let g:tweetvim_include_rts       = 1
@@ -603,14 +605,13 @@ function! s:bundle.hooks.on_source(bundle)
         autocmd!
         autocmd CursorHold,CursorHoldI,WinLeave,TabLeave * call anzu#clear_search_status()
     augroup END
-
 endfunction
 unlet s:bundle
 
 " }}}
 " eregex.vim {{{
 
-let s:bundle = neobundle#get('eregex')
+let s:bundle = neobundle#get('eregex.vim')
 function! s:bundle.hooks.on_source(bundle)
 
     let g:eregex_default_enable = 0
@@ -619,7 +620,6 @@ function! s:bundle.hooks.on_source(bundle)
     nmap     <leader>e [eregex]
 
     nnoremap [eregex]t :<c-u>call eregex#toggle()<cr>
-
 endfunction
 unlet s:bundle
 
@@ -676,7 +676,6 @@ function! s:bundle.hooks.on_source(bundle)
         autocmd!
         autocmd FileType c,cpp map <buffer><Leader>x <Plug>(operator-clang-format)
     augroup END
-
 endfunction
 unlet s:bundle
 
@@ -706,7 +705,6 @@ function! s:bundle.hooks.on_source(bundle)
     let g:neocomplete#force_omni_input_patterns.cpp    = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
     let g:neocomplete#force_omni_input_patterns.objc   = '[^.[:digit:] *\t]\%(\.\|->\)\w*'
     let g:neocomplete#force_omni_input_patterns.objcpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
-
 endfunction
 unlet s:bundle
 
@@ -1055,15 +1053,15 @@ noremap  <silent> <Leader>w :<C-u>call <SID>SmartClose()<CR>
 
 " アプリウィンドウの移動とリサイズ
 if s:isGuiRunning
-    noremap         <silent><Leader>H   :<C-u>call <SID>ResizeWin()<CR>
-    noremap         <silent><Leader>J   :<C-u>call <SID>ResizeWin()<CR>
-    noremap         <silent><Leader>K   :<C-u>call <SID>ResizeWin()<CR>
-    noremap         <silent><Leader>L   :<C-u>call <SID>ResizeWin()<CR>
-    noremap         <silent><Leader>h   :MoveWin<CR>
-    noremap         <silent><Leader>j   :MoveWin<CR>
-    noremap         <silent><Leader>k   :MoveWin<CR>
-    noremap         <silent><Leader>l   :MoveWin<CR>
-    noremap         <silent> <Leader>ff :<C-u>call <SID>FullWindow()<CR>
+    noremap         <silent>,H  :<C-u>call <SID>ResizeWin()<CR>
+    noremap         <silent>,J  :<C-u>call <SID>ResizeWin()<CR>
+    noremap         <silent>,K  :<C-u>call <SID>ResizeWin()<CR>
+    noremap         <silent>,L  :<C-u>call <SID>ResizeWin()<CR>
+    noremap         <silent>,h  :MoveWin<CR>
+    noremap         <silent>,j  :MoveWin<CR>
+    noremap         <silent>,k  :MoveWin<CR>
+    noremap         <silent>,l  :MoveWin<CR>
+    noremap         <silent>,ff :<C-u>call <SID>FullWindow()<CR>
 endif
 
 " }}}
@@ -1274,7 +1272,7 @@ function! s:SmartClose()
         if  &columns == g:baseColumns
             if isCurrentBufferModified == 0
                 quit
-            elseif confirm('未保存です。閉じますか？', '&Yes\n&No', 1, 'Question') == 1
+            elseif confirm('未保存です。閉じますか？', "&Yes\n&No", 1, 'Question') == 1
                 quit!
             endif
         else
@@ -1295,7 +1293,7 @@ function! s:SmartClose()
 
         if isCurrentBufferModified == 0
             bdelete
-        elseif confirm('未保存です。閉じますか？', '&Yes\n&No', 1, 'Question') == 1
+        elseif confirm('未保存です。閉じますか？', "&Yes\n&No", 1, 'Question') == 1
             bdelete!
         endif
     endif
