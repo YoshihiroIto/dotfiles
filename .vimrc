@@ -88,8 +88,7 @@ NeoBundleLazy 'Rip-Rip/clang_complete', {
 " }}}
 " 検索 {{{
 
-" NeoBundle 'supasorn/vim-easymotion'
-NeoBundle 'haya14busa/vim-easymotion'
+NeoBundle 'supasorn/vim-easymotion'
 NeoBundle 'tmhedberg/matchit'
 NeoBundle 'thinca/vim-visualstar'
 NeoBundle 'osyo-manga/vim-anzu'
@@ -361,23 +360,16 @@ noremap        <F8>            :TagbarToggle<CR>
 " }}}
 " vim-easymotion {{{
 
-let s:bundle = neobundle#get('vim-easymotion')
-function! s:bundle.hooks.on_source(bundle)
+" http://haya14busa.com/change-vim-easymotion-from-lokaltog-to-forked/
+" https://github.com/supasorn/vim-easymotion
 
-    " http://haya14busa.com/change-vim-easymotion-from-lokaltog-to-forked/
-    " https://github.com/supasorn/vim-easymotion
+let g:EasyMotion_leader_key          = '<Space><Space>'
+let g:EasyMotion_keys                = 'hjklasdyuiopqwertnmzxcvb4738291056gf'
+let g:EasyMotion_special_select_line = 0
+let g:EasyMotiselect_phrase          = 0
 
-    let g:EasyMotion_leader_key          = '<Space><Space>'
-    let g:EasyMotion_keys                = 'hjklasdyuiopqwertnmzxcvb4738291056gf'
-    let g:EasyMotion_special_select_line = 0
-    let g:EasyMotiselect_phrase          = 0
-    let g:EasyMotion_use_migemo          = 1
-
-    " カラー設定変更
-    hi EasyMotionTarget ctermbg=none ctermfg=red
-    hi easymotionshade  ctermbg=none ctermfg=blue
-endfunction
-unlet s:bundle
+" hi link EasyMotionTarget ErrorMsg
+" hi link EasyMotionShade  Comment
 
 " }}}
 " lingr.vim {{{
@@ -611,10 +603,10 @@ unlet s:bundle
 " }}}
 " eregex.vim {{{
 
+let g:eregex_default_enable = 0
+
 let s:bundle = neobundle#get('eregex.vim')
 function! s:bundle.hooks.on_source(bundle)
-
-    let g:eregex_default_enable = 0
 
     nnoremap [eregex]    <nop>
     nmap     <leader>e [eregex]
@@ -680,7 +672,7 @@ endfunction
 unlet s:bundle
 
 " }}}
-" clang-comp {{{
+" clang_complete {{{
 
 let s:bundle = neobundle#get('clang_complete')
 function! s:bundle.hooks.on_source(bundle)
