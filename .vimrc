@@ -7,7 +7,6 @@ scriptencoding utf-8            " スクリプト内でutf-8を使用する
 let s:isWindows    = has('win32') || has('win64')
 let s:isMac        = has('mac')
 let s:isGuiRunning = has('gui_running')
-" let s:metaKey      = s:isWindows ? 'M' : 'D'
 let g:baseColumns  = s:isWindows ? 140 : 100
 let $DOTVIM        = s:isWindows ? expand('~/vimfiles') : expand('~/.vim')
 let mapleader      = ' '
@@ -80,6 +79,11 @@ NeoBundleLazy 'rhysd/vim-clang-format', {
             \       'filetypes' : ['c', 'cpp', 'objc']
             \   }
             \ }
+NeoBundleLazy 'Rip-Rip/clang_complete', {
+            \   'autoload' : {
+            \       'filetypes' : ['c', 'cpp', 'objc']
+            \   }
+            \ }
 
 " }}}
 " 検索 {{{
@@ -117,6 +121,7 @@ NeoBundle 'osyo-manga/vim-textobj-multiblock'
 NeoBundle 'anyakichi/vim-textobj-ifdef'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-repeat'
+NeoBundle 'thinca/vim-textobj-comment'
 
 " }}}
 " アプリ {{{
@@ -260,7 +265,6 @@ unlet s:bundle
 " }}}
 " VimFiler {{{
 
-" exe 'noremap  <silent> <' . s:metaKey . '-o> :VimFilerBufferDir<CR>'
 noremap  <silent> <Leader>o :VimFilerBufferDir<CR>
 
 let s:bundle = neobundle#get('vimfiler')
@@ -289,8 +293,10 @@ unlet s:bundle
 
 let s:bundle = neobundle#get('vimshell.vim')
 function! s:bundle.hooks.on_source(bundle)
+
     let g:vimshell_prompt_expr = 'getcwd().">"'
     let g:vimshell_prompt_pattern = '^\f\+>'
+
 endfunction
 unlet s:bundle
 
@@ -353,17 +359,23 @@ noremap        <F8>            :TagbarToggle<CR>
 " }}}
 " vim-easymotion {{{
 
-" http://haya14busa.com/change-vim-easymotion-from-lokaltog-to-forked/
-" https://github.com/supasorn/vim-easymotion
+let s:bundle = neobundle#get('vim-easymotion')
+function! s:bundle.hooks.on_source(bundle)
 
-let g:EasyMotion_leader_key          = '<Space><Space>' 
-let g:EasyMotion_keys                = 'hjklasdyuiopqwertnmzxcvb4738291056gf'
-let g:EasyMotion_special_select_line = 0
-let g:EasyMotiselect_phrase          = 0
+    " http://haya14busa.com/change-vim-easymotion-from-lokaltog-to-forked/
+    " https://github.com/supasorn/vim-easymotion
 
-" カラー設定変更
-hi EasyMotionTarget ctermbg=none ctermfg=red
-hi easymotionshade  ctermbg=none ctermfg=blue
+    let g:EasyMotion_leader_key          = '<Space><Space>' 
+    let g:EasyMotion_keys                = 'hjklasdyuiopqwertnmzxcvb4738291056gf'
+    let g:EasyMotion_special_select_line = 0
+    let g:EasyMotiselect_phrase          = 0
+
+    " カラー設定変更
+    hi EasyMotionTarget ctermbg=none ctermfg=red
+    hi easymotionshade  ctermbg=none ctermfg=blue
+
+endfunction
+unlet s:bundle
 
 " }}}
 " lingr.vim {{{
@@ -390,7 +402,6 @@ function! s:bundle.hooks.on_source(bundle)
         function! s:SetLingrSetting()
             let b:disableSmartClose = 0
 
-            " exe 'noremap  <buffer><silent> <' . s:metaKey . '-w> :<C-u>call <SID>ToggleLingr()<CR>'
             noremap  <buffer><silent> <Leader>w :<C-u>call <SID>ToggleLingr()<CR>
         endfunction
     augroup END
@@ -411,24 +422,29 @@ endfunction
 
 noremap     <silent><F10>       :<C-u>call <SID>ToggleTweetVim()<CR>
 
-let g:tweetvim_include_rts       = 1
-let g:tweetvim_display_separator = 0
-let g:tweetvim_tweet_per_page    = 35
-let g:tweetvim_display_icon      = 1
+let s:bundle = neobundle#get('Tweetvim')
+function! s:bundle.hooks.on_source(bundle)
 
-function! s:ToggleTweetVim()
-    if bufnr("tweetvim") == -1
-        tabnew
-        TweetVimHomeTimeline
-    else
-        silent! exe 'bwipeout tweetvim'
-    endif
+    let g:tweetvim_include_rts       = 1
+    let g:tweetvim_display_separator = 0
+    let g:tweetvim_tweet_per_page    = 35
+    let g:tweetvim_display_icon      = 1
+
+    function! s:ToggleTweetVim()
+        if bufnr("tweetvim") == -1
+            tabnew
+            TweetVimHomeTimeline
+        else
+            silent! exe 'bwipeout tweetvim'
+        endif
+    endfunction
+
+    augroup TweetVimSetting
+        autocmd!
+        autocmd FileType tweetvim     nmap     <buffer>rr        <Plug>(tweetvim_action_reload)
+    augroup END
 endfunction
-
-augroup TweetVimSetting
-    autocmd!
-    autocmd FileType tweetvim     nmap     <buffer>rr        <Plug>(tweetvim_action_reload)
-augroup END
+unlet s:bundle
 
 " }}}
 " lightline {{{
@@ -572,28 +588,40 @@ endfunction
 " }}}
 " vim-anzu {{{
 
-" http://qiita.com/shiena/items/f53959d62085b7980cb5
-nmap <silent> n <Plug>(anzu-n)zOzz:<C-u>call     <SID>RefreshScreen()<CR>
-nmap <silent> N <Plug>(anzu-N)zOzz:<C-u>call     <SID>RefreshScreen()<CR>
-nmap <silent> * <Plug>(anzu-star)zOzz:<C-u>call  <SID>RefreshScreen()<CR>
-nmap <silent> # <Plug>(anzu-sharp)zOzz:<C-u>call <SID>RefreshScreen()<CR>
+let s:bundle = neobundle#get('vim-anzu')
+function! s:bundle.hooks.on_source(bundle)
 
-augroup vim-anzu
-    " 一定時間キー入力がないとき、ウインドウを移動したとき、タブを移動したときに
-    " 検索ヒット数の表示を消去する
-    autocmd!
-    autocmd CursorHold,CursorHoldI,WinLeave,TabLeave * call anzu#clear_search_status()
-augroup END
+    " http://qiita.com/shiena/items/f53959d62085b7980cb5
+    nmap <silent> n <Plug>(anzu-n)zOzz:<C-u>call     <SID>RefreshScreen()<CR>
+    nmap <silent> N <Plug>(anzu-N)zOzz:<C-u>call     <SID>RefreshScreen()<CR>
+    nmap <silent> * <Plug>(anzu-star)zOzz:<C-u>call  <SID>RefreshScreen()<CR>
+    nmap <silent> # <Plug>(anzu-sharp)zOzz:<C-u>call <SID>RefreshScreen()<CR>
+
+    augroup vim-anzu
+        " 一定時間キー入力がないとき、ウインドウを移動したとき、タブを移動したときに
+        " 検索ヒット数の表示を消去する
+        autocmd!
+        autocmd CursorHold,CursorHoldI,WinLeave,TabLeave * call anzu#clear_search_status()
+    augroup END
+
+endfunction
+unlet s:bundle
 
 " }}}
 " eregex.vim {{{
 
-let g:eregex_default_enable = 0
+let s:bundle = neobundle#get('eregex')
+function! s:bundle.hooks.on_source(bundle)
 
-nnoremap [eregex]    <nop>
-nmap     <leader>e [eregex]
+    let g:eregex_default_enable = 0
 
-nnoremap [eregex]t :<c-u>call eregex#toggle()<cr>
+    nnoremap [eregex]    <nop>
+    nmap     <leader>e [eregex]
+
+    nnoremap [eregex]t :<c-u>call eregex#toggle()<cr>
+
+endfunction
+unlet s:bundle
 
 " }}}
 " vim-alignta {{{
@@ -653,6 +681,36 @@ endfunction
 unlet s:bundle
 
 " }}}
+" clang-comp {{{
+
+let s:bundle = neobundle#get('clang_complete')
+function! s:bundle.hooks.on_source(bundle)
+
+    let g:clang_use_library   = 1
+    let g:clang_complete_auto = 0
+    let g:clang_auto_select   = 0
+
+    if s:isWindows
+        let g:clang_user_options = '-I c:/Development/boost/boost_1_47 -I "C:/Program Files (x86)/Microsoft Visual Studio 11.0/VC/include" -std=c++11 -fms-extensions -fmsc-version=1300 -fgnu-runtime -D__MSVCRT_VERSION__=0x700 -D_WIN32_WINNT=0x0500 2> NUL || exit 0"'
+        let g:clang_library_path = 'C:/Development/llvm/build/bin/Release/'
+    elseif s:isMac
+        let g:clang_user_options = '-std=c++11'
+    endif
+
+    if !exists('g:neocomplete#force_omni_input_patterns')
+        let g:neocomplete#force_omni_input_patterns = {}
+    endif
+
+    let g:neocomplete#force_overwrite_completefunc     = 1
+    let g:neocomplete#force_omni_input_patterns.c      = '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+    let g:neocomplete#force_omni_input_patterns.cpp    = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+    let g:neocomplete#force_omni_input_patterns.objc   = '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+    let g:neocomplete#force_omni_input_patterns.objcpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+
+endfunction
+unlet s:bundle
+
+" }}}
 " }}}
 " キー無効 {{{
 
@@ -704,7 +762,7 @@ augroup file-setting
     autocmd FileType            *           setlocal formatoptions-=ro      " コメント補完しない
     autocmd FileType            ruby        setlocal foldmethod=syntax tabstop=2 shiftwidth=2 softtabstop=2
     autocmd FileType            c,cpp,cs    setlocal foldmethod=syntax
-    autocmd FileType            vim         setlocal foldmethod=marker foldlevel=0 foldcolumn=3
+    autocmd FileType            vim         setlocal foldmethod=marker foldlevel=0 foldcolumn=4
 augroup END
 
 " }}}
@@ -729,9 +787,6 @@ inoremap    ¥   \
 inoremap    \   ¥
 cnoremap    ¥   \
 cnoremap    \   ¥
-
-" 最後に編集したところを選択
-nnoremap gt     `[v`]
 
 " http://lsifrontend.hatenablog.com/entry/2013/10/11/052640
 nmap <silent> <C-CR> yy:<C-u>TComment<CR>p
@@ -995,8 +1050,6 @@ vnoremap        <C-j>       <Esc>
 set splitbelow                    " 縦分割したら新しいウィンドウは下に
 set splitright                    " 横分割したら新しいウィンドウは右に
 
-" exe 'noremap  <silent> <' . s:metaKey . '-e> :<C-u>call <SID>ToggleVSplitWide()<CR>'
-" exe 'noremap  <silent> <' . s:metaKey . '-w> :<C-u>call <SID>SmartClose()<CR>'
 noremap  <silent> <Leader>e :<C-u>call <SID>ToggleVSplitWide()<CR>
 noremap  <silent> <Leader>w :<C-u>call <SID>SmartClose()<CR>
 
@@ -1010,8 +1063,7 @@ if s:isGuiRunning
     noremap         <silent><Leader>j   :MoveWin<CR>
     noremap         <silent><Leader>k   :MoveWin<CR>
     noremap         <silent><Leader>l   :MoveWin<CR>
-    " exe 'noremap  <silent> <' . s:metaKey . '-f> :<C-u>call <SID>FullWindow()<CR>'
-    noremap  <silent> <Leader>ff :<C-u>call <SID>FullWindow()<CR>
+    noremap         <silent> <Leader>ff :<C-u>call <SID>FullWindow()<CR>
 endif
 
 " }}}
@@ -1031,6 +1083,10 @@ vnoremap    <silent><C-e>   <C-e>j
 vnoremap    <silent><C-y>   <C-y>k
 nmap        <silent>gg      ggzOzz:<C-u>call <SID>RefreshScreen()<CR>
 nmap        <silent>GG      GGzOzz:<C-u>call <SID>RefreshScreen()<CR>
+
+nmap     <silent><Leader>h  ^
+nmap     <silent><Leader>l  $
+nmap     <silent><Leader>m  %
 
 " }}}
 " タブライン操作 {{{
@@ -1059,8 +1115,6 @@ nmap        <Leader>b   [Buffer]
 
 nnoremap <silent>[Buffer]x  :bdelete<CR>
 
-" exe 'noremap  <' . s:metaKey . '-j> :bnext<CR>'
-" exe 'noremap  <' . s:metaKey . '-k> :bprev<CR>'
 noremap  <Leader>j :bnext<CR>
 noremap  <Leader>k :bprev<CR>
 
@@ -1314,7 +1368,7 @@ endfunction
 " ファイルの場所をカレントにする{{{
 function! s:SetCurrentDir()
 
-    if &ft != '' && &ft != 'vimfilere'
+    if &ft != '' && &ft != 'vimfiler'
         exe 'lcd'  fnameescape(expand('%:p:h'))
     endif
 endfunction
@@ -1374,4 +1428,3 @@ if !s:isGuiRunning
 endif
 
 " }}}
-
