@@ -147,4 +147,3 @@ if s:isGuiRunning && s:isMac
 endif
 
 " }}}
-

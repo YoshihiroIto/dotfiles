@@ -50,18 +50,6 @@ NeoBundleLazy 'majutsushi/tagbar', {
 
 NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'YankRing.vim'
-NeoBundleLazy 'Shougo/neocomplete.vim', {
-            \   'autoload' : {
-            \       'insert' : 1,
-            \   }
-            \ }
-NeoBundleLazy 'honza/vim-snippets'
-NeoBundleLazy 'Shougo/neosnippet', {
-            \   'depends' : [ 'honza/vim-snippets' ],
-            \   'autoload' : {
-            \       'insert' : 1,
-            \   }
-            \ }
 NeoBundleLazy 'kana/vim-smartinput', {
             \   'autoload' : {
             \       'insert' : 1,
@@ -79,9 +67,34 @@ NeoBundleLazy 'rhysd/vim-clang-format', {
             \       'filetypes' : ['c', 'cpp', 'objc']
             \   }
             \ }
+" }}}
+" 補完 {{{
+
+NeoBundleLazy 'Shougo/neocomplete.vim', {
+            \   'autoload' : {
+            \       'insert' : 1,
+            \   }
+            \ }
+NeoBundleLazy 'honza/vim-snippets'
+NeoBundleLazy 'Shougo/neosnippet', {
+            \   'depends' : [ 'honza/vim-snippets' ],
+            \   'autoload' : {
+            \       'insert' : 1,
+            \   }
+            \ }
 NeoBundleLazy 'Rip-Rip/clang_complete', {
             \   'autoload' : {
             \       'filetypes' : ['c', 'cpp', 'objc']
+            \   }
+            \ }
+NeoBundleLazy 'nosami/Omnisharp', {
+            \   'autoload' : {
+            \       'filetypes' : [ 'cs' ]
+            \   },
+            \   'build' : {
+            \       'windows' : 'C:/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe server/OmniSharp.sln /p:Platform="Any CPU"',
+            \       'mac'     : 'xbuild server/OmniSharp.sln',
+            \       'unix'    : 'xbuild server/OmniSharp.sln',
             \   }
             \ }
 
@@ -92,21 +105,12 @@ NeoBundle 'supasorn/vim-easymotion'
 NeoBundle 'tmhedberg/matchit'
 NeoBundle 'thinca/vim-visualstar'
 NeoBundle 'osyo-manga/vim-anzu'
-NeoBundle 'othree/eregex.vim'
 NeoBundleLazy 'rking/ag.vim', {
             \   'depends' : [ 'Shougo/unite.vim' ],
             \   'autoload' : {
             \       'commands' : [ 'Ag' ]
             \   }
             \ }
-
-" }}}
-" オペレータ {{{
-" http://qiita.com/rbtnn/items/a47ed6684f1f0bc52906
-
-NeoBundle 'kana/vim-operator-user'
-NeoBundle 'tyru/operator-camelize.vim'
-NeoBundle 'kana/vim-operator-replace'
 
 " }}}
 " テキストオブジェクト {{{
@@ -122,6 +126,15 @@ NeoBundle 'anyakichi/vim-textobj-ifdef'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-repeat'
 NeoBundle 'thinca/vim-textobj-comment'
+NeoBundle 'sgur/vim-textobj-parameter'
+
+" }}}
+" オペレータ {{{
+" http://qiita.com/rbtnn/items/a47ed6684f1f0bc52906
+
+NeoBundle 'kana/vim-operator-user'
+NeoBundle 'kana/vim-operator-replace'
+NeoBundle 'tyru/operator-camelize.vim'
 
 " }}}
 " アプリ {{{
@@ -159,6 +172,14 @@ NeoBundleLazy 'basyura/TweetVim', {
             \       'commands' : [ 'TweetVimHomeTimeline', 'TweetVimUserStream' ]
             \   }
             \ }
+
+if s:isMac 
+    NeoBundleLazy 'itchyny/dictionary.vim', {
+                \   'autoload' : {
+                \       'commands' : [ 'Dictionary' ]
+                \   }
+                \ }
+endif
 
 " }}}
 " ヘルプ {{{
@@ -201,24 +222,6 @@ NeoBundleLazy 'open-browser.vim', {
             \        'commands'        : ['OpenBrowserSearch', 'OpenBrowser', 'OpenBrowserSmartSearch']
             \   }
             \ }
-if s:isMac 
-    NeoBundleLazy 'itchyny/dictionary.vim', {
-                \   'autoload' : {
-                \       'commands' : [ 'Dictionary' ]
-                \   }
-                \ }
-
-    NeoBundleLazy 'nosami/Omnisharp', {
-                \   'autoload' : {
-                \       'filetypes' : [ 'cs' ]
-                \   },
-                \   'build' : {
-                \       'windows' : 'C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe server/OmniSharp.sln /p : Platform="Any CPU"',
-                \       'mac'     : 'xbuild server/OmniSharp.sln',
-                \       'unix'    : 'xbuild server/OmniSharp.sln',
-                \   }
-                \ }
-endif
 " }}}
 " }}}
 " Unite {{{
@@ -303,6 +306,8 @@ unlet s:bundle
 
 " }}}
 " Omnisharp {{{
+
+let g:Omnisharp_stop_server = 0
 
 nnoremap <F12>      :OmniSharpGotoDefinition<CR>zz
 nnoremap <S-F12>    :OmniSharpFindUsages<CR>
@@ -597,21 +602,6 @@ function! s:bundle.hooks.on_source(bundle)
         autocmd!
         autocmd CursorHold,CursorHoldI,WinLeave,TabLeave * call anzu#clear_search_status()
     augroup END
-endfunction
-unlet s:bundle
-
-" }}}
-" eregex.vim {{{
-
-let g:eregex_default_enable = 0
-
-let s:bundle = neobundle#get('eregex.vim')
-function! s:bundle.hooks.on_source(bundle)
-
-    nnoremap [eregex]    <nop>
-    nmap     <leader>e [eregex]
-
-    nnoremap [eregex]t :<c-u>call eregex#toggle()<cr>
 endfunction
 unlet s:bundle
 
@@ -1053,7 +1043,7 @@ if s:isGuiRunning
     noremap         <silent>,j  :MoveWin<CR>
     noremap         <silent>,k  :MoveWin<CR>
     noremap         <silent>,l  :MoveWin<CR>
-    noremap         <silent>,ff :<C-u>call <SID>FullWindow()<CR>
+    noremap         <silent>,f  :<C-u>call <SID>FullWindow()<CR>
 endif
 
 " }}}
@@ -1081,8 +1071,7 @@ nmap     <silent><Leader>m  %
 " }}}
 " タブライン操作 {{{
 
-" タブライン常時表示
-set showtabline=2
+set showtabline=2                   " タブライン常時表示
 
 nnoremap    [Tab]       <Nop>
 nmap        <Leader>t   [Tab]
@@ -1090,8 +1079,8 @@ nmap        <Leader>t   [Tab]
 nnoremap <silent> [Tab]c :tabnew<CR>
 nnoremap <silent> [Tab]x :tabclose<CR>
 
-nnoremap <C-J>       :tabnext<CR>  
-nnoremap <C-K>       :tabprev<CR>
+nnoremap <Leader>j       :tabnext<CR>  
+nnoremap <Leader>k       :tabprev<CR>
 
 for s:n in range(1, 9)
     exe 'nnoremap <silent> [Tab]' . s:n  ':<C-u>tabnext' . s:n . '<CR>'
@@ -1105,8 +1094,8 @@ nmap        <Leader>b   [Buffer]
 
 nnoremap <silent>[Buffer]x  :bdelete<CR>
 
-noremap  <Leader>j :bnext<CR>
-noremap  <Leader>k :bprev<CR>
+noremap  <C-J> :bnext<CR>
+noremap  <C-K> :bprev<CR>
 
 for s:n in range(1, 9)
     exe 'nnoremap <silent> [Buffer]' . s:n  ':<C-u>b' . s:n . '<CR>'
@@ -1402,6 +1391,7 @@ function! s:RemoveDir(path)
     endif
 endfunction
 " }}}
+" }}}
 " 現在位置にテキストを挿入する {{{
 function! s:InsertTextAtCurrent(text)
 
@@ -1409,7 +1399,6 @@ function! s:InsertTextAtCurrent(text)
     exe ':normal i' . a:text
     call setpos('.', pos)
 endfunction
-" }}}
 " }}}
 " コンソール用 {{{
 
