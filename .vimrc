@@ -7,7 +7,7 @@ scriptencoding utf-8            " スクリプト内でutf-8を使用する
 let s:isWindows    = has('win32') || has('win64')
 let s:isMac        = has('mac')
 let s:isGuiRunning = has('gui_running')
-let g:baseColumns  = s:isWindows ? 140 : 100
+let s:baseColumns  = s:isWindows ? 140 : 100
 let $DOTVIM        = s:isWindows ? expand('~/vimfiles') : expand('~/.vim')
 let mapleader      = ' '
 set viminfo+=!
@@ -15,6 +15,8 @@ set viminfo+=!
 if !s:isGuiRunning
     let $MYGVIMRC = expand('~/.gvimrc')
 endif
+
+let s:rightWindowWidth = 40     " 右ウィンドウ幅
 
 " }}}
 " プラグイン {{{
@@ -44,6 +46,8 @@ NeoBundleLazy 'majutsushi/tagbar', {
             \       'commands' : [ 'TagbarToggle' ]
             \   }
             \ }
+" NeoBundle 'osyo-manga/vim-gift'
+" NeoBundle 'osyo-manga/vim-automatic'
 
 " }}}
 " 編集 {{{
@@ -67,6 +71,12 @@ NeoBundleLazy 'rhysd/vim-clang-format', {
             \       'filetypes' : ['c', 'cpp', 'objc']
             \   }
             \ }
+NeoBundleLazy 'sjl/gundo.vim', {
+            \   'autoload' : {
+            \       'commands' : [ 'GundoToggle' ]
+            \   }
+            \ }
+
 " }}}
 " 補完 {{{
 
@@ -105,6 +115,7 @@ NeoBundle 'supasorn/vim-easymotion'
 NeoBundle 'tmhedberg/matchit'
 NeoBundle 'thinca/vim-visualstar'
 NeoBundle 'osyo-manga/vim-anzu'
+NeoBundle 'rhysd/clever-f.vim'
 NeoBundleLazy 'rking/ag.vim', {
             \   'depends' : [ 'Shougo/unite.vim' ],
             \   'autoload' : {
@@ -117,10 +128,11 @@ NeoBundleLazy 'rking/ag.vim', {
 " http://d.hatena.ne.jp/osyo-manga/20130717/1374069987
 
 NeoBundle 'kana/vim-textobj-user'
-NeoBundle 'kana/vim-textobj-indent'
-NeoBundle 'kana/vim-textobj-function'
-NeoBundle 'kana/vim-textobj-line'
 NeoBundle 'kana/vim-textobj-entire'
+NeoBundle 'kana/vim-textobj-fold'
+NeoBundle 'kana/vim-textobj-function'
+NeoBundle 'kana/vim-textobj-indent'
+NeoBundle 'kana/vim-textobj-line'
 NeoBundle 'osyo-manga/vim-textobj-multiblock'
 NeoBundle 'anyakichi/vim-textobj-ifdef'
 NeoBundle 'tpope/vim-surround'
@@ -201,6 +213,9 @@ NeoBundleLazy 'tsukkee/unite-help', {
 NeoBundle 'YoshihiroIto/vim-icondrag'
 NeoBundle 'movewin.vim'
 NeoBundle 'Shougo/vimproc', {
+            \   'autoload' : {
+            \       'function_prefix' : 'vimproc',
+            \   },
             \   'build' : {
             \       'windows' : 'make -f make_mingw32.mak',
             \       'cygwin'  : 'make -f make_cygwin.mak',
@@ -208,12 +223,17 @@ NeoBundle 'Shougo/vimproc', {
             \       'unix'    : 'make -f make_unix.mak',
             \   },
             \ }
+
 NeoBundleLazy 'Shougo/unite.vim', {
             \   'autoload' : {
             \       'commands' : [ 'Unite', 'UniteResume', 'UniteWithCursorWord' ]
             \   }
             \ }
-NeoBundleLazy 'mattn/webapi-vim'
+NeoBundleLazy 'mattn/webapi-vim', {
+            \   'autoload' : {
+            \       'function_prefix' : 'webapi'
+            \   }
+            \ }
 NeoBundleLazy 'open-browser.vim', {
             \   'autoload' : {
             \        'mappings'        : ['<Plug>(open-browser-wwwsearch)', '<Plug>(openbrowser-open)'],
@@ -235,16 +255,20 @@ nnoremap <silent> [Unite]g    :<C-u>Unite grep:. -auto-preview -buffer-name=sear
 nnoremap <silent> [Unite]cg   :<C-u>Unite grep:. -auto-preview -buffer-name=search-buffer<CR><C-R><C-W><CR>
 nnoremap <silent> [Unite]r    :<C-u>UniteResume search-buffer<CR>
 
-nnoremap <silent> [Unite]o    :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow -no-quit outline<CR>
 nnoremap <silent> [Unite]m    :<C-u>Unite file_mru<CR>
 nnoremap <silent> [Unite]b    :<C-u>Unite bookmark<CR>
 nnoremap <silent> [Unite]h    :<C-u>UniteWithCursorWord help<CR>
 nnoremap <silent> [Unite]l    :<C-u>Unite -auto-preview line<CR>
-xnoremap <silent> [Unite]a    :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow alignta:arguments<CR>
 nnoremap <silent> [Unite]f    :<C-u>Unite menu:fix<CR>
+xnoremap <silent> [Unite]a    :<C-u>Unite -vertical -direction=rightbelow alignta:arguments<CR>
+nnoremap <silent> [Unite]o    :<C-u>Unite -vertical -direction=rightbelow -no-quit outline<CR>
+" xnoremap <silent> [Unite]a    :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow alignta:arguments<CR>
+" nnoremap <silent> [Unite]o    :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow -no-quit outline<CR>
 
 let s:bundle = neobundle#get('unite.vim')
 function! s:bundle.hooks.on_source(bundle)
+
+    let g:unite_winwidth = s:rightWindowWidth
 
     " insert modeで開始
     let g:unite_enable_start_insert = 1
@@ -290,17 +314,6 @@ function! s:bundle.hooks.on_source(bundle)
     endfunction
 
     let g:vimfiler_as_default_explorer = 1
-endfunction
-unlet s:bundle
-
-" }}}
-" VimShell {{{
-
-let s:bundle = neobundle#get('vimshell.vim')
-function! s:bundle.hooks.on_source(bundle)
-
-    let g:vimshell_prompt_expr = 'getcwd().">"'
-    let g:vimshell_prompt_pattern = '^\f\+>'
 endfunction
 unlet s:bundle
 
@@ -360,7 +373,40 @@ unlet s:bundle
 " }}}
 " TagBar {{{
 
-noremap        <F8>            :TagbarToggle<CR>
+" let g:tagbar_expand = 1
+" noremap        <silent><F8>            :TagbarToggle<CR>
+
+noremap        <silent><F8>            :<C-u>call <SID>ToggleTagBar()<CR>
+
+let g:tagbar_width = s:rightWindowWidth
+
+function! s:ToggleTagBar()
+    if bufwinnr(bufnr("__Tagbar__")) != -1
+        TagbarToggle
+        let &columns = &columns - (g:tagbar_width + 1)
+    else
+        let &columns = &columns + (g:tagbar_width + 1) 
+        TagbarToggle
+    endif
+endfunction
+
+" }}}
+" Gundo {{{
+
+noremap        <silent><F7>            :<C-u>call <SID>ToggleGundo()<CR>
+
+let g:gundo_right = 1
+let g:gundo_width = s:rightWindowWidth
+
+function! s:ToggleGundo()
+    if bufwinnr(bufnr("__Gundo__")) != -1 || bufwinnr(bufnr("__Gundo_Preview__")) != -1
+        GundoToggle
+        let &columns = &columns - (g:gundo_width + 1)
+    else
+        let &columns = &columns + (g:gundo_width + 1) 
+        GundoToggle
+    endif
+endfunction
 
 " }}}
 " vim-easymotion {{{
@@ -662,6 +708,15 @@ endfunction
 unlet s:bundle
 
 " }}}
+" clever-f.vim {{{
+
+let g:clever_f_ignore_case           = 1
+let g:clever_f_smart_case            = 1
+let g:clever_f_across_no_line        = 1
+let g:clever_f_use_migemo            = 1
+let g:clever_f_chars_match_any_signs = ';'
+
+" }}}
 " clang_complete {{{
 
 let s:bundle = neobundle#get('clang_complete')
@@ -691,6 +746,32 @@ endfunction
 unlet s:bundle
 
 " }}}
+" vim-automatic {{{
+
+" let g:automatic_config = [
+"             \   {
+"             \       'match' : {
+"             \           'autocmds'          : ['WinEnter'],
+"             \           'bufname'           : '[[*]unite[]*]',
+"             \           'any_unite_sources' : ['outline', 'alignta'],
+"             \       },
+"             \       'set'   : {
+"             \           'commands'          : ['let &columns = &columns + ' . s:rightWindowWidth],
+"             \       },
+"             \   },
+"             \   {
+"             \       'match' : {
+"             \           'autocmds'          : ['WinLeave'],
+"             \           'bufname'           : '[[*]unite[]*]',
+"             \           'any_unite_sources' : ['outline', 'alignta'],
+"             \       },
+"             \       'set'   : {
+"             \           'commands'          : ['let &columns = &columns - ' . s:rightWindowWidth]
+"             \       },
+"             \   },
+"             \]
+
+" }}}
 " }}}
 " キー無効 {{{
 
@@ -718,6 +799,10 @@ vnoremap    <BS>        <Nop>
 " inoremap  <Left>      <Nop>
 " inoremap  <Right>     <Nop>
 " inoremap  <BS>        <Nop>
+
+inoremap    <Esc>       <Nop>
+cnoremap    <Esc>       <Nop>
+vnoremap    <Esc>       <Nop>
 
 " Vimを閉じない
 nnoremap    ZZ          <Nop>
@@ -769,8 +854,8 @@ cnoremap    ¥   \
 cnoremap    \   ¥
 
 " http://lsifrontend.hatenablog.com/entry/2013/10/11/052640
-nmap <silent> <C-CR> yy:<C-u>TComment<CR>p
-vnoremap <silent> <C-CR> :call CopyAddComment()<CR>
+nmap     <silent> <C-CR> yy:<C-u>TComment<CR>p
+vnoremap <silent> <C-CR> :<C-u>call CopyAddComment()<CR>
 
 " http://qiita.com/akira-hamada/items/2417d0bcb563475deddb をもとに調整
 function! CopyAddComment() range
@@ -1035,15 +1120,18 @@ noremap  <silent> <Leader>w :<C-u>call <SID>SmartClose()<CR>
 
 " アプリウィンドウの移動とリサイズ
 if s:isGuiRunning
-    noremap         <silent>,H  :<C-u>call <SID>ResizeWin()<CR>
-    noremap         <silent>,J  :<C-u>call <SID>ResizeWin()<CR>
-    noremap         <silent>,K  :<C-u>call <SID>ResizeWin()<CR>
-    noremap         <silent>,L  :<C-u>call <SID>ResizeWin()<CR>
-    noremap         <silent>,h  :MoveWin<CR>
-    noremap         <silent>,j  :MoveWin<CR>
-    noremap         <silent>,k  :MoveWin<CR>
-    noremap         <silent>,l  :MoveWin<CR>
-    noremap         <silent>,f  :<C-u>call <SID>FullWindow()<CR>
+    nnoremap    [Window]    <Nop>
+    nmap        ,           [Window]
+
+    noremap  <silent>[Window]H  :<C-u>call <SID>ResizeWin()<CR>
+    noremap  <silent>[Window]J  :<C-u>call <SID>ResizeWin()<CR>
+    noremap  <silent>[Window]K  :<C-u>call <SID>ResizeWin()<CR>
+    noremap  <silent>[Window]L  :<C-u>call <SID>ResizeWin()<CR>
+    noremap  <silent>[Window]h  :MoveWin<CR>
+    noremap  <silent>[Window]j  :MoveWin<CR>
+    noremap  <silent>[Window]k  :MoveWin<CR>
+    noremap  <silent>[Window]l  :MoveWin<CR>
+    noremap  <silent>[Window]f  :<C-u>call <SID>FullWindow()<CR>
 endif
 
 " }}}
@@ -1066,7 +1154,7 @@ nmap        <silent>GG      GGzOzz:<C-u>call <SID>RefreshScreen()<CR>
 
 nmap     <silent><Leader>h  ^
 nmap     <silent><Leader>l  $
-nmap     <silent><Leader>m  %
+nmap     <silent><Leader>n  %
 
 " }}}
 " タブライン操作 {{{
@@ -1108,6 +1196,11 @@ endfor
 nnoremap    <silent><F1>    :<C-u>call <SID>SmartOpen($MYVIMRC)<CR>
 nnoremap    <silent><F2>    :<C-u>call <SID>SmartOpen($MYGVIMRC)<CR>
 nnoremap    <silent><F3>    :<C-u>source $MYVIMRC<CR>:source $MYGVIMRC<CR>
+
+" }}}
+" マーク {{{
+
+nmap     <silent><Leader>m  `
 
 " }}}
 " ヘルプ {{{
@@ -1207,14 +1300,14 @@ function! s:OpenVSplitWide()
     endif
 
     let s:depthVsp += 1
-    let &columns = g:baseColumns * s:depthVsp
-    exe 'botright vertical' g:baseColumns 'split'
+    let &columns = s:baseColumns * s:depthVsp
+    exe 'botright vertical' s:baseColumns 'split'
 endf
 
 function! s:CloseVSplitWide()
 
     let s:depthVsp -= 1
-    let &columns = g:baseColumns * s:depthVsp
+    let &columns = s:baseColumns * s:depthVsp
     call s:SmartClose()
 
     if s:depthVsp == 1
@@ -1233,8 +1326,8 @@ function! s:RefreshScreen()
 endfunction
 " }}}
 " 賢いクローズ {{{
-" ウィンドウが１つかつバッファが一つかつ&columns が g:baseColumns            :quit
-" ウィンドウが１つかつバッファが一つかつ&columns が g:baseColumnsでない      &columns = g:baseColumns
+" ウィンドウが１つかつバッファが一つかつ&columns が s:baseColumns            :quit
+" ウィンドウが１つかつバッファが一つかつ&columns が s:baseColumnsでない      &columns = s:baseColumns
 " 現在のウィンドウに表示しているバッファが他のウィンドウでも表示されてる     :close
 "                                                           表示されていない :bdelete
 function! s:SmartClose()
@@ -1250,14 +1343,14 @@ function! s:SmartClose()
     let windows                 = range(1, winnr('$'))
 
     if (len(windows) == 1) && (s:GetListedBufferCount() == 1) && (tabCount == 1)
-        if  &columns == g:baseColumns
+        if  &columns == s:baseColumns
             if isCurrentBufferModified == 0
                 quit
             elseif confirm('未保存です。閉じますか？', "&Yes\n&No", 1, 'Question') == 1
                 quit!
             endif
         else
-            let &columns   = g:baseColumns
+            let &columns   = s:baseColumns
             let s:depthVsp = 1
         endif
     else
@@ -1391,7 +1484,6 @@ function! s:RemoveDir(path)
     endif
 endfunction
 " }}}
-" }}}
 " 現在位置にテキストを挿入する {{{
 function! s:InsertTextAtCurrent(text)
 
@@ -1399,6 +1491,7 @@ function! s:InsertTextAtCurrent(text)
     exe ':normal i' . a:text
     call setpos('.', pos)
 endfunction
+" }}}
 " }}}
 " コンソール用 {{{
 
