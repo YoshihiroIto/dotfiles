@@ -33,9 +33,8 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 " 表示 {{{
 
 NeoBundle 'tomasr/molokai'
-NeoBundle 'bling/vim-bufferline'
 NeoBundle 'itchyny/lightline.vim'
-NeoBundle 'LeafCage/foldCC'
+NeoBundle 'bling/vim-bufferline'
 NeoBundleLazy 'Shougo/unite-outline', {
             \   'autoload' : {
             \       'unite_sources' : [ 'outline' ],
@@ -46,14 +45,16 @@ NeoBundleLazy 'majutsushi/tagbar', {
             \       'commands' : [ 'TagbarToggle' ]
             \   }
             \ }
-" NeoBundle 'osyo-manga/vim-gift'
-" NeoBundle 'osyo-manga/vim-automatic'
+NeoBundleLazy 'LeafCage/foldCC', {
+            \   'autoload' : {
+            \       'filetypes' : [ 'vim' ]
+            \   }
+            \ }
 
 " }}}
 " 編集 {{{
 
 NeoBundle 'tomtom/tcomment_vim'
-NeoBundle 'YankRing.vim'
 NeoBundleLazy 'kana/vim-smartinput', {
             \   'autoload' : {
             \       'insert' : 1,
@@ -68,7 +69,7 @@ NeoBundleLazy 'h1mesuke/vim-alignta', {
 NeoBundleLazy 'rhysd/vim-clang-format', {
             \   'depends'  : 'kana/vim-operator-user',
             \   'autoload' : {
-            \       'filetypes' : ['c', 'cpp', 'objc']
+            \       'filetypes' : [ 'c', 'cpp', 'objc' ]
             \   }
             \ }
 NeoBundleLazy 'sjl/gundo.vim', {
@@ -94,7 +95,7 @@ NeoBundleLazy 'Shougo/neosnippet', {
             \ }
 NeoBundleLazy 'Rip-Rip/clang_complete', {
             \   'autoload' : {
-            \       'filetypes' : ['c', 'cpp', 'objc']
+            \       'filetypes' : [ 'c', 'cpp', 'objc']
             \   }
             \ }
 NeoBundleLazy 'nosami/Omnisharp', {
@@ -111,18 +112,42 @@ NeoBundleLazy 'nosami/Omnisharp', {
 " }}}
 " 検索 {{{
 
-NeoBundle 'supasorn/vim-easymotion'
-NeoBundle 'tmhedberg/matchit'
-NeoBundle 'thinca/vim-visualstar'
-NeoBundle 'osyo-manga/vim-anzu'
-NeoBundle 'rhysd/clever-f.vim'
+NeoBundleLazy 'rhysd/clever-f.vim', {
+            \   'autoload' : {
+            \       'mappings' : 'f',
+            \   }
+            \ }
 NeoBundleLazy 'rking/ag.vim', {
             \   'depends' : [ 'Shougo/unite.vim' ],
             \   'autoload' : {
             \       'commands' : [ 'Ag' ]
             \   }
             \ }
-
+NeoBundleLazy 'matchit.zip', {
+            \   'autoload' : {
+            \       'mappings' : ['%', 'g%']
+            \   }
+            \ }
+NeoBundleLazy 'supasorn/vim-easymotion', {
+            \   'autoload' : {
+            \       'mappings' : [
+            \           '<Leader><Leader>j',
+            \           '<Leader><Leader>k',
+            \           '<Leader><Leader>s',
+            \       ]
+            \   }
+            \ }
+NeoBundleLazy 'thinca/vim-visualstar', {
+            \   'autoload': {
+            \       'mappings': [ '<Plug>(visualstar-' ]
+            \   }
+            \ }
+NeoBundleLazy 'osyo-manga/vim-anzu', {
+            \   'autoload': {
+            \       'mappings': [ '<Plug>(anzu-' ],
+            \       'function_prefix' : 'anzu'
+            \   }
+            \ }
 " }}}
 " テキストオブジェクト {{{
 " http://d.hatena.ne.jp/osyo-manga/20130717/1374069987
@@ -151,7 +176,6 @@ NeoBundle 'tyru/operator-camelize.vim'
 " }}}
 " アプリ {{{
 
-NeoBundle 'tpope/vim-fugitive'
 NeoBundleLazy 'basyura/twibill.vim'
 NeoBundleLazy 'tsukkee/lingr-vim', {
             \   'autoload' : {
@@ -184,6 +208,11 @@ NeoBundleLazy 'basyura/TweetVim', {
             \       'commands' : [ 'TweetVimHomeTimeline', 'TweetVimUserStream' ]
             \   }
             \ }
+NeoBundleLazy 'tpope/vim-fugitive', {
+            \   'autoload': {
+            \       'function_prefix' : 'fugitive'
+            \   }
+            \ }
 
 if s:isMac 
     NeoBundleLazy 'itchyny/dictionary.vim', {
@@ -209,10 +238,7 @@ NeoBundleLazy 'tsukkee/unite-help', {
 
 " }}}
 " その他 {{{
-
-NeoBundle 'YoshihiroIto/vim-icondrag'
-NeoBundle 'movewin.vim'
-NeoBundle 'Shougo/vimproc', {
+NeoBundleLazy 'Shougo/vimproc', {
             \   'autoload' : {
             \       'function_prefix' : 'vimproc',
             \   },
@@ -223,7 +249,6 @@ NeoBundle 'Shougo/vimproc', {
             \       'unix'    : 'make -f make_unix.mak',
             \   },
             \ }
-
 NeoBundleLazy 'Shougo/unite.vim', {
             \   'autoload' : {
             \       'commands' : [ 'Unite', 'UniteResume', 'UniteWithCursorWord' ]
@@ -236,20 +261,36 @@ NeoBundleLazy 'mattn/webapi-vim', {
             \ }
 NeoBundleLazy 'open-browser.vim', {
             \   'autoload' : {
-            \        'mappings'        : ['<Plug>(open-browser-wwwsearch)', '<Plug>(openbrowser-open)'],
-            \        'function_prefix' : 'openbrowser',
-            \        'functions'       : ['openbrowser#open'],
-            \        'commands'        : ['OpenBrowserSearch', 'OpenBrowser', 'OpenBrowserSmartSearch']
+            \       'mappings'        : ['<Plug>(open-browser-wwwsearch)', '<Plug>(openbrowser-open)'],
+            \       'function_prefix' : 'openbrowser',
+            \       'commands'        : ['OpenBrowserSearch', 'OpenBrowser', 'OpenBrowserSmartSearch']
             \   }
             \ }
+NeoBundleLazy 'movewin.vim', {
+            \   'autoload' : {
+            \       'commands' : [ 'MoveWin' ]
+            \   }
+            \ }
+if s:isWindows
+    NeoBundle 'YoshihiroIto/vim-icondrag'
+endif
+
+" }}}
+" 削除候補 {{{
+
+" NeoBundle 'YankRing.vim'
+
+" NeoBundle 'osyo-manga/vim-gift'
+" NeoBundle 'osyo-manga/vim-automatic'
+
 " }}}
 " }}}
 " Unite {{{
 
-nnoremap [Unite]    <Nop>
-xnoremap [Unite]    <Nop>
-nmap     <Leader>u  [Unite]
-xmap     <Leader>u  [Unite]
+nnoremap [Unite]    <nop>
+xnoremap [Unite]    <nop>
+nmap     <leader>u  [Unite]
+xmap     <leader>u  [Unite]
 
 nnoremap <silent> [Unite]g    :<C-u>Unite grep:. -auto-preview -buffer-name=search-buffer<CR>
 nnoremap <silent> [Unite]cg   :<C-u>Unite grep:. -auto-preview -buffer-name=search-buffer<CR><C-R><C-W><CR>
@@ -262,8 +303,6 @@ nnoremap <silent> [Unite]l    :<C-u>Unite -auto-preview line<CR>
 nnoremap <silent> [Unite]f    :<C-u>Unite menu:fix<CR>
 xnoremap <silent> [Unite]a    :<C-u>Unite -vertical -direction=rightbelow alignta:arguments<CR>
 nnoremap <silent> [Unite]o    :<C-u>Unite -vertical -direction=rightbelow -no-quit outline<CR>
-" xnoremap <silent> [Unite]a    :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow alignta:arguments<CR>
-" nnoremap <silent> [Unite]o    :<C-u>Unite -vertical -winwidth=40 -direction=rightbelow -no-quit outline<CR>
 
 let s:bundle = neobundle#get('unite.vim')
 function! s:bundle.hooks.on_source(bundle)
@@ -414,7 +453,7 @@ endfunction
 " http://haya14busa.com/change-vim-easymotion-from-lokaltog-to-forked/
 " https://github.com/supasorn/vim-easymotion
 
-let g:EasyMotion_leader_key          = '<Space><Space>'
+let g:EasyMotion_leader_key          = '<Leader><Leader>'
 let g:EasyMotion_keys                = 'hjklasdyuiopqwertnmzxcvb4738291056gf'
 let g:EasyMotion_special_select_line = 0
 let g:EasyMotiselect_phrase          = 0
@@ -568,7 +607,8 @@ function! MyFilename()
 endfunction
 
 function! MyFugitive()
-    if &ft !~? 'vimfiler\|gundo' && exists('*fugitive#head')
+    " if &ft !~? 'vimfiler\|gundo' && exists('*fugitive#head')
+    if &ft !~? 'vimfiler\|gundo'
         let _ = fugitive#head()
 
         return strlen(_) ? s:lightline_symbol_brunch . _ : ''
@@ -633,15 +673,14 @@ endfunction
 " }}}
 " vim-anzu {{{
 
+" http://qiita.com/shiena/items/f53959d62085b7980cb5
+nmap <silent> n <Plug>(anzu-n)zOzz:<C-u>call     <SID>RefreshScreen()<CR>
+nmap <silent> N <Plug>(anzu-N)zOzz:<C-u>call     <SID>RefreshScreen()<CR>
+nmap <silent> * <Plug>(anzu-star)zOzz:<C-u>call  <SID>RefreshScreen()<CR>
+nmap <silent> # <Plug>(anzu-sharp)zOzz:<C-u>call <SID>RefreshScreen()<CR>
+
 let s:bundle = neobundle#get('vim-anzu')
 function! s:bundle.hooks.on_source(bundle)
-
-    " http://qiita.com/shiena/items/f53959d62085b7980cb5
-    nmap <silent> n <Plug>(anzu-n)zOzz:<C-u>call     <SID>RefreshScreen()<CR>
-    nmap <silent> N <Plug>(anzu-N)zOzz:<C-u>call     <SID>RefreshScreen()<CR>
-    nmap <silent> * <Plug>(anzu-star)zOzz:<C-u>call  <SID>RefreshScreen()<CR>
-    nmap <silent> # <Plug>(anzu-sharp)zOzz:<C-u>call <SID>RefreshScreen()<CR>
-
     augroup vim-anzu
         " 一定時間キー入力がないとき、ウインドウを移動したとき、タブを移動したときに
         " 検索ヒット数の表示を消去する
@@ -685,8 +724,7 @@ function! s:bundle.hooks.on_source(bundle)
 
     if s:isWindows
         let g:clang_format#command = 'C:/Development/llvm/build/bin/Release/clang-format'
-    else
-        let g:clang_format#command = 'clang-format-3.4'
+    else let g:clang_format#command = 'clang-format-3.4'
     endif
 
     let g:clang_format#style_options = {
@@ -748,6 +786,7 @@ unlet s:bundle
 " }}}
 " vim-automatic {{{
 
+" Uniteウィンドウの幅がずれてしまうのでコメントアウト
 " let g:automatic_config = [
 "             \   {
 "             \       'match' : {
@@ -772,6 +811,22 @@ unlet s:bundle
 "             \]
 
 " }}}
+" machit{{{
+
+let bundle = neobundle#get('matchit.zip')
+function! bundle.hooks.on_post_source(bundle)
+    silent! execute 'doautocmd Filetype' &filetype
+endfunction
+
+" }}}
+" vim-visualstar {{{
+
+map *  <Plug>(visualstar-*)
+map #  <Plug>(visualstar-#)
+map g* <Plug>(visualstar-g*)
+map g# <Plug>(visualstar-g#)
+
+" }}}
 " }}}
 " キー無効 {{{
 
@@ -780,29 +835,23 @@ nnoremap    <Up>        <Nop>
 nnoremap    <Down>      <Nop>
 nnoremap    <Left>      <Nop>
 nnoremap    <Right>     <Nop>
-nnoremap    <BS>        <Nop>
 
 vnoremap    <Up>        <Nop>
 vnoremap    <Down>      <Nop>
 vnoremap    <Left>      <Nop>
 vnoremap    <Right>     <Nop>
-vnoremap    <BS>        <Nop>
 
 " todo:日本語入力がおかしくなる
 " cnoremap  <Up>        <Nop>
 " cnoremap  <Down>      <Nop>
 " cnoremap  <Left>      <Nop>
 " cnoremap  <Right>     <Nop>
-" cnoremap  <BS>        <Nop>
 " inoremap  <Up>        <Nop>
 " inoremap  <Down>      <Nop>
 " inoremap  <Left>      <Nop>
 " inoremap  <Right>     <Nop>
 " inoremap  <BS>        <Nop>
-
-inoremap    <Esc>       <Nop>
-cnoremap    <Esc>       <Nop>
-vnoremap    <Esc>       <Nop>
+" cnoremap  <BS>        <Nop>
 
 " Vimを閉じない
 nnoremap    ZZ          <Nop>
@@ -1108,6 +1157,10 @@ nnoremap <expr> zO foldclosed(line('.')) != -1 ? 'zO' : ''
 inoremap        <C-j>       <Esc>
 nnoremap        <C-j>       <Esc>
 vnoremap        <C-j>       <Esc>
+
+inoremap        <Esc>       <Nop>
+cnoremap        <Esc>       <Nop>
+vnoremap        <Esc>       <Nop>
 
 " }}}
 " ウィンドウ操作 {{{
