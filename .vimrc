@@ -820,8 +820,12 @@ xnoremap [Unite]    <nop>
 nmap     <leader>u  [Unite]
 xmap     <leader>u  [Unite]
 
-nnoremap <silent> [Unite]g    :<C-u>Unite grep:. -auto-preview -buffer-name=search-buffer<CR>
-nnoremap <silent> [Unite]cg   :<C-u>Unite grep:. -auto-preview -buffer-name=search-buffer<CR><C-R><C-W><CR>
+nnoremap <silent> [Unite]g    :<C-u>Unite grep:. -buffer-name=search-buffer<CR>
+nnoremap <silent> [Unite]gc   :<C-u>UniteWithCursorWord grep:. -buffer-name=search-buffer<CR>
+
+nnoremap <silent> [Unite]gp   :<C-u>call <SID>unite_grep_project('-buffer-name=search-buffer')<CR>
+nnoremap <silent> [Unite]gpc  :<C-u>call <SID>unite_grep_project('-buffer-name=search-buffer')<CR><C-R><C-W><CR>
+
 nnoremap <silent> [Unite]r    :<C-u>UniteResume search-buffer<CR>
 
 nnoremap <silent> [Unite]m    :<C-u>Unite file_mru<CR>
@@ -831,6 +835,13 @@ nnoremap <silent> [Unite]l    :<C-u>Unite -auto-preview line<CR>
 nnoremap <silent> [Unite]f    :<C-u>Unite menu:fix<CR>
 xnoremap <silent> [Unite]a    :<C-u>Unite -vertical -direction=rightbelow alignta:arguments<CR>
 nnoremap <silent> [Unite]o    :<C-u>Unite -vertical -direction=rightbelow -no-quit outline<CR>
+
+" http://sanrinsha.lolipop.jp/blog/2013/03/%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E5%86%85%E3%81%AE%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92unite-grep%E3%81%99%E3%82%8B.html
+function! s:unite_grep_project(...)
+    let opts = (a:0 ? join(a:000, ' ') : '')
+    let dir = unite#util#path2project_directory(expand('%'))
+    execute 'Unite' opts 'grep:' . dir
+endfunction
 
 let s:bundle = neobundle#get('unite.vim')
 function! s:bundle.hooks.on_source(bundle)
@@ -951,7 +962,7 @@ augroup file-setting
     autocmd filetype            *           setlocal formatoptions-=ro      " コメント補完しない
     autocmd filetype            ruby        setlocal foldmethod=syntax tabstop=2 shiftwidth=2 softtabstop=2
     autocmd filetype            c,cpp,cs    setlocal foldmethod=syntax
-    autocmd filetype            vim         setlocal foldmethod=marker foldlevel=0 foldcolumn=4
+    " autocmd filetype            vim         setlocal foldmethod=marker foldlevel=0 foldcolumn=4
 augroup end
 
 " }}}
@@ -1628,3 +1639,4 @@ if !s:isGuiRunning
 endif
 
 " }}}
+" vim: foldmethod=marker foldcolumn=4 foldlevel=0
