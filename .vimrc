@@ -77,6 +77,15 @@ NeoBundleLazy 'sjl/gundo.vim', {
             \       'commands' : [ 'GundoToggle' ]
             \   }
             \ }
+NeoBundleLazy 'tpope/vim-surround', {
+      \ 'autoload' : {
+      \   'mappings' : [
+      \     ['nx', '<Plug>Dsurround'], ['nx', '<Plug>Csurround'],
+      \     ['nx', '<Plug>Ysurround'], ['nx', '<Plug>YSurround'],
+      \     ['nx', '<Plug>Yssurround'], ['nx', '<Plug>YSsurround'],
+      \     ['nx', '<Plug>YSsurround'], ['vx', '<Plug>VgSurround'],
+      \     ['vx', '<Plug>VSurround']
+      \ ]}}
 
 " }}}
 " 補完 {{{
@@ -152,26 +161,74 @@ NeoBundleLazy 'osyo-manga/vim-anzu', {
 " テキストオブジェクト {{{
 " http://d.hatena.ne.jp/osyo-manga/20130717/1374069987
 
-NeoBundle 'kana/vim-textobj-user'
-NeoBundle 'kana/vim-textobj-entire'
-NeoBundle 'kana/vim-textobj-fold'
-NeoBundle 'kana/vim-textobj-function'
-NeoBundle 'kana/vim-textobj-indent'
-NeoBundle 'kana/vim-textobj-line'
-NeoBundle 'osyo-manga/vim-textobj-multiblock'
-NeoBundle 'anyakichi/vim-textobj-ifdef'
-NeoBundle 'tpope/vim-surround'
-NeoBundle 'tpope/vim-repeat'
-NeoBundle 'thinca/vim-textobj-comment'
-NeoBundle 'sgur/vim-textobj-parameter'
+NeoBundleLazy 'kana/vim-textobj-user'
+NeoBundleLazy 'kana/vim-textobj-entire',           {'depends': 'kana/vim-textobj-user', 'autoload': {'mappings': ['<Plug>(textobj-entire'     ] }}
+NeoBundleLazy 'kana/vim-textobj-fold',             {'depends': 'kana/vim-textobj-user', 'autoload': {'mappings': ['<Plug>(textobj-fold'       ] }}
+NeoBundleLazy 'kana/vim-textobj-indent',           {'depends': 'kana/vim-textobj-user', 'autoload': {'mappings': ['<Plug>(textobj-indent'     ] }}
+NeoBundleLazy 'kana/vim-textobj-line',             {'depends': 'kana/vim-textobj-user', 'autoload': {'mappings': ['<Plug>(textobj-line'       ] }}
+NeoBundleLazy 'osyo-manga/vim-textobj-multiblock', {'depends': 'kana/vim-textobj-user', 'autoload': {'mappings': ['<Plug>(textobj-multiblock' ] }}
+NeoBundleLazy 'anyakichi/vim-textobj-ifdef',       {'depends': 'kana/vim-textobj-user', 'autoload': {'mappings': ['<Plug>(textobj-ifdef'      ] }}
+NeoBundleLazy 'thinca/vim-textobj-comment',        {'depends': 'kana/vim-textobj-user', 'autoload': {'mappings': ['<Plug>(textobj-comment'    ] }}
+NeoBundleLazy 'sgur/vim-textobj-parameter',        {'depends': 'kana/vim-textobj-user', 'autoload': {'mappings': ['<Plug>(textobj-parameter'  ] }}
+
+let g:textobj_entire_no_default_key_mappings     = 1
+omap ae <Plug>(textobj-entire-a)
+omap ie <Plug>(textobj-entire-i)
+vmap ae <Plug>(textobj-entire-a)
+vmap ie <Plug>(textobj-entire-i)
+
+let g:textobj_fold_no_default_key_mappings       = 1
+omap az <Plug>(textobj-fold-a)
+omap iz <Plug>(textobj-fold-i)
+vmap az <Plug>(textobj-fold-a)
+vmap iz <Plug>(textobj-fold-i)
+
+let g:textobj_indent_no_default_key_mappings     = 1
+omap ai <Plug>(textobj-indent-a)
+omap ii <Plug>(textobj-indent-i)
+vmap ai <Plug>(textobj-indent-a)
+vmap ii <Plug>(textobj-indent-i)
+
+let g:textobj_line_no_default_key_mappings       = 1
+omap al <Plug>(textobj-line-a)
+omap il <Plug>(textobj-line-i)
+vmap al <Plug>(textobj-line-a)
+vmap il <Plug>(textobj-line-i)
+
+let g:textobj_multiblock_no_default_key_mappings = 1
+omap ab <Plug>(textobj-multiblock-a)
+omap ib <Plug>(textobj-multiblock-i)
+vmap ab <Plug>(textobj-multiblock-a)
+vmap ib <Plug>(textobj-multiblock-i)
+
+let g:textobj_ifdef_no_default_key_mappings      = 1
+omap a# <Plug>(textobj-ifdef-a)
+omap i# <Plug>(textobj-ifdef-i)
+vmap a# <Plug>(textobj-ifdef-a)
+vmap i# <Plug>(textobj-ifdef-i)
+
+let g:textobj_comment_no_default_key_mappings    = 1
+omap ac <Plug>(textobj-comment-a)
+omap ic <Plug>(textobj-comment-i)
+vmap ac <Plug>(textobj-comment-a)
+vmap ic <Plug>(textobj-comment-i)
+
+let g:textobj_parameter_no_default_key_mappings  = 1
+omap a, <Plug>(textobj-parameter-a)
+omap i, <Plug>(textobj-parameter-i)
+vmap a, <Plug>(textobj-parameter-a)
+vmap i, <Plug>(textobj-parameter-i)
 
 " }}}
 " オペレータ {{{
 " http://qiita.com/rbtnn/items/a47ed6684f1f0bc52906
 
-NeoBundle 'kana/vim-operator-user'
-NeoBundle 'kana/vim-operator-replace'
-NeoBundle 'tyru/operator-camelize.vim'
+NeoBundleLazy 'kana/vim-operator-user'
+NeoBundleLazy 'kana/vim-operator-replace',    {'depends': 'kana/vim-operator-user', 'autoload': {'mappings': ['<Plug>(operator-replace)']}}
+NeoBundleLazy 'tyru/operator-camelize.vim',   {'depends': 'kana/vim-operator-user', 'autoload': {'mappings': ['<Plug>(operator-camelize-toggle)']}}
+
+map R           <Plug>(operator-replace)
+map <Leader>c   <Plug>(operator-camelize-toggle)
 
 " }}}
 " アプリ {{{
@@ -707,16 +764,6 @@ let g:unite_source_alignta_preset_arguments = [
 let g:icondrag_auto_start = 1
 
 " }}}
-" operator-camelize.vim {{{
-
-map <Leader>c <Plug>(operator-camelize-toggle)
-
-" }}}
-" vim-operator-replace {{{
-
-map R  <Plug>(operator-replace)
-
-" }}}
 " vim-clang-format {{{
 
 let s:bundle = neobundle#get('vim-clang-format')
@@ -724,7 +771,8 @@ function! s:bundle.hooks.on_source(bundle)
 
     if s:isWindows
         let g:clang_format#command = 'C:/Development/llvm/build/bin/Release/clang-format'
-    else let g:clang_format#command = 'clang-format-3.4'
+    else
+        let g:clang_format#command = 'clang-format-3.4'
     endif
 
     let g:clang_format#style_options = {
@@ -825,6 +873,20 @@ map *  <Plug>(visualstar-*)
 map #  <Plug>(visualstar-#)
 map g* <Plug>(visualstar-g*)
 map g# <Plug>(visualstar-g#)
+
+" }}}
+" Surround {{{
+
+nmap ds  <Plug>Dsurround
+nmap cs  <Plug>Csurround
+nmap ys  <Plug>Ysurround
+nmap yS  <Plug>YSurround
+nmap yss <Plug>Yssurround
+nmap ySs <Plug>YSsurround
+nmap ySS <Plug>YSsurround
+xmap S   <Plug>VSurround
+xmap gS  <Plug>VgSurround
+vmap s   <Plug>VSurround
 
 " }}}
 " }}}
