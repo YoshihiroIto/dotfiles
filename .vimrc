@@ -9,6 +9,7 @@ let s:isMac        = has('mac')
 let s:isGuiRunning = has('gui_running')
 let s:baseColumns  = s:isWindows ? 140 : 100
 let $DOTVIM        = s:isWindows ? expand('~/vimfiles') : expand('~/.vim')
+let s:vimrc_local  = expand('~/.vimrc_local')
 let mapleader      = ' '
 set viminfo+=!
 
@@ -17,6 +18,10 @@ if !s:isGuiRunning
 endif
 
 let s:rightWindowWidth = 40     " 右ウィンドウ幅
+
+if filereadable(s:vimrc_local)
+    exe 'source' s:vimrc_local
+endif
 
 " NeoBundle {{{
 if has('vim_starting')
@@ -215,6 +220,7 @@ endfunction
 " 編集 {{{
 " インストール {{{
 NeoBundle 'tomtom/tcomment_vim'
+NeoBundle 'tpope/vim-surround'
 NeoBundleLazy 'kana/vim-smartinput', {
             \   'autoload' : {
             \       'insert' : 1,
@@ -237,15 +243,6 @@ NeoBundleLazy 'sjl/gundo.vim', {
             \       'commands' : [ 'GundoToggle' ]
             \   }
             \ }
-NeoBundleLazy 'tpope/vim-surround', {
-      \ 'autoload' : {
-      \   'mappings' : [
-      \     ['nx', '<Plug>Dsurround'], ['nx', '<Plug>Csurround'],
-      \     ['nx', '<Plug>Ysurround'], ['nx', '<Plug>YSurround'],
-      \     ['nx', '<Plug>Yssurround'], ['nx', '<Plug>YSsurround'],
-      \     ['nx', '<Plug>YSsurround'], ['vx', '<Plug>VgSurround'],
-      \     ['vx', '<Plug>VSurround']
-      \ ]}}
 " }}}
 " Gundo {{{
 
@@ -304,20 +301,6 @@ function! s:bundle.hooks.on_source(bundle)
     augroup END
 endfunction
 unlet s:bundle
-
-" }}}
-" Surround {{{
-
-nmap ds  <Plug>Dsurround
-nmap cs  <Plug>Csurround
-nmap ys  <Plug>Ysurround
-nmap yS  <Plug>YSurround
-nmap yss <Plug>Yssurround
-nmap ySs <Plug>YSsurround
-nmap ySS <Plug>YSsurround
-xmap S   <Plug>VSurround
-xmap gS  <Plug>VgSurround
-vmap s   <Plug>VSurround
 
 " }}}
 " }}}
@@ -699,12 +682,6 @@ function! s:bundle.hooks.on_source(bundle)
 
     let g:lingr_vim_say_buffer_height = 15
 
-    let g:vimrc_pass_file = expand('~/.vimrc_pass')
-
-    if filereadable(g:vimrc_pass_file)
-        exe 'source' g:vimrc_pass_file
-    endif
-
     augroup lingr-vim
         autocmd!
         autocmd FileType lingr-rooms    call s:SetLingrSetting()
@@ -941,13 +918,14 @@ nnoremap    ZZ          <Nop>
 nnoremap    ZQ          <Nop>
 
 " ミス操作で削除してしまうため
-nnoremap    dh          <Nop>
+nnoremap    dh          <nop>
 nnoremap    dj          <nop>
 nnoremap    dk          <nop>
 nnoremap    dl          <nop>
 
 " よくミスるため
-vnoremap    U           <nop>
+vnoremap    u           <nop>
+onoremap    u           <nop>
 
 " }}}
 " ファイルタイプごとの設定 {{{
@@ -1294,6 +1272,7 @@ nmap        <silent>GG      GGzOzz:<C-u>call <SID>RefreshScreen()<CR>
 nmap     <silent><Leader>h  ^
 nmap     <silent><Leader>l  $
 nmap     <silent><Leader>n  %
+vmap     <silent><Leader>n  %
 
 " }}}
 " タブライン操作 {{{
