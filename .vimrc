@@ -621,7 +621,7 @@ NeoBundleLazy 'Shougo/vimfiler', {
             \ }
 NeoBundleLazy 'Shougo/vimshell.vim', {
             \   'autoload' : {
-            \       'commands' : [ 'VimShell' ]
+            \       'commands' : [ 'VimShell', 'VimShellPop' ]
             \   }
             \ }
 NeoBundleLazy 'basyura/TweetVim', {
@@ -789,6 +789,7 @@ NeoBundleLazy 'movewin.vim', {
 if s:isWindows
     NeoBundle 'YoshihiroIto/vim-icondrag'
 endif
+
 " }}}
 " Unite {{{
 
@@ -940,7 +941,7 @@ augroup file-setting
     autocmd filetype            *           setlocal formatoptions-=ro      " コメント補完しない
     autocmd filetype            ruby        setlocal foldmethod=syntax tabstop=2 shiftwidth=2 softtabstop=2
     autocmd filetype            c,cpp,cs    setlocal foldmethod=syntax
-    " autocmd filetype            vim         setlocal foldmethod=marker foldlevel=0 foldcolumn=4
+    autocmd filetype            vim         setlocal foldmethod=marker foldlevel=0 foldcolumn=4
 augroup end
 
 " }}}
@@ -1270,9 +1271,13 @@ nmap        <silent>gg      ggzOzz:<C-u>call <SID>RefreshScreen()<CR>
 nmap        <silent>GG      GGzOzz:<C-u>call <SID>RefreshScreen()<CR>
 
 nmap     <silent><Leader>h  ^
+vmap     <silent><Leader>h  ^
 nmap     <silent><Leader>l  $
+vmap     <silent><Leader>l  $
+omap     <silent><Leader>l  $
 nmap     <silent><Leader>n  %
 vmap     <silent><Leader>n  %
+omap     <silent><Leader>n  %
 
 " }}}
 " タブライン操作 {{{
@@ -1285,8 +1290,8 @@ nmap        <Leader>t   [Tab]
 nnoremap <silent> [Tab]c :tabnew<CR>
 nnoremap <silent> [Tab]x :tabclose<CR>
 
-nnoremap <Leader>j       :tabnext<CR>  
-nnoremap <Leader>k       :tabprev<CR>
+nnoremap ,j       :tabnext<CR>  
+nnoremap ,k       :tabprev<CR>
 
 for s:n in range(1, 9)
     exe 'nnoremap <silent> [Tab]' . s:n  ':<C-u>tabnext' . s:n . '<CR>'
@@ -1300,8 +1305,8 @@ nmap        <Leader>b   [Buffer]
 
 nnoremap <silent>[Buffer]x  :bdelete<CR>
 
-noremap  <C-J> :bnext<CR>
-noremap  <C-K> :bprev<CR>
+noremap  <Leader>j :bnext<CR>
+noremap  <Leader>k :bprev<CR>
 
 for s:n in range(1, 9)
     exe 'nnoremap <silent> [Buffer]' . s:n  ':<C-u>b' . s:n . '<CR>'
@@ -1618,4 +1623,3 @@ if !s:isGuiRunning
 endif
 
 " }}}
-" vim: foldmethod=marker foldcolumn=4 foldlevel=0
