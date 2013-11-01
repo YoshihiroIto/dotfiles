@@ -39,7 +39,6 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 
 NeoBundle 'tomasr/molokai'
 NeoBundle 'itchyny/lightline.vim'
-NeoBundle 'bling/vim-bufferline'
 NeoBundleLazy 'Shougo/unite-outline', {
             \   'autoload' : {
             \       'unite_sources' : [ 'outline' ],
@@ -221,6 +220,11 @@ endfunction
 " インストール {{{
 NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'tpope/vim-surround'
+NeoBundleLazy 'LeafCage/yankround.vim', {
+            \   'autoload' : {
+            \       'mappings' : [ '<Plug>(yankround-' ],
+            \   }
+            \ }
 NeoBundleLazy 'kana/vim-smartinput', {
             \   'autoload' : {
             \       'insert' : 1,
@@ -243,6 +247,7 @@ NeoBundleLazy 'sjl/gundo.vim', {
             \       'commands' : [ 'GundoToggle' ]
             \   }
             \ }
+
 " }}}
 " Gundo {{{
 
@@ -301,6 +306,14 @@ function! s:bundle.hooks.on_source(bundle)
     augroup END
 endfunction
 unlet s:bundle
+
+" }}}
+" yankround {{{
+
+nmap p     <Plug>(yankround-p)
+nmap P     <Plug>(yankround-P)
+nmap <C-p> <Plug>(yankround-prev)
+nmap <C-n> <Plug>(yankround-next)
 
 " }}}
 " }}}
@@ -435,7 +448,8 @@ NeoBundleLazy 'matchit.zip', {
             \       'mappings' : ['%', 'g%']
             \   }
             \ }
-NeoBundleLazy 'supasorn/vim-easymotion', {
+
+NeoBundleLazy 'haya14busa/vim-easymotion', {
             \   'autoload' : {
             \       'mappings' : [
             \           '<Leader><Leader>j',
@@ -444,6 +458,15 @@ NeoBundleLazy 'supasorn/vim-easymotion', {
             \       ]
             \   }
             \ }
+" NeoBundleLazy 'supasorn/vim-easymotion', {
+"             \   'autoload' : {
+"             \       'mappings' : [
+"             \           '<Leader><Leader>j',
+"             \           '<Leader><Leader>k',
+"             \           '<Leader><Leader>s',
+"             \       ]
+"             \   }
+"             \ }
 NeoBundleLazy 'thinca/vim-visualstar', {
             \   'autoload': {
             \       'mappings': [ '<Plug>(visualstar-' ]
@@ -451,7 +474,8 @@ NeoBundleLazy 'thinca/vim-visualstar', {
             \ }
 NeoBundleLazy 'osyo-manga/vim-anzu', {
             \   'autoload': {
-            \       'mappings': [ '<Plug>(anzu-' ],
+            \       'unite_sources'   : [ 'anzu' ],
+            \       'mappings'        : [ '<Plug>(anzu-' ],
             \       'function_prefix' : 'anzu'
             \   }
             \ }
@@ -489,10 +513,9 @@ map g# <Plug>(visualstar-g#)
 let g:EasyMotion_leader_key          = '<Leader><Leader>'
 let g:EasyMotion_keys                = 'hjklasdyuiopqwertnmzxcvb4738291056gf'
 let g:EasyMotion_special_select_line = 0
-let g:EasyMotiselect_phrase          = 0
-
-" hi link EasyMotionTarget ErrorMsg
-" hi link EasyMotionShade  Comment
+let g:EasyMotion_select_phrase       = 1
+let g:EasyMotion_smartcase           = 1
+" let g:EasyMotion_use_migemo          = 1
 
 " }}}
 " vim-anzu {{{
@@ -860,6 +883,8 @@ let g:icondrag_auto_start = 1
 " NeoBundle 'osyo-manga/vim-gift'
 " NeoBundle 'osyo-manga/vim-automatic'
 
+" NeoBundle 'bling/vim-bufferline'
+
 " vim-automatic {{{
 
 " Uniteウィンドウの幅がずれてしまうのでコメントアウト
@@ -966,6 +991,8 @@ inoremap    ¥   \
 inoremap    \   ¥
 cnoremap    ¥   \
 cnoremap    \   ¥
+
+nnoremap   <C-M>   o<ESC>
 
 " http://lsifrontend.hatenablog.com/entry/2013/10/11/052640
 nmap     <silent> <C-CR> yy:<C-u>TComment<CR>p
