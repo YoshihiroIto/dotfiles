@@ -963,10 +963,16 @@ augroup file-setting
     autocmd!
     autocmd bufenter            *           call s:SetCurrentDir()
     autocmd bufnewfile,bufread  *.xaml      setf xml
+
     autocmd filetype            *           setlocal formatoptions-=ro      " コメント補完しない
     autocmd filetype            ruby        setlocal foldmethod=syntax tabstop=2 shiftwidth=2 softtabstop=2
     autocmd filetype            c,cpp,cs    setlocal foldmethod=syntax
     autocmd filetype            vim         setlocal foldmethod=marker foldlevel=0 foldcolumn=4
+
+    " Hack #22: XMLの閉じタグを補完する
+    " http://vim-users.jp/2009/06/hack22/
+    autocmd Filetype            xml         inoremap <buffer> </ </<C-x><C-o>
+    autocmd Filetype            html        inoremap <buffer> </ </<C-x><C-o>
 augroup end
 
 " }}}
