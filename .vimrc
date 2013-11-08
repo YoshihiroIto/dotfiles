@@ -366,6 +366,7 @@ unlet s:bundle
 
 let s:bundle = neobundle#get('neosnippet')
 function! s:bundle.hooks.on_source(bundle)
+    let g:neosnippet#snippets_directory = '$DOTVIM/snippets'
 
     " Enable snipMate compatibility feature.
     let g:neosnippet#enable_snipmate_compatibility = 1
@@ -1070,7 +1071,7 @@ set backup                        " バックアップファイルを使う
 set backupdir=~/.vimbackup        " バックアップファイルをホームディレクトリに保存
 
 " 自動ミラーリング {{{
-let s:mirrorDir = expand('~/vimmirror')
+let s:mirrorDir = expand('$DOTVIM/mirror')
 let s:mirrorMaxHistory = 7
 augroup auto-mirror
     autocmd!
