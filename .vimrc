@@ -57,10 +57,7 @@ NeoBundleLazy 'LeafCage/foldCC', {
 " }}}
 " TagBar {{{
 
-" let g:tagbar_expand = 1
-" noremap        <silent><F8>            :TagbarToggle<CR>
-
-noremap        <silent><F8>            :<C-u>call <SID>ToggleTagBar()<CR>
+noremap   <silent><F8>    :<C-u>call <SID>ToggleTagBar()<CR>
 
 let g:tagbar_width = s:rightWindowWidth
 
@@ -298,7 +295,7 @@ function! s:bundle.hooks.on_source(bundle)
                 \ 'BreakBeforeBraces'                   : 'Stroustrup',
                 \ }
 
-    let g:clang_format#code_style = "Chromium"
+    let g:clang_format#code_style = 'Chromium'
 
     augroup clang-format-setting
         autocmd!
@@ -378,16 +375,18 @@ function! s:bundle.hooks.on_source(bundle)
 
     " Plugin key-mappings.
     imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-    smap <c-k>     <plug>(neosnippet_expand_or_jump)
+    smap <C-k>     <plug>(neosnippet_expand_or_jump)
 
-    " supertab like snippets behavior.
-    imap <expr><tab> neosnippet#expandable() <bar><bar> neosnippet#jumpable() ? "\<plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<c-n>" : "\<tab>"
+    " imap <expr><tab> neosnippet#expandable() <bar><bar> neosnippet#jumpable() ? "\<plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<tab>"
+    " smap <expr><tab> neosnippet#expandable() <bar><bar> neosnippet#jumpable() ? "\<plug>(neosnippet_expand_or_jump)" : "\<tab>"
+    imap <expr><tab> neosnippet#expandable() <bar><bar> neosnippet#jumpable() ? "\<plug>(neosnippet_expand_or_jump)" : "\<tab>"
     smap <expr><tab> neosnippet#expandable() <bar><bar> neosnippet#jumpable() ? "\<plug>(neosnippet_expand_or_jump)" : "\<tab>"
 
     " for snippet_complete marker.
     if has('conceal')
         set conceallevel=2 concealcursor=i
     endif
+
 endfunction
 unlet s:bundle
 
@@ -432,6 +431,7 @@ unlet s:bundle
 " }}}
 " 検索 {{{
 " インストール {{{
+NeoBundle 'osyo-manga/vim-anzu'
 NeoBundleLazy 'rhysd/clever-f.vim', {
             \   'autoload' : {
             \       'mappings' : 'f',
@@ -458,25 +458,9 @@ NeoBundleLazy 'haya14busa/vim-easymotion', {
             \       ]
             \   }
             \ }
-" NeoBundleLazy 'supasorn/vim-easymotion', {
-"             \   'autoload' : {
-"             \       'mappings' : [
-"             \           '<Leader><Leader>j',
-"             \           '<Leader><Leader>k',
-"             \           '<Leader><Leader>s',
-"             \       ]
-"             \   }
-"             \ }
 NeoBundleLazy 'thinca/vim-visualstar', {
             \   'autoload': {
             \       'mappings': [ '<Plug>(visualstar-' ]
-            \   }
-            \ }
-NeoBundleLazy 'osyo-manga/vim-anzu', {
-            \   'autoload': {
-            \       'unite_sources'   : [ 'anzu' ],
-            \       'mappings'        : [ '<Plug>(anzu-' ],
-            \       'function_prefix' : 'anzu'
             \   }
             \ }
 " }}}
@@ -515,15 +499,14 @@ let g:EasyMotion_keys                = 'hjklasdyuiopqwertnmzxcvb4738291056gf'
 let g:EasyMotion_special_select_line = 0
 let g:EasyMotion_select_phrase       = 1
 let g:EasyMotion_smartcase           = 1
-" let g:EasyMotion_use_migemo          = 1
 
 " }}}
 " vim-anzu {{{
 
 " http://qiita.com/shiena/items/f53959d62085b7980cb5
-nmap <silent> n <Plug>(anzu-n)zOzz:<C-u>call     <SID>RefreshScreen()<CR>
-nmap <silent> N <Plug>(anzu-N)zOzz:<C-u>call     <SID>RefreshScreen()<CR>
-nmap <silent> * <Plug>(anzu-star)zOzz:<C-u>call  <SID>RefreshScreen()<CR>
+nmap <silent> n <Plug>(anzu-n)zOzz:<C-u>call <SID>RefreshScreen()<CR>
+nmap <silent> N <Plug>(anzu-N)zOzz:<C-u>call <SID>RefreshScreen()<CR>
+nmap <silent> * <Plug>(anzu-star)zOzz:<C-u>call <SID>RefreshScreen()<CR>
 nmap <silent> # <Plug>(anzu-sharp)zOzz:<C-u>call <SID>RefreshScreen()<CR>
 
 let s:bundle = neobundle#get('vim-anzu')
@@ -732,7 +715,7 @@ endfunction
 " }}}
 " Tweetvim {{{
 
-noremap     <silent><F10>       :<C-u>call <SID>ToggleTweetVim()<CR>
+noremap     <silent> <F10> :<C-u>call <SID>ToggleTweetVim()<CR>
 
 function! s:ToggleTweetVim()
     if bufnr("tweetvim") == -1
@@ -753,7 +736,7 @@ function! s:bundle.hooks.on_source(bundle)
 
     augroup TweetVimSetting
         autocmd!
-        autocmd FileType tweetvim     nmap     <buffer>rr        <Plug>(tweetvim_action_reload)
+        autocmd FileType tweetvim     nmap <buffer>   rr   <Plug>(tweetvim_action_reload)
     augroup END
 endfunction
 unlet s:bundle
@@ -821,21 +804,21 @@ xnoremap [Unite]    <nop>
 nmap     <leader>u  [Unite]
 xmap     <leader>u  [Unite]
 
-nnoremap <silent> [Unite]g    :<C-u>Unite grep:. -buffer-name=search-buffer<CR>
-nnoremap <silent> [Unite]gc   :<C-u>UniteWithCursorWord grep:. -buffer-name=search-buffer<CR>
+nnoremap <silent> [Unite]g   :<C-u>Unite grep:. -buffer-name=search-buffer<CR>
+nnoremap <silent> [Unite]gc  :<C-u>UniteWithCursorWord grep:. -buffer-name=search-buffer<CR>
 
-nnoremap <silent> [Unite]gp   :<C-u>call <SID>unite_grep_project('-buffer-name=search-buffer')<CR>
-nnoremap <silent> [Unite]gpc  :<C-u>call <SID>unite_grep_project('-buffer-name=search-buffer')<CR><C-R><C-W><CR>
+nnoremap <silent> [Unite]gp  :<C-u>call <SID>unite_grep_project('-buffer-name=search-buffer')<CR>
+nnoremap <silent> [Unite]gpc :<C-u>call <SID>unite_grep_project('-buffer-name=search-buffer')<CR><C-R><C-W><CR>
 
-nnoremap <silent> [Unite]r    :<C-u>UniteResume search-buffer<CR>
+nnoremap <silent> [Unite]r   :<C-u>UniteResume search-buffer<CR>
 
-nnoremap <silent> [Unite]m    :<C-u>Unite file_mru<CR>
-nnoremap <silent> [Unite]b    :<C-u>Unite bookmark<CR>
-nnoremap <silent> [Unite]h    :<C-u>UniteWithCursorWord help<CR>
-nnoremap <silent> [Unite]l    :<C-u>Unite -auto-preview line<CR>
-nnoremap <silent> [Unite]f    :<C-u>Unite menu:fix<CR>
-xnoremap <silent> [Unite]a    :<C-u>Unite -vertical -direction=rightbelow alignta:arguments<CR>
-nnoremap <silent> [Unite]o    :<C-u>Unite -vertical -direction=rightbelow -no-quit outline<CR>
+nnoremap <silent> [Unite]m   :<C-u>Unite file_mru<CR>
+nnoremap <silent> [Unite]b   :<C-u>Unite bookmark<CR>
+nnoremap <silent> [Unite]h   :<C-u>UniteWithCursorWord help<CR>
+nnoremap <silent> [Unite]l   :<C-u>Unite -auto-preview line<CR>
+nnoremap <silent> [Unite]f   :<C-u>Unite menu:fix<CR>
+xnoremap <silent> [Unite]a   :<C-u>Unite -vertical -direction=rightbelow alignta:arguments<CR>
+nnoremap <silent> [Unite]o   :<C-u>Unite -vertical -direction=rightbelow -no-quit outline<CR>
 
 " http://sanrinsha.lolipop.jp/blog/2013/03/%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E5%86%85%E3%81%AE%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92unite-grep%E3%81%99%E3%82%8B.html
 function! s:unite_grep_project(...)
@@ -973,7 +956,7 @@ augroup file-setting
     " http://vim-users.jp/2009/06/hack22/
     autocmd Filetype            xml         inoremap <buffer> </ </<C-x><C-o>
     autocmd Filetype            html        inoremap <buffer> </ </<C-x><C-o>
-augroup end
+augroup END
 
 " }}}
 " 編集 {{{
@@ -998,7 +981,7 @@ inoremap    \   ¥
 cnoremap    ¥   \
 cnoremap    \   ¥
 
-nnoremap   <C-M>   o<ESC>
+nnoremap   <C-m>   o<ESC>
 
 " http://lsifrontend.hatenablog.com/entry/2013/10/11/052640
 nmap     <silent> <C-CR> yy:<C-u>TComment<CR>p
@@ -1143,7 +1126,7 @@ if has('migemo')
 endif
 
 " 検索時のハイライトを解除
-nnoremap    <silent><Leader>/   :nohlsearch<CR>
+nnoremap    <silent>  <Leader>/   :nohlsearch<CR>
 
 " }}}
 " 表示{{{
@@ -1274,43 +1257,43 @@ if s:isGuiRunning
     nnoremap    [Window]    <Nop>
     nmap        ,           [Window]
 
-    noremap  <silent>[Window]H  :<C-u>call <SID>ResizeWin()<CR>
-    noremap  <silent>[Window]J  :<C-u>call <SID>ResizeWin()<CR>
-    noremap  <silent>[Window]K  :<C-u>call <SID>ResizeWin()<CR>
-    noremap  <silent>[Window]L  :<C-u>call <SID>ResizeWin()<CR>
-    noremap  <silent>[Window]h  :MoveWin<CR>
-    noremap  <silent>[Window]j  :MoveWin<CR>
-    noremap  <silent>[Window]k  :MoveWin<CR>
-    noremap  <silent>[Window]l  :MoveWin<CR>
-    noremap  <silent>[Window]f  :<C-u>call <SID>FullWindow()<CR>
+    noremap  <silent>     [Window]H  :<C-u>call <SID>ResizeWin()<CR>
+    noremap  <silent>     [Window]J  :<C-u>call <SID>ResizeWin()<CR>
+    noremap  <silent>     [Window]K  :<C-u>call <SID>ResizeWin()<CR>
+    noremap  <silent>     [Window]L  :<C-u>call <SID>ResizeWin()<CR>
+    noremap  <silent>     [Window]h  :MoveWin<CR>
+    noremap  <silent>     [Window]j  :MoveWin<CR>
+    noremap  <silent>     [Window]k  :MoveWin<CR>
+    noremap  <silent>     [Window]l  :MoveWin<CR>
+    noremap  <silent>     [Window]f  :<C-u>call <SID>FullWindow()<CR>
 endif
 
 " }}}
 " カーソル移動 {{{
 
-nnoremap    <silent>k       gk
-nnoremap    <silent>j       gj
-vnoremap    <silent>k       gk
-vnoremap    <silent>j       gj
-nnoremap    <silent>0       g0
-nnoremap    <silent>g0      0
-nnoremap    <silent>$       g$
-nnoremap    <silent>g$      $
-nnoremap    <silent><C-e>   <C-e>j
-nnoremap    <silent><C-y>   <C-y>k
-vnoremap    <silent><C-e>   <C-e>j
-vnoremap    <silent><C-y>   <C-y>k
-nmap        <silent>gg      ggzOzz:<C-u>call <SID>RefreshScreen()<CR>
-nmap        <silent>GG      GGzOzz:<C-u>call <SID>RefreshScreen()<CR>
+nnoremap    <silent>       k          gk
+nnoremap    <silent>       j          gj
+vnoremap    <silent>       k          gk
+vnoremap    <silent>       j          gj
+nnoremap    <silent>       0          g0
+nnoremap    <silent>       g0         0
+nnoremap    <silent>       $          g$
+nnoremap    <silent>       g$         $
+nnoremap    <silent>       <C-e>      <C-e>j
+nnoremap    <silent>       <C-y>      <C-y>k
+vnoremap    <silent>       <C-e>      <C-e>j
+vnoremap    <silent>       <C-y>      <C-y>k
+nmap        <silent>       gg         ggzOzz:<C-u>call <SID>RefreshScreen()<CR>
+nmap        <silent>       GG         GGzOzz:<C-u>call <SID>RefreshScreen()<CR>
 
-nmap     <silent><Leader>h  ^
-vmap     <silent><Leader>h  ^
-nmap     <silent><Leader>l  $
-vmap     <silent><Leader>l  $
-omap     <silent><Leader>l  $
-nmap     <silent><Leader>n  %
-vmap     <silent><Leader>n  %
-omap     <silent><Leader>n  %
+nmap        <silent>       <Leader>h  ^:<C-u>call <SID>RefreshScreen()<CR>
+vmap        <silent>       <Leader>h  ^:<C-u>call <SID>RefreshScreen()<CR>
+nmap        <silent>       <Leader>l  $:<C-u>call <SID>RefreshScreen()<CR>
+vmap        <silent>       <Leader>l  $:<C-u>call <SID>RefreshScreen()<CR>
+omap        <silent>       <Leader>l  $:<C-u>call <SID>RefreshScreen()<CR>
+nmap        <silent>       <Leader>n  %:<C-u>call <SID>RefreshScreen()<CR>
+vmap        <silent>       <Leader>n  %:<C-u>call <SID>RefreshScreen()<CR>
+omap        <silent>       <Leader>n  %:<C-u>call <SID>RefreshScreen()<CR>
 
 " }}}
 " タブライン操作 {{{
@@ -1336,7 +1319,7 @@ endfor
 nnoremap    [Buffer]    <Nop>
 nmap        <Leader>b   [Buffer]
 
-nnoremap <silent>[Buffer]x  :bdelete<CR>
+nnoremap <silent>  [Buffer]x  :bdelete<CR>
 
 noremap  <Leader>j :bnext<CR>
 noremap  <Leader>k :bprev<CR>
@@ -1349,14 +1332,14 @@ endfor
 " ファイル操作 {{{
 
 " vimrc / gvimrc の編集 
-nnoremap    <silent><F1>    :<C-u>call <SID>SmartOpen($MYVIMRC)<CR>
-nnoremap    <silent><F2>    :<C-u>call <SID>SmartOpen($MYGVIMRC)<CR>
-nnoremap    <silent><F3>    :<C-u>source $MYVIMRC<CR>:source $MYGVIMRC<CR>
+nnoremap    <silent>   <F1>    :<C-u>call <SID>SmartOpen($MYVIMRC)<CR>
+nnoremap    <silent>   <F2>    :<C-u>call <SID>SmartOpen($MYGVIMRC)<CR>
+nnoremap    <silent>   <F3>    :<C-u>source $MYVIMRC<CR>:source $MYGVIMRC<CR>
 
 " }}}
 " マーク {{{
 
-nmap     <silent><Leader>m  `
+nmap        <silent>   <Leader>m  `
 
 " }}}
 " ヘルプ {{{
