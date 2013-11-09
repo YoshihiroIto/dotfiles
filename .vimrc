@@ -62,7 +62,7 @@ noremap   <silent><F8>    :<C-u>call <SID>ToggleTagBar()<CR>
 let g:tagbar_width = s:rightWindowWidth
 
 function! s:ToggleTagBar()
-    if bufwinnr(bufnr("__Tagbar__")) != -1
+    if bufwinnr(bufnr('__Tagbar__')) != -1
         TagbarToggle
         let &columns = &columns - (g:tagbar_width + 1)
     else
@@ -148,7 +148,6 @@ function! MyFilename()
 endfunction
 
 function! MyFugitive()
-    " if &ft !~? 'vimfiler\|gundo' && exists('*fugitive#head')
     if &ft !~? 'vimfiler\|gundo'
         let _ = fugitive#head()
 
@@ -254,7 +253,7 @@ let g:gundo_right = 1
 let g:gundo_width = s:rightWindowWidth
 
 function! s:ToggleGundo()
-    if bufwinnr(bufnr("__Gundo__")) != -1 || bufwinnr(bufnr("__Gundo_Preview__")) != -1
+    if bufwinnr(bufnr('__Gundo__')) != -1 || bufwinnr(bufnr('__Gundo_Preview__')) != -1
         GundoToggle
         let &columns = &columns - (g:gundo_width + 1)
     else
@@ -366,28 +365,22 @@ unlet s:bundle
 
 let s:bundle = neobundle#get('neosnippet')
 function! s:bundle.hooks.on_source(bundle)
-    let g:neosnippet#snippets_directory = '$DOTVIM/snippets'
 
-    " Enable snipMate compatibility feature.
     let g:neosnippet#enable_snipmate_compatibility = 1
 
-    " Tell Neosnippet about the other snippets
-    let g:neosnippet#snippets_directory='$DOTVIM/bundle/vim-snippets/snippets'
+    let g:neosnippet#snippets_directory = '$DOTVIM/bundle/vim-snippets/snippets,$DOTVIM/snippets'
 
     " Plugin key-mappings.
-    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-    smap <C-k>     <plug>(neosnippet_expand_or_jump)
+    imap <C-k>  <Plug>(neosnippet_expand_or_jump)
+    smap <C-k>  <plug>(neosnippet_expand_or_jump)
 
-    " imap <expr><tab> neosnippet#expandable() <bar><bar> neosnippet#jumpable() ? "\<plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<tab>"
-    " smap <expr><tab> neosnippet#expandable() <bar><bar> neosnippet#jumpable() ? "\<plug>(neosnippet_expand_or_jump)" : "\<tab>"
-    imap <expr><tab> neosnippet#expandable() <bar><bar> neosnippet#jumpable() ? "\<plug>(neosnippet_expand_or_jump)" : "\<tab>"
-    smap <expr><tab> neosnippet#expandable() <bar><bar> neosnippet#jumpable() ? "\<plug>(neosnippet_expand_or_jump)" : "\<tab>"
+    imap <expr> <Tab> neosnippet#expandable() <Bar><Bar> neosnippet#jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : '<Tab>'
+    smap <expr> <Tab> neosnippet#expandable() <Bar><Bar> neosnippet#jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : '<Tab>'
 
     " for snippet_complete marker.
     if has('conceal')
         set conceallevel=2 concealcursor=i
     endif
-
 endfunction
 unlet s:bundle
 
@@ -433,6 +426,7 @@ unlet s:bundle
 " 検索 {{{
 " インストール {{{
 NeoBundle 'osyo-manga/vim-anzu'
+NeoBundle 'matchit.zip'
 NeoBundleLazy 'rhysd/clever-f.vim', {
             \   'autoload' : {
             \       'mappings' : 'f',
@@ -444,12 +438,6 @@ NeoBundleLazy 'rking/ag.vim', {
             \       'commands' : [ 'Ag' ]
             \   }
             \ }
-NeoBundleLazy 'matchit.zip', {
-            \   'autoload' : {
-            \       'mappings' : ['%', 'g%']
-            \   }
-            \ }
-
 NeoBundleLazy 'haya14busa/vim-easymotion', {
             \   'autoload' : {
             \       'mappings' : [
@@ -671,9 +659,12 @@ function! s:bundle.hooks.on_source(bundle)
             \  "\<Plug>(vimfiler_cd_file)",
             \  "\<Plug>(vimfiler_edit_file)")
 
-        nmap <buffer><expr> <S-Space> vimfiler#smart_cursor_map(
+        nmap <buffer><expr> <Tab> vimfiler#smart_cursor_map(
             \  "\<Plug>(vimfiler_toggle_mark_current_line)",
             \  "\<Plug>(vimfiler_toggle_mark_current_line)")
+        nmap <buffer><expr> <S-Tab> vimfiler#smart_cursor_map(
+            \  "\<Plug>(vimfiler_toggle_mark_current_line_up)",
+            \  "\<Plug>(vimfiler_toggle_mark_current_line_up)")
     endfunction
 
     let g:vimfiler_as_default_explorer = 1
@@ -719,7 +710,7 @@ endfunction
 noremap     <silent> <F10> :<C-u>call <SID>ToggleTweetVim()<CR>
 
 function! s:ToggleTweetVim()
-    if bufnr("tweetvim") == -1
+    if bufnr('tweetvim') == -1
         tabnew
         TweetVimHomeTimeline
     else
@@ -982,7 +973,7 @@ inoremap    \   ¥
 cnoremap    ¥   \
 cnoremap    \   ¥
 
-nnoremap   <C-m>   o<ESC>
+nnoremap   <C-m>   O<ESC>
 
 " http://lsifrontend.hatenablog.com/entry/2013/10/11/052640
 nmap     <silent> <C-CR> yy:<C-u>TComment<CR>p
