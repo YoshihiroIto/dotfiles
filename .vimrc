@@ -634,6 +634,14 @@ NeoBundleLazy 'tpope/vim-fugitive', {
             \       'function_prefix' : 'fugitive'
             \   }
             \ }
+NeoBundleLazy 'mattn/gist-vim', {
+            \   'depends' : [ 
+            \       'mattn/webapi-vim',
+            \   ],
+            \   'autoload' : {
+            \       'commands' : [ 'Gist' ]
+            \   }
+            \ }
 if s:isMac 
     NeoBundleLazy 'itchyny/dictionary.vim', {
                 \   'autoload' : {
@@ -641,6 +649,7 @@ if s:isMac
                 \   }
                 \ }
 endif
+
 " }}}
 " VimFiler {{{
 
@@ -1111,7 +1120,7 @@ augroup END
 set incsearch                     " インクリメンタルサーチ
 set ignorecase                    " 検索パターンにおいて大文字と小文字を区別しない。
 set smartcase                     " 検索パターンが大文字を含んでいたらオプション 'ignorecase' を上書きする。
-set nowrapscan                    " 検索をファイルの先頭へループしない
+" set nowrapscan                    " 検索をファイルの先頭へループしない
 
 if has('migemo')
     set migemo                        " 日本語インクリメンタルサーチ
@@ -1324,8 +1333,10 @@ endfor
 " ファイル操作 {{{
 
 " vimrc / gvimrc の編集 
-nnoremap    <silent>   <F1>    :<C-u>call <SID>SmartOpen($MYVIMRC)<CR>
-nnoremap    <silent>   <F2>    :<C-u>call <SID>SmartOpen($MYGVIMRC)<CR>
+" nnoremap    <silent>   <F1>    :<C-u>call <SID>SmartOpen($MYVIMRC)<CR>
+" nnoremap    <silent>   <F2>    :<C-u>call <SID>SmartOpen($MYGVIMRC)<CR>
+nnoremap    <silent>   <F1>    :<C-u>call <SID>SmartOpen('~/dotfiles/.vimrc')<CR>
+nnoremap    <silent>   <F2>    :<C-u>call <SID>SmartOpen('~/dotfiles/.gvimrc')<CR>
 nnoremap    <silent>   <F3>    :<C-u>source $MYVIMRC<CR>:source $MYGVIMRC<CR>
 
 " }}}
@@ -1572,7 +1583,7 @@ endfunction
 function! s:SetCurrentDir()
 
     if &ft != '' && &ft != 'vimfiler'
-        exe 'lcd'  fnameescape(expand('%:p:h'))
+        silent! exe 'lcd'  fnameescape(expand('%:p:h'))
     endif
 endfunction
 " }}}
