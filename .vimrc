@@ -216,6 +216,7 @@ endfunction
 " インストール {{{
 NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'tpope/vim-surround'
+NeoBundle 'tpope/vim-repeat'
 NeoBundleLazy 'LeafCage/yankround.vim', {
             \   'autoload' : {
             \       'mappings' : [ '<Plug>(yankround-' ],
@@ -796,7 +797,6 @@ NeoBundleLazy 'movewin.vim', {
 if s:isWindows
     NeoBundle 'YoshihiroIto/vim-icondrag'
 endif
-
 " }}}
 " Unite {{{
 
@@ -814,7 +814,7 @@ nnoremap <silent> [Unite]gpc :<C-u>call <SID>unite_grep_project('-buffer-name=se
 nnoremap <silent> [Unite]r   :<C-u>UniteResume search-buffer<CR>
 
 nnoremap <silent> [Unite]m   :<C-u>Unite file_mru<CR>
-nnoremap <silent> [Unite]b   :<C-u>Unite bookmark<CR>
+nnoremap <silent> [Unite]b   :<C-u>Unite buffer<CR>
 nnoremap <silent> [Unite]h   :<C-u>UniteWithCursorWord help<CR>
 nnoremap <silent> [Unite]l   :<C-u>Unite -auto-preview line<CR>
 nnoremap <silent> [Unite]f   :<C-u>Unite menu:fix<CR>
@@ -1285,7 +1285,7 @@ nnoremap    <silent>       <C-y>      <C-y>k
 vnoremap    <silent>       <C-e>      <C-e>j
 vnoremap    <silent>       <C-y>      <C-y>k
 nmap        <silent>       gg         ggzOzz:<C-u>call <SID>RefreshScreen()<CR>
-nmap        <silent>       GG         GGzOzz:<C-u>call <SID>RefreshScreen()<CR>
+nmap        <silent>       G          GzOzz:<C-u>call <SID>RefreshScreen()<CR>
 
 nmap        <silent>       <Leader>h  ^:<C-u>call <SID>RefreshScreen()<CR>
 vmap        <silent>       <Leader>h  ^:<C-u>call <SID>RefreshScreen()<CR>
