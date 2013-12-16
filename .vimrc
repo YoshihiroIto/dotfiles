@@ -54,6 +54,27 @@ NeoBundleLazy 'LeafCage/foldCC', {
             \       'filetypes' : [ 'vim' ]
             \   }
             \ }
+NeoBundleLazy 'vim-jp/cpp-vim', {
+            \   'autoload' : {
+            \       'filetypes' : [ 'cpp' ]
+            \   }
+            \ }
+NeoBundleLazy 'beyondmarc/hlsl.vim', {
+            \   'autoload' : {
+            \       'filetypes' : [ 'fx', 'fxc', 'fxh', 'hlsl' ]
+            \   }
+            \ }
+NeoBundleLazy 'majutsushi/tagbar', {
+            \   'autoload' : {
+            \       'commands' : [ 'TagbarToggle' ]
+            \   }
+            \ }
+NeoBundleLazy 'mhinz/vim-signify', {
+            \   'autoload' : {
+            \       'commands' : [ 'SignifyToggle' ]
+            \   }
+            \ }
+" NeoBundle 'mhinz/vim-signify'
 " }}}
 " TagBar {{{
 
@@ -244,7 +265,14 @@ NeoBundleLazy 'sjl/gundo.vim', {
             \       'commands' : [ 'GundoToggle' ]
             \   }
             \ }
-
+NeoBundleLazy 'nishigori/vim-sunday', {
+            \   'autoload' : {
+            \       'mappings' : [
+            \           '<C-x>',
+            \           '<C-a>',
+            \       ]
+            \   }
+            \ }
 " }}}
 " Gundo {{{
 
@@ -306,6 +334,8 @@ unlet s:bundle
 
 " }}}
 " yankround {{{
+
+let g:yankround_use_region_hl = 1
 
 nmap p     <Plug>(yankround-p)
 nmap P     <Plug>(yankround-P)
@@ -466,6 +496,7 @@ let g:clever_f_chars_match_any_signs = ';'
 " machit{{{
 
 let bundle = neobundle#get('matchit.zip')
+
 function! bundle.hooks.on_post_source(bundle)
     silent! execute 'doautocmd Filetype' &filetype
 endfunction
@@ -481,14 +512,19 @@ map g# <Plug>(visualstar-g#)
 " }}}
 " vim-easymotion {{{
 
-" http://haya14busa.com/change-vim-easymotion-from-lokaltog-to-forked/
-" https://github.com/supasorn/vim-easymotion
+" http://haya14busa.com/vim-lazymotion-on-speed/
 
 let g:EasyMotion_leader_key          = '<Leader><Leader>'
-let g:EasyMotion_keys                = 'hjklasdyuiopqwertnmzxcvb4738291056gf'
+" let g:EasyMotion_keys                = 'hjklasdyuiopqwertnmzxcvb4738291056gf'
+let g:EasyMotion_keys                = 'hjklasdyuiopqwertnmzxcvbgf'
 let g:EasyMotion_special_select_line = 0
 let g:EasyMotion_select_phrase       = 1
 let g:EasyMotion_smartcase           = 1
+" let g:EasyMotion_use_migemo          = 1
+
+nmap r <Leader><Leader>s
+vmap r <Leader><Leader>s
+omap r <Leader><Leader>s
 
 " }}}
 " vim-anzu {{{
@@ -516,70 +552,69 @@ unlet s:bundle
 " http://d.hatena.ne.jp/osyo-manga/20130717/1374069987
 " インストール {{{
 NeoBundleLazy 'kana/vim-textobj-user'
-NeoBundleLazy 'kana/vim-textobj-entire',           {'depends': 'kana/vim-textobj-user', 'autoload': {'mappings': ['<Plug>(textobj-entire'     ] }}
-NeoBundleLazy 'kana/vim-textobj-fold',             {'depends': 'kana/vim-textobj-user', 'autoload': {'mappings': ['<Plug>(textobj-fold'       ] }}
-NeoBundleLazy 'kana/vim-textobj-indent',           {'depends': 'kana/vim-textobj-user', 'autoload': {'mappings': ['<Plug>(textobj-indent'     ] }}
-NeoBundleLazy 'kana/vim-textobj-line',             {'depends': 'kana/vim-textobj-user', 'autoload': {'mappings': ['<Plug>(textobj-line'       ] }}
-NeoBundleLazy 'osyo-manga/vim-textobj-multiblock', {'depends': 'kana/vim-textobj-user', 'autoload': {'mappings': ['<Plug>(textobj-multiblock' ] }}
-NeoBundleLazy 'anyakichi/vim-textobj-ifdef',       {'depends': 'kana/vim-textobj-user', 'autoload': {'mappings': ['<Plug>(textobj-ifdef'      ] }}
-NeoBundleLazy 'thinca/vim-textobj-comment',        {'depends': 'kana/vim-textobj-user', 'autoload': {'mappings': ['<Plug>(textobj-comment'    ] }}
-NeoBundleLazy 'sgur/vim-textobj-parameter',        {'depends': 'kana/vim-textobj-user', 'autoload': {'mappings': ['<Plug>(textobj-parameter'  ] }}
-" }}}
-" vim-textobj-entire {{{
-let g:textobj_entire_no_default_key_mappings     = 1
-omap ae <Plug>(textobj-entire-a)
-omap ie <Plug>(textobj-entire-i)
-vmap ae <Plug>(textobj-entire-a)
-vmap ie <Plug>(textobj-entire-i)
-" }}}
-" vim-textobj-fold {{{
-let g:textobj_fold_no_default_key_mappings       = 1
-omap az <Plug>(textobj-fold-a)
-omap iz <Plug>(textobj-fold-i)
-vmap az <Plug>(textobj-fold-a)
-vmap iz <Plug>(textobj-fold-i)
-" }}}
-" vim-textobj-indent {{{
-let g:textobj_indent_no_default_key_mappings     = 1
-omap ai <Plug>(textobj-indent-a)
-omap ii <Plug>(textobj-indent-i)
-vmap ai <Plug>(textobj-indent-a)
-vmap ii <Plug>(textobj-indent-i)
-" }}}
-" vim-textobj-line {{{
-let g:textobj_line_no_default_key_mappings       = 1
-omap al <Plug>(textobj-line-a)
-omap il <Plug>(textobj-line-i)
-vmap al <Plug>(textobj-line-a)
-vmap il <Plug>(textobj-line-i)
-" }}}
-" vim-textobj-multiblock {{{
-let g:textobj_multiblock_no_default_key_mappings = 1
-omap ab <Plug>(textobj-multiblock-a)
-omap ib <Plug>(textobj-multiblock-i)
-vmap ab <Plug>(textobj-multiblock-a)
-vmap ib <Plug>(textobj-multiblock-i)
-" }}}
-" vim-textobj-ifdef {{{
-let g:textobj_ifdef_no_default_key_mappings      = 1
-omap a# <Plug>(textobj-ifdef-a)
-omap i# <Plug>(textobj-ifdef-i)
-vmap a# <Plug>(textobj-ifdef-a)
-vmap i# <Plug>(textobj-ifdef-i)
-" }}}
-" vim-textobj-comment {{{
-let g:textobj_comment_no_default_key_mappings    = 1
-omap ac <Plug>(textobj-comment-a)
-omap ic <Plug>(textobj-comment-i)
-vmap ac <Plug>(textobj-comment-a)
-vmap ic <Plug>(textobj-comment-i)
-" }}}
-" vim-textobj-parameter {{{
-let g:textobj_parameter_no_default_key_mappings  = 1
-omap a, <Plug>(textobj-parameter-a)
-omap i, <Plug>(textobj-parameter-i)
-vmap a, <Plug>(textobj-parameter-a)
-vmap i, <Plug>(textobj-parameter-i)
+
+NeoBundleLazy 'kana/vim-textobj-entire', {
+            \ 'depends' : 'kana/vim-textobj-user',
+            \ 'autoload' : {
+            \       'mappings' : [['xo', 'ae'], ['xo', 'ie']]
+            \   }
+            \ }
+
+NeoBundleLazy 'kana/vim-textobj-indent', {
+            \ 'depends' : 'kana/vim-textobj-user',
+            \ 'autoload' : {
+            \       'mappings' : [['xo', 'ai'], ['xo', 'aI'], ['xo', 'ii'], ['xo', 'iI']]
+            \   }
+            \ }
+
+NeoBundleLazy 'kana/vim-textobj-fold', {
+            \ 'depends' : 'kana/vim-textobj-user',
+            \ 'autoload' : {
+            \       'mappings' : [['xo', 'az'], ['xo', 'iz']]
+            \ }
+            \ }
+
+NeoBundleLazy 'kana/vim-textobj-line', {
+            \ 'depends' : 'kana/vim-textobj-user',
+            \ 'autoload' : {
+            \       'mappings' : [['xo', 'al'], ['xo', 'il']]
+            \   }
+            \ }
+
+NeoBundleLazy 'rhysd/vim-textobj-word-column', {
+            \ 'depends' : 'kana/vim-textobj-user',
+            \ 'autoload' : {
+            \       'mappings' : [['xo', 'av'], ['xo', 'aV'], ['xo', 'iv'], ['xo', 'iV']]
+            \   }
+            \ }
+
+NeoBundleLazy 'thinca/vim-textobj-comment', {
+            \ 'depends' : 'kana/vim-textobj-user',
+            \ 'autoload' : {
+            \       'mappings' : [['xo', 'ac'], ['xo', 'ic']]
+            \   }
+            \ }
+
+NeoBundleLazy 'sgur/vim-textobj-parameter', {
+            \ 'depends' : 'kana/vim-textobj-user',
+            \ 'autoload' : {
+            \       'mappings' : [['xo', 'a,'], ['xo', 'i,']]
+            \   }
+            \ }
+
+NeoBundleLazy 'rhysd/vim-textobj-anyblock', {
+            \ 'depends' : 'kana/vim-textobj-user',
+            \ 'autoload' : {
+            \       'mappings' : [['xo', 'ab'], ['xo', 'ib']]
+            \   }
+            \ }
+
+NeoBundleLazy 'anyakichi/vim-textobj-ifdef', {
+            \ 'depends' : 'kana/vim-textobj-user',
+            \ 'autoload' : {
+            \       'mappings' : [['xo', 'a#'], ['xo', 'i#']]
+            \   }
+            \ }
 " }}}
 " }}}
 " オペレータ {{{
@@ -806,10 +841,10 @@ nmap     <leader>u  [Unite]
 xmap     <leader>u  [Unite]
 
 nnoremap <silent> [Unite]g   :<C-u>Unite grep:. -buffer-name=search-buffer<CR>
-nnoremap <silent> [Unite]gc  :<C-u>UniteWithCursorWord grep:. -buffer-name=search-buffer<CR>
+nnoremap <silent> [Unite]cg  :<C-u>UniteWithCursorWord grep:. -buffer-name=search-buffer<CR>
 
-nnoremap <silent> [Unite]gp  :<C-u>call <SID>unite_grep_project('-buffer-name=search-buffer')<CR>
-nnoremap <silent> [Unite]gpc :<C-u>call <SID>unite_grep_project('-buffer-name=search-buffer')<CR><C-R><C-W><CR>
+nnoremap <silent> [Unite]pg  :<C-u>call <SID>unite_grep_project('-buffer-name=search-buffer')<CR>
+nnoremap <silent> [Unite]cpg :<C-u>call <SID>unite_grep_project('-buffer-name=search-buffer')<CR><C-R><C-W><CR>
 
 nnoremap <silent> [Unite]r   :<C-u>UniteResume search-buffer<CR>
 
@@ -861,8 +896,6 @@ let g:icondrag_auto_start = 1
 " }}}
 " }}}
 " 削除候補 {{{
-
-" NeoBundle 'YankRing.vim'
 
 " NeoBundle 'osyo-manga/vim-gift'
 " NeoBundle 'osyo-manga/vim-automatic'
@@ -945,8 +978,9 @@ filetype plugin on                " ファイルタイプごとのプラグイ�
 
 augroup file-setting
     autocmd!
-    autocmd bufenter            *           call s:SetCurrentDir()
-    autocmd bufnewfile,bufread  *.xaml      setf xml
+    autocmd bufenter            *                       call s:SetCurrentDir()
+    autocmd bufnewfile,bufread  *.xaml                  setf xml
+    autocmd bufnewfile,bufread  *.fx,*.fxc,*.fxh,*.hlsl set ft=hlsl
 
     autocmd filetype            *           setlocal formatoptions-=ro      " コメント補完しない
     autocmd filetype            ruby        setlocal foldmethod=syntax tabstop=2 shiftwidth=2 softtabstop=2
@@ -982,10 +1016,11 @@ inoremap    \   ¥
 cnoremap    ¥   \
 cnoremap    \   ¥
 
-nnoremap   <C-m>   O<ESC>
+" nnoremap   <C-m>   o<ESC>
 
 " http://lsifrontend.hatenablog.com/entry/2013/10/11/052640
 nmap     <silent> <C-CR> yy:<C-u>TComment<CR>p
+
 vnoremap <silent> <C-CR> :<C-u>call CopyAddComment()<CR>
 
 " http://qiita.com/akira-hamada/items/2417d0bcb563475deddb をもとに調整
@@ -1122,8 +1157,13 @@ set ignorecase                    " 検索パターンにおいて大文字と�
 set smartcase                     " 検索パターンが大文字を含んでいたらオプション 'ignorecase' を上書きする。
 " set nowrapscan                    " 検索をファイルの先頭へループしない
 
+" 日本語インクリメンタルサーチ
 if has('migemo')
-    set migemo                        " 日本語インクリメンタルサーチ
+    set migemo
+    
+    if s:isWindows
+        set migemodict=$VIM/dict/utf-8/migemo-dict
+    endif
 endif
 
 " 検索時のハイライトを解除
@@ -1149,8 +1189,30 @@ set wildignorecase                " 補完時に大文字小文字を区別し�
 set showfulltag
 set wildoptions=tagfile
 set fillchars=vert:\              " 縦分割の境界線
-
+set synmaxcol=500                 " ハイライトする文字数を制限する
 set updatetime=1000
+" set spelllang+=cjk
+"
+" " Vim で自動的に set spell を行う
+" " http://d.hatena.ne.jp/osyo-manga/20131129/1385737186
+"
+" " トリガーがONになっていたら set spell を行う
+" function! s:set_spell()
+"     if get(b:, "set_spell_trigger", 0) && &modifiable
+"         let &spell = 1
+"         unlet b:set_spell_trigger
+"     endif
+" endfunction
+"
+" " バッファの内容が変更されるか保存された時にスペルチェックを行う
+" " ただし、実際に有効になるのは CursorHold のタイミング
+" " また、カーソル移動を行えば無効にする
+" augroup my-setspell
+"     autocmd!
+"     autocmd BufWritePost,TextChanged,TextChangedI * let b:set_spell_trigger = 1
+"     autocmd CursorHold  * call s:set_spell()
+"     autocmd CursorMoved * if &spell | set nospell | endif
+" augroup END
 
 " 全角スペースをハイライト {{{
 
@@ -1245,6 +1307,16 @@ cnoremap        <Esc>       <Nop>
 vnoremap        <Esc>       <Nop>
 
 " }}}
+" コマンドラインモード {{{
+
+cnoremap <C-a> <Home>
+cnoremap <C-e> <End>
+cnoremap <C-f> <Right>
+cnoremap <C-b> <Left>
+cnoremap <C-n> <Down>
+cnoremap <C-p> <Up>
+
+" }}}
 " ウィンドウ操作 {{{
 
 set splitbelow                    " 縦分割したら新しいウィンドウは下に
@@ -1333,10 +1405,10 @@ endfor
 " ファイル操作 {{{
 
 " vimrc / gvimrc の編集 
-" nnoremap    <silent>   <F1>    :<C-u>call <SID>SmartOpen($MYVIMRC)<CR>
-" nnoremap    <silent>   <F2>    :<C-u>call <SID>SmartOpen($MYGVIMRC)<CR>
-nnoremap    <silent>   <F1>    :<C-u>call <SID>SmartOpen('~/dotfiles/.vimrc')<CR>
-nnoremap    <silent>   <F2>    :<C-u>call <SID>SmartOpen('~/dotfiles/.gvimrc')<CR>
+nnoremap    <silent>   <F1>    :<C-u>call <SID>SmartOpen($MYVIMRC)<CR>
+nnoremap    <silent>   <F2>    :<C-u>call <SID>SmartOpen($MYGVIMRC)<CR>
+" nnoremap    <silent>   <F1>    :<C-u>call <SID>SmartOpen('~/dotfiles/.vimrc')<CR>
+" nnoremap    <silent>   <F2>    :<C-u>call <SID>SmartOpen('~/dotfiles/.gvimrc')<CR>
 nnoremap    <silent>   <F3>    :<C-u>source $MYVIMRC<CR>:source $MYGVIMRC<CR>
 
 " }}}
