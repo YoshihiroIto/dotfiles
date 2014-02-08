@@ -89,7 +89,7 @@ function! s:ToggleTagBar()
         TagbarToggle
         let &columns = &columns - (g:tagbar_width + 1)
     else
-        let &columns = &columns + (g:tagbar_width + 1) 
+        let &columns = &columns + (g:tagbar_width + 1)
         TagbarToggle
     endif
 endfunction
@@ -109,14 +109,14 @@ let s:lightline_symbol_brunch             = s:isWindows ? ''   : '⭠ '
 let g:lightline = {
             \   'mode_map': {'c': 'NORMAL'},
             \   'active': {
-            \       'left'  : [ [ 'mode', 'paste' ],
-            \                   [ 'fugitive', 'filename', 'anzu'] ],
-            \       'right' : [ [ 'lineinfo' ],
-            \                   [ 'percent' ],
-            \                   [ 'charcode', 'fileformat', 'fileencoding', 'filetype' ] ]
+            \       'left':  [ [ 'mode', 'paste' ],
+            \                  [ 'fugitive', 'filename', 'anzu'] ],
+            \       'right': [ [ 'lineinfo' ],
+            \                  [ 'percent' ],
+            \                  [ 'charcode', 'fileformat', 'fileencoding', 'filetype' ] ]
             \   },
             \   'component': {
-            \       'lineinfo' : s:lightline_symbol_line . '%4l:%-3v',
+            \       'lineinfo': s:lightline_symbol_line . '%4l:%-3v',
             \   },
             \   'component_function': {
             \       'modified':          'MyModified',
@@ -132,24 +132,24 @@ let g:lightline = {
             \       'anzu':              'anzu#search_status',
             \    },
             \   'separator': {
-            \       'left'  : s:lightline_symbol_separator_left,
-            \       'right' : s:lightline_symbol_separator_right
+            \       'left':  s:lightline_symbol_separator_left,
+            \       'right': s:lightline_symbol_separator_right
             \   },
             \   'subseparator': {
-            \       'left'  : s:lightline_symbol_subseparator_left,
-            \       'right' : s:lightline_symbol_subseparator_right
+            \       'left':  s:lightline_symbol_subseparator_left,
+            \       'right': s:lightline_symbol_subseparator_right
             \   },
             \   'tabline': {
-            \       'left'  : [ [ 'tabs' ] ],
-            \       'right'  : [ [ ] ],
+            \       'left':  [ [ 'tabs' ] ],
+            \       'right': [ [ ] ],
             \   },
             \   'tabline_separator': {
-            \       'left'  : s:lightline_symbol_separator_left,
-            \       'right' : s:lightline_symbol_separator_right
+            \       'left':  s:lightline_symbol_separator_left,
+            \       'right': s:lightline_symbol_separator_right
             \   },
             \   'tabline_subseparator': {
-            \       'left'  : s:lightline_symbol_subseparator_left,
-            \       'right' : s:lightline_symbol_subseparator_right
+            \       'left':  s:lightline_symbol_subseparator_left,
+            \       'right': s:lightline_symbol_subseparator_right
             \   },
             \ }
 
@@ -200,7 +200,7 @@ function! MyCurrentWorkingDir()
 endfunction
 
 function! MyCharCode()
-    if winwidth(0) <= 80 
+    if winwidth(0) <= 80
         return ''
     endif
 
@@ -236,8 +236,9 @@ endfunction
 " }}}
 " indentLine {{{
 
-let g:indentLine_fileType  = ['c', 'cpp', 'cs', 'xml', 'vim', 'rb', 'glsl', 'hlsl']
-let g:indentLine_color_gui = '#383838'
+let g:indentLine_fileType   = ['c', 'cpp', 'cs', 'vim', 'rb', 'glsl', 'hlsl', 'xml', 'json']
+let g:indentLine_color_gui  = '#383838'
+let g:indentLine_color_term = 239
 
 " }}}
 " }}}
@@ -279,7 +280,8 @@ NeoBundleLazy 'junegunn/vim-easy-align', {'autoload': {'mappings': ['<Plug>(Easy
 " }}}
 " vim-easy-align {{{
 
-vmap <Space> <Plug>(EasyAlign)
+" vmap <Space> <Plug>(EasyAlign)
+vmap m <Plug>(EasyAlign)
 
 " }}}
 " vim-smartinput-endwise {{{
@@ -287,7 +289,9 @@ vmap <Space> <Plug>(EasyAlign)
 " http://cohama.hateblo.jp/entry/2013/11/08/013136
 let s:bundle = neobundle#get('vim-smartinput-endwise')
 function! s:bundle.hooks.on_source(bundle)
+
     call smartinput_endwise#define_default_rules()
+
 endfunction
 unlet s:bundle
 
@@ -397,7 +401,7 @@ function! s:bundle.hooks.on_source(bundle)
     if !exists('g:neocomplete#force_omni_input_patterns')
         let g:neocomplete#force_omni_input_patterns = {}
     endif
-    
+
     let g:neocomplete#force_omni_input_patterns.cs = '[^.]\.\%(\u\{2,}\)\?'
 endfunction
 unlet s:bundle
@@ -409,8 +413,7 @@ let s:bundle = neobundle#get('neosnippet')
 function! s:bundle.hooks.on_source(bundle)
 
     let g:neosnippet#enable_snipmate_compatibility = 1
-
-    let g:neosnippet#snippets_directory = '$DOTVIM/bundle/vim-snippets/snippets,$DOTVIM/snippets'
+    let g:neosnippet#snippets_directory            = '$DOTVIM/bundle/vim-snippets/snippets,$DOTVIM/snippets'
 
     " Plugin key-mappings.
     imap <C-k>  <Plug>(neosnippet_expand_or_jump)
@@ -502,11 +505,13 @@ let g:clever_f_chars_match_any_signs = ';'
 " }}}
 " machit{{{
 
-let bundle = neobundle#get('matchit.zip')
+let s:bundle = neobundle#get('matchit.zip')
+function! s:bundle.hooks.on_source(bundle)
 
-function! bundle.hooks.on_post_source(bundle)
     silent! execute 'doautocmd Filetype' &filetype
+
 endfunction
+unlet s:bundle
 
 " }}}
 " vim-visualstar {{{
@@ -546,12 +551,14 @@ nmap <silent> # <Plug>(anzu-sharp)
 
 let s:bundle = neobundle#get('vim-anzu')
 function! s:bundle.hooks.on_source(bundle)
+
     augroup vim-anzu
         " 一定時間キー入力がないとき、ウインドウを移動したとき、タブを移動したときに
         " 検索ヒット数の表示を消去する
         autocmd!
         autocmd CursorHold,CursorHoldI,WinLeave,TabLeave * call anzu#clear_search_status()
     augroup END
+
 endfunction
 unlet s:bundle
 
@@ -669,7 +676,7 @@ NeoBundleLazy 'Shougo/vimshell.vim', {
             \   }
             \ }
 NeoBundleLazy 'basyura/TweetVim', {
-            \   'depends' : [ 
+            \   'depends' : [
             \       'basyura/twibill.vim',
             \       'tyru/open-browser.vim',
             \       'mattn/webapi-vim',
@@ -684,7 +691,7 @@ NeoBundleLazy 'tpope/vim-fugitive', {
             \   }
             \ }
 NeoBundleLazy 'mattn/gist-vim', {
-            \   'depends' : [ 
+            \   'depends' : [
             \       'mattn/webapi-vim',
             \   ],
             \   'autoload' : {
@@ -692,7 +699,7 @@ NeoBundleLazy 'mattn/gist-vim', {
             \   }
             \ }
 
-if s:isMac 
+if s:isMac
     NeoBundleLazy 'itchyny/dictionary.vim', {
                 \   'autoload' : {
                 \       'commands' : [ 'Dictionary' ]
@@ -728,6 +735,7 @@ function! s:bundle.hooks.on_source(bundle)
     let g:vimfiler_as_default_explorer = 1
 endfunction
 unlet s:bundle
+
 " }}}
 " lingr.vim {{{
 
@@ -756,7 +764,7 @@ unlet s:bundle
 function! s:ToggleLingr()
     if bufnr('lingr-messages') == -1
         tabnew
-        LingrLaunch 
+        LingrLaunch
     else
         LingrExit
     endif
@@ -800,7 +808,7 @@ NeoBundleLazy 'vim-jp/vimdoc-ja', {
             \       'commands' : [ 'Help' ]
             \   }
             \ }
-NeoBundleLazy 'tsukkee/unite-help', { 
+NeoBundleLazy 'tsukkee/unite-help', {
             \   'autoload' : {
             \       'unite_sources' : [ 'help' ],
             \   }
@@ -1031,7 +1039,7 @@ function! CopyAddComment() range
     endif
 
     " コメントアウトする
-    normal gc  
+    normal gc
 
     " ビジュアルモードからエスケープ
     exe "normal! \e\e"
@@ -1072,7 +1080,7 @@ function! DoFormatXML() range
     " Recalculate first and last lines of the edited code
     let l:newFirstLine=search('<PrettyXML>')
     let l:newLastLine=search('</PrettyXML>')
-    
+
     " Get inner range
     let l:innerFirstLine=l:newFirstLine+1
     let l:innerLastLine=l:newLastLine-1
@@ -1119,7 +1127,7 @@ let g:unite_source_menu_menus.fix = {
       \         ['Current Filename Only',     'InsertCurrentFilepath'     ],
       \         ['Current Filename Fullpath', 'InsertCurrentFilefullpath' ],
       \     ]
-      \ } 
+      \ }
 
 " }}}
 " インデント {{{
@@ -1131,7 +1139,7 @@ set smartindent
 set cindent                       " Cプログラムファイルの自動インデントを始める
 
 set list
-set listchars=tab:\|\ ,eol:↲,extends:»,precedes:«,nbsp:%
+set listchars=tab:\¦\ ,eol:↲,extends:»,precedes:«,nbsp:%
 
 vnoremap    <       <gv
 vnoremap    >       >gv
@@ -1158,12 +1166,12 @@ augroup auto-mirror
     autocmd VimEnter    * call s:TrimMirrorDirs()
     autocmd BufWritePre * call s:MirrorCurrentFile()
 
-    "古いミラーディレクトリを削除する 
+    "古いミラーディレクトリを削除する
     function! s:TrimMirrorDirs()
 
         let mirrorDirs = sort(split(glob(s:mirrorDir . '/*'),  '\n'))
 
-        while len(mirrorDirs) > s:mirrorMaxHistory 
+        while len(mirrorDirs) > s:mirrorMaxHistory
             let dir = remove(mirrorDirs, 0)
             call s:RemoveDir(dir)
         endwhile
@@ -1172,7 +1180,7 @@ augroup auto-mirror
     "カレントファイルをミラーリングする
     function! s:MirrorCurrentFile()
 
-        let sourceFilepath = expand('%:p') 
+        let sourceFilepath = expand('%:p')
 
         if filereadable(sourceFilepath)
             " ファイルパス作成
@@ -1205,7 +1213,7 @@ set smartcase                     " 検索パターンが大文字を含んで�
 " 日本語インクリメンタルサーチ
 if has('migemo')
     set migemo
-    
+
     if s:isWindows
         set migemodict=$VIM/dict/utf-8/migemo-dict
     endif
@@ -1284,7 +1292,7 @@ set updatetime=1000
 if has('syntax')
     function! s:ActivateInvisibleIndicator()
         syntax match InvisibleJISX0208Space '　' display containedin=ALL
-        highlight InvisibleJISX0208Space term=underline guibg=#112233 
+        highlight InvisibleJISX0208Space term=underline guibg=#112233
 
         " if s:isGuiRunning
             syntax match InvisibleTab '\t' display containedin=ALL
@@ -1486,7 +1494,7 @@ nmap        <Leader>t   [Tab]
 nnoremap <silent> [Tab]c :tabnew<CR>
 nnoremap <silent> [Tab]x :tabclose<CR>
 
-nnoremap ,j       :tabnext<CR>  
+nnoremap ,j       :tabnext<CR>
 nnoremap ,k       :tabprev<CR>
 
 for s:n in range(1, 9)
@@ -1511,7 +1519,7 @@ endfor
 " }}}
 " ファイル操作 {{{
 
-" vimrc / gvimrc の編集 
+" vimrc / gvimrc の編集
 nnoremap    <silent>   <F1>    :<C-u>call <SID>SmartOpen($MYVIMRC)<CR>
 nnoremap    <silent>   <F2>    :<C-u>call <SID>SmartOpen($MYGVIMRC)<CR>
 nnoremap    <silent>   <F3>    :<C-u>source $MYVIMRC<CR>:source $MYGVIMRC<CR>
@@ -1526,7 +1534,7 @@ nmap        <silent>   <Leader>m  `
 
 set helplang=ja,en
 
-nnoremap    K   :<C-u>help 
+nnoremap    K   :<C-u>help
 nnoremap    KK  :<C-u>help <C-r><C-w><CR>
 
 " }}}
@@ -1576,7 +1584,7 @@ function! s:ResizeWin()
                     let y = y - d2
                 endif
             endif
-            
+
             if k ==? 'l'
                 let x = x + d1
                 if k == 'l'
@@ -1775,7 +1783,7 @@ function! s:CopyFile(sourceFilepath, targetFilepath)
     elseif s:isMac
         call vimproc#system('cp ' . esource . ' ' . etarget)
     else
-        throw 'Not supported. 
+        throw 'Not supported.
     endif
 endfunction
 " }}}
@@ -1790,7 +1798,7 @@ endfunction
 " ディレクトリ削除 {{{
 function! s:RemoveDir(path)
 
-    let epath = vimproc#shellescape(expand(a:path)) 
+    let epath = vimproc#shellescape(expand(a:path))
 
     if isdirectory(a:path)
         if s:isWindows
@@ -1798,7 +1806,7 @@ function! s:RemoveDir(path)
         elseif s:isMac
             call vimproc#system_bg('rm -rf ' . epath)
         else
-            throw 'Not supported.' 
+            throw 'Not supported.'
         endif
     endif
 endfunction
@@ -1822,7 +1830,7 @@ endfunction
 " コンソール用 {{{
 
 if !s:isGuiRunning
-    source $MYGVIMRC 
+    source $MYGVIMRC
 endif
 
 " }}}
