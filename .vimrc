@@ -352,6 +352,16 @@ let g:increment_activator_filetype_candidates =
             \ }
 
 " }}}
+" vim-over {{{
+
+nnoremap <silent> <Leader>s :OverCommandLine<CR>
+vnoremap <silent> <Leader>s :OverCommandLine<CR>
+
+let g:over_command_line_key_mappings = {
+            \   "\<C-j>" : "\<Esc>",
+            \}
+
+" }}}
 " }}}
 " 補完 {{{
 " インストール {{{
@@ -493,6 +503,7 @@ NeoBundleLazy 'thinca/vim-visualstar', {
             \       'mappings' : [ '<Plug>(visualstar-' ]
             \   }
             \ }
+NeoBundleLazy 'osyo-manga/vim-over', {'autoload': {'commands': ['OverCommandLineNoremap', 'OverCommandLine']}}
 " }}}
 " clever-f.vim {{{
 
@@ -544,8 +555,6 @@ omap r <Plug>(easymotion-s)
 " http://qiita.com/shiena/items/f53959d62085b7980cb5
 nmap <silent> n <Plug>(anzu-n)zOzz:<C-u>call <SID>RefreshScreen()<CR>
 nmap <silent> N <Plug>(anzu-N)zOzz:<C-u>call <SID>RefreshScreen()<CR>
-" nmap <silent> * <Plug>(anzu-star)zOzz:<C-u>call <SID>RefreshScreen()<CR>
-" nmap <silent> # <Plug>(anzu-sharp)zOzz:<C-u>call <SID>RefreshScreen()<CR>
 nmap <silent> * <Plug>(anzu-star)
 nmap <silent> # <Plug>(anzu-sharp)
 
@@ -756,6 +765,8 @@ function! s:bundle.hooks.on_source(bundle)
             let b:disableSmartClose = 0
 
             noremap  <buffer><silent> <Leader>w :<C-u>call <SID>ToggleLingr()<CR>
+
+            set nolist
         endfunction
     augroup END
 endfunction
@@ -1534,7 +1545,7 @@ nmap        <silent>   <Leader>m  `
 
 set helplang=ja,en
 
-nnoremap    K   :<C-u>help
+nnoremap    K   :<C-u>help 
 nnoremap    KK  :<C-u>help <C-r><C-w><CR>
 
 " }}}
