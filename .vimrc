@@ -39,6 +39,8 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 
 NeoBundle 'tomasr/molokai'
 NeoBundle 'itchyny/lightline.vim'
+NeoBundle 'Yggdroot/indentLine'
+
 NeoBundleLazy 'Shougo/unite-outline', {
             \   'autoload' : {
             \       'unite_sources' : [ 'outline' ],
@@ -59,22 +61,22 @@ NeoBundleLazy 'vim-jp/cpp-vim', {
             \       'filetypes' : [ 'cpp' ]
             \   }
             \ }
+NeoBundleLazy 'Mizuchi/STL-Syntax', {
+            \   'autoload' : {
+            \       'filetypes' : [ 'cpp' ]
+            \   }
+            \ }
 NeoBundleLazy 'beyondmarc/hlsl.vim', {
             \   'autoload' : {
-            \       'filetypes' : [ 'fx', 'fxc', 'fxh', 'hlsl' ]
+            \       'filetypes' : [ 'hlsl' ]
             \   }
             \ }
-NeoBundleLazy 'majutsushi/tagbar', {
+NeoBundleLazy 'tikhomirov/vim-glsl', {
             \   'autoload' : {
-            \       'commands' : [ 'TagbarToggle' ]
+            \       'filetypes' : [ 'glsl' ]
             \   }
             \ }
-NeoBundleLazy 'mhinz/vim-signify', {
-            \   'autoload' : {
-            \       'commands' : [ 'SignifyToggle' ]
-            \   }
-            \ }
-" NeoBundle 'mhinz/vim-signify'
+
 " }}}
 " TagBar {{{
 
@@ -117,17 +119,17 @@ let g:lightline = {
             \       'lineinfo' : s:lightline_symbol_line . '%4l:%-3v',
             \   },
             \   'component_function': {
-            \       'modified'          : 'MyModified',
-            \       'readonly'          : 'MyReadonly',
-            \       'fugitive'          : 'MyFugitive',
-            \       'filename'          : 'MyFilename',
-            \       'fileformat'        : 'MyFileformat',
-            \       'filetype'          : 'MyFiletype',
-            \       'fileencoding'      : 'MyFileencoding',
-            \       'mode'              : 'MyMode',
-            \       'charcode'          : 'MyCharCode',
-            \       'currentworkingdir' : 'MyCurrentWorkingDir',
-            \       'anzu'              : 'anzu#search_status',
+            \       'modified':          'MyModified',
+            \       'readonly':          'MyReadonly',
+            \       'fugitive':          'MyFugitive',
+            \       'filename':          'MyFilename',
+            \       'fileformat':        'MyFileformat',
+            \       'filetype':          'MyFiletype',
+            \       'fileencoding':      'MyFileencoding',
+            \       'mode':              'MyMode',
+            \       'charcode':          'MyCharCode',
+            \       'currentworkingdir': 'MyCurrentWorkingDir',
+            \       'anzu':              'anzu#search_status',
             \    },
             \   'separator': {
             \       'left'  : s:lightline_symbol_separator_left,
@@ -232,6 +234,12 @@ function! MyCharCode()
     return "'". char ."' ". nr
 endfunction
 " }}}
+" indentLine {{{
+
+let g:indentLine_fileType  = ['c', 'cpp', 'cs', 'xml', 'vim', 'rb', 'glsl', 'hlsl']
+let g:indentLine_color_gui = '#383838'
+
+" }}}
 " }}}
 " 編集 {{{
 " インストール {{{
@@ -248,10 +256,9 @@ NeoBundleLazy 'kana/vim-smartinput', {
             \       'insert' : 1,
             \   }
             \ }
-NeoBundleLazy 'h1mesuke/vim-alignta', {
+NeoBundleLazy 'cohama/vim-smartinput-endwise', {
             \   'autoload' : {
-            \       'unite_sources' : [ 'alignta' ],
-            \       'commands'      : [ 'Alignta' ]
+            \       'insert' : 1,
             \   }
             \ }
 NeoBundleLazy 'rhysd/vim-clang-format', {
@@ -260,12 +267,7 @@ NeoBundleLazy 'rhysd/vim-clang-format', {
             \       'filetypes' : [ 'c', 'cpp', 'objc' ]
             \   }
             \ }
-NeoBundleLazy 'sjl/gundo.vim', {
-            \   'autoload' : {
-            \       'commands' : [ 'GundoToggle' ]
-            \   }
-            \ }
-NeoBundleLazy 'nishigori/vim-sunday', {
+NeoBundleLazy 'nishigori/increment-activator', {
             \   'autoload' : {
             \       'mappings' : [
             \           '<C-x>',
@@ -273,34 +275,21 @@ NeoBundleLazy 'nishigori/vim-sunday', {
             \       ]
             \   }
             \ }
+NeoBundleLazy 'junegunn/vim-easy-align', {'autoload': {'mappings': ['<Plug>(EasyAlignOperator)', ['sxn', '<Plug>(EasyAlign)'], ['sxn', '<Plug>(LiveEasyAlign)'], ['sxn', '<Plug>(EasyAlignRepeat)']], 'commands': ['EasyAlign', 'LiveEasyAlign']}}
 " }}}
-" Gundo {{{
+" vim-easy-align {{{
 
-noremap        <silent><F7>            :<C-u>call <SID>ToggleGundo()<CR>
+vmap <Space> <Plug>(EasyAlign)
 
-let g:gundo_right = 1
-let g:gundo_width = s:rightWindowWidth
+" }}}
+" vim-smartinput-endwise {{{
 
-function! s:ToggleGundo()
-    if bufwinnr(bufnr('__Gundo__')) != -1 || bufwinnr(bufnr('__Gundo_Preview__')) != -1
-        GundoToggle
-        let &columns = &columns - (g:gundo_width + 1)
-    else
-        let &columns = &columns + (g:gundo_width + 1) 
-        GundoToggle
-    endif
+" http://cohama.hateblo.jp/entry/2013/11/08/013136
+let s:bundle = neobundle#get('vim-smartinput-endwise')
+function! s:bundle.hooks.on_source(bundle)
+    call smartinput_endwise#define_default_rules()
 endfunction
-
-" }}}
-" vim-alignta {{{
-
-let g:unite_source_alignta_preset_arguments = [
-            \     ["Align at '='", '=>\='],
-            \     ["Align at ':'", ':'],
-            \     ["Align at '|'", '|'],
-            \     ["Align at '/'", '/\//'],
-            \     ["Align at ','", ','],
-            \ ]
+unlet s:bundle
 
 " }}}
 " vim-clang-format {{{
@@ -315,12 +304,12 @@ function! s:bundle.hooks.on_source(bundle)
     endif
 
     let g:clang_format#style_options = {
-                \ 'AccessModifierOffset'                : -4,
-                \ 'ColumnLimit'                         : 120,
-                \ 'AllowShortIfStatementsOnASingleLine' : 'true',
-                \ 'AlwaysBreakTemplateDeclarations'     : 'true',
-                \ 'Standard'                            : 'C++11',
-                \ 'BreakBeforeBraces'                   : 'Stroustrup',
+                \ 'AccessModifierOffset':                -4,
+                \ 'ColumnLimit':                         120,
+                \ 'AllowShortIfStatementsOnASingleLine': 'true',
+                \ 'AlwaysBreakTemplateDeclarations':     'true',
+                \ 'Standard':                            'C++11',
+                \ 'BreakBeforeBraces':                   'Stroustrup',
                 \ }
 
     let g:clang_format#code_style = 'Chromium'
@@ -343,6 +332,22 @@ nmap <C-p> <Plug>(yankround-prev)
 nmap <C-n> <Plug>(yankround-next)
 
 " }}}
+" increment-activator {{{
+
+let g:increment_activator_filetype_candidates =
+            \ {
+            \   '_': [
+            \     ['width', 'height'],
+            \   ],
+            \   'cs': [
+            \     ['private', 'protected', 'public', 'internal'],
+            \   ],
+            \   'cpp': [
+            \     ['private', 'protected', 'public'],
+            \   ],
+            \ }
+
+" }}}
 " }}}
 " 補完 {{{
 " インストール {{{
@@ -358,9 +363,15 @@ NeoBundleLazy 'Shougo/neosnippet', {
             \       'insert' : 1,
             \   }
             \ }
+NeoBundleLazy "Shougo/neosnippet-snippets", {
+            \   'depends' : [ 'honza/vim-snippets' ],
+            \   'autoload' : {
+            \       'insert' : 1,
+            \   }
+            \ }
 NeoBundleLazy 'Rip-Rip/clang_complete', {
             \   'autoload' : {
-            \       'filetypes' : [ 'c', 'cpp', 'objc']
+            \       'filetypes' : [ 'c', 'cpp', 'objc' ]
             \   }
             \ }
 NeoBundleLazy 'nosami/Omnisharp', {
@@ -471,16 +482,12 @@ NeoBundleLazy 'rking/ag.vim', {
             \ }
 NeoBundleLazy 'haya14busa/vim-easymotion', {
             \   'autoload' : {
-            \       'mappings' : [
-            \           '<Leader><Leader>j',
-            \           '<Leader><Leader>k',
-            \           '<Leader><Leader>s',
-            \       ]
+            \       'mappings' : [ '<Plug>(easymotion-' ]
             \   }
             \ }
 NeoBundleLazy 'thinca/vim-visualstar', {
             \   'autoload': {
-            \       'mappings': [ '<Plug>(visualstar-' ]
+            \       'mappings' : [ '<Plug>(visualstar-' ]
             \   }
             \ }
 " }}}
@@ -515,16 +522,16 @@ map g# <Plug>(visualstar-g#)
 " http://haya14busa.com/vim-lazymotion-on-speed/
 
 let g:EasyMotion_leader_key          = '<Leader><Leader>'
-" let g:EasyMotion_keys                = 'hjklasdyuiopqwertnmzxcvb4738291056gf'
-let g:EasyMotion_keys                = 'hjklasdyuiopqwertnmzxcvbgf'
+let g:EasyMotion_keys                = 'hjklasdyuiopqwertnmzxcvb4738291056gf'
+" let g:EasyMotion_keys                = 'hjklasdyuiopqwertnmzxcvbgf'
 let g:EasyMotion_special_select_line = 0
 let g:EasyMotion_select_phrase       = 1
 let g:EasyMotion_smartcase           = 1
 " let g:EasyMotion_use_migemo          = 1
 
-nmap r <Leader><Leader>s
-vmap r <Leader><Leader>s
-omap r <Leader><Leader>s
+nmap r <Plug>(easymotion-s)
+vmap r <Plug>(easymotion-s)
+omap r <Plug>(easymotion-s)
 
 " }}}
 " vim-anzu {{{
@@ -532,8 +539,10 @@ omap r <Leader><Leader>s
 " http://qiita.com/shiena/items/f53959d62085b7980cb5
 nmap <silent> n <Plug>(anzu-n)zOzz:<C-u>call <SID>RefreshScreen()<CR>
 nmap <silent> N <Plug>(anzu-N)zOzz:<C-u>call <SID>RefreshScreen()<CR>
-nmap <silent> * <Plug>(anzu-star)zOzz:<C-u>call <SID>RefreshScreen()<CR>
-nmap <silent> # <Plug>(anzu-sharp)zOzz:<C-u>call <SID>RefreshScreen()<CR>
+" nmap <silent> * <Plug>(anzu-star)zOzz:<C-u>call <SID>RefreshScreen()<CR>
+" nmap <silent> # <Plug>(anzu-sharp)zOzz:<C-u>call <SID>RefreshScreen()<CR>
+nmap <silent> * <Plug>(anzu-star)
+nmap <silent> # <Plug>(anzu-sharp)
 
 let s:bundle = neobundle#get('vim-anzu')
 function! s:bundle.hooks.on_source(bundle)
@@ -628,12 +637,16 @@ NeoBundleLazy 'tyru/operator-camelize.vim',   {'depends': 'kana/vim-operator-use
 map R           <Plug>(operator-replace)
 " }}}
 " operator-camelize.vim {{{
-map <Leader>c   <Plug>(operator-camelize-toggle)
+nmap  <Leader>c  <Plug>(operator-camelize-toggle)iw
 " }}}
 " }}}
 " アプリ {{{
 " インストール {{{
+
 NeoBundleLazy 'basyura/twibill.vim'
+
+NeoBundleLazy 'LeafCage/nebula.vim', {'autoload': {'commands': ['NebulaPutLazy', 'NebulaPutFromClipboard', 'NebulaYankOptions', 'NebulaYankConfig', 'NebulaPutConfig', 'NebulaYankTap']}}
+
 NeoBundleLazy 'tsukkee/lingr-vim', {
             \   'autoload' : {
             \       'commands' : [ 'LingrLaunch' ]
@@ -678,6 +691,7 @@ NeoBundleLazy 'mattn/gist-vim', {
             \       'commands' : [ 'Gist' ]
             \   }
             \ }
+
 if s:isMac 
     NeoBundleLazy 'itchyny/dictionary.vim', {
                 \   'autoload' : {
@@ -703,7 +717,6 @@ function! s:bundle.hooks.on_source(bundle)
         nmap <buffer><expr> <Enter> vimfiler#smart_cursor_map(
             \  "\<Plug>(vimfiler_cd_file)",
             \  "\<Plug>(vimfiler_edit_file)")
-
         nmap <buffer><expr> <Tab> vimfiler#smart_cursor_map(
             \  "\<Plug>(vimfiler_toggle_mark_current_line)",
             \  "\<Plug>(vimfiler_toggle_mark_current_line)")
@@ -801,17 +814,19 @@ NeoBundleLazy 'Shougo/vimproc', {
             \       'function_prefix' : 'vimproc',
             \   },
             \   'build' : {
-            \       'windows' : 'make -f make_mingw32.mak',
-            \       'cygwin'  : 'make -f make_cygwin.mak',
-            \       'mac'     : 'make -f make_mac.mak',
-            \       'unix'    : 'make -f make_unix.mak',
+            \       'windows': 'make -f make_mingw32.mak',
+            \       'cygwin':  'make -f make_cygwin.mak',
+            \       'mac':     'make -f make_mac.mak',
+            \       'unix':    'make -f make_unix.mak',
             \   },
             \ }
-NeoBundleLazy 'Shougo/unite.vim', {
-            \   'autoload' : {
-            \       'commands' : [ 'Unite', 'UniteResume', 'UniteWithCursorWord' ]
-            \   }
-            \ }
+" NeoBundleLazy 'Shougo/unite.vim', {
+"             \   'autoload' : {
+"             \       'commands' : [ 'Unite', 'UniteResume', 'UniteWithCursorWord' ]
+"             \   }
+"             \ }
+NeoBundle 'Shougo/unite.vim'
+
 NeoBundleLazy 'mattn/webapi-vim', {
             \   'autoload' : {
             \       'function_prefix' : 'webapi'
@@ -853,7 +868,6 @@ nnoremap <silent> [Unite]b   :<C-u>Unite buffer<CR>
 nnoremap <silent> [Unite]h   :<C-u>UniteWithCursorWord help<CR>
 nnoremap <silent> [Unite]l   :<C-u>Unite -auto-preview line<CR>
 nnoremap <silent> [Unite]f   :<C-u>Unite menu:fix<CR>
-xnoremap <silent> [Unite]a   :<C-u>Unite -vertical -direction=rightbelow alignta:arguments<CR>
 nnoremap <silent> [Unite]o   :<C-u>Unite -vertical -direction=rightbelow -no-quit outline<CR>
 
 " http://sanrinsha.lolipop.jp/blog/2013/03/%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E5%86%85%E3%81%AE%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92unite-grep%E3%81%99%E3%82%8B.html
@@ -875,13 +889,20 @@ function! s:bundle.hooks.on_source(bundle)
     let g:unite_source_file_mru_filename_format = ''
 
     " most recently used のリストサイズ
-    let g:unite_source_file_mru_limit = 100
+    let g:unite_source_file_mru_limit = 1000
 
     " unite grep に ag(The Silver Searcher) を使う
     if s:isMac
         if executable('ag')
             let g:unite_source_grep_command       = 'ag'
             let g:unite_source_grep_default_opts  = '--nogroup --nocolor --column'
+            let g:unite_source_grep_recursive_opt = ''
+        endif
+    elseif s:isWindows
+        " http://blog.monochromegane.com/blog/2014/01/16/the-platinum-searcher/
+        if executable('pt')
+            let g:unite_source_grep_command       = 'pt'
+            let g:unite_source_grep_default_opts  = '--nogroup --nocolor'
             let g:unite_source_grep_recursive_opt = ''
         endif
     endif
@@ -892,41 +913,6 @@ unlet s:bundle
 " icondrag {{{
 
 let g:icondrag_auto_start = 1
-
-" }}}
-" }}}
-" 削除候補 {{{
-
-" NeoBundle 'osyo-manga/vim-gift'
-" NeoBundle 'osyo-manga/vim-automatic'
-
-" NeoBundle 'bling/vim-bufferline'
-
-" vim-automatic {{{
-
-" Uniteウィンドウの幅がずれてしまうのでコメントアウト
-" let g:automatic_config = [
-"             \   {
-"             \       'match' : {
-"             \           'autocmds'          : ['WinEnter'],
-"             \           'bufname'           : '[[*]unite[]*]',
-"             \           'any_unite_sources' : ['outline', 'alignta'],
-"             \       },
-"             \       'set'   : {
-"             \           'commands'          : ['let &columns = &columns + ' . s:rightWindowWidth],
-"             \       },
-"             \   },
-"             \   {
-"             \       'match' : {
-"             \           'autocmds'          : ['WinLeave'],
-"             \           'bufname'           : '[[*]unite[]*]',
-"             \           'any_unite_sources' : ['outline', 'alignta'],
-"             \       },
-"             \       'set'   : {
-"             \           'commands'          : ['let &columns = &columns - ' . s:rightWindowWidth]
-"             \       },
-"             \   },
-"             \]
 
 " }}}
 " }}}
@@ -978,19 +964,19 @@ filetype plugin on                " ファイルタイプごとのプラグイ�
 
 augroup file-setting
     autocmd!
-    autocmd bufenter            *                       call s:SetCurrentDir()
-    autocmd bufnewfile,bufread  *.xaml                  setf xml
-    autocmd bufnewfile,bufread  *.fx,*.fxc,*.fxh,*.hlsl set ft=hlsl
+    autocmd BufEnter            *                   call s:SetCurrentDir()
+    autocmd BufNewFile,BufRead  *.xaml              setf xml
+    autocmd BufNewFile,BufRead  *.{fx,fxc,fxh,hlsl} setf hlsl
+    autocmd BufNewFile,BufRead  *.{fsh,vsh}         setf glsl
 
-    autocmd filetype            *           setlocal formatoptions-=ro      " コメント補完しない
-    autocmd filetype            ruby        setlocal foldmethod=syntax tabstop=2 shiftwidth=2 softtabstop=2
-    autocmd filetype            c,cpp,cs    setlocal foldmethod=syntax
-    autocmd filetype            vim         setlocal foldmethod=marker foldlevel=0 foldcolumn=4
+    autocmd Filetype            *           setlocal formatoptions-=ro      " コメント補完しない
+    autocmd Filetype            ruby        setlocal foldmethod=syntax tabstop=2 shiftwidth=2 softtabstop=2
+    autocmd Filetype            c,cpp,cs    setlocal foldmethod=syntax
+    autocmd Filetype            vim         setlocal foldmethod=marker foldlevel=0 foldcolumn=4
 
     " Hack #22: XMLの閉じタグを補完する
     " http://vim-users.jp/2009/06/hack22/
-    autocmd Filetype            xml         inoremap <buffer> </ </<C-x><C-o>
-    autocmd Filetype            html        inoremap <buffer> </ </<C-x><C-o>
+    autocmd Filetype            xml,html         inoremap <buffer> </ </<C-x><C-o>
 augroup END
 
 " }}}
@@ -1016,7 +1002,11 @@ inoremap    \   ¥
 cnoremap    ¥   \
 cnoremap    \   ¥
 
-" nnoremap   <C-m>   o<ESC>
+" ^Mを取り除く
+command! RemoveCr call s:ExecuteKeepView('silent! %substitute/\r$//g | nohlsearch')
+
+" 行末のスペースを取り除く
+command! RemoveEolSpace call s:ExecuteKeepView('silent! %substitute/ \+$//g | nohlsearch')
 
 " http://lsifrontend.hatenablog.com/entry/2013/10/11/052640
 nmap     <silent> <C-CR> yy:<C-u>TComment<CR>p
@@ -1049,6 +1039,58 @@ function! CopyAddComment() range
     " 元の位置に戻る
     exe 'normal ' . (selectedCount + 1) . 'j'
 endfunction
+
+" http://vim.wikia.com/wiki/Pretty-formatting_XML
+function! DoFormatXML() range
+    " Save the file type
+    let l:origft = &ft
+
+    " Clean the file type
+    set ft=
+
+    " Add fake initial tag (so we can process multiple top-level elements)
+    exe ":let l:beforeFirstLine=" . a:firstline . "-1"
+    if l:beforeFirstLine < 0
+        let l:beforeFirstLine=0
+    endif
+    exe a:lastline . "put ='</PrettyXML>'"
+    exe l:beforeFirstLine . "put ='<PrettyXML>'"
+    exe ":let l:newLastLine=" . a:lastline . "+2"
+    if l:newLastLine > line('$')
+        let l:newLastLine=line('$')
+    endif
+
+    " Remove XML header
+    exe ":" . a:firstline . "," . a:lastline . "s/<\?xml\\_.*\?>\\_s*//e"
+
+    " Recalculate last line of the edited code
+    let l:newLastLine=search('</PrettyXML>')
+
+    " Execute external formatter
+    exe ":silent " . a:firstline . "," . l:newLastLine . "!xmllint --noblanks --format --recover -"
+
+    " Recalculate first and last lines of the edited code
+    let l:newFirstLine=search('<PrettyXML>')
+    let l:newLastLine=search('</PrettyXML>')
+    
+    " Get inner range
+    let l:innerFirstLine=l:newFirstLine+1
+    let l:innerLastLine=l:newLastLine-1
+
+    " Remove extra unnecessary indentation
+    exe ":silent " . l:innerFirstLine . "," . l:innerLastLine "s/^  //e"
+
+    " Remove fake tag
+    exe l:newLastLine . "d"
+    exe l:newFirstLine . "d"
+
+    " Put the cursor at the first line of the edited code
+    exe ":" . l:newFirstLine
+
+    " Restore the file type
+    exe "set ft=" . l:origft
+endfunction
+command! -range=% XmlFormat <line1>,<line2>call DoFormatXML()
 
 " 自動的にディレクトリを作成する
 " http://vim-users.jp/2011/02/hack202/
@@ -1087,6 +1129,9 @@ filetype indent on                " ファイルタイプごとのインデン�
 set autoindent
 set smartindent
 set cindent                       " Cプログラムファイルの自動インデントを始める
+
+set list
+set listchars=tab:\|\ ,eol:↲,extends:»,precedes:«,nbsp:%
 
 vnoremap    <       <gv
 vnoremap    >       >gv
@@ -1168,6 +1213,25 @@ endif
 
 " 検索時のハイライトを解除
 nnoremap    <silent>  <Leader>/   :nohlsearch<CR>
+
+" http://deris.hatenablog.jp/entry/2013/05/15/024932
+" very magic
+nnoremap /  /\v
+
+" " カーソル移動しない
+" map * *N
+" map # #N
+
+" *による検索時に初回は移動しない
+nnoremap <silent>* viw:<C-u>call <SID>StarSearch()<CR>:<C-u>set hlsearch<CR>`<
+vnoremap <silent>* :<C-u>call <SID>StarSearch()<CR>:<C-u>set hlsearch<CR>
+function! s:StarSearch()
+    let orig = @"
+    normal! gvy
+    let text = @"
+    let @/ = '\V' . substitute(escape(text, '\/'), '\n', '\\n', 'g')
+    let @" = orig
+endfunction
 
 " }}}
 " 表示{{{
@@ -1274,6 +1338,58 @@ augroup vimrc-auto-cursorline
 augroup END
 
 " }}}
+" Vim でカーソル下の単語を移動するたびにハイライトする{{{
+" http://d.hatena.ne.jp/osyo-manga/20140121/1390309901
+let g:enable_highlight_cursor_word = 1
+
+augroup highlight-cursor-word
+    autocmd!
+    autocmd CursorMoved * call s:hl_cword()
+    " カーソル移動が重くなったと感じるようであれば
+    " CursorMoved ではなくて
+    " CursorHold を使用する
+"     autocmd CursorHold * call s:hl_cword()
+    " 単語のハイライト設定
+    autocmd ColorScheme * highlight CursorWord guifg=Red
+    " アンダーラインでハイライトを行う場合
+    " autocmd ColorScheme * highlight CursorWord gui=underline guifg=NONE
+    autocmd BufLeave * call s:hl_clear()
+    autocmd WinLeave * call s:hl_clear()
+    autocmd InsertEnter * call s:hl_clear()
+augroup END
+
+
+function! s:hl_clear()
+    if exists("b:highlight_cursor_word_id") && exists("b:highlight_cursor_word")
+        silent! call matchdelete(b:highlight_cursor_word_id)
+        unlet b:highlight_cursor_word_id
+        unlet b:highlight_cursor_word
+    endif
+endfunction
+
+function! s:hl_cword()
+    let word = expand("<cword>")
+    if    word == ""
+    return
+    endif
+    if get(b:, "highlight_cursor_word", "") ==# word
+        return
+    endif
+
+    call s:hl_clear()
+    if !g:enable_highlight_cursor_word
+        return
+    endif
+
+    if !empty(filter(split(word, '\zs'), "strlen(v:val) > 1"))
+        return
+    endif
+
+    let pattern = printf("\\<%s\\>", expand("<cword>"))
+    silent! let b:highlight_cursor_word_id = matchadd("CursorWord", pattern)
+    let b:highlight_cursor_word = word
+endfunction
+" }}}
 " }}}
 " 折り畳み {{{
 
@@ -1359,15 +1475,6 @@ vnoremap    <silent>       <C-y>      <C-y>k
 nmap        <silent>       gg         ggzOzz:<C-u>call <SID>RefreshScreen()<CR>
 nmap        <silent>       G          GzOzz:<C-u>call <SID>RefreshScreen()<CR>
 
-nmap        <silent>       <Leader>h  ^:<C-u>call <SID>RefreshScreen()<CR>
-vmap        <silent>       <Leader>h  ^:<C-u>call <SID>RefreshScreen()<CR>
-nmap        <silent>       <Leader>l  $:<C-u>call <SID>RefreshScreen()<CR>
-vmap        <silent>       <Leader>l  $:<C-u>call <SID>RefreshScreen()<CR>
-omap        <silent>       <Leader>l  $:<C-u>call <SID>RefreshScreen()<CR>
-nmap        <silent>       <Leader>n  %:<C-u>call <SID>RefreshScreen()<CR>
-vmap        <silent>       <Leader>n  %:<C-u>call <SID>RefreshScreen()<CR>
-omap        <silent>       <Leader>n  %:<C-u>call <SID>RefreshScreen()<CR>
-
 " }}}
 " タブライン操作 {{{
 
@@ -1407,8 +1514,6 @@ endfor
 " vimrc / gvimrc の編集 
 nnoremap    <silent>   <F1>    :<C-u>call <SID>SmartOpen($MYVIMRC)<CR>
 nnoremap    <silent>   <F2>    :<C-u>call <SID>SmartOpen($MYGVIMRC)<CR>
-" nnoremap    <silent>   <F1>    :<C-u>call <SID>SmartOpen('~/dotfiles/.vimrc')<CR>
-" nnoremap    <silent>   <F2>    :<C-u>call <SID>SmartOpen('~/dotfiles/.gvimrc')<CR>
 nnoremap    <silent>   <F3>    :<C-u>source $MYVIMRC<CR>:source $MYGVIMRC<CR>
 
 " }}}
@@ -1434,8 +1539,8 @@ endfunction
 " アプリケーションウィンドウサイズの変更 {{{
 function! s:ResizeWin()
 
-    let d1 = 1
-    let d2 = 1
+    let d1 = 4
+    let d2 = 4
 
     let t = &titlestring
     let x = &columns
@@ -1706,6 +1811,13 @@ function! s:InsertTextAtCurrent(text)
     call setpos('.', pos)
 endfunction
 " }}}
+" コマンド実行後の表示状態を維持する {{{
+function! s:ExecuteKeepView(expr)
+    let wininfo = winsaveview()
+    execute a:expr
+    call winrestview(wininfo)
+endfunction
+" }}}
 " }}}
 " コンソール用 {{{
 
@@ -1714,3 +1826,4 @@ if !s:isGuiRunning
 endif
 
 " }}}
+

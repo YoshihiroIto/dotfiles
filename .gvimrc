@@ -15,12 +15,14 @@ hi DiffText                      guibg=#4C4745 gui=bold
 hi Macro           guifg=#C4BE89               gui=none
 hi SpecialKey      guifg=#66D9EF               gui=none
 hi Special         guifg=#66D9EF guibg=bg      gui=none
-hi SpecialKey      guifg=#888A85               gui=none
 hi StorageClass    guifg=#FD971F               gui=none
 hi Tag             guifg=#F92672               gui=none
 hi FoldColumn      guifg=#465457 guibg=#242526
 hi Folded          guifg=#465457 guibg=#242526
 hi VertSplit       guifg=#202020 guibg=#202020 gui=bold "見えなくする
+
+" タブ表示など
+hi SpecialKey      guifg=#383838 guibg=#121212 gui=none
 
 " }}}
 " 見た目 {{{
