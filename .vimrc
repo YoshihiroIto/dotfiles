@@ -116,7 +116,7 @@ let g:lightline = {
             \                  [ 'charcode', 'fileformat', 'fileencoding', 'filetype' ] ]
             \   },
             \   'component': {
-            \       'lineinfo': s:lightline_symbol_line . '%4l:%-3v',
+            \       'lineinfo': s:lightline_symbol_line . '%4l/%L : %-3v',
             \   },
             \   'component_function': {
             \       'modified':          'MyModified',
@@ -236,7 +236,7 @@ endfunction
 " }}}
 " indentLine {{{
 
-let g:indentLine_fileType   = ['c', 'cpp', 'cs', 'vim', 'rb', 'glsl', 'hlsl', 'xml', 'json']
+let g:indentLine_fileType   = ['c', 'cpp', 'cs', 'vim', 'rb', 'go', 'glsl', 'hlsl', 'xml', 'json']
 let g:indentLine_color_gui  = '#383838'
 let g:indentLine_color_term = 239
 
@@ -491,12 +491,6 @@ NeoBundleLazy 'rhysd/clever-f.vim', {
             \       'mappings' : 'f',
             \   }
             \ }
-NeoBundleLazy 'rking/ag.vim', {
-            \   'depends' : [ 'Shougo/unite.vim' ],
-            \   'autoload' : {
-            \       'commands' : [ 'Ag' ]
-            \   }
-            \ }
 NeoBundleLazy 'haya14busa/vim-easymotion', {
             \   'autoload' : {
             \       'mappings' : [ '<Plug>(easymotion-' ]
@@ -573,13 +567,6 @@ function! s:bundle.hooks.on_source(bundle)
 
 endfunction
 unlet s:bundle
-
-" }}}
-" Ag {{{
-
-if s:isWindows
-    let g:agprg="pt"
-endif
 
 " }}}
 " }}}
@@ -884,8 +871,10 @@ xnoremap [Unite]    <nop>
 nmap     <leader>u  [Unite]
 xmap     <leader>u  [Unite]
 
-nnoremap <silent> [Unite]g   :<C-u>Unite grep:. -buffer-name=search-buffer<CR>
-nnoremap <silent> [Unite]cg  :<C-u>UniteWithCursorWord grep:. -buffer-name=search-buffer<CR>
+" nnoremap <silent> [Unite]g   :<C-u>Unite grep:. -buffer-name=search-buffer<CR>
+" nnoremap <silent> [Unite]cg  :<C-u>UniteWithCursorWord grep:. -buffer-name=search-buffer<CR>
+nnoremap <silent> [Unite]g   :<C-u>Unite grep -buffer-name=search-buffer<CR>
+nnoremap <silent> [Unite]cg  :<C-u>UniteWithCursorWord grep -buffer-name=search-buffer<CR>
 
 nnoremap <silent> [Unite]pg  :<C-u>call <SID>unite_grep_project('-buffer-name=search-buffer')<CR>
 nnoremap <silent> [Unite]cpg :<C-u>call <SID>unite_grep_project('-buffer-name=search-buffer')<CR><C-R><C-W><CR>
@@ -1009,8 +998,13 @@ augroup file-setting
     autocmd FileType            xml,html            inoremap <buffer> </ </<C-x><C-o>
 
     function! s:SetQuickFix()
-        noremap  <buffer>         p <CR>zz<C-w>p
-        nnoremap <buffer><silent> q :<C-u>cclose<CR>
+        noremap  <buffer><silent> p    <CR>zz<C-w>p
+        nnoremap <buffer><silent> r    :<C-u>Qfreplace<CR>
+        nnoremap <buffer><silent> q    :<C-u>cclose<CR>
+        nnoremap <buffer><silent> e    <CR>
+        nnoremap <buffer><silent> <CR> <CR>zz:<C-u>cclose<CR>
+        nnoremap <buffer><silent> k    k:<C-u>call <SID>RefreshScreen()<CR>
+        nnoremap <buffer><silent> j    j:<C-u>call <SID>RefreshScreen()<CR>
     endfunction
 augroup END
 
@@ -1239,6 +1233,9 @@ set ignorecase                    " 検索パターンにおいて大文字と�
 set smartcase                     " 検索パターンが大文字を含んでいたらオプション 'ignorecase' を上書きする。
 " set nowrapscan                    " 検索をファイルの先頭へループしない
 
+set grepprg=pt\ --nogroup\ --nocolor
+set grepformat=%f:%l:%m
+
 " 日本語インクリメンタルサーチ
 if has('migemo')
     set migemo
@@ -1255,10 +1252,6 @@ nnoremap    <silent>  <Leader>/   :nohlsearch<CR>
 " very magic
 nnoremap /  /\v
 
-" " カーソル移動しない
-" map * *N
-" map # #N
-
 " *による検索時に初回は移動しない
 nnoremap <silent>* viw:<C-u>call <SID>StarSearch()<CR>:<C-u>set hlsearch<CR>`<
 vnoremap <silent>* :<C-u>call    <SID>StarSearch()<CR>:<C-u>set hlsearch<CR>
@@ -1270,6 +1263,23 @@ function! s:StarSearch()
     let @" = orig
 endfunction
 
+function! s:ExecuteGrep(args)
+
+    if empty(a:args)
+        let l:grepargs = expand("<cword>")
+    else
+        let l:grepargs = a:args . join(a:000, ' ')
+    end
+
+    silent exe 'grep! ' . l:grepargs . ' | cw'
+endfunction
+
+command! -bang -nargs=* -complete=file Grep call s:ExecuteGrep(<q-args>)
+noremap <C-@> :Grep <C-r><C-w> 
+noremap <C-^> :Grep <C-r><C-w> ./<CR>
+noremap <C-[> :Grep <C-r><C-w> ../<CR>
+noremap <C-]> :Grep <C-r><C-w> ../../<CR>
+    
 " }}}
 " 表示{{{
 
@@ -1301,10 +1311,8 @@ if has('syntax')
         syntax match InvisibleJISX0208Space '　' display containedin=ALL
         highlight InvisibleJISX0208Space term=underline guibg=#112233
 
-        " if s:isGuiRunning
-            syntax match InvisibleTab '\t' display containedin=ALL
-            highlight InvisibleTab term=underline ctermbg=Gray guibg=#121212
-        " endif
+        syntax match InvisibleTab '\t' display containedin=ALL
+        highlight InvisibleTab term=underline ctermbg=Gray guibg=#121212
     endf
 
     augroup invisible
@@ -1317,40 +1325,42 @@ endif
 " カレントウィンドウにのみ罫線を引く {{{
 
 " http://d.hatena.ne.jp/thinca/20090530/1243615055
-augroup vimrc-auto-cursorline
-    autocmd!
-    autocmd CursorMoved,CursorMovedI * call s:auto_cursorline('CursorMoved')
-    autocmd CursorHold,CursorHoldI   * call s:auto_cursorline('CursorHold')
-    autocmd WinEnter                 * call s:auto_cursorline('WinEnter')
-    autocmd WinLeave                 * call s:auto_cursorline('WinLeave')
+" augroup vimrc-auto-cursorline
+"     autocmd!
+"     autocmd CursorMoved,CursorMovedI * call s:auto_cursorline('CursorMoved')
+"     autocmd CursorHold,CursorHoldI   * call s:auto_cursorline('CursorHold')
+"     autocmd WinEnter                 * call s:auto_cursorline('WinEnter')
+"     autocmd WinLeave                 * call s:auto_cursorline('WinLeave')
+"
+"     let s:cursorline_lock = 0
+"     function! s:auto_cursorline(event)
+"         if a:event ==# 'WinEnter'
+"             setlocal cursorline
+"             let s:cursorline_lock = 2
+"         elseif a:event ==# 'WinLeave'
+"             setlocal nocursorline
+"         elseif a:event ==# 'CursorMoved'
+"             if s:cursorline_lock
+"                 if 1 < s:cursorline_lock
+"                     let s:cursorline_lock = 1
+"                 else
+"                     setlocal nocursorline
+"                     let s:cursorline_lock = 0
+"                 endif
+"             endif
+"         elseif a:event ==# 'CursorHold'
+"             setlocal cursorline
+"             let s:cursorline_lock = 1
+"         endif
+"     endfunction
+" augroup END
 
-    let s:cursorline_lock = 0
-    function! s:auto_cursorline(event)
-        if a:event ==# 'WinEnter'
-            setlocal cursorline
-            let s:cursorline_lock = 2
-        elseif a:event ==# 'WinLeave'
-            setlocal nocursorline
-        elseif a:event ==# 'CursorMoved'
-            if s:cursorline_lock
-                if 1 < s:cursorline_lock
-                    let s:cursorline_lock = 1
-                else
-                    setlocal nocursorline
-                    let s:cursorline_lock = 0
-                endif
-            endif
-        elseif a:event ==# 'CursorHold'
-            setlocal cursorline
-            let s:cursorline_lock = 1
-        endif
-    endfunction
+function! s:ForceShowCursolLine()
+    " setlocal cursorline
+    " let s:cursorline_lock = 1
+endfunction
 
-    function! s:ForceShowCursolLine()
-        setlocal cursorline
-        let s:cursorline_lock = 1
-    endfunction
-augroup END
+set cursorline
 
 " }}}
 " Vim でカーソル下の単語を移動するたびにハイライトする{{{
