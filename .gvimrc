@@ -51,7 +51,7 @@ set t_vb=
 if s:isMac
     augroup transparency
         autocmd!
-        autocmd GuiEnter,FocusGained * set transparency=4   " アクティブ時の透過率
+        autocmd GuiEnter,FocusGained * set transparency=3   " アクティブ時の透過率
         autocmd FocusLost            * set transparency=48  " 非アクティブ時の透過率
     augroup END
 endif

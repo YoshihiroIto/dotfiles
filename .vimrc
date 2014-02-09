@@ -42,38 +42,38 @@ NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'Yggdroot/indentLine'
 
 NeoBundleLazy 'Shougo/unite-outline', {
-            \   'autoload' : {
-            \       'unite_sources' : [ 'outline' ],
+            \   'autoload': {
+            \       'unite_sources': [ 'outline' ],
             \   }
             \ }
 NeoBundleLazy 'majutsushi/tagbar', {
-            \   'autoload' : {
-            \       'commands' : [ 'TagbarToggle' ]
+            \   'autoload': {
+            \       'commands': [ 'TagbarToggle' ]
             \   }
             \ }
 NeoBundleLazy 'LeafCage/foldCC', {
-            \   'autoload' : {
-            \       'filetypes' : [ 'vim' ]
+            \   'autoload': {
+            \       'filetypes': [ 'vim' ]
             \   }
             \ }
 NeoBundleLazy 'vim-jp/cpp-vim', {
-            \   'autoload' : {
-            \       'filetypes' : [ 'cpp' ]
+            \   'autoload': {
+            \       'filetypes': [ 'cpp' ]
             \   }
             \ }
 NeoBundleLazy 'Mizuchi/STL-Syntax', {
-            \   'autoload' : {
-            \       'filetypes' : [ 'cpp' ]
+            \   'autoload': {
+            \       'filetypes': [ 'cpp' ]
             \   }
             \ }
 NeoBundleLazy 'beyondmarc/hlsl.vim', {
-            \   'autoload' : {
-            \       'filetypes' : [ 'hlsl' ]
+            \   'autoload': {
+            \       'filetypes': [ 'hlsl' ]
             \   }
             \ }
 NeoBundleLazy 'tikhomirov/vim-glsl', {
-            \   'autoload' : {
-            \       'filetypes' : [ 'glsl' ]
+            \   'autoload': {
+            \       'filetypes': [ 'glsl' ]
             \   }
             \ }
 
@@ -276,11 +276,16 @@ NeoBundleLazy 'nishigori/increment-activator', {
             \       ]
             \   }
             \ }
+NeoBundleLazy 'thinca/vim-qfreplace', {
+            \   'autoload' : {
+            \       'commands' : [ 'Qfreplace' ]
+            \   }
+            \ }
 NeoBundleLazy 'junegunn/vim-easy-align', {'autoload': {'mappings': ['<Plug>(EasyAlignOperator)', ['sxn', '<Plug>(EasyAlign)'], ['sxn', '<Plug>(LiveEasyAlign)'], ['sxn', '<Plug>(EasyAlignRepeat)']], 'commands': ['EasyAlign', 'LiveEasyAlign']}}
+
 " }}}
 " vim-easy-align {{{
 
-" vmap <Space> <Plug>(EasyAlign)
 vmap m <Plug>(EasyAlign)
 
 " }}}
@@ -354,8 +359,7 @@ let g:increment_activator_filetype_candidates =
 " }}}
 " vim-over {{{
 
-nnoremap <silent> <Leader>s :OverCommandLine<CR>
-vnoremap <silent> <Leader>s :OverCommandLine<CR>
+noremap <silent> <Leader>s :OverCommandLine<CR>
 
 let g:over_command_line_key_mappings = {
             \   "\<C-j>" : "\<Esc>",
@@ -539,7 +543,6 @@ map g# <Plug>(visualstar-g#)
 
 let g:EasyMotion_leader_key          = '<Leader><Leader>'
 let g:EasyMotion_keys                = 'hjklasdyuiopqwertnmzxcvb4738291056gf'
-" let g:EasyMotion_keys                = 'hjklasdyuiopqwertnmzxcvbgf'
 let g:EasyMotion_special_select_line = 0
 let g:EasyMotion_select_phrase       = 1
 let g:EasyMotion_smartcase           = 1
@@ -572,6 +575,13 @@ endfunction
 unlet s:bundle
 
 " }}}
+" Ag {{{
+
+if s:isWindows
+    let g:agprg="pt"
+endif
+
+" }}}
 " }}}
 " テキストオブジェクト {{{
 " http://d.hatena.ne.jp/osyo-manga/20130717/1374069987
@@ -579,65 +589,65 @@ unlet s:bundle
 NeoBundleLazy 'kana/vim-textobj-user'
 
 NeoBundleLazy 'kana/vim-textobj-entire', {
-            \ 'depends' : 'kana/vim-textobj-user',
-            \ 'autoload' : {
-            \       'mappings' : [['xo', 'ae'], ['xo', 'ie']]
+            \ 'depends': 'kana/vim-textobj-user',
+            \ 'autoload': {
+            \       'mappings': [['xo', 'ae'], ['xo', 'ie']]
             \   }
             \ }
 
 NeoBundleLazy 'kana/vim-textobj-indent', {
-            \ 'depends' : 'kana/vim-textobj-user',
-            \ 'autoload' : {
-            \       'mappings' : [['xo', 'ai'], ['xo', 'aI'], ['xo', 'ii'], ['xo', 'iI']]
+            \ 'depends': 'kana/vim-textobj-user',
+            \ 'autoload': {
+            \       'mappings': [['xo', 'ai'], ['xo', 'aI'], ['xo', 'ii'], ['xo', 'iI']]
             \   }
             \ }
 
 NeoBundleLazy 'kana/vim-textobj-fold', {
-            \ 'depends' : 'kana/vim-textobj-user',
-            \ 'autoload' : {
-            \       'mappings' : [['xo', 'az'], ['xo', 'iz']]
+            \ 'depends': 'kana/vim-textobj-user',
+            \ 'autoload': {
+            \       'mappings': [['xo', 'az'], ['xo', 'iz']]
             \ }
             \ }
 
 NeoBundleLazy 'kana/vim-textobj-line', {
-            \ 'depends' : 'kana/vim-textobj-user',
-            \ 'autoload' : {
-            \       'mappings' : [['xo', 'al'], ['xo', 'il']]
+            \ 'depends': 'kana/vim-textobj-user',
+            \ 'autoload': {
+            \       'mappings': [['xo', 'al'], ['xo', 'il']]
             \   }
             \ }
 
 NeoBundleLazy 'rhysd/vim-textobj-word-column', {
-            \ 'depends' : 'kana/vim-textobj-user',
-            \ 'autoload' : {
-            \       'mappings' : [['xo', 'av'], ['xo', 'aV'], ['xo', 'iv'], ['xo', 'iV']]
+            \ 'depends': 'kana/vim-textobj-user',
+            \ 'autoload': {
+            \       'mappings': [['xo', 'av'], ['xo', 'aV'], ['xo', 'iv'], ['xo', 'iV']]
             \   }
             \ }
 
 NeoBundleLazy 'thinca/vim-textobj-comment', {
-            \ 'depends' : 'kana/vim-textobj-user',
-            \ 'autoload' : {
-            \       'mappings' : [['xo', 'ac'], ['xo', 'ic']]
+            \ 'depends': 'kana/vim-textobj-user',
+            \ 'autoload': {
+            \       'mappings': [['xo', 'ac'], ['xo', 'ic']]
             \   }
             \ }
 
 NeoBundleLazy 'sgur/vim-textobj-parameter', {
-            \ 'depends' : 'kana/vim-textobj-user',
-            \ 'autoload' : {
-            \       'mappings' : [['xo', 'a,'], ['xo', 'i,']]
+            \ 'depends': 'kana/vim-textobj-user',
+            \ 'autoload': {
+            \       'mappings': [['xo', 'a,'], ['xo', 'i,']]
             \   }
             \ }
 
 NeoBundleLazy 'rhysd/vim-textobj-anyblock', {
-            \ 'depends' : 'kana/vim-textobj-user',
-            \ 'autoload' : {
-            \       'mappings' : [['xo', 'ab'], ['xo', 'ib']]
+            \ 'depends': 'kana/vim-textobj-user',
+            \ 'autoload': {
+            \       'mappings': [['xo', 'ab'], ['xo', 'ib']]
             \   }
             \ }
 
 NeoBundleLazy 'anyakichi/vim-textobj-ifdef', {
-            \ 'depends' : 'kana/vim-textobj-user',
-            \ 'autoload' : {
-            \       'mappings' : [['xo', 'a#'], ['xo', 'i#']]
+            \ 'depends': 'kana/vim-textobj-user',
+            \ 'autoload': {
+            \       'mappings': [['xo', 'a#'], ['xo', 'i#']]
             \   }
             \ }
 " }}}
@@ -719,7 +729,7 @@ endif
 " }}}
 " VimFiler {{{
 
-noremap  <silent> <Leader>o :VimFilerBufferDir<CR>
+noremap  <silent> <leader>o :VimFilerBufferDir<CR>
 
 let s:bundle = neobundle#get('vimfiler')
 function! s:bundle.hooks.on_source(bundle)
@@ -766,7 +776,7 @@ function! s:bundle.hooks.on_source(bundle)
 
             noremap  <buffer><silent> <Leader>w :<C-u>call <SID>ToggleLingr()<CR>
 
-            set nolist
+            setlocal nolist
         endfunction
     augroup END
 endfunction
@@ -910,8 +920,8 @@ function! s:bundle.hooks.on_source(bundle)
     " most recently used のリストサイズ
     let g:unite_source_file_mru_limit = 1000
 
-    " unite grep に ag(The Silver Searcher) を使う
     if s:isMac
+        " unite grep に ag(The Silver Searcher) を使う
         if executable('ag')
             let g:unite_source_grep_command       = 'ag'
             let g:unite_source_grep_default_opts  = '--nogroup --nocolor --column'
@@ -988,14 +998,20 @@ augroup file-setting
     autocmd BufNewFile,BufRead  *.{fx,fxc,fxh,hlsl} setf hlsl
     autocmd BufNewFile,BufRead  *.{fsh,vsh}         setf glsl
 
-    autocmd Filetype            *           setlocal formatoptions-=ro      " コメント補完しない
-    autocmd Filetype            ruby        setlocal foldmethod=syntax tabstop=2 shiftwidth=2 softtabstop=2
-    autocmd Filetype            c,cpp,cs    setlocal foldmethod=syntax
-    autocmd Filetype            vim         setlocal foldmethod=marker foldlevel=0 foldcolumn=4
+    autocmd FileType            *                   setlocal formatoptions-=ro      " コメント補完しない
+    autocmd FileType            ruby                setlocal foldmethod=syntax tabstop=2 shiftwidth=2 softtabstop=2
+    autocmd FileType            c,cpp,cs            setlocal foldmethod=syntax
+    autocmd FileType            vim                 setlocal foldmethod=marker foldlevel=0 foldcolumn=4
+    autocmd FileType            qf                  call s:SetQuickFix()
 
     " Hack #22: XMLの閉じタグを補完する
     " http://vim-users.jp/2009/06/hack22/
-    autocmd Filetype            xml,html         inoremap <buffer> </ </<C-x><C-o>
+    autocmd FileType            xml,html            inoremap <buffer> </ </<C-x><C-o>
+
+    function! s:SetQuickFix()
+        noremap  <buffer>         p <CR>zz<C-w>p
+        nnoremap <buffer><silent> q :<C-u>cclose<CR>
+    endfunction
 augroup END
 
 " }}}
@@ -1197,11 +1213,13 @@ augroup auto-mirror
             " ファイルパス作成
             let currentMirrorDir = s:mirrorDir . '/' . strftime('%Y%m%d')
             let currentPostfix   = strftime('%H%M%S')
-            let filename = expand('%:p:t:r')
-            let ext      = expand('%:p:t:e')
+            let filename         = expand('%:p:t:r')
+            let ext              = expand('%:p:t:e')
+
             if ext != ''
                 let ext = '.' . ext
             endif
+
             let outputFilepath = currentMirrorDir . '/' . filename . currentPostfix . ext
 
             " ミラー先ディレクトリを確認
@@ -1243,7 +1261,7 @@ nnoremap /  /\v
 
 " *による検索時に初回は移動しない
 nnoremap <silent>* viw:<C-u>call <SID>StarSearch()<CR>:<C-u>set hlsearch<CR>`<
-vnoremap <silent>* :<C-u>call <SID>StarSearch()<CR>:<C-u>set hlsearch<CR>
+vnoremap <silent>* :<C-u>call    <SID>StarSearch()<CR>:<C-u>set hlsearch<CR>
 function! s:StarSearch()
     let orig = @"
     normal! gvy
@@ -1274,28 +1292,6 @@ set wildoptions=tagfile
 set fillchars=vert:\              " 縦分割の境界線
 set synmaxcol=500                 " ハイライトする文字数を制限する
 set updatetime=1000
-" set spelllang+=cjk
-"
-" " Vim で自動的に set spell を行う
-" " http://d.hatena.ne.jp/osyo-manga/20131129/1385737186
-"
-" " トリガーがONになっていたら set spell を行う
-" function! s:set_spell()
-"     if get(b:, "set_spell_trigger", 0) && &modifiable
-"         let &spell = 1
-"         unlet b:set_spell_trigger
-"     endif
-" endfunction
-"
-" " バッファの内容が変更されるか保存された時にスペルチェックを行う
-" " ただし、実際に有効になるのは CursorHold のタイミング
-" " また、カーソル移動を行えば無効にする
-" augroup my-setspell
-"     autocmd!
-"     autocmd BufWritePost,TextChanged,TextChangedI * let b:set_spell_trigger = 1
-"     autocmd CursorHold  * call s:set_spell()
-"     autocmd CursorMoved * if &spell | set nospell | endif
-" augroup END
 
 " 全角スペースをハイライト {{{
 
@@ -1843,6 +1839,18 @@ endfunction
 if !s:isGuiRunning
     source $MYGVIMRC
 endif
-
+" }}}
+" メモ{{{
+" +--------+--------+--------+--------+--------+--------+
+" |        | normal | visual |  wait  | insert |command |
+" +--------+--------+--------+--------+--------+--------+
+" |  map   |   ○   |   ○   |   ○   |        |        |
+" |  map!  |        |        |        |   ○   |   ○   |
+" |  nmap  |   ○   |        |        |        |        |
+" |  vmap  |        |   ○   |        |        |        |
+" |  omap  |        |        |   ○   |        |        |
+" |  imap  |        |        |        |   ○   |        |
+" |  cmap  |        |        |        |        |   ○   |
+" +--------+--------+--------+--------+--------+--------+
 " }}}
 
