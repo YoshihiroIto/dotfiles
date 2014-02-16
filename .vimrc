@@ -75,6 +75,30 @@ NeoBundleLazy 'tikhomirov/vim-glsl', {
             \       'filetypes': [ 'glsl' ]
             \   }
             \ }
+" NeoBundle 'osyo-manga/vim-gift'
+" NeoBundle 'osyo-manga/vim-automatic'
+" let g:automatic_config = [
+"             \   {
+"             \       'match' : {
+"             \           'autocmds' : ['WinEnter'],
+"             \           "preset" : "unite",
+"             \       },
+"             \       "set" : {
+"             \          'commands': ['let &columns = &columns + ' . 90],
+"             \           "move":     "right",
+"             \       },
+"             \   },
+"             \   {
+"             \       'match' : {
+"             \           'autocmds' : ['WinLeave'],
+"             \           "preset" : "unite",
+"             \       },
+"             \       "set" : {
+"             \          'commands': ['let &columns = &columns - ' . 90],
+"             \           "move":     "right",
+"             \       },
+"             \   },
+"             \]
 " }}}
 " TagBar {{{
 
@@ -1137,6 +1161,7 @@ inoremap    ¥   \
 inoremap    \   ¥
 cnoremap    ¥   \
 cnoremap    \   ¥
+noremap     U   J
 
 " ^Mを取り除く
 command! RemoveCr call s:ExecuteKeepView('silent! %substitute/\r$//g | nohlsearch')
@@ -1345,6 +1370,10 @@ nnoremap    <silent>  <Leader>/   :nohlsearch<CR>
 " very magic
 nnoremap /  /\v
 
+" map  / <Plug>(easymotion-sn)
+" xmap / <C-j><Plug>(easymotion-sn)\v%V
+" omap / <Plug>(easymotion-tn)
+
 " *による検索時に初回は移動しない
 nnoremap <silent>* viw:<C-u>call <SID>StarSearch()<CR>:<C-u>set hlsearch<CR>`<
 vnoremap <silent>* :<C-u>call    <SID>StarSearch()<CR>:<C-u>set hlsearch<CR>
@@ -1356,17 +1385,17 @@ function! s:StarSearch()
     let @" = orig
 endfunction
 
-function! s:ExecuteGrep(args)
-
-    if empty(a:args)
-        let l:grepargs = expand("<cword>")
-    else
-        let l:grepargs = a:args . join(a:000, ' ')
-    end
-
-    silent exe 'grep! ' . l:grepargs . ' | cw'
-endfunction
-
+" function! s:ExecuteGrep(args)
+"
+"     if empty(a:args)
+"         let l:grepargs = expand("<cword>")
+"     else
+"         let l:grepargs = a:args . join(a:000, ' ')
+"     end
+"
+"     silent exe 'grep! ' . l:grepargs . ' | cw'
+" endfunction
+"
 " command! -bang -nargs=* -complete=file Grep call s:ExecuteGrep(<q-args>)
 "
 " noremap <C-@> :<C-u>Grep <C-r><C-w> 
@@ -1596,7 +1625,7 @@ nmap        <silent>   <Leader>m  `
 
 set helplang=ja,en
 
-nnoremap <C-k>      :<C-u>help
+nnoremap <C-k>      :<C-u>help 
 nnoremap <C-k><C-k> :<C-u>help <C-r><C-w><CR>
 
 " }}}
@@ -1886,15 +1915,17 @@ if !s:isGuiRunning
 endif
 " }}}
 " メモ{{{
-" +--------+--------+--------+--------+--------+--------+
-" |        | normal | visual |  wait  | insert |command |
-" +--------+--------+--------+--------+--------+--------+
-" |  map   |   ○   |   ○   |   ○   |        |        |
-" |  map!  |        |        |        |   ○   |   ○   |
-" |  nmap  |   ○   |        |        |        |        |
-" |  vmap  |        |   ○   |        |        |        |
-" |  omap  |        |        |   ○   |        |        |
-" |  imap  |        |        |        |   ○   |        |
-" |  cmap  |        |        |        |        |   ○   |
-" +--------+--------+--------+--------+--------+--------+
+" +--------+--------+--------+--------+--------+--------+--------+
+" |        | normal | visual | select |  wait  | insert |command |
+" +--------+--------+--------+--------+--------+--------+--------+
+" |  map   |   ○   |   ○   |        |   ○   |        |        |
+" |  map!  |        |        |        |        |   ○   |   ○   |
+" |  nmap  |   ○   |        |        |        |        |        |
+" |  vmap  |        |   ○   |   ○   |        |        |        |
+" |  xmap  |        |   ○   |        |        |        |        |
+" |  smap  |        |        |   ○   |        |        |        |
+" |  omap  |        |        |        |   ○   |        |        |
+" |  imap  |        |        |        |        |   ○   |        |
+" |  cmap  |        |        |        |        |        |   ○   |
+" +--------+--------+--------+--------+--------+--------+--------+
 " }}} 
