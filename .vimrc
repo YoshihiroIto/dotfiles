@@ -1,5 +1,4 @@
 " 基本 {{{
- 
 
 set nocompatible                " VI互換をオフ
 set encoding=utf-8
@@ -75,30 +74,6 @@ NeoBundleLazy 'tikhomirov/vim-glsl', {
             \       'filetypes': [ 'glsl' ]
             \   }
             \ }
-" NeoBundle 'osyo-manga/vim-gift'
-" NeoBundle 'osyo-manga/vim-automatic'
-" let g:automatic_config = [
-"             \   {
-"             \       'match' : {
-"             \           'autocmds' : ['WinEnter'],
-"             \           "preset" : "unite",
-"             \       },
-"             \       "set" : {
-"             \          'commands': ['let &columns = &columns + ' . 90],
-"             \           "move":     "right",
-"             \       },
-"             \   },
-"             \   {
-"             \       'match' : {
-"             \           'autocmds' : ['WinLeave'],
-"             \           "preset" : "unite",
-"             \       },
-"             \       "set" : {
-"             \          'commands': ['let &columns = &columns - ' . 90],
-"             \           "move":     "right",
-"             \       },
-"             \   },
-"             \]
 " }}}
 " TagBar {{{
 
@@ -652,9 +627,13 @@ NeoBundleLazy 'thinca/vim-textobj-comment', {
 NeoBundleLazy 'sgur/vim-textobj-parameter', {
             \ 'depends': 'kana/vim-textobj-user',
             \ 'autoload': {
-            \       'mappings': [['xo', 'a,'], ['xo', 'i,']]
+            \       'mappings': [['xo', '<Plug>(textobj-parameter']]
             \   }
             \ }
+xmap aa <Plug>(textobj-parameter-a)
+xmap ia <Plug>(textobj-parameter-i)
+omap aa <Plug>(textobj-parameter-a)
+omap ia <Plug>(textobj-parameter-i)
 
 NeoBundleLazy 'rhysd/vim-textobj-anyblock', {
             \ 'depends': 'kana/vim-textobj-user',
@@ -669,20 +648,38 @@ NeoBundleLazy 'anyakichi/vim-textobj-ifdef', {
             \       'mappings': [['xo', 'a#'], ['xo', 'i#']]
             \   }
             \ }
+
+NeoBundleLazy 'h1mesuke/textobj-wiw', {
+            \ 'depends': 'kana/vim-textobj-user',
+            \ 'autoload': {
+            \       'mappings': [['xo', '<Plug>(textobj-wiw']]
+            \   }
+            \ }
+xmap a. <Plug>(textobj-wiw-a)
+xmap i. <Plug>(textobj-wiw-i)
+omap a. <Plug>(textobj-wiw-a)
+omap i. <Plug>(textobj-wiw-i)
 " }}}
 " }}}
 " オペレータ {{{
 " http://qiita.com/rbtnn/items/a47ed6684f1f0bc52906
 " インストール {{{
 NeoBundleLazy 'kana/vim-operator-user'
-NeoBundleLazy 'kana/vim-operator-replace',    {'depends': 'kana/vim-operator-user', 'autoload': {'mappings': ['<Plug>(operator-replace)']}}
-NeoBundleLazy 'tyru/operator-camelize.vim',   {'depends': 'kana/vim-operator-user', 'autoload': {'mappings': ['<Plug>(operator-camelize-toggle)']}}
+NeoBundleLazy 'kana/vim-operator-replace',  {'depends': 'kana/vim-operator-user', 'autoload': {'mappings': [['nx', '<Plug>(operator-replace)']]}}
+NeoBundleLazy 'tyru/operator-camelize.vim', {'depends': 'kana/vim-operator-user', 'autoload': {'mappings': [['nx', '<Plug>(operator-camelize-toggle)']]}}
+NeoBundleLazy 'emonkak/vim-operator-sort',  {'depends': 'kana/vim-operator-user', 'autoload': {'mappings': [['nx', '<Plug>(operator-sort']]}}
 " }}}
 " vim-operator-replace {{{
-map R           <Plug>(operator-replace)
+nmap R         <Plug>(operator-replace)
+xmap R         <Plug>(operator-replace)
 " }}}
 " operator-camelize.vim {{{
-nmap  <Leader>c  <Plug>(operator-camelize-toggle)iw
+nmap <Leader>c <Plug>(operator-camelize-toggle)iw
+xmap <Leader>c <Plug>(operator-camelize-toggle)iw
+" }}}
+" vim-operator-sort {{{
+nmap <Leader>o <Plug>(operator-sort)
+xmap <Leader>o <Plug>(operator-sort)
 " }}}
 " }}}
 " アプリ {{{
@@ -745,6 +742,11 @@ if s:isMac
                 \   }
                 \ }
 endif
+
+" }}}
+" lingr.vim {{{
+
+noremap <silent>[App]s :<C-u>VimShellPop<CR>
 
 " }}}
 " VimFiler {{{
@@ -875,6 +877,13 @@ NeoBundleLazy 'osyo-manga/unite-fold', {
             \       'unite_sources': [ 'fold' ],
             \   }
             \ }
+" NeoBundleLazy 'Shougo/neomru.vim', {
+"             \   'autoload': {
+"             \       'unite_sources': [ 'neomru/file' ],
+"             \   }
+"             \ }
+NeoBundle 'Shougo/neomru.vim'
+
 NeoBundleLazy 'rhysd/unite-codic.vim', {
             \   'depends':  ['koron/codic-vim'],
             \   'autoload': {
@@ -895,7 +904,7 @@ nnoremap <silent> [Unite]pg  :<C-u>call <SID>unite_grep_project('-auto-preview -
 nnoremap <silent> [Unite]cpg :<C-u>call <SID>unite_grep_project('-auto-preview -no-split -buffer-name=search-buffer')<CR><C-R><C-W><CR>
 nnoremap <silent> [Unite]r   :<C-u>UniteResume -no-split search-buffer<CR>
 
-nnoremap <silent> [Unite]m   :<C-u>Unite -no-split file_mru<CR>
+nnoremap <silent> [Unite]m   :<C-u>Unite -no-split neomru/file<CR>
 nnoremap <silent> [Unite]b   :<C-u>Unite -no-split buffer<CR>
 nnoremap <silent> [Unite]t   :<C-u>Unite -no-split tab<CR>
 nnoremap <silent> [Unite]l   :<C-u>Unite -no-split line<CR>
@@ -924,11 +933,9 @@ function! s:bundle.hooks.on_source(bundle)
     " insert modeで開始
     let g:unite_enable_start_insert             = 1
 
-    " 無指定にすることで高速化
-    let g:unite_source_file_mru_filename_format = ''
+    let g:neomru#update_interval                = 60
 
-    " most recently used のリストサイズ
-    let g:unite_source_file_mru_limit           = 1000
+    call unite#custom#source('fold', 'matchers', 'matcher_migemo')
 
     " http://blog.monochromegane.com/blog/2014/01/16/the-platinum-searcher/
     if executable('pt')
@@ -1370,10 +1377,6 @@ nnoremap    <silent>  <Leader>/   :nohlsearch<CR>
 " very magic
 nnoremap /  /\v
 
-" map  / <Plug>(easymotion-sn)
-" xmap / <C-j><Plug>(easymotion-sn)\v%V
-" omap / <Plug>(easymotion-tn)
-
 " *による検索時に初回は移動しない
 nnoremap <silent>* viw:<C-u>call <SID>StarSearch()<CR>:<C-u>set hlsearch<CR>`<
 vnoremap <silent>* :<C-u>call    <SID>StarSearch()<CR>:<C-u>set hlsearch<CR>
@@ -1427,6 +1430,9 @@ set wildoptions=tagfile
 set fillchars=vert:\              " 縦分割の境界線
 set synmaxcol=500                 " ハイライトする文字数を制限する
 set updatetime=1000
+
+noremap <C-i>   <C-i>zz
+noremap <C-o>   <C-o>zz
 
 " 全角スペースをハイライト {{{
 
@@ -1902,6 +1908,7 @@ endfunction
 " }}}
 " コマンド実行後の表示状態を維持する {{{
 function! s:ExecuteKeepView(expr)
+
     let wininfo = winsaveview()
     execute a:expr
     call winrestview(wininfo)
@@ -1928,4 +1935,5 @@ endif
 " |  imap  |        |        |        |        |   ○   |        |
 " |  cmap  |        |        |        |        |        |   ○   |
 " +--------+--------+--------+--------+--------+--------+--------+
-" }}} 
+" }}}
+
