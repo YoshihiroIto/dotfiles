@@ -28,12 +28,17 @@ endif
 
 " NeoBundle {{{
 if has('vim_starting')
+    if !isdirectory(expand("$DOTVIM/bundle/neobundle.vim/"))
+        echo "install neobundle..."
+        call system("git clone git://github.com/Shougo/neobundle.vim $DOTVIM/bundle/neobundle.vim")
+    endif
+
     set runtimepath+=$DOTVIM/bundle/neobundle.vim/
 endif
 
 call neobundle#rc(expand('$DOTVIM/bundle/'))
-
 NeoBundleFetch 'Shougo/neobundle.vim'
+
 " }}}
 " }}}
 " プラグイン {{{
@@ -281,10 +286,29 @@ NeoBundleLazy 'thinca/vim-qfreplace', {
             \ }
 NeoBundleLazy 'junegunn/vim-easy-align', {'autoload': {'mappings': ['<Plug>(EasyAlignOperator)', ['sxn', '<Plug>(EasyAlign)'], ['sxn', '<Plug>(LiveEasyAlign)'], ['sxn', '<Plug>(EasyAlignRepeat)']], 'commands': ['EasyAlign', 'LiveEasyAlign']}}
 
+
 " }}}
 " vim-easy-align {{{
 
-vmap m <Plug>(EasyAlign)
+nmap <Leader>m <Plug>(EasyAlign)
+vmap <Leader>m <Plug>(EasyAlign)
+
+" nmap <silent><Leader>a=       vii<Plug>(EasyAlign)=
+" nmap <silent><Leader>a:       vii<Plug>(EasyAlign):
+" nmap <silent><Leader>a,       vii<Plug>(EasyAlign)*,
+" nmap <silent><Leader>a<Space> vii<Plug>(EasyAlign)*<Space>
+" xmap <silent><Leader>a=       <Plug>(EasyAlign)=
+" xmap <silent><Leader>a:       <Plug>(EasyAlign):
+" xmap <silent><Leader>a,       <Plug>(EasyAlign)*,
+" xmap <silent><Leader>a<Space> <Plug>(EasyAlign)*<Space>
+nmap <silent><Leader>a=       vii<Leader>m=
+nmap <silent><Leader>a:       vii<Leader>m:
+nmap <silent><Leader>a,       vii<Leader>m*,
+nmap <silent><Leader>a<Space> vii<Leader>m*<Space>
+xmap <silent><Leader>a=       <Leader>m=
+xmap <silent><Leader>a:       <Leader>m:
+xmap <silent><Leader>a,       <Leader>m*,
+xmap <silent><Leader>a<Space> <Leader>m*<Space>
 
 " }}}
 " vim-smartinput-endwise {{{
@@ -391,6 +415,7 @@ NeoBundleLazy 'Rip-Rip/clang_complete', {
             \   }
             \ }
 NeoBundleLazy 'nosami/Omnisharp', {
+            \   'depends': [ 'Shougo/neocomplete.vim' ],
             \   'autoload': {
             \       'filetypes': [ 'cs' ]
             \   },
@@ -406,15 +431,77 @@ NeoBundleLazy 'nosami/Omnisharp', {
 let s:bundle = neobundle#get('neocomplete.vim')
 function! s:bundle.hooks.on_source(bundle)
 
-    let g:neocomplete#enable_at_startup  = 1
-    let g:neocomplete#enable_ignore_case = 1
-    let g:neocomplete#enable_smart_case  = 1
+    let g:neocomplete#enable_at_startup       = 1
+    let g:neocomplete#enable_ignore_case      = 1
+    let g:neocomplete#enable_smart_case       = 1
+    let g:neocomplete#enable_auto_delimiter   = 1
+    let g:neocomplete#enable_fuzzy_completion = 1
+    let g:neocomplete#enable_refresh_always   = 1
+    let g:neocomplete#enable_prefetch         = 1
+
+    let g:neocomplete#auto_completion_start_length      = 2
+    let g:neocomplete#manual_completion_start_length    = 0
+    let g:neocomplete#sources#syntax#min_keyword_length = 3
+    let g:neocomplete#min_keyword_length                = 3
+    let g:neocomplete#force_overwrite_completefunc      = 1
+
+    let g:neocomplete#skip_auto_completion_time               = ''
+    let g:neocomplete#disable_auto_select_buffer_name_pattern = '\[Command Line\]'
+
+    if !exists('g:neocomplete#sources#dictionary#dictionaries')
+        let g:neocomplete#sources#dictionary#dictionaries = {}
+    endif
+    let g:neocomplete#sources#dictionary#dictionaries.default  = ''
+    let g:neocomplete#sources#dictionary#dictionaries.vimshell = $HOME . '/.vimshell_hist'
+
+    if !exists('g:neocomplete#sources#vim#complete_functions')
+        let g:neocomplete#sources#vim#complete_functions = {}
+    endif
+    let g:neocomplete#sources#vim#complete_functions.Unite               = 'unite#complete_source'
+    let g:neocomplete#sources#vim#complete_functions.VimShellExecute     = 'vimshell#vimshell_execute_complete'
+    let g:neocomplete#sources#vim#complete_functions.VimShellInteractive = 'vimshell#vimshell_execute_complete'
+    let g:neocomplete#sources#vim#complete_functions.VimShellTerminal    = 'vimshell#vimshell_execute_complete'
+    let g:neocomplete#sources#vim#complete_functions.VimShell            = 'vimshell#complete'
+    let g:neocomplete#sources#vim#complete_functions.VimFiler            = 'vimfiler#complete'
+
+    if !exists('g:neocomplete#keyword_patterns')
+        let g:neocomplete#keyword_patterns = {}
+    endif
+    " 日本語は収集しない
+    let g:neocomplete#keyword_patterns._ = '\h\w*'
+
+    if !exists('g:neocomplete#sources#omni#input_patterns')
+        let g:neocomplete#sources#omni#input_patterns = {}
+    endif
+    let g:neocomplete#sources#omni#input_patterns.c    = '\%(\.\|->\)\h\w*'
+    let g:neocomplete#sources#omni#input_patterns.cpp  = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
+    let g:neocomplete#sources#omni#input_patterns.cs   = '[a-zA-Z0-9.]\{2\}'
+    let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
 
     if !exists('g:neocomplete#force_omni_input_patterns')
         let g:neocomplete#force_omni_input_patterns = {}
     endif
+    let g:neocomplete#force_omni_input_patterns.c      = '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+    let g:neocomplete#force_omni_input_patterns.cpp    = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+    let g:neocomplete#force_omni_input_patterns.objc   = '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+    let g:neocomplete#force_omni_input_patterns.objcpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+    let g:neocomplete#force_omni_input_patterns.cs     = '[^.[:digit:] *\t]\%(\.\)\w*\|\h\w*::\w*'
 
-    let g:neocomplete#force_omni_input_patterns.cs = '[^.]\.\%(\u\{2,}\)\?'
+    if !exists('g:neocomplete#delimiter_patterns')
+        let g:neocomplete#delimiter_patterns = {}
+    endif
+    let g:neocomplete#delimiter_patterns.c   = ['.', '->']
+    let g:neocomplete#delimiter_patterns.cpp = [' ::', '.']
+    let g:neocomplete#delimiter_patterns.cs  = ['.']
+    let g:neocomplete#delimiter_patterns.vim = ['#', '.']
+
+    if !exists('g:neocomplete#sources#file_include#exts')
+        let g:neocomplete#sources#file_include#exts = {}
+    endif
+    let g:neocomplete#sources#file_include#exts.c   = ['', 'h']
+    let g:neocomplete#sources#file_include#exts.cpp = ['', 'h', 'hpp', 'hxx']
+    let g:neocomplete#sources#file_include#exts.cs  = ['', 'Designer.cs']
+
 endfunction
 unlet s:bundle
 
@@ -444,10 +531,14 @@ unlet s:bundle
 " }}}
 " Omnisharp {{{
 
-let g:Omnisharp_stop_server = 0
+let s:bundle = neobundle#get('Omnisharp')
+function! s:bundle.hooks.on_source(bundle)
 
-nnoremap <F12>      :OmniSharpGotoDefinition<CR>zz
-nnoremap <S-F12>    :OmniSharpFindUsages<CR>
+    let g:Omnisharp_stop_server         = 0
+    let g:OmniSharp_typeLookupInPreview = 1
+
+endfunction
+unlet s:bundle
 
 " }}}
 " clang_complete {{{
@@ -465,16 +556,6 @@ function! s:bundle.hooks.on_source(bundle)
     elseif s:isMac
         let g:clang_user_options = '-std=c++11'
     endif
-
-    if !exists('g:neocomplete#force_omni_input_patterns')
-        let g:neocomplete#force_omni_input_patterns = {}
-    endif
-
-    let g:neocomplete#force_overwrite_completefunc     = 1
-    let g:neocomplete#force_omni_input_patterns.c      = '[^.[:digit:] *\t]\%(\.\|->\)\w*'
-    let g:neocomplete#force_omni_input_patterns.cpp    = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
-    let g:neocomplete#force_omni_input_patterns.objc   = '[^.[:digit:] *\t]\%(\.\|->\)\w*'
-    let g:neocomplete#force_omni_input_patterns.objcpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
 endfunction
 unlet s:bundle
 
@@ -502,6 +583,7 @@ NeoBundleLazy 'thinca/vim-visualstar', {
             \   }
             \ }
 NeoBundleLazy 'osyo-manga/vim-over', {'autoload': {'commands': ['OverCommandLineNoremap', 'OverCommandLine']}}
+NeoBundleLazy 'deris/parajump', {'autoload': {'mappings': [['sxno', '<Plug>(parajump-']]}}
 " }}}
 " clever-f.vim {{{
 
@@ -546,12 +628,6 @@ let g:EasyMotion_startofline         = 1
 nmap r    <Plug>(easymotion-s)
 vmap r    <Plug>(easymotion-s)
 omap r    <Plug>(easymotion-s)
-nmap J    <Plug>(easymotion-j)
-vmap J    <Plug>(easymotion-j)
-omap J    <Plug>(easymotion-j)
-nmap K    <Plug>(easymotion-k)
-vmap K    <Plug>(easymotion-k)
-omap K    <Plug>(easymotion-k)
 
 " }}}
 " vim-anzu {{{
@@ -575,6 +651,10 @@ function! s:bundle.hooks.on_source(bundle)
 endfunction
 unlet s:bundle
 
+" }}}
+" parajump {{{
+map { <Plug>(parajump-backward)
+map } <Plug>(parajump-forward)
 " }}}
 " }}}
 " テキストオブジェクト {{{
@@ -649,6 +729,13 @@ NeoBundleLazy 'anyakichi/vim-textobj-ifdef', {
             \   }
             \ }
 
+NeoBundleLazy 'thinca/vim-textobj-between', {
+            \ 'depends': 'kana/vim-textobj-user',
+            \ 'autoload': {
+            \       'mappings': [['xo', 'af'], ['xo', 'if']]
+            \   }
+            \ }
+
 NeoBundleLazy 'h1mesuke/textobj-wiw', {
             \ 'depends': 'kana/vim-textobj-user',
             \ 'autoload': {
@@ -668,6 +755,7 @@ NeoBundleLazy 'kana/vim-operator-user'
 NeoBundleLazy 'kana/vim-operator-replace',  {'depends': 'kana/vim-operator-user', 'autoload': {'mappings': [['nx', '<Plug>(operator-replace)']]}}
 NeoBundleLazy 'tyru/operator-camelize.vim', {'depends': 'kana/vim-operator-user', 'autoload': {'mappings': [['nx', '<Plug>(operator-camelize-toggle)']]}}
 NeoBundleLazy 'emonkak/vim-operator-sort',  {'depends': 'kana/vim-operator-user', 'autoload': {'mappings': [['nx', '<Plug>(operator-sort']]}}
+NeoBundleLazy 'deris/vim-rengbang',         {'depends': 'kana/vim-operator-user', 'autoload': {'mappings': [['nx', '<Plug>(operator-rengbang']], 'commands': ['RengBang']}}
 " }}}
 " vim-operator-replace {{{
 nmap R         <Plug>(operator-replace)
@@ -680,6 +768,10 @@ xmap <Leader>c <Plug>(operator-camelize-toggle)iw
 " vim-operator-sort {{{
 nmap <Leader>o <Plug>(operator-sort)
 xmap <Leader>o <Plug>(operator-sort)
+" }}}
+" vim-rengbang {{{
+nmap <Leader>r <Plug>(operator-rengbang)
+xmap <Leader>r <Plug>(operator-rengbang)
 " }}}
 " }}}
 " アプリ {{{
@@ -733,8 +825,6 @@ NeoBundleLazy 'mattn/gist-vim', {
             \       'commands': [ 'Gist' ]
             \   }
             \ }
-NeoBundleLazy 'koron/codic-vim', {'autoload': {'commands': [{'complete': 'customlist,codic#complete', 'name': 'Codic'}]}}
-
 if s:isMac
     NeoBundleLazy 'itchyny/dictionary.vim', {
                 \   'autoload': {
@@ -751,7 +841,7 @@ noremap <silent>[App]s :<C-u>VimShellPop<CR>
 " }}}
 " VimFiler {{{
 
-noremap  <silent>[App]o :VimFilerBufferDir<CR>
+noremap  <silent>[App]f :VimFilerBufferDir<CR>
 
 let s:bundle = neobundle#get('vimfiler')
 function! s:bundle.hooks.on_source(bundle)
@@ -884,12 +974,12 @@ NeoBundleLazy 'osyo-manga/unite-fold', {
 "             \ }
 NeoBundle 'Shougo/neomru.vim'
 
-NeoBundleLazy 'rhysd/unite-codic.vim', {
-            \   'depends':  ['koron/codic-vim'],
+NeoBundleLazy 'tsukkee/unite-tag', {
             \   'autoload': {
-            \       'unite_sources': [ 'codic' ],
+            \       'unite_sources': [ 'tag' ],
             \   }
             \ }
+
 " }}}
 
 nnoremap [Unite] <nop>
@@ -897,7 +987,7 @@ xnoremap [Unite] <nop>
 nmap     <Space> [Unite]
 xmap     <Space> [Unite]
 
-nnoremap <silent> [Unite]g   :<C-u>Unite grep -auto-preview -no-split -buffer-name=search-buffer<CR>
+nnoremap <silent> [Unite]g   :<C-u>Unite               grep -auto-preview -no-split -buffer-name=search-buffer<CR>
 nnoremap <silent> [Unite]cg  :<C-u>UniteWithCursorWord grep -auto-preview -no-split -buffer-name=search-buffer<CR>
 
 nnoremap <silent> [Unite]pg  :<C-u>call <SID>unite_grep_project('-auto-preview -no-split -buffer-name=search-buffer')<CR>
@@ -905,12 +995,12 @@ nnoremap <silent> [Unite]cpg :<C-u>call <SID>unite_grep_project('-auto-preview -
 nnoremap <silent> [Unite]r   :<C-u>UniteResume -no-split search-buffer<CR>
 
 nnoremap <silent> [Unite]m   :<C-u>Unite -no-split neomru/file<CR>
+nnoremap <silent> [Unite]f   :<C-u>Unite -no-split file<CR>
 nnoremap <silent> [Unite]b   :<C-u>Unite -no-split buffer<CR>
 nnoremap <silent> [Unite]t   :<C-u>Unite -no-split tab<CR>
 nnoremap <silent> [Unite]l   :<C-u>Unite -no-split line<CR>
 nnoremap <silent> [Unite]o   :<C-u>Unite -no-split outline<CR>
-nnoremap <silent> [Unite]f   :<C-u>Unite -no-split fold<CR>
-nnoremap <silent> [Unite]co  :<C-u>Unite -horizontal codic<CR>
+nnoremap <silent> [Unite]z   :<C-u>Unite -no-split fold<CR>
 
 nnoremap          [Unite]uu  :<C-u>NeoBundleUpdate<CR>:NeoBundleUpdatesLog<CR>
 nnoremap          [Unite]ui  :<C-u>NeoBundleInstall<CR>:NeoBundleUpdatesLog<CR>
@@ -934,7 +1024,9 @@ function! s:bundle.hooks.on_source(bundle)
     let g:unite_enable_start_insert             = 1
 
     let g:neomru#update_interval                = 60
+    let g:neomru#file_mru_limit                 = 500
 
+    " call unite#custom#source('fold,neomru/file', 'matchers', 'matcher_migemo')
     call unite#custom#source('fold', 'matchers', 'matcher_migemo')
 
     " http://blog.monochromegane.com/blog/2014/01/16/the-platinum-searcher/
@@ -1080,17 +1172,28 @@ augroup file-setting
     autocmd BufNewFile,BufRead  *.{fx,fxc,fxh,hlsl} setf hlsl
     autocmd BufNewFile,BufRead  *.{fsh,vsh}         setf glsl
 
-    autocmd FileType            *                   setlocal formatoptions-=ro      " コメント補完しない
-    autocmd FileType            ruby                setlocal foldmethod=syntax tabstop=2 shiftwidth=2 softtabstop=2
-    autocmd FileType            c,cpp,cs            setlocal foldmethod=syntax
-    autocmd FileType            vim                 setlocal foldmethod=marker foldlevel=0 foldcolumn=4
-    autocmd FileType            qf                  call s:SetQuickFix()
-    autocmd FileType            help                call s:SetHelp()
-    autocmd FileType            unite               call s:SetUnite()
+    autocmd FileType *     setlocal formatoptions-=ro " コメント補完しない
+    autocmd FileType ruby  setlocal foldmethod=syntax tabstop=2 shiftwidth=2 softtabstop=2
+    autocmd FileType c,cpp setlocal foldmethod=syntax
+    autocmd FileType vim   setlocal foldmethod=marker foldlevel=0 foldcolumn=4
+    autocmd FileType qf    call     s:SetQuickFix()
+    autocmd FileType help  call     s:SetHelp()
+    autocmd FileType unite call     s:SetUnite()
+    autocmd FileType cs    call     s:SetCs()
 
     " Hack #22: XMLの閉じタグを補完する
     " http://vim-users.jp/2009/06/hack22/
     autocmd FileType            xml,html            inoremap <buffer> </ </<C-x><C-o>
+
+    function! s:SetCs()
+
+        setlocal omnifunc=OmniSharp#Complete
+        setlocal foldmethod=syntax
+
+        nnoremap <buffer><F12>      :OmniSharpGotoDefinition<CR>zz
+        nnoremap <buffer><S-F12>    :OmniSharpFindUsages<CR>
+
+    endfunction
 
     function! s:SetUnite()
         let unite = unite#get_current_unite()
@@ -1101,7 +1204,6 @@ augroup file-setting
 
         nmap <buffer> <C-v>     <Plug>(unite_toggle_auto_preview)
         imap <buffer> <C-v>     <Plug>(unite_toggle_auto_preview)
-
         nmap <buffer> <C-j>     <Plug>(unite_exit)
     endfunction
 
@@ -1163,6 +1265,8 @@ set imsearch=0                    " 検索モードでのデフォルトのIME�
 set formatexpr=autofmt#japanese#formatexpr()
 set nrformats-=octal
 set nrformats+=alpha
+" set completeopt=longest,menuone,preview
+set completeopt=longest,menuone
 
 inoremap    ¥   \
 inoremap    \   ¥
@@ -1430,9 +1534,7 @@ set wildoptions=tagfile
 set fillchars=vert:\              " 縦分割の境界線
 set synmaxcol=500                 " ハイライトする文字数を制限する
 set updatetime=1000
-
-noremap <C-i>   <C-i>zz
-noremap <C-o>   <C-o>zz
+set previewheight=24
 
 " 全角スペースをハイライト {{{
 
@@ -1455,7 +1557,7 @@ endif
 " }}}
 " Vim でカーソル下の単語を移動するたびにハイライトする{{{
 " http://d.hatena.ne.jp/osyo-manga/20140121/1390309901
-let g:enable_highlight_cursor_word = 1
+let g:enable_highlight_cursor_word = -1
 
 augroup highlight-cursor-word
     autocmd!
@@ -1561,6 +1663,15 @@ vnoremap <silent> <C-y> <C-y>k
 nmap     <silent> gg    ggzOzz
 nmap     <silent> G     GzOzz
 
+noremap <C-i> <C-i>zz
+noremap <C-o> <C-o>zz
+map     [[    [[zz
+map     ]]    ]]zz
+map     H     ^
+map     L     $
+map     J     }zz
+map     K     {zz
+
 " }}}
 " ウィンドウ操作 {{{
 
@@ -1631,8 +1742,8 @@ nmap        <silent>   <Leader>m  `
 
 set helplang=ja,en
 
-nnoremap <C-k>      :<C-u>help 
-nnoremap <C-k><C-k> :<C-u>help <C-r><C-w><CR>
+nnoremap <Leader><C-k>      :<C-u>help<Space>
+nnoremap <Leader><C-k><C-k> :<C-u>help <C-r><C-w><CR>
 
 " }}}
 " 汎用関数 {{{
@@ -1746,7 +1857,7 @@ endf
 "                                                           表示されていない :bdelete
 function! s:SmartClose()
 
-    if exists('b:disableSmartClose')
+    if exists('b:isableSmartClose')
         return
     end
 

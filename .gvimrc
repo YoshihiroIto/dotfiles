@@ -68,7 +68,8 @@ if s:isGuiRunning
         set linespace=0
     elseif s:isMac
         " set guifont=Ricty:h13
-        set guifont=Ricty\ Regular\ for\ Powerline:h13
+        " set guifont=Ricty\ Regular\ for\ Powerline:h13
+        set guifont=Ricty\ Regular\ for\ Powerline:h12
         " set guifont=MeiryoKe_Gothic_SZ\ for\ Powerline:h13:cSHIFTJIS
 
         set antialias
