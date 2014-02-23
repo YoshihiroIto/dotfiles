@@ -59,26 +59,6 @@ NeoBundleLazy 'LeafCage/foldCC', {
             \       'filetypes': [ 'vim' ]
             \   }
             \ }
-NeoBundleLazy 'vim-jp/cpp-vim', {
-            \   'autoload': {
-            \       'filetypes': [ 'cpp' ]
-            \   }
-            \ }
-NeoBundleLazy 'Mizuchi/STL-Syntax', {
-            \   'autoload': {
-            \       'filetypes': [ 'cpp' ]
-            \   }
-            \ }
-NeoBundleLazy 'beyondmarc/hlsl.vim', {
-            \   'autoload': {
-            \       'filetypes': [ 'hlsl' ]
-            \   }
-            \ }
-NeoBundleLazy 'tikhomirov/vim-glsl', {
-            \   'autoload': {
-            \       'filetypes': [ 'glsl' ]
-            \   }
-            \ }
 " }}}
 " TagBar {{{
 
@@ -264,12 +244,6 @@ NeoBundleLazy 'cohama/vim-smartinput-endwise', {
             \       'insert': 1,
             \   }
             \ }
-NeoBundleLazy 'rhysd/vim-clang-format', {
-            \   'depends' : 'kana/vim-operator-user',
-            \   'autoload': {
-            \       'filetypes': [ 'c', 'cpp', 'objc' ]
-            \   }
-            \ }
 NeoBundleLazy 'nishigori/increment-activator', {
             \   'autoload': {
             \       'mappings': [
@@ -285,7 +259,7 @@ NeoBundleLazy 'thinca/vim-qfreplace', {
             \   }
             \ }
 NeoBundleLazy 'junegunn/vim-easy-align', {'autoload': {'mappings': ['<Plug>(EasyAlignOperator)', ['sxn', '<Plug>(EasyAlign)'], ['sxn', '<Plug>(LiveEasyAlign)'], ['sxn', '<Plug>(EasyAlignRepeat)']], 'commands': ['EasyAlign', 'LiveEasyAlign']}}
-
+NeoBundle 'thinca/vim-prettyprint'
 
 " }}}
 " vim-easy-align {{{
@@ -319,36 +293,6 @@ function! s:bundle.hooks.on_source(bundle)
 
     call smartinput_endwise#define_default_rules()
 
-endfunction
-unlet s:bundle
-
-" }}}
-" vim-clang-format {{{
-
-let s:bundle = neobundle#get('vim-clang-format')
-function! s:bundle.hooks.on_source(bundle)
-
-    if s:isWindows
-        let g:clang_format#command = 'C:/Development/llvm/build/bin/Release/clang-format'
-    else
-        let g:clang_format#command = 'clang-format-3.4'
-    endif
-
-    let g:clang_format#style_options = {
-                \ 'AccessModifierOffset':                -4,
-                \ 'ColumnLimit':                         120,
-                \ 'AllowShortIfStatementsOnASingleLine': 'true',
-                \ 'AlwaysBreakTemplateDeclarations':     'true',
-                \ 'Standard':                            'C++11',
-                \ 'BreakBeforeBraces':                   'Stroustrup',
-                \ }
-
-    let g:clang_format#code_style = 'Chromium'
-
-    augroup clang-format-setting
-        autocmd!
-        autocmd FileType c,cpp map <buffer><Leader>x <Plug>(operator-clang-format)
-    augroup END
 endfunction
 unlet s:bundle
 
@@ -407,11 +351,6 @@ NeoBundleLazy "Shougo/neosnippet-snippets", {
             \   'depends': [ 'honza/vim-snippets' ],
             \   'autoload': {
             \       'insert': 1,
-            \   }
-            \ }
-NeoBundleLazy 'Rip-Rip/clang_complete', {
-            \   'autoload': {
-            \       'filetypes': [ 'c', 'cpp', 'objc' ]
             \   }
             \ }
 NeoBundleLazy 'nosami/Omnisharp', {
@@ -541,25 +480,6 @@ endfunction
 unlet s:bundle
 
 " }}}
-" clang_complete {{{
-
-let s:bundle = neobundle#get('clang_complete')
-function! s:bundle.hooks.on_source(bundle)
-
-    let g:clang_use_library   = 1
-    let g:clang_complete_auto = 0
-    let g:clang_auto_select   = 0
-
-    if s:isWindows
-        let g:clang_user_options = '-I c:/Development/boost/boost_1_47 -I "C:/Program Files (x86)/Microsoft Visual Studio 11.0/VC/include" -std=c++11 -fms-extensions -fmsc-version=1300 -fgnu-runtime -D__MSVCRT_VERSION__=0x700 -D_WIN32_WINNT=0x0500 2> NUL || exit 0"'
-        let g:clang_library_path = 'C:/Development/llvm/build/bin/Release/'
-    elseif s:isMac
-        let g:clang_user_options = '-std=c++11'
-    endif
-endfunction
-unlet s:bundle
-
-" }}}
 " }}}
 " 検索 {{{
 " インストール {{{
@@ -655,6 +575,138 @@ unlet s:bundle
 " parajump {{{
 map { <Plug>(parajump-backward)
 map } <Plug>(parajump-forward)
+" }}}
+" }}}
+" 言語 {{{
+" インストール {{{
+NeoBundleLazy 'vim-jp/cpp-vim', {
+        \   'autoload': {
+        \       'filetypes': [ 'cpp' ]
+        \   }
+        \ }
+NeoBundleLazy 'Mizuchi/STL-Syntax', {
+        \   'autoload': {
+        \       'filetypes': [ 'cpp' ]
+        \   }
+        \ }
+NeoBundleLazy 'beyondmarc/hlsl.vim', {
+        \   'autoload': {
+        \       'filetypes': [ 'hlsl' ]
+        \   }
+        \ }
+NeoBundleLazy 'tikhomirov/vim-glsl', {
+        \   'autoload': {
+        \       'filetypes': [ 'glsl' ]
+        \   }
+        \ }
+NeoBundleLazy 'Rip-Rip/clang_complete', {
+        \   'autoload': {
+        \       'filetypes': [ 'c', 'cpp', 'objc' ]
+        \   }
+        \ }
+NeoBundleLazy 'rhysd/vim-clang-format', {
+        \   'depends' : 'kana/vim-operator-user',
+        \   'autoload': {
+        \       'filetypes': [ 'c', 'cpp', 'objc' ]
+        \   }
+        \ }
+NeoBundleLazy 'rhysd/wandbox-vim', {'autoload': {'commands': [{'complete': 'customlist,wandbox#complete_command', 'name': 'WandboxAsync'}, {'complete': 'customlist,wandbox#complete_command', 'name': 'WandboxSync'}, {'complete': 'customlist,wandbox#complete_command', 'name': 'Wandbox'}, 'WandboxOptionList', 'WandboxOpenBrowser', 'WandboxOptionListAsync', 'WandboxAbortAsyncWorks']}}
+NeoBundleLazy 'thinca/vim-quickrun', {
+        \   'depends' : [
+        \       'osyo-manga/shabadou.vim',
+        \       'rhysd/wandbox-vim'
+        \    ],
+        \    'autoload': {
+        \        'mappings': [['sxn', '<Plug>(quickrun']],
+            \        'commands': [{'complete': 'customlist,quickrun#complete', 'name': 'QuickRun'}]
+            \    }
+            \ }
+NeoBundleLazy 'osyo-manga/shabadou.vim', {}
+
+" }}}
+" clang_complete {{{
+
+let s:bundle = neobundle#get('clang_complete')
+function! s:bundle.hooks.on_source(bundle)
+
+    let g:clang_use_library   = 1
+    let g:clang_complete_auto = 0
+    let g:clang_auto_select   = 0
+
+    if s:isWindows
+        let g:clang_user_options = '-I c:/Development/boost/boost_1_47 -I "C:/Program Files (x86)/Microsoft Visual Studio 11.0/VC/include" -std=c++11 -fms-extensions -fmsc-version=1300 -fgnu-runtime -D__MSVCRT_VERSION__=0x700 -D_WIN32_WINNT=0x0500 2> NUL || exit 0"'
+        let g:clang_library_path = 'C:/Development/llvm/build/bin/Release/'
+    elseif s:isMac
+        let g:clang_user_options = '-std=c++11'
+    endif
+endfunction
+unlet s:bundle
+" }}}
+" vim-clang-format {{{
+let s:bundle = neobundle#get('vim-clang-format')
+function! s:bundle.hooks.on_source(bundle)
+
+    if s:isWindows
+        let g:clang_format#command = 'C:/Development/llvm/build/bin/Release/clang-format'
+    else
+        let g:clang_format#command = 'clang-format-3.4'
+    endif
+
+    let g:clang_format#style_options = {
+                \ 'AccessModifierOffset':                -4,
+                \ 'ColumnLimit':                         120,
+                \ 'AllowShortIfStatementsOnASingleLine': 'true',
+                \ 'AlwaysBreakTemplateDeclarations':     'true',
+                \ 'Standard':                            'C++11',
+                \ 'BreakBeforeBraces':                   'Stroustrup',
+                \ }
+
+    let g:clang_format#code_style = 'Chromium'
+endfunction
+unlet s:bundle
+" }}}
+" wandbox-vim {{{
+
+let s:bundle = neobundle#get('wandbox-vim')
+function! s:bundle.hooks.on_source(bundle)
+
+    " wandbox.vim で quickfix を開かないようにする
+    let g:wandbox#open_quickfix_window = 0
+
+    let g:wandbox#default_compiler = {
+                \   'cpp' : 'clang-head',
+                \ }
+endfunction
+unlet s:bundle
+
+" }}}
+" vim-quickrun {{{
+
+map <silent>[App]r :<C-u>QuickRun<CR>
+
+let s:bundle = neobundle#get('vim-quickrun')
+function! s:bundle.hooks.on_source(bundle)
+
+    " http://d.hatena.ne.jp/osyo-manga/20120919/1348054752
+    let g:quickrun_config = {
+                \   "_" : {
+                \       "hook/close_unite_quickfix/enable_hook_loaded": 1,
+                \       "hook/unite_quickfix/enable_failure":           1,
+                \       "hook/close_quickfix/enable_exit":              1,
+                \       "hook/close_buffer/enable_failure":             1,
+                \       "hook/close_buffer/enable_empty_data":          1,
+                \       "outputter":                                    "multi:buffer:quickfix",
+                \       "outputter/buffer/split":                       ":botright 16sp",
+                \       "runner":                                       "vimproc",
+                \       "runner/vimproc/updatetime":                    40,
+                \   },
+                \   "cpp" : {
+                \       "runner":                                       "wandbox",
+                \    }
+                \ }
+endfunction
+unlet s:bundle
+
 " }}}
 " }}}
 " テキストオブジェクト {{{
@@ -941,15 +993,6 @@ unlet s:bundle
 
 " }}}
 " }}}
-" ヘルプ {{{
-" インストール {{{
-NeoBundleLazy 'vim-jp/vimdoc-ja', {
-            \   'autoload': {
-            \       'commands': [ 'Help' ]
-            \   }
-            \ }
-" }}}
-" }}}
 " Unite {{{
 " インストール {{{
 NeoBundleLazy 'Shougo/unite.vim', {
@@ -967,19 +1010,17 @@ NeoBundleLazy 'osyo-manga/unite-fold', {
             \       'unite_sources': [ 'fold' ],
             \   }
             \ }
-" NeoBundleLazy 'Shougo/neomru.vim', {
-"             \   'autoload': {
-"             \       'unite_sources': [ 'neomru/file' ],
-"             \   }
-"             \ }
-NeoBundle 'Shougo/neomru.vim'
-
 NeoBundleLazy 'tsukkee/unite-tag', {
             \   'autoload': {
             \       'unite_sources': [ 'tag' ],
             \   }
             \ }
-
+NeoBundleLazy 'osyo-manga/unite-quickfix', {
+            \   'autoload': {
+            \       'unite_sources': [ 'quickfix' ],
+            \   }
+            \ }
+NeoBundle 'Shougo/neomru.vim'
 " }}}
 
 nnoremap [Unite] <nop>
@@ -1001,6 +1042,7 @@ nnoremap <silent> [Unite]t   :<C-u>Unite -no-split tab<CR>
 nnoremap <silent> [Unite]l   :<C-u>Unite -no-split line<CR>
 nnoremap <silent> [Unite]o   :<C-u>Unite -no-split outline<CR>
 nnoremap <silent> [Unite]z   :<C-u>Unite -no-split fold<CR>
+nnoremap <silent> [Unite]q   :<C-u>Unite -no-quit -horizontal quickfix<CR>
 
 nnoremap          [Unite]uu  :<C-u>NeoBundleUpdate<CR>:NeoBundleUpdatesLog<CR>
 nnoremap          [Unite]ui  :<C-u>NeoBundleInstall<CR>:NeoBundleUpdatesLog<CR>
@@ -1174,25 +1216,29 @@ augroup file-setting
 
     autocmd FileType *     setlocal formatoptions-=ro " コメント補完しない
     autocmd FileType ruby  setlocal foldmethod=syntax tabstop=2 shiftwidth=2 softtabstop=2
-    autocmd FileType c,cpp setlocal foldmethod=syntax
     autocmd FileType vim   setlocal foldmethod=marker foldlevel=0 foldcolumn=4
     autocmd FileType qf    call     s:SetQuickFix()
     autocmd FileType help  call     s:SetHelp()
     autocmd FileType unite call     s:SetUnite()
     autocmd FileType cs    call     s:SetCs()
+    autocmd FileType c,cpp call     s:SetCpp()
 
     " Hack #22: XMLの閉じタグを補完する
     " http://vim-users.jp/2009/06/hack22/
-    autocmd FileType            xml,html            inoremap <buffer> </ </<C-x><C-o>
+    autocmd FileType xml,html  inoremap <buffer> </ </<C-x><C-o>
+
+    function! s:SetCpp()
+        setlocal foldmethod=syntax
+
+        map <buffer><Leader>x <Plug>(operator-clang-format)
+    endfunction
 
     function! s:SetCs()
-
         setlocal omnifunc=OmniSharp#Complete
         setlocal foldmethod=syntax
 
         nnoremap <buffer><F12>      :OmniSharpGotoDefinition<CR>zz
         nnoremap <buffer><S-F12>    :OmniSharpFindUsages<CR>
-
     endfunction
 
     function! s:SetUnite()
@@ -1574,7 +1620,6 @@ augroup highlight-cursor-word
     autocmd WinLeave * call s:hl_clear()
     autocmd InsertEnter * call s:hl_clear()
 augroup END
-
 
 function! s:hl_clear()
     if exists("b:highlight_cursor_word_id") && exists("b:highlight_cursor_word")
