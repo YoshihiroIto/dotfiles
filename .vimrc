@@ -7,7 +7,7 @@ scriptencoding utf-8            " スクリプト内でutf-8を使用する
 let s:isWindows    = has('win32') || has('win64')
 let s:isMac        = has('mac')
 let s:isGuiRunning = has('gui_running')
-let s:baseColumns  = s:isWindows ? 140 : 100
+let s:baseColumns  = s:isWindows ? 140 : 120
 let $DOTVIM        = s:isWindows ? expand('~/vimfiles') : expand('~/.vim')
 let s:vimrc_local  = expand('~/.vimrc_local')
 let mapleader      = ','
@@ -378,7 +378,7 @@ function! s:bundle.hooks.on_source(bundle)
     let g:neocomplete#enable_refresh_always   = 1
     let g:neocomplete#enable_prefetch         = 1
 
-    let g:neocomplete#auto_completion_start_length      = 2
+    let g:neocomplete#auto_completion_start_length      = 3
     let g:neocomplete#manual_completion_start_length    = 0
     let g:neocomplete#sources#syntax#min_keyword_length = 3
     let g:neocomplete#min_keyword_length                = 3
@@ -580,49 +580,53 @@ map } <Plug>(parajump-forward)
 " 言語 {{{
 " インストール {{{
 NeoBundleLazy 'vim-jp/cpp-vim', {
-        \   'autoload': {
-        \       'filetypes': [ 'cpp' ]
-        \   }
-        \ }
+            \   'autoload': {
+            \       'filetypes': [ 'cpp' ]
+            \   }
+            \ }
 NeoBundleLazy 'Mizuchi/STL-Syntax', {
-        \   'autoload': {
-        \       'filetypes': [ 'cpp' ]
-        \   }
-        \ }
+            \   'autoload': {
+            \       'filetypes': [ 'cpp' ]
+            \   }
+            \ }
 NeoBundleLazy 'beyondmarc/hlsl.vim', {
-        \   'autoload': {
-        \       'filetypes': [ 'hlsl' ]
-        \   }
-        \ }
+            \   'autoload': {
+            \       'filetypes': [ 'hlsl' ]
+            \   }
+            \ }
 NeoBundleLazy 'tikhomirov/vim-glsl', {
-        \   'autoload': {
-        \       'filetypes': [ 'glsl' ]
-        \   }
-        \ }
+            \   'autoload': {
+            \       'filetypes': [ 'glsl' ]
+            \   }
+            \ }
 NeoBundleLazy 'Rip-Rip/clang_complete', {
-        \   'autoload': {
-        \       'filetypes': [ 'c', 'cpp', 'objc' ]
-        \   }
-        \ }
+            \   'autoload': {
+            \       'filetypes': [ 'c', 'cpp', 'objc' ]
+            \   }
+            \ }
 NeoBundleLazy 'rhysd/vim-clang-format', {
-        \   'depends' : 'kana/vim-operator-user',
-        \   'autoload': {
-        \       'filetypes': [ 'c', 'cpp', 'objc' ]
-        \   }
-        \ }
+            \   'depends' : 'kana/vim-operator-user',
+            \   'autoload': {
+            \       'filetypes': [ 'c', 'cpp', 'objc' ]
+            \   }
+            \ }
+NeoBundleLazy 'vim-ruby/vim-ruby', {
+            \   'autoload': {
+            \       'filetypes': [ 'rb' ]
+            \   }
+            \ }
 NeoBundleLazy 'rhysd/wandbox-vim', {'autoload': {'commands': [{'complete': 'customlist,wandbox#complete_command', 'name': 'WandboxAsync'}, {'complete': 'customlist,wandbox#complete_command', 'name': 'WandboxSync'}, {'complete': 'customlist,wandbox#complete_command', 'name': 'Wandbox'}, 'WandboxOptionList', 'WandboxOpenBrowser', 'WandboxOptionListAsync', 'WandboxAbortAsyncWorks']}}
 NeoBundleLazy 'thinca/vim-quickrun', {
-        \   'depends' : [
-        \       'osyo-manga/shabadou.vim',
-        \       'rhysd/wandbox-vim'
-        \    ],
-        \    'autoload': {
-        \        'mappings': [['sxn', '<Plug>(quickrun']],
+            \   'depends' : [
+            \       'osyo-manga/shabadou.vim',
+            \       'rhysd/wandbox-vim'
+            \    ],
+            \    'autoload': {
+            \        'mappings': [['sxn', '<Plug>(quickrun']],
             \        'commands': [{'complete': 'customlist,quickrun#complete', 'name': 'QuickRun'}]
             \    }
             \ }
 NeoBundleLazy 'osyo-manga/shabadou.vim', {}
-
 " }}}
 " clang_complete {{{
 
