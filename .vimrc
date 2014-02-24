@@ -266,14 +266,6 @@ NeoBundleLazy 'junegunn/vim-easy-align', {'autoload': {'mappings': ['<Plug>(Easy
 nmap <Leader>m <Plug>(EasyAlign)
 vmap <Leader>m <Plug>(EasyAlign)
 
-" nmap <silent><Leader>a=       vii<Plug>(EasyAlign)=
-" nmap <silent><Leader>a:       vii<Plug>(EasyAlign):
-" nmap <silent><Leader>a,       vii<Plug>(EasyAlign)*,
-" nmap <silent><Leader>a<Space> vii<Plug>(EasyAlign)*<Space>
-" xmap <silent><Leader>a=       <Plug>(EasyAlign)=
-" xmap <silent><Leader>a:       <Plug>(EasyAlign):
-" xmap <silent><Leader>a,       <Plug>(EasyAlign)*,
-" xmap <silent><Leader>a<Space> <Plug>(EasyAlign)*<Space>
 nmap <silent><Leader>a=       vii<Leader>m=
 nmap <silent><Leader>a:       vii<Leader>m:
 nmap <silent><Leader>a,       vii<Leader>m*,
@@ -374,7 +366,7 @@ function! s:bundle.hooks.on_source(bundle)
     let g:neocomplete#enable_smart_case       = 1
     let g:neocomplete#enable_auto_delimiter   = 1
     let g:neocomplete#enable_fuzzy_completion = 1
-    let g:neocomplete#enable_refresh_always   = 1
+    " let g:neocomplete#enable_refresh_always   = 1
     let g:neocomplete#enable_prefetch         = 1
 
     let g:neocomplete#auto_completion_start_length      = 3
