@@ -259,7 +259,6 @@ NeoBundleLazy 'thinca/vim-qfreplace', {
             \   }
             \ }
 NeoBundleLazy 'junegunn/vim-easy-align', {'autoload': {'mappings': ['<Plug>(EasyAlignOperator)', ['sxn', '<Plug>(EasyAlign)'], ['sxn', '<Plug>(LiveEasyAlign)'], ['sxn', '<Plug>(EasyAlignRepeat)']], 'commands': ['EasyAlign', 'LiveEasyAlign']}}
-NeoBundle 'thinca/vim-prettyprint'
 
 " }}}
 " vim-easy-align {{{
@@ -627,6 +626,11 @@ NeoBundleLazy 'thinca/vim-quickrun', {
             \    }
             \ }
 NeoBundleLazy 'osyo-manga/shabadou.vim', {}
+NeoBundleLazy 'Blackrush/vim-gocode', {
+            \   'autoload': {
+            \       'filetypes': [ 'go' ]
+            \   }
+            \ }
 " }}}
 " clang_complete {{{
 
@@ -1607,7 +1611,7 @@ endif
 " }}}
 " Vim でカーソル下の単語を移動するたびにハイライトする{{{
 " http://d.hatena.ne.jp/osyo-manga/20140121/1390309901
-let g:enable_highlight_cursor_word = -1
+let g:enable_highlight_cursor_word = 1
 
 augroup highlight-cursor-word
     autocmd!
