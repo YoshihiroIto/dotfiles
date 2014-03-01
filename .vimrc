@@ -26,6 +26,11 @@ if filereadable(s:vimrc_local)
     exe 'source' s:vimrc_local
 endif
 
+" golang {{{
+set rtp+=/usr/local/Cellar/go/1.2/libexec/misc/vim
+exe "set rtp+=" . globpath($GOPATH, "src/github.com/nsf/gocode/vim")
+exe "set rtp+=" . globpath($GOPATH, "src/github.com/golang/lint/misc/vim")
+" }}}
 " NeoBundle {{{
 if has('vim_starting')
     if !isdirectory(expand("$DOTVIM/bundle/neobundle.vim/"))
@@ -33,12 +38,11 @@ if has('vim_starting')
         call system("git clone git://github.com/Shougo/neobundle.vim $DOTVIM/bundle/neobundle.vim")
     endif
 
-    set runtimepath+=$DOTVIM/bundle/neobundle.vim/
+    set rtp+=$DOTVIM/bundle/neobundle.vim/
 endif
 
 call neobundle#rc(expand('$DOTVIM/bundle/'))
 NeoBundleFetch 'Shougo/neobundle.vim'
-
 " }}}
 " }}}
 " プラグイン {{{
@@ -366,7 +370,7 @@ function! s:bundle.hooks.on_source(bundle)
     let g:neocomplete#enable_smart_case       = 1
     let g:neocomplete#enable_auto_delimiter   = 1
     let g:neocomplete#enable_fuzzy_completion = 1
-    " let g:neocomplete#enable_refresh_always   = 1
+    let g:neocomplete#enable_refresh_always   = 1
     let g:neocomplete#enable_prefetch         = 1
 
     let g:neocomplete#auto_completion_start_length      = 3
@@ -618,11 +622,6 @@ NeoBundleLazy 'thinca/vim-quickrun', {
             \    }
             \ }
 NeoBundleLazy 'osyo-manga/shabadou.vim', {}
-NeoBundleLazy 'Blackrush/vim-gocode', {
-            \   'autoload': {
-            \       'filetypes': [ 'go' ]
-            \   }
-            \ }
 " }}}
 " clang_complete {{{
 
@@ -682,27 +681,29 @@ unlet s:bundle
 " }}}
 " vim-quickrun {{{
 
-map <silent>[App]r :<C-u>QuickRun<CR>
+map <silent>[App]r    :<C-u>QuickRun<CR>
 
 let s:bundle = neobundle#get('vim-quickrun')
 function! s:bundle.hooks.on_source(bundle)
 
     " http://d.hatena.ne.jp/osyo-manga/20120919/1348054752
     let g:quickrun_config = {
-                \   "_" : {
-                \       "hook/close_unite_quickfix/enable_hook_loaded": 1,
-                \       "hook/unite_quickfix/enable_failure":           1,
-                \       "hook/close_quickfix/enable_exit":              1,
-                \       "hook/close_buffer/enable_failure":             1,
-                \       "hook/close_buffer/enable_empty_data":          1,
-                \       "outputter":                                    "multi:buffer:quickfix",
-                \       "outputter/buffer/split":                       ":botright 16sp",
-                \       "runner":                                       "vimproc",
-                \       "runner/vimproc/updatetime":                    40,
+                \   '_': {
+                \       'hook/close_unite_quickfix/enable_hook_loaded': 1,
+                \       'hook/unite_quickfix/enable_failure':           1,
+                \       'hook/close_quickfix/enable_exit':              1,
+                \       'hook/close_buffer/enable_failure':             1,
+                \       'hook/close_buffer/enable_empty_data':          1,
+                \       'outputter':                                    'multi:buffer:quickfix',
+                \       'outputter/buffer/split':                       ':botright 16sp',
+                \       'runner':                                       'vimproc',
+                \       'runner/vimproc/updatetime':                    40,
                 \   },
-                \   "cpp" : {
-                \       "runner":                                       "wandbox",
-                \    }
+                \   'cpp': {
+                \       'runner':                                       'wandbox',
+                \       'runner/wandbox/compiler':                      'clang-head',
+                \       'runner/wandbox/options':                       'warning,c++1y,boost-1.55',
+                \   },
                 \ }
 endfunction
 unlet s:bundle
@@ -938,8 +939,8 @@ function! s:bundle.hooks.on_source(bundle)
         function! s:SetLingr()
             let b:disableSmartClose = 0
 
-            noremap  <buffer><silent> <Leader>w :<C-u>call <SID>ToggleLingr()<CR>
-            nnoremap <buffer><silent> q         :<C-u>call <SID>ToggleLingr()<CR>
+            noremap  <silent><buffer> <Leader>w :<C-u>call <SID>ToggleLingr()<CR>
+            nnoremap <silent><buffer> q         :<C-u>call <SID>ToggleLingr()<CR>
 
             setlocal nolist
         endfunction
@@ -984,8 +985,8 @@ function! s:bundle.hooks.on_source(bundle)
         autocmd FileType tweetvim     call s:SetTweetVim()
 
         function! s:SetTweetVim()
-            nmap     <buffer>         rr <Plug>(tweetvim_action_reload)
-            nnoremap <buffer><silent> q  :<C-u>call <SID>ToggleTweetVim()<CR>
+            nmap     <silent><buffer>         rr <Plug>(tweetvim_action_reload)
+            nnoremap <silent><buffer> q  :<C-u>call <SID>ToggleTweetVim()<CR>
         endfunction
     augroup END
 endfunction
@@ -1206,6 +1207,7 @@ onoremap    u           <nop>
 
 filetype on                       " ファイルタイプごとの処理を有効
 filetype plugin on                " ファイルタイプごとのプラグインを有効
+filetype indent on                " ファイルタイプごとのインデントを有効
 
 augroup file-setting
     autocmd!
@@ -1230,15 +1232,15 @@ augroup file-setting
     function! s:SetCpp()
         setlocal foldmethod=syntax
 
-        map <buffer><Leader>x <Plug>(operator-clang-format)
+        map <silent><buffer><Leader>x <Plug>(operator-clang-format)
     endfunction
 
     function! s:SetCs()
         setlocal omnifunc=OmniSharp#Complete
         setlocal foldmethod=syntax
 
-        nnoremap <buffer><F12>      :OmniSharpGotoDefinition<CR>zz
-        nnoremap <buffer><S-F12>    :OmniSharpFindUsages<CR>
+        nnoremap <buffer><F12>      :<C-u>OmniSharpGotoDefinition<CR>zz
+        nnoremap <buffer><S-F12>    :<C-u>OmniSharpFindUsages<CR>
     endfunction
 
     function! s:SetUnite()
@@ -1254,19 +1256,19 @@ augroup file-setting
     endfunction
 
     function! s:SetHelp()
-        noremap  <buffer><silent> q     :<C-u>close<CR>
+        noremap  <silent><buffer> q     :<C-u>close<CR>
     endfunction
 
     function! s:SetQuickFix()
-        noremap  <buffer><silent> p     <CR>zz<C-w>p
-        nnoremap <buffer><silent> r     :<C-u>Qfreplace<CR>
-        nnoremap <buffer><silent> q     :<C-u>cclose<CR>
-        nnoremap <buffer><silent> e     <CR>
-        nnoremap <buffer><silent> <CR>  <CR>zz:<C-u>cclose<CR>
-        nnoremap <buffer><silent> k     kzz
-        nnoremap <buffer><silent> j     jzz
-        nnoremap <buffer><silent> <C-k> kzz<CR>zz<C-w>p
-        nnoremap <buffer><silent> <C-j> jzz<CR>zz<C-w>p
+        noremap  <silent><buffer> p     <CR>zz<C-w>p
+        nnoremap <silent><buffer> r     :<C-u>Qfreplace<CR>
+        nnoremap <silent><buffer> q     :<C-u>cclose<CR>
+        nnoremap <silent><buffer> e     <CR>
+        nnoremap <silent><buffer> <CR>  <CR>zz:<C-u>cclose<CR>
+        nnoremap <silent><buffer> k     kzz
+        nnoremap <silent><buffer> j     jzz
+        nnoremap <silent><buffer> <C-k> kzz<CR>zz<C-w>p
+        nnoremap <silent><buffer> <C-j> jzz<CR>zz<C-w>p
 
         " http://d.hatena.ne.jp/thinca/20130708/1373210009
         nnoremap <silent><buffer> dd    :<C-u>call <SID>del_entry()<CR>
@@ -1426,10 +1428,8 @@ augroup END
 " }}}
 " インデント {{{
 
-filetype indent on                " ファイルタイプごとのインデントを有効
-
 set autoindent
-set smartindent
+" set smartindent
 set cindent                       " Cプログラムファイルの自動インデントを始める
 
 set list
@@ -1504,7 +1504,6 @@ augroup END
 set incsearch                     " インクリメンタルサーチ
 set ignorecase                    " 検索パターンにおいて大文字と小文字を区別しない。
 set smartcase                     " 検索パターンが大文字を含んでいたらオプション 'ignorecase' を上書きする。
-" set nowrapscan                    " 検索をファイルの先頭へループしない
 
 if executable('pt')
     set grepprg=pt\ --nogroup\ --nocolor\ -S
@@ -1538,25 +1537,6 @@ function! s:StarSearch()
     let @" = orig
 endfunction
 
-" function! s:ExecuteGrep(args)
-"
-"     if empty(a:args)
-"         let l:grepargs = expand("<cword>")
-"     else
-"         let l:grepargs = a:args . join(a:000, ' ')
-"     end
-"
-"     silent exe 'grep! ' . l:grepargs . ' | cw'
-" endfunction
-"
-" command! -bang -nargs=* -complete=file Grep call s:ExecuteGrep(<q-args>)
-"
-" noremap <C-@> :<C-u>Grep <C-r><C-w> 
-" if s:isGuiRunning
-"     noremap <C-\[> :<C-u>Grep <C-r><C-w> ../
-" endif
-" noremap <C-]> :<C-u>Grep <C-r><C-w> ../../
-    
 " }}}
 " 表示{{{
 
@@ -2092,4 +2072,3 @@ endif
 " |  cmap  |        |        |        |        |        |   ○   |
 " +--------+--------+--------+--------+--------+--------+--------+
 " }}}
-
