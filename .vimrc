@@ -747,7 +747,7 @@ endfunction
 unlet s:bundle
 " }}}
 " vim-quickrun {{{
-map <silent>[App]r    :<C-u>QuickRun<CR>
+map <silent> [App]r    :<C-u>QuickRun<CR>
 
 let s:bundle = neobundle#get('vim-quickrun')
 function! s:bundle.hooks.on_source(bundle)
@@ -869,20 +869,6 @@ xmap i. <Plug>(textobj-wiw-i)
 omap a. <Plug>(textobj-wiw-a)
 omap i. <Plug>(textobj-wiw-i)
 
-NeoBundleLazy 'osyo-manga/vim-operator-jump_side', {
-            \   'depends': 'kana/vim-textobj-user',
-            \   'autoload': {
-            \     'mappings': [
-            \       '<Plug>(operator-jump-head)',
-            \       '<Plug>(operator-jump-tail)',
-            \     ],
-            \   }
-            \ }
-" map <expr> <Leader><Leader> <SID>GetOnBraceChar() == 1 ?
-"             \    '<Plug>(operator-jump-tail)ab:<C-u>call <SID>RefreshScreen()<CR>' :
-"             \    '<Plug>(operator-jump-head)ab:<C-u>call <SID>RefreshScreen()<CR>'
-map  <Leader><Leader> <Plug>(operator-jump-head)ai:<C-u>call <SID>RefreshScreen()<CR>
-
 " }}}
 " }}}
 " オペレータ {{{
@@ -893,6 +879,16 @@ NeoBundleLazy 'kana/vim-operator-replace',  {'depends': 'kana/vim-operator-user'
 NeoBundleLazy 'tyru/operator-camelize.vim', {'depends': 'kana/vim-operator-user', 'autoload': {'mappings': [['nx', '<Plug>(operator-camelize-toggle)']]}}
 NeoBundleLazy 'emonkak/vim-operator-sort',  {'depends': 'kana/vim-operator-user', 'autoload': {'mappings': [['nx', '<Plug>(operator-sort']]}}
 NeoBundleLazy 'deris/vim-rengbang',         {'depends': 'kana/vim-operator-user', 'autoload': {'mappings': [['nx', '<Plug>(operator-rengbang']], 'commands': ['RengBang']}}
+
+NeoBundleLazy 'osyo-manga/vim-operator-jump_side', {
+            \   'depends': ['kana/vim-operator-user'],
+            \   'autoload': {
+            \     'mappings': [
+            \       '<Plug>(operator-jump-head)',
+            \       '<Plug>(operator-jump-tail)',
+            \     ],
+            \   }
+            \ }
 " }}}
 " vim-operator-replace {{{
 nmap R         <Plug>(operator-replace)
@@ -909,6 +905,10 @@ xmap <Leader>o <Plug>(operator-sort)
 " vim-rengbang {{{
 nmap <Leader>r <Plug>(operator-rengbang)
 xmap <Leader>r <Plug>(operator-rengbang)
+" }}}
+" vim-operator-jump_side {{{
+nmap <silent> <Leader>J <Plug>(operator-jump-head)ai:<C-u>call <SID>RefreshScreen()<CR>
+nmap <silent> <Leader>K <Plug>(operator-jump-tail)ai:<C-u>call <SID>RefreshScreen()<CR>
 " }}}
 " }}}
 " アプリ {{{
@@ -1087,7 +1087,7 @@ function! s:bundle.hooks.on_source(bundle)
         autocmd FileType tweetvim     call s:SetTweetVim()
 
         function! s:SetTweetVim()
-            nmap     <silent><buffer>         rr <Plug>(tweetvim_action_reload)
+            nmap     <silent><buffer> rr <Plug>(tweetvim_action_reload)
             nnoremap <silent><buffer> q  :<C-u>call <SID>ToggleTweetVim()<CR>
         endfunction
     augroup END
@@ -1820,14 +1820,14 @@ vnoremap <silent> <C-y> <C-y>k
 nmap     <silent> gg    ggzOzz:<C-u>call <SID>RefreshScreen()<CR>
 nmap     <silent> G     GzOzz:<C-u>call <SID>RefreshScreen()<CR>
 
-noremap <C-i> <C-i>zz:<C-u>call <SID>RefreshScreen()<CR>
-noremap <C-o> <C-o>zz:<C-u>call <SID>RefreshScreen()<CR>
-map     [[    [[zz:<C-u>call <SID>RefreshScreen()<CR>
-map     ]]    ]]zz:<C-u>call <SID>RefreshScreen()<CR>
-map     H     ^:<C-u>call <SID>RefreshScreen()<CR>
-map     L     $:<C-u>call <SID>RefreshScreen()<CR>
-map     J     }zz:<C-u>call <SID>RefreshScreen()<CR>
-map     K     {zz:<C-u>call <SID>RefreshScreen()<CR>
+noremap  <silent> <C-i> <C-i>zz:<C-u>call <SID>RefreshScreen()<CR>
+noremap  <silent> <C-o> <C-o>zz:<C-u>call <SID>RefreshScreen()<CR>
+map      <silent> [[    [[zz:<C-u>call <SID>RefreshScreen()<CR>
+map      <silent> ]]    ]]zz:<C-u>call <SID>RefreshScreen()<CR>
+map      <silent> H     ^:<C-u>call <SID>RefreshScreen()<CR>
+map      <silent> L     $:<C-u>call <SID>RefreshScreen()<CR>
+map      <silent> J     }zz:<C-u>call <SID>RefreshScreen()<CR>
+map      <silent> K     {zz:<C-u>call <SID>RefreshScreen()<CR>
 " }}}
 " ウィンドウ操作 {{{
 set splitbelow                    " 縦分割したら新しいウィンドウは下に
@@ -1898,6 +1898,7 @@ endfunction
 " }}}
 " CursorHold を継続させる{{{
 function! s:ContinueCursorHold()
+    " http://d.hatena.ne.jp/osyo-manga/20121102/1351836801
     call feedkeys(mode() ==# 'i' ? "\<C-g>\<ESC>" : "g\<ESC>", 'n')
 endfunction
 " }}}
