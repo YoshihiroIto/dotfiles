@@ -1,16 +1,15 @@
+set nocompatible
+scriptencoding utf-8
 " 基本 {{{
-
-set nocompatible                " VI互換をオフ
 set encoding=utf-8
-scriptencoding utf-8            " スクリプト内でutf-8を使用する
 
 let s:isWindows    = has('win32') || has('win64')
 let s:isMac        = has('mac')
 let s:isGuiRunning = has('gui_running')
 let s:baseColumns  = s:isWindows ? 140 : 120
-let $DOTVIM        = s:isWindows ? expand('~/vimfiles') : expand('~/.vim')
 let s:vimrc_local  = expand('~/.vimrc_local')
-let mapleader      = ','
+let g:mapleader    = ','
+let $DOTVIM        = s:isWindows ? expand('~/vimfiles') : expand('~/.vim')
 set viminfo+=!
 
 nnoremap    [App]    <Nop>
@@ -52,7 +51,6 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundle 'tomasr/molokai'
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'Yggdroot/indentLine'
-
 NeoBundleLazy 'majutsushi/tagbar', {
             \   'autoload': {
             \       'commands': [ 'TagbarToggle' ]
@@ -262,8 +260,17 @@ NeoBundleLazy 'thinca/vim-qfreplace', {
             \       'commands':  ['Qfreplace']
             \   }
             \ }
-NeoBundleLazy 'junegunn/vim-easy-align', {'autoload': {'mappings': ['<Plug>(EasyAlignOperator)', ['sxn', '<Plug>(EasyAlign)'], ['sxn', '<Plug>(LiveEasyAlign)'], ['sxn', '<Plug>(EasyAlignRepeat)']], 'commands': ['EasyAlign', 'LiveEasyAlign']}}
-
+NeoBundleLazy 'junegunn/vim-easy-align', {
+            \   'autoload': {
+            \     'commands': [ 'EasyAlign', 'LiveEasyAlign' ],
+            \     'mappings': [
+            \       '<Plug>(EasyAlignOperator)',
+            \       ['sxn', '<Plug>(EasyAlign)'],
+            \       ['sxn', '<Plug>(LiveEasyAlign)'],
+            \       ['sxn', '<Plug>(EasyAlignRepeat)']
+            \     ]
+            \   }
+            \ }
 " }}}
 " vim-easy-align {{{
 
@@ -497,8 +504,19 @@ NeoBundleLazy 'thinca/vim-visualstar', {
             \       'mappings': [ '<Plug>(visualstar-' ]
             \   }
             \ }
-NeoBundleLazy 'osyo-manga/vim-over', {'autoload': {'commands': ['OverCommandLineNoremap', 'OverCommandLine']}}
-NeoBundleLazy 'deris/parajump', {'autoload': {'mappings': [['sxno', '<Plug>(parajump-']]}}
+NeoBundleLazy 'osyo-manga/vim-over', 
+            \ {
+            \   "autoload": {
+            \     "commands": ["OverCommandLineNoremap", "OverCommandLine"]
+            \   }
+            \ }
+NeoBundleLazy 'deris/parajump', {
+            \   'autoload': {
+            \     'mappings': [
+            \       ['sxno', '<Plug>(parajump-']
+            \     ]
+            \   }
+            \ }
 " }}}
 " clever-f.vim {{{
 
@@ -548,8 +566,8 @@ omap r    <Plug>(easymotion-s)
 " vim-anzu {{{
 
 " http://qiita.com/shiena/items/f53959d62085b7980cb5
-nmap <silent> n <Plug>(anzu-n)zOzz
-nmap <silent> N <Plug>(anzu-N)zOzz
+nmap <silent> n <Plug>(anzu-n)zOzz:call <SID>BeginDisplayAnzu()<CR>
+nmap <silent> N <Plug>(anzu-N)zOzz:call <SID>BeginDisplayAnzu()<CR>
 nmap <silent> * <Plug>(anzu-star)
 nmap <silent> # <Plug>(anzu-sharp)
 
@@ -560,9 +578,31 @@ function! s:bundle.hooks.on_source(bundle)
         " 一定時間キー入力がないとき、ウインドウを移動したとき、タブを移動したときに
         " 検索ヒット数の表示を消去する
         autocmd!
-        autocmd CursorHold,CursorHoldI,WinLeave,TabLeave * call anzu#clear_search_status()
-    augroup END
+        autocmd CursorHold,CursorHoldI * call s:UpdateDisplayAnzu()
+        autocmd WinLeave,TabLeave      * call s:ClearDisplayAnzu()
 
+        " anzuを表示する時間
+        let s:anzuDisplayTime = 1000
+
+        let s:anzuDisplayCount = 0
+        function! s:BeginDisplayAnzu()
+            let s:anzuDisplayCount = s:anzuDisplayTime / &updatetime
+        endfunction
+
+        function! s:UpdateDisplayAnzu()
+            if s:anzuDisplayCount != 0
+                let s:anzuDisplayCount -= 1
+                call s:ContinueCursorHold()
+            else
+                call s:ClearDisplayAnzu()
+            endif
+        endfunction
+
+        function! s:ClearDisplayAnzu()
+            let s:anzuDisplayCount = 0
+            call anzu#clear_search_status()
+        endfunction
+    augroup END
 endfunction
 unlet s:bundle
 
@@ -610,7 +650,33 @@ NeoBundleLazy 'vim-ruby/vim-ruby', {
             \       'filetypes': [ 'rb' ]
             \   }
             \ }
-NeoBundleLazy 'rhysd/wandbox-vim', {'autoload': {'commands': [{'complete': 'customlist,wandbox#complete_command', 'name': 'WandboxAsync'}, {'complete': 'customlist,wandbox#complete_command', 'name': 'WandboxSync'}, {'complete': 'customlist,wandbox#complete_command', 'name': 'Wandbox'}, 'WandboxOptionList', 'WandboxOpenBrowser', 'WandboxOptionListAsync', 'WandboxAbortAsyncWorks']}}
+NeoBundleLazy 'vim-scripts/JSON.vim', {
+            \   'autoload': {
+            \       'filetypes': [ 'json' ]
+            \   }
+            \ }
+NeoBundleLazy 'rhysd/wandbox-vim', {
+            \   "autoload": {
+            \     "commands": [
+            \       {
+            \         "name":     "WandboxAsync",
+            \         "complete": "customlist,wandbox#complete_command"
+            \       },
+            \       {
+            \         "name":     "WandboxSync",
+            \         "complete": "customlist,wandbox#complete_command"
+            \       },
+            \       {
+            \         "name":     "Wandbox",
+            \         "complete": "customlist,wandbox#complete_command"
+            \       },
+            \       "WandboxOptionList",
+            \       "WandboxOpenBrowser",
+            \       "WandboxOptionListAsync",
+            \       "WandboxAbortAsyncWorks"
+            \     ]
+            \   }
+            \ }
 NeoBundleLazy 'thinca/vim-quickrun', {
             \   'depends' : [
             \       'osyo-manga/shabadou.vim',
@@ -661,6 +727,8 @@ function! s:bundle.hooks.on_source(bundle)
                 \ }
 
     let g:clang_format#code_style = 'Chromium'
+
+    command! -range=% -nargs=0 CppFormat call clang_format#replace(<line1>, <line2>)
 endfunction
 unlet s:bundle
 " }}}
@@ -703,6 +771,10 @@ function! s:bundle.hooks.on_source(bundle)
                 \       'runner':                                       'wandbox',
                 \       'runner/wandbox/compiler':                      'clang-head',
                 \       'runner/wandbox/options':                       'warning,c++1y,boost-1.55',
+                \   },
+                \   'json': {
+                \       'command':                                      'jq',
+                \       'exec':                                         "%c '.' %s"
                 \   },
                 \ }
 endfunction
@@ -831,9 +903,18 @@ xmap <Leader>r <Plug>(operator-rengbang)
 " インストール {{{
 
 NeoBundleLazy 'basyura/twibill.vim'
-
-NeoBundleLazy 'LeafCage/nebula.vim', {'autoload': {'commands': ['NebulaPutLazy', 'NebulaPutFromClipboard', 'NebulaYankOptions', 'NebulaYankConfig', 'NebulaPutConfig', 'NebulaYankTap']}}
-
+NeoBundleLazy 'LeafCage/nebula.vim', {
+            \   'autoload': {
+            \     'commands': [
+            \       'NebulaPutLazy',
+            \       'NebulaPutFromClipboard',
+            \       'NebulaYankOptions',
+            \       'NebulaYankConfig',
+            \       'NebulaPutConfig',
+            \       'NebulaYankTap'
+            \     ]
+            \   }
+            \ }
 NeoBundleLazy 'tsukkee/lingr-vim', {
             \   'autoload': {
             \       'commands': [ 'LingrLaunch' ]
@@ -878,6 +959,14 @@ NeoBundleLazy 'mattn/gist-vim', {
             \       'commands': [ 'Gist' ]
             \   }
             \ }
+NeoBundleLazy 'ynkdir/vim-vimlparser', {}
+NeoBundleLazy 'syngan/vim-vimlint', {
+            \   'depends': 'ynkdir/vim-vimlparser',
+            \   'autoload': {
+            \        'functions': 'vimlint#vimlint'
+            \   }
+            \ }
+
 if s:isMac
     NeoBundleLazy 'itchyny/dictionary.vim', {
                 \   'autoload': {
@@ -991,6 +1080,11 @@ function! s:bundle.hooks.on_source(bundle)
     augroup END
 endfunction
 unlet s:bundle
+
+" }}}
+" vimlint {{{
+
+command! VimLint call vimlint#vimlint(expand('%:p'))
 
 " }}}
 " }}}
@@ -1412,6 +1506,17 @@ function! DoFormatXML() range
 endfunction
 command! -range=% XmlFormat <line1>,<line2>call DoFormatXML()
 
+" http://qiita.com/tekkoc/items/324d736f68b0f27680b8
+function! s:Jq(...)
+    if 0 == a:0
+        let l:arg = "."
+    else
+        let l:arg = a:1
+    endif
+    execute "%! jq \"" . l:arg . "\""
+endfunction
+command! -nargs=? JsonFormat call s:Jq(<f-args>)
+
 " 自動的にディレクトリを作成する
 " http://vim-users.jp/2011/02/hack202/
 augroup vimrc-auto-mkdir
@@ -1541,8 +1646,6 @@ endfunction
 " 表示{{{
 
 syntax on                         " 構文ごとに色分けをする
-
-set cursorline
 set number                        " 行番号表示
 set shiftwidth=4                  " インデントの各段階に使われる空白の数。
 set textwidth=0                   " 一行に長い文章を書いていても自動折り返しをしない
@@ -1559,9 +1662,41 @@ set showfulltag
 set wildoptions=tagfile
 set fillchars=vert:\              " 縦分割の境界線
 set synmaxcol=500                 " ハイライトする文字数を制限する
-set updatetime=1000
+set updatetime=250
 set previewheight=24
 
+" 'cursorline' を必要な時にだけ有効にする {{{
+" http://d.hatena.ne.jp/thinca/20090530/1243615055
+augroup vimrc-auto-cursorline
+    autocmd!
+    autocmd CursorMoved,CursorMovedI * call s:auto_cursorline('CursorMoved')
+    autocmd CursorHold,CursorHoldI   * call s:auto_cursorline('CursorHold')
+    autocmd WinEnter                 * call s:auto_cursorline('WinEnter')
+    autocmd WinLeave                 * call s:auto_cursorline('WinLeave')
+
+    let s:cursorline_lock = 0
+    function! s:auto_cursorline(event)
+        if a:event ==# 'WinEnter'
+            setlocal cursorline
+            let s:cursorline_lock = 2
+        elseif a:event ==# 'WinLeave'
+            setlocal nocursorline
+        elseif a:event ==# 'CursorMoved'
+            if s:cursorline_lock
+                if 1 < s:cursorline_lock
+                    let s:cursorline_lock = 1
+                else
+                    setlocal nocursorline
+                    let s:cursorline_lock = 0
+                endif
+            endif
+        elseif a:event ==# 'CursorHold'
+            setlocal cursorline
+            let s:cursorline_lock = 1
+        endif
+    endfunction
+augroup END
+" }}}
 " 全角スペースをハイライト {{{
 
 " http://fifnel.com/2009/04/07/2300/
@@ -1591,7 +1726,7 @@ augroup highlight-cursor-word
     " カーソル移動が重くなったと感じるようであれば
     " CursorMoved ではなくて
     " CursorHold を使用する
-"     autocmd CursorHold * call s:hl_cword()
+    " autocmd CursorHold * call s:hl_cword()
     " 単語のハイライト設定
     autocmd ColorScheme * highlight CursorWord guifg=Red
     " アンダーラインでハイライトを行う場合
@@ -1775,6 +1910,11 @@ nnoremap <Leader><C-k><C-k> :<C-u>help <C-r><C-w><CR>
 " SID取得 {{{
 function! s:SID()
     return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID$')
+endfunction
+" }}}
+" CursorHold を継続させる{{{
+function! s:ContinueCursorHold()
+    call feedkeys(mode() ==# 'i' ? "\<C-g>\<ESC>" : "g\<ESC>", 'n')
 endfunction
 " }}}
 " アプリケーションウィンドウサイズの変更 {{{
@@ -2006,7 +2146,7 @@ function! s:CopyFile(sourceFilepath, targetFilepath)
     elseif s:isMac
         call vimproc#system('cp ' . esource . ' ' . etarget)
     else
-        throw 'Not supported.
+        throw 'Not supported.'
     endif
 endfunction
 " }}}
