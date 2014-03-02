@@ -907,8 +907,8 @@ nmap <Leader>r <Plug>(operator-rengbang)
 xmap <Leader>r <Plug>(operator-rengbang)
 " }}}
 " vim-operator-jump_side {{{
-nmap <silent> <Leader>J <Plug>(operator-jump-head)ai:<C-u>call <SID>RefreshScreen()<CR>
-nmap <silent> <Leader>K <Plug>(operator-jump-tail)ai:<C-u>call <SID>RefreshScreen()<CR>
+nmap <silent> <Leader>K <Plug>(operator-jump-head)ai:<C-u>call <SID>RefreshScreen()<CR>
+nmap <silent> <Leader>J <Plug>(operator-jump-tail)ai:<C-u>call <SID>RefreshScreen()<CR>
 " }}}
 " }}}
 " アプリ {{{
