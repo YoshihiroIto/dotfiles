@@ -1,8 +1,8 @@
 set nocompatible
+set encoding=utf-8
 scriptencoding utf-8
 
 " 基本 {{{
-set encoding=utf-8
 
 let s:isWindows    = has('win32') || has('win64')
 let s:isMac        = has('mac')
@@ -884,8 +884,7 @@ NeoBundleLazy 'osyo-manga/vim-operator-jump_side', {
             \   'depends': ['kana/vim-operator-user'],
             \   'autoload': {
             \     'mappings': [
-            \       '<Plug>(operator-jump-head)',
-            \       '<Plug>(operator-jump-tail)',
+            \       '<Plug>(operator-jump-toggle)',
             \     ],
             \   }
             \ }
@@ -907,8 +906,7 @@ nmap <Leader>r <Plug>(operator-rengbang)
 xmap <Leader>r <Plug>(operator-rengbang)
 " }}}
 " vim-operator-jump_side {{{
-nmap <silent> <Leader>K <Plug>(operator-jump-head)ai:<C-u>call <SID>RefreshScreen()<CR>
-nmap <silent> <Leader>J <Plug>(operator-jump-tail)ai:<C-u>call <SID>RefreshScreen()<CR>
+nmap <silent> <Leader><Leader> <Plug>(operator-jump-toggle)ai:<C-u>call <SID>RefreshScreen()<CR>
 " }}}
 " }}}
 " アプリ {{{
@@ -1316,10 +1314,11 @@ filetype indent on                " ファイルタイプごとのインデン�
 
 augroup file-setting
     autocmd!
-    autocmd BufEnter            *                   call s:SetCurrentDir()
-    autocmd BufNewFile,BufRead  *.xaml              setf xml
-    autocmd BufNewFile,BufRead  *.{fx,fxc,fxh,hlsl} setf hlsl
-    autocmd BufNewFile,BufRead  *.{fsh,vsh}         setf glsl
+    autocmd BufEnter                      *                   call s:SetCurrentDir()
+    autocmd BufEnter,WinEnter,BufWinEnter *                   let  &l:numberwidth = len(line("$")) + 2
+    autocmd BufNewFile,BufRead            *.xaml              setf xml
+    autocmd BufNewFile,BufRead            *.{fx,fxc,fxh,hlsl} setf hlsl
+    autocmd BufNewFile,BufRead            *.{fsh,vsh}         setf glsl
 
     autocmd FileType *     setlocal formatoptions-=ro " コメント補完しない
     autocmd FileType ruby  setlocal foldmethod=syntax tabstop=2 shiftwidth=2 softtabstop=2
