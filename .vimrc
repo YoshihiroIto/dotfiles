@@ -1333,29 +1333,6 @@ augroup END
 " }}}
 " }}}
 " キー無効 {{{
-" Vimっぽさ矯正
-nnoremap    <Up>        <Nop>
-nnoremap    <Down>      <Nop>
-nnoremap    <Left>      <Nop>
-nnoremap    <Right>     <Nop>
-
-vnoremap    <Up>        <Nop>
-vnoremap    <Down>      <Nop>
-vnoremap    <Left>      <Nop>
-vnoremap    <Right>     <Nop>
-
-" todo:日本語入力がおかしくなる
-" cnoremap  <Up>        <Nop>
-" cnoremap  <Down>      <Nop>
-" cnoremap  <Left>      <Nop>
-" cnoremap  <Right>     <Nop>
-" inoremap  <Up>        <Nop>
-" inoremap  <Down>      <Nop>
-" inoremap  <Left>      <Nop>
-" inoremap  <Right>     <Nop>
-" inoremap  <BS>        <Nop>
-" cnoremap  <BS>        <Nop>
-
 " Vimを閉じない
 nnoremap    ZZ          <Nop>
 nnoremap    ZQ          <Nop>
@@ -1927,6 +1904,9 @@ nnoremap <silent> [Tab]x :tabclose<CR>
 for s:n in range(1, 9)
     exe 'nnoremap <silent> [Tab]' . s:n  ':<C-u>tabnext' . s:n . '<CR>'
 endfor
+
+nnoremap    <Left>      :<C-u>tabp<cr> 
+nnoremap    <Right>     :<C-u>tabn<cr> 
 " }}}
 " バッファ操作 {{{
 nnoremap    [Buffer]    <Nop>
@@ -1937,6 +1917,10 @@ nnoremap <silent>  [Buffer]x  :bdelete<CR>
 for s:n in range(1, 9)
     exe 'nnoremap <silent> [Buffer]' . s:n  ':<C-u>b' . s:n . '<CR>'
 endfor
+
+nnoremap    <Up>        :<C-u>bp<cr>
+nnoremap    <Down>      :<C-u>bn<cr>
+
 " }}}
 " ファイル操作 {{{
 " vimrc / gvimrc の編集
