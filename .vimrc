@@ -900,7 +900,6 @@ NeoBundle 'rhysd/vim-textobj-anyblock'
 NeoBundle 'anyakichi/vim-textobj-ifdef'
 NeoBundle 'thinca/vim-textobj-between'
 NeoBundle 'h1mesuke/textobj-wiw'
-NeoBundle 'terryma/vim-expand-region'
 
 xmap aa <Plug>(textobj-parameter-a)
 xmap ia <Plug>(textobj-parameter-i)
@@ -912,6 +911,7 @@ xmap i. <Plug>(textobj-wiw-i)
 omap a. <Plug>(textobj-wiw-a)
 omap i. <Plug>(textobj-wiw-i)
 
+NeoBundle 'terryma/vim-expand-region'
 map J <Plug>(expand_region_expand)
 map K <Plug>(expand_region_shrink)
 let g:expand_region_text_objects = {
