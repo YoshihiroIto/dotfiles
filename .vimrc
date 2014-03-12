@@ -3,7 +3,6 @@ set encoding=utf-8
 scriptencoding utf-8
 
 " 基本 {{{
-
 let s:isWindows    = has('win32') || has('win64')
 let s:isMac        = has('mac')
 let s:isGuiRunning = has('gui_running')
@@ -31,6 +30,7 @@ if s:isMac
 elseif s:isWindows
     exe "set rtp+=" . globpath($GOROOT, "misc/vim")
 endif
+
 exe "set rtp+=" . globpath($GOPATH, "src/github.com/nsf/gocode/vim")
 exe "set rtp+=" . globpath($GOPATH, "src/github.com/golang/lint/misc/vim")
 " }}}
@@ -53,13 +53,14 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 " インストール {{{
 NeoBundle 'tomasr/molokai'
 NeoBundle 'itchyny/lightline.vim'
-NeoBundle 'Yggdroot/indentLine'
+" NeoBundle 'Yggdroot/indentLine'
+NeoBundle 'nathanaelkane/vim-indent-guides'
 
-NeoBundleLazy 'majutsushi/tagbar', {
-            \   'autoload': {
-            \       'commands': [ 'TagbarToggle' ]
-            \   }
-            \ }
+" NeoBundleLazy 'majutsushi/tagbar', {
+"             \   'autoload': {
+"             \       'commands': [ 'TagbarToggle' ]
+"             \   }
+"             \ }
 
 NeoBundleLazy 'LeafCage/foldCC', {
             \   'autoload': {
@@ -68,7 +69,7 @@ NeoBundleLazy 'LeafCage/foldCC', {
             \ }
 " }}}
 " TagBar {{{
-noremap   <silent><F8>    :<C-u>call <SID>ToggleTagBar()<CR>
+noremap <silent> <F8>    :<C-u>call <SID>ToggleTagBar()<CR>
 
 let g:tagbar_width = s:rightWindowWidth
 
@@ -221,9 +222,14 @@ function! MyCharCode()
 endfunction
 " }}}
 " indentLine {{{
-let g:indentLine_fileType   = ['c', 'cpp', 'cs', 'vim', 'rb', 'go', 'glsl', 'hlsl', 'xml', 'json']
-let g:indentLine_color_gui  = '#383838'
-let g:indentLine_color_term = 239
+" let g:indentLine_fileType   = ['c', 'cpp', 'cs', 'vim', 'rb', 'go', 'glsl', 'hlsl', 'xml', 'json']
+" let g:indentLine_color_gui  = '#383838'
+" let g:indentLine_color_term = 239
+" }}}
+" vim-indent-guides {{{
+let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_guide_size            = 1
+let g:indent_guides_auto_colors           = 0
 " }}}
 " }}}
 " 編集 {{{
@@ -282,14 +288,14 @@ NeoBundleLazy 'junegunn/vim-easy-align', {
 nmap <Leader>m <Plug>(EasyAlign)
 vmap <Leader>m <Plug>(EasyAlign)
 
-nmap <silent><Leader>a=       vii<Leader>m=
-nmap <silent><Leader>a:       vii<Leader>m:
-nmap <silent><Leader>a,       vii<Leader>m*,
-nmap <silent><Leader>a<Space> vii<Leader>m*<Space>
-xmap <silent><Leader>a=       <Leader>m=
-xmap <silent><Leader>a:       <Leader>m:
-xmap <silent><Leader>a,       <Leader>m*,
-xmap <silent><Leader>a<Space> <Leader>m*<Space>
+nmap <silent> <Leader>a=       vii<Leader>m=
+nmap <silent> <Leader>a:       vii<Leader>m:
+nmap <silent> <Leader>a,       vii<Leader>m*,
+nmap <silent> <Leader>a<Space> vii<Leader>m*<Space>
+xmap <silent> <Leader>a=       <Leader>m=
+xmap <silent> <Leader>a:       <Leader>m:
+xmap <silent> <Leader>a,       <Leader>m*,
+xmap <silent> <Leader>a<Space> <Leader>m*<Space>
 
 " }}}
 " vim-smartinput-endwise {{{
@@ -298,7 +304,6 @@ let s:bundle = neobundle#get('vim-smartinput-endwise')
 function! s:bundle.hooks.on_source(bundle)
 
     call smartinput_endwise#define_default_rules()
-
 endfunction
 unlet s:bundle
 " }}}
@@ -481,7 +486,6 @@ function! s:bundle.hooks.on_source(bundle)
 
     let g:Omnisharp_stop_server         = 0
     let g:OmniSharp_typeLookupInPreview = 1
-
 endfunction
 unlet s:bundle
 " }}}
@@ -512,7 +516,7 @@ NeoBundleLazy 'thinca/vim-visualstar', {
             \   }
             \ }
 
-NeoBundleLazy 'osyo-manga/vim-over', 
+NeoBundleLazy 'osyo-manga/vim-over',
             \ {
             \   "autoload": {
             \     "commands": ["OverCommandLineNoremap", "OverCommandLine"]
@@ -538,8 +542,7 @@ let g:clever_f_chars_match_any_signs = ';'
 let s:bundle = neobundle#get('matchit.zip')
 function! s:bundle.hooks.on_source(bundle)
 
-    silent! execute 'doautocmd Filetype' &filetype
-
+    silent! exe 'doautocmd Filetype' &filetype
 endfunction
 unlet s:bundle
 " }}}
@@ -612,6 +615,7 @@ nmap <silent> # <Plug>(anzu-sharp):<C-u>call <SID>RefreshScreen()<CR>
 "     augroup END
 " endfunction
 " unlet s:bundle
+
 " }}}
 " parajump {{{
 map { <Plug>(parajump-backward)
@@ -767,7 +771,6 @@ map <silent> [App]r    :<C-u>QuickRun<CR>
 let s:bundle = neobundle#get('vim-quickrun')
 function! s:bundle.hooks.on_source(bundle)
 
-    " http://d.hatena.ne.jp/osyo-manga/20120919/1348054752
     let g:quickrun_config = {
                 \   '_': {
                 \       'hook/close_unite_quickfix/enable_hook_loaded': 1,
@@ -776,7 +779,6 @@ function! s:bundle.hooks.on_source(bundle)
                 \       'hook/close_buffer/enable_failure':             1,
                 \       'hook/close_buffer/enable_empty_data':          1,
                 \       'outputter':                                    'multi:buffer:quickfix',
-                \       'outputter/buffer/split':                       ':botright 16sp',
                 \       'runner':                                       'vimproc',
                 \       'runner/vimproc/updatetime':                    40,
                 \   },
@@ -789,6 +791,9 @@ function! s:bundle.hooks.on_source(bundle)
                 \       'command':                                      'jq',
                 \       'exec':                                         "%c '.' %s"
                 \   },
+                \   'lua': {
+                \       'type':                                         'lua/vim'
+                \   }
                 \ }
 endfunction
 unlet s:bundle
@@ -797,135 +802,85 @@ unlet s:bundle
 " テキストオブジェクト {{{
 " http://d.hatena.ne.jp/osyo-manga/20130717/1374069987
 " インストール {{{
-" NeoBundleLazy 'kana/vim-textobj-user'
-"
-" NeoBundleLazy 'kana/vim-textobj-entire', {
-"             \   'depends': 'kana/vim-textobj-user',
-"             \   'autoload': {
-"             \       'mappings': [['xo', 'ae'], ['xo', 'ie']]
-"             \   }
-"             \ }
-"
-" NeoBundleLazy 'kana/vim-textobj-indent', {
-"             \   'depends': 'kana/vim-textobj-user',
-"             \   'autoload': {
-"             \       'mappings': [['xo', 'ai'], ['xo', 'aI'], ['xo', 'ii'], ['xo', 'iI']]
-"             \   }
-"             \ }
-"
-" NeoBundleLazy 'kana/vim-textobj-fold', {
-"             \   'depends': 'kana/vim-textobj-user',
-"             \   'autoload': {
-"             \       'mappings': [['xo', 'az'], ['xo', 'iz']]
-"             \   }
-"             \ }
-"
-" NeoBundleLazy 'kana/vim-textobj-line', {
-"             \   'depends': 'kana/vim-textobj-user',
-"             \   'autoload': {
-"             \       'mappings': [['xo', 'al'], ['xo', 'il']]
-"             \   }
-"             \ }
-"
-" NeoBundleLazy 'rhysd/vim-textobj-word-column', {
-"             \   'depends': 'kana/vim-textobj-user',
-"             \   'autoload': {
-"             \       'mappings': [['xo', 'av'], ['xo', 'aV'], ['xo', 'iv'], ['xo', 'iV']]
-"             \   }
-"             \ }
-"
-" NeoBundleLazy 'thinca/vim-textobj-comment', {
-"             \   'depends': 'kana/vim-textobj-user',
-"             \   'autoload': {
-"             \       'mappings': [['xo', 'ac'], ['xo', 'ic']]
-"             \   }
-"             \ }
-"
-" NeoBundleLazy 'sgur/vim-textobj-parameter', {
-"             \   'depends': 'kana/vim-textobj-user',
-"             \   'autoload': {
-"             \       'mappings': [['xo', '<Plug>(textobj-parameter']]
-"             \   }
-"             \ }
-" xmap aa <Plug>(textobj-parameter-a)
-" xmap ia <Plug>(textobj-parameter-i)
-" omap aa <Plug>(textobj-parameter-a)
-" omap ia <Plug>(textobj-parameter-i)
-"
-" NeoBundleLazy 'rhysd/vim-textobj-anyblock', {
-"             \   'depends': 'kana/vim-textobj-user',
-"             \   'autoload': {
-"             \       'mappings': [['xo', 'ab'], ['xo', 'ib']]
-"             \   }
-"             \ }
-"
+NeoBundleLazy 'kana/vim-textobj-user'
+
+NeoBundleLazy 'kana/vim-textobj-entire', {
+            \   'depends': 'kana/vim-textobj-user',
+            \   'autoload': {
+            \       'mappings': [['xo', 'ae'], ['xo', 'ie']]
+            \   }
+            \ }
+
+NeoBundleLazy 'kana/vim-textobj-indent', {
+            \   'depends': 'kana/vim-textobj-user',
+            \   'autoload': {
+            \       'mappings': [['xo', 'ai'], ['xo', 'aI'], ['xo', 'ii'], ['xo', 'iI']]
+            \   }
+            \ }
+
+NeoBundleLazy 'kana/vim-textobj-line', {
+            \   'depends': 'kana/vim-textobj-user',
+            \   'autoload': {
+            \       'mappings': [['xo', 'al'], ['xo', 'il']]
+            \   }
+            \ }
+
+NeoBundleLazy 'rhysd/vim-textobj-word-column', {
+            \   'depends': 'kana/vim-textobj-user',
+            \   'autoload': {
+            \       'mappings': [['xo', 'av'], ['xo', 'aV'], ['xo', 'iv'], ['xo', 'iV']]
+            \   }
+            \ }
+
+NeoBundleLazy 'thinca/vim-textobj-comment', {
+            \   'depends': 'kana/vim-textobj-user',
+            \   'autoload': {
+            \       'mappings': [['xo', 'ac'], ['xo', 'ic']]
+            \   }
+            \ }
+
+NeoBundleLazy 'sgur/vim-textobj-parameter', {
+            \   'depends': 'kana/vim-textobj-user',
+            \   'autoload': {
+            \       'mappings': [['xo', '<Plug>(textobj-parameter']]
+            \   }
+            \ }
+xmap aa <Plug>(textobj-parameter-a)
+xmap ia <Plug>(textobj-parameter-i)
+omap aa <Plug>(textobj-parameter-a)
+omap ia <Plug>(textobj-parameter-i)
+
+NeoBundleLazy 'rhysd/vim-textobj-anyblock', {
+            \   'depends': 'kana/vim-textobj-user',
+            \   'autoload': {
+            \       'mappings': [['xo', 'ab'], ['xo', 'ib']]
+            \   }
+            \ }
+
 " NeoBundleLazy 'anyakichi/vim-textobj-ifdef', {
 "             \   'depends': 'kana/vim-textobj-user',
 "             \   'autoload': {
 "             \       'mappings': [['xo', 'a#'], ['xo', 'i#']]
 "             \   }
 "             \ }
-"
-" NeoBundleLazy 'thinca/vim-textobj-between', {
-"             \   'depends': 'kana/vim-textobj-user',
-"             \   'autoload': {
-"             \       'mappings': [['xo', 'af'], ['xo', 'if']]
-"             \   }
-"             \ }
-"
-" NeoBundleLazy 'h1mesuke/textobj-wiw', {
-"             \   'depends': 'kana/vim-textobj-user',
-"             \   'autoload': {
-"             \       'mappings': [['xo', '<Plug>(textobj-wiw']]
-"             \   }
-"             \ }
-" xmap a. <Plug>(textobj-wiw-a)
-" xmap i. <Plug>(textobj-wiw-i)
-" omap a. <Plug>(textobj-wiw-a)
-" omap i. <Plug>(textobj-wiw-i)
-"
-" NeoBundle 'terryma/vim-expand-region'
-" map J <Plug>(expand_region_expand)
-" map K <Plug>(expand_region_shrink)
 
-NeoBundle 'kana/vim-textobj-user'
-NeoBundle 'kana/vim-textobj-entire'
-NeoBundle 'kana/vim-textobj-indent'
-NeoBundle 'kana/vim-textobj-fold'
-NeoBundle 'kana/vim-textobj-line'
-NeoBundle 'rhysd/vim-textobj-word-column'
-NeoBundle 'thinca/vim-textobj-comment'
-NeoBundle 'sgur/vim-textobj-parameter'
-NeoBundle 'rhysd/vim-textobj-anyblock'
-NeoBundle 'anyakichi/vim-textobj-ifdef'
-NeoBundle 'thinca/vim-textobj-between'
-NeoBundle 'h1mesuke/textobj-wiw'
+NeoBundleLazy 'thinca/vim-textobj-between', {
+            \   'depends': 'kana/vim-textobj-user',
+            \   'autoload': {
+            \       'mappings': [['xo', 'af'], ['xo', 'if']]
+            \   }
+            \ }
 
-xmap aa <Plug>(textobj-parameter-a)
-xmap ia <Plug>(textobj-parameter-i)
-omap aa <Plug>(textobj-parameter-a)
-omap ia <Plug>(textobj-parameter-i)
-
+NeoBundleLazy 'h1mesuke/textobj-wiw', {
+            \   'depends': 'kana/vim-textobj-user',
+            \   'autoload': {
+            \       'mappings': [['xo', '<Plug>(textobj-wiw']]
+            \   }
+            \ }
 xmap a. <Plug>(textobj-wiw-a)
 xmap i. <Plug>(textobj-wiw-i)
 omap a. <Plug>(textobj-wiw-a)
 omap i. <Plug>(textobj-wiw-i)
-
-NeoBundle 'terryma/vim-expand-region'
-map J <Plug>(expand_region_expand)
-map K <Plug>(expand_region_shrink)
-let g:expand_region_text_objects = {
-            \ 'iw':  0,
-            \ 'iW':  0,
-            \ 'i"':  0,
-            \ 'i''': 0,
-            \ 'i]':  1,
-            \ 'ib':  1,
-            \ 'iB':  1,
-            \ 'il':  0,
-            \ 'ip':  0,
-            \ 'ie':  0,
-            \ }
 " }}}
 " }}}
 " オペレータ {{{
@@ -1025,23 +980,23 @@ NeoBundleLazy 'tpope/vim-fugitive', {
             \   }
             \ }
 
-NeoBundleLazy 'mattn/gist-vim', {
-            \   'depends': [
-            \       'mattn/webapi-vim',
-            \   ],
-            \   'autoload': {
-            \       'commands': [ 'Gist' ]
-            \   }
-            \ }
+" NeoBundleLazy 'mattn/gist-vim', {
+"             \   'depends': [
+"             \       'mattn/webapi-vim',
+"             \   ],
+"             \   'autoload': {
+"             \       'commands': [ 'Gist' ]
+"             \   }
+"             \ }
 
-NeoBundleLazy 'ynkdir/vim-vimlparser', {}
-
-NeoBundleLazy 'syngan/vim-vimlint', {
-            \   'depends': 'ynkdir/vim-vimlparser',
-            \   'autoload': {
-            \        'functions': 'vimlint#vimlint'
-            \   }
-            \ }
+" NeoBundleLazy 'ynkdir/vim-vimlparser', {}
+"
+" NeoBundleLazy 'syngan/vim-vimlint', {
+"             \   'depends': 'ynkdir/vim-vimlparser',
+"             \   'autoload': {
+"             \        'functions': 'vimlint#vimlint'
+"             \   }
+"             \ }
 
 if s:isMac
     NeoBundleLazy 'itchyny/dictionary.vim', {
@@ -1052,10 +1007,10 @@ if s:isMac
 endif
 " }}}
 " lingr.vim {{{
-noremap <silent>[App]s :<C-u>VimShellPop<CR>
+noremap <silent> [App]s :<C-u>VimShellPop<CR>
 " }}}
 " VimFiler {{{
-noremap  <silent>[App]f :VimFilerBufferDir<CR>
+noremap  <silent> [App]f :VimFilerBufferDir<CR>
 
 let s:bundle = neobundle#get('vimfiler')
 function! s:bundle.hooks.on_source(bundle)
@@ -1082,7 +1037,7 @@ endfunction
 unlet s:bundle
 " }}}
 " lingr.vim {{{
-noremap <silent>[App]1 :<C-u>call <SID>ToggleLingr()<CR>
+noremap <silent> [App]1 :<C-u>call <SID>ToggleLingr()<CR>
 
 let s:bundle = neobundle#get('lingr-vim')
 function! s:bundle.hooks.on_source(bundle)
@@ -1118,7 +1073,7 @@ function! s:ToggleLingr()
 endfunction
 " }}}
 " Tweetvim {{{
-noremap <silent>[App]2 :<C-u>call <SID>ToggleTweetVim()<CR>
+noremap <silent> [App]2 :<C-u>call <SID>ToggleTweetVim()<CR>
 
 function! s:ToggleTweetVim()
     if bufnr('tweetvim') == -1
@@ -1167,11 +1122,11 @@ NeoBundleLazy 'Shougo/unite-outline', {
             \   }
             \ }
 
-NeoBundleLazy 'osyo-manga/unite-fold', {
-            \   'autoload': {
-            \       'unite_sources': [ 'fold' ],
-            \   }
-            \ }
+" NeoBundleLazy 'osyo-manga/unite-fold', {
+"             \   'autoload': {
+"             \       'unite_sources': [ 'fold' ],
+"             \   }
+"             \ }
 
 NeoBundleLazy 'tsukkee/unite-tag', {
             \   'autoload': {
@@ -1184,12 +1139,6 @@ NeoBundleLazy 'osyo-manga/unite-quickfix', {
             \       'unite_sources': [ 'quickfix' ],
             \   }
             \ }
-
-" NeoBundleLazy 'LeafCage/unite-gvimrgb', {
-"             \   'autoload': {
-"             \       'unite_sources': [ 'gvimrgb' ],
-"             \   }
-"             \ }
 
 NeoBundle 'Shougo/neomru.vim'
 " }}}
@@ -1222,7 +1171,7 @@ nnoremap          [Unite]ui  :<C-u>NeoBundleInstall<CR>:NeoBundleUpdatesLog<CR>
 function! s:unite_grep_project(...)
     let opts = (a:0 ? join(a:000, ' ') : '')
     let dir = unite#util#path2project_directory(expand('%'))
-    execute 'Unite' opts 'grep:' . dir
+    exe 'Unite' opts 'grep:' . dir
 endfunction
 
 let s:bundle = neobundle#get('unite.vim')
@@ -1334,18 +1283,18 @@ augroup END
 " }}}
 " キー無効 {{{
 " Vimを閉じない
-nnoremap    ZZ          <Nop>
-nnoremap    ZQ          <Nop>
+nnoremap ZZ <Nop>
+nnoremap ZQ <Nop>
 
 " ミス操作で削除してしまうため
-nnoremap    dh          <nop>
-nnoremap    dj          <nop>
-nnoremap    dk          <nop>
-nnoremap    dl          <nop>
+nnoremap dh <nop>
+nnoremap dj <nop>
+nnoremap dk <nop>
+nnoremap dl <nop>
 
 " よくミスるため
-vnoremap    u           <nop>
-onoremap    u           <nop>
+vnoremap u  <nop>
+onoremap u  <nop>
 " }}}
 " ファイルタイプごとの設定 {{{
 filetype on                       " ファイルタイプごとの処理を有効
@@ -1360,19 +1309,40 @@ augroup file-setting
     autocmd BufNewFile,BufRead            *.{fx,fxc,fxh,hlsl} setf hlsl
     autocmd BufNewFile,BufRead            *.{fsh,vsh}         setf glsl
 
-    autocmd FileType *     setlocal formatoptions-=ro textwidth=0
-    autocmd FileType ruby  setlocal foldmethod=syntax tabstop=2 shiftwidth=2 softtabstop=2
-    autocmd FileType vim   setlocal foldmethod=marker foldlevel=0 foldcolumn=4
-    autocmd FileType qf    call     s:SetQuickFix()
-    autocmd FileType help  call     s:SetHelp()
-    autocmd FileType unite call     s:SetUnite()
-    autocmd FileType cs    call     s:SetCs()
-    autocmd FileType c,cpp call     s:SetCpp()
-    autocmd FileType go    call     s:SetGo()
+    autocmd FileType *        call s:SetAll()
+    autocmd FileType ruby     call s:SetRuby()
+    autocmd FileType vim      call s:SetVim()
+    autocmd FileType qf       call s:SetQuickFix()
+    autocmd FileType help     call s:SetHelp()
+    autocmd FileType unite    call s:SetUnite()
+    autocmd FileType cs       call s:SetCs()
+    autocmd FileType c,cpp    call s:SetCpp()
+    autocmd FileType go       call s:SetGo()
+    autocmd FileType xml,html call s:SetXml()
 
-    " Hack #22: XMLの閉じタグを補完する
-    " http://vim-users.jp/2009/06/hack22/
-    autocmd FileType xml,html  inoremap <buffer> </ </<C-x><C-o>
+    function! s:SetAll()
+        setlocal formatoptions-=ro
+        setlocal textwidth=0
+    endfunction
+
+    function! s:SetRuby()
+        setlocal foldmethod=syntax
+        setlocal tabstop=2
+        setlocal shiftwidth=2
+        setlocal softtabstop=2
+    endfunction
+
+    function! s:SetVim()
+        setlocal foldmethod=marker
+        setlocal foldlevel=0
+        setlocal foldcolumn=4
+    endfunction
+
+    function! s:SetXml()
+        " Hack #22: XMLの閉じタグを補完する
+        " http://vim-users.jp/2009/06/hack22/
+        inoremap <buffer> </ </<C-x><C-o>
+    endfunction
 
     function! s:SetGo()
         setlocal foldmethod=syntax
@@ -1389,20 +1359,20 @@ augroup file-setting
         setlocal omnifunc=OmniSharp#Complete
         setlocal foldmethod=syntax
 
-        nnoremap <buffer><F12>      :<C-u>OmniSharpGotoDefinition<CR>zz
-        nnoremap <buffer><S-F12>    :<C-u>OmniSharpFindUsages<CR>
+        nnoremap <buffer> <F12>   :<C-u>OmniSharpGotoDefinition<CR>zz
+        nnoremap <buffer> <S-F12> :<C-u>OmniSharpFindUsages<CR>
     endfunction
 
     function! s:SetUnite()
         let unite = unite#get_current_unite()
         if unite.buffer_name =~# '^search'
-            nmap <silent><buffer><expr> <C-r>     unite#do_action('replace')
-            imap <silent><buffer><expr> <C-r>     unite#do_action('replace')
+            nmap <silent><buffer><expr> <C-r> unite#do_action('replace')
+            imap <silent><buffer><expr> <C-r> unite#do_action('replace')
         endif
 
-        nmap <buffer> <C-v>     <Plug>(unite_toggle_auto_preview)
-        imap <buffer> <C-v>     <Plug>(unite_toggle_auto_preview)
-        nmap <buffer> <C-j>     <Plug>(unite_exit)
+        nmap <buffer> <C-v> <Plug>(unite_toggle_auto_preview)
+        imap <buffer> <C-v> <Plug>(unite_toggle_auto_preview)
+        nmap <buffer> <C-j> <Plug>(unite_exit)
     endfunction
 
     function! s:SetHelp()
@@ -1435,7 +1405,7 @@ augroup file-setting
         let w:qf_history = history
         unlet! qf[a:firstline - 1 : a:lastline - 1]
         call setqflist(qf, 'r')
-        execute a:firstline
+        exe a:firstline
     endfunction
 
     function! s:undo_entry()
@@ -1464,11 +1434,11 @@ set nrformats+=alpha
 " set completeopt=longest,menuone,preview
 set completeopt=longest,menuone
 
-inoremap    ¥   \
-inoremap    \   ¥
-cnoremap    ¥   \
-cnoremap    \   ¥
-noremap     U   J
+inoremap ¥ \
+inoremap \ ¥
+cnoremap ¥ \
+cnoremap \ ¥
+noremap  U J
 
 " ^Mを取り除く
 command! RemoveCr call s:ExecuteKeepView('silent! %substitute/\r$//g | nohlsearch')
@@ -1478,7 +1448,6 @@ command! RemoveEolSpace call s:ExecuteKeepView('silent! %substitute/ \+$//g | no
 
 " http://lsifrontend.hatenablog.com/entry/2013/10/11/052640
 nmap     <silent> <C-CR> yy:<C-u>TComment<CR>p
-
 vnoremap <silent> <C-CR> :<C-u>call CopyAddComment()<CR>
 
 " http://qiita.com/akira-hamada/items/2417d0bcb563475deddb をもとに調整
@@ -1567,7 +1536,7 @@ function! s:Jq(...)
     else
         let l:arg = a:1
     endif
-    execute "%! jq \"" . l:arg . "\""
+    exe "%! jq \"" . l:arg . "\""
 endfunction
 command! -nargs=? JsonFormat call s:Jq(<f-args>)
 
@@ -1586,14 +1555,13 @@ augroup END
 " }}}
 " インデント {{{
 set autoindent
-" set smartindent
 set cindent                       " Cプログラムファイルの自動インデントを始める
 
 set list
 set listchars=tab:\¦\ ,eol:↲,extends:»,precedes:«,nbsp:%
 
-vnoremap    <       <gv
-vnoremap    >       >gv
+vnoremap < <gv
+vnoremap > >gv
 " }}}
 " タブ {{{
 set tabstop=4                     " ファイル内の <Tab> が対応する空白の数。
@@ -1651,7 +1619,6 @@ augroup auto-mirror
     endfunction
 augroup END
 " }}}
-
 " }}}
 " 検索 {{{
 set incsearch                     " インクリメンタルサーチ
@@ -1673,15 +1640,15 @@ if has('migemo')
 endif
 
 " 検索時のハイライトを解除
-nnoremap    <silent>  <Leader>/   :nohlsearch<CR>
+nnoremap <silent> <Leader>/   :nohlsearch<CR>
 
 " http://deris.hatenablog.jp/entry/2013/05/15/024932
 " very magic
-nnoremap /  /\v
+nnoremap / /\v
 
 " *による検索時に初回は移動しない
-nnoremap <silent>* viw:<C-u>call <SID>StarSearch()<CR>:<C-u>set hlsearch<CR>`<
-vnoremap <silent>* :<C-u>call    <SID>StarSearch()<CR>:<C-u>set hlsearch<CR>
+nnoremap <silent> * viw:<C-u>call <SID>StarSearch()<CR>:<C-u>set hlsearch<CR>`<
+vnoremap <silent> * :<C-u>call    <SID>StarSearch()<CR>:<C-u>set hlsearch<CR>
 function! s:StarSearch()
     let orig = @"
     normal! gvy
@@ -1789,7 +1756,7 @@ augroup highlight-cursor-word
 
     function! s:hl_cword()
         let word = expand("<cword>")
-        if    word == ""
+        if word == ""
             return
         endif
         if get(b:, "highlight_cursor_word", "") ==# word
@@ -1857,24 +1824,24 @@ nnoremap <silent> <C-e> <C-e>j
 nnoremap <silent> <C-y> <C-y>k
 vnoremap <silent> <C-e> <C-e>j
 vnoremap <silent> <C-y> <C-y>k
-nmap     <silent> gg    ggzOzz:<C-u>call <SID>RefreshScreen()<CR>
-nmap     <silent> G     GzOzz:<C-u>call <SID>RefreshScreen()<CR>
+nmap     <silent> gg    ggzOzz:<C-u>call  <SID>RefreshScreen()<CR>
+nmap     <silent> G     GzOzz:<C-u>call   <SID>RefreshScreen()<CR>
 
 noremap  <silent> <C-i> <C-i>zz:<C-u>call <SID>RefreshScreen()<CR>
 noremap  <silent> <C-o> <C-o>zz:<C-u>call <SID>RefreshScreen()<CR>
-map      <silent> [[    [[zz:<C-u>call <SID>RefreshScreen()<CR>
-map      <silent> ]]    ]]zz:<C-u>call <SID>RefreshScreen()<CR>
-map      <silent> H     ^:<C-u>call <SID>RefreshScreen()<CR>
-map      <silent> L     $:<C-u>call <SID>RefreshScreen()<CR>
-" map      <silent> J     }zz:<C-u>call <SID>RefreshScreen()<CR>
-" map      <silent> K     {zz:<C-u>call <SID>RefreshScreen()<CR>
+map      <silent> [[    [[zz:<C-u>call    <SID>RefreshScreen()<CR>
+map      <silent> ]]    ]]zz:<C-u>call    <SID>RefreshScreen()<CR>
+map      <silent> K     {zz:<C-u>call     <SID>RefreshScreen()<CR>
+map      <silent> J     }zz:<C-u>call     <SID>RefreshScreen()<CR>
+map      <silent> H     ^:<C-u>call       <SID>RefreshScreen()<CR>
+map      <silent> L     $:<C-u>call       <SID>RefreshScreen()<CR>
 " }}}
 " ウィンドウ操作 {{{
 set splitbelow                    " 縦分割したら新しいウィンドウは下に
 set splitright                    " 横分割したら新しいウィンドウは右に
 
-nnoremap    [Window]    <Nop>
-nmap        <Leader>w   [Window]
+nnoremap [Window]  <Nop>
+nmap     <Leader>w [Window]
 
 noremap  <silent> [Window]e :<C-u>call <SID>ToggleVSplitWide()<CR>
 noremap  <silent> [Window]w :<C-u>call <SID>SmartClose()<CR>
@@ -1895,8 +1862,8 @@ endif
 " タブライン操作 {{{
 set showtabline=2                   " タブライン常時表示
 
-nnoremap    [Tab]       <Nop>
-nmap        <Leader>t   [Tab]
+nnoremap [Tab]     <Nop>
+nmap     <Leader>t [Tab]
 
 nnoremap <silent> [Tab]c :tabnew<CR>
 nnoremap <silent> [Tab]x :tabclose<CR>
@@ -1905,31 +1872,31 @@ for s:n in range(1, 9)
     exe 'nnoremap <silent> [Tab]' . s:n  ':<C-u>tabnext' . s:n . '<CR>'
 endfor
 
-nnoremap    <Left>      :<C-u>tabp<cr> 
-nnoremap    <Right>     :<C-u>tabn<cr> 
+nnoremap <silent> <Left>  :<C-u>tabp<cr>
+nnoremap <silent> <Right> :<C-u>tabn<cr>
 " }}}
 " バッファ操作 {{{
-nnoremap    [Buffer]    <Nop>
-nmap        <Leader>b   [Buffer]
+nnoremap [Buffer]  <Nop>
+nmap     <Leader>b [Buffer]
 
-nnoremap <silent>  [Buffer]x  :bdelete<CR>
+nnoremap <silent> [Buffer]x :bdelete<CR>
 
 for s:n in range(1, 9)
     exe 'nnoremap <silent> [Buffer]' . s:n  ':<C-u>b' . s:n . '<CR>'
 endfor
 
-nnoremap    <Up>        :<C-u>bp<cr>
-nnoremap    <Down>      :<C-u>bn<cr>
+nnoremap <silent> <Up>   :<C-u>bp<cr>
+nnoremap <silent> <Down> :<C-u>bn<cr>
 
 " }}}
 " ファイル操作 {{{
 " vimrc / gvimrc の編集
-nnoremap    <silent>   <F1>    :<C-u>call <SID>SmartOpen($MYVIMRC)<CR>
-nnoremap    <silent>   <F2>    :<C-u>call <SID>SmartOpen($MYGVIMRC)<CR>
-nnoremap    <silent>   <F3>    :<C-u>source $MYVIMRC<CR>:source $MYGVIMRC<CR>
+nnoremap <silent> <F1> :<C-u>call   <SID>SmartOpen($MYVIMRC)<CR>
+nnoremap <silent> <F2> :<C-u>call   <SID>SmartOpen($MYGVIMRC)<CR>
+nnoremap <silent> <F3> :<C-u>source $MYVIMRC<CR>:source $MYGVIMRC<CR>
 " }}}
 " マーク {{{
-nmap        <silent>   <Leader>m  `
+nmap <silent> <Leader>m `
 " }}}
 " ヘルプ {{{
 set helplang=ja,en
@@ -2054,7 +2021,6 @@ function! s:RefreshScreen()
     " silent doautocmd CursorHold <buffer>
 
     call s:ForceShowCursolLine()
-
 endfunction
 " }}}
 " 賢いクローズ {{{
@@ -2228,7 +2194,7 @@ endfunction
 function! s:ExecuteKeepView(expr)
 
     let wininfo = winsaveview()
-    execute a:expr
+    exe a:expr
     call winrestview(wininfo)
 endfunction
 " }}}
