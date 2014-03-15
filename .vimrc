@@ -12,28 +12,20 @@ let g:mapleader    = ','
 let $DOTVIM        = s:isWindows ? expand('~/vimfiles') : expand('~/.vim')
 set viminfo+=!
 
-nnoremap    [App]    <Nop>
-nmap        ;        [App]
+nnoremap [App] <Nop>
+nmap     ;     [App]
 
 if !s:isGuiRunning
     let $MYGVIMRC = expand('~/.gvimrc')
 endif
 
-let s:rightWindowWidth = 40     " 右ウィンドウ幅
+" 右ウィンドウ幅
+let s:rightWindowWidth = 40
 
 if filereadable(s:vimrc_local)
     exe 'source' s:vimrc_local
 endif
-" golang {{{
-if s:isMac
-    set rtp+=/usr/local/Cellar/go/1.2/libexec/misc/vim
-elseif s:isWindows
-    exe "set rtp+=" . globpath($GOROOT, "misc/vim")
-endif
-
-exe "set rtp+=" . globpath($GOPATH, "src/github.com/nsf/gocode/vim")
-exe "set rtp+=" . globpath($GOPATH, "src/github.com/golang/lint/misc/vim")
-" }}}
+"}}}
 " NeoBundle {{{
 if has('vim_starting')
     if !isdirectory(expand("$DOTVIM/bundle/neobundle.vim/"))
@@ -47,13 +39,24 @@ endif
 call neobundle#rc(expand('$DOTVIM/bundle/'))
 NeoBundleFetch 'Shougo/neobundle.vim'
 " }}}
+" golang {{{
+if has('vim_starting')
+    if s:isMac
+        set rtp+=/usr/local/Cellar/go/1.2/libexec/misc/vim
+    elseif s:isWindows
+        exe "set rtp+=" . globpath($GOROOT, "misc/vim")
+    endif
+
+    " let g:gocomplete#system_function = 'vimproc#system'
+    exe "set rtp+=" . globpath($GOPATH, "src/github.com/nsf/gocode/vim")
+    exe "set rtp+=" . globpath($GOPATH, "src/github.com/golang/lint/misc/vim")
+endif
 " }}}
 " プラグイン {{{
 " 表示 {{{
 " インストール {{{
 NeoBundle 'tomasr/molokai'
 NeoBundle 'itchyny/lightline.vim'
-" NeoBundle 'Yggdroot/indentLine'
 NeoBundle 'nathanaelkane/vim-indent-guides'
 
 " NeoBundleLazy 'majutsushi/tagbar', {
@@ -69,19 +72,19 @@ NeoBundleLazy 'LeafCage/foldCC', {
             \ }
 " }}}
 " TagBar {{{
-noremap <silent> <F8>    :<C-u>call <SID>ToggleTagBar()<CR>
-
-let g:tagbar_width = s:rightWindowWidth
-
-function! s:ToggleTagBar()
-    if bufwinnr(bufnr('__Tagbar__')) != -1
-        TagbarToggle
-        let &columns = &columns - (g:tagbar_width + 1)
-    else
-        let &columns = &columns + (g:tagbar_width + 1)
-        TagbarToggle
-    endif
-endfunction
+" noremap <silent> <F8>    :<C-u>call <SID>ToggleTagBar()<CR>
+"
+" let g:tagbar_width = s:rightWindowWidth
+"
+" function! s:ToggleTagBar()
+"     if bufwinnr(bufnr('__Tagbar__')) != -1
+"         TagbarToggle
+"         let &columns = &columns - (g:tagbar_width + 1)
+"     else
+"         let &columns = &columns + (g:tagbar_width + 1)
+"         TagbarToggle
+"     endif
+" endfunction
 " }}}
 " lightline {{{
 " lightline用シンボル
@@ -221,11 +224,6 @@ function! MyCharCode()
     return "'". char ."' ". nr
 endfunction
 " }}}
-" indentLine {{{
-" let g:indentLine_fileType   = ['c', 'cpp', 'cs', 'vim', 'rb', 'go', 'glsl', 'hlsl', 'xml', 'json']
-" let g:indentLine_color_gui  = '#383838'
-" let g:indentLine_color_term = 239
-" }}}
 " vim-indent-guides {{{
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_guide_size            = 1
@@ -296,7 +294,6 @@ xmap <silent> <Leader>a=       <Leader>m=
 xmap <silent> <Leader>a:       <Leader>m:
 xmap <silent> <Leader>a,       <Leader>m*,
 xmap <silent> <Leader>a<Space> <Leader>m*<Space>
-
 " }}}
 " vim-smartinput-endwise {{{
 " http://cohama.hateblo.jp/entry/2013/11/08/013136
@@ -332,7 +329,6 @@ let g:increment_activator_filetype_candidates =
             \     ['private', 'protected', 'public'],
             \   ],
             \ }
-
 " }}}
 " vim-over {{{
 noremap <silent> <Leader>s :OverCommandLine<CR>
@@ -367,7 +363,7 @@ NeoBundleLazy "Shougo/neosnippet-snippets", {
             \ }
 
 NeoBundleLazy 'nosami/Omnisharp', {
-            \   'depends': [ 'Shougo/neocomplete.vim' ],
+            \   'depends': [ 'Shougo/neocomplete.vim', 'Shougo/vimproc'],
             \   'autoload': {
             \       'filetypes': [ 'cs' ]
             \   },
@@ -428,7 +424,6 @@ function! s:bundle.hooks.on_source(bundle)
     let g:neocomplete#sources#omni#input_patterns.cpp  = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
     let g:neocomplete#sources#omni#input_patterns.cs   = '[a-zA-Z0-9.]\{2\}'
     let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-    " let g:neocomplete#sources#omni#input_patterns.go   = '[^.[:digit:] *\t]\.\w*'
 
     if !exists('g:neocomplete#force_omni_input_patterns')
         let g:neocomplete#force_omni_input_patterns = {}
@@ -438,7 +433,6 @@ function! s:bundle.hooks.on_source(bundle)
     let g:neocomplete#force_omni_input_patterns.objc   = '[^.[:digit:] *\t]\%(\.\|->\)\w*'
     let g:neocomplete#force_omni_input_patterns.objcpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
     let g:neocomplete#force_omni_input_patterns.cs     = '[^.[:digit:] *\t]\%(\.\)\w*\|\h\w*::\w*'
-    " let g:neocomplete#force_omni_input_patterns.go     = '[^.[:digit:] *\t]\%(\.\)\w*\|\h\w*::\w*'
 
     if !exists('g:neocomplete#delimiter_patterns')
         let g:neocomplete#delimiter_patterns = {}
@@ -1202,17 +1196,18 @@ unlet s:bundle
 " }}}
 " その他 {{{
 " インストール {{{
-NeoBundleLazy 'Shougo/vimproc', {
-            \   'autoload': {
-            \       'function_prefix': 'vimproc',
-            \   },
-            \   'build': {
-            \       'windows': 'make -f make_mingw32.mak',
-            \       'cygwin':  'make -f make_cygwin.mak',
-            \       'mac':     'make -f make_mac.mak',
-            \       'unix':    'make -f make_unix.mak',
-            \   },
-            \ }
+" NeoBundleLazy 'Shougo/vimproc', {
+"             \   'autoload': {
+"             \       'function_prefix': 'vimproc',
+"             \   },
+"             \   'build': {
+"             \       'windows': 'make -f make_mingw32.mak',
+"             \       'cygwin':  'make -f make_cygwin.mak',
+"             \       'mac':     'make -f make_mac.mak',
+"             \       'unix':    'make -f make_unix.mak',
+"             \   },
+"             \ }
+NeoBundle 'Shougo/vimproc'
 
 NeoBundleLazy 'mattn/webapi-vim', {
             \   'autoload': {
@@ -1558,7 +1553,7 @@ set autoindent
 set cindent                       " Cプログラムファイルの自動インデントを始める
 
 set list
-set listchars=tab:\¦\ ,eol:↲,extends:»,precedes:«,nbsp:%
+set listchars=tab:\ \ ,eol:↲,extends:»,precedes:«,nbsp:%
 
 vnoremap < <gv
 vnoremap > >gv
