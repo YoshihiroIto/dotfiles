@@ -67,7 +67,6 @@ augroup END
 " フォント設定 {{{
 if s:isGuiRunning
     if s:isWindows
-        " set ambiwidth=single
         " set rop=type:directx
         set guifont=MeiryoKe_Gothic_SZ:h9:cSHIFTJIS
         " set guifont=Inconsolata\ for\ Powerline:h10:cSHIFTJIS
