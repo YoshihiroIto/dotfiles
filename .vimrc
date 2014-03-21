@@ -51,10 +51,6 @@ endif
 
 " 右ウィンドウ幅
 let s:rightWindowWidth = 40
-
-if filereadable(s:vimrc_local)
-    exe 'source' s:vimrc_local
-endif
 "}}}
 " プラグイン {{{
 " NeoBundle {{{
@@ -77,9 +73,9 @@ call neobundle#rc(expand('$DOTVIM/bundle/'))
 function! s:SetNeoBundle()"{{{
     " 表示 {{{
     NeoBundle 'tomasr/molokai'
-    NeoBundle 'itchyny/lightline.vim'
-    NeoBundle 'nathanaelkane/vim-indent-guides'
-    NeoBundle 'vim-scripts/matchparenpp'
+    NeoBundleLazy 'itchyny/lightline.vim'
+    NeoBundleLazy 'nathanaelkane/vim-indent-guides'
+    NeoBundleLazy 'vim-scripts/matchparenpp'
 
     NeoBundleLazy 'majutsushi/tagbar', {
                 \   'autoload': {
@@ -94,9 +90,9 @@ function! s:SetNeoBundle()"{{{
                 \ }
     " }}}
     " 編集 {{{
-    NeoBundle 'tomtom/tcomment_vim'
-    NeoBundle 'tpope/vim-surround'
-    NeoBundle 'tpope/vim-repeat'
+    NeoBundleLazy 'tomtom/tcomment_vim'
+    NeoBundleLazy 'tpope/vim-surround'
+    NeoBundleLazy 'tpope/vim-repeat'
 
     NeoBundleLazy 'LeafCage/yankround.vim', {
                 \   'autoload': {
@@ -158,17 +154,13 @@ function! s:SetNeoBundle()"{{{
                 \   }
                 \ }
 
-    " NeoBundleLazy 'honza/vim-snippets'
-
     NeoBundleLazy 'Shougo/neosnippet', {
-                \   'depends': [ 'honza/vim-snippets' ],
                 \   'autoload': {
                 \       'insert': 1,
                 \   }
                 \ }
 
     NeoBundleLazy 'Shougo/neosnippet-snippets', {
-                \   'depends': [ 'honza/vim-snippets' ],
                 \   'autoload': {
                 \       'insert': 1,
                 \   }
@@ -187,8 +179,8 @@ function! s:SetNeoBundle()"{{{
                 \ }
     " }}}
     " 検索 {{{
-    NeoBundle 'osyo-manga/vim-anzu'
-    NeoBundle 'matchit.zip'
+    NeoBundleLazy 'osyo-manga/vim-anzu'
+    NeoBundleLazy 'matchit.zip'
 
     NeoBundleLazy 'rhysd/clever-f.vim', {
                 \   'autoload': {
@@ -505,7 +497,7 @@ function! s:SetNeoBundle()"{{{
                 \ }
 
     if s:isWindows
-        NeoBundle 'YoshihiroIto/vim-icondrag'
+        NeoBundleLazy 'YoshihiroIto/vim-icondrag'
     endif
     " }}}
     " Unite {{{
@@ -533,7 +525,7 @@ function! s:SetNeoBundle()"{{{
                 \   }
                 \ }
 
-    NeoBundle 'Shougo/neomru.vim'
+    NeoBundleLazy 'Shougo/neomru.vim'
     " }}}
 endfunction " }}}
 if s:neobundle_cache
@@ -1137,7 +1129,7 @@ endfunction
 unlet s:bundle
 " }}}
 " icondrag {{{
-let g:icondrag_auto_start = 1
+" let g:icondrag_auto_start = 1
 " }}}
 " }}}
 " Unite {{{
@@ -1269,14 +1261,79 @@ if has('vim_starting')
 endif
 " }}}
 
-filetype plugin indent on
+" filetype plugin indent on
+
+let s:isFirstOneShotDone = 0
+let s:firstOneShotDelay = 2
+function! s:FirstOneShot()
+
+    if s:isFirstOneShotDone
+        return
+    endif
+
+    if s:firstOneShotDelay > 0
+        let s:firstOneShotDelay = s:firstOneShotDelay - 1
+        call s:ContinueCursorHold()
+        return
+    endif
+
+    let s:isFirstOneShotDone = 1
+
+    " syntax enable                     " 構文ごとに色分けをする
+    filetype plugin indent on
+
+    " 表示 {{{
+    NeoBundleSource vim-indent-guides
+    IndentGuidesEnable
+    NeoBundleSource lightline.vim
+    NeoBundleSource matchparenpp
+    " }}}
+    " 編集 {{{
+    NeoBundleSource tcomment_vim
+    NeoBundleSource vim-surround
+    NeoBundleSource vim-repeat
+    "}}}
+    " 検索 {{{
+    NeoBundleSource vim-anzu
+    NeoBundleSource matchit.zip
+    " }}}
+    " アプリ {{{
+    if s:isWindows
+        NeoBundleSource vim-icondrag
+        IconDragEnable
+    endif
+    " }}}
+    " Unite {{{
+    NeoBundleSource neomru.vim
+    " }}}
+
+    set laststatus=2
+    set showtabline=1
+
+    set incsearch                     " インクリメンタルサーチ
+    set ignorecase                    " 検索パターンにおいて大文字と小文字を区別しない。
+    set smartcase                     " 検索パターンが大文字を含んでいたらオプション 'ignorecase' を上書きする。
+
+    if filereadable(s:vimrc_local)
+        exe 'source' s:vimrc_local
+    endif
+
+    augroup FirstOneShot
+        autocmd!
+    augroup END
+endfunction
+
+augroup FirstOneShot
+    autocmd!
+    autocmd CursorHold,BufEnter,WinEnter,BufWinEnter *                   call s:FirstOneShot()
+augroup END
 
 augroup MyAutoGroup
-    autocmd BufEnter                      *                   call s:SetCurrentDir()
-    autocmd BufEnter,WinEnter,BufWinEnter *                   let  &l:numberwidth = len(line("$")) + 2
-    autocmd BufNewFile,BufRead            *.xaml              setf xml
-    autocmd BufNewFile,BufRead            *.{fx,fxc,fxh,hlsl} setf hlsl
-    autocmd BufNewFile,BufRead            *.{fsh,vsh}         setf glsl
+    autocmd BufEnter                                 *                   call s:SetCurrentDir()
+    autocmd BufEnter,WinEnter,BufWinEnter            *                   let  &l:numberwidth = len(line("$")) + 2
+    autocmd BufNewFile,BufRead                       *.xaml              setf xml
+    autocmd BufNewFile,BufRead                       *.{fx,fxc,fxh,hlsl} setf hlsl
+    autocmd BufNewFile,BufRead                       *.{fsh,vsh}         setf glsl
 
     autocmd FileType *        call s:SetAll()
     autocmd FileType ruby     call s:SetRuby()
@@ -1539,8 +1596,9 @@ set expandtab                     " Insertモードで <Tab> を挿入すると�
 " }}}
 " バックアップ・スワップファイル {{{
 set noswapfile                    " スワップファイルを作らない
-set backup                        " バックアップファイルを使う
-set backupdir=~/.vimbackup        " バックアップファイルをホームディレクトリに保存
+" set backup                        " バックアップファイルを使う
+" set backupdir=~/.vimbackup        " バックアップファイルをホームディレクトリに保存
+set nobackup                      " バックアップファイルを使わない
 
 " 自動ミラーリング {{{
 let s:mirrorDir = expand('$DOTVIM/mirror')
@@ -1589,10 +1647,6 @@ augroup END
 " }}}
 " }}}
 " 検索 {{{
-set incsearch                     " インクリメンタルサーチ
-set ignorecase                    " 検索パターンにおいて大文字と小文字を区別しない。
-set smartcase                     " 検索パターンが大文字を含んでいたらオプション 'ignorecase' を上書きする。
-
 if executable('pt')
     set grepprg=pt\ --nogroup\ --nocolor\ -S
     set grepformat=%f:%l:%m
@@ -1645,7 +1699,7 @@ set fillchars=vert:\              " 縦分割の境界線
 set synmaxcol=500                 " ハイライトする文字数を制限する
 set updatetime=220
 set previewheight=24
-set laststatus=2
+set laststatus=0
 set cmdheight=1
 
 " 'cursorline' を必要な時にだけ有効にする {{{
@@ -1828,7 +1882,8 @@ if s:isGuiRunning
 endif
 " }}}
 " タブライン操作 {{{
-set showtabline=2                   " タブライン常時表示
+" set showtabline=2                   " タブライン常時表示
+set showtabline=0
 
 nnoremap [Tab]     <Nop>
 nmap     <Leader>t [Tab]
@@ -1861,7 +1916,7 @@ nnoremap <silent> <Down> :<C-u>bn<cr>
 " vimrc / gvimrc の編集
 nnoremap <silent> <F1> :<C-u>call <SID>SmartOpen($MYVIMRC)<CR>
 nnoremap <silent> <F2> :<C-u>call <SID>SmartOpen($MYGVIMRC)<CR>
-nnoremap <silent> <F3> :<C-u>NeoBundleClearCache<CR>:<C-u>source $MYVIMRC<CR>:<C-u>source $MYGVIMRC<CR>
+nnoremap <silent> <F3> :<C-u>source $MYVIMRC<CR>:<C-u>source $MYGVIMRC<CR>
 " }}}
 " マーク {{{
 nmap <silent> <Leader>m `
