@@ -14,21 +14,19 @@ let s:vimrc_local  = expand('~/.vimrc_local')
 let g:mapleader    = ','
 let $DOTVIM        = s:isWindows ? expand('~/vimfiles') : expand('~/.vim')
 set viminfo+=!
-" set viminfo=
 
 augroup MyAutoGroup
     autocmd!
 augroup END
 
 " WinではPATHに$VIMが含まれていないときにexeを見つけ出せないので修正
-if has('win32') && $PATH !~? '\(^\|;\)' . escape($VIM, '\\') . '\(;\|$\)'
+if s:isWindows && $PATH !~? '\(^\|;\)' . escape($VIM, '\\') . '\(;\|$\)'
     let $PATH = $VIM . ';' . $PATH
 endif
 
-if has('mac')
-    " Macではデフォルトの'iskeyword'がcp932に対応しきれていないので修正
+" Macではデフォルトの'iskeyword'がcp932に対応しきれていないので修正
+if s:isMac
     set iskeyword=@,48-57,_,128-167,224-235
-
     let $PATH = simplify($VIM . '/../../MacOS') . ':' . $PATH
 endif
 
@@ -79,13 +77,13 @@ function! s:SetNeoBundle()"{{{
 
     NeoBundleLazy 'majutsushi/tagbar', {
                 \   'autoload': {
-                \       'commands': [ 'TagbarToggle' ]
+                \       'commands': ['TagbarToggle']
                 \   }
                 \ }
 
     NeoBundleLazy 'LeafCage/foldCC', {
                 \   'autoload': {
-                \       'filetypes': [ 'vim', 'markdown' ]
+                \       'filetypes': ['vim', 'markdown']
                 \   }
                 \ }
     " }}}
@@ -96,7 +94,7 @@ function! s:SetNeoBundle()"{{{
 
     NeoBundleLazy 'LeafCage/yankround.vim', {
                 \   'autoload': {
-                \       'mappings': [ '<Plug>(yankround-' ],
+                \       'mappings': ['<Plug>(yankround-'],
                 \   }
                 \ }
 
@@ -137,7 +135,7 @@ function! s:SetNeoBundle()"{{{
 
     NeoBundleLazy 'junegunn/vim-easy-align', {
                 \   'autoload': {
-                \     'commands': [ 'EasyAlign', 'LiveEasyAlign' ],
+                \     'commands': ['EasyAlign', 'LiveEasyAlign'],
                 \     'mappings': [
                 \       '<Plug>(EasyAlignOperator)',
                 \       ['sxn', '<Plug>(EasyAlign)'],
@@ -167,9 +165,9 @@ function! s:SetNeoBundle()"{{{
                 \ }
 
     NeoBundleLazy 'nosami/Omnisharp', {
-                \   'depends': [ 'Shougo/neocomplete.vim', 'Shougo/vimproc'],
+                \   'depends': ['Shougo/neocomplete.vim', 'Shougo/vimproc'],
                 \   'autoload': {
-                \       'filetypes': [ 'cs' ]
+                \       'filetypes': ['cs']
                 \   },
                 \   'build': {
                 \       'windows': 'C:/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe server/OmniSharp.sln /p:Platform="Any CPU"',
@@ -258,9 +256,21 @@ function! s:SetNeoBundle()"{{{
                 \   }
                 \ }
 
-    NeoBundleLazy 'rcmdnk/vim-markdown', {
+    NeoBundleLazy 'gabrielelana/vim-markdown', {
                 \   'autoload': {
                 \       'filetypes': ['markdown']
+                \   }
+                \ }
+
+    NeoBundleLazy 'pangloss/vim-javascript', {
+                \   'autoload': {
+                \       'filetypes': ['javascript']
+                \   }
+                \ }
+
+    NeoBundleLazy 'jelera/vim-javascript-syntax', {
+                \   'autoload': {
+                \       'filetypes': ['javascript']
                 \   }
                 \ }
 
@@ -288,7 +298,7 @@ function! s:SetNeoBundle()"{{{
                 \ }
 
     NeoBundleLazy 'thinca/vim-quickrun', {
-                \   'depends' : [ 'osyo-manga/shabadou.vim', 'rhysd/wandbox-vim' ],
+                \   'depends' : ['osyo-manga/shabadou.vim', 'rhysd/wandbox-vim'],
                 \   'autoload': {
                 \       'mappings': [['sxn', '<Plug>(quickrun']],
                 \       'commands': [
@@ -394,7 +404,7 @@ function! s:SetNeoBundle()"{{{
                 \   'depends':  ['kana/vim-operator-user'],
                 \   'autoload': {
                 \     'commands': ['RengBang'],
-                \     'mappings': [[ 'nx', '<Plug>(operator-rengbang']]
+                \     'mappings': [['nx', '<Plug>(operator-rengbang']]
                 \   }
                 \ }
 
@@ -454,6 +464,12 @@ function! s:SetNeoBundle()"{{{
                 \   ],
                 \   'autoload': {
                 \       'commands': ['TweetVimHomeTimeline', 'TweetVimUserStream']
+                \   }
+                \ }
+
+    NeoBundleLazy 'tpope/vim-fugitive', {
+                \   'autoload': {
+                \       'function_prefix': 'fugitive'
                 \   }
                 \ }
 
@@ -560,29 +576,30 @@ endfunction
 " }}}
 " lightline {{{
 " lightline用シンボル
-let s:lightline_symbol_separator_left     = s:isWindows ? ''   : '⮀'
-let s:lightline_symbol_separator_right    = s:isWindows ? ''   : '⮂'
-let s:lightline_symbol_subseparator_left  = s:isWindows ? '|'  : '⮁'
-let s:lightline_symbol_subseparator_right = s:isWindows ? '|'  : '⮃'
-let s:lightline_symbol_line               = s:isWindows ? ''   : '⭡ '
-let s:lightline_symbol_readonly           = s:isWindows ? 'ro' : '⭤'
-let s:lightline_symbol_brunch             = s:isWindows ? ''   : '⭠ '
+let s:LightlineSymbolSeparatorLeft     = s:isWindows ? ''   : '⮀'
+let s:LightlineSymbolSeparatorRight    = s:isWindows ? ''   : '⮂'
+let s:LightlineSymbolSubseparatorLeft  = s:isWindows ? '|'  : '⮁'
+let s:LightlineSymbolSubseparatorRight = s:isWindows ? '|'  : '⮃'
+let s:LightlineSymbolLine              = s:isWindows ? ''   : '⭡ '
+let s:LightlineSymbolReadonly          = s:isWindows ? 'ro' : '⭤'
+let s:LightlineSymbolBrunch            = s:isWindows ? ''   : '⭠ '
 
 let g:lightline = {
             \   'mode_map': {'c': 'NORMAL'},
             \   'active': {
-            \       'left':  [ [ 'mode', 'paste' ],
-            \                  [ 'filename', 'anzu'] ],
-            \       'right': [ [ 'lineinfo' ],
-            \                  [ 'percent' ],
-            \                  [ 'charcode', 'fileformat', 'fileencoding', 'filetype' ] ]
+            \       'left':  [['mode', 'paste'],
+            \                 ['fugitive', 'filename', 'anzu']],
+            \       'right': [['lineinfo'],
+            \                 ['percent'],
+            \                 ['charcode', 'fileformat', 'fileencoding', 'filetype']]
             \   },
             \   'component': {
-            \       'lineinfo': s:lightline_symbol_line . '%4l/%L : %-3v',
+            \       'lineinfo': s:LightlineSymbolLine . '%4l/%L : %-3v',
             \   },
             \   'component_function': {
             \       'modified':          'MyModified',
             \       'readonly':          'MyReadonly',
+            \       'fugitive':          'MyFugitive',
             \       'filename':          'MyFilename',
             \       'fileformat':        'MyFileformat',
             \       'filetype':          'MyFiletype',
@@ -593,24 +610,24 @@ let g:lightline = {
             \       'anzu':              'anzu#search_status',
             \    },
             \   'separator': {
-            \       'left':  s:lightline_symbol_separator_left,
-            \       'right': s:lightline_symbol_separator_right
+            \       'left':  s:LightlineSymbolSeparatorLeft,
+            \       'right': s:LightlineSymbolSeparatorRight
             \   },
             \   'subseparator': {
-            \       'left':  s:lightline_symbol_subseparator_left,
-            \       'right': s:lightline_symbol_subseparator_right
+            \       'left':  s:LightlineSymbolSubseparatorLeft,
+            \       'right': s:LightlineSymbolSubseparatorRight
             \   },
             \   'tabline': {
-            \       'left':  [ [ 'tabs' ] ],
-            \       'right': [ [ ] ],
+            \       'left':  [['tabs']],
+            \       'right': [[]],
             \   },
             \   'tabline_separator': {
-            \       'left':  s:lightline_symbol_separator_left,
-            \       'right': s:lightline_symbol_separator_right
+            \       'left':  s:LightlineSymbolSeparatorLeft,
+            \       'right': s:LightlineSymbolSeparatorRight
             \   },
             \   'tabline_subseparator': {
-            \       'left':  s:lightline_symbol_subseparator_left,
-            \       'right': s:lightline_symbol_subseparator_right
+            \       'left':  s:LightlineSymbolSubseparatorLeft,
+            \       'right': s:LightlineSymbolSubseparatorRight
             \   },
             \ }
 
@@ -619,7 +636,7 @@ function! MyModified()
 endfunction
 
 function! MyReadonly()
-    return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? s:lightline_symbol_readonly : ''
+    return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? s:LightlineSymbolReadonly : ''
 endfunction
 
 function! MyFilename()
@@ -629,6 +646,15 @@ function! MyFilename()
                 \  &ft == 'vimshell'  ? vimshell#get_status_string() :
                 \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
                 \ ('' != MyModified() ? ' ' . MyModified() : '')
+endfunction
+
+function! MyFugitive()
+    if &ft !~? 'vimfiler\|gundo'
+        let _ = fugitive#head()
+
+        return strlen(_) ? s:LightlineSymbolBrunch . _ : ''
+    endif
+    return ''
 endfunction
 
 function! MyFileformat()
@@ -690,6 +716,7 @@ endfunction
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_guide_size            = 1
 let g:indent_guides_auto_colors           = 0
+let g:indent_guides_exclude_filetypes     = ['help', 'lingr-messages', 'tweetvim']
 " }}}
 " }}}
 " 編集 {{{
@@ -885,7 +912,6 @@ map g# <Plug>(visualstar-g#)
 " vim-easymotion {{{
 " http://haya14busa.com/vim-lazymotion-on-speed/
 let g:EasyMotion_do_mapping          = 0
-" let g:EasyMotion_leader_key          = '<Leader>'
 let g:EasyMotion_keys                = 'hlasdyuiopqwertnmzxcvbgfkj'
 let g:EasyMotion_special_select_line = 0
 let g:EasyMotion_select_phrase       = 1
@@ -898,10 +924,45 @@ vmap r         <Plug>(easymotion-s)
 omap r         <Plug>(easymotion-s)
 " }}}
 " vim-anzu {{{
-nmap <silent> n <Plug>(anzu-n)zOzz:<C-u>call <SID>RefreshScreen()<CR>
-nmap <silent> N <Plug>(anzu-N)zOzz:<C-u>call <SID>RefreshScreen()<CR>
+nmap <silent> n <Plug>(anzu-n)zOzz:call <SID>BeginDisplayAnzu()<CR>:<C-u>call <SID>RefreshScreen()<CR>
+nmap <silent> N <Plug>(anzu-N)zOzz:call <SID>BeginDisplayAnzu()<CR>:<C-u>call <SID>RefreshScreen()<CR>
 nmap <silent> * <Plug>(anzu-star):<C-u>call <SID>RefreshScreen()<CR>
 nmap <silent> # <Plug>(anzu-sharp):<C-u>call <SID>RefreshScreen()<CR>
+
+let s:bundle = neobundle#get('vim-anzu')
+function! s:bundle.hooks.on_source(bundle)
+
+    augroup vim-anzu
+        " 一定時間キー入力がないとき、ウインドウを移動したとき、タブを移動したときに
+        " 検索ヒット数の表示を消去する
+        autocmd!
+        autocmd CursorHold,CursorHoldI * call s:UpdateDisplayAnzu()
+        autocmd WinLeave,TabLeave      * call s:ClearDisplayAnzu()
+
+        " anzuを表示する時間
+        let s:anzuDisplayTime = 2000
+
+        let s:anzuDisplayCount = 0
+        function! s:BeginDisplayAnzu()
+            let s:anzuDisplayCount = s:anzuDisplayTime / &updatetime
+        endfunction
+
+        function! s:UpdateDisplayAnzu()
+            if s:anzuDisplayCount >= 0
+                let s:anzuDisplayCount -= 1
+                call s:ContinueCursorHold()
+            else
+                call s:ClearDisplayAnzu()
+            endif
+        endfunction
+
+        function! s:ClearDisplayAnzu()
+            let s:anzuDisplayCount = 0
+            call anzu#clear_search_status()
+        endfunction
+    augroup END
+endfunction
+unlet s:bundle
 " }}}
 " parajump {{{
 map { <Plug>(parajump-backward)
@@ -1154,8 +1215,8 @@ nnoremap <silent> [Unite]o   :<C-u>Unite -no-split outline<CR>
 nnoremap <silent> [Unite]z   :<C-u>Unite -no-split fold<CR>
 nnoremap <silent> [Unite]q   :<C-u>Unite -no-quit -horizontal quickfix<CR>
 
-nnoremap          [Unite]uu  :<C-u>NeoBundleClearCache<CR>:<C-u>NeoBundleUpdate<CR>:NeoBundleUpdatesLog<CR>
-nnoremap          [Unite]ui  :<C-u>NeoBundleClearCache<CR>:<C-u>NeoBundleInstall<CR>:NeoBundleUpdatesLog<CR>
+nnoremap          [Unite]uu  :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
+nnoremap          [Unite]ui  :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
 
 " http://sanrinsha.lolipop.jp/blog/2013/03/%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E5%86%85%E3%81%AE%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92unite-grep%E3%81%99%E3%82%8B.html
 function! s:unite_grep_project(...)
@@ -1227,7 +1288,6 @@ augroup auto-source
     autocmd!
     autocmd FocusLost * call s:source()
 augroup END
-
 " }}}
 " }}}
 " }}}
@@ -1265,7 +1325,7 @@ endif
 
 let s:isFirstOneShotDone = 0
 let s:firstOneShotDelay = 2
-function! s:FirstOneShot()
+function! s:FirstOneShot()"{{{
 
     if s:isFirstOneShotDone
         return
@@ -1298,6 +1358,7 @@ function! s:FirstOneShot()
     NeoBundleSource matchit.zip
     " }}}
     " アプリ {{{
+    NeoBundleSource vim-fugitive
     if s:isWindows
         NeoBundleSource vim-icondrag
         IconDragEnable
@@ -1321,19 +1382,18 @@ function! s:FirstOneShot()
     augroup FirstOneShot
         autocmd!
     augroup END
-endfunction
+endfunction"}}}
 
 augroup FirstOneShot
     autocmd!
-    autocmd CursorHold,BufEnter,WinEnter,BufWinEnter *                   call s:FirstOneShot()
+    autocmd CursorHold,BufEnter,WinEnter,BufWinEnter * call s:FirstOneShot()
 augroup END
 
 augroup MyAutoGroup
-    autocmd BufEnter                                 *                   call s:SetCurrentDir()
-    autocmd BufEnter,WinEnter,BufWinEnter            *                   let  &l:numberwidth = len(line("$")) + 2
-    autocmd BufNewFile,BufRead                       *.xaml              setf xml
-    autocmd BufNewFile,BufRead                       *.{fx,fxc,fxh,hlsl} setf hlsl
-    autocmd BufNewFile,BufRead                       *.{fsh,vsh}         setf glsl
+    autocmd BufEnter,WinEnter,BufWinEnter *                   call s:SetAll()
+    autocmd BufNewFile,BufRead            *.xaml              setf xml
+    autocmd BufNewFile,BufRead            *.{fx,fxc,fxh,hlsl} setf hlsl
+    autocmd BufNewFile,BufRead            *.{fsh,vsh}         setf glsl
 
     autocmd FileType *        call s:SetAll()
     autocmd FileType ruby     call s:SetRuby()
@@ -1349,6 +1409,13 @@ augroup MyAutoGroup
     function! s:SetAll()
         setlocal formatoptions-=ro
         setlocal textwidth=0
+
+        let  &l:numberwidth = len(line("$")) + 2
+
+        " ファイルの場所をカレントにする
+        if &ft != '' && &ft != 'vimfiler'
+            silent! exe 'lcd'  fnameescape(expand('%:p:h'))
+        endif
     endfunction
 
     function! s:SetRuby()
@@ -1457,7 +1524,6 @@ set imsearch=0                    " 検索モードでのデフォルトのIME�
 set formatexpr=autofmt#japanese#formatexpr()
 set nrformats-=octal
 set nrformats+=alpha
-" set completeopt=longest,menuone,preview
 set completeopt=longest,menuone
 set backspace=indent,eol,start
 
@@ -1596,8 +1662,6 @@ set expandtab                     " Insertモードで <Tab> を挿入すると�
 " }}}
 " バックアップ・スワップファイル {{{
 set noswapfile                    " スワップファイルを作らない
-" set backup                        " バックアップファイルを使う
-" set backupdir=~/.vimbackup        " バックアップファイルをホームディレクトリに保存
 set nobackup                      " バックアップファイルを使わない
 
 " 自動ミラーリング {{{
@@ -1607,7 +1671,7 @@ augroup MyAutoGroup
     autocmd VimEnter    * call s:TrimMirrorDirs()
     autocmd BufWritePre * call s:MirrorCurrentFile()
 
-    "古いミラーディレクトリを削除する
+    " 古いミラーディレクトリを削除する
     function! s:TrimMirrorDirs()
 
         let mirrorDirs = sort(split(glob(s:mirrorDir . '/*'),  '\n'))
@@ -1618,7 +1682,7 @@ augroup MyAutoGroup
         endwhile
     endfunction
 
-    "カレントファイルをミラーリングする
+    " カレントファイルをミラーリングする
     function! s:MirrorCurrentFile()
 
         let sourceFilepath = expand('%:p')
@@ -1882,7 +1946,6 @@ if s:isGuiRunning
 endif
 " }}}
 " タブライン操作 {{{
-" set showtabline=2                   " タブライン常時表示
 set showtabline=0
 
 nnoremap [Tab]     <Nop>
@@ -1910,7 +1973,6 @@ endfor
 
 nnoremap <silent> <Up>   :<C-u>bp<cr>
 nnoremap <silent> <Down> :<C-u>bn<cr>
-
 " }}}
 " ファイル操作 {{{
 " vimrc / gvimrc の編集
@@ -1931,11 +1993,13 @@ nnoremap <Leader><C-k><C-k> :<C-u>help <C-r><C-w><CR>
 " 汎用関数 {{{
 " SID取得 {{{
 function! s:SID()
+
     return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID$')
 endfunction
 " }}}
 " CursorHold を継続させる{{{
 function! s:ContinueCursorHold()
+
     " http://d.hatena.ne.jp/osyo-manga/20121102/1351836801
     call feedkeys(mode() ==# 'i' ? "\<C-g>\<ESC>" : "g\<ESC>", 'n')
 endfunction
@@ -2008,6 +2072,7 @@ let s:opendLeftVsp = 0
 let s:opendTopVsp  = 0
 
 function! s:ToggleVSplitWide()
+
     if s:depthVsp <= 1
         call s:OpenVSplitWide()
     else
@@ -2159,14 +2224,6 @@ function! s:CleanEmptyBuffers()
     endif
 endfunction
 " }}}
-" ファイルの場所をカレントにする{{{
-function! s:SetCurrentDir()
-
-    if &ft != '' && &ft != 'vimfiler'
-        silent! exe 'lcd'  fnameescape(expand('%:p:h'))
-    endif
-endfunction
-" }}}
 " ファイルコピー{{{
 function! s:CopyFile(sourceFilepath, targetFilepath)
 
@@ -2225,6 +2282,7 @@ endfunction
 " カーソル位置のn文字前を取得する {{{
 " http://d.hatena.ne.jp/eagletmt/20100623/1277289728
 function! s:GetPrevCursorChar(n)
+
     let chars = split(getline('.')[0 : col('.')-1], '\zs')
     let len = len(chars)
     if a:n >= len
@@ -2236,8 +2294,9 @@ endfunction
 " }}}
 " 現在位置が括弧上にあるか 0:ない 1:開括弧 2:閉括弧 {{{
 function! s:GetOnBraceChar()
-    let s:openBraces  = [ '(', '{', '[', '<', '"', "'"]
-    let s:closeBraces = [ ')', '}', ']', '>']
+
+    let s:openBraces  = ['(', '{', '[', '<', '"', "'"]
+    let s:closeBraces = [')', '}', ']', '>']
 
     let s:currentChar = s:GetPrevCursorChar(0)
     for s:b in s:openBraces
@@ -2258,6 +2317,7 @@ endfunction
 " }}}
 " コンソール用 {{{
 if !s:isGuiRunning
+
     source $MYGVIMRC
 endif
 " }}}
