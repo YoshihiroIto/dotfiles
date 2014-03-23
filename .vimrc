@@ -473,13 +473,31 @@ function! s:SetNeoBundle()"{{{
                 \   }
                 \ }
 
-    if s:isMac
-        NeoBundleLazy 'itchyny/dictionary.vim', {
-                    \   'autoload': {
-                    \       'commands': ['Dictionary']
-                    \   }
-                    \ }
-    endif
+    NeoBundleLazy 'Shougo/vinarise.vim', {
+                \  'autoload': {
+                \    'commands': [
+                \      {
+                \        'name':     'VinariseScript2Hex',
+                \        'complete': 'customlist,vinarise#complete'
+                \      },
+                \      'VinarisePluginBitmapView',
+                \      {
+                \        'name':     'Vinarise',
+                \        'complete': 'customlist,vinarise#complete'
+                \      },
+                \      'VinarisePluginDump',
+                \      {
+                \        'name':     'VinariseDump',
+                \        'complete': 'customlist,vinarise#complete'
+                \      },
+                \      {
+                \        'name':     'VinariseHex2Script',
+                \        'complete': 'file'
+                \      }
+                \    ],
+                \    'unite_sources': ['vinarise_analysis']
+                \  }
+                \ }
 
     NeoBundleLazy 'Shougo/vimproc', {
                 \   'autoload': {
@@ -511,6 +529,20 @@ function! s:SetNeoBundle()"{{{
                 \       'commands': ['MoveWin']
                 \   }
                 \ }
+
+    NeoBundleLazy 'thinca/vim-threes', {
+                \   'autoload': {
+                \       'commands': ['ThreesStart']
+                \   }
+                \ }
+
+    if s:isMac
+        NeoBundleLazy 'itchyny/dictionary.vim', {
+                    \   'autoload': {
+                    \       'commands': ['Dictionary']
+                    \   }
+                    \ }
+    endif
 
     if s:isWindows
         NeoBundleLazy 'YoshihiroIto/vim-icondrag'
@@ -649,12 +681,12 @@ endfunction
 
 function! MyFilename()
     return ('' != MyReadonly() ? MyReadonly() . ' ' : '') .
-                \ (&ft ==  'vimfiler' ? vimfiler#get_status_string() :
-                \  &ft ==  'unite'    ? unite#get_status_string() :
-                \  &ft ==  'vimshell' ? vimshell#get_status_string() :
-                \  &ft =~? 'lingr'    ? '' :
-                \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
-                \ ('' != MyModified() ? ' ' . MyModified() : '')
+                \ (&ft ==  'vimfiler'  ? vimfiler#get_status_string() :
+                \  &ft ==  'unite'     ? unite#get_status_string() :
+                \  &ft ==  'vimshell'  ? vimshell#get_status_string() :
+                \  &ft =~? 'lingr'     ? '' :
+                \ ''  != expand('%:t') ? expand('%:t') : '[No Name]') .
+                \ ('' != MyModified()  ? ' ' . MyModified() : '')
 endfunction
 
 function! MyFugitive()
@@ -1116,6 +1148,10 @@ nmap <silent> <Leader><Leader> <Plug>(operator-jump-toggle)ai:<C-u>call <SID>Ref
 " アプリ {{{
 " vimshell.vim {{{
 noremap <silent> [App]s :<C-u>VimShellPop<CR>
+
+let g:vimshell_popup_height   = 40
+let g:vimshell_prompt_expr    = 'getcwd()." > "'
+let g:vimshell_prompt_pattern = '^\f\+ > '
 " }}}
 " VimFiler {{{
 noremap <silent> [App]f :<C-u>VimFilerBufferDir<CR>
@@ -1137,9 +1173,13 @@ function! s:bundle.hooks.on_source(bundle)
         nmap <buffer><expr> K vimfiler#smart_cursor_map(
             \  "\<Plug>(easymotion-k)",
             \  "\<Plug>(easymotion-k)")
+
+        " dotfile表示状態に設定
+        exe ':normal .'
     endfunction
 
-    let g:vimfiler_as_default_explorer = 1
+    let g:vimfiler_as_default_explorer        = 1
+    let g:vimfiler_force_overwrite_statusline = 0
 endfunction
 unlet s:bundle
 " }}}
@@ -1258,6 +1298,8 @@ function! s:bundle.hooks.on_source(bundle)
 
     let g:neomru#update_interval                = 60
     let g:neomru#file_mru_limit                 = 500
+
+    let g:unite_force_overwrite_statusline = 0
 
     " call unite#custom#source('fold,neomru/file', 'matchers', 'matcher_migemo')
     call unite#custom#source('fold', 'matchers', 'matcher_migemo')
@@ -1738,6 +1780,8 @@ if has('migemo')
 
     if s:isWindows
         set migemodict=$VIM/dict/utf-8/migemo-dict
+    elseif s:isMac
+        set migemodict=$VIMRUNTIME/dict/migemo-dict
     endif
 endif
 
