@@ -29,8 +29,8 @@ hi VertSplit        guifg=#202020 guibg=#202020 gui=bold "見えなくする
 hi SpecialKey       guifg=#383838 guibg=#121212 gui=none
 
 " vim-indent-guides
-hi IndentGuidesOdd  guibg=#181818
-hi IndentGuidesEven guibg=#181818
+hi IndentGuidesOdd                guibg=#181818
+hi IndentGuidesEven               guibg=#181818
 " }}}
 " 見た目 {{{
 " ツールバー削除

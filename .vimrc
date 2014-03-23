@@ -576,13 +576,13 @@ endfunction
 " }}}
 " lightline {{{
 " lightline用シンボル
-let s:LightlineSymbolSeparatorLeft     = s:isWindows ? ''   : '⮀'
-let s:LightlineSymbolSeparatorRight    = s:isWindows ? ''   : '⮂'
-let s:LightlineSymbolSubseparatorLeft  = s:isWindows ? '|'  : '⮁'
-let s:LightlineSymbolSubseparatorRight = s:isWindows ? '|'  : '⮃'
-let s:LightlineSymbolLine              = s:isWindows ? ''   : '⭡ '
-let s:LightlineSymbolReadonly          = s:isWindows ? 'ro' : '⭤'
-let s:LightlineSymbolBrunch            = s:isWindows ? ''   : '⭠ '
+let s:lightlineSymbolSeparatorLeft     = s:isWindows ? ''   : '⮀'
+let s:lightlineSymbolSeparatorRight    = s:isWindows ? ''   : '⮂'
+let s:lightlineSymbolSubseparatorLeft  = s:isWindows ? '|'  : '⮁'
+let s:lightlineSymbolSubseparatorRight = s:isWindows ? '|'  : '⮃'
+let s:lightlineSymbolLine              = s:isWindows ? ''   : '⭡ '
+let s:lightlineSymbolReadonly          = s:isWindows ? 'ro' : '⭤'
+let s:lightlineSymbolBrunch            = s:isWindows ? ''   : '⭠ '
 
 let g:lightline = {
             \   'mode_map': {'c': 'NORMAL'},
@@ -594,90 +594,111 @@ let g:lightline = {
             \                 ['charcode', 'fileformat', 'fileencoding', 'filetype']]
             \   },
             \   'component': {
-            \       'lineinfo': s:LightlineSymbolLine . '%4l/%L : %-3v',
+            \       'lineinfo': s:lightlineSymbolLine . '%4l/%L : %-3v',
             \   },
             \   'component_function': {
-            \       'modified':          'MyModified',
-            \       'readonly':          'MyReadonly',
-            \       'fugitive':          'MyFugitive',
-            \       'filename':          'MyFilename',
-            \       'fileformat':        'MyFileformat',
-            \       'filetype':          'MyFiletype',
-            \       'fileencoding':      'MyFileencoding',
-            \       'mode':              'MyMode',
-            \       'charcode':          'MyCharCode',
-            \       'currentworkingdir': 'MyCurrentWorkingDir',
-            \       'anzu':              'anzu#search_status',
+            \       'modified':     'MyModified',
+            \       'readonly':     'MyReadonly',
+            \       'fugitive':     'MyFugitive',
+            \       'filename':     'MyFilename',
+            \       'fileformat':   'MyFileformat',
+            \       'filetype':     'MyFiletype',
+            \       'fileencoding': 'MyFileencoding',
+            \       'mode':         'MyMode',
+            \       'charcode':     'MyCharCode',
+            \       'anzu':         'anzu#search_status',
             \    },
             \   'separator': {
-            \       'left':  s:LightlineSymbolSeparatorLeft,
-            \       'right': s:LightlineSymbolSeparatorRight
+            \       'left':  s:lightlineSymbolSeparatorLeft,
+            \       'right': s:lightlineSymbolSeparatorRight
             \   },
             \   'subseparator': {
-            \       'left':  s:LightlineSymbolSubseparatorLeft,
-            \       'right': s:LightlineSymbolSubseparatorRight
+            \       'left':  s:lightlineSymbolSubseparatorLeft,
+            \       'right': s:lightlineSymbolSubseparatorRight
             \   },
             \   'tabline': {
             \       'left':  [['tabs']],
             \       'right': [[]],
             \   },
             \   'tabline_separator': {
-            \       'left':  s:LightlineSymbolSeparatorLeft,
-            \       'right': s:LightlineSymbolSeparatorRight
+            \       'left':  s:lightlineSymbolSeparatorLeft,
+            \       'right': s:lightlineSymbolSeparatorRight
             \   },
             \   'tabline_subseparator': {
-            \       'left':  s:LightlineSymbolSubseparatorLeft,
-            \       'right': s:LightlineSymbolSubseparatorRight
+            \       'left':  s:lightlineSymbolSubseparatorLeft,
+            \       'right': s:lightlineSymbolSubseparatorRight
             \   },
             \ }
 
+function! MyMode()
+    return        &ft == 'unite'    ? 'Unite'    :
+                \ &ft == 'vimfiler' ? 'VimFiler' :
+                \ &ft == 'vimshell' ? 'VimShell' :
+                \ winwidth(0) > 60 ? lightline#mode() : ''
+endfunction
+
+let s:lightlineNoDispFt = 'help\|vimfiler\|lingr'
+
 function! MyModified()
-    return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+    return &ft =~ s:lightlineNoDispFt ? '' : &modified ? '+' : &modifiable ? '' : '-'
 endfunction
 
 function! MyReadonly()
-    return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? s:LightlineSymbolReadonly : ''
+    return &ft !~? s:lightlineNoDispFt && &readonly ? s:lightlineSymbolReadonly : ''
 endfunction
 
 function! MyFilename()
     return ('' != MyReadonly() ? MyReadonly() . ' ' : '') .
-                \ (&ft == 'vimfiler'  ? vimfiler#get_status_string() :
-                \  &ft == 'unite'     ? unite#get_status_string() :
-                \  &ft == 'vimshell'  ? vimshell#get_status_string() :
+                \ (&ft ==  'vimfiler' ? vimfiler#get_status_string() :
+                \  &ft ==  'unite'    ? unite#get_status_string() :
+                \  &ft ==  'vimshell' ? vimshell#get_status_string() :
+                \  &ft =~? 'lingr'    ? '' :
                 \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
                 \ ('' != MyModified() ? ' ' . MyModified() : '')
 endfunction
 
 function! MyFugitive()
-    if &ft !~? 'vimfiler\|gundo'
+    if &ft !~? 'vimfiler'
         let _ = fugitive#head()
 
-        return strlen(_) ? s:LightlineSymbolBrunch . _ : ''
+        return strlen(_) ? s:lightlineSymbolBrunch . _ : ''
     endif
     return ''
 endfunction
 
 function! MyFileformat()
+
+    if &ft =~? s:lightlineNoDispFt
+        return ''
+    endif
+
     return winwidth(0) > 70 ? &fileformat : ''
 endfunction
 
 function! MyFiletype()
+
+    if &ft =~? s:lightlineNoDispFt
+        return ''
+    endif
+
     return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype : 'no ft') : ''
 endfunction
 
 function! MyFileencoding()
+
+    if &ft =~? s:lightlineNoDispFt
+        return ''
+    endif
+
     return winwidth(0) > 70 ? (strlen(&fenc) ? &fenc : &enc) : ''
 endfunction
 
-function! MyMode()
-    return winwidth(0) > 60 ? lightline#mode() : ''
-endfunction
-
-function! MyCurrentWorkingDir()
-    return fnamemodify(getcwd(), ':~')
-endfunction
-
 function! MyCharCode()
+
+    if &ft =~? s:lightlineNoDispFt
+        return ''
+    endif
+
     if winwidth(0) <= 80
         return ''
     endif
@@ -924,18 +945,17 @@ vmap r         <Plug>(easymotion-s)
 omap r         <Plug>(easymotion-s)
 " }}}
 " vim-anzu {{{
-nmap <silent> n <Plug>(anzu-n)zOzz:call <SID>BeginDisplayAnzu()<CR>:<C-u>call <SID>RefreshScreen()<CR>
-nmap <silent> N <Plug>(anzu-N)zOzz:call <SID>BeginDisplayAnzu()<CR>:<C-u>call <SID>RefreshScreen()<CR>
-nmap <silent> * <Plug>(anzu-star):<C-u>call <SID>RefreshScreen()<CR>
+nmap <silent> n <Plug>(anzu-n)zOzz:<C-u>call <SID>BeginDisplayAnzu()<CR>:<C-u>call <SID>RefreshScreen()<CR>
+nmap <silent> N <Plug>(anzu-N)zOzz:<C-u>call <SID>BeginDisplayAnzu()<CR>:<C-u>call <SID>RefreshScreen()<CR>
+nmap <silent> * <Plug>(anzu-star):<C-u>call  <SID>RefreshScreen()<CR>
 nmap <silent> # <Plug>(anzu-sharp):<C-u>call <SID>RefreshScreen()<CR>
 
 let s:bundle = neobundle#get('vim-anzu')
 function! s:bundle.hooks.on_source(bundle)
 
-    augroup vim-anzu
+    augroup MyAutoGroup
         " 一定時間キー入力がないとき、ウインドウを移動したとき、タブを移動したときに
         " 検索ヒット数の表示を消去する
-        autocmd!
         autocmd CursorHold,CursorHoldI * call s:UpdateDisplayAnzu()
         autocmd WinLeave,TabLeave      * call s:ClearDisplayAnzu()
 
@@ -1094,11 +1114,11 @@ nmap <silent> <Leader><Leader> <Plug>(operator-jump-toggle)ai:<C-u>call <SID>Ref
 " }}}
 " }}}
 " アプリ {{{
-" lingr.vim {{{
+" vimshell.vim {{{
 noremap <silent> [App]s :<C-u>VimShellPop<CR>
 " }}}
 " VimFiler {{{
-noremap  <silent> [App]f :VimFilerBufferDir<CR>
+noremap <silent> [App]f :<C-u>VimFilerBufferDir<CR>
 
 let s:bundle = neobundle#get('vimfiler')
 function! s:bundle.hooks.on_source(bundle)
@@ -1179,7 +1199,7 @@ function! s:bundle.hooks.on_source(bundle)
     let g:tweetvim_display_icon      = 1
 
     augroup MyAutoGroup
-        autocmd FileType tweetvim     call s:SetTweetVim()
+        autocmd FileType tweetvim call s:SetTweetVim()
 
         function! s:SetTweetVim()
             nmap     <silent><buffer> rr <Plug>(tweetvim_action_reload)
@@ -1315,14 +1335,10 @@ if has('vim_starting')
         exe "set rtp+=" . globpath($GOROOT, "misc/vim")
     endif
 
-    " let g:gocomplete#system_function = 'vimproc#system'
     exe "set rtp+=" . globpath($GOPATH, "src/github.com/nsf/gocode/vim")
     exe "set rtp+=" . globpath($GOPATH, "src/github.com/golang/lint/misc/vim")
 endif
 " }}}
-
-" filetype plugin indent on
-
 let s:isFirstOneShotDone = 0
 let s:firstOneShotDelay = 2
 function! s:FirstOneShot()"{{{
@@ -1872,10 +1888,10 @@ set foldcolumn=0
 set foldlevel=99
 set foldtext=foldCC#foldtext()
 
-nnoremap <silent> zo    zR
-nnoremap <silent> zc    zM
+nnoremap <silent> zo zR
+nnoremap <silent> zc zM
 
-nnoremap <expr> zh foldlevel(line('.')) > 0 ? 'zc' : '<C-h>'
+nnoremap <expr> zh foldlevel(line('.'))  >  0  ? 'zc' : '<C-h>'
 nnoremap <expr> zl foldclosed(line('.')) != -1 ? 'zo' : '<C-l>'
 
 " 折り畳み外であれば何もしない
