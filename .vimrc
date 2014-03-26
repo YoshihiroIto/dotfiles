@@ -69,6 +69,7 @@ call neobundle#rc(expand('$DOTVIM/bundle/'))
 " }}}
 " インストール{{{
 function! s:SetNeoBundle()"{{{
+
     " 表示 {{{
     NeoBundle 'tomasr/molokai'
     NeoBundleLazy 'itchyny/lightline.vim'
@@ -119,8 +120,7 @@ function! s:SetNeoBundle()"{{{
                 \   }
                 \ }
 
-    NeoBundleLazy 'osyo-manga/vim-over',
-                \ {
+    NeoBundleLazy 'osyo-manga/vim-over', {
                 \   'autoload': {
                 \     'commands': ['OverCommandLineNoremap', 'OverCommandLine']
                 \   }
@@ -147,6 +147,7 @@ function! s:SetNeoBundle()"{{{
     " }}}
     " 補完 {{{
     NeoBundleLazy 'Shougo/neocomplete.vim', {
+                \   'depends': ['Shougo/vimproc'],
                 \   'autoload': {
                 \       'insert': 1,
                 \   }
@@ -298,7 +299,7 @@ function! s:SetNeoBundle()"{{{
                 \ }
 
     NeoBundleLazy 'thinca/vim-quickrun', {
-                \   'depends' : ['osyo-manga/shabadou.vim', 'rhysd/wandbox-vim'],
+                \   'depends' : ['osyo-manga/shabadou.vim', 'rhysd/wandbox-vim', 'Shougo/vimproc'],
                 \   'autoload': {
                 \       'mappings': [['sxn', '<Plug>(quickrun']],
                 \       'commands': [
@@ -310,7 +311,7 @@ function! s:SetNeoBundle()"{{{
                 \   }
                 \ }
 
-    NeoBundleLazy 'osyo-manga/shabadou.vim', {}
+    NeoBundleLazy 'osyo-manga/shabadou.vim'
     " }}}
     " テキストオブジェクト {{{
     NeoBundleLazy 'kana/vim-textobj-user'
@@ -444,13 +445,14 @@ function! s:SetNeoBundle()"{{{
                 \ }
 
     NeoBundleLazy 'Shougo/vimfiler', {
-                \   'depends':  ['Shougo/unite.vim', 'Shougo/vimshell.vim'],
+                \   'depends':  ['Shougo/vimproc', 'Shougo/unite.vim', 'Shougo/vimshell.vim'],
                 \   'autoload': {
                 \       'commands': ['VimFilerBufferDir']
                 \   }
                 \ }
 
     NeoBundleLazy 'Shougo/vimshell.vim', {
+                \   'depends': ['Shougo/vimproc'],
                 \   'autoload': {
                 \       'commands': ['VimShell', 'VimShellPop']
                 \   }
@@ -458,6 +460,7 @@ function! s:SetNeoBundle()"{{{
 
     NeoBundleLazy 'basyura/TweetVim', {
                 \   'depends': [
+                \       'Shougo/vimproc',
                 \       'basyura/twibill.vim',
                 \       'tyru/open-browser.vim',
                 \       'mattn/webapi-vim',
@@ -516,11 +519,25 @@ function! s:SetNeoBundle()"{{{
                 \       'function_prefix': 'webapi'
                 \   }
                 \ }
-    NeoBundleLazy 'open-browser.vim', {
+
+    NeoBundleLazy 'tyru/open-browser.vim', {
+                \   'depends': ['Shougo/vimproc'],
                 \   'autoload': {
-                \       'mappings':        ['<Plug>(open-browser-wwwsearch)', '<Plug>(openbrowser-open)'],
-                \       'function_prefix': 'openbrowser',
-                \       'commands':        ['OpenBrowserSearch', 'OpenBrowser', 'OpenBrowserSmartSearch']
+                \     'mappings': ['<Plug>(openbrowser-'],
+                \     'commands': [
+                \       {
+                \         'name':     'OpenBrowserSearch',
+                \         'complete': 'customlist,openbrowser#_cmd_complete'
+                \       },
+                \       {
+                \         'name':     'OpenBrowserSmartSearch',
+                \         'complete': 'customlist,openbrowser#_cmd_complete'
+                \       },
+                \       {
+                \         'name':     'OpenBrowser',
+                \         'complete': 'file'
+                \       }
+                \     ],
                 \   }
                 \ }
 
@@ -550,6 +567,7 @@ function! s:SetNeoBundle()"{{{
     " }}}
     " Unite {{{
     NeoBundleLazy 'Shougo/unite.vim', {
+                \   'depends': ['Shougo/vimproc'],
                 \   'autoload': {
                 \       'commands': ['Unite', 'UniteResume', 'UniteWithCursorWord']
                 \   }
@@ -669,7 +687,7 @@ function! MyMode()
                 \ winwidth(0) > 60 ? lightline#mode() : ''
 endfunction
 
-let s:lightlineNoDispFt = 'help\|vimfiler\|lingr'
+let s:lightlineNoDispFt = 'vimfiler\|lingr'
 
 function! MyModified()
     return &ft =~ s:lightlineNoDispFt ? '' : &modified ? '+' : &modifiable ? '' : '-'
@@ -1146,6 +1164,11 @@ nmap <silent> <Leader><Leader> <Plug>(operator-jump-toggle)ai:<C-u>call <SID>Ref
 " }}}
 " }}}
 " アプリ {{{
+" open-browser.vim {{{
+let g:netrw_nogx = 1 " disable netrw's gx mapping.
+nmap gx <Plug>(openbrowser-smart-search)
+vmap gx <Plug>(openbrowser-smart-search)
+" }}}
 " vimshell.vim {{{
 noremap <silent> [App]s :<C-u>VimShellPop<CR>
 
@@ -1319,11 +1342,7 @@ unlet s:bundle
 
 " Lazy しているプラグイン名をリストアップ
 function! s:get_lazy_plugins()
-    " 先に source したいプラグインをリストの先頭に追加する
-    return [
-\       "unite.vim",
-\       "vimfiler.vim",
-\   ] + map(filter(neobundle#config#get_neobundles(), "v:val.lazy"), "v:val.name")
+    return map(filter(neobundle#config#get_neobundles(), 'v:val.lazy'), 'v:val.name')
 endfunction
 
 function! s:is_not_sourced(source)
@@ -1331,19 +1350,19 @@ function! s:is_not_sourced(source)
 endfunction
 
 function! s:source()
-    let sources = map(filter(s:get_lazy_plugins(), "s:is_not_sourced(v:val)"), "v:val")
+    let sources = map(filter(s:get_lazy_plugins(), 's:is_not_sourced(v:val)'), 'v:val')
 
     for s in sources
-        echom "source:" . s
+        echom 'source:' . s
         call neobundle#source(s)
-        " echom "sourced:" . s
+        " echom 'sourced:' . s
     endfor
 
     augroup auto-source
         autocmd!
     augroup END
 
-    echom ""
+    echom ''
 endfunction
 
 augroup auto-source
