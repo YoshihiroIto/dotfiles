@@ -72,7 +72,10 @@ function! s:SetNeoBundle()"{{{
 
     " 表示 {{{
     NeoBundle 'tomasr/molokai'
-    NeoBundleLazy 'itchyny/lightline.vim'
+    NeoBundleLazy 'itchyny/lightline.vim', {
+                \   'depends': ['Shougo/vimproc'],
+                \ }
+
     NeoBundleLazy 'nathanaelkane/vim-indent-guides'
     NeoBundleLazy 'vim-scripts/matchparenpp'
 
@@ -591,6 +594,14 @@ function! s:SetNeoBundle()"{{{
                 \   }
                 \ }
 
+    NeoBundleLazy 'kmnk/vim-unite-giti', {
+                \ 'autoload': {
+                \   'unite_sources': [
+                \     'giti', 'giti/branch', 'giti/branch/new', 'giti/branch_all',
+                \     'giti/config', 'giti/log', 'giti/remote', 'giti/status'
+                \   ]
+                \ }}
+
     NeoBundleLazy 'Shougo/neomru.vim'
     " }}}
 endfunction " }}}
@@ -787,7 +798,7 @@ endfunction
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_guide_size            = 1
 let g:indent_guides_auto_colors           = 0
-let g:indent_guides_exclude_filetypes     = ['help', 'lingr-messages', 'tweetvim']
+let g:indent_guides_exclude_filetypes     = ['help', 'lingr-messages', 'tweetvim', 'unite']
 " }}}
 " }}}
 " 編集 {{{
@@ -1297,6 +1308,7 @@ nnoremap <silent> [Unite]l   :<C-u>Unite -no-split line<CR>
 nnoremap <silent> [Unite]o   :<C-u>Unite -no-split outline<CR>
 nnoremap <silent> [Unite]z   :<C-u>Unite -no-split fold<CR>
 nnoremap <silent> [Unite]q   :<C-u>Unite -no-quit -horizontal quickfix<CR>
+nnoremap <silent> [Unite]v   :<C-u>Unite -no-split giti<CR>
 
 nnoremap          [Unite]uu  :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
 nnoremap          [Unite]ui  :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
