@@ -2,9 +2,6 @@ set nocompatible
 set encoding=utf-8
 scriptencoding utf-8
 
-let s:neobundle_cache = 1
-" let s:neobundle_cache = 0
-
 " 基本 {{{
 let s:isWindows    = has('win32') || has('win64')
 let s:isMac        = has('mac')
@@ -58,11 +55,7 @@ if has('vim_starting')
         call system("git clone git://github.com/Shougo/neobundle.vim $DOTVIM/bundle/neobundle.vim")
     endif
 
-    if s:neobundle_cache
-        set rtp+=$HOME/neobundle.vim/
-    else
-        set rtp+=$DOTVIM/bundle/neobundle.vim/
-    endif
+    set rtp+=$DOTVIM/bundle/neobundle.vim/
 endif
 
 call neobundle#rc(expand('$DOTVIM/bundle/'))
@@ -605,18 +598,15 @@ function! s:SetNeoBundle()"{{{
     NeoBundleLazy 'Shougo/neomru.vim'
     " }}}
 endfunction " }}}
-if s:neobundle_cache
-    if neobundle#has_cache()
-        NeoBundleLoadCache
-    else
-        NeoBundleFetch 'Shougo/neobundle.vim'
 
-        call s:SetNeoBundle()
-
-        NeoBundleSaveCache
-    endif
+if neobundle#has_cache()
+    NeoBundleLoadCache
 else
+    NeoBundleFetch 'Shougo/neobundle.vim'
+
     call s:SetNeoBundle()
+
+    NeoBundleSaveCache
 endif
 " }}}
 " 表示 {{{
