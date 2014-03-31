@@ -16,6 +16,15 @@ augroup MyAutoGroup
     autocmd!
 augroup END
 
+" 文字コード自動判断
+if has('iconv')
+    if has('guess_encode')
+        set fileencodings=guess,iso-2022-jp,cp932,euc-jp,ucs-bom
+    else
+        set fileencodings=iso-2022-jp,cp932,euc-jp,ucs-bom
+    endif
+endif
+
 " WinではPATHに$VIMが含まれていないときにexeを見つけ出せないので修正
 if s:isWindows && $PATH !~? '\(^\|;\)' . escape($VIM, '\\') . '\(;\|$\)'
     let $PATH = $VIM . ';' . $PATH
@@ -74,13 +83,13 @@ function! s:SetNeoBundle()"{{{
 
     NeoBundleLazy 'majutsushi/tagbar', {
                 \   'autoload': {
-                \       'commands': ['TagbarToggle']
+                \     'commands': ['TagbarToggle']
                 \   }
                 \ }
 
     NeoBundleLazy 'LeafCage/foldCC', {
                 \   'autoload': {
-                \       'filetypes': ['vim', 'markdown']
+                \     'filetypes': ['vim', 'markdown']
                 \   }
                 \ }
     " }}}
@@ -91,28 +100,28 @@ function! s:SetNeoBundle()"{{{
 
     NeoBundleLazy 'LeafCage/yankround.vim', {
                 \   'autoload': {
-                \       'mappings': ['<Plug>(yankround-'],
+                \     'mappings': ['<Plug>(yankround-'],
                 \   }
                 \ }
 
     NeoBundleLazy 'kana/vim-smartinput', {
                 \   'autoload': {
-                \       'insert': 1,
+                \     'insert': 1,
                 \   }
                 \ }
 
     NeoBundleLazy 'cohama/vim-smartinput-endwise', {
                 \   'autoload': {
-                \       'insert': 1,
+                \     'insert': 1,
                 \   }
                 \ }
 
     NeoBundleLazy 'nishigori/increment-activator', {
                 \   'autoload': {
-                \       'mappings': [
-                \           '<C-x>',
-                \           '<C-a>',
-                \       ]
+                \     'mappings': [
+                \         '<C-x>',
+                \         '<C-a>',
+                \     ]
                 \   }
                 \ }
 
@@ -124,8 +133,8 @@ function! s:SetNeoBundle()"{{{
 
     NeoBundleLazy 'thinca/vim-qfreplace', {
                 \   'autoload': {
-                \       'filetypes': ['unite', 'quickfix'],
-                \       'commands':  ['Qfreplace']
+                \     'filetypes': ['unite', 'quickfix'],
+                \     'commands':  ['Qfreplace']
                 \   }
                 \ }
 
@@ -145,31 +154,31 @@ function! s:SetNeoBundle()"{{{
     NeoBundleLazy 'Shougo/neocomplete.vim', {
                 \   'depends': ['Shougo/vimproc'],
                 \   'autoload': {
-                \       'insert': 1,
+                \     'insert': 1,
                 \   }
                 \ }
 
     NeoBundleLazy 'Shougo/neosnippet', {
                 \   'autoload': {
-                \       'insert': 1,
+                \     'insert': 1,
                 \   }
                 \ }
 
     NeoBundleLazy 'Shougo/neosnippet-snippets', {
                 \   'autoload': {
-                \       'insert': 1,
+                \     'insert': 1,
                 \   }
                 \ }
 
     NeoBundleLazy 'nosami/Omnisharp', {
                 \   'depends': ['Shougo/neocomplete.vim', 'Shougo/vimproc'],
                 \   'autoload': {
-                \       'filetypes': ['cs']
+                \     'filetypes': ['cs']
                 \   },
                 \   'build': {
-                \       'windows': 'C:/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe server/OmniSharp.sln /p:Platform="Any CPU"',
-                \       'mac':     'xbuild server/OmniSharp.sln',
-                \       'unix':    'xbuild server/OmniSharp.sln',
+                \     'windows': 'C:/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe server/OmniSharp.sln /p:Platform="Any CPU"',
+                \     'mac':     'xbuild server/OmniSharp.sln',
+                \     'unix':    'xbuild server/OmniSharp.sln',
                 \   }
                 \ }
     " }}}
@@ -179,19 +188,19 @@ function! s:SetNeoBundle()"{{{
 
     NeoBundleLazy 'rhysd/clever-f.vim', {
                 \   'autoload': {
-                \       'mappings': 'f',
+                \     'mappings': 'f',
                 \   }
                 \ }
 
     NeoBundleLazy 'Lokaltog/vim-easymotion', {
                 \   'autoload': {
-                \       'mappings': ['<Plug>(easymotion-']
+                \     'mappings': ['<Plug>(easymotion-']
                 \   }
                 \ }
 
     NeoBundleLazy 'thinca/vim-visualstar', {
                 \   'autoload': {
-                \       'mappings': ['<Plug>(visualstar-']
+                \     'mappings': ['<Plug>(visualstar-']
                 \   }
                 \ }
 
@@ -206,68 +215,68 @@ function! s:SetNeoBundle()"{{{
     " 言語 {{{
     NeoBundleLazy 'vim-jp/cpp-vim', {
                 \   'autoload': {
-                \       'filetypes': ['cpp']
+                \     'filetypes': ['cpp']
                 \   }
                 \ }
 
     NeoBundleLazy 'Mizuchi/STL-Syntax', {
                 \   'autoload': {
-                \       'filetypes': ['cpp']
+                \     'filetypes': ['cpp']
                 \   }
                 \ }
 
     NeoBundleLazy 'Rip-Rip/clang_complete', {
                 \   'autoload': {
-                \       'filetypes': ['c', 'cpp', 'objc']
+                \     'filetypes': ['c', 'cpp', 'objc']
                 \   }
                 \ }
 
     NeoBundleLazy 'rhysd/vim-clang-format', {
                 \   'depends' : ['kana/vim-operator-user'],
                 \   'autoload': {
-                \       'filetypes': ['c', 'cpp', 'objc']
+                \     'filetypes': ['c', 'cpp', 'objc']
                 \   }
                 \ }
 
     NeoBundleLazy 'beyondmarc/hlsl.vim', {
                 \   'autoload': {
-                \       'filetypes': ['hlsl']
+                \     'filetypes': ['hlsl']
                 \   }
                 \ }
 
     NeoBundleLazy 'tikhomirov/vim-glsl', {
                 \   'autoload': {
-                \       'filetypes': ['glsl']
+                \     'filetypes': ['glsl']
                 \   }
                 \ }
 
     NeoBundleLazy 'vim-ruby/vim-ruby', {
                 \   'autoload': {
-                \       'filetypes': ['rb']
+                \     'filetypes': ['rb']
                 \   }
                 \ }
 
     NeoBundleLazy 'vim-scripts/JSON.vim', {
                 \   'autoload': {
-                \       'filetypes': ['json']
+                \     'filetypes': ['json']
                 \   }
                 \ }
 
     NeoBundleLazy 'gabrielelana/vim-markdown', {
                 \   'autoload': {
-                \       'filetypes': ['markdown']
+                \     'filetypes': ['markdown']
                 \   }
                 \ }
 
     NeoBundleLazy 'pangloss/vim-javascript', {
                 \   'autoload': {
-                \       'filetypes': ['javascript']
+                \     'filetypes': ['javascript']
                 \   }
                 \ }
 
     NeoBundleLazy 'jelera/vim-javascript-syntax', {
                 \   'autoload': {
-                \       'filetypes': ['javascript']
+                \     'filetypes': ['javascript']
                 \   }
                 \ }
 
@@ -297,13 +306,13 @@ function! s:SetNeoBundle()"{{{
     NeoBundleLazy 'thinca/vim-quickrun', {
                 \   'depends' : ['osyo-manga/shabadou.vim', 'rhysd/wandbox-vim', 'Shougo/vimproc'],
                 \   'autoload': {
-                \       'mappings': [['sxn', '<Plug>(quickrun']],
-                \       'commands': [
-                \         {
-                \           'complete': 'customlist,quickrun#complete',
-                \           'name':     'QuickRun'
-                \         }
-                \       ]
+                \     'mappings': [['sxn', '<Plug>(quickrun']],
+                \     'commands': [
+                \       {
+                \         'complete': 'customlist,quickrun#complete',
+                \         'name':     'QuickRun'
+                \       }
+                \     ]
                 \   }
                 \ }
 
@@ -315,63 +324,63 @@ function! s:SetNeoBundle()"{{{
     NeoBundleLazy 'kana/vim-textobj-entire', {
                 \   'depends': 'kana/vim-textobj-user',
                 \   'autoload': {
-                \       'mappings': [['xo', 'ae'], ['xo', 'ie']]
+                \     'mappings': [['xo', 'ae'], ['xo', 'ie']]
                 \   }
                 \ }
 
     NeoBundleLazy 'kana/vim-textobj-indent', {
                 \   'depends': 'kana/vim-textobj-user',
                 \   'autoload': {
-                \       'mappings': [['xo', 'ai'], ['xo', 'aI'], ['xo', 'ii'], ['xo', 'iI']]
+                \     'mappings': [['xo', 'ai'], ['xo', 'aI'], ['xo', 'ii'], ['xo', 'iI']]
                 \   }
                 \ }
 
     NeoBundleLazy 'kana/vim-textobj-line', {
                 \   'depends': 'kana/vim-textobj-user',
                 \   'autoload': {
-                \       'mappings': [['xo', 'al'], ['xo', 'il']]
+                \     'mappings': [['xo', 'al'], ['xo', 'il']]
                 \   }
                 \ }
 
     NeoBundleLazy 'rhysd/vim-textobj-word-column', {
                 \   'depends': 'kana/vim-textobj-user',
                 \   'autoload': {
-                \       'mappings': [['xo', 'av'], ['xo', 'aV'], ['xo', 'iv'], ['xo', 'iV']]
+                \     'mappings': [['xo', 'av'], ['xo', 'aV'], ['xo', 'iv'], ['xo', 'iV']]
                 \   }
                 \ }
 
     NeoBundleLazy 'thinca/vim-textobj-comment', {
                 \   'depends': 'kana/vim-textobj-user',
                 \   'autoload': {
-                \       'mappings': [['xo', 'ac'], ['xo', 'ic']]
+                \     'mappings': [['xo', 'ac'], ['xo', 'ic']]
                 \   }
                 \ }
 
     NeoBundleLazy 'sgur/vim-textobj-parameter', {
                 \   'depends': 'kana/vim-textobj-user',
                 \   'autoload': {
-                \       'mappings': [['xo', '<Plug>(textobj-parameter']]
+                \     'mappings': [['xo', '<Plug>(textobj-parameter']]
                 \   }
                 \ }
 
     NeoBundleLazy 'rhysd/vim-textobj-anyblock', {
                 \   'depends': 'kana/vim-textobj-user',
                 \   'autoload': {
-                \       'mappings': [['xo', 'ab'], ['xo', 'ib']]
+                \     'mappings': [['xo', 'ab'], ['xo', 'ib']]
                 \   }
                 \ }
 
     NeoBundleLazy 'thinca/vim-textobj-between', {
                 \   'depends': 'kana/vim-textobj-user',
                 \   'autoload': {
-                \       'mappings': [['xo', 'af'], ['xo', 'if']]
+                \     'mappings': [['xo', 'af'], ['xo', 'if']]
                 \   }
                 \ }
 
     NeoBundleLazy 'h1mesuke/textobj-wiw', {
                 \   'depends': 'kana/vim-textobj-user',
                 \   'autoload': {
-                \       'mappings': [['xo', '<Plug>(textobj-wiw']]
+                \     'mappings': [['xo', '<Plug>(textobj-wiw']]
                 \   }
                 \ }
     " }}}
@@ -430,45 +439,46 @@ function! s:SetNeoBundle()"{{{
 
     NeoBundleLazy 'tsukkee/lingr-vim', {
                 \   'autoload': {
-                \       'commands': ['LingrLaunch']
+                \     'commands': ['LingrLaunch']
                 \   }
                 \ }
 
     NeoBundleLazy 'mattn/benchvimrc-vim', {
                 \   'autoload': {
-                \       'commands': ['BenchVimrc']
+                \     'commands': ['BenchVimrc']
                 \   }
                 \ }
 
     NeoBundleLazy 'Shougo/vimfiler', {
                 \   'depends':  ['Shougo/vimproc', 'Shougo/unite.vim', 'Shougo/vimshell.vim'],
                 \   'autoload': {
-                \       'commands': ['VimFilerBufferDir']
+                \     'commands': ['VimFilerBufferDir'],
+                \     'explorer': 1
                 \   }
                 \ }
 
     NeoBundleLazy 'Shougo/vimshell.vim', {
                 \   'depends': ['Shougo/vimproc'],
                 \   'autoload': {
-                \       'commands': ['VimShell', 'VimShellPop']
+                \     'commands': ['VimShell', 'VimShellPop']
                 \   }
                 \ }
 
     NeoBundleLazy 'basyura/TweetVim', {
                 \   'depends': [
-                \       'Shougo/vimproc',
-                \       'basyura/twibill.vim',
-                \       'tyru/open-browser.vim',
-                \       'mattn/webapi-vim',
+                \     'Shougo/vimproc',
+                \     'basyura/twibill.vim',
+                \     'tyru/open-browser.vim',
+                \     'mattn/webapi-vim',
                 \   ],
                 \   'autoload': {
-                \       'commands': ['TweetVimHomeTimeline', 'TweetVimUserStream']
+                \     'commands': ['TweetVimHomeTimeline', 'TweetVimUserStream']
                 \   }
                 \ }
 
     NeoBundleLazy 'tpope/vim-fugitive', {
                 \   'autoload': {
-                \       'function_prefix': 'fugitive'
+                \     'function_prefix': 'fugitive'
                 \   }
                 \ }
 
@@ -500,19 +510,19 @@ function! s:SetNeoBundle()"{{{
 
     NeoBundleLazy 'Shougo/vimproc', {
                 \   'autoload': {
-                \       'function_prefix': 'vimproc',
+                \     'function_prefix': 'vimproc',
                 \   },
                 \   'build': {
-                \       'windows': 'make -f make_mingw32.mak',
-                \       'cygwin':  'make -f make_cygwin.mak',
-                \       'mac':     'make -f make_mac.mak',
-                \       'unix':    'make -f make_unix.mak',
+                \     'windows': 'make -f make_mingw32.mak',
+                \     'cygwin':  'make -f make_cygwin.mak',
+                \     'mac':     'make -f make_mac.mak',
+                \     'unix':    'make -f make_unix.mak',
                 \   },
                 \ }
 
     NeoBundleLazy 'mattn/webapi-vim', {
                 \   'autoload': {
-                \       'function_prefix': 'webapi'
+                \     'function_prefix': 'webapi'
                 \   }
                 \ }
 
@@ -539,20 +549,20 @@ function! s:SetNeoBundle()"{{{
 
     NeoBundleLazy 'movewin.vim', {
                 \   'autoload': {
-                \       'commands': ['MoveWin']
+                \     'commands': ['MoveWin']
                 \   }
                 \ }
 
     NeoBundleLazy 'thinca/vim-threes', {
                 \   'autoload': {
-                \       'commands': ['ThreesStart']
+                \     'commands': ['ThreesStart']
                 \   }
                 \ }
 
     if s:isMac
         NeoBundleLazy 'itchyny/dictionary.vim', {
                     \   'autoload': {
-                    \       'commands': ['Dictionary']
+                    \     'commands': ['Dictionary']
                     \   }
                     \ }
     endif
@@ -565,48 +575,66 @@ function! s:SetNeoBundle()"{{{
     NeoBundleLazy 'Shougo/unite.vim', {
                 \   'depends': ['Shougo/vimproc'],
                 \   'autoload': {
-                \       'commands': ['Unite', 'UniteResume', 'UniteWithCursorWord']
+                \     'commands': ['Unite', 'UniteResume', 'UniteWithCursorWord']
                 \   }
                 \ }
 
     NeoBundleLazy 'Shougo/unite-outline', {
+                \   'depends': ['Shougo/unite.vim'],
                 \   'autoload': {
-                \       'unite_sources': ['outline']
+                \     'unite_sources': ['outline']
                 \   }
                 \ }
 
     NeoBundleLazy 'tsukkee/unite-tag', {
+                \   'depends': ['Shougo/unite.vim'],
                 \   'autoload': {
-                \       'unite_sources': ['tag']
+                \     'unite_sources': ['tag']
                 \   }
                 \ }
 
     NeoBundleLazy 'osyo-manga/unite-quickfix', {
+                \   'depends': ['Shougo/unite.vim'],
                 \   'autoload': {
-                \       'unite_sources': ['quickfix']
+                \     'unite_sources': ['quickfix']
+                \   }
+                \ }
+
+    NeoBundleLazy 'osyo-manga/unite-fold', {
+                \   'depends': ['Shougo/unite.vim'],
+                \   'autoload': {
+                \     'unite_sources': ['fold']
                 \   }
                 \ }
 
     NeoBundleLazy 'kmnk/vim-unite-giti', {
-                \ 'autoload': {
-                \   'unite_sources': [
-                \     'giti', 'giti/branch', 'giti/branch/new', 'giti/branch_all',
-                \     'giti/config', 'giti/log', 'giti/remote', 'giti/status'
-                \   ]
-                \ }}
+                \   'depends': ['Shougo/unite.vim'],
+                \   'autoload': {
+                \     'unite_sources': [
+                \       'giti',        'giti/branch', 'giti/branch/new', 'giti/branch_all',
+                \       'giti/config', 'giti/log',    'giti/remote',     'giti/status'
+                \     ]
+                \   }
+                \ }
 
-    NeoBundleLazy 'Shougo/neomru.vim'
+    NeoBundleLazy 'Shougo/neomru.vim', {
+                \   'depends': ['Shougo/unite.vim'],
+                \   'autoload': {
+                \     'unite_sources': ['neomru/file'],
+                \     'explorer':      1
+                \   }
+                \ }
     " }}}
 endfunction " }}}
 
 if neobundle#has_cache()
-    NeoBundleLoadCache
+   NeoBundleLoadCache
 else
-    NeoBundleFetch 'Shougo/neobundle.vim'
+   NeoBundleFetch 'Shougo/neobundle.vim'
 
-    call s:SetNeoBundle()
+   call s:SetNeoBundle()
 
-    NeoBundleSaveCache
+   NeoBundleSaveCache
 endif
 " }}}
 " 表示 {{{
@@ -658,7 +686,7 @@ let g:lightline = {
             \       'mode':         'MyMode',
             \       'charcode':     'MyCharCode',
             \       'anzu':         'anzu#search_status',
-            \    },
+            \   },
             \   'separator': {
             \       'left':  s:lightlineSymbolSeparatorLeft,
             \       'right': s:lightlineSymbolSeparatorRight
@@ -1197,6 +1225,9 @@ function! s:bundle.hooks.on_source(bundle)
         nmap <buffer><expr> K vimfiler#smart_cursor_map(
             \  "\<Plug>(easymotion-k)",
             \  "\<Plug>(easymotion-k)")
+        nmap <buffer><expr> <C-j> vimfiler#smart_cursor_map(
+            \  "\<Plug>(vimfiler_exit)",
+            \  "\<Plug>(vimfiler_exit)")
 
         " dotfile表示状態に設定
         exe ':normal .'
@@ -1302,6 +1333,7 @@ nnoremap <silent> [Unite]v   :<C-u>Unite -no-split giti<CR>
 
 nnoremap          [Unite]uu  :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
 nnoremap          [Unite]ui  :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
+nnoremap          [Unite]uc  :<C-u>NeoBundleClearCache<CR>
 
 " http://sanrinsha.lolipop.jp/blog/2013/03/%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E5%86%85%E3%81%AE%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92unite-grep%E3%81%99%E3%82%8B.html
 function! s:unite_grep_project(...)
@@ -1404,7 +1436,54 @@ endif
 " }}}
 let s:isFirstOneShotDone = 0
 let s:firstOneShotDelay = 2
+let s:firstOneShotPhase = 0
 function! s:FirstOneShot()"{{{
+
+    function! s:FirstOneShotPhase0()
+        filetype plugin indent on
+
+        " 表示 {{{
+        NeoBundleSource vim-indent-guides
+        IndentGuidesEnable
+        NeoBundleSource lightline.vim
+        NeoBundleSource matchparenpp
+        " }}}
+        " 編集 {{{
+        NeoBundleSource tcomment_vim
+        NeoBundleSource vim-surround
+        NeoBundleSource vim-repeat
+        "}}}
+        " 検索 {{{
+        NeoBundleSource vim-anzu
+        NeoBundleSource matchit.zip
+        " }}}
+        " アプリ {{{
+        NeoBundleSource vim-fugitive
+        if s:isWindows
+            NeoBundleSource vim-icondrag
+            IconDragEnable
+        endif
+        " }}}
+        " Unite {{{
+        NeoBundleSource neomru.vim
+        " }}}
+
+        set laststatus=2
+        set showtabline=1
+
+        set incsearch                     " インクリメンタルサーチ
+        set ignorecase                    " 検索パターンにおいて大文字と小文字を区別しない。
+        set smartcase                     " 検索パターンが大文字を含んでいたらオプション 'ignorecase' を上書きする。
+
+        if filereadable(s:vimrc_local)
+            exe 'source' s:vimrc_local
+        endif
+    endfunction
+
+    function! s:FirstOneShotPhase1()
+
+        call over#load()
+    endfunction
 
     if s:isFirstOneShotDone
         return
@@ -1416,51 +1495,22 @@ function! s:FirstOneShot()"{{{
         return
     endif
 
-    let s:isFirstOneShotDone = 1
+    if s:firstOneShotPhase == 0
+        call s:FirstOneShotPhase0()
+        let s:firstOneShotPhase = s:firstOneShotPhase + 1
+        call s:ContinueCursorHold()
 
-    " syntax enable                     " 構文ごとに色分けをする
-    filetype plugin indent on
+    elseif s:firstOneShotPhase == 1
+        call s:FirstOneShotPhase1()
+        let s:firstOneShotPhase = s:firstOneShotPhase + 1
+        call s:ContinueCursorHold()
 
-    " 表示 {{{
-    NeoBundleSource vim-indent-guides
-    IndentGuidesEnable
-    NeoBundleSource lightline.vim
-    NeoBundleSource matchparenpp
-    " }}}
-    " 編集 {{{
-    NeoBundleSource tcomment_vim
-    NeoBundleSource vim-surround
-    NeoBundleSource vim-repeat
-    "}}}
-    " 検索 {{{
-    NeoBundleSource vim-anzu
-    NeoBundleSource matchit.zip
-    " }}}
-    " アプリ {{{
-    NeoBundleSource vim-fugitive
-    if s:isWindows
-        NeoBundleSource vim-icondrag
-        IconDragEnable
+    else
+        let s:isFirstOneShotDone = 1
+        augroup FirstOneShot
+            autocmd!
+        augroup END
     endif
-    " }}}
-    " Unite {{{
-    NeoBundleSource neomru.vim
-    " }}}
-
-    set laststatus=2
-    set showtabline=1
-
-    set incsearch                     " インクリメンタルサーチ
-    set ignorecase                    " 検索パターンにおいて大文字と小文字を区別しない。
-    set smartcase                     " 検索パターンが大文字を含んでいたらオプション 'ignorecase' を上書きする。
-
-    if filereadable(s:vimrc_local)
-        exe 'source' s:vimrc_local
-    endif
-
-    augroup FirstOneShot
-        autocmd!
-    augroup END
 endfunction"}}}
 
 augroup FirstOneShot
