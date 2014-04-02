@@ -1202,8 +1202,7 @@ vmap gx <Plug>(openbrowser-smart-search)
 noremap <silent> [App]s :<C-u>VimShellPop<CR>
 
 let g:vimshell_popup_height   = 40
-let g:vimshell_prompt_expr    = 'getcwd()." > "'
-let g:vimshell_prompt_pattern = '^\f\+ > '
+
 " }}}
 " VimFiler {{{
 noremap <silent> [App]f :<C-u>VimFilerBufferDir<CR>
@@ -1434,7 +1433,7 @@ if has('vim_starting')
     exe "set rtp+=" . globpath($GOPATH, "src/github.com/golang/lint/misc/vim")
 endif
 " }}}
-let s:isFirstOneShotDone = 0
+
 let s:firstOneShotDelay = 2
 let s:firstOneShotPhase = 0
 function! s:FirstOneShot()"{{{
@@ -1481,36 +1480,31 @@ function! s:FirstOneShot()"{{{
     endfunction
 
     function! s:FirstOneShotPhase1()
-
         call over#load()
+
+        " 意図的に vital.vim を読み込み
+        call unite#util#strchars("")
+        call unite#util#sort_by([], "")
+        call unite#util#get_vital().import('Vim.Message')
+
+        NeoMRUReload
     endfunction
 
-    if s:isFirstOneShotDone
-        return
-    endif
-
-    if s:firstOneShotDelay > 0
-        let s:firstOneShotDelay = s:firstOneShotDelay - 1
-        call s:ContinueCursorHold()
-        return
-    endif
-
-    if s:firstOneShotPhase == 0
-        call s:FirstOneShotPhase0()
-        let s:firstOneShotPhase = s:firstOneShotPhase + 1
-        call s:ContinueCursorHold()
-
-    elseif s:firstOneShotPhase == 1
-        call s:FirstOneShotPhase1()
-        let s:firstOneShotPhase = s:firstOneShotPhase + 1
-        call s:ContinueCursorHold()
-
-    else
-        let s:isFirstOneShotDone = 1
+    function! s:FirstOneShotPhase2()
         augroup FirstOneShot
             autocmd!
         augroup END
+    endfunction
+
+    if s:firstOneShotDelay > 0
+        let s:firstOneShotDelay = s:firstOneShotDelay - 1
+    else
+        call call(printf('s:FirstOneShotPhase%d', s:firstOneShotPhase), [])
+
+        let s:firstOneShotPhase = s:firstOneShotPhase + 1
     endif
+
+    call s:ContinueCursorHold()
 endfunction"}}}
 
 augroup FirstOneShot
@@ -1670,10 +1664,10 @@ command! RemoveEolSpace call s:ExecuteKeepView('silent! %substitute/ \+$//g | no
 
 " http://lsifrontend.hatenablog.com/entry/2013/10/11/052640
 nmap     <silent> <C-CR> yy:<C-u>TComment<CR>p
-vnoremap <silent> <C-CR> :<C-u>call CopyAddComment()<CR>
+vnoremap <silent> <C-CR> :<C-u>call <SID>CopyAddComment()<CR>
 
 " http://qiita.com/akira-hamada/items/2417d0bcb563475deddb をもとに調整
-function! CopyAddComment() range
+function! s:CopyAddComment() range
     let selectedCount = line("'>") - line("'<")
 
     " 選択中の行をyank

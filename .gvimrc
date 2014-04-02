@@ -31,6 +31,10 @@ hi SpecialKey       guifg=#383838 guibg=#121212 gui=none
 " vim-indent-guides
 hi IndentGuidesOdd                guibg=#181818
 hi IndentGuidesEven               guibg=#181818
+
+" 日本語入力中のカーソルの色
+hi CursorIM         guifg=NONE    guibg=Red
+
 " }}}
 " 見た目 {{{
 " ツールバー削除
@@ -86,9 +90,6 @@ if s:isWindows
 elseif s:isMac
     set ambiwidth=double
 endif
-" }}}
-" 日本語入力中のカーソルの色 {{{
-highlight CursorIM guifg=NONE guibg=Red
 " }}}
 " ウィンドウの位置とサイズを記憶する {{{
 if s:isGuiRunning
