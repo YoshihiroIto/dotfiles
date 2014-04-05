@@ -182,6 +182,13 @@ function! s:SetNeoBundle()"{{{
                 \   }
                 \ }
     " }}}
+    " ファイル {{{
+    NeoBundleLazy 'kana/vim-altr', {
+               \    'autoload': {
+               \        'mappings': [['scxino', '<Plug>(altr-']]
+               \    }
+               \ }
+    " }}}
     " 検索 {{{
     NeoBundleLazy 'osyo-manga/vim-anzu'
     NeoBundleLazy 'matchit.zip'
@@ -279,6 +286,8 @@ function! s:SetNeoBundle()"{{{
                 \     'filetypes': ['javascript']
                 \   }
                 \ }
+
+    NeoBundleLazy 'scrooloose/syntastic'
 
     NeoBundleLazy 'rhysd/wandbox-vim', {
                 \   'autoload': {
@@ -987,6 +996,17 @@ endfunction
 unlet s:bundle
 " }}}
 " }}}
+" ファイル {{{
+nmap <F5>  <Plug>(altr-back)
+nmap <F6>  <Plug>(altr-forward)
+
+let s:bundle = neobundle#get('vim-altr')
+function! s:bundle.hooks.on_source(bundle)
+    call altr#define('Models/%Model.cs', 'ViewModels/%ViewModel.cs', 'Views/%.xaml', 'Views/%.xaml.cs')
+    call altr#define('%Model.cs', '%ViewModel.cs', '%.xaml', '%.xaml.cs')
+endfunction
+unlet s:bundle
+" }}}
 " 検索 {{{
 " clever-f.vim {{{
 let g:clever_f_ignore_case           = 1
@@ -1048,7 +1068,8 @@ function! s:bundle.hooks.on_source(bundle)
 
         function! s:UpdateDisplayAnzu()
             if s:anzuDisplayCount >= 0
-                let s:anzuDisplayCount -= 1
+                let s:anzuDisplayCount = s:anzuDisplayCount - 1
+
                 call s:ContinueCursorHold()
             else
                 call s:ClearDisplayAnzu()
@@ -1056,7 +1077,7 @@ function! s:bundle.hooks.on_source(bundle)
         endfunction
 
         function! s:ClearDisplayAnzu()
-            let s:anzuDisplayCount = 0
+            " let s:anzuDisplayCount = 0
             call anzu#clear_search_status()
         endfunction
     augroup END
@@ -1069,6 +1090,12 @@ map } <Plug>(parajump-forward)
 " }}}
 " }}}
 " 言語 {{{
+" syntastic {{{
+let g:syntastic_cs_checkers = ['syntax', 'issues']
+augroup MyAutoGroup
+    autocmd BufEnter,TextChanged,InsertLeave *.{cs} SyntasticCheck
+augroup END
+" }}}
 " clang_complete {{{
 let s:bundle = neobundle#get('clang_complete')
 function! s:bundle.hooks.on_source(bundle)
@@ -1154,6 +1181,7 @@ function! s:bundle.hooks.on_source(bundle)
                 \       'type':                                         'lua/vim'
                 \   }
                 \ }
+
 endfunction
 unlet s:bundle
 " }}}
@@ -1303,9 +1331,6 @@ function! s:bundle.hooks.on_source(bundle)
 endfunction
 unlet s:bundle
 " }}}
-" icondrag {{{
-" let g:icondrag_auto_start = 1
-" }}}
 " }}}
 " Unite {{{
 nnoremap [Unite] <nop>
@@ -1439,6 +1464,7 @@ let s:firstOneShotPhase = 0
 function! s:FirstOneShot()"{{{
 
     function! s:FirstOneShotPhase0()
+
         filetype plugin indent on
 
         " 表示 {{{
@@ -1452,6 +1478,9 @@ function! s:FirstOneShot()"{{{
         NeoBundleSource vim-surround
         NeoBundleSource vim-repeat
         "}}}
+        " ファイル {{{
+        NeoBundleSource vim-altr
+        "}}}
         " 検索 {{{
         NeoBundleSource vim-anzu
         NeoBundleSource matchit.zip
@@ -1464,7 +1493,11 @@ function! s:FirstOneShot()"{{{
         endif
         " }}}
         " Unite {{{
+        NeoBundleSource unite.vim
         NeoBundleSource neomru.vim
+        " }}}
+        " 言語 {{{
+        NeoBundleSource syntastic
         " }}}
 
         set laststatus=2
@@ -1500,7 +1533,6 @@ function! s:FirstOneShot()"{{{
         let s:firstOneShotDelay = s:firstOneShotDelay - 1
     else
         call call(printf('s:FirstOneShotPhase%d', s:firstOneShotPhase), [])
-
         let s:firstOneShotPhase = s:firstOneShotPhase + 1
     endif
 
@@ -2083,8 +2115,8 @@ for s:n in range(1, 9)
     exe 'nnoremap <silent> [Tab]' . s:n  ':<C-u>tabnext' . s:n . '<CR>'
 endfor
 
-nnoremap <silent> <Left>  :<C-u>tabp<cr>
-nnoremap <silent> <Right> :<C-u>tabn<cr>
+nnoremap <silent> <Left>  :<C-u>tabp<CR>
+nnoremap <silent> <Right> :<C-u>tabn<CR>
 " }}}
 " バッファ操作 {{{
 nnoremap [Buffer]  <Nop>
@@ -2096,8 +2128,8 @@ for s:n in range(1, 9)
     exe 'nnoremap <silent> [Buffer]' . s:n  ':<C-u>b' . s:n . '<CR>'
 endfor
 
-nnoremap <silent> <Up>   :<C-u>bp<cr>
-nnoremap <silent> <Down> :<C-u>bn<cr>
+nnoremap <silent> <Up>   :<C-u>bp<CR>
+nnoremap <silent> <Down> :<C-u>bn<CR>
 " }}}
 " ファイル操作 {{{
 " vimrc / gvimrc の編集
