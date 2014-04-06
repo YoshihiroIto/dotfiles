@@ -62,9 +62,6 @@ augroup transparency
     if s:isMac
         autocmd GuiEnter,FocusGained * set transparency=3   " アクティブ時の透過率
         autocmd FocusLost            * set transparency=48  " 非アクティブ時の透過率
-    elseif s:isWindows
-        " autocmd GuiEnter,FocusGained * set transparency=240 " アクティブ時の透過率
-        " autocmd FocusLost            * set transparency=160 " 非アクティブ時の透過率
     endif
 augroup END
 " }}}

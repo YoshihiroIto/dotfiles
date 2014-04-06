@@ -118,10 +118,7 @@ function! s:SetNeoBundle()"{{{
 
     NeoBundleLazy 'nishigori/increment-activator', {
                 \   'autoload': {
-                \     'mappings': [
-                \         '<C-x>',
-                \         '<C-a>',
-                \     ]
+                \     'mappings': ['<C-x>', '<C-a>']
                 \   }
                 \ }
 
@@ -185,7 +182,7 @@ function! s:SetNeoBundle()"{{{
     " ファイル {{{
     NeoBundleLazy 'kana/vim-altr', {
                \    'autoload': {
-               \        'mappings': [['scxino', '<Plug>(altr-']]
+               \      'mappings': [['scxino', '<Plug>(altr-']]
                \    }
                \ }
     " }}}
@@ -213,9 +210,7 @@ function! s:SetNeoBundle()"{{{
 
     NeoBundleLazy 'deris/parajump', {
                 \   'autoload': {
-                \     'mappings': [
-                \       ['sxno', '<Plug>(parajump-']
-                \     ]
+                \     'mappings': [['sxno', '<Plug>(parajump-']]
                 \   }
                 \ }
     " }}}
@@ -1262,6 +1257,11 @@ function! s:bundle.hooks.on_source(bundle)
 
     let g:vimfiler_as_default_explorer        = 1
     let g:vimfiler_force_overwrite_statusline = 0
+	let g:vimfiler_tree_leaf_icon             = ' '
+	let g:vimfiler_tree_opened_icon           = '▾'
+	let g:vimfiler_tree_closed_icon           = '▸'
+	let g:vimfiler_file_icon                  = '-'
+	let g:vimfiler_marked_file_icon           = '*'
 endfunction
 unlet s:bundle
 " }}}
