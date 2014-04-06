@@ -1,0 +1,16 @@
+snippet     dep
+abbr        DependencyProperty
+    public ${1:property_type} ${2:property_name}
+    {
+        get { return ($1)this.GetValue($2Property); }
+        set { this.SetValue($2Property, value); }
+    }
+
+    public static readonly DependencyProperty $2Property =
+        DependencyProperty.Register(
+            "$2",
+            typeof($1),
+            typeof(${3:owner_class}),
+            new PropertyMetadata(default($1), (s, e) => {}));
+    ${0}
+
