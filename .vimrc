@@ -57,18 +57,6 @@ endif
 let s:rightWindowWidth = 40
 "}}}
 " プラグイン {{{
-" NeoBundle {{{
-if has('vim_starting')
-   if !isdirectory(expand("$DOTVIM/bundle/neobundle.vim/"))
-        echo "install neobundle..."
-        call system("git clone git://github.com/Shougo/neobundle.vim $DOTVIM/bundle/neobundle.vim")
-    endif
-
-    set rtp+=$DOTVIM/bundle/neobundle.vim/
-endif
-
-call neobundle#rc(expand('$DOTVIM/bundle/'))
-" }}}
 " インストール{{{
 function! s:SetNeoBundle()"{{{
 
@@ -631,6 +619,12 @@ function! s:SetNeoBundle()"{{{
     " }}}
 endfunction " }}}
 
+if has('vim_starting')
+    set rtp+=$DOTVIM/bundle/neobundle.vim/
+endif
+
+call neobundle#begin(expand('$DOTVIM/bundle/'))
+
 if neobundle#has_cache()
    NeoBundleLoadCache
 else
@@ -640,6 +634,8 @@ else
 
    NeoBundleSaveCache
 endif
+
+call neobundle#end()
 " }}}
 " 表示 {{{
 " TagBar {{{
@@ -1510,10 +1506,6 @@ function! s:FirstOneShot()"{{{
         if filereadable(s:vimrc_local)
             exe 'source' s:vimrc_local
         endif
-    endfunction
-
-    function! s:FirstOneShotPhase1()
-        call over#load()
 
         " 意図的に vital.vim を読み込み
         call unite#util#strchars("")
@@ -1521,6 +1513,10 @@ function! s:FirstOneShot()"{{{
         call unite#util#get_vital().import('Vim.Message')
 
         NeoMRUReload
+    endfunction
+
+    function! s:FirstOneShotPhase1()
+        call over#load()
     endfunction
 
     function! s:FirstOneShotPhase2()
@@ -1531,12 +1527,13 @@ function! s:FirstOneShot()"{{{
 
     if s:firstOneShotDelay > 0
         let s:firstOneShotDelay = s:firstOneShotDelay - 1
+        call s:ContinueCursorHold()
     else
         call call(printf('s:FirstOneShotPhase%d', s:firstOneShotPhase), [])
         let s:firstOneShotPhase = s:firstOneShotPhase + 1
     endif
 
-    call s:ContinueCursorHold()
+    " call s:ContinueCursorHold()
 endfunction"}}}
 
 augroup FirstOneShot

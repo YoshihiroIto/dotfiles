@@ -14,3 +14,31 @@ abbr        DependencyProperty
             new PropertyMetadata(default($1), (s, e) => {}));
     ${0}
 
+snippet     props
+abbr        Property (RaiseAndSetIfChanged)
+    private ${1:type} _${2:name};
+    public $1 $2
+    {
+        get { return _$2; }
+        set { RaiseAndSetIfChanged(ref _$2, value); }
+    }
+    ${0}
+
+snippet     propa
+abbr        Property (RaisePropertyChanged)
+    private ${1:type} _${2:name};
+
+    public $1 $2
+    {
+        get { return _$2; }
+        set
+        { 
+            if (_$2 == value)
+                return;
+
+            _$2 = value;
+            RaisePropertyChanged(() => $2);
+        }
+    }
+    ${0}
+
