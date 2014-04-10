@@ -59,7 +59,6 @@ let s:rightWindowWidth = 40
 " プラグイン {{{
 " インストール{{{
 function! s:SetNeoBundle()"{{{
-
     " 表示 {{{
     NeoBundle 'tomasr/molokai'
     NeoBundleLazy 'itchyny/lightline.vim', {
@@ -145,7 +144,8 @@ function! s:SetNeoBundle()"{{{
 
     NeoBundleLazy 'Shougo/neosnippet', {
                 \   'autoload': {
-                \     'insert': 1,
+                \     'insert':    1,
+                \     'filetypes': ['neosnippet']
                 \   }
                 \ }
 
@@ -960,7 +960,11 @@ let s:bundle = neobundle#get('neosnippet')
 function! s:bundle.hooks.on_source(bundle)
 
     let g:neosnippet#enable_snipmate_compatibility = 1
-    let g:neosnippet#snippets_directory            = '$DOTVIM/bundle/vim-snippets/snippets,$DOTVIM/snippets'
+    let g:neosnippet#snippets_directory            = '$DOTVIM/snippets'
+
+    if isdirectory(expand('$DOTVIM/snippets.local'))
+        let g:neosnippet#snippets_directory = g:neosnippet#snippets_directory . ',$DOTVIM/snippets.local'
+    endif
 
     " Plugin key-mappings.
     imap <C-k>  <Plug>(neosnippet_expand_or_jump)
