@@ -143,9 +143,31 @@ function! s:SetNeoBundle()"{{{
                 \ }
 
     NeoBundleLazy 'Shougo/neosnippet', {
+                \   'depends': ['Shougo/neosnippet-snippets'],
                 \   'autoload': {
-                \     'insert':    1,
-                \     'filetypes': ['neosnippet']
+                \     'insert': 1,
+                \     'filetypes': ['neosnippet'],
+                \     'commands': [
+                \       'NeoSnippetClearMarkers',
+                \       {
+                \         'name':     'NeoSnippetSource',
+                \         'complete': 'file'
+                \       },
+                \       {
+                \         'name':     'NeoSnippetMakeCache',
+                \         'complete': 'customlist,neosnippet#commands#_filetype_complete'
+                \       },
+                \       {
+                \         'name':     'NeoSnippetEdit',
+                \         'complete': 'customlist,neosnippet#commands#_edit_complete'
+                \       }
+                \     ],
+                \     'mappings': [['sxi', '<Plug>(neosnippet_']],
+                \     'unite_sources': [
+                \       'neosnippet',
+                \       'neosnippet_file',
+                \       'neosnippet_target'
+                \     ]
                 \   }
                 \ }
 
@@ -596,16 +618,6 @@ function! s:SetNeoBundle()"{{{
                 \   'depends': ['Shougo/unite.vim'],
                 \   'autoload': {
                 \     'unite_sources': ['fold']
-                \   }
-                \ }
-
-    NeoBundleLazy 'kmnk/vim-unite-giti', {
-                \   'depends': ['Shougo/unite.vim'],
-                \   'autoload': {
-                \     'unite_sources': [
-                \       'giti',        'giti/branch', 'giti/branch/new', 'giti/branch_all',
-                \       'giti/config', 'giti/log',    'giti/remote',     'giti/status'
-                \     ]
                 \   }
                 \ }
 

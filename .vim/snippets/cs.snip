@@ -1,44 +1,49 @@
-snippet     dep
-abbr        DependencyProperty
-    public ${1:property_type} ${2:property_name}
-    {
-        get { return ($1)this.GetValue($2Property); }
-        set { this.SetValue($2Property, value); }
-    }
+snippet	 dep
+abbr		DependencyProperty
+	#region ${1:property_name}
+	public ${2:property_type} $1
+	{
+		get { return ($2)this.GetValue($1Property); }
+		set { this.SetValue($1Property, value); }
+	}
 
-    public static readonly DependencyProperty $2Property =
-        DependencyProperty.Register(
-            "$2",
-            typeof($1),
-            typeof(${3:owner_class}),
-            new PropertyMetadata(default($1), (s, e) => {}));
-    ${0}
+	public static readonly DependencyProperty $1Property =
+		DependencyProperty.Register(
+			"$1",
+			typeof($2),
+			typeof(${3:owner_class}),
+			new PropertyMetadata(default($2), (s, e) => {}));
+	#endregion
+	${0}
 
-snippet     props
-abbr        Property (RaiseAndSetIfChanged)
-    private ${1:type} _${2:name};
-    public $1 $2
-    {
-        get { return _$2; }
-        set { RaiseAndSetIfChanged(ref _$2, value); }
-    }
-    ${0}
+snippet	 props
+abbr		Property (SetProperty)
+	#region ${1:property_name}
+	private ${2:property_type} _$1;
+	public $2 $1
+	{
+		get { return _$1; }
+		set { SetProperty(ref _$1, value); }
+	}
+	#endregion
+	${0}
 
-snippet     propa
-abbr        Property (RaisePropertyChanged)
-    private ${1:type} _${2:name};
+snippet	 propa
+abbr		Property (RaisePropertyChanged)
+	#region ${1:property_name}
+	private ${2:property_type} _$1;
+	public $2 $1
+	{
+		get { return _$1; }
+		set
+		{ 
+			if (_$1 == value)
+				return;
 
-    public $1 $2
-    {
-        get { return _$2; }
-        set
-        { 
-            if (_$2 == value)
-                return;
-
-            _$2 = value;
-            RaisePropertyChanged(() => $2);
-        }
-    }
-    ${0}
+			_$1 = value;
+			RaisePropertyChanged(() => $1);
+		}
+	}
+	#endregion
+	${0}
 
