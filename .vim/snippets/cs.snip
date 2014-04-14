@@ -3,8 +3,8 @@ abbr		DependencyProperty
 	#region ${1:property_name}
 	public ${2:property_type} $1
 	{
-		get { return ($2)this.GetValue($1Property); }
-		set { this.SetValue($1Property, value); }
+		get { return ($2)GetValue($1Property); }
+		set { SetValue($1Property, value); }
 	}
 
 	public static readonly DependencyProperty $1Property =

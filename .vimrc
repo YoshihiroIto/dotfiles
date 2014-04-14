@@ -567,12 +567,6 @@ function! s:SetNeoBundle()"{{{
                 \   }
                 \ }
 
-    NeoBundleLazy 'thinca/vim-threes', {
-                \   'autoload': {
-                \     'commands': ['ThreesStart']
-                \   }
-                \ }
-
     if s:isMac
         NeoBundleLazy 'itchyny/dictionary.vim', {
                     \   'autoload': {
@@ -1272,8 +1266,6 @@ function! s:bundle.hooks.on_source(bundle)
 	let g:vimfiler_tree_leaf_icon             = ' '
 	let g:vimfiler_tree_opened_icon           = '▾'
 	let g:vimfiler_tree_closed_icon           = '▸'
-	let g:vimfiler_file_icon                  = '-'
-	let g:vimfiler_marked_file_icon           = '*'
 endfunction
 unlet s:bundle
 " }}}
