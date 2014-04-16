@@ -1,4 +1,4 @@
-snippet	 dep
+snippet		dep
 abbr		DependencyProperty
 	#region ${1:property_name}
 	public ${2:property_type} $1
@@ -16,7 +16,7 @@ abbr		DependencyProperty
 	#endregion
 	${0}
 
-snippet	 props
+snippet		props
 abbr		Property (SetProperty)
 	#region ${1:property_name}
 	private ${2:property_type} _$1;
@@ -28,7 +28,7 @@ abbr		Property (SetProperty)
 	#endregion
 	${0}
 
-snippet	 propa
+snippet		propa
 abbr		Property (RaisePropertyChanged)
 	#region ${1:property_name}
 	private ${2:property_type} _$1;
@@ -43,6 +43,36 @@ abbr		Property (RaisePropertyChanged)
 			_$1 = value;
 			RaisePropertyChanged(() => $1);
 		}
+	}
+	#endregion
+	${0}
+
+snippet		comv
+abbr		Property (ViewModelCommand)
+	#region ${1:command_name}Command
+	private ViewModelCommand _$1Command;
+	public ViewModelCommand $1Command
+	{
+		get { return _$1Command ?? (_$1Command = new ViewModelCommand($1)); }
+	}
+
+	private void $1()
+	{
+	}
+	#endregion
+	${0}
+
+snippet		coml
+abbr		Property (ListenerCommand)
+	#region ${1:command_name}Command
+	private ListenerCommand<${2:message_type}> _$1Command;
+	public ListenerCommand<$2> $1Command
+	{
+		get { return _$1Command ?? (_$1Command = new ListenerCommand<$2>($1)); }
+	}
+
+	private void $1($2 message)
+	{
 	}
 	#endregion
 	${0}

@@ -1420,6 +1420,9 @@ function! s:source()
         " echom 'sourced:' . s
     endfor
 
+    " 明示的に初期化したいものはここで
+    call over#load()
+
     augroup auto-source
         autocmd!
     augroup END
@@ -1524,7 +1527,7 @@ function! s:FirstOneShot()"{{{
     endfunction
 
     function! s:FirstOneShotPhase1()
-        call over#load()
+        " call over#load()
     endfunction
 
     function! s:FirstOneShotPhase2()
@@ -2163,7 +2166,7 @@ endfunction
 function! s:ContinueCursorHold()
 
     " http://d.hatena.ne.jp/osyo-manga/20121102/1351836801
-    call feedkeys(mode() ==# 'i' ? "\<C-g>\<ESC>" : "g\<ESC>", 'n')
+    call feedkeys(mode() ==# 'i' ? "\<C-g>\<Esc>" : "g\<Esc>", 'n')
 endfunction
 " }}}
 " アプリケーションウィンドウサイズの変更 {{{
