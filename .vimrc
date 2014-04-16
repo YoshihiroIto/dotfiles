@@ -1557,6 +1557,7 @@ augroup MyAutoGroup
     autocmd BufNewFile,BufRead            *.xaml              setf xml
     autocmd BufNewFile,BufRead            *.{fx,fxc,fxh,hlsl} setf hlsl
     autocmd BufNewFile,BufRead            *.{fsh,vsh}         setf glsl
+    autocmd BufWritePost                  $MYVIMRC            NeoBundleClearCache
 
     autocmd FileType *        call s:SetAll()
     autocmd FileType ruby     call s:SetRuby()
