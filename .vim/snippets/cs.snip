@@ -77,3 +77,12 @@ abbr		Property (ListenerCommand)
 	#endregion
 	${0}
 
+snippet		singleton
+abbr		Singleton
+	private ${1:class_name}(){}
+	private static readonly $1 _instance = new $1();
+	public static $1 Instance
+	{
+		get { return _instance; }
+	}
+	${0}

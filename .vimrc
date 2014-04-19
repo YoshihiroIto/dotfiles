@@ -1390,10 +1390,12 @@ function! s:bundle.hooks.on_source(bundle)
     call unite#custom#source('fold', 'matchers', 'matcher_migemo')
 
     " http://blog.monochromegane.com/blog/2014/01/16/the-platinum-searcher/
+    " https://github.com/monochromegane/the_platinum_searcher
     if executable('pt')
         let g:unite_source_grep_command       = 'pt'
         let g:unite_source_grep_default_opts  = '--nogroup --nocolor -S'
         let g:unite_source_grep_recursive_opt = ''
+        let g:unite_source_grep_encoding      = 'utf-8'
     endif
 endfunction
 unlet s:bundle
