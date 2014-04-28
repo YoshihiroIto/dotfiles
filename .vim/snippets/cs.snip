@@ -12,7 +12,17 @@ abbr		DependencyProperty
 			"$1",
 			typeof($2),
 			typeof(${3:owner_class}),
-			new PropertyMetadata(default($2), (s, e) => {}));
+			new FrameworkPropertyMetadata
+			{
+				DefaultValue            = default($2),
+				BindsTwoWayByDefault    = true,
+				PropertyChangedCallback = On$1Changed
+			}
+		);
+
+	private static void On$1Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+	{
+	}
 	#endregion
 	${0}
 
@@ -28,24 +38,24 @@ abbr		Property (SetProperty)
 	#endregion
 	${0}
 
-snippet		propa
-abbr		Property (RaisePropertyChanged)
-	#region ${1:property_name}
-	private ${2:property_type} _$1;
-	public $2 $1
-	{
-		get { return _$1; }
-		set
-		{ 
-			if (_$1 == value)
-				return;
-
-			_$1 = value;
-			RaisePropertyChanged(() => $1);
-		}
-	}
-	#endregion
-	${0}
+# snippet		propa
+# abbr		Property (RaisePropertyChanged)
+# 	#region ${1:property_name}
+# 	private ${2:property_type} _$1;
+# 	public $2 $1
+# 	{
+# 		get { return _$1; }
+# 		set
+# 		{ 
+# 			if (_$1 == value)
+# 				return;
+#
+# 			_$1 = value;
+# 			RaisePropertyChanged(() => $1);
+# 		}
+# 	}
+# 	#endregion
+# 	${0}
 
 snippet		comv
 abbr		Property (ViewModelCommand)
@@ -53,11 +63,16 @@ abbr		Property (ViewModelCommand)
 	private ViewModelCommand _$1Command;
 	public ViewModelCommand $1Command
 	{
-		get { return _$1Command ?? (_$1Command = new ViewModelCommand($1)); }
+		get { return _$1Command ?? (_$1Command = new ViewModelCommand($1, Can$1)); }
 	}
 
 	private void $1()
 	{
+	}
+
+	private bool Can$1()
+	{
+		 return true;
 	}
 	#endregion
 	${0}
@@ -68,11 +83,16 @@ abbr		Property (ListenerCommand)
 	private ListenerCommand<${2:message_type}> _$1Command;
 	public ListenerCommand<$2> $1Command
 	{
-		get { return _$1Command ?? (_$1Command = new ListenerCommand<$2>($1)); }
+		get { return _$1Command ?? (_$1Command = new ListenerCommand<$2>($1, Can$1)); }
 	}
 
 	private void $1($2 message)
 	{
+	}
+
+	private bool Can$1()
+	{
+		 return true;
 	}
 	#endregion
 	${0}

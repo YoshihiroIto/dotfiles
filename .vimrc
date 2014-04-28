@@ -177,17 +177,17 @@ function! s:SetNeoBundle()"{{{
                 \   }
                 \ }
 
-    NeoBundleLazy 'nosami/Omnisharp', {
-                \   'depends': ['Shougo/neocomplete.vim', 'Shougo/vimproc'],
-                \   'autoload': {
-                \     'filetypes': ['cs']
-                \   },
-                \   'build': {
-                \     'windows': 'C:/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe server/OmniSharp.sln /p:Platform="Any CPU"',
-                \     'mac':     'xbuild server/OmniSharp.sln',
-                \     'unix':    'xbuild server/OmniSharp.sln',
-                \   }
-                \ }
+    " NeoBundleLazy 'nosami/Omnisharp', {
+    "             \   'depends': ['Shougo/neocomplete.vim', 'Shougo/vimproc'],
+    "             \   'autoload': {
+    "             \     'filetypes': ['cs']
+    "             \   },
+    "             \   'build': {
+    "             \     'windows': 'C:/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe server/OmniSharp.sln /p:Platform="Any CPU"',
+    "             \     'mac':     'xbuild server/OmniSharp.sln',
+    "             \     'unix':    'xbuild server/OmniSharp.sln',
+    "             \   }
+    "             \ }
     " }}}
     " ファイル {{{
     NeoBundleLazy 'kana/vim-altr', {
@@ -274,7 +274,7 @@ function! s:SetNeoBundle()"{{{
                 \   }
                 \ }
 
-    NeoBundleLazy 'gabrielelana/vim-markdown', {
+    NeoBundleLazy 'plasticboy/vim-markdown', {
                 \   'autoload': {
                 \     'filetypes': ['markdown']
                 \   }
@@ -987,15 +987,15 @@ endfunction
 unlet s:bundle
 
 " }}}
-" Omnisharp {{{
-let s:bundle = neobundle#get('Omnisharp')
-function! s:bundle.hooks.on_source(bundle)
-
-    let g:Omnisharp_stop_server         = 0
-    let g:OmniSharp_typeLookupInPreview = 1
-endfunction
-unlet s:bundle
-" }}}
+" " Omnisharp {{{
+" let s:bundle = neobundle#get('Omnisharp')
+" function! s:bundle.hooks.on_source(bundle)
+"
+"     let g:Omnisharp_stop_server         = 0
+"     let g:OmniSharp_typeLookupInPreview = 1
+" endfunction
+" unlet s:bundle
+" " }}}
 " }}}
 " ファイル {{{
 nmap <F5>  <Plug>(altr-back)
@@ -1561,16 +1561,17 @@ augroup MyAutoGroup
     autocmd BufNewFile,BufRead            *.{fsh,vsh}         setf glsl
     autocmd BufWritePost                  $MYVIMRC            NeoBundleClearCache
 
-    autocmd FileType *        call s:SetAll()
-    autocmd FileType ruby     call s:SetRuby()
-    autocmd FileType vim      call s:SetVim()
-    autocmd FileType qf       call s:SetQuickFix()
-    autocmd FileType help     call s:SetHelp()
-    autocmd FileType unite    call s:SetUnite()
-    autocmd FileType cs       call s:SetCs()
-    autocmd FileType c,cpp    call s:SetCpp()
-    autocmd FileType go       call s:SetGo()
-    autocmd FileType xml,html call s:SetXml()
+    autocmd FileType *          call s:SetAll()
+    autocmd FileType ruby       call s:SetRuby()
+    autocmd FileType vim        call s:SetVim()
+    autocmd FileType qf         call s:SetQuickFix()
+    autocmd FileType help       call s:SetHelp()
+    autocmd FileType unite      call s:SetUnite()
+    autocmd FileType cs         call s:SetCs()
+    autocmd FileType c,cpp      call s:SetCpp()
+    autocmd FileType go         call s:SetGo()
+    autocmd FileType xml,html   call s:SetXml()
+    autocmd FileType neosnippet call s:SetNeoSnippet()
 
     function! s:SetAll()
         setlocal formatoptions-=ro
@@ -1615,7 +1616,7 @@ augroup MyAutoGroup
     endfunction
 
     function! s:SetCs()
-        setlocal omnifunc=OmniSharp#Complete
+        " setlocal omnifunc=OmniSharp#Complete
         setlocal foldmethod=syntax
 
         nnoremap <buffer> <F12>   :<C-u>OmniSharpGotoDefinition<CR>zz
@@ -1636,6 +1637,10 @@ augroup MyAutoGroup
 
     function! s:SetHelp()
         noremap  <silent><buffer> q     :<C-u>close<CR>
+    endfunction
+
+    function! s:SetNeoSnippet()
+        setlocal noexpandtab
     endfunction
 
     function! s:SetQuickFix()
