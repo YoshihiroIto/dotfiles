@@ -12,16 +12,20 @@ abbr		DependencyProperty
 			"$1",
 			typeof($2),
 			typeof(${3:owner_class}),
-			new FrameworkPropertyMetadata
+			new FrameworkPropertyMetadata(On$1Changed, OnCoerce$1)
 			{
-				DefaultValue            = default($2),
-				BindsTwoWayByDefault    = true,
-				PropertyChangedCallback = On$1Changed
+				DefaultValue         = default($2),
+				BindsTwoWayByDefault = true
 			}
 		);
 
 	private static void On$1Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
 	{
+	}
+
+	private static object OnCoerce$1(DependencyObject d, object value)
+	{
+		return value;
 	}
 	#endregion
 	${0}
@@ -38,24 +42,24 @@ abbr		Property (SetProperty)
 	#endregion
 	${0}
 
-# snippet		propa
-# abbr		Property (RaisePropertyChanged)
-# 	#region ${1:property_name}
-# 	private ${2:property_type} _$1;
-# 	public $2 $1
-# 	{
-# 		get { return _$1; }
-# 		set
-# 		{ 
-# 			if (_$1 == value)
-# 				return;
-#
-# 			_$1 = value;
-# 			RaisePropertyChanged(() => $1);
-# 		}
-# 	}
-# 	#endregion
-# 	${0}
+snippet		propa
+abbr		Property (RaisePropertyChanged)
+	#region ${1:property_name}
+	private ${2:property_type} _$1;
+	public $2 $1
+	{
+		get { return _$1; }
+		set
+		{ 
+			if (_$1 == value)
+				return;
+
+			_$1 = value;
+			RaisePropertyChanged(() => $1);
+		}
+	}
+	#endregion
+	${0}
 
 snippet		comv
 abbr		Property (ViewModelCommand)
@@ -100,9 +104,13 @@ abbr		Property (ListenerCommand)
 snippet		singleton
 abbr		Singleton
 	private ${1:class_name}(){}
-	private static readonly $1 _instance = new $1();
+	private static readonly $1 _Instance = new $1();
 	public static $1 Instance
 	{
-		get { return _instance; }
+		get { return _Instance; }
 	}
 	${0}
+
+
+
+# vim:set noexpandtab :

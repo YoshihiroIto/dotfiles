@@ -65,7 +65,8 @@ function! s:SetNeoBundle()"{{{
                 \   'depends': ['Shougo/vimproc'],
                 \ }
 
-    NeoBundleLazy 'nathanaelkane/vim-indent-guides'
+    " NeoBundleLazy 'nathanaelkane/vim-indent-guides'
+    NeoBundleLazy 'Yggdroot/indentLine'
     NeoBundleLazy 'vim-scripts/matchparenpp'
 
     NeoBundleLazy 'majutsushi/tagbar', {
@@ -818,12 +819,18 @@ function! MyCharCode()
     return "'". char ."' ". nr
 endfunction
 " }}}
-" vim-indent-guides {{{
-let g:indent_guides_enable_on_vim_startup = 1
-let g:indent_guides_guide_size            = 1
-let g:indent_guides_auto_colors           = 0
-let g:indent_guides_exclude_filetypes     = ['help', 'lingr-messages', 'tweetvim', 'unite']
-" }}}
+" " vim-indent-guides {{{
+" let g:indent_guides_enable_on_vim_startup = 1
+" let g:indent_guides_guide_size            = 1
+" let g:indent_guides_auto_colors           = 0
+" let g:indent_guides_exclude_filetypes     = ['help', 'lingr-messages', 'tweetvim', 'unite']
+" " }}}
+" indentLine {{{
+let g:indentLine_fileType   = ['c', 'cpp', 'cs', 'vim', 'rb', 'go', 'glsl', 'hlsl', 'xml', 'json']
+let g:indentLine_color_gui  = '#383838'
+let g:indentLine_color_term = 239
+let g:indentLine_faster     = 1
+"}}}
 " }}}
 " 編集 {{{
 " vim-easy-align {{{
@@ -1003,8 +1010,11 @@ nmap <F6>  <Plug>(altr-forward)
 
 let s:bundle = neobundle#get('vim-altr')
 function! s:bundle.hooks.on_source(bundle)
-    call altr#define('Models/%Model.cs', 'ViewModels/%ViewModel.cs', 'Views/%.xaml', 'Views/%.xaml.cs')
-    call altr#define('%Model.cs', '%ViewModel.cs', '%.xaml', '%.xaml.cs')
+    call altr#define('Models/%Model.cs',       'ViewModels/%Vm.cs',       'Views/%.xaml',       'Views/%.xaml.cs')
+    call altr#define('Models/*/%Model.cs',     'ViewModels/*/%Vm.cs',     'Views/*/%.xaml',     'Views/*/%.xaml.cs')
+    call altr#define('Models/*/*/%Model.cs',   'ViewModels/*/*/%Vm.cs',   'Views/*/*/%.xaml',   'Views/*/*/%.xaml.cs')
+    call altr#define('Models/*/*/*/%Model.cs', 'ViewModels/*/*/*/%Vm.cs', 'Views/*/*/*/%.xaml', 'Views/*/*/*/%.xaml.cs')
+    call altr#define('%Model.cs',              '%Vm.cs',                  '%.xaml',             '%.xaml.cs')
 endfunction
 unlet s:bundle
 " }}}
@@ -1477,8 +1487,9 @@ function! s:FirstOneShot()"{{{
         filetype plugin indent on
 
         " 表示 {{{
-        NeoBundleSource vim-indent-guides
-        IndentGuidesEnable
+        " NeoBundleSource vim-indent-guides
+        " IndentGuidesEnable
+        NeoBundleSource indentLine
         NeoBundleSource lightline.vim
         NeoBundleSource matchparenpp
         " }}}
@@ -1571,7 +1582,6 @@ augroup MyAutoGroup
     autocmd FileType c,cpp      call s:SetCpp()
     autocmd FileType go         call s:SetGo()
     autocmd FileType xml,html   call s:SetXml()
-    autocmd FileType neosnippet call s:SetNeoSnippet()
 
     function! s:SetAll()
         setlocal formatoptions-=ro
@@ -1821,7 +1831,8 @@ set autoindent
 set cindent                       " Cプログラムファイルの自動インデントを始める
 
 set list
-set listchars=tab:\ \ ,eol:↲,extends:»,precedes:«,nbsp:%
+" set listchars=tab:\ \ ,eol:↲,extends:»,precedes:«,nbsp:%
+set listchars=tab:\¦\ ,eol:↲,extends:»,precedes:«,nbsp:%
 
 vnoremap < <gv
 vnoremap > >gv
