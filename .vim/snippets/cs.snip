@@ -12,10 +12,12 @@ abbr		DependencyProperty
 			"$1",
 			typeof($2),
 			typeof(${3:owner_class}),
-			new FrameworkPropertyMetadata(On$1Changed, OnCoerce$1)
+			new FrameworkPropertyMetadata
 			{
-				DefaultValue         = default($2),
-				BindsTwoWayByDefault = true
+				PropertyChangedCallback = On$1Changed,
+				CoerceValueCallback     = Coerce$1,
+				DefaultValue            = default($2),
+				BindsTwoWayByDefault    = true
 			}
 		);
 
@@ -23,7 +25,7 @@ abbr		DependencyProperty
 	{
 	}
 
-	private static object OnCoerce$1(DependencyObject d, object value)
+	private static object Coerce$1(DependencyObject d, object value)
 	{
 		return value;
 	}
@@ -76,7 +78,7 @@ abbr		Property (ViewModelCommand)
 
 	private bool Can$1()
 	{
-		 return true;
+		return true;
 	}
 	#endregion
 	${0}
@@ -96,7 +98,7 @@ abbr		Property (ListenerCommand)
 
 	private bool Can$1()
 	{
-		 return true;
+		return true;
 	}
 	#endregion
 	${0}
