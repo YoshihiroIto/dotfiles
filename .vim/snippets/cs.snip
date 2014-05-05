@@ -23,10 +23,15 @@ abbr		DependencyProperty
 
 	private static void On$1Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
 	{
+		Debug.Assert(self is $3);
+		var self = d as $3;
 	}
 
 	private static object Coerce$1(DependencyObject d, object value)
 	{
+		Debug.Assert(self is $3);
+		var self = d as $3;
+
 		return value;
 	}
 	#endregion

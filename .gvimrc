@@ -26,7 +26,15 @@ hi Folded           guifg=#465457 guibg=#242526
 hi VertSplit        guifg=#202020 guibg=#202020 gui=bold "見えなくする
 
 " タブ表示など
-hi SpecialKey       guifg=#383838 guibg=#121212 gui=none
+" hi SpecialKey       guifg=#383838 guibg=#121212 gui=none
+" hi SpecialKey       guifg=#D0D0D0 guibg=#121212 gui=none
+
+if s:isMac
+    hi SpecialKey       guifg=#303030 guibg=#121212 gui=none
+else
+    hi SpecialKey       guifg=#B0D0F0 guibg=#121212 gui=none
+endif
+
 
 " vim-indent-guides
 hi IndentGuidesOdd                guibg=#181818

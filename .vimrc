@@ -59,14 +59,14 @@ let s:rightWindowWidth = 40
 " プラグイン {{{
 " インストール{{{
 function! s:SetNeoBundle()"{{{
+
     " 表示 {{{
     NeoBundle 'tomasr/molokai'
-    NeoBundleLazy 'itchyny/lightline.vim', {
+    NeoBundle 'Yggdroot/indentLine'
+    NeoBundle 'itchyny/lightline.vim', {
                 \   'depends': ['Shougo/vimproc'],
                 \ }
 
-    " NeoBundleLazy 'nathanaelkane/vim-indent-guides'
-    NeoBundleLazy 'Yggdroot/indentLine'
     NeoBundleLazy 'vim-scripts/matchparenpp'
 
     NeoBundleLazy 'majutsushi/tagbar', {
@@ -819,17 +819,19 @@ function! MyCharCode()
     return "'". char ."' ". nr
 endfunction
 " }}}
-" " vim-indent-guides {{{
-" let g:indent_guides_enable_on_vim_startup = 1
-" let g:indent_guides_guide_size            = 1
-" let g:indent_guides_auto_colors           = 0
-" let g:indent_guides_exclude_filetypes     = ['help', 'lingr-messages', 'tweetvim', 'unite']
-" " }}}
 " indentLine {{{
 let g:indentLine_fileType   = ['c', 'cpp', 'cs', 'vim', 'rb', 'go', 'glsl', 'hlsl', 'xml', 'json']
-let g:indentLine_color_gui  = '#383838'
+let g:indentLine_faster     = 0
 let g:indentLine_color_term = 239
-let g:indentLine_faster     = 1
+
+if s:isMac
+    let g:indentLine_char       = '¦'
+    let g:indentLine_color_gui  = '#303030'
+else
+    let g:indentLine_char       = '┆'
+    let g:indentLine_color_gui  = '#B0D0F0'
+endif
+" let g:indentLine_color_gui  = '#383838'
 "}}}
 " }}}
 " 編集 {{{
@@ -1426,11 +1428,10 @@ endfunction
 function! s:source()
     let sources = map(filter(s:get_lazy_plugins(), 's:is_not_sourced(v:val)'), 'v:val')
 
-    for s in sources
-        echom 'source:' . s
-        call neobundle#source(s)
-        " echom 'sourced:' . s
-    endfor
+    " for s in sources
+    "     echom 'source:' . s
+    "     call neobundle#source(s)
+    " endfor
 
     " 明示的に初期化したいものはここで
     call over#load()
@@ -1487,10 +1488,8 @@ function! s:FirstOneShot()"{{{
         filetype plugin indent on
 
         " 表示 {{{
-        " NeoBundleSource vim-indent-guides
-        " IndentGuidesEnable
-        NeoBundleSource indentLine
-        NeoBundleSource lightline.vim
+        " NeoBundleSource indentLine
+        " NeoBundleSource lightline.vim
         NeoBundleSource matchparenpp
         " }}}
         " 編集 {{{
@@ -1503,7 +1502,7 @@ function! s:FirstOneShot()"{{{
         "}}}
         " 検索 {{{
         NeoBundleSource vim-anzu
-        NeoBundleSource matchit.zip
+        " NeoBundleSource matchit.zip
         " }}}
         " アプリ {{{
         NeoBundleSource vim-fugitive
@@ -1540,10 +1539,12 @@ function! s:FirstOneShot()"{{{
     endfunction
 
     function! s:FirstOneShotPhase1()
+
         " call over#load()
     endfunction
 
     function! s:FirstOneShotPhase2()
+
         augroup FirstOneShot
             autocmd!
         augroup END
@@ -1551,13 +1552,13 @@ function! s:FirstOneShot()"{{{
 
     if s:firstOneShotDelay > 0
         let s:firstOneShotDelay = s:firstOneShotDelay - 1
-        call s:ContinueCursorHold()
+        " call s:ContinueCursorHold()
     else
         call call(printf('s:FirstOneShotPhase%d', s:firstOneShotPhase), [])
         let s:firstOneShotPhase = s:firstOneShotPhase + 1
     endif
 
-    " call s:ContinueCursorHold()
+    call s:ContinueCursorHold()
 endfunction"}}}
 
 augroup FirstOneShot
@@ -1832,7 +1833,13 @@ set cindent                       " Cプログラムファイルの自動イン�
 
 set list
 " set listchars=tab:\ \ ,eol:↲,extends:»,precedes:«,nbsp:%
-set listchars=tab:\¦\ ,eol:↲,extends:»,precedes:«,nbsp:%
+" set listchars=tab:\¦\ ,eol:↲,extends:»,precedes:«,nbsp:%
+
+if s:isMac
+    set listchars=tab:\¦\ ,eol:↲,extends:»,precedes:«,nbsp:%
+else
+    set listchars=tab:\┆\ ,eol:↲,extends:»,precedes:«,nbsp:%
+endif
 
 vnoremap < <gv
 vnoremap > >gv
