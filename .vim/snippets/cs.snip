@@ -49,7 +49,7 @@ abbr		Property (SetProperty)
 	#endregion
 	${0}
 
-snippet		propa
+snippet		propr
 abbr		Property (RaisePropertyChanged)
 	#region ${1:property_name}
 	private ${2:property_type} _$1;
@@ -66,6 +66,11 @@ abbr		Property (RaisePropertyChanged)
 		}
 	}
 	#endregion
+	${0}
+
+snippet		propa
+abbr		Auto Property
+	public ${1:TValue} ${2:name} { get; set; }
 	${0}
 
 snippet		comv
@@ -118,6 +123,200 @@ abbr		Singleton
 	}
 	${0}
 
+snippet		///
+abbr		summary
+	/// <summary>
+	/// ${0}
+	/// </summary>
 
+snippet		if
+abbr		if
+	if (${1})
+	{
+		${0}
+	}
+
+snippet		else
+abbr		else
+	else
+	{
+		${0}
+	}
+
+snippet		foreach
+abbr		foreach
+	foreach (var ${1:item} in ${2:items})
+	{
+		${0}
+	}
+
+snippet		for
+abbr		for
+	for (var ${1:i} = 0;$1 != ${2:max};++ $1)
+	{
+		${0}
+	}
+
+snippet		while
+abbr		while
+	while (${1})
+	{
+		${0}
+	}
+
+snippet		do
+abbr		do 〜 while
+	do
+	{
+		${0}
+	}
+	while (${1});
+
+snippet		yield return
+abbr		yield return
+	yield return ${0};
+
+snippet		try
+abbr		try 〜 catch 〜 finally
+	try
+	{
+		${0}
+	}
+	catch (Exception e)
+	{
+	}
+	finally
+	{
+	}
+
+snippet		switch
+abbr		switch 〜 case
+	switch (${1:value})
+	{
+		case ${2}:
+			${0}
+			break;
+
+		default:
+			break;
+	}
+
+snippet		using
+abbr		using block
+	using (var ${1:value} = new ${2:TValue}())
+	{
+		${0}
+	}
+
+snippet		Dispose
+abbr		protected override void Dispose(bool disposing)
+	protected override void Dispose(bool disposing)
+	{
+		if (disposing)
+		{
+			${0}
+		}
+
+		base.Dispose(disposing);
+	}
+
+snippet		Parallel ForEach
+abbr		Parallel.ForEach
+	Parallel.ForEach(${1:items}, ${2:item} =>
+	{
+		${0}
+	});
+
+snippet		Parallel For
+abbr		Parallel.For
+	Parallel.For(0, ${1:max}, ${2:i} =>
+	{
+		${0}
+	});
+
+snippet		TryGetValue
+abbr		Dictionary.TryGetValue
+	${1:TValue} value = default($1);
+	if (${2:dict}.TryGetValue(${3:key}, out value))
+	{
+		${0}
+	}
+
+snippet		GetOrAdd
+abbr		ConcurrentDictionary.GetOrAdd
+	var value = ${1:dict}.GetOrAdd(${2:key}, key =>
+	{
+		${0}
+	});
+
+snippet		Task Run WaitAll
+abbr		Task.Run
+	var task = Task.Run(() => ${0});
+	Task.WaitAll(new []{task});
+
+snippet		IDisposable
+	IDisposable
+
+snippet		Serializable
+	Serializable
+
+snippet		readonly
+	readonly
+
+snippet		Enumerable
+abbr		Enumerable
+	Enumerable
+
+snippet		IEnumerable
+abbr		IEnumerable
+	IEnumerable<${1:T}> ${0}
+
+snippet		ObservableCollection
+abbr		ObservableCollection
+	ObservableCollection<${1:T}> ${0}
+
+snippet		Dictionary
+abbr		Dictionary
+	Dictionary<${1:TKey}, ${2:TValue}> ${0}
+
+snippet		new List
+abbr		new List
+	var ${1:value} = new List<${2:T}>();
+	${0}
+
+snippet		new HashSet
+abbr		new HashSet
+	var ${1:value} = new HashSet<${2:T}>();
+	${0}
+
+snippet		new Dictionary
+abbr		new Dictionary
+	var ${1:value} = new Dictionary<${2:TKey}, ${3:TValue}>();
+	${0}
+
+snippet		throw NotImplementedException
+	throw new NotImplementedException(${0});
+
+snippet		throw NotSupportedException
+	throw new NotSupportedException(${0});
+
+snippet		throw InvalidOperationException
+	throw new InvalidOperationException(${0});
+
+snippet		NotImplementedException
+	NotImplementedException
+
+snippet		NotSupportedException
+	NotSupportedException
+
+snippet		InvalidOperationException
+	InvalidOperationException
+
+snippet		string IsNullOrEmpty
+abbr		if string.IsNullOrEmpty
+	if (string.IsNullOrEmpty(${1:value}))
+	{
+		${0}
+	}
 
 # vim:set noexpandtab :

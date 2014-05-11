@@ -200,20 +200,13 @@ function! s:SetNeoBundle()"{{{
     " }}}
     " 検索 {{{
     NeoBundleLazy 'osyo-manga/vim-anzu'
-    " NeoBundleLazy 'matchit.zip'
-    NeoBundle 'matchit.zip'
+    NeoBundleLazy 'matchit.zip'
 
     NeoBundleLazy 'rhysd/clever-f.vim', {
                 \   'autoload': {
                 \     'mappings': 'f',
                 \   }
                 \ }
-
-    " NeoBundleLazy 'Lokaltog/vim-easymotion', {
-    "             \   'autoload': {
-    "             \     'mappings': ['<Plug>(easymotion-']
-    "             \   }
-    "             \ }
 
     NeoBundleLazy 'thinca/vim-visualstar', {
                 \   'autoload': {
@@ -294,8 +287,6 @@ function! s:SetNeoBundle()"{{{
                 \     'filetypes': ['javascript']
                 \   }
                 \ }
-
-    " NeoBundleLazy 'scrooloose/syntastic'
 
     NeoBundleLazy 'rhysd/wandbox-vim', {
                 \   'autoload': {
@@ -823,7 +814,7 @@ endfunction
 " }}}
 " indentLine {{{
 let g:indentLine_fileType    = ['c', 'cpp', 'cs', 'vim', 'rb', 'go', 'glsl', 'hlsl', 'xml', 'json']
-let g:indentLine_faster      = 0
+let g:indentLine_faster      = 1
 let g:indentLine_color_term  = 239
 let g:indentLine_indentLevel = 20
 
@@ -981,7 +972,7 @@ function! s:bundle.hooks.on_source(bundle)
     let g:neosnippet#snippets_directory            = '$DOTVIM/snippets'
 
     if isdirectory(expand('$DOTVIM/snippets.local'))
-        let g:neosnippet#snippets_directory = g:neosnippet#snippets_directory . ',$DOTVIM/snippets.local'
+        let g:neosnippet#snippets_directory = '$DOTVIM/snippets.local,' . g:neosnippet#snippets_directory
     endif
 
     " Plugin key-mappings.
@@ -1031,34 +1022,12 @@ let g:clever_f_across_no_line        = 1
 let g:clever_f_use_migemo            = 1
 let g:clever_f_chars_match_any_signs = ';'
 " }}}
-" machit{{{
-let s:bundle = neobundle#get('matchit.zip')
-function! s:bundle.hooks.on_source(bundle)
-
-    silent! exe 'doautocmd Filetype' &filetype
-endfunction
-unlet s:bundle
-" }}}
 " vim-visualstar {{{
 map *  <Plug>(visualstar-*)
 map #  <Plug>(visualstar-#)
 map g* <Plug>(visualstar-g*)
 map g# <Plug>(visualstar-g#)
 " }}}
-" " vim-easymotion {{{
-" " http://haya14busa.com/vim-lazymotion-on-speed/
-" let g:EasyMotion_do_mapping          = 0
-" let g:EasyMotion_keys                = 'hlasdyuiopqwertnmzxcvbgfkj'
-" let g:EasyMotion_special_select_line = 0
-" let g:EasyMotion_select_phrase       = 1
-" let g:EasyMotion_smartcase           = 1
-" let g:EasyMotion_startofline         = 1
-" map  <Leader>j <Plug>(easymotion-j)
-" map  <Leader>k <Plug>(easymotion-k)
-" nmap r         <Plug>(easymotion-s)
-" vmap r         <Plug>(easymotion-s)
-" omap r         <Plug>(easymotion-s)
-" " }}}
 " vim-anzu {{{
 nmap <silent> n <Plug>(anzu-n)zOzz:<C-u>call <SID>BeginDisplayAnzu()<CR>:<C-u>call <SID>RefreshScreen()<CR>
 nmap <silent> N <Plug>(anzu-N)zOzz:<C-u>call <SID>BeginDisplayAnzu()<CR>:<C-u>call <SID>RefreshScreen()<CR>
@@ -1112,23 +1081,23 @@ map } <Plug>(parajump-forward)
 "     autocmd BufEnter,TextChanged,InsertLeave *.{cs} SyntasticCheck
 " augroup END
 " " }}}
-" " clang_complete {{{
-" let s:bundle = neobundle#get('clang_complete')
-" function! s:bundle.hooks.on_source(bundle)
-"
-"     let g:clang_use_library   = 1
-"     let g:clang_complete_auto = 0
-"     let g:clang_auto_select   = 0
-"
-"     if s:isWindows
-"         let g:clang_user_options = '-I c:/Development/boost/boost_1_47 -I "C:/Program Files (x86)/Microsoft Visual Studio 11.0/VC/include" -std=c++11 -fms-extensions -fmsc-version=1300 -fgnu-runtime -D__MSVCRT_VERSION__=0x700 -D_WIN32_WINNT=0x0500 2> NUL || exit 0"'
-"         let g:clang_library_path = 'C:/Development/llvm/build/bin/Release/'
-"     elseif s:isMac
-"         let g:clang_user_options = '-std=c++11'
-"     endif
-" endfunction
-" unlet s:bundle
-" " }}}
+" clang_complete {{{
+let s:bundle = neobundle#get('clang_complete')
+function! s:bundle.hooks.on_source(bundle)
+
+    let g:clang_use_library   = 1
+    let g:clang_complete_auto = 0
+    let g:clang_auto_select   = 0
+
+    if s:isWindows
+        let g:clang_user_options = '-I c:/Development/boost/boost_1_47 -I "C:/Program Files (x86)/Microsoft Visual Studio 11.0/VC/include" -std=c++11 -fms-extensions -fmsc-version=1300 -fgnu-runtime -D__MSVCRT_VERSION__=0x700 -D_WIN32_WINNT=0x0500 2> NUL || exit 0"'
+        let g:clang_library_path = 'C:/Development/llvm/build/bin/Release/'
+    elseif s:isMac
+        let g:clang_user_options = '-std=c++11'
+    endif
+endfunction
+unlet s:bundle
+" }}}
 " vim-clang-format {{{
 let s:bundle = neobundle#get('vim-clang-format')
 function! s:bundle.hooks.on_source(bundle)
@@ -1431,10 +1400,10 @@ endfunction
 function! s:source()
     let sources = map(filter(s:get_lazy_plugins(), 's:is_not_sourced(v:val)'), 'v:val')
 
-    " for s in sources
-    "     " echom 'source:' . s
-    "     call neobundle#source(s)
-    " endfor
+    for s in sources
+        echom 'source:' . s
+        call neobundle#source(s)
+    endfor
 
     " 明示的に初期化したいものはここで
     call over#load()
@@ -1505,7 +1474,7 @@ function! s:FirstOneShot()"{{{
         "}}}
         " 検索 {{{
         NeoBundleSource vim-anzu
-        " NeoBundleSource matchit.zip                                       # indentLine が正しく動かなくなる
+        NeoBundleSource matchit.zip
         " }}}
         " アプリ {{{
         NeoBundleSource vim-fugitive
