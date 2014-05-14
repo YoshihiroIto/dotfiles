@@ -1,4 +1,4 @@
-snippet		dep
+snippet		DependencyProperty
 abbr		DependencyProperty
 	#region ${1:property_name}
 	public ${2:property_type} $1
@@ -71,10 +71,9 @@ abbr		Property (RaisePropertyChanged)
 snippet		propa
 abbr		Auto Property
 	public ${1:TValue} ${2:name} { get; set; }
-	${0}
 
 snippet		comv
-abbr		Property (ViewModelCommand)
+abbr		ViewModelCommand
 	#region ${1:command_name}Command
 	private ViewModelCommand _$1Command;
 	public ViewModelCommand $1Command
@@ -94,7 +93,7 @@ abbr		Property (ViewModelCommand)
 	${0}
 
 snippet		coml
-abbr		Property (ListenerCommand)
+abbr		ListenerCommand
 	#region ${1:command_name}Command
 	private ListenerCommand<${2:message_type}> _$1Command;
 	public ListenerCommand<$2> $1Command
@@ -113,7 +112,7 @@ abbr		Property (ListenerCommand)
 	#endregion
 	${0}
 
-snippet		singleton
+snippet		Singleton
 abbr		Singleton
 	private ${1:class_name}(){}
 	private static readonly $1 _Instance = new $1();
@@ -126,12 +125,13 @@ abbr		Singleton
 snippet		///
 abbr		summary
 	/// <summary>
-	/// ${0}
+	/// ${1}
 	/// </summary>
+	${0}
 
 snippet		if
 abbr		if
-	if (${1})
+	if (${1:cond})
 	{
 		${0}
 	}
@@ -159,7 +159,7 @@ abbr		for
 
 snippet		while
 abbr		while
-	while (${1})
+	while (${1:cond})
 	{
 		${0}
 	}
@@ -170,7 +170,7 @@ abbr		do 〜 while
 	{
 		${0}
 	}
-	while (${1});
+	while (${1:cond});
 
 snippet		yield return
 abbr		yield return
@@ -204,6 +204,13 @@ abbr		switch 〜 case
 snippet		using
 abbr		using block
 	using (var ${1:value} = new ${2:TValue}())
+	{
+		${0}
+	}
+
+snippet		AnonymousDisposable
+abbr		AnonymousDisposable block
+	using (new AnonymousDisposable(() => ${1}))
 	{
 		${0}
 	}
@@ -271,13 +278,13 @@ snippet		IEnumerable
 abbr		IEnumerable
 	IEnumerable<${1:T}> ${0}
 
-snippet		ObservableCollection
-abbr		ObservableCollection
-	ObservableCollection<${1:T}> ${0}
-
 snippet		Dictionary
 abbr		Dictionary
 	Dictionary<${1:TKey}, ${2:TValue}> ${0}
+
+snippet		ObservableCollection
+abbr		ObservableCollection
+	ObservableCollection<${1:T}> ${0}
 
 snippet		new List
 abbr		new List
@@ -293,6 +300,21 @@ snippet		new Dictionary
 abbr		new Dictionary
 	var ${1:value} = new Dictionary<${2:TKey}, ${3:TValue}>();
 	${0}
+
+snippet		new ObservableCollection
+abbr		new ObservableCollection
+	new ObservableCollection<${1:T}>();
+
+snippet		new PropertyChangedEventListener
+abbr		new PropertyChangedEventListener
+	new PropertyChangedEventListener(${0})
+
+snippet		string IsNullOrEmpty
+abbr		if string.IsNullOrEmpty
+	if (string.IsNullOrEmpty(${1:value}))
+	{
+		${0}
+	}
 
 snippet		throw NotImplementedException
 	throw new NotImplementedException(${0});
@@ -311,12 +333,5 @@ snippet		NotSupportedException
 
 snippet		InvalidOperationException
 	InvalidOperationException
-
-snippet		string IsNullOrEmpty
-abbr		if string.IsNullOrEmpty
-	if (string.IsNullOrEmpty(${1:value}))
-	{
-		${0}
-	}
 
 # vim:set noexpandtab :

@@ -179,17 +179,17 @@ function! s:SetNeoBundle()"{{{
                 \   }
                 \ }
 
-    " NeoBundleLazy 'nosami/Omnisharp', {
-    "             \   'depends': ['Shougo/neocomplete.vim', 'Shougo/vimproc'],
-    "             \   'autoload': {
-    "             \     'filetypes': ['cs']
-    "             \   },
-    "             \   'build': {
-    "             \     'windows': 'C:/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe server/OmniSharp.sln /p:Platform="Any CPU"',
-    "             \     'mac':     'xbuild server/OmniSharp.sln',
-    "             \     'unix':    'xbuild server/OmniSharp.sln',
-    "             \   }
-    "             \ }
+    NeoBundleLazy 'nosami/Omnisharp', {
+                \   'depends': ['Shougo/neocomplete.vim', 'Shougo/vimproc'],
+                \   'autoload': {
+                \     'filetypes': ['cs']
+                \   },
+                \   'build': {
+                \     'windows': 'C:/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe server/OmniSharp.sln /p:Platform="Any CPU"',
+                \     'mac':     'xbuild server/OmniSharp.sln',
+                \     'unix':    'xbuild server/OmniSharp.sln',
+                \   }
+                \ }
     " }}}
     " ファイル {{{
     NeoBundleLazy 'kana/vim-altr', {
@@ -990,15 +990,15 @@ endfunction
 unlet s:bundle
 
 " }}}
-" " Omnisharp {{{
-" let s:bundle = neobundle#get('Omnisharp')
-" function! s:bundle.hooks.on_source(bundle)
-"
-"     let g:Omnisharp_stop_server         = 0
-"     let g:OmniSharp_typeLookupInPreview = 1
-" endfunction
-" unlet s:bundle
-" " }}}
+" Omnisharp {{{
+let s:bundle = neobundle#get('Omnisharp')
+function! s:bundle.hooks.on_source(bundle)
+
+    let g:Omnisharp_stop_server         = 0
+    let g:OmniSharp_typeLookupInPreview = 1
+endfunction
+unlet s:bundle
+" }}}
 " }}}
 " ファイル {{{
 nmap <F5>  <Plug>(altr-back)
@@ -1247,9 +1247,9 @@ function! s:bundle.hooks.on_source(bundle)
 
     let g:vimfiler_as_default_explorer        = 1
     let g:vimfiler_force_overwrite_statusline = 0
-	let g:vimfiler_tree_leaf_icon             = ' '
-	let g:vimfiler_tree_opened_icon           = '▾'
-	let g:vimfiler_tree_closed_icon           = '▸'
+    let g:vimfiler_tree_leaf_icon             = ' '
+    let g:vimfiler_tree_opened_icon           = '▾'
+    let g:vimfiler_tree_closed_icon           = '▸'
 endfunction
 unlet s:bundle
 " }}}
@@ -1406,7 +1406,7 @@ function! s:source()
     endfor
 
     " 明示的に初期化したいものはここで
-    call over#load()
+    " call over#load()
 
     augroup auto-source
         autocmd!
@@ -1599,8 +1599,9 @@ augroup MyAutoGroup
     endfunction
 
     function! s:SetCs()
-        " setlocal omnifunc=OmniSharp#Complete
+        setlocal omnifunc=OmniSharp#Complete
         setlocal foldmethod=syntax
+        let g:omnicomplete_fetch_full_documentation = 0
 
         nnoremap <buffer> <F12>   :<C-u>OmniSharpGotoDefinition<CR>zz
         nnoremap <buffer> <S-F12> :<C-u>OmniSharpFindUsages<CR>
