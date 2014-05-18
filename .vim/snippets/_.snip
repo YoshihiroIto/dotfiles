@@ -1,7 +1,9 @@
-snippet     filename
+snippet		filename
+options		word
 	`expand("%")`
 
-snippet     fullfilename
+snippet		fullfilename
+options		word
 	`substitute(expand("%:p"), '\', '/', "g")`
 
 

@@ -45,6 +45,7 @@ endif
 
 " メニューを読み込まない
 set guioptions+=M
+let g:did_install_default_menus = 1
 
 nnoremap [App] <Nop>
 nmap     ;     [App]
@@ -180,7 +181,7 @@ function! s:SetNeoBundle()"{{{
                 \ }
 
     NeoBundleLazy 'nosami/Omnisharp', {
-                \   'depends': ['Shougo/neocomplete.vim', 'Shougo/vimproc'],
+                \   'depends': ['Shougo/neocomplete.vim', 'Shougo/vimproc', 'scrooloose/syntastic'],
                 \   'autoload': {
                 \     'filetypes': ['cs']
                 \   },
@@ -224,6 +225,12 @@ function! s:SetNeoBundle()"{{{
     NeoBundleLazy 'vim-jp/cpp-vim', {
                 \   'autoload': {
                 \     'filetypes': ['cpp']
+                \   }
+                \ }
+
+    NeoBundleLazy 'scrooloose/syntastic', {
+                \   'autoload': {
+                \     'filetypes': ['cs']
                 \   }
                 \ }
 
@@ -1075,12 +1082,12 @@ map } <Plug>(parajump-forward)
 " }}}
 " }}}
 " 言語 {{{
-" " syntastic {{{
-" let g:syntastic_cs_checkers = ['syntax', 'issues']
-" augroup MyAutoGroup
-"     autocmd BufEnter,TextChanged,InsertLeave *.{cs} SyntasticCheck
-" augroup END
-" " }}}
+" syntastic {{{
+let g:syntastic_cs_checkers = ['syntax', 'issues']
+augroup MyAutoGroup
+    autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
+augroup END
+" }}}
 " clang_complete {{{
 let s:bundle = neobundle#get('clang_complete')
 function! s:bundle.hooks.on_source(bundle)
@@ -1341,7 +1348,6 @@ nnoremap <silent> [Unite]l   :<C-u>Unite -no-split line<CR>
 nnoremap <silent> [Unite]o   :<C-u>Unite -no-split outline<CR>
 nnoremap <silent> [Unite]z   :<C-u>Unite -no-split fold<CR>
 nnoremap <silent> [Unite]q   :<C-u>Unite -no-quit -horizontal quickfix<CR>
-nnoremap <silent> [Unite]v   :<C-u>Unite -no-split giti<CR>
 
 nnoremap          [Unite]uu  :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
 nnoremap          [Unite]ui  :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
@@ -1488,7 +1494,7 @@ function! s:FirstOneShot()"{{{
         NeoBundleSource neomru.vim
         " }}}
         " 言語 {{{
-        " NeoBundleSource syntastic
+        NeoBundleSource syntastic
         " }}}
 
         set laststatus=2
@@ -1682,10 +1688,6 @@ set nrformats+=alpha
 set completeopt=longest,menuone
 set backspace=indent,eol,start
 
-inoremap ¥ \
-inoremap \ ¥
-cnoremap ¥ \
-cnoremap \ ¥
 noremap  U J
 
 " ^Mを取り除く
@@ -1805,9 +1807,6 @@ set autoindent
 set cindent                       " Cプログラムファイルの自動インデントを始める
 
 set list
-" set listchars=tab:\ \ ,eol:↲,extends:»,precedes:«,nbsp:%
-" set listchars=tab:\¦\ ,eol:↲,extends:»,precedes:«,nbsp:%
-
 if s:isMac
     set listchars=tab:\¦\ ,eol:↲,extends:»,precedes:«,nbsp:%
 else
