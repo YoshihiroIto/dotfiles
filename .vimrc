@@ -1,7 +1,6 @@
 set nocompatible
 set encoding=utf-8
 scriptencoding utf-8
-
 " 基本 {{{
 let s:isWindows    = has('win32') || has('win64')
 let s:isMac        = has('mac')
@@ -146,7 +145,7 @@ function! s:SetNeoBundle()"{{{
                 \ }
 
     NeoBundleLazy 'Shougo/neosnippet', {
-                \   'depends': ['Shougo/neosnippet-snippets'],
+                \   'depends': ['Shougo/neosnippet-snippets', 'Shougo/neocomplete.vim'],
                 \   'autoload': {
                 \     'insert': 1,
                 \     'filetypes': ['neosnippet'],
@@ -993,6 +992,8 @@ function! s:bundle.hooks.on_source(bundle)
         let g:neosnippet#snippets_directory = '$DOTVIM/snippets.local,' . g:neosnippet#snippets_directory
     endif
 
+    call neocomplete#custom#source('neosnippet', 'rank', 1000)
+
     " Plugin key-mappings.
     imap <C-k>  <Plug>(neosnippet_expand_or_jump)
     smap <C-k>  <plug>(neosnippet_expand_or_jump)
@@ -1249,12 +1250,6 @@ function! s:bundle.hooks.on_source(bundle)
         nmap <buffer><expr> <Enter> vimfiler#smart_cursor_map(
             \  "\<Plug>(vimfiler_cd_file)",
             \  "\<Plug>(vimfiler_edit_file)")
-        nmap <buffer><expr> J vimfiler#smart_cursor_map(
-            \  "\<Plug>(easymotion-j)",
-            \  "\<Plug>(easymotion-j)")
-        nmap <buffer><expr> K vimfiler#smart_cursor_map(
-            \  "\<Plug>(easymotion-k)",
-            \  "\<Plug>(easymotion-k)")
         nmap <buffer><expr> <C-j> vimfiler#smart_cursor_map(
             \  "\<Plug>(vimfiler_exit)",
             \  "\<Plug>(vimfiler_exit)")
