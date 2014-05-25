@@ -180,8 +180,19 @@ function! s:SetNeoBundle()"{{{
                 \   }
                 \ }
 
+    " NeoBundleLazy 'nosami/Omnisharp', {
+    "             \   'depends': ['Shougo/neocomplete.vim', 'Shougo/vimproc', 'scrooloose/syntastic'],
+    "             \   'autoload': {
+    "             \     'filetypes': ['cs']
+    "             \   },
+    "             \   'build': {
+    "             \     'windows': 'C:/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe server/OmniSharp.sln /p:Platform="Any CPU"',
+    "             \     'mac':     'xbuild server/OmniSharp.sln',
+    "             \     'unix':    'xbuild server/OmniSharp.sln',
+    "             \   }
+    "             \ }
     NeoBundleLazy 'nosami/Omnisharp', {
-                \   'depends': ['Shougo/neocomplete.vim', 'Shougo/vimproc', 'scrooloose/syntastic'],
+                \   'depends': ['Shougo/neocomplete.vim', 'Shougo/vimproc'],
                 \   'autoload': {
                 \     'filetypes': ['cs']
                 \   },
@@ -228,11 +239,11 @@ function! s:SetNeoBundle()"{{{
                 \   }
                 \ }
 
-    NeoBundleLazy 'scrooloose/syntastic', {
-                \   'autoload': {
-                \     'filetypes': ['cs']
-                \   }
-                \ }
+    " NeoBundleLazy 'scrooloose/syntastic', {
+    "             \   'autoload': {
+    "             \     'filetypes': ['cs']
+    "             \   }
+    "             \ }
 
     NeoBundleLazy 'Mizuchi/STL-Syntax', {
                 \   'autoload': {
@@ -581,7 +592,7 @@ function! s:SetNeoBundle()"{{{
     endif
     " }}}
     " Unite {{{
-    NeoBundleLazy 'Shougo/unite.vim', {
+    NeoBundleLazy 'Shougo/unite.vim' {
                 \   'depends': ['Shougo/vimproc'],
                 \   'autoload': {
                 \     'commands': ['Unite', 'UniteResume', 'UniteWithCursorWord']
@@ -1083,10 +1094,10 @@ map } <Plug>(parajump-forward)
 " }}}
 " 言語 {{{
 " syntastic {{{
-let g:syntastic_cs_checkers = ['syntax', 'issues']
-augroup MyAutoGroup
-    autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
-augroup END
+" let g:syntastic_cs_checkers = ['syntax', 'issues']
+" augroup MyAutoGroup
+"     autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
+" augroup END
 " }}}
 " clang_complete {{{
 let s:bundle = neobundle#get('clang_complete')
@@ -1494,7 +1505,7 @@ function! s:FirstOneShot()"{{{
         NeoBundleSource neomru.vim
         " }}}
         " 言語 {{{
-        NeoBundleSource syntastic
+        " NeoBundleSource syntastic
         " }}}
 
         set laststatus=2
@@ -2041,6 +2052,9 @@ nnoremap <silent> zc zM
 nnoremap <expr> zh foldlevel(line('.'))  >  0  ? 'zc' : '<C-h>'
 nnoremap <expr> zl foldclosed(line('.')) != -1 ? 'zo' : '<C-l>'
 
+nnoremap <C-h> zc
+nnoremap <C-l> zo
+
 " 折り畳み外であれば何もしない
 nnoremap <expr> zO foldclosed(line('.')) != -1 ? 'zO' : ''
 " }}}
@@ -2061,8 +2075,13 @@ cnoremap <C-n> <Down>
 cnoremap <C-p> <Up>
 " }}}
 " カーソル移動 {{{
-nnoremap <silent> k     gk
-nnoremap <silent> j     gj
+" nnoremap <silent> k     gk
+" nnoremap <silent> j     gj
+nnoremap <silent> k     :<C-u>call <SID>UpCursor()<CR>
+nnoremap <silent> j     :<C-u>call <SID>DownCursor()<CR>
+nnoremap <silent> h     :<C-u>call <SID>LeftCursor()<CR>
+nnoremap <silent> l     :<C-u>call <SID>RightCursor()<CR>
+
 vnoremap <silent> k     gk
 vnoremap <silent> j     gj
 nnoremap <silent> 0     g0
@@ -2082,8 +2101,45 @@ map      <silent> [[    [[zz:<C-u>call    <SID>RefreshScreen()<CR>
 map      <silent> ]]    ]]zz:<C-u>call    <SID>RefreshScreen()<CR>
 map      <silent> K     {zz:<C-u>call     <SID>RefreshScreen()<CR>
 map      <silent> J     }zz:<C-u>call     <SID>RefreshScreen()<CR>
-map      <silent> H     ^:<C-u>call       <SID>RefreshScreen()<CR>
-map      <silent> L     $:<C-u>call       <SID>RefreshScreen()<CR>
+map      <silent> H     :<C-u>call <SID>DisableVirtualCursor()<CR>^:<C-u>call <SID>RefreshScreen()<CR>
+map      <silent> L     :<C-u>call <SID>DisableVirtualCursor()<CR>$:<C-u>call <SID>RefreshScreen()<CR>
+
+function! s:UpCursor()
+    call s:EnableVirtualCursor()
+    normal! gk
+endfunction
+
+function! s:DownCursor()
+    call s:EnableVirtualCursor()
+    normal! gj
+endfunction
+
+function! s:LeftCursor()
+    call s:DisableVirtualCursor()
+    normal! h
+endfunction
+
+function! s:RightCursor()
+    call s:DisableVirtualCursor()
+    normal! l
+
+    if foldclosed(line('.')) != -1
+        normal zv
+    endif
+endfunction
+
+function! s:EnableVirtualCursor()
+    set virtualedit=all
+endfunction
+
+function! s:DisableVirtualCursor()
+    set virtualedit=block
+endfunction
+
+augroup MyAutoGroup
+    autocmd InsertEnter * call s:DisableVirtualCursor()
+augroup END
+
 " }}}
 " ウィンドウ操作 {{{
 set splitbelow                    " 縦分割したら新しいウィンドウは下に
