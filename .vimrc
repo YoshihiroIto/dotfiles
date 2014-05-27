@@ -1,6 +1,7 @@
 set nocompatible
 set encoding=utf-8
 scriptencoding utf-8
+
 " 基本 {{{
 let s:isWindows    = has('win32') || has('win64')
 let s:isMac        = has('mac')
@@ -586,12 +587,12 @@ function! s:SetNeoBundle()"{{{
                     \ }
     endif
 
-    if s:isWindows
+    if s:isWindows && s:isGuiRunning
         NeoBundleLazy 'YoshihiroIto/vim-icondrag'
     endif
     " }}}
     " Unite {{{
-    NeoBundleLazy 'Shougo/unite.vim' {
+    NeoBundleLazy 'Shougo/unite.vim', {
                 \   'depends': ['Shougo/vimproc'],
                 \   'autoload': {
                 \     'commands': ['Unite', 'UniteResume', 'UniteWithCursorWord']
@@ -1339,21 +1340,21 @@ xnoremap [Unite] <nop>
 nmap     <Space> [Unite]
 xmap     <Space> [Unite]
 
-nnoremap <silent> [Unite]g   :<C-u>Unite               grep -auto-preview -no-split -buffer-name=search-buffer<CR>
-nnoremap <silent> [Unite]cg  :<C-u>UniteWithCursorWord grep -auto-preview -no-split -buffer-name=search-buffer<CR>
+nnoremap <silent> [Unite]g   :<C-u>Unite               grep -prompt-direction=top -auto-preview -no-split -buffer-name=search-buffer<CR>
+nnoremap <silent> [Unite]cg  :<C-u>UniteWithCursorWord grep -prompt-direction=top -auto-preview -no-split -buffer-name=search-buffer<CR>
 
-nnoremap <silent> [Unite]pg  :<C-u>call <SID>unite_grep_project('-auto-preview -no-split -buffer-name=search-buffer')<CR>
-nnoremap <silent> [Unite]cpg :<C-u>call <SID>unite_grep_project('-auto-preview -no-split -buffer-name=search-buffer')<CR><C-R><C-W><CR>
-nnoremap <silent> [Unite]r   :<C-u>UniteResume -no-split search-buffer<CR>
+nnoremap <silent> [Unite]pg  :<C-u>call <SID>unite_grep_project('-prompt-direction=top -auto-preview -no-split -buffer-name=search-buffer')<CR>
+nnoremap <silent> [Unite]cpg :<C-u>call <SID>unite_grep_project('-prompt-direction=top -auto-preview -no-split -buffer-name=search-buffer')<CR><C-R><C-W><CR>
+nnoremap <silent> [Unite]r   :<C-u>UniteResume -prompt-direction=top -no-split search-buffer<CR>
 
-nnoremap <silent> [Unite]m   :<C-u>Unite -no-split neomru/file<CR>
-nnoremap <silent> [Unite]f   :<C-u>Unite -no-split file<CR>
-nnoremap <silent> [Unite]b   :<C-u>Unite -no-split buffer<CR>
-nnoremap <silent> [Unite]t   :<C-u>Unite -no-split tab<CR>
-nnoremap <silent> [Unite]l   :<C-u>Unite -no-split line<CR>
-nnoremap <silent> [Unite]o   :<C-u>Unite -no-split outline<CR>
-nnoremap <silent> [Unite]z   :<C-u>Unite -no-split fold<CR>
-nnoremap <silent> [Unite]q   :<C-u>Unite -no-quit -horizontal quickfix<CR>
+nnoremap <silent> [Unite]m   :<C-u>Unite -prompt-direction=top -no-split neomru/file<CR>
+nnoremap <silent> [Unite]f   :<C-u>Unite -prompt-direction=top -no-split file<CR>
+nnoremap <silent> [Unite]b   :<C-u>Unite -prompt-direction=top -no-split buffer<CR>
+nnoremap <silent> [Unite]t   :<C-u>Unite -prompt-direction=top -no-split tab<CR>
+nnoremap <silent> [Unite]l   :<C-u>Unite -prompt-direction=top -no-split line<CR>
+nnoremap <silent> [Unite]o   :<C-u>Unite -prompt-direction=top -no-split outline<CR>
+nnoremap <silent> [Unite]z   :<C-u>Unite -prompt-direction=top -no-split fold<CR>
+nnoremap <silent> [Unite]q   :<C-u>Unite -prompt-direction=top -no-quit -horizontal quickfix<CR>
 
 nnoremap          [Unite]uu  :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
 nnoremap          [Unite]ui  :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
@@ -1490,7 +1491,7 @@ function! s:FirstOneShot()"{{{
         " }}}
         " アプリ {{{
         NeoBundleSource vim-fugitive
-        if s:isWindows
+        if s:isWindows && s:isGuiRunning
             NeoBundleSource vim-icondrag
             IconDragEnable
         endif
@@ -2046,9 +2047,6 @@ nnoremap <silent> zc zM
 
 nnoremap <expr> zh foldlevel(line('.'))  >  0  ? 'zc' : '<C-h>'
 nnoremap <expr> zl foldclosed(line('.')) != -1 ? 'zo' : '<C-l>'
-
-nnoremap <C-h> zc
-nnoremap <C-l> zo
 
 " 折り畳み外であれば何もしない
 nnoremap <expr> zO foldclosed(line('.')) != -1 ? 'zO' : ''
