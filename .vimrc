@@ -245,6 +245,8 @@ function! s:SetNeoBundle()"{{{
     "             \   }
     "             \ }
 
+    NeoBundleLazy 'koron/codic-vim'
+
     NeoBundleLazy 'Mizuchi/STL-Syntax', {
                 \   'autoload': {
                 \     'filetypes': ['cpp']
@@ -627,6 +629,13 @@ function! s:SetNeoBundle()"{{{
                 \   }
                 \ }
 
+    NeoBundleLazy 'rhysd/unite-codic.vim', {
+                \   'depends': ['Shougo/unite.vim', 'koron/codic-vim'],
+                \   'autoload': {
+                \     'unite_sources': ['codic']
+                \   }
+                \ }
+
     NeoBundleLazy 'Shougo/neomru.vim', {
                 \   'depends': ['Shougo/unite.vim'],
                 \   'autoload': {
@@ -832,7 +841,8 @@ endfunction
 " }}}
 " indentLine {{{
 let g:indentLine_fileType    = ['c', 'cpp', 'cs', 'vim', 'rb', 'go', 'glsl', 'hlsl', 'xml', 'json']
-let g:indentLine_faster      = 1
+" let g:indentLine_faster      = 1
+let g:indentLine_faster      = 0
 let g:indentLine_color_term  = 239
 let g:indentLine_indentLevel = 20
 
@@ -1340,25 +1350,23 @@ xnoremap [Unite] <nop>
 nmap     <Space> [Unite]
 xmap     <Space> [Unite]
 
-nnoremap <silent> [Unite]g   :<C-u>Unite               grep -prompt-direction=top -auto-preview -no-split -buffer-name=search-buffer<CR>
-nnoremap <silent> [Unite]cg  :<C-u>UniteWithCursorWord grep -prompt-direction=top -auto-preview -no-split -buffer-name=search-buffer<CR>
+nnoremap <silent> [Unite]g  :<C-u>Unite grep -prompt-direction=top -auto-preview -no-split -buffer-name=search-buffer<CR>
+nnoremap <silent> [Unite]pg :<C-u>call <SID>unite_grep_project('-prompt-direction=top -auto-preview -no-split -buffer-name=search-buffer')<CR>
+nnoremap <silent> [Unite]r  :<C-u>UniteResume -prompt-direction=top -no-split search-buffer<CR>
 
-nnoremap <silent> [Unite]pg  :<C-u>call <SID>unite_grep_project('-prompt-direction=top -auto-preview -no-split -buffer-name=search-buffer')<CR>
-nnoremap <silent> [Unite]cpg :<C-u>call <SID>unite_grep_project('-prompt-direction=top -auto-preview -no-split -buffer-name=search-buffer')<CR><C-R><C-W><CR>
-nnoremap <silent> [Unite]r   :<C-u>UniteResume -prompt-direction=top -no-split search-buffer<CR>
+nnoremap <silent> [Unite]m  :<C-u>Unite -prompt-direction=top -no-split neomru/file<CR>
+nnoremap <silent> [Unite]f  :<C-u>Unite -prompt-direction=top -no-split file<CR>
+nnoremap <silent> [Unite]b  :<C-u>Unite -prompt-direction=top -no-split buffer<CR>
+nnoremap <silent> [Unite]t  :<C-u>Unite -prompt-direction=top -no-split tab<CR>
+nnoremap <silent> [Unite]l  :<C-u>Unite -prompt-direction=top -no-split line<CR>
+nnoremap <silent> [Unite]o  :<C-u>Unite -prompt-direction=top -no-split outline<CR>
+nnoremap <silent> [Unite]z  :<C-u>Unite -prompt-direction=top -no-split fold<CR>
+nnoremap <silent> [Unite]q  :<C-u>Unite -prompt-direction=top -no-quit -horizontal quickfix<CR>
+nnoremap <silent> [Unite]c  :<C-u>Unite -prompt-direction=top -horizontal codic<CR>
 
-nnoremap <silent> [Unite]m   :<C-u>Unite -prompt-direction=top -no-split neomru/file<CR>
-nnoremap <silent> [Unite]f   :<C-u>Unite -prompt-direction=top -no-split file<CR>
-nnoremap <silent> [Unite]b   :<C-u>Unite -prompt-direction=top -no-split buffer<CR>
-nnoremap <silent> [Unite]t   :<C-u>Unite -prompt-direction=top -no-split tab<CR>
-nnoremap <silent> [Unite]l   :<C-u>Unite -prompt-direction=top -no-split line<CR>
-nnoremap <silent> [Unite]o   :<C-u>Unite -prompt-direction=top -no-split outline<CR>
-nnoremap <silent> [Unite]z   :<C-u>Unite -prompt-direction=top -no-split fold<CR>
-nnoremap <silent> [Unite]q   :<C-u>Unite -prompt-direction=top -no-quit -horizontal quickfix<CR>
-
-nnoremap          [Unite]uu  :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
-nnoremap          [Unite]ui  :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
-nnoremap          [Unite]uc  :<C-u>NeoBundleClearCache<CR>
+nnoremap          [Unite]uu :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
+nnoremap          [Unite]ui :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
+nnoremap          [Unite]uc :<C-u>NeoBundleClearCache<CR>
 
 " http://sanrinsha.lolipop.jp/blog/2013/03/%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E5%86%85%E3%81%AE%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92unite-grep%E3%81%99%E3%82%8B.html
 function! s:unite_grep_project(...)
@@ -1502,6 +1510,7 @@ function! s:FirstOneShot()"{{{
         " }}}
         " 言語 {{{
         " NeoBundleSource syntastic
+        NeoBundleSource codic-vim
         " }}}
 
         set laststatus=2
@@ -1675,6 +1684,18 @@ augroup MyAutoGroup
             call setqflist(remove(history, -1), 'r')
         endif
     endfunction
+
+    " 場所ごとに設定を用意する {{{
+    " http://vim-users.jp/2009/12/hack112/
+    autocmd BufNewFile,BufReadPost * call s:vimrc_local(expand('<afile>:p:h'))
+
+    function! s:vimrc_local(loc)
+        let files = findfile('.vimrc.local', escape(a:loc, ' ') . ';', -1)
+        for i in reverse(filter(files, 'filereadable(v:val)'))
+            source `=i`
+        endfor
+    endfunction
+    " }}}
 augroup END
 " }}}
 " 編集 {{{
