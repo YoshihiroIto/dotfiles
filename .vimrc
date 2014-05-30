@@ -245,7 +245,7 @@ function! s:SetNeoBundle()"{{{
     "             \   }
     "             \ }
 
-    NeoBundleLazy 'koron/codic-vim'
+    NeoBundleLazy 'YoshihiroIto/codic-vim'
 
     NeoBundleLazy 'Mizuchi/STL-Syntax', {
                 \   'autoload': {
@@ -1607,6 +1607,12 @@ augroup MyAutoGroup
         " Hack #22: XMLの閉じタグを補完する
         " http://vim-users.jp/2009/06/hack22/
         inoremap <buffer> </ </<C-x><C-o>
+
+        let g:xml_syntax_folding = 1
+
+        setlocal foldmethod=syntax
+        setlocal foldlevel=100
+        setlocal foldcolumn=5
     endfunction
 
     function! s:SetGo()
