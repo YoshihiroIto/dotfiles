@@ -239,11 +239,11 @@ function! s:SetNeoBundle()"{{{
                 \   }
                 \ }
 
-    " NeoBundleLazy 'scrooloose/syntastic', {
-    "             \   'autoload': {
-    "             \     'filetypes': ['cs']
-    "             \   }
-    "             \ }
+    NeoBundleLazy 'scrooloose/syntastic', {
+                \   'autoload': {
+                \     'filetypes': ['go', 'ruby']
+                \   }
+                \ }
 
     NeoBundleLazy 'YoshihiroIto/codic-vim'
 
@@ -280,7 +280,7 @@ function! s:SetNeoBundle()"{{{
 
     NeoBundleLazy 'vim-ruby/vim-ruby', {
                 \   'autoload': {
-                \     'filetypes': ['rb']
+                \     'filetypes': ['ruby']
                 \   }
                 \ }
 
@@ -1509,7 +1509,7 @@ function! s:FirstOneShot()"{{{
         NeoBundleSource neomru.vim
         " }}}
         " 言語 {{{
-        " NeoBundleSource syntastic
+        NeoBundleSource syntastic
         NeoBundleSource codic-vim
         " }}}
 
@@ -1561,33 +1561,44 @@ augroup FirstOneShot
 augroup END
 
 augroup MyAutoGroup
-    autocmd BufEnter,WinEnter,BufWinEnter *                   call s:SetAll()
-    autocmd BufNewFile,BufRead            *.xaml              setf xml
-    autocmd BufNewFile,BufRead            *.{fx,fxc,fxh,hlsl} setf hlsl
-    autocmd BufNewFile,BufRead            *.{fsh,vsh}         setf glsl
-    autocmd BufWritePost                  $MYVIMRC            NeoBundleClearCache
+    autocmd BufEnter,WinEnter,BufWinEnter,BufWritePost *                   call s:UpdateAll()
+    autocmd BufNewFile,BufRead                         *.xaml              setf xml
+    autocmd BufNewFile,BufRead                         *.{fx,fxc,fxh,hlsl} setf hlsl
+    autocmd BufNewFile,BufRead                         *.{fsh,vsh}         setf glsl
+    autocmd BufWritePre                                *.go                silent! exe ':Fmt'
+    autocmd BufWritePost                               $MYVIMRC            NeoBundleClearCache
 
-    autocmd FileType *          call s:SetAll()
-    autocmd FileType ruby       call s:SetRuby()
-    autocmd FileType vim        call s:SetVim()
-    autocmd FileType qf         call s:SetQuickFix()
-    autocmd FileType help       call s:SetHelp()
-    autocmd FileType unite      call s:SetUnite()
-    autocmd FileType cs         call s:SetCs()
-    autocmd FileType c,cpp      call s:SetCpp()
-    autocmd FileType go         call s:SetGo()
-    autocmd FileType xml,html   call s:SetXml()
+    autocmd FileType *        call s:SetAll()
+    autocmd FileType ruby     call s:SetRuby()
+    autocmd FileType vim      call s:SetVim()
+    autocmd FileType qf       call s:SetQuickFix()
+    autocmd FileType help     call s:SetHelp()
+    autocmd FileType unite    call s:SetUnite()
+    autocmd FileType cs       call s:SetCs()
+    autocmd FileType c,cpp    call s:SetCpp()
+    autocmd FileType go       call s:SetGo()
+    autocmd FileType xml,html call s:SetXml()
+
+    function! s:UpdateAll()
+
+        " 行番号表示幅を設定する
+        " http://d.hatena.ne.jp/osyo-manga/20140303/1393854617
+        let w = len(line('$')) + 2
+        if w < 5
+            let w = 5
+        endif
+
+        let &l:numberwidth = w
+
+        " ファイルの場所をカレントにする
+        if &ft != '' && &ft != 'vimfiler'
+            silent! exe 'lcd' fnameescape(expand('%:p:h'))
+        endif
+    endfunction
 
     function! s:SetAll()
         setlocal formatoptions-=ro
         setlocal textwidth=0
-
-        let  &l:numberwidth = len(line("$")) + 2
-
-        " ファイルの場所をカレントにする
-        if &ft != '' && &ft != 'vimfiler'
-            silent! exe 'lcd'  fnameescape(expand('%:p:h'))
-        endif
     endfunction
 
     function! s:SetRuby()
@@ -1617,6 +1628,10 @@ augroup MyAutoGroup
 
     function! s:SetGo()
         setlocal foldmethod=syntax
+        setlocal shiftwidth=4
+        setlocal noexpandtab
+        setlocal tabstop=4
+        compiler go
     endfunction
 
     function! s:SetCpp()
@@ -2205,13 +2220,15 @@ nnoremap [Buffer]  <Nop>
 nmap     <Leader>b [Buffer]
 
 nnoremap <silent> [Buffer]x :bdelete<CR>
+nnoremap <silent> <Leader>x :bdelete<CR>
 
 for s:n in range(1, 9)
     exe 'nnoremap <silent> [Buffer]' . s:n  ':<C-u>b' . s:n . '<CR>'
 endfor
 
-nnoremap <silent> <Up>   :<C-u>bp<CR>
-nnoremap <silent> <Down> :<C-u>bn<CR>
+nnoremap <silent> <C-K> :<C-u>bp<CR>
+nnoremap <silent> <C-J> :<C-u>bn<CR>
+
 " }}}
 " ファイル操作 {{{
 " vimrc / gvimrc の編集
