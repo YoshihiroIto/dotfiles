@@ -239,6 +239,12 @@ function! s:SetNeoBundle()"{{{
                 \   }
                 \ }
 
+    NeoBundleLazy 'Blackrush/vim-gocode', {
+                \   'autoload': {
+                \     'filetypes': ['go']
+                \   }
+                \ }
+
     NeoBundleLazy 'scrooloose/syntastic', {
                 \   'autoload': {
                 \     'filetypes': ['go', 'ruby']
@@ -1461,14 +1467,20 @@ onoremap u  <nop>
 " ファイルタイプごとの設定 {{{
 " golang {{{
 if has('vim_starting')
-    if s:isMac
-        set rtp+=/usr/local/Cellar/go/1.2/libexec/misc/vim
-    elseif s:isWindows
-        exe "set rtp+=" . globpath($GOROOT, "misc/vim")
+    " if s:isMac
+    "     set rtp+=/usr/local/Cellar/go/1.2.2/libexec/misc/vim
+    " elseif s:isWindows
+    "     exe "set rtp+=" . globpath($GOROOT, "misc/vim")
+    " endif
+
+    if $GOROOT == ''
+        if s:isMac
+            let $GOROOT = '/usr/local/Cellar/go/1.2.2/libexec'
+        endif
     endif
 
-    exe "set rtp+=" . globpath($GOPATH, "src/github.com/nsf/gocode/vim")
-    exe "set rtp+=" . globpath($GOPATH, "src/github.com/golang/lint/misc/vim")
+    exe "set rtp+=" . globpath($GOROOT, "misc/vim")
+    " exe "set rtp+=" . globpath($GOPATH, "src/github.com/nsf/gocode/vim")
 endif
 " }}}
 
