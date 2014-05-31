@@ -81,7 +81,6 @@ function! s:SetNeoBundle()"{{{
                 \     'filetypes': ['vim', 'markdown']
                 \   }
                 \ }
-
     " }}}
     " 編集 {{{
     NeoBundleLazy 'tomtom/tcomment_vim'
@@ -226,11 +225,11 @@ function! s:SetNeoBundle()"{{{
                 \   }
                 \ }
 
-    NeoBundleLazy 'deris/parajump', {
-                \   'autoload': {
-                \     'mappings': [['sxno', '<Plug>(parajump-']]
-                \   }
-                \ }
+    " NeoBundleLazy 'deris/parajump', {
+    "             \   'autoload': {
+    "             \     'mappings': [['sxno', '<Plug>(parajump-']]
+    "             \   }
+    "             \ }
     " }}}
     " 言語 {{{
     NeoBundleLazy 'vim-jp/cpp-vim', {
@@ -1467,12 +1466,6 @@ onoremap u  <nop>
 " ファイルタイプごとの設定 {{{
 " golang {{{
 if has('vim_starting')
-    " if s:isMac
-    "     set rtp+=/usr/local/Cellar/go/1.2.2/libexec/misc/vim
-    " elseif s:isWindows
-    "     exe "set rtp+=" . globpath($GOROOT, "misc/vim")
-    " endif
-
     if $GOROOT == ''
         if s:isMac
             let $GOROOT = '/usr/local/Cellar/go/1.2.2/libexec'
@@ -1480,7 +1473,6 @@ if has('vim_starting')
     endif
 
     exe "set rtp+=" . globpath($GOROOT, "misc/vim")
-    " exe "set rtp+=" . globpath($GOPATH, "src/github.com/nsf/gocode/vim")
 endif
 " }}}
 
@@ -2122,12 +2114,10 @@ cnoremap <C-n> <Down>
 cnoremap <C-p> <Up>
 " }}}
 " カーソル移動 {{{
-" nnoremap <silent> k     gk
-" nnoremap <silent> j     gj
-nnoremap <silent> k     :<C-u>call <SID>UpCursor()<CR>
-nnoremap <silent> j     :<C-u>call <SID>DownCursor()<CR>
-nnoremap <silent> h     :<C-u>call <SID>LeftCursor()<CR>
-nnoremap <silent> l     :<C-u>call <SID>RightCursor()<CR>
+nnoremap <silent> k     :<C-u>call <SID>UpCursor(v:count1)<CR>
+nnoremap <silent> j     :<C-u>call <SID>DownCursor(v:count1)<CR>
+nnoremap <silent> h     :<C-u>call <SID>LeftCursor(v:count1)<CR>
+nnoremap <silent> l     :<C-u>call <SID>RightCursor(v:count1)<CR>
 
 vnoremap <silent> k     gk
 vnoremap <silent> j     gj
@@ -2144,31 +2134,51 @@ nmap     <silent> G     GzOzz:<C-u>call   <SID>RefreshScreen()<CR>
 
 noremap  <silent> <C-i> <C-i>zz:<C-u>call <SID>RefreshScreen()<CR>
 noremap  <silent> <C-o> <C-o>zz:<C-u>call <SID>RefreshScreen()<CR>
-map      <silent> [[    [[zz:<C-u>call    <SID>RefreshScreen()<CR>
-map      <silent> ]]    ]]zz:<C-u>call    <SID>RefreshScreen()<CR>
-map      <silent> K     {zz:<C-u>call     <SID>RefreshScreen()<CR>
-map      <silent> J     }zz:<C-u>call     <SID>RefreshScreen()<CR>
+" map      <silent> [[    [[zz:<C-u>call    <SID>RefreshScreen()<CR>
+" map      <silent> ]]    ]]zz:<C-u>call    <SID>RefreshScreen()<CR>
+" map      <silent> K     {zz:<C-u>call     <SID>RefreshScreen()<CR>
+" map      <silent> J     }zz:<C-u>call     <SID>RefreshScreen()<CR>
 map      <silent> H     :<C-u>call <SID>DisableVirtualCursor()<CR>^:<C-u>call <SID>RefreshScreen()<CR>
 map      <silent> L     :<C-u>call <SID>DisableVirtualCursor()<CR>$:<C-u>call <SID>RefreshScreen()<CR>
 
-function! s:UpCursor()
+function! s:UpCursor(count)
     call s:EnableVirtualCursor()
-    normal! gk
+
+    let c = a:count
+    while c > 0
+        normal! gk
+        let c -= 1
+    endwhile
 endfunction
 
-function! s:DownCursor()
+function! s:DownCursor(count)
     call s:EnableVirtualCursor()
-    normal! gj
+
+    let c = a:count
+    while c > 0
+        normal! gj
+        let c -= 1
+    endwhile
 endfunction
 
-function! s:LeftCursor()
+function! s:LeftCursor(count)
     call s:DisableVirtualCursor()
-    normal! h
+
+    let c = a:count
+    while c > 0
+        normal! h
+        let c -= 1
+    endwhile
 endfunction
 
-function! s:RightCursor()
+function! s:RightCursor(count)
     call s:DisableVirtualCursor()
-    normal! l
+
+    let c = a:count
+    while c > 0
+        normal! l
+        let c -= 1
+    endwhile
 
     if foldclosed(line('.')) != -1
         normal zv
@@ -2224,8 +2234,13 @@ for s:n in range(1, 9)
     exe 'nnoremap <silent> [Tab]' . s:n  ':<C-u>tabnext' . s:n . '<CR>'
 endfor
 
-nnoremap <silent> <Left>  :<C-u>tabp<CR>
-nnoremap <silent> <Right> :<C-u>tabn<CR>
+nnoremap <silent> <C-K> :<C-u>tabp<CR>
+nnoremap <silent> <C-J> :<C-u>tabn<CR>
+
+" Vimですべてのバッファをタブ化する
+" http://qiita.com/kuwa72/items/deef2703af74d2d993ee
+nnoremap <silent> <C-L> :<C-u>tab ba<CR>
+
 " }}}
 " バッファ操作 {{{
 nnoremap [Buffer]  <Nop>
@@ -2238,8 +2253,8 @@ for s:n in range(1, 9)
     exe 'nnoremap <silent> [Buffer]' . s:n  ':<C-u>b' . s:n . '<CR>'
 endfor
 
-nnoremap <silent> <C-K> :<C-u>bp<CR>
-nnoremap <silent> <C-J> :<C-u>bn<CR>
+" nnoremap <silent> <C-K> :<C-u>bp<CR>
+" nnoremap <silent> <C-J> :<C-u>bn<CR>
 
 " }}}
 " ファイル操作 {{{
