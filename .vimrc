@@ -179,19 +179,8 @@ function! s:SetNeoBundle()"{{{
                 \   }
                 \ }
 
-    " NeoBundleLazy 'nosami/Omnisharp', {
-    "             \   'depends': ['Shougo/neocomplete.vim', 'Shougo/vimproc', 'scrooloose/syntastic'],
-    "             \   'autoload': {
-    "             \     'filetypes': ['cs']
-    "             \   },
-    "             \   'build': {
-    "             \     'windows': 'C:/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe server/OmniSharp.sln /p:Platform="Any CPU"',
-    "             \     'mac':     'xbuild server/OmniSharp.sln',
-    "             \     'unix':    'xbuild server/OmniSharp.sln',
-    "             \   }
-    "             \ }
     NeoBundleLazy 'nosami/Omnisharp', {
-                \   'depends': ['Shougo/neocomplete.vim', 'Shougo/vimproc'],
+                \   'depends': ['Shougo/neocomplete.vim', 'Shougo/vimproc', 'scrooloose/syntastic'],
                 \   'autoload': {
                 \     'filetypes': ['cs']
                 \   },
@@ -224,21 +213,17 @@ function! s:SetNeoBundle()"{{{
                 \     'mappings': ['<Plug>(visualstar-']
                 \   }
                 \ }
-
-    " NeoBundleLazy 'deris/parajump', {
-    "             \   'autoload': {
-    "             \     'mappings': [['sxno', '<Plug>(parajump-']]
-    "             \   }
-    "             \ }
     " }}}
     " 言語 {{{
+    NeoBundleLazy 'YoshihiroIto/codic-vim'
+
     NeoBundleLazy 'vim-jp/cpp-vim', {
                 \   'autoload': {
                 \     'filetypes': ['cpp']
                 \   }
                 \ }
 
-    NeoBundleLazy 'Blackrush/vim-gocode', {
+    NeoBundleLazy 'YoshihiroIto/vim-gocode', {
                 \   'autoload': {
                 \     'filetypes': ['go']
                 \   }
@@ -249,8 +234,6 @@ function! s:SetNeoBundle()"{{{
                 \     'filetypes': ['go', 'ruby']
                 \   }
                 \ }
-
-    NeoBundleLazy 'YoshihiroIto/codic-vim'
 
     NeoBundleLazy 'Mizuchi/STL-Syntax', {
                 \   'autoload': {
@@ -513,32 +496,6 @@ function! s:SetNeoBundle()"{{{
                 \   'autoload': {
                 \     'function_prefix': 'fugitive'
                 \   }
-                \ }
-
-    NeoBundleLazy 'Shougo/vinarise.vim', {
-                \  'autoload': {
-                \    'commands': [
-                \      {
-                \        'name':     'VinariseScript2Hex',
-                \        'complete': 'customlist,vinarise#complete'
-                \      },
-                \      'VinarisePluginBitmapView',
-                \      {
-                \        'name':     'Vinarise',
-                \        'complete': 'customlist,vinarise#complete'
-                \      },
-                \      'VinarisePluginDump',
-                \      {
-                \        'name':     'VinariseDump',
-                \        'complete': 'customlist,vinarise#complete'
-                \      },
-                \      {
-                \        'name':     'VinariseHex2Script',
-                \        'complete': 'file'
-                \      }
-                \    ],
-                \    'unite_sources': ['vinarise_analysis']
-                \  }
                 \ }
 
     NeoBundleLazy 'Shougo/vimproc', {
@@ -1104,17 +1061,13 @@ function! s:bundle.hooks.on_source(bundle)
 endfunction
 unlet s:bundle
 " }}}
-" parajump {{{
-map { <Plug>(parajump-backward)
-map } <Plug>(parajump-forward)
-" }}}
 " }}}
 " 言語 {{{
 " syntastic {{{
-" let g:syntastic_cs_checkers = ['syntax', 'issues']
-" augroup MyAutoGroup
-"     autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
-" augroup END
+let g:syntastic_cs_checkers = ['syntax', 'issues']
+augroup MyAutoGroup
+    autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
+augroup END
 " }}}
 " clang_complete {{{
 let s:bundle = neobundle#get('clang_complete')
@@ -1242,7 +1195,9 @@ nmap <silent> <Leader><Leader> <Plug>(operator-jump-toggle)ai:<C-u>call <SID>Ref
 " }}}
 " アプリ {{{
 " open-browser.vim {{{
-let g:netrw_nogx = 1 " disable netrw's gx mapping.
+let g:netrw_nogx                   = 1 " disable netrw's gx mapping.
+let g:openbrowser_no_default_menus = 1
+
 nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
 " }}}
@@ -1466,9 +1421,9 @@ onoremap u  <nop>
 " ファイルタイプごとの設定 {{{
 " golang {{{
 if has('vim_starting')
-    if $GOROOT == ''
+    if !exists('$GOROOT')
         if s:isMac
-            let $GOROOT = '/usr/local/Cellar/go/1.2.2/libexec'
+            let $GOROOT = '/usr/local/opt/go/libexec'
         endif
     endif
 
@@ -1569,7 +1524,6 @@ augroup MyAutoGroup
     autocmd BufNewFile,BufRead                         *.xaml              setf xml
     autocmd BufNewFile,BufRead                         *.{fx,fxc,fxh,hlsl} setf hlsl
     autocmd BufNewFile,BufRead                         *.{fsh,vsh}         setf glsl
-    autocmd BufWritePre                                *.go                silent! exe ':Fmt'
     autocmd BufWritePost                               $MYVIMRC            NeoBundleClearCache
 
     autocmd FileType *        call s:SetAll()
