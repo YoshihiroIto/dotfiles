@@ -56,10 +56,10 @@ endif
 
 " 右ウィンドウ幅
 let s:rightWindowWidth = 40
-"}}}
+" }}}
 " プラグイン {{{
-" インストール{{{
-function! s:SetNeoBundle()"{{{
+" インストール {{{
+function! s:SetNeoBundle() " {{{
 
     " 表示 {{{
     NeoBundle 'tomasr/molokai'
@@ -803,8 +803,8 @@ endfunction
 " }}}
 " indentLine {{{
 let g:indentLine_fileType    = ['c', 'cpp', 'cs', 'vim', 'rb', 'go', 'glsl', 'hlsl', 'xml', 'json']
-" let g:indentLine_faster      = 1
-let g:indentLine_faster      = 0
+let g:indentLine_faster      = 1
+" let g:indentLine_faster      = 0
 let g:indentLine_color_term  = 239
 let g:indentLine_indentLevel = 20
 
@@ -816,7 +816,7 @@ else
     let g:indentLine_color_gui  = '#B0D0F0'
 endif
 " let g:indentLine_color_gui  = '#383838'
-"}}}
+" }}}
 " }}}
 " 編集 {{{
 " vim-easy-align {{{
@@ -871,7 +871,7 @@ let g:increment_activator_filetype_candidates =
 noremap <silent> <Leader>s :OverCommandLine<CR>
 
 let g:over_command_line_key_mappings = {
-            \   "\<C-j>" : "\<Esc>",
+            \   '\<C-j>' : '\<Esc>',
             \ }
 " }}}
 " }}}
@@ -1427,13 +1427,13 @@ if has('vim_starting')
         endif
     endif
 
-    exe "set rtp+=" . globpath($GOROOT, "misc/vim")
+    exe 'set rtp+=' . globpath($GOROOT, 'misc/vim')
 endif
 " }}}
 
 let s:firstOneShotDelay = 2
 let s:firstOneShotPhase = 0
-function! s:FirstOneShot()"{{{
+function! s:FirstOneShot() " {{{
 
     function! s:FirstOneShotPhase0()
 
@@ -1448,10 +1448,10 @@ function! s:FirstOneShot()"{{{
         NeoBundleSource tcomment_vim
         NeoBundleSource vim-surround
         NeoBundleSource vim-repeat
-        "}}}
+        " }}}
         " ファイル {{{
         NeoBundleSource vim-altr
-        "}}}
+        " }}}
         " 検索 {{{
         NeoBundleSource vim-anzu
         NeoBundleSource matchit.zip
@@ -1484,8 +1484,8 @@ function! s:FirstOneShot()"{{{
         endif
 
         " 意図的に vital.vim を読み込み
-        call unite#util#strchars("")
-        call unite#util#sort_by([], "")
+        call unite#util#strchars('')
+        call unite#util#sort_by([], '')
         call unite#util#get_vital().import('Vim.Message')
 
         NeoMRUReload
@@ -1512,7 +1512,7 @@ function! s:FirstOneShot()"{{{
     endif
 
     " call s:ContinueCursorHold()
-endfunction"}}}
+endfunction " }}}
 
 augroup FirstOneShot
     autocmd!
@@ -1913,7 +1913,7 @@ function! s:StarSearch()
     let @" = orig
 endfunction
 " }}}
-" 表示{{{
+" 表示 {{{
 syntax enable                     " 構文ごとに色分けをする
 set number                        " 行番号表示
 set shiftwidth=4                  " インデントの各段階に使われる空白の数。
@@ -1989,7 +1989,7 @@ if has('syntax')
     augroup END
 endif
 " }}}
-" Vim でカーソル下の単語を移動するたびにハイライトする{{{
+" Vim でカーソル下の単語を移動するたびにハイライトする {{{
 " http://d.hatena.ne.jp/osyo-manga/20140121/1390309901
 let g:enable_highlight_cursor_word = 1
 
@@ -2090,8 +2090,8 @@ noremap  <silent> <C-i> <C-i>zz:<C-u>call <SID>RefreshScreen()<CR>
 noremap  <silent> <C-o> <C-o>zz:<C-u>call <SID>RefreshScreen()<CR>
 " map      <silent> [[    [[zz:<C-u>call    <SID>RefreshScreen()<CR>
 " map      <silent> ]]    ]]zz:<C-u>call    <SID>RefreshScreen()<CR>
-" map      <silent> K     {zz:<C-u>call     <SID>RefreshScreen()<CR>
-" map      <silent> J     }zz:<C-u>call     <SID>RefreshScreen()<CR>
+map      <silent> K     {zz:<C-u>call     <SID>RefreshScreen()<CR>
+map      <silent> J     }zz:<C-u>call     <SID>RefreshScreen()<CR>
 map      <silent> H     :<C-u>call <SID>DisableVirtualCursor()<CR>^:<C-u>call <SID>RefreshScreen()<CR>
 map      <silent> L     :<C-u>call <SID>DisableVirtualCursor()<CR>$:<C-u>call <SID>RefreshScreen()<CR>
 
@@ -2520,7 +2520,7 @@ endfunction
 " http://d.hatena.ne.jp/eagletmt/20100623/1277289728
 function! s:GetPrevCursorChar(n)
 
-    let chars = split(getline('.')[0 : col('.')-1], '\zs')
+    let chars = split(getline('.')[0 : col('.') - 1], '\zs')
     let len = len(chars)
     if a:n >= len
         return ''
@@ -2558,7 +2558,7 @@ if !s:isGuiRunning
     source $MYGVIMRC
 endif
 " }}}
-" メモ{{{
+" メモ {{{
 " +--------+--------+--------+--------+--------+--------+--------+
 " |        | normal | visual | select |  wait  | insert |command |
 " +--------+--------+--------+--------+--------+--------+--------+
