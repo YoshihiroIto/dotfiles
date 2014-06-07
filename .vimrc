@@ -78,7 +78,7 @@ function! s:SetNeoBundle() " {{{
 
     NeoBundleLazy 'LeafCage/foldCC', {
                 \   'autoload': {
-                \     'filetypes': ['vim', 'markdown']
+                \     'filetypes': ['vim']
                 \   }
                 \ }
     " }}}
@@ -304,6 +304,12 @@ function! s:SetNeoBundle() " {{{
     NeoBundleLazy 'pangloss/vim-javascript', {
                 \   'autoload': {
                 \     'filetypes': ['javascript']
+                \   }
+                \ }
+
+    NeoBundleLazy 'kchmck/vim-coffee-script', {
+                \   'autoload': {
+                \     'filetypes': ['coffee']
                 \   }
                 \ }
 
@@ -651,15 +657,6 @@ function! s:ToggleTagBar()
 endfunction
 " }}}
 " lightline {{{
-" lightline用シンボル
-let s:lightlineSymbolSeparatorLeft     = s:isWindows ? ''  : '⮀'
-let s:lightlineSymbolSeparatorRight    = s:isWindows ? ''  : '⮂'
-let s:lightlineSymbolSubseparatorLeft  = s:isWindows ? ''  : '⮁'
-let s:lightlineSymbolSubseparatorRight = s:isWindows ? ''  : '⮃'
-let s:lightlineSymbolLine              = s:isWindows ? ' ' : '⭡ '
-let s:lightlineSymbolReadonly          = s:isWindows ? ''  : '⭤'
-let s:lightlineSymbolBrunch            = s:isWindows ? ' ' : '⭠ '
-
 let g:lightline = {
             \   'mode_map': {'c': 'NORMAL'},
             \   'active': {
@@ -670,7 +667,7 @@ let g:lightline = {
             \                 ['charcode', 'fileformat', 'fileencoding', 'filetype']]
             \   },
             \   'component': {
-            \       'lineinfo': s:lightlineSymbolLine . '%4l/%L : %-3v',
+            \       'lineinfo': '⭡ %4l/%L : %-3v',
             \   },
             \   'component_function': {
             \       'modified':     'MyModified',
@@ -685,24 +682,24 @@ let g:lightline = {
             \       'anzu':         'anzu#search_status',
             \   },
             \   'separator': {
-            \       'left':  s:lightlineSymbolSeparatorLeft,
-            \       'right': s:lightlineSymbolSeparatorRight
+            \       'left':  '⮀',
+            \       'right': '⮂'
             \   },
             \   'subseparator': {
-            \       'left':  s:lightlineSymbolSubseparatorLeft,
-            \       'right': s:lightlineSymbolSubseparatorRight
+            \       'left':  '⮁',
+            \       'right': '⮃'
             \   },
             \   'tabline': {
             \       'left':  [['tabs']],
             \       'right': [[]],
             \   },
             \   'tabline_separator': {
-            \       'left':  s:lightlineSymbolSeparatorLeft,
-            \       'right': s:lightlineSymbolSeparatorRight
+            \       'left':  '⮀',
+            \       'right': '⮂'
             \   },
             \   'tabline_subseparator': {
-            \       'left':  s:lightlineSymbolSubseparatorLeft,
-            \       'right': s:lightlineSymbolSubseparatorRight
+            \       'left':  '⮁',
+            \       'right': '⮃'
             \   },
             \ }
 
@@ -720,7 +717,7 @@ function! MyModified()
 endfunction
 
 function! MyReadonly()
-    return &ft !~? s:lightlineNoDispFt && &readonly ? s:lightlineSymbolReadonly : ''
+    return &ft !~? s:lightlineNoDispFt && &readonly ? '⭤' : ''
 endfunction
 
 function! MyFilename()
@@ -737,7 +734,7 @@ function! MyFugitive()
     if &ft !~? 'vimfiler'
         let _ = fugitive#head()
 
-        return strlen(_) ? s:lightlineSymbolBrunch . _ : ''
+        return strlen(_) ? '⭠ ' . _ : ''
     endif
     return ''
 endfunction
@@ -814,14 +811,8 @@ let g:indentLine_fileType    = ['c', 'cpp', 'cs', 'vim', 'rb', 'go', 'glsl', 'hl
 let g:indentLine_faster      = 1
 let g:indentLine_color_term  = 239
 let g:indentLine_indentLevel = 20
-
-if s:isMac
-    let g:indentLine_char       = '¦'
-    let g:indentLine_color_gui  = '#303030'
-else
-    let g:indentLine_char       = '┆'
-    let g:indentLine_color_gui  = '#B0D0F0'
-endif
+let g:indentLine_char        = '⭟'
+let g:indentLine_color_gui   = '#505050'
 " }}}
 " }}}
 " 編集 {{{
@@ -1175,6 +1166,9 @@ function! s:bundle.hooks.on_source(bundle)
 endfunction
 unlet s:bundle
 " }}}
+" vim-markdown {{{
+let g:vim_markdown_folding_disabled = 0
+" }}}
 " }}}
 " テキストオブジェクト {{{
 " http://d.hatena.ne.jp/osyo-manga/20130717/1374069987
@@ -1249,8 +1243,6 @@ function! s:bundle.hooks.on_source(bundle)
     let g:vimfiler_as_default_explorer        = 1
     let g:vimfiler_force_overwrite_statusline = 0
     let g:vimfiler_tree_leaf_icon             = ' '
-    let g:vimfiler_tree_opened_icon           = '▾'
-    let g:vimfiler_tree_closed_icon           = '▸'
 endfunction
 unlet s:bundle
 " }}}
@@ -1551,6 +1543,7 @@ augroup MyAutoGroup
     autocmd FileType c,cpp    call s:SetCpp()
     autocmd FileType go       call s:SetGo()
     autocmd FileType godoc    call s:SetGodoc()
+    autocmd FileType coffee   call s:SetCoffee()
     autocmd FileType xml,html call s:SetXml()
 
     function! s:UpdateAll()
@@ -1620,6 +1613,11 @@ augroup MyAutoGroup
 
     function! s:SetGodoc()
         nnoremap <silent><buffer> q :<C-u>close<CR>
+    endfunction
+
+    function! s:SetCoffee()
+        setlocal shiftwidth=2
+        setlocal expandtab
     endfunction
 
     function! s:SetCpp()
@@ -1844,11 +1842,7 @@ set autoindent
 set cindent                       " Cプログラムファイルの自動インデントを始める
 
 set list
-if s:isMac
-    set listchars=tab:\¦\ ,eol:↲,extends:»,precedes:«,nbsp:%
-else
-    set listchars=tab:\┆\ ,eol:↲,extends:»,precedes:«,nbsp:%
-endif
+set listchars=tab:\⭟\ ,eol:↲,extends:»,precedes:«,nbsp:%
 
 vnoremap < <gv
 vnoremap > >gv

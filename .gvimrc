@@ -77,13 +77,11 @@ augroup END
 if s:isGuiRunning
     if s:isWindows
         " set rop=type:directx
-        set guifont=MeiryoKe_Gothic_SZ:h9:cSHIFTJIS
-
+        " set guifont=MeiryoKe_Gothic_SZ:h9:cSHIFTJIS
+        set guifont=Ricty\ Regular\ for\ Powerline:h11
         set linespace=0
     elseif s:isMac
-        " set guifont=Ricty:h13
         set guifont=Ricty\ Regular\ for\ Powerline:h12
-
         set antialias
     endif
 endif
