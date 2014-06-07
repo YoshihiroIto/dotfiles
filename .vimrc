@@ -7,9 +7,9 @@ let s:isWindows    = has('win32') || has('win64')
 let s:isMac        = has('mac')
 let s:isGuiRunning = has('gui_running')
 let s:baseColumns  = s:isWindows ? 140 : 120
-let s:vimrc_local  = expand('~/.vimrc_local')
 let g:mapleader    = ','
-let $DOTVIM        = s:isWindows ? expand('~/vimfiles') : expand('~/.vim')
+let s:vimrc_local  = expand('~/.vimrc_local')
+let $DOTVIM        = expand('~/.vim')
 set viminfo+=!
 
 augroup MyAutoGroup
@@ -135,6 +135,12 @@ function! s:SetNeoBundle() " {{{
                 \     ]
                 \   }
                 \ }
+
+    NeoBundleLazy 'terryma/vim-expand-region', {
+                \   'autoload': {
+                \     'mappings': [['sxn', '<Plug>(expand_region_']]
+                \   }
+                \ }
     " }}}
     " 補完 {{{
     NeoBundleLazy 'Shougo/neocomplete.vim', {
@@ -215,15 +221,26 @@ function! s:SetNeoBundle() " {{{
                 \ }
     " }}}
     " 言語 {{{
-    NeoBundleLazy 'YoshihiroIto/codic-vim'
-
     NeoBundleLazy 'vim-jp/cpp-vim', {
                 \   'autoload': {
                 \     'filetypes': ['cpp']
                 \   }
                 \ }
 
-    NeoBundleLazy 'YoshihiroIto/vim-gocode', {
+    " todo: WindowsだとLazyでエラーになってしまう
+    " NeoBundleLazy 'YoshihiroIto/vim-gocode', {
+    "             \   'autoload': {
+    "             \     'filetypes': ['go']
+    "             \   }
+    "             \ }
+    NeoBundle 'YoshihiroIto/vim-gocode', {
+                \   'depends': ['Shougo/vimproc'],
+                \   'autoload': {
+                \     'filetypes': ['go']
+                \   }
+                \ }
+
+    NeoBundleLazy 'dgryski/vim-godef', {
                 \   'autoload': {
                 \     'filetypes': ['go']
                 \   }
@@ -503,8 +520,6 @@ function! s:SetNeoBundle() " {{{
                 \     'function_prefix': 'vimproc',
                 \   },
                 \   'build': {
-                \     'windows': 'make -f make_mingw32.mak',
-                \     'cygwin':  'make -f make_cygwin.mak',
                 \     'mac':     'make -f make_mac.mak',
                 \     'unix':    'make -f make_unix.mak',
                 \   },
@@ -591,13 +606,6 @@ function! s:SetNeoBundle() " {{{
                 \   }
                 \ }
 
-    NeoBundleLazy 'rhysd/unite-codic.vim', {
-                \   'depends': ['Shougo/unite.vim', 'koron/codic-vim'],
-                \   'autoload': {
-                \     'unite_sources': ['codic']
-                \   }
-                \ }
-
     NeoBundleLazy 'Shougo/neomru.vim', {
                 \   'depends': ['Shougo/unite.vim'],
                 \   'autoload': {
@@ -644,13 +652,13 @@ endfunction
 " }}}
 " lightline {{{
 " lightline用シンボル
-let s:lightlineSymbolSeparatorLeft     = s:isWindows ? ''   : '⮀'
-let s:lightlineSymbolSeparatorRight    = s:isWindows ? ''   : '⮂'
-let s:lightlineSymbolSubseparatorLeft  = s:isWindows ? '|'  : '⮁'
-let s:lightlineSymbolSubseparatorRight = s:isWindows ? '|'  : '⮃'
-let s:lightlineSymbolLine              = s:isWindows ? ''   : '⭡ '
-let s:lightlineSymbolReadonly          = s:isWindows ? 'ro' : '⭤'
-let s:lightlineSymbolBrunch            = s:isWindows ? ''   : '⭠ '
+let s:lightlineSymbolSeparatorLeft     = s:isWindows ? ''  : '⮀'
+let s:lightlineSymbolSeparatorRight    = s:isWindows ? ''  : '⮂'
+let s:lightlineSymbolSubseparatorLeft  = s:isWindows ? ''  : '⮁'
+let s:lightlineSymbolSubseparatorRight = s:isWindows ? ''  : '⮃'
+let s:lightlineSymbolLine              = s:isWindows ? ' ' : '⭡ '
+let s:lightlineSymbolReadonly          = s:isWindows ? ''  : '⭤'
+let s:lightlineSymbolBrunch            = s:isWindows ? ' ' : '⭠ '
 
 let g:lightline = {
             \   'mode_map': {'c': 'NORMAL'},
@@ -804,7 +812,6 @@ endfunction
 " indentLine {{{
 let g:indentLine_fileType    = ['c', 'cpp', 'cs', 'vim', 'rb', 'go', 'glsl', 'hlsl', 'xml', 'json']
 let g:indentLine_faster      = 1
-" let g:indentLine_faster      = 0
 let g:indentLine_color_term  = 239
 let g:indentLine_indentLevel = 20
 
@@ -815,7 +822,6 @@ else
     let g:indentLine_char       = '┆'
     let g:indentLine_color_gui  = '#B0D0F0'
 endif
-" let g:indentLine_color_gui  = '#383838'
 " }}}
 " }}}
 " 編集 {{{
@@ -872,6 +878,17 @@ noremap <silent> <Leader>s :OverCommandLine<CR>
 
 let g:over_command_line_key_mappings = {
             \   '\<C-j>' : '\<Esc>',
+            \ }
+" }}}
+" vim-expand-region {{{
+map J <Plug>(expand_region_expand)
+map K <Plug>(expand_region_shrink)
+
+let g:expand_region_text_objects = {
+            \ 'il':  0,
+            \ 'ii':  0,
+            \ 'ai':  0,
+            \ 'ip':  0,
             \ }
 " }}}
 " }}}
@@ -1064,10 +1081,10 @@ unlet s:bundle
 " }}}
 " 言語 {{{
 " syntastic {{{
-let g:syntastic_cs_checkers = ['syntax', 'issues']
-augroup MyAutoGroup
-    autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
-augroup END
+" let g:syntastic_cs_checkers = ['syntax', 'issues']
+" augroup MyAutoGroup
+"     autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
+" augroup END
 " }}}
 " clang_complete {{{
 let s:bundle = neobundle#get('clang_complete')
@@ -1078,7 +1095,7 @@ function! s:bundle.hooks.on_source(bundle)
     let g:clang_auto_select   = 0
 
     if s:isWindows
-        let g:clang_user_options = '-I c:/Development/boost/boost_1_47 -I "C:/Program Files (x86)/Microsoft Visual Studio 11.0/VC/include" -std=c++11 -fms-extensions -fmsc-version=1300 -fgnu-runtime -D__MSVCRT_VERSION__=0x700 -D_WIN32_WINNT=0x0500 2> NUL || exit 0"'
+        let g:clang_user_options = '-I C:/Development/boost_1_55_0 -I "C:/Program Files (x86)/Microsoft Visual Studio 11.0/VC/include" -std=c++11 -fms-extensions -fmsc-version=1300 -fgnu-runtime -D__MSVCRT_VERSION__=0x700 -D_WIN32_WINNT=0x0500 2> NUL || exit 0"'
         let g:clang_library_path = 'C:/Development/llvm/build/bin/Release/'
     elseif s:isMac
         let g:clang_user_options = '-std=c++11'
@@ -1322,7 +1339,6 @@ nnoremap <silent> [Unite]l  :<C-u>Unite -prompt-direction=top -no-split line<CR>
 nnoremap <silent> [Unite]o  :<C-u>Unite -prompt-direction=top -no-split outline<CR>
 nnoremap <silent> [Unite]z  :<C-u>Unite -prompt-direction=top -no-split fold<CR>
 nnoremap <silent> [Unite]q  :<C-u>Unite -prompt-direction=top -no-quit -horizontal quickfix<CR>
-nnoremap <silent> [Unite]c  :<C-u>Unite -prompt-direction=top -horizontal codic<CR>
 
 nnoremap          [Unite]uu :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
 nnoremap          [Unite]ui :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
@@ -1346,7 +1362,7 @@ function! s:bundle.hooks.on_source(bundle)
     " insert modeで開始
     let g:unite_enable_start_insert             = 1
 
-    let g:neomru#update_interval                = 60
+    let g:neomru#update_interval                = 1
     let g:neomru#file_mru_limit                 = 500
 
     let g:unite_force_overwrite_statusline = 0
@@ -1382,7 +1398,7 @@ function! s:source()
     let sources = map(filter(s:get_lazy_plugins(), 's:is_not_sourced(v:val)'), 'v:val')
 
     for s in sources
-        echom 'source:' . s
+        " echom 'source:' . s
         call neobundle#source(s)
     endfor
 
@@ -1469,7 +1485,6 @@ function! s:FirstOneShot() " {{{
         " }}}
         " 言語 {{{
         NeoBundleSource syntastic
-        NeoBundleSource codic-vim
         " }}}
 
         set laststatus=2
@@ -1535,6 +1550,7 @@ augroup MyAutoGroup
     autocmd FileType cs       call s:SetCs()
     autocmd FileType c,cpp    call s:SetCpp()
     autocmd FileType go       call s:SetGo()
+    autocmd FileType godoc    call s:SetGodoc()
     autocmd FileType xml,html call s:SetXml()
 
     function! s:UpdateAll()
@@ -1552,6 +1568,8 @@ augroup MyAutoGroup
         if &ft != '' && &ft != 'vimfiler'
             silent! exe 'lcd' fnameescape(expand('%:p:h'))
         endif
+
+        call s:SetAll()
     endfunction
 
     function! s:SetAll()
@@ -1570,6 +1588,9 @@ augroup MyAutoGroup
         setlocal foldmethod=marker
         setlocal foldlevel=0
         setlocal foldcolumn=5
+
+        nnoremap <buffer> <Leader><C-k>      :<C-u>help<Space>
+        nnoremap <buffer> <Leader><C-k><C-k> :<C-u>help <C-r><C-w><CR>
     endfunction
 
     function! s:SetXml()
@@ -1590,6 +1611,15 @@ augroup MyAutoGroup
         setlocal noexpandtab
         setlocal tabstop=4
         compiler go
+
+        let g:godef_split                    = 0
+        let g:godef_same_file_in_same_window = 1
+
+        nnoremap <buffer> <Leader><C-k><C-k> :<C-u>Godoc<CR>zz
+    endfunction
+
+    function! s:SetGodoc()
+        nnoremap <silent><buffer> q :<C-u>close<CR>
     endfunction
 
     function! s:SetCpp()
@@ -2090,45 +2120,45 @@ noremap  <silent> <C-i> <C-i>zz:<C-u>call <SID>RefreshScreen()<CR>
 noremap  <silent> <C-o> <C-o>zz:<C-u>call <SID>RefreshScreen()<CR>
 " map      <silent> [[    [[zz:<C-u>call    <SID>RefreshScreen()<CR>
 " map      <silent> ]]    ]]zz:<C-u>call    <SID>RefreshScreen()<CR>
-map      <silent> K     {zz:<C-u>call     <SID>RefreshScreen()<CR>
-map      <silent> J     }zz:<C-u>call     <SID>RefreshScreen()<CR>
+" map      <silent> K     {zz:<C-u>call     <SID>RefreshScreen()<CR>
+" map      <silent> J     }zz:<C-u>call     <SID>RefreshScreen()<CR>
 map      <silent> H     :<C-u>call <SID>DisableVirtualCursor()<CR>^:<C-u>call <SID>RefreshScreen()<CR>
 map      <silent> L     :<C-u>call <SID>DisableVirtualCursor()<CR>$:<C-u>call <SID>RefreshScreen()<CR>
 
-function! s:UpCursor(count)
+function! s:UpCursor(repeat)
     call s:EnableVirtualCursor()
 
-    let c = a:count
+    let c = a:repeat
     while c > 0
         normal! gk
         let c -= 1
     endwhile
 endfunction
 
-function! s:DownCursor(count)
+function! s:DownCursor(repeat)
     call s:EnableVirtualCursor()
 
-    let c = a:count
+    let c = a:repeat
     while c > 0
         normal! gj
         let c -= 1
     endwhile
 endfunction
 
-function! s:LeftCursor(count)
+function! s:LeftCursor(repeat)
     call s:DisableVirtualCursor()
 
-    let c = a:count
+    let c = a:repeat
     while c > 0
         normal! h
         let c -= 1
     endwhile
 endfunction
 
-function! s:RightCursor(count)
+function! s:RightCursor(repeat)
     call s:DisableVirtualCursor()
 
-    let c = a:count
+    let c = a:repeat
     while c > 0
         normal! l
         let c -= 1
@@ -2193,7 +2223,7 @@ nnoremap <silent> <C-J> :<C-u>tabn<CR>
 
 " Vimですべてのバッファをタブ化する
 " http://qiita.com/kuwa72/items/deef2703af74d2d993ee
-nnoremap <silent> <C-L> :<C-u>tab ba<CR>
+nnoremap <silent> <C-L> :<C-u>call <SID>CleanEmptyBuffers()<CR>:<C-u>tab ba<CR>
 
 " }}}
 " バッファ操作 {{{
@@ -2223,9 +2253,6 @@ nmap <silent> <Leader>m `
 " ヘルプ {{{
 set helplang=ja,en
 set rtp+=$VIM/plugins/vimdoc-ja
-
-nnoremap <Leader><C-k>      :<C-u>help<Space>
-nnoremap <Leader><C-k><C-k> :<C-u>help <C-r><C-w><CR>
 " }}}
 " 汎用関数 {{{
 " SID取得 {{{
