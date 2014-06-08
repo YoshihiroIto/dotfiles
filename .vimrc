@@ -65,7 +65,7 @@ function! s:SetNeoBundle() " {{{
     " 表示 {{{
     NeoBundle 'tomasr/molokai'
     NeoBundle 'Yggdroot/indentLine'
-    NeoBundle 'itchyny/lightline.vim', {
+    NeoBundleLazy 'itchyny/lightline.vim', {
                 \   'depends': ['Shougo/vimproc'],
                 \ }
 
@@ -234,18 +234,18 @@ function! s:SetNeoBundle() " {{{
                 \   }
                 \ }
 
-    " todo: WindowsだとLazyでエラーになってしまう
-    " NeoBundleLazy 'YoshihiroIto/vim-gocode', {
-    "             \   'autoload': {
-    "             \       'filetypes': ['go']
-    "             \   }
-    "             \ }
-    NeoBundle 'YoshihiroIto/vim-gocode', {
-                \   'depends': ['Shougo/vimproc'],
+    " todo: WindowsでLazyだとエラーになってしまう
+    NeoBundleLazy 'YoshihiroIto/vim-gocode', {
                 \   'autoload': {
                 \       'filetypes': ['go']
                 \   }
                 \ }
+    " NeoBundle 'YoshihiroIto/vim-gocode', {
+    "             \   'depends': ['Shougo/vimproc'],
+    "             \   'autoload': {
+    "             \       'filetypes': ['go']
+    "             \   }
+    "             \ }
 
     NeoBundleLazy 'dgryski/vim-godef', {
                 \   'autoload': {
@@ -619,7 +619,6 @@ function! s:SetNeoBundle() " {{{
                 \   'depends':  ['Shougo/unite.vim'],
                 \   'autoload': {
                 \       'unite_sources': ['neomru/file'],
-                \       'explorer':      1
                 \   }
                 \ }
     " }}}
@@ -826,12 +825,16 @@ function! MyCharCode()
 endfunction
 " }}}
 " indentLine {{{
-let g:indentLine_fileType    = ['c', 'cpp', 'cs', 'vim', 'rb', 'go', 'glsl', 'hlsl', 'xml', 'json']
-let g:indentLine_faster      = 1
-let g:indentLine_color_term  = 239
-let g:indentLine_indentLevel = 20
-let g:indentLine_char        = '⭟'
-let g:indentLine_color_gui   = '#505050'
+let s:bundle = neobundle#get('indentLine')
+function! s:bundle.hooks.on_source(bundle)
+    let g:indentLine_fileType    = ['c', 'cpp', 'cs', 'vim', 'rb', 'go', 'glsl', 'hlsl', 'xml', 'json']
+    let g:indentLine_faster      = 1
+    let g:indentLine_color_term  = 0
+    let g:indentLine_indentLevel = 20
+    let g:indentLine_char        = '⭟'
+    let g:indentLine_color_gui   = '#505050'
+endfunction
+unlet s:bundle
 " }}}
 " }}}
 " 編集 {{{
@@ -1357,12 +1360,8 @@ function! s:bundle.hooks.on_source(bundle)
     " insert modeで開始
     let g:unite_enable_start_insert             = 1
 
-    let g:neomru#update_interval                = 1
-    let g:neomru#file_mru_limit                 = 500
-
     let g:unite_force_overwrite_statusline = 0
 
-    " call unite#custom#source('fold,neomru/file', 'matchers', 'matcher_migemo')
     call unite#custom#source('fold', 'matchers', 'matcher_migemo')
 
     " http://blog.monochromegane.com/blog/2014/01/16/the-platinum-searcher/
@@ -1373,6 +1372,14 @@ function! s:bundle.hooks.on_source(bundle)
         let g:unite_source_grep_recursive_opt = ''
         let g:unite_source_grep_encoding      = 'utf-8'
     endif
+endfunction
+unlet s:bundle
+" }}}
+" neomru.vim {{{
+let s:bundle = neobundle#get('neomru.vim')
+function! s:bundle.hooks.on_source(bundle)
+    let g:neomru#update_interval = 1
+    let g:neomru#file_mru_limit  = 500
 endfunction
 unlet s:bundle
 " }}}
@@ -1452,7 +1459,7 @@ function! s:FirstOneShot() " {{{
 
         " 表示 {{{
         " NeoBundleSource indentLine
-        " NeoBundleSource lightline.vim
+        NeoBundleSource lightline.vim
         NeoBundleSource matchparenpp
         " }}}
         " 編集 {{{
@@ -1497,8 +1504,6 @@ function! s:FirstOneShot() " {{{
         call unite#util#strchars('')
         call unite#util#sort_by([], '')
         call unite#util#get_vital().import('Vim.Message')
-
-        NeoMRUReload
     endfunction
 
     function! s:FirstOneShotPhase1()
@@ -1953,7 +1958,7 @@ set shortmess+=I                  " 起動時のメッセージを表示しな�
 set lazyredraw                    " スクリプト実行中に画面を描画しない
 set wildmenu
 set wildmode=list:full            " コマンドライン補完を便利に
-set wildignorecase                " 補完時に大文字小文字を区別しない
+" set wildignorecase                " 補完時に大文字小文字を区別しない
 set showfulltag
 set wildoptions=tagfile
 set fillchars=vert:\              " 縦分割の境界線
@@ -2487,7 +2492,7 @@ function! s:CopyFile(sourceFilepath, targetFilepath)
     elseif s:isMac
         call vimproc#system('cp ' . esource . ' ' . etarget)
     else
-        throw 'Not supported.'
+        echo 'CopyFile : Not supported.'
     endif
 endfunction
 " }}}
@@ -2510,7 +2515,7 @@ function! s:RemoveDir(path)
         elseif s:isMac
             call vimproc#system_bg('rm -rf ' . epath)
         else
-            throw 'Not supported.'
+            echo 'RemoveDir : Not supported.'
         endif
     endif
 endfunction
