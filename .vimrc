@@ -6,6 +6,7 @@ scriptencoding utf-8
 let s:isWindows    = has('win32') || has('win64')
 let s:isMac        = has('mac')
 let s:isGuiRunning = has('gui_running')
+let s:isStarting   = has('vim_starting')
 let s:baseColumns  = s:isWindows ? 140 : 120
 let g:mapleader    = ','
 let s:vimrc_local  = expand('~/.vimrc_local')
@@ -79,6 +80,12 @@ function! s:SetNeoBundle() " {{{
     NeoBundleLazy 'LeafCage/foldCC', {
                 \   'autoload': {
                 \     'filetypes': ['vim']
+                \   }
+                \ }
+
+    NeoBundleLazy 'movewin.vim', {
+                \   'autoload': {
+                \     'commands': ['MoveWin']
                 \   }
                 \ }
     " }}}
@@ -297,7 +304,7 @@ function! s:SetNeoBundle() " {{{
 
     NeoBundleLazy 'plasticboy/vim-markdown', {
                 \   'autoload': {
-                \     'filetypes': ['markdown']
+                \     'filetypes': ['markdown', 'mkd']
                 \   }
                 \ }
 
@@ -558,12 +565,6 @@ function! s:SetNeoBundle() " {{{
                 \   }
                 \ }
 
-    NeoBundleLazy 'movewin.vim', {
-                \   'autoload': {
-                \     'commands': ['MoveWin']
-                \   }
-                \ }
-
     if s:isMac
         NeoBundleLazy 'itchyny/dictionary.vim', {
                     \   'autoload': {
@@ -622,7 +623,7 @@ function! s:SetNeoBundle() " {{{
     " }}}
 endfunction " }}}
 
-if has('vim_starting')
+if s:isStarting
     set rtp+=$DOTVIM/bundle/neobundle.vim/
 endif
 
@@ -658,7 +659,6 @@ endfunction
 " }}}
 " lightline {{{
 let g:lightline = {
-            \   'mode_map': {'c': 'NORMAL'},
             \   'active': {
             \       'left':  [['mode', 'paste'],
             \                 ['fugitive', 'filename', 'anzu']],
@@ -701,6 +701,19 @@ let g:lightline = {
             \       'left':  '⮁',
             \       'right': '⮃'
             \   },
+            \   'mode_map': {
+            \       'n':      'N',
+            \       'i':      'I',
+            \       'R':      'R',
+            \       'v':      'V',
+            \       'V':      'V-LINE',
+            \       'c':      'C',
+            \       "\<C-v>": 'V-BLOCK',
+            \       's':      'S',
+            \       'S':      'S-LINE',
+            \       "\<C-s>": 'S-BLOCK',
+            \       '?':      '      '
+            \   }
             \ }
 
 function! MyMode()
@@ -1428,7 +1441,7 @@ onoremap u  <nop>
 " }}}
 " ファイルタイプごとの設定 {{{
 " golang {{{
-if has('vim_starting')
+if s:isStarting
     if !exists('$GOROOT')
         if s:isMac
             let $GOROOT = '/usr/local/opt/go/libexec'
@@ -2377,7 +2390,7 @@ endfunction
 "                                                           表示されていない :bdelete
 function! s:SmartClose()
 
-    if exists('b:isableSmartClose')
+    if exists('b:disableSmartClose')
         return
     end
 
@@ -2594,3 +2607,4 @@ endif
 " |  cmap  |        |        |        |        |        |   ○   |
 " +--------+--------+--------+--------+--------+--------+--------+
 " }}}
+

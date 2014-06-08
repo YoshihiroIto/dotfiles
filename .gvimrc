@@ -23,12 +23,9 @@ hi StorageClass     guifg=#FD971F               gui=none
 hi Tag              guifg=#F92672               gui=none
 hi FoldColumn       guifg=#465457 guibg=#242526
 hi Folded           guifg=#465457 guibg=#242526
-hi VertSplit        guifg=#202020 guibg=#202020 gui=bold "見えなくする
+hi VertSplit        guifg=#202020 guibg=#202020 gui=bold    " 見えなくする
 
 " タブ表示など
-" hi SpecialKey       guifg=#383838 guibg=#121212 gui=none
-" hi SpecialKey       guifg=#D0D0D0 guibg=#121212 gui=none
-
 if s:isMac
     hi SpecialKey       guifg=#303030 guibg=#121212 gui=none
 else
@@ -79,7 +76,6 @@ if s:isGuiRunning
         " set rop=type:directx
         " set guifont=MeiryoKe_Gothic_SZ:h9:cSHIFTJIS
         set guifont=Ricty\ Regular\ for\ Powerline:h11
-        set linespace=0
     elseif s:isMac
         set guifont=Ricty\ Regular\ for\ Powerline:h12
         set antialias
@@ -116,3 +112,4 @@ if s:isGuiRunning
     endif
 endif
 " }}}
+
