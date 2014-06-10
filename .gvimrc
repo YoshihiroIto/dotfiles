@@ -112,4 +112,5 @@ if s:isGuiRunning
   endif
 endif
 " }}}
-" vim: set ts=2 sw=2 :
+" vim: set ts=2 sw=2 sts=2 et :
+

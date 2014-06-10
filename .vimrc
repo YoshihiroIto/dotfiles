@@ -135,7 +135,7 @@ function! s:SetNeoBundle() " {{{
         \   'autoload': {
         \     'commands': ['EasyAlign', 'LiveEasyAlign'],
         \     'mappings': [
-        \     '<Plug>(EasyAlignOperator)',
+        \       '<Plug>(EasyAlignOperator)',
         \       ['sxn', '<Plug>(EasyAlign)'],
         \       ['sxn', '<Plug>(LiveEasyAlign)'],
         \       ['sxn', '<Plug>(EasyAlignRepeat)']
@@ -234,7 +234,7 @@ function! s:SetNeoBundle() " {{{
         \   }
         \ }
 
-  NeoBundleLazy 'YoshihiroIto/vim-gocode', {
+  NeoBundle 'YoshihiroIto/vim-gocode', {
         \   'autoload': {
         \     'filetypes': ['go']
         \   }
@@ -622,6 +622,13 @@ function! s:SetNeoBundle() " {{{
           \     'unite_sources': ['everything', 'everything/async'],
           \   }
           \ }
+  elseif s:isMac
+    " NeoBundleLazy 'choplin/unite-spotlight', {
+    "       \   'depends':  ['Shougo/unite.vim'],
+    "       \   'autoload': {
+    "       \     'unite_sources': ['spotlight'],
+    "       \   }
+    "       \ }
   endif
   " }}}
 endfunction " }}}
@@ -1349,6 +1356,8 @@ if s:isWindows
   nnoremap <silent> [Unite]m  :<C-u>Unite -prompt-direction=top -no-split neomru/file everything<CR>
   nnoremap <silent> [Unite]e  :<C-u>Unite -prompt-direction=top -no-split everything<CR>
 else
+  " nnoremap <silent> [Unite]m  :<C-u>Unite -prompt-direction=top -no-split neomru/file spotlight<CR>
+  " nnoremap <silent> [Unite]e  :<C-u>Unite -prompt-direction=top -no-split spotlight<CR>
   nnoremap <silent> [Unite]m  :<C-u>Unite -prompt-direction=top -no-split neomru/file<CR>
 endif
 
@@ -1388,6 +1397,16 @@ function! s:bundle.hooks.on_source(bundle)
   endif
 endfunction
 unlet s:bundle
+" unite-everything {{{
+if s:isWindows
+  let s:bundle = neobundle#get('unite-everything')
+  function! s:bundle.hooks.on_source(bundle)
+    call unite#custom_max_candidates('everything', 300)
+
+    let g:unite_source_everything_full_path_search = 1
+  endfunction
+  unlet s:bundle
+endif
 " }}}
 " neomru.vim {{{
 let s:bundle = neobundle#get('neomru.vim')
@@ -1396,6 +1415,7 @@ function! s:bundle.hooks.on_source(bundle)
   let g:neomru#file_mru_limit  = 500
 endfunction
 unlet s:bundle
+" }}}
 " }}}
 " その他 {{{
 " NeoBundleLazy したプラグインをフォーカスが外れている時に自動的に読み込む {{{
@@ -1414,7 +1434,6 @@ function! s:source()
   let sources = map(filter(s:get_lazy_plugins(), 's:is_not_sourced(v:val)'), 'v:val')
 
   for s in sources
-    " echom 'source:' . s
     call neobundle#source(s)
   endfor
 
@@ -1515,7 +1534,9 @@ function! s:FirstOneShot() " {{{
     call unite#util#sort_by([], '')
     call unite#util#get_vital().import('Vim.Message')
 
-    IndentLinesReset
+    if s:isGuiRunning
+      IndentLinesReset
+    endif
   endfunction
 
   function! s:FirstOneShotPhase1()
@@ -1524,7 +1545,6 @@ function! s:FirstOneShot() " {{{
   endfunction
 
   function! s:FirstOneShotPhase2()
-
     augroup FirstOneShot
       autocmd!
     augroup END
@@ -1590,8 +1610,6 @@ augroup MyAutoGroup
   function! s:SetAll()
     setlocal formatoptions-=ro
     setlocal textwidth=0
-
-    IndentLinesReset
   endfunction
 
   function! s:SetRuby()
@@ -1655,8 +1673,8 @@ augroup MyAutoGroup
     setlocal foldmethod=syntax
     let g:omnicomplete_fetch_full_documentation = 0
 
-    nnoremap <buffer> <F12>   :<C-u>OmniSharpGotoDefinition<CR>zz
-    nnoremap <buffer> <S-F12> :<C-u>OmniSharpFindUsages<CR>
+    nnoremap <buffer> <F12>   :<C-u>call OmniSharp#GotoDefinition()<CR>zz
+    nnoremap <buffer> <S-F12> :<C-u>call OmniSharp#FindUsages()<CR>
   endfunction
 
   function! s:SetUnite()
@@ -1879,6 +1897,7 @@ vnoremap > >gv
 " タブ {{{
 set tabstop=4                     " ファイル内の <Tab> が対応する空白の数。
 set softtabstop=4                 " <Tab> の挿入や <BS> の使用等の編集操作をするときに、<Tab> が対応する空白の数。
+set shiftwidth=4                  " インデントの各段階に使われる空白の数。
 set expandtab                     " Insertモードで <Tab> を挿入するとき、代わりに適切な数の空白を使う。
 " }}}
 " バックアップ・スワップファイル {{{
@@ -1969,7 +1988,6 @@ endfunction
 " 表示 {{{
 syntax enable                     " 構文ごとに色分けをする
 set number                        " 行番号表示
-set shiftwidth=4                  " インデントの各段階に使われる空白の数。
 set textwidth=0                   " 一行に長い文章を書いていても自動折り返しをしない
 set showcmd                       " コマンドをステータス行に表示
 set showmatch                     " 括弧の対応をハイライト
@@ -2001,6 +2019,10 @@ augroup MyAutoGroup
 
   let s:cursorline_lock = 0
   function! s:auto_cursorline(event)
+    if s:IsUniteRunning()
+      return
+    endif
+
     if a:event ==# 'WinEnter'
       setlocal cursorline
       let s:cursorline_lock = 2
@@ -2023,8 +2045,16 @@ augroup MyAutoGroup
   endfunction
 
   function! s:ForceShowCursolLine()
+    if s:IsUniteRunning()
+      return
+    endif
+
     setlocal cursorline
     let s:cursorline_lock = 1
+  endfunction
+
+  function! s:IsUniteRunning()
+    return &ft == 'unite'
   endfunction
 augroup END
 " }}}
@@ -2630,4 +2660,4 @@ endif
 " |  cmap  |        |        |        |        |        |   ○   |
 " +--------+--------+--------+--------+--------+--------+--------+
 " }}}
-" vim: set ts=2 sw=2 :
+" vim: set ts=2 sw=2 sts=2 et :
