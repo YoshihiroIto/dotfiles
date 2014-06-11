@@ -73,7 +73,7 @@ function! s:SetNeoBundle() " {{{
 
   NeoBundleLazy 'majutsushi/tagbar', {
         \   'autoload': {
-        \       'commands': ['TagbarToggle']
+        \     'commands': ['TagbarToggle']
         \   }
         \ }
 
