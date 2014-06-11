@@ -66,7 +66,7 @@ function! s:SetNeoBundle() " {{{
   NeoBundle 'tomasr/molokai'
   NeoBundle 'Yggdroot/indentLine'
   NeoBundle 'itchyny/lightline.vim', {
-        \   'depends': ['Shougo/vimproc'],
+        \   'depends': ['Shougo/vimproc', 'tpope/vim-fugitive', 'osyo-manga/vim-anzu', 'scrooloose/syntastic']
         \ }
 
   NeoBundleLazy 'vim-scripts/matchparenpp'
@@ -668,15 +668,23 @@ function! s:ToggleTagBar()
 endfunction
 " }}}
 " lightline {{{
+let s:p = lightline#colorscheme#default#palette
+let s:p.normal.left     = [['darkestgreen', 'brightgreen', 'bold'], ['gray7', 'gray2']]
+let s:p.normal.fugitive = [['white', 'gray4']]
+
+let g:lightline#colorscheme#yoi#palette = lightline#colorscheme#fill(s:p)
+
+unlet s:p
+
 let g:lightline = {
+      \   'colorscheme': 'yoi',
       \   'active': {
       \     'left': [
       \       ['mode',     'paste'],
-      \       ['fugitive'],
-      \       ['filename', 'anzu']
+      \       ['fugitive', 'filename', 'anzu']
       \     ],
       \     'right': [
-      \       ['lineinfo'],
+      \       ['syntastic', 'lineinfo'],
       \       ['percent']
       \     ]
       \   },
@@ -687,7 +695,6 @@ let g:lightline = {
       \   'component_function': {
       \     'modified':     'MyModified',
       \     'readonly':     'MyReadonly',
-      \     'fugitive':     'MyFugitive',
       \     'filename':     'MyFilename',
       \     'fileformat':   'MyFileformat',
       \     'filetype':     'MyFiletype',
@@ -695,6 +702,14 @@ let g:lightline = {
       \     'mode':         'MyMode',
       \     'charcode':     'MyCharCode',
       \     'anzu':         'anzu#search_status'
+      \   },
+      \   'component_expand': {
+      \     'syntastic':    'SyntasticStatuslineFlag',
+      \     'fugitive':     'MyFugitive',
+      \   },
+      \   'component_type': {
+      \     'syntastic':    'error',
+      \     'fugitive':     'fugitive'
       \   },
       \   'separator': {
       \     'left':  '⮀',
@@ -709,8 +724,7 @@ let g:lightline = {
       \       ['tabs']
       \     ],
       \     'right': [
-      \       ['fileformat', 'fileencoding'],
-      \       ['filetype'],
+      \       ['filetype', 'fileformat', 'fileencoding']
       \     ]
       \   },
       \   'tabline_separator': {
@@ -732,12 +746,12 @@ let g:lightline = {
       \     's':      'S',
       \     'S':      'SL',
       \     "\<C-s>": 'SB',
-      \     '?':      '      '
+      \     '?':      ' '
       \   }
       \ }
 
 function! MyMode()
-  return        &ft == 'unite'    ? 'Unite'    :
+  return  &ft == 'unite'    ? 'Unite'    :
         \ &ft == 'vimfiler' ? 'VimFiler' :
         \ &ft == 'vimshell' ? 'VimShell' :
         \ winwidth(0) > 60 ? lightline#mode() : ''
@@ -764,6 +778,7 @@ function! MyFilename()
 endfunction
 
 function! MyFugitive()
+
   if &ft !~? 'vimfiler'
     let _ = fugitive#head()
 
@@ -1095,10 +1110,15 @@ unlet s:bundle
 " }}}
 " 言語 {{{
 " syntastic {{{
-" let g:syntastic_cs_checkers = ['syntax', 'issues']
-" augroup MyAutoGroup
-"     autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
-" augroup END
+let g:syntastic_cs_checkers = ['syntax', 'issues']
+augroup MyAutoGroup
+  function! s:SyntasticCheck()
+    SyntasticCheck
+    call lightline#update()
+  endfunction
+
+  autocmd BufWritePost *.{go,rb} call s:SyntasticCheck()
+augroup END
 " }}}
 " clang_complete {{{
 let s:bundle = neobundle#get('clang_complete')
@@ -1534,7 +1554,7 @@ function! s:FirstOneShot() " {{{
     call unite#util#sort_by([], '')
     call unite#util#get_vital().import('Vim.Message')
 
-    if s:isGuiRunning
+    if exists(':IndentLinesReset')
       IndentLinesReset
     endif
   endfunction
@@ -2088,7 +2108,7 @@ augroup MyAutoGroup
   autocmd ColorScheme * highlight CursorWord guifg=Red
 
   function! s:hl_clear()
-    if exists("b:highlight_cursor_word_id") && exists("b:highlight_cursor_word")
+    if exists('b:highlight_cursor_word_id') && exists('b:highlight_cursor_word')
       silent! call matchdelete(b:highlight_cursor_word_id)
       unlet b:highlight_cursor_word_id
       unlet b:highlight_cursor_word
@@ -2661,3 +2681,4 @@ endif
 " +--------+--------+--------+--------+--------+--------+--------+
 " }}}
 " vim: set ts=2 sw=2 sts=2 et :
+
