@@ -66,7 +66,7 @@ function! s:SetNeoBundle() " {{{
   NeoBundle 'tomasr/molokai'
   NeoBundle 'Yggdroot/indentLine'
   NeoBundle 'itchyny/lightline.vim', {
-        \   'depends': ['Shougo/vimproc', 'tpope/vim-fugitive', 'osyo-manga/vim-anzu', 'scrooloose/syntastic']
+        \   'depends':  ['Shougo/vimproc', 'tpope/vim-fugitive', 'osyo-manga/vim-anzu', 'scrooloose/syntastic']
         \ }
 
   NeoBundleLazy 'vim-scripts/matchparenpp'
@@ -151,14 +151,14 @@ function! s:SetNeoBundle() " {{{
   " }}}
   " 補完 {{{
   NeoBundleLazy 'Shougo/neocomplete.vim', {
-        \   'depends': ['Shougo/vimproc'],
+        \   'depends':  ['Shougo/vimproc'],
         \   'autoload': {
         \     'insert': 1,
         \   }
         \ }
 
   NeoBundleLazy 'Shougo/neosnippet', {
-        \   'depends': ['Shougo/neosnippet-snippets', 'Shougo/neocomplete.vim'],
+        \   'depends':  ['Shougo/neosnippet-snippets', 'Shougo/neocomplete.vim'],
         \   'autoload': {
         \     'insert': 1,
         \     'filetypes': ['neosnippet'],
@@ -193,7 +193,7 @@ function! s:SetNeoBundle() " {{{
         \ }
 
   NeoBundleLazy 'nosami/Omnisharp', {
-        \   'depends': ['Shougo/neocomplete.vim', 'Shougo/vimproc', 'scrooloose/syntastic'],
+        \   'depends':  ['Shougo/neocomplete.vim', 'Shougo/vimproc', 'scrooloose/syntastic'],
         \   'autoload': {
         \     'filetypes': ['cs']
         \   },
@@ -265,7 +265,7 @@ function! s:SetNeoBundle() " {{{
         \ }
 
   NeoBundleLazy 'rhysd/vim-clang-format', {
-        \   'depends': ['kana/vim-operator-user'],
+        \   'depends':  ['kana/vim-operator-user'],
         \   'autoload': {
         \     'filetypes': ['c', 'cpp', 'objc']
         \   }
@@ -343,7 +343,7 @@ function! s:SetNeoBundle() " {{{
         \ }
 
   NeoBundleLazy 'thinca/vim-quickrun', {
-        \   'depends': ['osyo-manga/shabadou.vim', 'rhysd/wandbox-vim', 'Shougo/vimproc'],
+        \   'depends':  ['osyo-manga/shabadou.vim', 'rhysd/wandbox-vim', 'Shougo/vimproc'],
         \   'autoload': {
         \     'mappings': [['sxn', '<Plug>(quickrun']],
         \     'commands': [
@@ -361,63 +361,63 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'kana/vim-textobj-user'
 
   NeoBundleLazy 'kana/vim-textobj-entire', {
-        \   'depends': ['kana/vim-textobj-user'],
+        \   'depends':  ['kana/vim-textobj-user'],
         \   'autoload': {
         \     'mappings': [['xo', 'ae'], ['xo', 'ie']]
         \   }
         \ }
 
   NeoBundleLazy 'kana/vim-textobj-indent', {
-        \   'depends': ['kana/vim-textobj-user'],
+        \   'depends':  ['kana/vim-textobj-user'],
         \   'autoload': {
         \     'mappings': [['xo', 'ai'], ['xo', 'aI'], ['xo', 'ii'], ['xo', 'iI']]
         \   }
         \ }
 
   NeoBundleLazy 'kana/vim-textobj-line', {
-        \   'depends': ['kana/vim-textobj-user'],
+        \   'depends':  ['kana/vim-textobj-user'],
         \   'autoload': {
         \     'mappings': [['xo', 'al'], ['xo', 'il']]
         \   }
         \ }
 
   NeoBundleLazy 'rhysd/vim-textobj-word-column', {
-        \   'depends': ['kana/vim-textobj-user'],
+        \   'depends':  ['kana/vim-textobj-user'],
         \   'autoload': {
         \     'mappings': [['xo', 'av'], ['xo', 'aV'], ['xo', 'iv'], ['xo', 'iV']]
         \   }
         \ }
 
   NeoBundleLazy 'thinca/vim-textobj-comment', {
-        \   'depends': ['kana/vim-textobj-user'],
+        \   'depends':  ['kana/vim-textobj-user'],
         \   'autoload': {
         \     'mappings': [['xo', 'ac'], ['xo', 'ic']]
         \   }
         \ }
 
   NeoBundleLazy 'sgur/vim-textobj-parameter', {
-        \   'depends': ['kana/vim-textobj-user'],
+        \   'depends':  ['kana/vim-textobj-user'],
         \   'autoload': {
         \     'mappings': [['xo', '<Plug>(textobj-parameter']]
         \   }
         \ }
 
   NeoBundleLazy 'rhysd/vim-textobj-anyblock', {
-        \   'depends': ['kana/vim-textobj-user'],
+        \   'depends':  ['kana/vim-textobj-user'],
         \   'autoload': {
         \     'mappings': [['xo', 'ab'], ['xo', 'ib']]
         \   }
         \ }
 
   NeoBundleLazy 'thinca/vim-textobj-between', {
-        \   'depends': ['kana/vim-textobj-user'],
+        \   'depends':  ['kana/vim-textobj-user'],
         \   'autoload': {
         \     'mappings': [['xo', 'af'], ['xo', 'if']]
         \   }
         \ }
 
   NeoBundleLazy 'h1mesuke/textobj-wiw', {
-        \   'depends': ['kana/vim-textobj-user'],
+        \   'depends':  ['kana/vim-textobj-user'],
         \   'autoload': {
         \     'mappings': [['xo', '<Plug>(textobj-wiw']]
         \   }
