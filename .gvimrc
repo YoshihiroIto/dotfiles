@@ -32,7 +32,6 @@ else
   hi SpecialKey       guifg=#B0D0F0 guibg=#121212 gui=none
 endif
 
-
 " vim-indent-guides
 hi IndentGuidesOdd                guibg=#181818
 hi IndentGuidesEven               guibg=#181818

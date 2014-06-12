@@ -856,16 +856,16 @@ endfunction
 " }}}
 " }}}
 " indentLine {{{
-let s:bundle = neobundle#get('indentLine')
-function! s:bundle.hooks.on_source(bundle)
-  let g:indentLine_fileType    = ['c', 'cpp', 'cs', 'vim', 'rb', 'go', 'glsl', 'hlsl', 'xml', 'json']
-  let g:indentLine_faster      = 0
-  let g:indentLine_color_term  = 0
-  let g:indentLine_indentLevel = 20
-  let g:indentLine_char        = '⭟'
-  let g:indentLine_color_gui   = '#505050'
-endfunction
-unlet s:bundle
+let g:indentLine_fileType    = ['c', 'cpp', 'cs', 'vim', 'rb', 'go', 'glsl', 'hlsl', 'xml', 'json']
+let g:indentLine_faster      = 0
+let g:indentLine_color_term  = 0
+let g:indentLine_indentLevel = 20
+let g:indentLine_char        = '⭟'
+let g:indentLine_color_gui   = '#505050'
+
+augroup MyAutoGroup
+  autocmd BufReadPost * IndentLinesEnable
+augroup END
 " }}}
 " }}}
 " 編集 {{{
