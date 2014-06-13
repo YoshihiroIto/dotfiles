@@ -64,10 +64,11 @@ function! s:SetNeoBundle() " {{{
 
   " 表示 {{{
   NeoBundle 'tomasr/molokai'
-  NeoBundle 'Yggdroot/indentLine'
   NeoBundle 'itchyny/lightline.vim', {
         \   'depends':  ['Shougo/vimproc', 'tpope/vim-fugitive', 'osyo-manga/vim-anzu', 'scrooloose/syntastic']
         \ }
+  NeoBundle 'Yggdroot/indentLine'
+  " NeoBundleLazy 'nathanaelkane/vim-indent-guides'
 
   NeoBundleLazy 'vim-scripts/matchparenpp'
 
@@ -672,6 +673,12 @@ let s:p = lightline#colorscheme#default#palette
 let s:p.normal.left     = [['darkestgreen', 'brightgreen', 'bold'], ['gray7', 'gray2']]
 let s:p.normal.fugitive = [['white', 'gray4']]
 
+let s:p.insert.left     = [['darkestcyan', 'white', 'bold'], ['mediumcyan', 'darkestblue']]
+let s:p.insert.fugitive = [['white', 'darkblue']]
+
+let s:p.visual.left     = [['darkred', 'brightorange', 'bold'], ['gray7', 'gray2']]
+" let s:p.visual.fugitive = [['white', '#af8700']]
+
 let g:lightline#colorscheme#yoi#palette = lightline#colorscheme#fill(s:p)
 
 unlet s:p
@@ -857,7 +864,7 @@ endfunction
 " }}}
 " indentLine {{{
 let g:indentLine_fileType    = ['c', 'cpp', 'cs', 'vim', 'rb', 'go', 'glsl', 'hlsl', 'xml', 'json']
-let g:indentLine_faster      = 0
+let g:indentLine_faster      = 1
 let g:indentLine_color_term  = 0
 let g:indentLine_indentLevel = 20
 let g:indentLine_char        = '⭟'
@@ -866,6 +873,12 @@ let g:indentLine_color_gui   = '#505050'
 augroup MyAutoGroup
   autocmd BufReadPost * IndentLinesEnable
 augroup END
+" }}}
+" vim-indent-guides {{{
+" let g:indent_guides_enable_on_vim_startup = 1
+" let g:indent_guides_guide_size            = 1
+" let g:indent_guides_auto_colors           = 0
+" let g:indent_guides_exclude_filetypes     = ['help', 'lingr-messages', 'tweetvim', 'unite']
 " }}}
 " }}}
 " 編集 {{{
@@ -1510,8 +1523,9 @@ function! s:FirstOneShot() " {{{
     filetype plugin indent on
 
     " 表示 {{{
-    " NeoBundleSource indentLine
+    NeoBundleSource indentLine
     " NeoBundleSource lightline.vim
+    " NeoBundleSource vim-indent-guides
     NeoBundleSource matchparenpp
     " }}}
     " 編集 {{{
@@ -1557,6 +1571,10 @@ function! s:FirstOneShot() " {{{
     if exists(':IndentLinesReset')
       IndentLinesReset
     endif
+
+    " if exists(':IndentGuidesEnable')
+    "   IndentGuidesEnable
+    " endif
   endfunction
 
   function! s:FirstOneShotPhase1()
