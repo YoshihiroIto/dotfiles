@@ -670,14 +670,19 @@ endfunction
 " }}}
 " lightline {{{
 let s:p = lightline#colorscheme#default#palette
-let s:p.normal.left     = [['darkestgreen', 'brightgreen', 'bold'], ['gray7', 'gray2']]
-let s:p.normal.fugitive = [['white', 'gray4']]
 
 let s:p.insert.left     = [['darkestcyan', 'white', 'bold'], ['mediumcyan', 'darkestblue']]
+let s:p.insert.middle   = [['mediumcyan', 'darkestblue']]
+let s:p.insert.right    = [['darkestcyan', 'mediumcyan'], ['mediumcyan', 'darkblue'], ['mediumcyan', 'darkestblue']]
 let s:p.insert.fugitive = [['white', 'darkblue']]
 
-let s:p.visual.left     = [['darkred', 'brightorange', 'bold'], ['gray7', 'gray2']]
-" let s:p.visual.fugitive = [['white', '#af8700']]
+let s:p.visual.left     = [['#671B12', 'white', 'bold'], ['#FFB586', '#873700']]
+let s:p.visual.middle   = [['#FFB586', '#873700']]
+let s:p.visual.right    = [['#672021', '#FFB587'], ['#FEB386', '#AF3C00'], ['#FFB586', '#873700']]
+let s:p.visual.fugitive = [['white', '#AF3C00']]
+
+let s:p.normal.left     = [['#195E00', '#07AF00', 'bold'], ['gray7', 'gray2']]
+let s:p.normal.fugitive = [['white', 'gray4']]
 
 let g:lightline#colorscheme#yoi#palette = lightline#colorscheme#fill(s:p)
 
