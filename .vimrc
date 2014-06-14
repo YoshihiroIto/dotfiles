@@ -776,10 +776,11 @@ function! MyMode()
   return  &ft == 'unite'    ? 'Unite'    :
         \ &ft == 'vimfiler' ? 'VimFiler' :
         \ &ft == 'vimshell' ? 'VimShell' :
+        \ &ft == 'quickrun' ? 'quickrun' :
         \ winwidth(0) > 60 ? lightline#mode() : ''
 endfunction
 
-let s:lightlineNoDispFt = 'vimfiler\|lingr'
+let s:lightlineNoDispFt = 'vimfiler\|unite\|vimshell\|tweetvim\|quickrun\|lingr'
 
 function! MyModified()
   return &ft =~ s:lightlineNoDispFt ? '' : &modified ? '+' : &modifiable ? '' : '-'
@@ -794,6 +795,8 @@ function! MyFilename()
         \ (&ft ==  'vimfiler'  ? vimfiler#get_status_string() :
         \  &ft ==  'unite'     ? unite#get_status_string() :
         \  &ft ==  'vimshell'  ? vimshell#get_status_string() :
+        \  &ft ==  'tweetvim'  ? '' :
+        \  &ft ==  'quickrun'  ? '' :
         \  &ft =~? 'lingr'     ? '' :
         \ ''  != expand('%:t') ? expand('%:t') : '[No Name]') .
         \ ('' != MyModified()  ? ' ' . MyModified() : '')
