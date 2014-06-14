@@ -611,7 +611,7 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'Shougo/neomru.vim', {
         \   'depends':  ['Shougo/unite.vim'],
         \   'autoload': {
-        \     'unite_sources': ['neomru/file'],
+        \     'unite_sources': ['neomru/file']
         \   }
         \ }
 
@@ -671,23 +671,23 @@ endfunction
 " lightline {{{
 let s:p = lightline#colorscheme#default#palette
 
+let s:p.normal.left     = [['#195E00', '#07AF00', 'bold'], ['gray7', 'gray2']]
+let s:p.normal.fugitive = [['white', 'gray4']]
+
 let s:p.insert.left     = [['darkestcyan', 'white', 'bold'], ['mediumcyan', 'darkestblue']]
 let s:p.insert.middle   = [['mediumcyan', 'darkestblue']]
 let s:p.insert.right    = [['darkestcyan', 'mediumcyan'], ['mediumcyan', 'darkblue'], ['mediumcyan', 'darkestblue']]
 let s:p.insert.fugitive = [['white', 'darkblue']]
-
-" let s:p.visual.left     = [['#671B12', 'white', 'bold'], ['#FFB586', '#873700']]
-" let s:p.visual.middle   = [['#FFB586', '#873700']]
-" let s:p.visual.right    = [['#672021', '#FFB587'], ['#FEB386', '#AF3C00'], ['#FFB586', '#873700']]
-" let s:p.visual.fugitive = [['white', '#AF3C00']]
 
 let s:p.visual.left     = [['#AB2362', 'white', 'bold'], ['#FF84BA', '#870036']]
 let s:p.visual.middle   = [['#FF84BA', '#870036']]
 let s:p.visual.right    = [['#75003D', '#FF87BB'], ['#FE86BB', '#AF0053'], ['#FF84BA', '#870036']]
 let s:p.visual.fugitive = [['white', '#AF0053']]
 
-let s:p.normal.left     = [['#195E00', '#07AF00', 'bold'], ['gray7', 'gray2']]
-let s:p.normal.fugitive = [['white', 'gray4']]
+" let s:p.visual.left     = [['#671B12', 'white', 'bold'], ['#FFB586', '#873700']]
+" let s:p.visual.middle   = [['#FFB586', '#873700']]
+" let s:p.visual.right    = [['#672021', '#FFB587'], ['#FEB386', '#AF3C00'], ['#FFB586', '#873700']]
+" let s:p.visual.fugitive = [['white', '#AF3C00']]
 
 " let s:p.normal.left     = [['#0E3D00', 'white', 'bold'], ['#65DE65', '#006600']]
 " let s:p.normal.middle   = [['#65DE65', '#006600']]
@@ -715,12 +715,12 @@ let g:lightline = {
       \     'lineinfo': '%4l/%L : %-3v'
       \   },
       \   'component_function': {
-      \     'modified':     'MyModified',
-      \     'readonly':     'MyReadonly',
-      \     'filename':     'MyFilename',
       \     'fileformat':   'MyFileformat',
       \     'filetype':     'MyFiletype',
       \     'fileencoding': 'MyFileencoding',
+      \     'modified':     'MyModified',
+      \     'readonly':     'MyReadonly',
+      \     'filename':     'MyFilename',
       \     'mode':         'MyMode',
       \     'charcode':     'MyCharCode',
       \     'anzu':         'anzu#search_status'
@@ -773,10 +773,11 @@ let g:lightline = {
       \ }
 
 function! MyMode()
-  return  &ft == 'unite'    ? 'Unite'    :
-        \ &ft == 'vimfiler' ? 'VimFiler' :
-        \ &ft == 'vimshell' ? 'VimShell' :
-        \ &ft == 'quickrun' ? 'quickrun' :
+  return  &ft ==   'unite'    ? 'Unite'    :
+        \ &ft ==   'vimfiler' ? 'VimFiler' :
+        \ &ft ==   'vimshell' ? 'VimShell' :
+        \ &ft ==   'quickrun' ? 'quickrun' :
+        \ &ft =~? 'lingr'     ? 'lingr'    :
         \ winwidth(0) > 60 ? lightline#mode() : ''
 endfunction
 
@@ -888,8 +889,15 @@ let g:indentLine_char        = '⭟'
 let g:indentLine_color_gui   = '#505050'
 
 augroup MyAutoGroup
-  autocmd BufReadPost * IndentLinesEnable
+  autocmd BufReadPost * call s:SafeIndentLinesEnable()
+
+  function! s:SafeIndentLinesEnable()
+    if exists(':IndentLinesEnable')
+      IndentLinesEnable
+    endif
+  endfunction
 augroup END
+
 " }}}
 " vim-indent-guides {{{
 " let g:indent_guides_enable_on_vim_startup = 1
@@ -1540,7 +1548,7 @@ function! s:FirstOneShot() " {{{
     filetype plugin indent on
 
     " 表示 {{{
-    NeoBundleSource indentLine
+    " NeoBundleSource indentLine
     " NeoBundleSource lightline.vim
     " NeoBundleSource vim-indent-guides
     NeoBundleSource matchparenpp
@@ -1629,19 +1637,20 @@ augroup MyAutoGroup
   autocmd BufNewFile,BufRead                         *.{fsh,vsh}         setlocal ft=glsl
   autocmd BufWritePost                               $MYVIMRC            NeoBundleClearCache
 
-  autocmd FileType *        call s:SetAll()
-  autocmd FileType ruby     call s:SetRuby()
-  autocmd FileType vim      call s:SetVim()
-  autocmd FileType qf       call s:SetQuickFix()
-  autocmd FileType help     call s:SetHelp()
-  autocmd FileType unite    call s:SetUnite()
-  autocmd FileType cs       call s:SetCs()
-  autocmd FileType c,cpp    call s:SetCpp()
-  autocmd FileType go       call s:SetGo()
-  autocmd FileType godoc    call s:SetGodoc()
-  autocmd FileType coffee   call s:SetCoffee()
-  autocmd FileType json     call s:SetJson()
-  autocmd FileType xml,html call s:SetXml()
+  autocmd FileType *          call s:SetAll()
+  autocmd FileType ruby       call s:SetRuby()
+  autocmd FileType vim        call s:SetVim()
+  autocmd FileType qf         call s:SetQuickFix()
+  autocmd FileType help       call s:SetHelp()
+  autocmd FileType unite      call s:SetUnite()
+  autocmd FileType cs         call s:SetCs()
+  autocmd FileType c,cpp      call s:SetCpp()
+  autocmd FileType go         call s:SetGo()
+  autocmd FileType godoc      call s:SetGodoc()
+  autocmd FileType coffee     call s:SetCoffee()
+  autocmd FileType json       call s:SetJson()
+  autocmd FileType xml,html   call s:SetXml()
+  autocmd FileType neosnippet call s:SetNeosnippet()
 
   function! s:UpdateAll()
 
@@ -1678,6 +1687,10 @@ augroup MyAutoGroup
     setlocal foldmethod=marker
     setlocal foldlevel=0
     setlocal foldcolumn=5
+
+    setlocal tabstop=2
+    setlocal shiftwidth=2
+    setlocal softtabstop=2
   endfunction
 
   function! s:SetXml()
@@ -1748,7 +1761,7 @@ augroup MyAutoGroup
     noremap  <silent><buffer> q     :<C-u>close<CR>
   endfunction
 
-  function! s:SetNeoSnippet()
+  function! s:SetNeosnippet()
     setlocal noexpandtab
   endfunction
 
