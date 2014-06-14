@@ -727,7 +727,7 @@ let g:lightline = {
       \   },
       \   'component_expand': {
       \     'syntastic':    'SyntasticStatuslineFlag',
-      \     'fugitive':     'MyFugitive',
+      \     'fugitive':     'MyFugitive'
       \   },
       \   'component_type': {
       \     'syntastic':    'error',
@@ -1385,8 +1385,8 @@ unlet s:bundle
 " }}}
 " }}}
 " Unite {{{
-nnoremap [Unite] <nop>
-xnoremap [Unite] <nop>
+nnoremap [Unite] <Nop>
+xnoremap [Unite] <Nop>
 nmap     <Space> [Unite]
 xmap     <Space> [Unite]
 
