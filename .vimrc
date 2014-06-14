@@ -61,7 +61,6 @@ let s:rightWindowWidth = 40
 " プラグイン {{{
 " インストール {{{
 function! s:SetNeoBundle() " {{{
-
   " 表示 {{{
   NeoBundle 'tomasr/molokai'
   NeoBundle 'itchyny/lightline.vim', {
@@ -652,6 +651,7 @@ endif
 
 call neobundle#end()
 " }}}
+" }}}
 " 表示 {{{
 " TagBar {{{
 noremap <silent> <F8>    :<C-u>call <SID>ToggleTagBar()<CR>
@@ -676,13 +676,23 @@ let s:p.insert.middle   = [['mediumcyan', 'darkestblue']]
 let s:p.insert.right    = [['darkestcyan', 'mediumcyan'], ['mediumcyan', 'darkblue'], ['mediumcyan', 'darkestblue']]
 let s:p.insert.fugitive = [['white', 'darkblue']]
 
-let s:p.visual.left     = [['#671B12', 'white', 'bold'], ['#FFB586', '#873700']]
-let s:p.visual.middle   = [['#FFB586', '#873700']]
-let s:p.visual.right    = [['#672021', '#FFB587'], ['#FEB386', '#AF3C00'], ['#FFB586', '#873700']]
-let s:p.visual.fugitive = [['white', '#AF3C00']]
+" let s:p.visual.left     = [['#671B12', 'white', 'bold'], ['#FFB586', '#873700']]
+" let s:p.visual.middle   = [['#FFB586', '#873700']]
+" let s:p.visual.right    = [['#672021', '#FFB587'], ['#FEB386', '#AF3C00'], ['#FFB586', '#873700']]
+" let s:p.visual.fugitive = [['white', '#AF3C00']]
+
+let s:p.visual.left     = [['#AB2362', 'white', 'bold'], ['#FF84BA', '#870036']]
+let s:p.visual.middle   = [['#FF84BA', '#870036']]
+let s:p.visual.right    = [['#75003D', '#FF87BB'], ['#FE86BB', '#AF0053'], ['#FF84BA', '#870036']]
+let s:p.visual.fugitive = [['white', '#AF0053']]
 
 let s:p.normal.left     = [['#195E00', '#07AF00', 'bold'], ['gray7', 'gray2']]
 let s:p.normal.fugitive = [['white', 'gray4']]
+
+" let s:p.normal.left     = [['#0E3D00', 'white', 'bold'], ['#65DE65', '#006600']]
+" let s:p.normal.middle   = [['#65DE65', '#006600']]
+" let s:p.normal.right    = [['#005300', '#66DE66'], ['#65DE65', '#008E00'], ['#65DE65', '#006600']]
+" let s:p.normal.fugitive = [['white', '#008E00']]
 
 let g:lightline#colorscheme#yoi#palette = lightline#colorscheme#fill(s:p)
 
@@ -865,7 +875,6 @@ function! MyCharCode()
 
   return "'". char ."' ". nr
 endfunction
-" }}}
 " }}}
 " indentLine {{{
 let g:indentLine_fileType    = ['c', 'cpp', 'cs', 'vim', 'rb', 'go', 'glsl', 'hlsl', 'xml', 'json']
@@ -1497,14 +1506,14 @@ nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
 
 " ミス操作で削除してしまうため
-nnoremap dh <nop>
-nnoremap dj <nop>
-nnoremap dk <nop>
-nnoremap dl <nop>
+nnoremap dh <Nop>
+nnoremap dj <Nop>
+nnoremap dk <Nop>
+nnoremap dl <Nop>
 
 " よくミスるため
-vnoremap u  <nop>
-onoremap u  <nop>
+vnoremap u  <Nop>
+onoremap u  <Nop>
 " }}}
 " ファイルタイプごとの設定 {{{
 " golang {{{
