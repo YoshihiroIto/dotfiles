@@ -5,35 +5,35 @@ scriptencoding utf-8
 " 基本 {{{
 " グローバル関数 {{{
 function! IsWindows()
-  if !exists('s:isWindows')
-    let s:isWindows = has('win32') || has('win64')
+  if !exists('g:vimrc_isWindows')
+    let g:vimrc_isWindows = has('win32') || has('win64')
   endif
 
-  return s:isWindows
+  return g:vimrc_isWindows
 endfunction
 
 function! IsMac()
-  if !exists('s:isMac')
-    let s:isMac = has('mac')
+  if !exists('g:vimrc_isMac')
+    let g:vimrc_isMac = has('mac')
   endif
 
-  return s:isMac
+  return g:vimrc_isMac
 endfunction
 
 function! IsGuiRunning()
-  if !exists('s:gui_running')
-    let s:isGuiRunning = has('gui_running')
+  if !exists('g:vimrc_isGuiRunning')
+    let g:vimrc_isGuiRunning = has('gui_running')
   endif
 
-  return s:isGuiRunning
+  return g:vimrc_isGuiRunning
 endfunction
 
 function! IsStarting()
-  if !exists('s:vim_starting')
-    let s:isStarting = has('vim_starting')
+  if !exists('g:vimrc_isStarting')
+    let g:vimrc_isStarting = has('vim_starting')
   endif
 
-  return s:isStarting
+  return g:vimrc_isStarting
 endfunction
 " }}}
 
@@ -2716,7 +2716,7 @@ endfunction
 " }}}
 " }}}
 " コンソール用 {{{
-if !s:isGuiRunning
+if !IsGuiRunning()
 
   source $MYGVIMRC
 endif
