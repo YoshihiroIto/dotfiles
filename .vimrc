@@ -3,11 +3,41 @@ set encoding=utf-8
 scriptencoding utf-8
 
 " 基本 {{{
-let s:isWindows    = has('win32') || has('win64')
-let s:isMac        = has('mac')
-let s:isGuiRunning = has('gui_running')
-let s:isStarting   = has('vim_starting')
-let s:baseColumns  = s:isWindows ? 140 : 120
+" グローバル関数 {{{
+function! IsWindows()
+  if !exists('s:isWindows')
+    let s:isWindows = has('win32') || has('win64')
+  endif
+
+  return s:isWindows
+endfunction
+
+function! IsMac()
+  if !exists('s:isMac')
+    let s:isMac = has('mac')
+  endif
+
+  return s:isMac
+endfunction
+
+function! IsGuiRunning()
+  if !exists('s:gui_running')
+    let s:isGuiRunning = has('gui_running')
+  endif
+
+  return s:isGuiRunning
+endfunction
+
+function! IsStarting()
+  if !exists('s:vim_starting')
+    let s:isStarting = has('vim_starting')
+  endif
+
+  return s:isStarting
+endfunction
+" }}}
+
+let s:baseColumns  = IsWindows() ? 140 : 120
 let g:mapleader    = ','
 let s:vimrc_local  = expand('~/.vimrc_local')
 let $DOTVIM        = expand('~/.vim')
@@ -27,12 +57,12 @@ if has('iconv')
 endif
 
 " WinではPATHに$VIMが含まれていないときにexeを見つけ出せないので修正
-if s:isWindows && $PATH !~? '\(^\|;\)' . escape($VIM, '\\') . '\(;\|$\)'
+if IsWindows() && $PATH !~? '\(^\|;\)' . escape($VIM, '\\') . '\(;\|$\)'
   let $PATH = $VIM . ';' . $PATH
 endif
 
 " Macではデフォルトの'iskeyword'がcp932に対応しきれていないので修正
-if s:isMac
+if IsMac()
   set iskeyword=@,48-57,_,128-167,224-235
   let $PATH = simplify($VIM . '/../../MacOS') . ':' . $PATH
 endif
@@ -51,7 +81,7 @@ let g:did_install_default_menus = 1
 nnoremap [App] <Nop>
 nmap     ;     [App]
 
-if !s:isGuiRunning
+if !IsGuiRunning()
   let $MYGVIMRC = expand('~/.gvimrc')
 endif
 
@@ -559,7 +589,7 @@ function! s:SetNeoBundle() " {{{
         \   }
         \ }
 
-  if s:isMac
+  if IsMac()
     NeoBundleLazy 'itchyny/dictionary.vim', {
           \   'autoload': {
           \     'commands': ['Dictionary']
@@ -567,7 +597,7 @@ function! s:SetNeoBundle() " {{{
           \ }
   endif
 
-  if s:isWindows && s:isGuiRunning
+  if IsWindows() && IsGuiRunning()
     NeoBundleLazy 'YoshihiroIto/vim-icondrag'
   endif
   " }}}
@@ -614,7 +644,7 @@ function! s:SetNeoBundle() " {{{
         \   }
         \ }
 
-  if s:isWindows
+  if IsWindows()
     NeoBundleLazy 'sgur/unite-everything', {
           \   'depends':  ['Shougo/unite.vim'],
           \   'autoload': {
@@ -625,7 +655,7 @@ function! s:SetNeoBundle() " {{{
   " }}}
 endfunction " }}}
 
-if s:isStarting
+if IsStarting()
   set rtp+=$DOTVIM/bundle/neobundle.vim/
 endif
 
@@ -1151,10 +1181,10 @@ function! s:bundle.hooks.on_source(bundle)
   let g:clang_complete_auto = 0
   let g:clang_auto_select   = 0
 
-  if s:isWindows
+  if IsWindows()
     let g:clang_user_options = '-I C:/Development/boost_1_55_0 -I "C:/Program Files (x86)/Microsoft Visual Studio 11.0/VC/include" -std=c++11 -fms-extensions -fmsc-version=1300 -fgnu-runtime -D__MSVCRT_VERSION__=0x700 -D_WIN32_WINNT=0x0500 2> NUL || exit 0"'
     let g:clang_library_path = 'C:/Development/llvm/build/bin/Release/'
-  elseif s:isMac
+  elseif IsMac()
     let g:clang_user_options = '-std=c++11'
   endif
 endfunction
@@ -1164,7 +1194,7 @@ unlet s:bundle
 let s:bundle = neobundle#get('vim-clang-format')
 function! s:bundle.hooks.on_source(bundle)
 
-  if s:isWindows
+  if IsWindows()
     let g:clang_format#command = 'C:/Development/llvm/build/bin/Release/clang-format'
   else
     let g:clang_format#command = 'clang-format-3.4'
@@ -1392,7 +1422,7 @@ nnoremap <silent> [Unite]o  :<C-u>Unite -prompt-direction=top -no-split outline<
 nnoremap <silent> [Unite]z  :<C-u>Unite -prompt-direction=top -no-split fold<CR>
 nnoremap <silent> [Unite]q  :<C-u>Unite -prompt-direction=top -no-quit -horizontal quickfix<CR>
 
-if s:isWindows
+if IsWindows()
   nnoremap <silent> [Unite]m  :<C-u>Unite -prompt-direction=top -no-split neomru/file everything<CR>
   nnoremap <silent> [Unite]e  :<C-u>Unite -prompt-direction=top -no-split everything<CR>
 else
@@ -1436,7 +1466,7 @@ function! s:bundle.hooks.on_source(bundle)
 endfunction
 unlet s:bundle
 " unite-everything {{{
-if s:isWindows
+if IsWindows()
   let s:bundle = neobundle#get('unite-everything')
   function! s:bundle.hooks.on_source(bundle)
     call unite#custom_max_candidates('everything', 300)
@@ -1508,9 +1538,9 @@ onoremap u  <Nop>
 " }}}
 " ファイルタイプごとの設定 {{{
 " golang {{{
-if s:isStarting
+if IsStarting()
   if !exists('$GOROOT')
-    if s:isMac
+    if IsMac()
       let $GOROOT = '/usr/local/opt/go/libexec'
     endif
   endif
@@ -1546,7 +1576,7 @@ function! s:FirstOneShot() " {{{
     " }}}
     " アプリ {{{
     NeoBundleSource vim-fugitive
-    if s:isWindows && s:isGuiRunning
+    if IsWindows() && IsGuiRunning()
       NeoBundleSource vim-icondrag
       IconDragEnable
     endif
@@ -2003,9 +2033,9 @@ endif
 if has('migemo')
   set migemo
 
-  if s:isWindows
+  if IsWindows()
     set migemodict=$VIM/dict/utf-8/migemo-dict
-  elseif s:isMac
+  elseif IsMac()
     set migemodict=$VIMRUNTIME/dict/migemo-dict
   endif
 endif
@@ -2288,7 +2318,7 @@ noremap  <silent> [Window]e :<C-u>call <SID>ToggleVSplitWide()<CR>
 noremap  <silent> [Window]w :<C-u>call <SID>SmartClose()<CR>
 
 " アプリウィンドウ操作
-if s:isGuiRunning
+if IsGuiRunning()
   noremap <silent> [Window]H :<C-u>call <SID>ResizeWin()<CR>
   noremap <silent> [Window]J :<C-u>call <SID>ResizeWin()<CR>
   noremap <silent> [Window]K :<C-u>call <SID>ResizeWin()<CR>
@@ -2582,9 +2612,9 @@ function! s:CopyFile(sourceFilepath, targetFilepath)
   let esource = vimproc#shellescape(expand(a:sourceFilepath))
   let etarget = vimproc#shellescape(expand(a:targetFilepath))
 
-  if s:isWindows
+  if IsWindows()
     call vimproc#system('copy ' . esource . ' ' . etarget)
-  elseif s:isMac
+  elseif IsMac()
     call vimproc#system('cp ' . esource . ' ' . etarget)
   else
     echo 'CopyFile : Not supported.'
@@ -2605,9 +2635,9 @@ function! s:RemoveDir(path)
   let epath = vimproc#shellescape(expand(a:path))
 
   if isdirectory(a:path)
-    if s:isWindows
+    if IsWindows()
       call vimproc#system_bg('rd /S /Q ' . epath)
-    elseif s:isMac
+    elseif IsMac()
       call vimproc#system_bg('rm -rf ' . epath)
     else
       echo 'RemoveDir : Not supported.'

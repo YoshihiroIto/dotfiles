@@ -1,12 +1,8 @@
 " 基本 {{{
-let s:isWindows    = has('win32') || has('win64')
-let s:isMac        = has('mac')
-let s:isGuiRunning = has('gui_running')
-
 set noimdisable
 
 " MacVim-KaoriYa 自動IM on禁止
-if s:isMac
+if IsMac()
   set imdisableactivate
 endif
 " }}}
@@ -26,7 +22,7 @@ hi Folded           guifg=#465457 guibg=#242526
 hi VertSplit        guifg=#202020 guibg=#202020 gui=bold    " 見えなくする
 
 " タブ表示など
-if s:isMac
+if IsMac()
   hi SpecialKey       guifg=#303030 guibg=#121212 gui=none
 else
   hi SpecialKey       guifg=#B0D0F0 guibg=#121212 gui=none
@@ -63,33 +59,33 @@ set t_vb=
 " 半透明化
 augroup transparency
   autocmd!
-  if s:isMac
+  if IsMac()
     autocmd GuiEnter,FocusGained * set transparency=3   " アクティブ時の透過率
     autocmd FocusLost            * set transparency=48  " 非アクティブ時の透過率
   endif
 augroup END
 " }}}
 " フォント設定 {{{
-if s:isGuiRunning
-  if s:isWindows
+if IsGuiRunning()
+  if IsWindows()
     " set rop=type:directx
     " set guifont=MeiryoKe_Gothic_SZ:h9:cSHIFTJIS
     set guifont=Ricty\ Regular\ for\ Powerline:h11
-  elseif s:isMac
+  elseif IsMac()
     set guifont=Ricty\ Regular\ for\ Powerline:h12
     set antialias
   endif
 endif
 
-if s:isWindows
+if IsWindows()
   " 一部のUCS文字の幅を自動計測して決める
   set ambiwidth=auto
-elseif s:isMac
+elseif IsMac()
   set ambiwidth=double
 endif
 " }}}
 " ウィンドウの位置とサイズを記憶する {{{
-if s:isGuiRunning
+if IsGuiRunning()
   " http://vim-users.jp/2010/01/hack120/
   let g:save_window_file = expand('~/.vimwinpos')
   augroup SaveWindow
