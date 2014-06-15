@@ -59,7 +59,6 @@ endif
 let s:rightWindowWidth = 40
 " }}}
 " プラグイン {{{
-" インストール {{{
 function! s:SetNeoBundle() " {{{
   " 表示 {{{
   NeoBundle 'tomasr/molokai'
@@ -67,7 +66,6 @@ function! s:SetNeoBundle() " {{{
         \   'depends':  ['Shougo/vimproc', 'tpope/vim-fugitive', 'osyo-manga/vim-anzu', 'scrooloose/syntastic']
         \ }
   NeoBundle 'Yggdroot/indentLine'
-  " NeoBundleLazy 'nathanaelkane/vim-indent-guides'
 
   NeoBundleLazy 'vim-scripts/matchparenpp'
 
@@ -651,7 +649,6 @@ endif
 
 call neobundle#end()
 " }}}
-" }}}
 " 表示 {{{
 " TagBar {{{
 noremap <silent> <F8>    :<C-u>call <SID>ToggleTagBar()<CR>
@@ -898,12 +895,6 @@ augroup MyAutoGroup
   endfunction
 augroup END
 
-" }}}
-" vim-indent-guides {{{
-" let g:indent_guides_enable_on_vim_startup = 1
-" let g:indent_guides_guide_size            = 1
-" let g:indent_guides_auto_colors           = 0
-" let g:indent_guides_exclude_filetypes     = ['help', 'lingr-messages', 'tweetvim', 'unite']
 " }}}
 " }}}
 " 編集 {{{
@@ -1550,7 +1541,6 @@ function! s:FirstOneShot() " {{{
     " 表示 {{{
     " NeoBundleSource indentLine
     " NeoBundleSource lightline.vim
-    " NeoBundleSource vim-indent-guides
     NeoBundleSource matchparenpp
     " }}}
     " 編集 {{{
@@ -1596,10 +1586,6 @@ function! s:FirstOneShot() " {{{
     if exists(':IndentLinesReset')
       IndentLinesReset
     endif
-
-    " if exists(':IndentGuidesEnable')
-    "   IndentGuidesEnable
-    " endif
   endfunction
 
   function! s:FirstOneShotPhase1()
@@ -2152,6 +2138,7 @@ augroup MyAutoGroup
   autocmd BufLeave    * call s:hl_clear()
   autocmd WinLeave    * call s:hl_clear()
   autocmd InsertEnter * call s:hl_clear()
+  autocmd CursorMoved * call s:hl_clear()
 
   autocmd ColorScheme * highlight CursorWord guifg=Red
 
@@ -2694,6 +2681,8 @@ endfunction
 function! s:SmartFormat()
 
   if &ft == 'cpp'
+    CppFormat
+  elseif &ft == 'c'
     CppFormat
   elseif &ft == 'xml'
     XmlFormat
