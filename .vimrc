@@ -179,59 +179,10 @@ function! s:SetNeoBundle() " {{{
         \ }
   " }}}
   " 補完 {{{
-  NeoBundleLazy 'Shougo/neocomplete.vim', {
-        \   'depends':  ['Shougo/vimproc'],
-        \   'autoload': {
-        \     'insert': 1,
-        \   }
-        \ }
-
-  NeoBundleLazy 'Shougo/neosnippet', {
-        \   'depends':  ['Shougo/neosnippet-snippets', 'Shougo/neocomplete.vim'],
-        \   'autoload': {
-        \     'insert': 1,
-        \     'filetypes': ['neosnippet'],
-        \     'commands': [
-        \       'NeoSnippetClearMarkers',
-        \         {
-        \           'name':     'NeoSnippetSource',
-        \           'complete': 'file'
-        \         },
-        \         {
-        \           'name':     'NeoSnippetMakeCache',
-        \           'complete': 'customlist,neosnippet#commands#_filetype_complete'
-        \         },
-        \         {
-        \            'name':     'NeoSnippetEdit',
-        \            'complete': 'customlist,neosnippet#commands#_edit_complete'
-        \         }
-        \       ],
-        \       'mappings': [['sxi', '<Plug>(neosnippet_']],
-        \       'unite_sources': [
-        \         'neosnippet',
-        \         'neosnippet_file',
-        \         'neosnippet_target'
-        \       ]
-        \   }
-        \ }
-
-  NeoBundleLazy 'Shougo/neosnippet-snippets', {
-        \   'autoload': {
-        \     'insert': 1,
-        \   }
-        \ }
-
-  NeoBundleLazy 'nosami/Omnisharp', {
-        \   'depends':  ['Shougo/neocomplete.vim', 'Shougo/vimproc', 'scrooloose/syntastic'],
-        \   'autoload': {
-        \     'filetypes': ['cs']
-        \   },
-        \   'build': {
-        \     'windows': 'C:/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe server/OmniSharp.sln /p:Platform="Any CPU"',
-        \     'mac':     'xbuild server/OmniSharp.sln',
-        \     'unix':    'xbuild server/OmniSharp.sln',
-        \   }
-        \ }
+  NeoBundleLazy 'Shougo/neosnippet-snippets'
+  NeoBundleLazy 'Shougo/neocomplete.vim', { 'depends': ['Shougo/vimproc']             }
+  NeoBundleLazy 'Shougo/neosnippet.vim',  { 'depends': ['Shougo/neosnippet-snippets', 'Shougo/neocomplete.vim'] }
+  NeoBundleLazy 'nosami/Omnisharp',       { 'depends': ['Shougo/neocomplete.vim',     'Shougo/vimproc',         'scrooloose/syntastic'] }
   " }}}
   " ファイル {{{
   NeoBundleLazy 'kana/vim-altr'
@@ -641,88 +592,111 @@ let g:expand_region_text_objects = {
 " }}}
 " }}}
 " 補完 {{{
-" neocomplete {{{
-let s:bundle = neobundle#get('neocomplete.vim')
-function! s:bundle.hooks.on_source(bundle)
+" neocomplete.vim {{{
+if neobundle#tap('neocomplete.vim')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'insert': 1,
+        \   }
+        \ })
 
-  let g:neocomplete#enable_at_startup       = 1
-  let g:neocomplete#enable_ignore_case      = 1
-  let g:neocomplete#enable_smart_case       = 1
-  let g:neocomplete#enable_auto_delimiter   = 1
-  let g:neocomplete#enable_fuzzy_completion = 1
-  let g:neocomplete#enable_refresh_always   = 1
-  let g:neocomplete#enable_prefetch         = 1
+  function! neobundle#hooks.on_source(bundle)
+    let g:neocomplete#enable_at_startup       = 1
+    let g:neocomplete#enable_ignore_case      = 1
+    let g:neocomplete#enable_smart_case       = 1
+    let g:neocomplete#enable_auto_delimiter   = 1
+    let g:neocomplete#enable_fuzzy_completion = 1
+    let g:neocomplete#enable_refresh_always   = 1
+    let g:neocomplete#enable_prefetch         = 1
 
-  let g:neocomplete#auto_completion_start_length      = 3
-  let g:neocomplete#manual_completion_start_length    = 0
-  let g:neocomplete#sources#syntax#min_keyword_length = 3
-  let g:neocomplete#min_keyword_length                = 3
-  let g:neocomplete#force_overwrite_completefunc      = 1
+    let g:neocomplete#auto_completion_start_length      = 3
+    let g:neocomplete#manual_completion_start_length    = 0
+    let g:neocomplete#sources#syntax#min_keyword_length = 3
+    let g:neocomplete#min_keyword_length                = 3
+    let g:neocomplete#force_overwrite_completefunc      = 1
 
-  let g:neocomplete#skip_auto_completion_time               = ''
-  let g:neocomplete#disable_auto_select_buffer_name_pattern = '\[Command Line\]'
+    let g:neocomplete#skip_auto_completion_time               = ''
+    let g:neocomplete#disable_auto_select_buffer_name_pattern = '\[Command Line\]'
 
-  let g:neocomplete#sources#dictionary#dictionaries = {
-        \   'default':  '',
-        \   'vimshell': $HOME . '/.vimshell_hist'
-        \ }
+    let g:neocomplete#sources#dictionary#dictionaries = {
+          \   'default':  '',
+          \   'vimshell': $HOME . '/.vimshell_hist'
+          \ }
 
-  let g:neocomplete#sources#vim#complete_functions = {
-        \   'Unite':               'unite#complete_source',
-        \   'VimShellExecute':     'vimshell#vimshell_execute_complete',
-        \   'VimShellInteractive': 'vimshell#vimshell_execute_complete',
-        \   'VimShellTerminal':    'vimshell#vimshell_execute_complete',
-        \   'VimShell':            'vimshell#complete',
-        \   'VimFiler':            'vimfiler#complete'
-        \ }
+    let g:neocomplete#sources#vim#complete_functions = {
+          \   'Unite':               'unite#complete_source',
+          \   'VimShellExecute':     'vimshell#vimshell_execute_complete',
+          \   'VimShellInteractive': 'vimshell#vimshell_execute_complete',
+          \   'VimShellTerminal':    'vimshell#vimshell_execute_complete',
+          \   'VimShell':            'vimshell#complete',
+          \   'VimFiler':            'vimfiler#complete'
+          \ }
 
-  " 日本語は収集しない
-  let g:neocomplete#keyword_patterns = {
-        \   '_': '\h\w*'
-        \ }
+    " 日本語は収集しない
+    let g:neocomplete#keyword_patterns = {
+          \   '_': '\h\w*'
+          \ }
 
-  let g:neocomplete#sources#omni#input_patterns = {
-        \   'c':    '\%(\.\|->\)\h\w*',
-        \   'cpp':  '\h\w*\%(\.\|->\)\h\w*\|\h\w*::',
-        \   'cs':   '[a-zA-Z0-9.]\{2\}',
-        \   'ruby': '[^. *\t]\.\w*\|\h\w*::'
-        \ }
+    let g:neocomplete#sources#omni#input_patterns = {
+          \   'c':    '\%(\.\|->\)\h\w*',
+          \   'cpp':  '\h\w*\%(\.\|->\)\h\w*\|\h\w*::',
+          \   'cs':   '[a-zA-Z0-9.]\{2\}',
+          \   'ruby': '[^. *\t]\.\w*\|\h\w*::'
+          \ }
 
-  let g:neocomplete#force_omni_input_patterns = {
-        \   'c':      '[^.[:digit:] *\t]\%(\.\|->\)\w*',
-        \   'cpp':    '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*',
-        \   'objc':   '[^.[:digit:] *\t]\%(\.\|->\)\w*',
-        \   'objcpp': '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*',
-        \   'cs':     '[^.[:digit:] *\t]\%(\.\)\w*\|\h\w*::\w*'
-        \ }
+    let g:neocomplete#force_omni_input_patterns = {
+          \   'c':      '[^.[:digit:] *\t]\%(\.\|->\)\w*',
+          \   'cpp':    '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*',
+          \   'objc':   '[^.[:digit:] *\t]\%(\.\|->\)\w*',
+          \   'objcpp': '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*',
+          \   'cs':     '[^.[:digit:] *\t]\%(\.\)\w*\|\h\w*::\w*'
+          \ }
 
-  let g:neocomplete#delimiter_patterns = {
-        \   'c':   ['.', '->'],
-        \   'cpp': [' ::', '.'],
-        \   'cs':  ['.'],
-        \   'vim': ['#', '.']
-        \ }
+    let g:neocomplete#delimiter_patterns = {
+          \   'c':   ['.', '->'],
+          \   'cpp': [' ::', '.'],
+          \   'cs':  ['.'],
+          \   'vim': ['#', '.']
+          \ }
 
-  let g:neocomplete#sources#file_include#exts = {
-        \   'c':   ['', 'h'],
-        \   'cpp': ['', 'h', 'hpp', 'hxx'],
-        \   'cs':  ['', 'Designer.cs']
-        \ }
-endfunction
-unlet s:bundle
+    let g:neocomplete#sources#file_include#exts = {
+          \   'c':   ['', 'h'],
+          \   'cpp': ['', 'h', 'hpp', 'hxx'],
+          \   'cs':  ['', 'Designer.cs']
+          \ }
+    call neobundle#untap()
+  endfunction
+endif
 " }}}
-" neosnippet {{{
-let s:bundle = neobundle#get('neosnippet')
-function! s:bundle.hooks.on_source(bundle)
-
-  let g:neosnippet#enable_snipmate_compatibility = 1
-  let g:neosnippet#snippets_directory            = '$DOTVIM/snippets'
-
-  if isdirectory(expand('$DOTVIM/snippets.local'))
-    let g:neosnippet#snippets_directory = '$DOTVIM/snippets.local,' . g:neosnippet#snippets_directory
-  endif
-
-  call neocomplete#custom#source('neosnippet', 'rank', 1000)
+" neosnippet.vim {{{
+if neobundle#tap('neosnippet.vim')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'insert': 1,
+        \     'filetypes': ['neosnippet'],
+        \     'commands': [
+        \       'NeoSnippetClearMarkers',
+        \         {
+        \           'name':     'NeoSnippetSource',
+        \           'complete': 'file'
+        \         },
+        \         {
+        \           'name':     'NeoSnippetMakeCache',
+        \           'complete': 'customlist,neosnippet#commands#_filetype_complete'
+        \         },
+        \         {
+        \            'name':     'NeoSnippetEdit',
+        \            'complete': 'customlist,neosnippet#commands#_edit_complete'
+        \         }
+        \       ],
+        \       'mappings': [['sxi', '<Plug>(neosnippet_']],
+        \       'unite_sources': [
+        \         'neosnippet',
+        \         'neosnippet_file',
+        \         'neosnippet_target'
+        \       ]
+        \   }
+        \ })
 
   " Plugin key-mappings.
   imap <C-k>  <Plug>(neosnippet_expand_or_jump)
@@ -731,22 +705,45 @@ function! s:bundle.hooks.on_source(bundle)
   imap <expr> <Tab> neosnippet#expandable() <Bar><Bar> neosnippet#jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : '<Tab>'
   smap <expr> <Tab> neosnippet#expandable() <Bar><Bar> neosnippet#jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : '<Tab>'
 
-  " for snippet_complete marker.
-  if has('conceal')
-    set conceallevel=2 concealcursor=i
-  endif
-endfunction
-unlet s:bundle
+  function! neobundle#hooks.on_source(bundle)
+    let g:neosnippet#enable_snipmate_compatibility = 1
+    let g:neosnippet#snippets_directory            = '$DOTVIM/snippets'
 
+    if isdirectory(expand('$DOTVIM/snippets.local'))
+      let g:neosnippet#snippets_directory = '$DOTVIM/snippets.local,' . g:neosnippet#snippets_directory
+    endif
+
+    call neocomplete#custom#source('neosnippet', 'rank', 1000)
+
+    " for snippet_complete marker.
+    if has('conceal')
+      set conceallevel=2 concealcursor=i
+    endif
+  endfunction
+
+  call neobundle#untap()
+endif
 " }}}
 " Omnisharp {{{
-let s:bundle = neobundle#get('Omnisharp')
-function! s:bundle.hooks.on_source(bundle)
+if neobundle#tap('Omnisharp')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': ['cs']
+        \   },
+        \   'build': {
+        \     'windows': 'C:/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe server/OmniSharp.sln /p:Platform="Any CPU"',
+        \     'mac':     'xbuild server/OmniSharp.sln',
+        \     'unix':    'xbuild server/OmniSharp.sln',
+        \   }
+        \ })
 
+  function! neobundle#hooks.on_source(bundle)
   let g:Omnisharp_stop_server         = 0
   let g:OmniSharp_typeLookupInPreview = 1
 endfunction
-unlet s:bundle
+
+  call neobundle#untap()
+endif
 " }}}
 " }}}
 " ファイル {{{
@@ -861,7 +858,6 @@ if neobundle#tap('syntastic')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-
     let g:syntastic_cs_checkers = ['syntax', 'issues']
 
     augroup MyAutoGroup
