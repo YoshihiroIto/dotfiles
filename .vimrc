@@ -98,24 +98,9 @@ function! s:SetNeoBundle() " {{{
   NeoBundle 'Yggdroot/indentLine'
 
   NeoBundleLazy 'vim-scripts/matchparenpp'
-
-  NeoBundleLazy 'majutsushi/tagbar', {
-        \   'autoload': {
-        \     'commands': ['TagbarToggle']
-        \   }
-        \ }
-
-  NeoBundleLazy 'LeafCage/foldCC', {
-        \   'autoload': {
-        \     'filetypes': ['vim']
-        \   }
-        \ }
-
-  NeoBundleLazy 'movewin.vim', {
-        \   'autoload': {
-        \     'commands': ['MoveWin']
-        \   }
-        \ }
+  NeoBundleLazy 'majutsushi/tagbar'
+  NeoBundleLazy 'LeafCage/foldCC'
+  NeoBundleLazy 'movewin.vim'
   " }}}
   " 編集 {{{
   NeoBundleLazy 'tomtom/tcomment_vim'
@@ -283,21 +268,57 @@ endif
 call neobundle#end()
 " }}}
 " 表示 {{{
-" TagBar {{{
-noremap <silent> <F8>    :<C-u>call <SID>ToggleTagBar()<CR>
+" tagbar {{{
+if neobundle#tap('tagbar')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'commands': ['TagbarToggle']
+        \   }
+        \ })
 
-let g:tagbar_width = s:rightWindowWidth
+  noremap <silent> <F8>    :<C-u>call <SID>ToggleTagBar()<CR>
 
-function! s:ToggleTagBar()
-  if bufwinnr(bufnr('__Tagbar__')) != -1
-    TagbarToggle
-    let &columns = &columns - (g:tagbar_width + 1)
-  else
-    let &columns = &columns + (g:tagbar_width + 1)
-    TagbarToggle
-  endif
-endfunction
+  function! s:ToggleTagBar()
+    if bufwinnr(bufnr('__Tagbar__')) != -1
+      TagbarToggle
+      let &columns = &columns - (s:rightWindowWidth + 1)
+    else
+      let &columns = &columns + (s:rightWindowWidth + 1)
+      TagbarToggle
+    endif
+  endfunction
+
+  call neobundle#untap()
+endif
 " }}}
+" foldCC {{{
+if neobundle#tap('foldCC')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'filetypes': ['vim']
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    let g:foldCCtext_enable_autofdc_adjuster = 1
+    set foldtext=foldCC#foldtext()
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
+" movewin.vim {{{
+if neobundle#tap('movewin.vim')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'commands': ['MoveWin']
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+if neobundle#tap('tagbar')
 " lightline {{{
 let s:p = lightline#colorscheme#default#palette
 
@@ -2416,11 +2437,8 @@ augroup END
 " }}}
 " }}}
 " 折り畳み {{{
-let g:foldCCtext_enable_autofdc_adjuster = 1
-
 set foldcolumn=0
 set foldlevel=99
-set foldtext=foldCC#foldtext()
 
 nnoremap <silent> zo zR
 nnoremap <silent> zc zM
