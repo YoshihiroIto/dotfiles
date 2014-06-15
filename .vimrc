@@ -99,6 +99,7 @@ function! s:SetNeoBundle() " {{{
         \ }
 
   NeoBundleLazy 'kana/vim-smartinput', {
+        \   'depends':  ['cohama/vim-smartinput-endwise'],
         \   'autoload': {
         \     'insert': 1,
         \   }
@@ -620,13 +621,6 @@ function! s:SetNeoBundle() " {{{
           \     'unite_sources': ['everything', 'everything/async'],
           \   }
           \ }
-  elseif s:isMac
-    " NeoBundleLazy 'choplin/unite-spotlight', {
-    "       \   'depends':  ['Shougo/unite.vim'],
-    "       \   'autoload': {
-    "       \     'unite_sources': ['spotlight'],
-    "       \   }
-    "       \ }
   endif
   " }}}
 endfunction " }}}
@@ -1295,16 +1289,12 @@ let s:bundle = neobundle#get('vimfiler')
 function! s:bundle.hooks.on_source(bundle)
 
   augroup MyAutoGroup
-    autocmd FileType vimfiler call s:vimfiler_my_settings()
+    autocmd FileType vimfiler call s:VimfilerMySettings()
   augroup END
 
-  function! s:vimfiler_my_settings()
-    nmap <buffer><expr> <Enter> vimfiler#smart_cursor_map(
-          \  "\<Plug>(vimfiler_cd_file)",
-          \  "\<Plug>(vimfiler_edit_file)")
-    nmap <buffer><expr> <C-j> vimfiler#smart_cursor_map(
-          \  "\<Plug>(vimfiler_exit)",
-          \  "\<Plug>(vimfiler_exit)")
+  function! s:VimfilerMySettings()
+    nmap <buffer><expr> <Enter> vimfiler#smart_cursor_map("\<Plug>(vimfiler_cd_file)", "\<Plug>(vimfiler_edit_file)")
+    nmap <buffer><expr> <C-j>   vimfiler#smart_cursor_map("\<Plug>(vimfiler_exit)",    "\<Plug>(vimfiler_exit)")
 
     " dotfile表示状態に設定
     exe ':normal .'
@@ -1313,6 +1303,7 @@ function! s:bundle.hooks.on_source(bundle)
   let g:vimfiler_as_default_explorer        = 1
   let g:vimfiler_force_overwrite_statusline = 0
   let g:vimfiler_tree_leaf_icon             = ' '
+  let g:unite_kind_file_use_trashbox        = 1
 endfunction
 unlet s:bundle
 " }}}
@@ -1405,8 +1396,6 @@ if s:isWindows
   nnoremap <silent> [Unite]m  :<C-u>Unite -prompt-direction=top -no-split neomru/file everything<CR>
   nnoremap <silent> [Unite]e  :<C-u>Unite -prompt-direction=top -no-split everything<CR>
 else
-  " nnoremap <silent> [Unite]m  :<C-u>Unite -prompt-direction=top -no-split neomru/file spotlight<CR>
-  " nnoremap <silent> [Unite]e  :<C-u>Unite -prompt-direction=top -no-split spotlight<CR>
   nnoremap <silent> [Unite]m  :<C-u>Unite -prompt-direction=top -no-split neomru/file<CR>
 endif
 
