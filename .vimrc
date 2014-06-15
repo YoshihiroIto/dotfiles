@@ -90,95 +90,44 @@ let s:rightWindowWidth = 40
 " }}}
 " プラグイン {{{
 function! s:SetNeoBundle() " {{{
-  " 表示 {{{
-  NeoBundle 'tomasr/molokai'
-  NeoBundle 'itchyny/lightline.vim', {
-        \   'depends':  ['Shougo/vimproc', 'tpope/vim-fugitive', 'osyo-manga/vim-anzu', 'scrooloose/syntastic']
-        \ }
-  NeoBundle 'Yggdroot/indentLine'
-
+  " 表示
+  NeoBundle     'tomasr/molokai'
+  NeoBundle     'Yggdroot/indentLine'
+  NeoBundle     'itchyny/lightline.vim', { 'depends': ['Shougo/vimproc', 'tpope/vim-fugitive', 'osyo-manga/vim-anzu', 'scrooloose/syntastic'] }
   NeoBundleLazy 'vim-scripts/matchparenpp'
   NeoBundleLazy 'majutsushi/tagbar'
   NeoBundleLazy 'LeafCage/foldCC'
   NeoBundleLazy 'movewin.vim'
-  " }}}
-  " 編集 {{{
+
+  " 編集
   NeoBundleLazy 'tomtom/tcomment_vim'
   NeoBundleLazy 'tpope/vim-surround'
   NeoBundleLazy 'tpope/vim-repeat'
+  NeoBundleLazy 'LeafCage/yankround.vim'
+  NeoBundleLazy 'cohama/vim-smartinput-endwise'
+  NeoBundleLazy 'nishigori/increment-activator'
+  NeoBundleLazy 'osyo-manga/vim-over'
+  NeoBundleLazy 'thinca/vim-qfreplace'
+  NeoBundleLazy 'terryma/vim-expand-region'
+  NeoBundleLazy 'junegunn/vim-easy-align'
+  NeoBundleLazy 'kana/vim-smartinput', { 'depends': ['cohama/vim-smartinput-endwise'] }
 
-  NeoBundleLazy 'LeafCage/yankround.vim', {
-        \   'autoload': {
-        \     'mappings': ['<Plug>(yankround-'],
-        \   }
-        \ }
-
-  NeoBundleLazy 'kana/vim-smartinput', {
-        \   'depends':  ['cohama/vim-smartinput-endwise'],
-        \   'autoload': {
-        \     'insert': 1,
-        \   }
-        \ }
-
-  NeoBundleLazy 'cohama/vim-smartinput-endwise', {
-        \   'autoload': {
-        \     'insert': 1,
-        \   }
-        \ }
-
-  NeoBundleLazy 'nishigori/increment-activator', {
-        \   'autoload': {
-        \     'mappings': ['<C-x>', '<C-a>']
-        \   }
-        \ }
-
-  NeoBundleLazy 'osyo-manga/vim-over', {
-        \   'autoload': {
-        \     'commands': ['OverCommandLineNoremap', 'OverCommandLine']
-        \   }
-        \ }
-
-  NeoBundleLazy 'thinca/vim-qfreplace', {
-        \   'autoload': {
-        \     'filetypes': ['unite', 'quickfix'],
-        \       'commands': ['Qfreplace']
-        \   }
-        \ }
-
-  NeoBundleLazy 'junegunn/vim-easy-align', {
-        \   'autoload': {
-        \     'commands': ['EasyAlign', 'LiveEasyAlign'],
-        \     'mappings': [
-        \       '<Plug>(EasyAlignOperator)',
-        \       ['sxn', '<Plug>(EasyAlign)'],
-        \       ['sxn', '<Plug>(LiveEasyAlign)'],
-        \       ['sxn', '<Plug>(EasyAlignRepeat)']
-        \     ]
-        \   }
-        \ }
-
-  NeoBundleLazy 'terryma/vim-expand-region', {
-        \   'autoload': {
-        \     'mappings': [['sxn', '<Plug>(expand_region_']]
-        \   }
-        \ }
-  " }}}
-  " 補完 {{{
+  " 補完
   NeoBundleLazy 'Shougo/neosnippet-snippets'
-  NeoBundleLazy 'Shougo/neocomplete.vim', { 'depends': ['Shougo/vimproc']             }
+  NeoBundleLazy 'Shougo/neocomplete.vim', { 'depends': ['Shougo/vimproc'] }
   NeoBundleLazy 'Shougo/neosnippet.vim',  { 'depends': ['Shougo/neosnippet-snippets', 'Shougo/neocomplete.vim'] }
   NeoBundleLazy 'nosami/Omnisharp',       { 'depends': ['Shougo/neocomplete.vim',     'Shougo/vimproc',         'scrooloose/syntastic'] }
-  " }}}
-  " ファイル {{{
+
+  " ファイル
   NeoBundleLazy 'kana/vim-altr'
-  " }}}
-  " 検索 {{{
+
+  " 検索
   NeoBundleLazy 'matchit.zip'
   NeoBundleLazy 'osyo-manga/vim-anzu'
   NeoBundleLazy 'rhysd/clever-f.vim'
   NeoBundleLazy 'thinca/vim-visualstar'
-  " }}}
-  " 言語 {{{
+
+  " 言語
   NeoBundleLazy 'scrooloose/syntastic'
   NeoBundleLazy 'Rip-Rip/clang_complete'
   NeoBundleLazy 'rhysd/vim-clang-format'
@@ -197,8 +146,8 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'jelera/vim-javascript-syntax'
   NeoBundleLazy 'rhysd/wandbox-vim',             { 'depends': ['Shougo/vimproc'] }
   NeoBundleLazy 'thinca/vim-quickrun',           { 'depends': ['osyo-manga/shabadou.vim', 'rhysd/wandbox-vim', 'Shougo/vimproc'] }
-  " }}}
-  " テキストオブジェクト {{{
+
+  " テキストオブジェクト
   NeoBundleLazy 'kana/vim-textobj-user'
   NeoBundleLazy 'kana/vim-textobj-entire',       { 'depends': ['kana/vim-textobj-user'] }
   NeoBundleLazy 'kana/vim-textobj-indent',       { 'depends': ['kana/vim-textobj-user'] }
@@ -209,15 +158,15 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'rhysd/vim-textobj-anyblock',    { 'depends': ['kana/vim-textobj-user'] }
   NeoBundleLazy 'thinca/vim-textobj-between',    { 'depends': ['kana/vim-textobj-user'] }
   NeoBundleLazy 'h1mesuke/textobj-wiw',          { 'depends': ['kana/vim-textobj-user'] }
-  " }}}
-  " オペレータ {{{
+
+  " オペレータ
   NeoBundleLazy 'kana/vim-operator-user'
   NeoBundleLazy 'kana/vim-operator-replace',  { 'depends': ['kana/vim-operator-user'] }
   NeoBundleLazy 'tyru/operator-camelize.vim', { 'depends': ['kana/vim-operator-user'] }
   NeoBundleLazy 'emonkak/vim-operator-sort',  { 'depends': ['kana/vim-operator-user'] }
   NeoBundleLazy 'deris/vim-rengbang',         { 'depends': ['kana/vim-operator-user'] }
-  " }}}
-  " アプリ {{{
+
+  " アプリ
   NeoBundleLazy 'Shougo/vimproc'
   NeoBundleLazy 'basyura/twibill.vim'
   NeoBundleLazy 'LeafCage/nebula.vim'
@@ -235,8 +184,8 @@ function! s:SetNeoBundle() " {{{
   if IsWindows() && IsGuiRunning()
     NeoBundleLazy 'YoshihiroIto/vim-icondrag'
   endif
-  " }}}
-  " Unite {{{
+
+  " Unite
   NeoBundleLazy 'Shougo/unite.vim',          { 'depends': ['Shougo/vimproc']   }
   NeoBundleLazy 'Shougo/unite-outline',      { 'depends': ['Shougo/unite.vim'] }
   NeoBundleLazy 'osyo-manga/unite-quickfix', { 'depends': ['Shougo/unite.vim'] }
@@ -246,7 +195,6 @@ function! s:SetNeoBundle() " {{{
   if IsWindows()
     NeoBundleLazy 'sgur/unite-everything',   { 'depends': ['Shougo/unite.vim'] }
   endif
-  " }}}
 endfunction " }}}
 
 if IsStarting()
@@ -318,7 +266,6 @@ if neobundle#tap('movewin.vim')
   call neobundle#untap()
 endif
 " }}}
-if neobundle#tap('tagbar')
 " lightline {{{
 let s:p = lightline#colorscheme#default#palette
 
@@ -548,68 +495,148 @@ augroup MyAutoGroup
     endif
   endfunction
 augroup END
-
 " }}}
 " }}}
 " 編集 {{{
 " vim-easy-align {{{
-nmap <Leader>m <Plug>(EasyAlign)
-vmap <Leader>m <Plug>(EasyAlign)
+if neobundle#tap('vim-easy-align')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'commands': ['EasyAlign', 'LiveEasyAlign'],
+        \     'mappings': [
+        \       '<Plug>(EasyAlignOperator)',
+        \       ['sxn', '<Plug>(EasyAlign)'],
+        \       ['sxn', '<Plug>(LiveEasyAlign)'],
+        \       ['sxn', '<Plug>(EasyAlignRepeat)']
+        \     ]
+        \   }
+        \ })
 
-nmap <silent> <Leader>a=       vii<Leader>m=
-nmap <silent> <Leader>a:       vii<Leader>m:
-nmap <silent> <Leader>a,       vii<Leader>m*,
-nmap <silent> <Leader>a<Space> vii<Leader>m*<Space>
-xmap <silent> <Leader>a=       <Leader>m=
-xmap <silent> <Leader>a:       <Leader>m:
-xmap <silent> <Leader>a,       <Leader>m*,
-xmap <silent> <Leader>a<Space> <Leader>m*<Space>
-" }}}
-" vim-smartinput-endwise {{{
-" http://cohama.hateblo.jp/entry/2013/11/08/013136
-let s:bundle = neobundle#get('vim-smartinput-endwise')
-function! s:bundle.hooks.on_source(bundle)
+  nmap <Leader>m <Plug>(EasyAlign)
+  vmap <Leader>m <Plug>(EasyAlign)
 
-  call smartinput_endwise#define_default_rules()
-endfunction
-unlet s:bundle
+  nmap <silent> <Leader>a=       vii<Leader>m=
+  nmap <silent> <Leader>a:       vii<Leader>m:
+  nmap <silent> <Leader>a,       vii<Leader>m*,
+  nmap <silent> <Leader>a<Space> vii<Leader>m*<Space>
+  xmap <silent> <Leader>a=       <Leader>m=
+  xmap <silent> <Leader>a:       <Leader>m:
+  xmap <silent> <Leader>a,       <Leader>m*,
+  xmap <silent> <Leader>a<Space> <Leader>m*<Space>
+
+  call neobundle#untap()
+endif
 " }}}
 " yankround {{{
-let g:yankround_use_region_hl = 1
+if neobundle#tap('yankround.vim')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'mappings': ['<Plug>(yankround-'],
+        \   }
+        \ })
 
-nmap p     <Plug>(yankround-p)
-xmap p     <Plug>(yankround-p)
-nmap P     <Plug>(yankround-P)
-nmap gp    <Plug>(yankround-gp)
-xmap gp    <Plug>(yankround-gp)
-nmap gP    <Plug>(yankround-gP)
-nmap <C-p> <Plug>(yankround-prev)
-nmap <C-n> <Plug>(yankround-next)
+  nmap p     <Plug>(yankround-p)
+  xmap p     <Plug>(yankround-p)
+  nmap P     <Plug>(yankround-P)
+  nmap gp    <Plug>(yankround-gp)
+  xmap gp    <Plug>(yankround-gp)
+  nmap gP    <Plug>(yankround-gP)
+  nmap <C-p> <Plug>(yankround-prev)
+  nmap <C-n> <Plug>(yankround-next)
+
+  function! neobundle#hooks.on_source(bundle)
+    let g:yankround_use_region_hl = 1
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-smartinput {{{
+if neobundle#tap('vim-smartinput')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'insert': 1,
+        \   }
+        \ })
+endif
+" }}}
+" vim-smartinput-endwise {{{
+if neobundle#tap('vim-smartinput-endwise')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'insert': 1,
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    call smartinput_endwise#define_default_rules()
+  endfunction
+endif
 " }}}
 " increment-activator {{{
-let g:increment_activator_filetype_candidates = {
-      \   '_':   [['width', 'height']],
-      \   'cs':  [['private', 'protected', 'public', 'internal']],
-      \   'cpp': [['private', 'protected', 'public']],
-      \ }
+if neobundle#tap('increment-activator')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'mappings': ['<C-x>', '<C-a>']
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    let g:increment_activator_filetype_candidates = {
+          \   '_':   [['width', 'height']],
+          \   'cs':  [['private', 'protected', 'public', 'internal']],
+          \   'cpp': [['private', 'protected', 'public']],
+          \ }
+  endfunction
+endif
 " }}}
 " vim-over {{{
-noremap <silent> <Leader>s :OverCommandLine<CR>
+if neobundle#tap('vim-over')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'commands': ['OverCommandLineNoremap', 'OverCommandLine']
+        \   }
+        \ })
 
-let g:over_command_line_key_mappings = {
-      \   '\<C-j>': '\<Esc>',
-      \ }
+  noremap <silent> <Leader>s :OverCommandLine<CR>
+
+  function! neobundle#hooks.on_source(bundle)
+    let g:over_command_line_key_mappings = {
+          \   '\<C-j>': '\<Esc>',
+          \ }
+  endfunction
+endif
+" }}}
+" vim-qfreplace' {{{
+if neobundle#tap('vim-qfreplace')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'filetypes': ['unite', 'quickfix'],
+        \     'commands':  ['Qfreplace']
+        \   }
+        \ })
+endif
 " }}}
 " vim-expand-region {{{
-map J <Plug>(expand_region_expand)
-map K <Plug>(expand_region_shrink)
+if neobundle#tap('vim-expand-region')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'mappings': [['sxn', '<Plug>(expand_region_']]
+        \   }
+        \ })
 
-let g:expand_region_text_objects = {
-      \   'il': 0,
-      \   'ii': 0,
-      \   'ai': 0,
-      \   'ip': 0,
-      \ }
+  map J <Plug>(expand_region_expand)
+  map K <Plug>(expand_region_shrink)
+
+  function! neobundle#hooks.on_source(bundle)
+    let g:expand_region_text_objects = {
+          \   'il': 0,
+          \   'ii': 0,
+          \   'ai': 0,
+          \   'ip': 0,
+          \ }
+  endfunction
+endif
 " }}}
 " }}}
 " 補完 {{{
@@ -759,9 +786,9 @@ if neobundle#tap('Omnisharp')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-  let g:Omnisharp_stop_server         = 0
-  let g:OmniSharp_typeLookupInPreview = 1
-endfunction
+    let g:Omnisharp_stop_server         = 0
+    let g:OmniSharp_typeLookupInPreview = 1
+  endfunction
 
   call neobundle#untap()
 endif
