@@ -156,7 +156,7 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'thinca/vim-qfreplace', {
         \   'autoload': {
         \     'filetypes': ['unite', 'quickfix'],
-        \       'commands':  ['Qfreplace']
+        \       'commands': ['Qfreplace']
         \   }
         \ }
 
@@ -454,42 +454,10 @@ function! s:SetNeoBundle() " {{{
   " }}}
   " オペレータ {{{
   NeoBundleLazy 'kana/vim-operator-user'
-
-  NeoBundleLazy 'kana/vim-operator-replace', {
-        \   'depends':  ['kana/vim-operator-user'],
-        \   'autoload': {
-        \     'mappings': [['nx', '<Plug>(operator-replace)']]
-        \   }
-        \ }
-
-  NeoBundleLazy 'tyru/operator-camelize.vim', {
-        \   'depends':  ['kana/vim-operator-user'],
-        \   'autoload': {
-        \     'mappings': [['nx', '<Plug>(operator-camelize-toggle)']]
-        \   }
-        \ }
-
-  NeoBundleLazy 'emonkak/vim-operator-sort', {
-        \   'depends':  ['kana/vim-operator-user'],
-        \   'autoload': {
-        \     'mappings': [['nx', '<Plug>(operator-sort']]
-        \   }
-        \ }
-
-  NeoBundleLazy 'deris/vim-rengbang',  {
-        \   'depends':  ['kana/vim-operator-user'],
-        \   'autoload': {
-        \     'commands': ['RengBang'],
-        \     'mappings': [['nx', '<Plug>(operator-rengbang']]
-        \   }
-        \ }
-
-  NeoBundleLazy 'osyo-manga/vim-operator-jump_side', {
-        \   'depends':  ['kana/vim-operator-user'],
-        \   'autoload': {
-        \     'mappings': ['<Plug>(operator-jump-toggle)'],
-        \   }
-        \ }
+  NeoBundleLazy 'kana/vim-operator-replace',  { 'depends': ['kana/vim-operator-user'] }
+  NeoBundleLazy 'tyru/operator-camelize.vim', { 'depends': ['kana/vim-operator-user'] }
+  NeoBundleLazy 'emonkak/vim-operator-sort',  { 'depends': ['kana/vim-operator-user'] }
+  NeoBundleLazy 'deris/vim-rengbang',         { 'depends': ['kana/vim-operator-user'] }
   " }}}
   " アプリ {{{
   NeoBundleLazy 'Shougo/vimproc'
@@ -1148,23 +1116,61 @@ omap i. <Plug>(textobj-wiw-i)
 " オペレータ {{{
 " http://qiita.com/rbtnn/items/a47ed6684f1f0bc52906
 " vim-operator-replace {{{
-nmap R         <Plug>(operator-replace)
-xmap R         <Plug>(operator-replace)
+if neobundle#tap('vim-operator-replace')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'mappings': [['nx', '<Plug>(operator-replace)']]
+        \   }
+        \ })
+
+  nmap R         <Plug>(operator-replace)
+  xmap R         <Plug>(operator-replace)
+
+  call neobundle#untap()
+endif
 " }}}
 " operator-camelize.vim {{{
-nmap <Leader>c <Plug>(operator-camelize-toggle)iw
-xmap <Leader>c <Plug>(operator-camelize-toggle)iw
+if neobundle#tap('operator-camelize.vim')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'mappings': [['nx', '<Plug>(operator-camelize-toggle)']]
+        \   }
+        \ })
+
+  nmap <Leader>c <Plug>(operator-camelize-toggle)iw
+  xmap <Leader>c <Plug>(operator-camelize-toggle)iw
+
+  call neobundle#untap()
+endif
 " }}}
 " vim-operator-sort {{{
-nmap <Leader>o <Plug>(operator-sort)
-xmap <Leader>o <Plug>(operator-sort)
+if neobundle#tap('vim-operator-sort')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'mappings': [['nx', '<Plug>(operator-sort']]
+        \   }
+        \ })
+  
+  nmap <Leader>o <Plug>(operator-sort)
+  xmap <Leader>o <Plug>(operator-sort)
+
+  call neobundle#untap()
+endif
 " }}}
 " vim-rengbang {{{
-nmap <Leader>r <Plug>(operator-rengbang)
-xmap <Leader>r <Plug>(operator-rengbang)
-" }}}
-" vim-operator-jump_side {{{
-nmap <silent> <Leader><Leader> <Plug>(operator-jump-toggle)ai:<C-u>call <SID>RefreshScreen()<CR>
+if neobundle#tap('vim-vim-rengbang-sort')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'commands': ['RengBang'],
+        \     'mappings': [['nx', '<Plug>(operator-rengbang']]
+        \   }
+        \ })
+
+  nmap <Leader>r <Plug>(operator-rengbang)
+  xmap <Leader>r <Plug>(operator-rengbang)
+
+  call neobundle#untap()
+endif
 " }}}
 " }}}
 " アプリ {{{
@@ -1200,13 +1206,6 @@ if neobundle#tap('nebula.vim')
 
   call neobundle#untap()
 endif
-" }}}
-" open-browser.vim {{{
-let g:netrw_nogx                   = 1 " disable netrw's gx mapping.
-let g:openbrowser_no_default_menus = 1
-
-nmap gx <Plug>(openbrowser-smart-search)
-vmap gx <Plug>(openbrowser-smart-search)
 " }}}
 " vimshell.vim {{{
 if neobundle#tap('vimshell.vim')
@@ -1394,6 +1393,12 @@ if neobundle#tap('open-browser.vim')
         \   }
         \ })
 
+  let g:netrw_nogx                   = 1 " disable netrw's gx mapping.
+  let g:openbrowser_no_default_menus = 1
+
+  nmap gx <Plug>(openbrowser-smart-search)
+  vmap gx <Plug>(openbrowser-smart-search)
+
   call neobundle#untap()
 endif
 " dictionary.vim {{{
@@ -1436,7 +1441,7 @@ if neobundle#tap('unite.vim')
   nnoremap <silent> [Unite]l  :<C-u>Unite -prompt-direction=top -no-split line<CR>
   nnoremap <silent> [Unite]o  :<C-u>Unite -prompt-direction=top -no-split outline<CR>
   nnoremap <silent> [Unite]z  :<C-u>Unite -prompt-direction=top -no-split fold<CR>
-  nnoremap <silent> [Unite]q  :<C-u>Unite -prompt-direction=top -no-quit -horizontal quickfix<CR>
+  nnoremap <silent> [Unite]q  :<C-u>Unite -prompt-direction=top -no-quit  quickfix<CR>
 
   if IsWindows()
     nnoremap <silent> [Unite]m  :<C-u>Unite -prompt-direction=top -no-split neomru/file everything<CR>
