@@ -110,13 +110,13 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'thinca/vim-qfreplace'
   NeoBundleLazy 'terryma/vim-expand-region'
   NeoBundleLazy 'junegunn/vim-easy-align'
-  NeoBundleLazy 'kana/vim-smartinput', { 'depends': ['cohama/vim-smartinput-endwise'] }
+  NeoBundleLazy 'kana/vim-smartinput'
 
   " 補完
   NeoBundleLazy 'Shougo/neosnippet-snippets'
-  NeoBundleLazy 'Shougo/neocomplete.vim', { 'depends': ['Shougo/vimproc'] }
-  NeoBundleLazy 'Shougo/neosnippet.vim',  { 'depends': ['Shougo/neosnippet-snippets', 'Shougo/neocomplete.vim'] }
-  NeoBundleLazy 'nosami/Omnisharp',       { 'depends': ['Shougo/neocomplete.vim',     'Shougo/vimproc',         'scrooloose/syntastic'] }
+  NeoBundleLazy 'Shougo/neocomplete.vim'
+  NeoBundleLazy 'Shougo/neosnippet.vim'
+  NeoBundleLazy 'nosami/Omnisharp'
 
   " ファイル
   NeoBundleLazy 'kana/vim-altr'
@@ -144,27 +144,26 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'pangloss/vim-javascript'
   NeoBundleLazy 'kchmck/vim-coffee-script'
   NeoBundleLazy 'jelera/vim-javascript-syntax'
-  NeoBundleLazy 'rhysd/wandbox-vim',             { 'depends': ['Shougo/vimproc'] }
-  NeoBundleLazy 'thinca/vim-quickrun',           { 'depends': ['osyo-manga/shabadou.vim', 'rhysd/wandbox-vim', 'Shougo/vimproc'] }
+  NeoBundleLazy 'rhysd/wandbox-vim'
+  NeoBundleLazy 'thinca/vim-quickrun'
 
   " テキストオブジェクト
   NeoBundleLazy 'kana/vim-textobj-user'
-  NeoBundleLazy 'kana/vim-textobj-entire',       { 'depends': ['kana/vim-textobj-user'] }
-  NeoBundleLazy 'kana/vim-textobj-indent',       { 'depends': ['kana/vim-textobj-user'] }
-  NeoBundleLazy 'kana/vim-textobj-line',         { 'depends': ['kana/vim-textobj-user'] }
-  NeoBundleLazy 'rhysd/vim-textobj-word-column', { 'depends': ['kana/vim-textobj-user'] }
-  NeoBundleLazy 'thinca/vim-textobj-comment',    { 'depends': ['kana/vim-textobj-user'] }
-  NeoBundleLazy 'sgur/vim-textobj-parameter',    { 'depends': ['kana/vim-textobj-user'] }
-  NeoBundleLazy 'rhysd/vim-textobj-anyblock',    { 'depends': ['kana/vim-textobj-user'] }
-  NeoBundleLazy 'thinca/vim-textobj-between',    { 'depends': ['kana/vim-textobj-user'] }
-  NeoBundleLazy 'h1mesuke/textobj-wiw',          { 'depends': ['kana/vim-textobj-user'] }
+  NeoBundleLazy 'kana/vim-textobj-entire'
+  NeoBundleLazy 'kana/vim-textobj-indent'
+  NeoBundleLazy 'kana/vim-textobj-line'
+  NeoBundleLazy 'rhysd/vim-textobj-word-column'
+  NeoBundleLazy 'thinca/vim-textobj-comment'
+  NeoBundleLazy 'sgur/vim-textobj-parameter'
+  NeoBundleLazy 'rhysd/vim-textobj-anyblock'
+  NeoBundleLazy 'h1mesuke/textobj-wiw'
 
   " オペレータ
   NeoBundleLazy 'kana/vim-operator-user'
-  NeoBundleLazy 'kana/vim-operator-replace',  { 'depends': ['kana/vim-operator-user'] }
-  NeoBundleLazy 'tyru/operator-camelize.vim', { 'depends': ['kana/vim-operator-user'] }
-  NeoBundleLazy 'emonkak/vim-operator-sort',  { 'depends': ['kana/vim-operator-user'] }
-  NeoBundleLazy 'deris/vim-rengbang',         { 'depends': ['kana/vim-operator-user'] }
+  NeoBundleLazy 'kana/vim-operator-replace'
+  NeoBundleLazy 'tyru/operator-camelize.vim'
+  NeoBundleLazy 'emonkak/vim-operator-sort'
+  NeoBundleLazy 'deris/vim-rengbang'
 
   " アプリ
   NeoBundleLazy 'Shougo/vimproc'
@@ -174,10 +173,10 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'mattn/benchvimrc-vim'
   NeoBundleLazy 'tpope/vim-fugitive'
   NeoBundleLazy 'mattn/webapi-vim'
-  NeoBundleLazy 'Shougo/vimshell.vim',   { 'depends': ['Shougo/vimproc'] }
-  NeoBundleLazy 'tyru/open-browser.vim', { 'depends': ['Shougo/vimproc'] }
-  NeoBundleLazy 'Shougo/vimfiler.vim',   { 'depends': ['Shougo/vimproc', 'Shougo/unite.vim',    'Shougo/vimshell.vim'] }
-  NeoBundleLazy 'basyura/TweetVim',      { 'depends': ['Shougo/vimproc', 'basyura/twibill.vim', 'tyru/open-browser.vim', 'mattn/webapi-vim'] }
+  NeoBundleLazy 'Shougo/vimshell.vim'
+  NeoBundleLazy 'tyru/open-browser.vim'
+  NeoBundleLazy 'Shougo/vimfiler.vim'
+  NeoBundleLazy 'basyura/TweetVim'
   if IsMac()
     NeoBundleLazy 'itchyny/dictionary.vim'
   endif
@@ -186,14 +185,14 @@ function! s:SetNeoBundle() " {{{
   endif
 
   " Unite
-  NeoBundleLazy 'Shougo/unite.vim',          { 'depends': ['Shougo/vimproc']   }
-  NeoBundleLazy 'Shougo/unite-outline',      { 'depends': ['Shougo/unite.vim'] }
-  NeoBundleLazy 'osyo-manga/unite-quickfix', { 'depends': ['Shougo/unite.vim'] }
-  NeoBundleLazy 'osyo-manga/unite-fold',     { 'depends': ['Shougo/unite.vim'] }
-  NeoBundleLazy 'Shougo/neomru.vim',         { 'depends': ['Shougo/unite.vim'] }
+  NeoBundleLazy 'Shougo/unite.vim'
+  NeoBundleLazy 'Shougo/unite-outline'
+  NeoBundleLazy 'osyo-manga/unite-quickfix'
+  NeoBundleLazy 'osyo-manga/unite-fold'
+  NeoBundleLazy 'Shougo/neomru.vim'
 
   if IsWindows()
-    NeoBundleLazy 'sgur/unite-everything',   { 'depends': ['Shougo/unite.vim'] }
+    NeoBundleLazy 'sgur/unite-everything'
   endif
 endfunction " }}}
 
@@ -207,9 +206,7 @@ if neobundle#has_cache()
   NeoBundleLoadCache
 else
   NeoBundleFetch 'Shougo/neobundle.vim'
-
   call s:SetNeoBundle()
-
   NeoBundleSaveCache
 endif
 
@@ -219,7 +216,7 @@ call neobundle#end()
 " tagbar {{{
 if neobundle#tap('tagbar')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'commands': ['TagbarToggle']
         \   }
         \ })
@@ -242,7 +239,7 @@ endif
 " foldCC {{{
 if neobundle#tap('foldCC')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'filetypes': ['vim']
         \   }
         \ })
@@ -258,7 +255,7 @@ endif
 " movewin.vim {{{
 if neobundle#tap('movewin.vim')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'commands': ['MoveWin']
         \   }
         \ })
@@ -501,7 +498,7 @@ augroup END
 " vim-easy-align {{{
 if neobundle#tap('vim-easy-align')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'commands': ['EasyAlign', 'LiveEasyAlign'],
         \     'mappings': [
         \       '<Plug>(EasyAlignOperator)',
@@ -530,7 +527,7 @@ endif
 " yankround {{{
 if neobundle#tap('yankround.vim')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'mappings': ['<Plug>(yankround-'],
         \   }
         \ })
@@ -554,7 +551,8 @@ endif
 " vim-smartinput {{{
 if neobundle#tap('vim-smartinput')
   call neobundle#config({
-        \   'autoload' : {
+        \   'depends':  ['cohama/vim-smartinput-endwise'],
+        \   'autoload': {
         \     'insert': 1,
         \   }
         \ })
@@ -563,7 +561,7 @@ endif
 " vim-smartinput-endwise {{{
 if neobundle#tap('vim-smartinput-endwise')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'insert': 1,
         \   }
         \ })
@@ -576,7 +574,7 @@ endif
 " increment-activator {{{
 if neobundle#tap('increment-activator')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'mappings': ['<C-x>', '<C-a>']
         \   }
         \ })
@@ -593,7 +591,7 @@ endif
 " vim-over {{{
 if neobundle#tap('vim-over')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'commands': ['OverCommandLineNoremap', 'OverCommandLine']
         \   }
         \ })
@@ -610,7 +608,7 @@ endif
 " vim-qfreplace' {{{
 if neobundle#tap('vim-qfreplace')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'filetypes': ['unite', 'quickfix'],
         \     'commands':  ['Qfreplace']
         \   }
@@ -620,7 +618,7 @@ endif
 " vim-expand-region {{{
 if neobundle#tap('vim-expand-region')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'mappings': [['sxn', '<Plug>(expand_region_']]
         \   }
         \ })
@@ -643,7 +641,8 @@ endif
 " neocomplete.vim {{{
 if neobundle#tap('neocomplete.vim')
   call neobundle#config({
-        \   'autoload' : {
+        \   'depends':  ['Shougo/vimproc'],
+        \   'autoload': {
         \     'insert': 1,
         \   }
         \ })
@@ -719,7 +718,8 @@ endif
 " neosnippet.vim {{{
 if neobundle#tap('neosnippet.vim')
   call neobundle#config({
-        \   'autoload' : {
+        \   'depends':  ['Shougo/neosnippet-snippets', 'Shougo/neocomplete.vim'],
+        \   'autoload': {
         \     'insert': 1,
         \     'filetypes': ['neosnippet'],
         \     'commands': [
@@ -775,6 +775,7 @@ endif
 " Omnisharp {{{
 if neobundle#tap('Omnisharp')
   call neobundle#config({
+        \   'depends':  ['Shougo/neocomplete.vim', 'Shougo/vimproc', 'scrooloose/syntastic'],
         \   'autoload': {
         \     'filetypes': ['cs']
         \   },
@@ -797,7 +798,7 @@ endif
 " ファイル {{{
 if neobundle#tap('vim-altr')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'mappings': [['scxino', '<Plug>(altr-']]
         \   }
         \ })
@@ -863,7 +864,7 @@ endif
 " clever-f.vim {{{
 if neobundle#tap('clever-f.vim')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'mappings': 'f',
         \   }
         \ })
@@ -882,7 +883,7 @@ endif
 " vim-visualstar {{{
 if neobundle#tap('vim-visualstar')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'mappings': ['<Plug>(visualstar-']
         \   }
         \ })
@@ -900,7 +901,7 @@ endif
 " syntastic {{{
 if neobundle#tap('syntastic')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'filetypes': ['go', 'ruby']
         \   }
         \ })
@@ -924,7 +925,7 @@ endif
 " clang_complete {{{
 if neobundle#tap('clang_complete')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'filetypes': ['c', 'cpp', 'objc']
         \   }
         \ })
@@ -948,7 +949,7 @@ endif
 " vim-clang-format {{{
 if neobundle#tap('vim-clang-format')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'filetypes': ['c', 'cpp', 'objc']
         \   }
         \ })
@@ -980,7 +981,8 @@ endif
 " wandbox-vim {{{
 if neobundle#tap('wandbox-vim')
   call neobundle#config({
-        \   'autoload' : {
+        \   'depends':  ['Shougo/vimproc'],
+        \   'autoload': {
         \     'filetypes': ['c', 'cpp', 'objc'],
         \     'commands': [
         \       {
@@ -1018,7 +1020,8 @@ endif
 " vim-quickrun {{{
 if neobundle#tap('vim-quickrun')
   call neobundle#config({
-        \   'autoload' : {
+        \   'depends':  ['osyo-manga/shabadou.vim', 'rhysd/wandbox-vim', 'Shougo/vimproc'],
+        \   'autoload': {
         \     'mappings': [['sxn', '<Plug>(quickrun']],
         \     'commands': [
         \       {
@@ -1064,7 +1067,7 @@ endif
 " vim-markdown {{{
 if neobundle#tap('vim-markdown')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'filetypes': ['markdown', 'mkd']
         \   }
         \ })
@@ -1079,7 +1082,7 @@ endif
 " cpp-vim {{{
 if neobundle#tap('cpp-vim')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'filetypes': ['cpp']
         \   }
         \ })
@@ -1090,7 +1093,7 @@ endif
 " vim-gocode {{{
 if neobundle#tap('vim-gocode')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'filetypes': ['go']
         \   }
         \ })
@@ -1101,7 +1104,7 @@ endif
 " vim-godef {{{
 if neobundle#tap('vim-godef')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'filetypes': ['go']
         \   }
         \ })
@@ -1112,7 +1115,7 @@ endif
 " STL-Syntax {{{
 if neobundle#tap('STL-Syntax')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'filetypes': ['cpp']
         \   }
         \ })
@@ -1123,7 +1126,7 @@ endif
 " hlsl.vim {{{
 if neobundle#tap('hlsl.vim')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'filetypes': ['hlsl']
         \   }
         \ })
@@ -1134,7 +1137,7 @@ endif
 " vim-glsl {{{
 if neobundle#tap('vim-glsl')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'filetypes': ['glsl']
         \   }
         \ })
@@ -1145,7 +1148,7 @@ endif
 " vim-ruby {{{
 if neobundle#tap('vim-ruby')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'filetypes': ['ruby']
         \   }
         \ })
@@ -1156,7 +1159,7 @@ endif
 " JSON.vim {{{
 if neobundle#tap('JSON.vim')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'filetypes': ['json']
         \   }
         \ })
@@ -1167,7 +1170,7 @@ endif
 " vim-javascript {{{
 if neobundle#tap('vim-javascript.vim')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'filetypes': ['javascript']
         \   }
         \ })
@@ -1178,7 +1181,7 @@ endif
 " vim-coffee-script {{{
 if neobundle#tap('vim-coffee-script')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'filetypes': ['coffee']
         \   }
         \ })
@@ -1189,7 +1192,7 @@ endif
 " vim-javascript-syntax {{{
 if neobundle#tap('vim-javascript-syntax')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'filetypes': ['javascript']
         \   }
         \ })
@@ -1203,7 +1206,8 @@ endif
 " vim-textobj-entire {{{
 if neobundle#tap('vim-textobj-entire')
   call neobundle#config({
-        \   'autoload' : {
+        \   'depends':  ['kana/vim-textobj-user'],
+        \   'autoload': {
         \     'mappings': [['xo', 'ae'], ['xo', 'ie']]
         \   }
         \ })
@@ -1214,7 +1218,8 @@ endif
 " vim-textobj-indent {{{
 if neobundle#tap('vim-textobj-indent')
   call neobundle#config({
-        \   'autoload' : {
+        \   'depends':  ['kana/vim-textobj-user'],
+        \   'autoload': {
         \     'mappings': [['xo', 'ai'], ['xo', 'aI'], ['xo', 'ii'], ['xo', 'iI']]
         \   }
         \ })
@@ -1225,7 +1230,8 @@ endif
 " vim-textobj-line {{{
 if neobundle#tap('vim-textobj-line')
   call neobundle#config({
-        \   'autoload' : {
+        \   'depends':  ['kana/vim-textobj-user'],
+        \   'autoload': {
         \     'mappings': [['xo', 'al'], ['xo', 'il']]
         \   }
         \ })
@@ -1236,7 +1242,8 @@ endif
 " vim-textobj-word-column {{{
 if neobundle#tap('vim-textobj-word-column')
   call neobundle#config({
-        \   'autoload' : {
+        \   'depends':  ['kana/vim-textobj-user'],
+        \   'autoload': {
         \     'mappings': [['xo', 'av'], ['xo', 'aV'], ['xo', 'iv'], ['xo', 'iV']]
         \   }
         \ })
@@ -1247,7 +1254,8 @@ endif
 " vim-textobj-comment {{{
 if neobundle#tap('vim-textobj-comment')
   call neobundle#config({
-        \   'autoload' : {
+        \   'depends':  ['kana/vim-textobj-user'],
+        \   'autoload': {
         \     'mappings': [['xo', 'ac'], ['xo', 'ic']]
         \   }
         \ })
@@ -1258,7 +1266,8 @@ endif
 " vim-textobj-parameter {{{
 if neobundle#tap('vim-textobj-parameter')
   call neobundle#config({
-        \   'autoload' : {
+        \   'depends':  ['kana/vim-textobj-user'],
+        \   'autoload': {
         \     'mappings': [['xo', '<Plug>(textobj-parameter']]
         \   }
         \ })
@@ -1274,19 +1283,9 @@ endif
 " vim-textobj-anyblock {{{
 if neobundle#tap('vim-textobj-anyblock')
   call neobundle#config({
-        \   'autoload' : {
+        \   'depends':  ['kana/vim-textobj-user'],
+        \   'autoload': {
         \     'mappings': [['xo', 'ab'], ['xo', 'ib']]
-        \   }
-        \ })
-
-  call neobundle#untap()
-endif
-" }}}
-" vim-textobj-between {{{
-if neobundle#tap('vim-textobj-between')
-  call neobundle#config({
-        \   'autoload' : {
-        \     'mappings': [['xo', 'af'], ['xo', 'if']]
         \   }
         \ })
 
@@ -1296,7 +1295,8 @@ endif
 " textobj-wiw {{{
 if neobundle#tap('textobj-wiw')
   call neobundle#config({
-        \   'autoload' : {
+        \   'depends':  ['kana/vim-textobj-user'],
+        \   'autoload': {
         \     'mappings': [['xo', '<Plug>(textobj-wiw']]
         \   }
         \ })
@@ -1315,7 +1315,8 @@ endif
 " vim-operator-replace {{{
 if neobundle#tap('vim-operator-replace')
   call neobundle#config({
-        \   'autoload' : {
+        \   'depends':  ['kana/vim-operator-user'],
+        \   'autoload': {
         \     'mappings': [['nx', '<Plug>(operator-replace)']]
         \   }
         \ })
@@ -1329,7 +1330,8 @@ endif
 " operator-camelize.vim {{{
 if neobundle#tap('operator-camelize.vim')
   call neobundle#config({
-        \   'autoload' : {
+        \   'depends':  ['kana/vim-operator-user'],
+        \   'autoload': {
         \     'mappings': [['nx', '<Plug>(operator-camelize-toggle)']]
         \   }
         \ })
@@ -1343,11 +1345,12 @@ endif
 " vim-operator-sort {{{
 if neobundle#tap('vim-operator-sort')
   call neobundle#config({
-        \   'autoload' : {
+        \   'depends':  ['kana/vim-operator-user'],
+        \   'autoload': {
         \     'mappings': [['nx', '<Plug>(operator-sort']]
         \   }
         \ })
-  
+
   nmap <Leader>o <Plug>(operator-sort)
   xmap <Leader>o <Plug>(operator-sort)
 
@@ -1357,7 +1360,8 @@ endif
 " vim-rengbang {{{
 if neobundle#tap('vim-vim-rengbang-sort')
   call neobundle#config({
-        \   'autoload' : {
+        \   'depends':  ['kana/vim-operator-user'],
+        \   'autoload': {
         \     'commands': ['RengBang'],
         \     'mappings': [['nx', '<Plug>(operator-rengbang']]
         \   }
@@ -1389,7 +1393,7 @@ endif
 " nebula.vim {{{
 if neobundle#tap('nebula.vim')
   call neobundle#config({
-        \   'autoload' : {
+        \   'autoload': {
         \     'commands': [
         \       'NebulaPutLazy',
         \       'NebulaPutFromClipboard',
@@ -1407,7 +1411,8 @@ endif
 " vimshell.vim {{{
 if neobundle#tap('vimshell.vim')
   call neobundle#config({
-        \   'autoload' : {
+        \   'depends':  ['Shougo/vimproc'],
+        \   'autoload': {
         \     'commands' : [ 'VimShell', 'VimShellPop' ]
         \   }
         \ })
@@ -1424,7 +1429,8 @@ endif
 " vimfiler.vim {{{
 if neobundle#tap('vimfiler.vim')
   call neobundle#config({
-        \   'autoload' : {
+        \   'depends':  ['Shougo/vimproc', 'Shougo/unite.vim', 'Shougo/vimshell.vim'],
+        \   'autoload': {
         \     'commands': ['VimFilerBufferDir'],
         \   }
         \ })
@@ -1510,6 +1516,7 @@ endif
 " Tweetvim {{{
 if neobundle#tap('TweetVim')
   call neobundle#config({
+        \   'depends':  ['Shougo/vimproc', 'basyura/twibill.vim', 'tyru/open-browser.vim', 'mattn/webapi-vim'],
         \   'autoload': {
         \     'commands': ['TweetVimHomeTimeline', 'TweetVimUserStream']
         \   }
@@ -1571,6 +1578,7 @@ endif
 " open-browser.vim {{{
 if neobundle#tap('open-browser.vim')
   call neobundle#config({
+        \   'depends':  ['Shougo/vimproc'],
         \   'autoload': {
         \     'mappings': ['<Plug>(openbrowser-'],
         \     'commands': [
@@ -1611,13 +1619,13 @@ if IsMac()
   endif
 endif
 " }}}
-
 " }}}
 " }}}
 " Unite {{{
 " unite.vim {{{
 if neobundle#tap('unite.vim')
   call neobundle#config({
+        \   'depends':  ['Shougo/vimproc'],
         \   'autoload': {
         \     'commands': ['Unite', 'UniteResume', 'UniteWithCursorWord']
         \   }
@@ -1688,7 +1696,8 @@ endif
 " unite-outline {{{
 if neobundle#tap('unite-outline')
   call neobundle#config({
-        \   'autoload' : {
+        \   'depends':  ['Shougo/unite.vim'],
+        \   'autoload': {
         \     'unite_sources': ['outline']
         \   }
         \ })
@@ -1699,7 +1708,8 @@ endif
 " unite-quickfix {{{
 if neobundle#tap('unite-quickfix')
   call neobundle#config({
-        \   'autoload' : {
+        \   'depends':  ['Shougo/unite.vim'],
+        \   'autoload': {
         \     'unite_sources': ['quickfix']
         \   }
         \ })
@@ -1710,7 +1720,8 @@ endif
 " unite-fold {{{
 if neobundle#tap('unite-fold')
   call neobundle#config({
-        \   'autoload' : {
+        \   'depends':  ['Shougo/unite.vim'],
+        \   'autoload': {
         \     'unite_sources': ['fold']
         \   }
         \ })
@@ -1721,7 +1732,8 @@ endif
 " neomru.vim {{{
 if neobundle#tap('neomru.vim')
   call neobundle#config({
-        \   'autoload' : {
+        \   'depends':  ['Shougo/unite.vim'],
+        \   'autoload': {
         \     'unite_sources': ['neomru/file']
         \   }
         \ })
@@ -1738,7 +1750,8 @@ endif
 if IsWindows()
   if neobundle#tap('unite-everything')
     call neobundle#config({
-          \   'autoload' : {
+          \   'depends':  ['Shougo/unite.vim'],
+          \   'autoload': {
           \     'unite_sources': ['everything', 'everything/async'],
           \   }
           \ })
