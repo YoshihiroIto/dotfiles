@@ -492,111 +492,20 @@ function! s:SetNeoBundle() " {{{
         \ }
   " }}}
   " アプリ {{{
+  NeoBundleLazy 'Shougo/vimproc'
   NeoBundleLazy 'basyura/twibill.vim'
-
-  NeoBundleLazy 'LeafCage/nebula.vim', {
-        \   'autoload': {
-        \     'commands': [
-        \       'NebulaPutLazy',
-        \       'NebulaPutFromClipboard',
-        \       'NebulaYankOptions',
-        \       'NebulaYankConfig',
-        \       'NebulaPutConfig',
-        \       'NebulaYankTap'
-        \     ]
-        \   }
-        \ }
-
-  NeoBundleLazy 'tsukkee/lingr-vim', {
-        \   'autoload': {
-        \     'commands': ['LingrLaunch']
-        \   }
-        \ }
-
-  NeoBundleLazy 'mattn/benchvimrc-vim', {
-        \   'autoload': {
-        \     'commands': ['BenchVimrc']
-        \   }
-        \ }
-
-  NeoBundleLazy 'Shougo/vimfiler', {
-        \   'depends':  ['Shougo/vimproc', 'Shougo/unite.vim', 'Shougo/vimshell.vim'],
-        \   'autoload': {
-        \     'commands': ['VimFilerBufferDir'],
-        \     'explorer': 1
-        \   }
-        \ }
-
-  NeoBundleLazy 'Shougo/vimshell.vim', {
-        \   'depends':  ['Shougo/vimproc'],
-        \   'autoload': {
-        \     'commands': ['VimShell', 'VimShellPop']
-        \   }
-        \ }
-
-  NeoBundleLazy 'basyura/TweetVim', {
-        \   'depends':  [
-        \     'Shougo/vimproc',
-        \     'basyura/twibill.vim',
-        \     'tyru/open-browser.vim',
-        \     'mattn/webapi-vim',
-        \   ],
-        \   'autoload': {
-        \     'commands': ['TweetVimHomeTimeline', 'TweetVimUserStream']
-        \   }
-        \ }
-
-  NeoBundleLazy 'tpope/vim-fugitive', {
-        \   'autoload': {
-        \     'function_prefix': 'fugitive'
-        \   }
-        \ }
-
-  NeoBundleLazy 'Shougo/vimproc', {
-        \   'autoload': {
-        \     'function_prefix': 'vimproc',
-        \   },
-        \   'build': {
-        \     'mac':  'make -f make_mac.mak',
-        \     'unix': 'make -f make_unix.mak',
-        \   },
-        \ }
-
-  NeoBundleLazy 'mattn/webapi-vim', {
-        \   'autoload': {
-        \     'function_prefix': 'webapi'
-        \   }
-        \ }
-
-  NeoBundleLazy 'tyru/open-browser.vim', {
-        \   'depends':  ['Shougo/vimproc'],
-        \   'autoload': {
-        \     'mappings': ['<Plug>(openbrowser-'],
-        \     'commands': [
-        \       {
-        \         'name':     'OpenBrowserSearch',
-        \         'complete': 'customlist,openbrowser#_cmd_complete'
-        \       },
-        \       {
-        \         'name':     'OpenBrowserSmartSearch',
-        \         'complete': 'customlist,openbrowser#_cmd_complete'
-        \       },
-        \       {
-        \         'name':     'OpenBrowser',
-        \         'complete': 'file'
-        \       }
-        \     ],
-        \   }
-        \ }
-
+  NeoBundleLazy 'LeafCage/nebula.vim'
+  NeoBundleLazy 'tsukkee/lingr-vim'
+  NeoBundleLazy 'mattn/benchvimrc-vim'
+  NeoBundleLazy 'tpope/vim-fugitive'
+  NeoBundleLazy 'mattn/webapi-vim'
+  NeoBundleLazy 'Shougo/vimshell.vim',   { 'depends': ['Shougo/vimproc'] }
+  NeoBundleLazy 'tyru/open-browser.vim', { 'depends': ['Shougo/vimproc'] }
+  NeoBundleLazy 'Shougo/vimfiler.vim',   { 'depends': ['Shougo/vimproc', 'Shougo/unite.vim',    'Shougo/vimshell.vim'] }
+  NeoBundleLazy 'basyura/TweetVim',      { 'depends': ['Shougo/vimproc', 'basyura/twibill.vim', 'tyru/open-browser.vim', 'mattn/webapi-vim'] }
   if IsMac()
-    NeoBundleLazy 'itchyny/dictionary.vim', {
-          \   'autoload': {
-          \     'commands': ['Dictionary']
-          \   }
-          \ }
+    NeoBundleLazy 'itchyny/dictionary.vim'
   endif
-
   if IsWindows() && IsGuiRunning()
     NeoBundleLazy 'YoshihiroIto/vim-icondrag'
   endif
@@ -1300,6 +1209,39 @@ nmap <silent> <Leader><Leader> <Plug>(operator-jump-toggle)ai:<C-u>call <SID>Ref
 " }}}
 " }}}
 " アプリ {{{
+" vimproc {{{
+if neobundle#tap('vimproc')
+  call neobundle#config({
+        \   'autoload': {
+        \     'function_prefix': 'vimproc',
+        \   },
+        \   'build': {
+        \     'mac':  'make -f make_mac.mak',
+        \     'unix': 'make -f make_unix.mak',
+        \   },
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" nebula.vim {{{
+if neobundle#tap('nebula.vim')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'commands': [
+        \       'NebulaPutLazy',
+        \       'NebulaPutFromClipboard',
+        \       'NebulaYankOptions',
+        \       'NebulaYankConfig',
+        \       'NebulaPutConfig',
+        \       'NebulaYankTap'
+        \     ]
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
 " open-browser.vim {{{
 let g:netrw_nogx                   = 1 " disable netrw's gx mapping.
 let g:openbrowser_no_default_menus = 1
@@ -1308,100 +1250,207 @@ nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
 " }}}
 " vimshell.vim {{{
-noremap <silent> [App]s :<C-u>VimShellPop<CR>
+if neobundle#tap('vimshell.vim')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'commands' : [ 'VimShell', 'VimShellPop' ]
+        \   }
+        \ })
 
-let g:vimshell_popup_height = 40
-" }}}
-" VimFiler {{{
-noremap <silent> [App]f :<C-u>VimFilerBufferDir<CR>
+  noremap <silent> [App]s :<C-u>VimShellPop<CR>
 
-let s:bundle = neobundle#get('vimfiler')
-function! s:bundle.hooks.on_source(bundle)
-
-  augroup MyAutoGroup
-    autocmd FileType vimfiler call s:VimfilerMySettings()
-  augroup END
-
-  function! s:VimfilerMySettings()
-    nmap <buffer><expr> <Enter> vimfiler#smart_cursor_map("\<Plug>(vimfiler_cd_file)", "\<Plug>(vimfiler_edit_file)")
-    nmap <buffer><expr> <C-j>   vimfiler#smart_cursor_map("\<Plug>(vimfiler_exit)",    "\<Plug>(vimfiler_exit)")
-
-    " dotfile表示状態に設定
-    exe ':normal .'
+  function! neobundle#hooks.on_source(bundle)
+    let g:vimshell_popup_height = 40
   endfunction
 
-  let g:vimfiler_as_default_explorer        = 1
-  let g:vimfiler_force_overwrite_statusline = 0
-  let g:vimfiler_tree_leaf_icon             = ' '
-  let g:unite_kind_file_use_trashbox        = 1
-endfunction
-unlet s:bundle
+  call neobundle#untap()
+endif
 " }}}
-" lingr. vim {{{
-noremap <silent> [App]1 :<C-u>call <SID>ToggleLingr()<CR>
+" vimfiler.vim {{{
+if neobundle#tap('vimfiler.vim')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'commands': ['VimFilerBufferDir'],
+        \   }
+        \ })
 
-let s:bundle = neobundle#get('lingr-vim')
-function! s:bundle.hooks.on_source(bundle)
+  noremap <silent> [App]f :<C-u>VimFilerBufferDir<CR>
 
-  let g:lingr_vim_say_buffer_height = 15
+  function! neobundle#hooks.on_source(bundle)
+    augroup MyAutoGroup
+      autocmd FileType vimfiler call s:SetVimfiler()
 
-  augroup MyAutoGroup
-    autocmd FileType lingr-rooms    call s:SetLingr()
-    autocmd FileType lingr-members  call s:SetLingr()
-    autocmd FileType lingr-messages call s:SetLingr()
+      function! s:SetVimfiler()
+        nmap <buffer><expr> <Enter> vimfiler#smart_cursor_map("\<Plug>(vimfiler_cd_file)", "\<Plug>(vimfiler_edit_file)")
+        nmap <buffer><expr> <C-j>   vimfiler#smart_cursor_map("\<Plug>(vimfiler_exit)",    "\<Plug>(vimfiler_exit)")
 
-    function! s:SetLingr()
-      let b:disableSmartClose = 0
+        " dotfile表示状態に設定
+        exe ':normal .'
+      endfunction
+    augroup END
 
-      noremap  <silent><buffer> <Leader>w :<C-u>call <SID>ToggleLingr()<CR>
-      nnoremap <silent><buffer> q         :<C-u>call <SID>ToggleLingr()<CR>
+    let g:vimfiler_as_default_explorer        = 1
+    let g:vimfiler_force_overwrite_statusline = 0
+    let g:vimfiler_tree_leaf_icon             = ' '
+    let g:unite_kind_file_use_trashbox        = 1
+  endfunction
 
-      setlocal nolist
-    endfunction
-  augroup END
-endfunction
-unlet s:bundle
+  call neobundle#untap()
+endif
+" }}}
+" lingr-vim {{{
+if neobundle#tap('lingr-vim')
+  call neobundle#config({
+        \   'autoload': {
+        \     'commands': ['LingrLaunch']
+        \   }
+        \ })
 
-function! s:ToggleLingr()
-  if bufnr('lingr-messages') == -1
-    tabnew
-    LingrLaunch
-    exe 'wincmd l'
-  else
-    LingrExit
-  endif
-endfunction
+  noremap <silent> [App]1 :<C-u>call <SID>ToggleLingr()<CR>
+
+  function! neobundle#hooks.on_source(bundle)
+
+    let g:lingr_vim_say_buffer_height = 15
+
+    augroup MyAutoGroup
+      autocmd FileType lingr-rooms    call s:SetLingr()
+      autocmd FileType lingr-members  call s:SetLingr()
+      autocmd FileType lingr-messages call s:SetLingr()
+
+      function! s:SetLingr()
+        let b:disableSmartClose = 0
+
+        noremap  <silent><buffer> <Leader>w :<C-u>call <SID>ToggleLingr()<CR>
+        nnoremap <silent><buffer> q         :<C-u>call <SID>ToggleLingr()<CR>
+
+        setlocal nolist
+      endfunction
+    augroup END
+  endfunction
+
+  function! s:ToggleLingr()
+    if bufnr('lingr-messages') == -1
+      tabnew
+      LingrLaunch
+      exe 'wincmd l'
+    else
+      LingrExit
+    endif
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
+" benchvimrc-vim {{{
+if neobundle#tap('benchvimrc-vim')
+  call neobundle#config({
+        \   'autoload': {
+        \     'commands': ['BenchVimrc']
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
 " }}}
 " Tweetvim {{{
-noremap <silent> [App]2 :<C-u>call <SID>ToggleTweetVim()<CR>
+if neobundle#tap('TweetVim')
+  call neobundle#config({
+        \   'autoload': {
+        \     'commands': ['TweetVimHomeTimeline', 'TweetVimUserStream']
+        \   }
+        \ })
 
-function! s:ToggleTweetVim()
-  if bufnr('tweetvim') == -1
-    tabnew
-    TweetVimHomeTimeline
-  else
-    silent! exe 'bwipeout tweetvim'
+  noremap <silent> [App]2 :<C-u>call <SID>ToggleTweetVim()<CR>
+
+  function! neobundle#hooks.on_source(bundle)
+
+    let g:tweetvim_include_rts       = 1
+    let g:tweetvim_display_separator = 0
+    let g:tweetvim_tweet_per_page    = 35
+    let g:tweetvim_display_icon      = 1
+
+    augroup MyAutoGroup
+      autocmd FileType tweetvim call s:SetTweetVim()
+
+      function! s:SetTweetVim()
+        nmap     <silent><buffer> rr <Plug>(tweetvim_action_reload)
+        nnoremap <silent><buffer> q  :<C-u>call <SID>ToggleTweetVim()<CR>
+      endfunction
+    augroup END
+  endfunction
+
+  function! s:ToggleTweetVim()
+    if bufnr('tweetvim') == -1
+      tabnew
+      TweetVimHomeTimeline
+    else
+      silent! exe 'bwipeout tweetvim'
+    endif
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-fugitive {{{
+if neobundle#tap('vim-fugitive')
+  call neobundle#config({
+        \   'autoload': {
+        \     'function_prefix': 'fugitive'
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" webapi-vim {{{
+if neobundle#tap('webapi-vim')
+  call neobundle#config({
+        \   'autoload': {
+        \     'function_prefix': 'webapi'
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" open-browser.vim {{{
+if neobundle#tap('open-browser.vim')
+  call neobundle#config({
+        \   'autoload': {
+        \     'mappings': ['<Plug>(openbrowser-'],
+        \     'commands': [
+        \       {
+        \         'name':     'OpenBrowserSearch',
+        \         'complete': 'customlist,openbrowser#_cmd_complete'
+        \       },
+        \       {
+        \         'name':     'OpenBrowserSmartSearch',
+        \         'complete': 'customlist,openbrowser#_cmd_complete'
+        \       },
+        \       {
+        \         'name':     'OpenBrowser',
+        \         'complete': 'file'
+        \       }
+        \     ],
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" dictionary.vim {{{
+if IsMac()
+  if neobundle#tap('dictionary.vim')
+    call neobundle#config({
+          \   'autoload': {
+          \     'commands': ['Dictionary']
+          \   }
+          \ })
+
+    call neobundle#untap()
   endif
-endfunction
+endif
+" }}}
 
-let s:bundle = neobundle#get('TweetVim')
-function! s:bundle.hooks.on_source(bundle)
-
-  let g:tweetvim_include_rts       = 1
-  let g:tweetvim_display_separator = 0
-  let g:tweetvim_tweet_per_page    = 35
-  let g:tweetvim_display_icon      = 1
-
-  augroup MyAutoGroup
-    autocmd FileType tweetvim call s:SetTweetVim()
-
-    function! s:SetTweetVim()
-      nmap     <silent><buffer> rr <Plug>(tweetvim_action_reload)
-      nnoremap <silent><buffer> q  :<C-u>call <SID>ToggleTweetVim()<CR>
-    endfunction
-  augroup END
-endfunction
-unlet s:bundle
 " }}}
 " }}}
 " Unite {{{
