@@ -388,69 +388,15 @@ function! s:SetNeoBundle() " {{{
   " }}}
   " テキストオブジェクト {{{
   NeoBundleLazy 'kana/vim-textobj-user'
-
-  NeoBundleLazy 'kana/vim-textobj-entire', {
-        \   'depends':  ['kana/vim-textobj-user'],
-        \   'autoload': {
-        \     'mappings': [['xo', 'ae'], ['xo', 'ie']]
-        \   }
-        \ }
-
-  NeoBundleLazy 'kana/vim-textobj-indent', {
-        \   'depends':  ['kana/vim-textobj-user'],
-        \   'autoload': {
-        \     'mappings': [['xo', 'ai'], ['xo', 'aI'], ['xo', 'ii'], ['xo', 'iI']]
-        \   }
-        \ }
-
-  NeoBundleLazy 'kana/vim-textobj-line', {
-        \   'depends':  ['kana/vim-textobj-user'],
-        \   'autoload': {
-        \     'mappings': [['xo', 'al'], ['xo', 'il']]
-        \   }
-        \ }
-
-  NeoBundleLazy 'rhysd/vim-textobj-word-column', {
-        \   'depends':  ['kana/vim-textobj-user'],
-        \   'autoload': {
-        \     'mappings': [['xo', 'av'], ['xo', 'aV'], ['xo', 'iv'], ['xo', 'iV']]
-        \   }
-        \ }
-
-  NeoBundleLazy 'thinca/vim-textobj-comment', {
-        \   'depends':  ['kana/vim-textobj-user'],
-        \   'autoload': {
-        \     'mappings': [['xo', 'ac'], ['xo', 'ic']]
-        \   }
-        \ }
-
-  NeoBundleLazy 'sgur/vim-textobj-parameter', {
-        \   'depends':  ['kana/vim-textobj-user'],
-        \   'autoload': {
-        \     'mappings': [['xo', '<Plug>(textobj-parameter']]
-        \   }
-        \ }
-
-  NeoBundleLazy 'rhysd/vim-textobj-anyblock', {
-        \   'depends':  ['kana/vim-textobj-user'],
-        \   'autoload': {
-        \     'mappings': [['xo', 'ab'], ['xo', 'ib']]
-        \   }
-        \ }
-
-  NeoBundleLazy 'thinca/vim-textobj-between', {
-        \   'depends':  ['kana/vim-textobj-user'],
-        \   'autoload': {
-        \     'mappings': [['xo', 'af'], ['xo', 'if']]
-        \   }
-        \ }
-
-  NeoBundleLazy 'h1mesuke/textobj-wiw', {
-        \   'depends':  ['kana/vim-textobj-user'],
-        \   'autoload': {
-        \     'mappings': [['xo', '<Plug>(textobj-wiw']]
-        \   }
-        \ }
+  NeoBundleLazy 'kana/vim-textobj-entire',       { 'depends': ['kana/vim-textobj-user'] }
+  NeoBundleLazy 'kana/vim-textobj-indent',       { 'depends': ['kana/vim-textobj-user'] }
+  NeoBundleLazy 'kana/vim-textobj-line',         { 'depends': ['kana/vim-textobj-user'] }
+  NeoBundleLazy 'rhysd/vim-textobj-word-column', { 'depends': ['kana/vim-textobj-user'] }
+  NeoBundleLazy 'thinca/vim-textobj-comment',    { 'depends': ['kana/vim-textobj-user'] }
+  NeoBundleLazy 'sgur/vim-textobj-parameter',    { 'depends': ['kana/vim-textobj-user'] }
+  NeoBundleLazy 'rhysd/vim-textobj-anyblock',    { 'depends': ['kana/vim-textobj-user'] }
+  NeoBundleLazy 'thinca/vim-textobj-between',    { 'depends': ['kana/vim-textobj-user'] }
+  NeoBundleLazy 'h1mesuke/textobj-wiw',          { 'depends': ['kana/vim-textobj-user'] }
   " }}}
   " オペレータ {{{
   NeoBundleLazy 'kana/vim-operator-user'
@@ -1103,15 +1049,115 @@ let g:vim_markdown_folding_disabled = 0
 " }}}
 " テキストオブジェクト {{{
 " http://d.hatena.ne.jp/osyo-manga/20130717/1374069987
-xmap aa <Plug>(textobj-parameter-a)
-xmap ia <Plug>(textobj-parameter-i)
-omap aa <Plug>(textobj-parameter-a)
-omap ia <Plug>(textobj-parameter-i)
+" vim-textobj-entire {{{
+if neobundle#tap('vim-textobj-entire')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'mappings': [['xo', 'ae'], ['xo', 'ie']]
+        \   }
+        \ })
 
-xmap a. <Plug>(textobj-wiw-a)
-xmap i. <Plug>(textobj-wiw-i)
-omap a. <Plug>(textobj-wiw-a)
-omap i. <Plug>(textobj-wiw-i)
+  call neobundle#untap()
+endif
+" }}}
+" vim-textobj-indent {{{
+if neobundle#tap('vim-textobj-indent')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'mappings': [['xo', 'ai'], ['xo', 'aI'], ['xo', 'ii'], ['xo', 'iI']]
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-textobj-line {{{
+if neobundle#tap('vim-textobj-line')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'mappings': [['xo', 'al'], ['xo', 'il']]
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-textobj-word-column {{{
+if neobundle#tap('vim-textobj-word-column')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'mappings': [['xo', 'av'], ['xo', 'aV'], ['xo', 'iv'], ['xo', 'iV']]
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-textobj-comment {{{
+if neobundle#tap('vim-textobj-comment')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'mappings': [['xo', 'ac'], ['xo', 'ic']]
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-textobj-parameter {{{
+if neobundle#tap('vim-textobj-parameter')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'mappings': [['xo', '<Plug>(textobj-parameter']]
+        \   }
+        \ })
+
+  xmap aa <Plug>(textobj-parameter-a)
+  xmap ia <Plug>(textobj-parameter-i)
+  omap aa <Plug>(textobj-parameter-a)
+  omap ia <Plug>(textobj-parameter-i)
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-textobj-anyblock {{{
+if neobundle#tap('vim-textobj-anyblock')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'mappings': [['xo', 'ab'], ['xo', 'ib']]
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-textobj-between {{{
+if neobundle#tap('vim-textobj-between')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'mappings': [['xo', 'af'], ['xo', 'if']]
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" textobj-wiw {{{
+if neobundle#tap('textobj-wiw')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'mappings': [['xo', '<Plug>(textobj-wiw']]
+        \   }
+        \ })
+
+  xmap a. <Plug>(textobj-wiw-a)
+  xmap i. <Plug>(textobj-wiw-i)
+  omap a. <Plug>(textobj-wiw-a)
+  omap i. <Plug>(textobj-wiw-i)
+
+  call neobundle#untap()
+endif
+" }}}
 " }}}
 " オペレータ {{{
 " http://qiita.com/rbtnn/items/a47ed6684f1f0bc52906
