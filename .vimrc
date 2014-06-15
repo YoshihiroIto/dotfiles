@@ -796,6 +796,7 @@ endif
 " }}}
 " }}}
 " ファイル {{{
+" vim-altr {{{
 if neobundle#tap('vim-altr')
   call neobundle#config({
         \   'autoload': {
@@ -816,6 +817,7 @@ if neobundle#tap('vim-altr')
 
   call neobundle#untap()
 endif
+" }}}
 " }}}
 " 検索 {{{
 " vim-anzu {{{
