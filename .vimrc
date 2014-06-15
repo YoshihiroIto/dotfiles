@@ -1,7 +1,6 @@
 set nocompatible
 set encoding=utf-8
 scriptencoding utf-8
-
 " 基本 {{{
 " グローバル関数 {{{
 function! IsWindows()
@@ -211,7 +210,7 @@ else
 endif
 
 call neobundle#end()
-" }}}
+
 " 表示 {{{
 " tagbar {{{
 if neobundle#tap('tagbar')
@@ -556,6 +555,8 @@ if neobundle#tap('vim-smartinput')
         \     'insert': 1,
         \   }
         \ })
+
+  call neobundle#untap()
 endif
 " }}}
 " vim-smartinput-endwise {{{
@@ -569,6 +570,8 @@ if neobundle#tap('vim-smartinput-endwise')
   function! neobundle#hooks.on_source(bundle)
     call smartinput_endwise#define_default_rules()
   endfunction
+
+  call neobundle#untap()
 endif
 " }}}
 " increment-activator {{{
@@ -586,6 +589,8 @@ if neobundle#tap('increment-activator')
           \   'cpp': [['private', 'protected', 'public']],
           \ }
   endfunction
+
+  call neobundle#untap()
 endif
 " }}}
 " vim-over {{{
@@ -603,6 +608,8 @@ if neobundle#tap('vim-over')
           \   '\<C-j>': '\<Esc>',
           \ }
   endfunction
+
+  call neobundle#untap()
 endif
 " }}}
 " vim-qfreplace' {{{
@@ -613,6 +620,8 @@ if neobundle#tap('vim-qfreplace')
         \     'commands':  ['Qfreplace']
         \   }
         \ })
+
+  call neobundle#untap()
 endif
 " }}}
 " vim-expand-region {{{
@@ -634,6 +643,8 @@ if neobundle#tap('vim-expand-region')
           \   'ip': 0,
           \ }
   endfunction
+
+  call neobundle#untap()
 endif
 " }}}
 " }}}
@@ -711,8 +722,9 @@ if neobundle#tap('neocomplete.vim')
           \   'cpp': ['', 'h', 'hpp', 'hxx'],
           \   'cs':  ['', 'Designer.cs']
           \ }
-    call neobundle#untap()
   endfunction
+
+  call neobundle#untap()
 endif
 " }}}
 " neosnippet.vim {{{
@@ -1805,6 +1817,7 @@ augroup auto-source
 augroup END
 " }}}
 " }}}
+" }}}
 " キー無効 {{{
 " Vimを閉じない
 nnoremap ZZ <Nop>
@@ -2122,8 +2135,6 @@ set completeopt=longest,menuone
 set backspace=indent,eol,start
 
 noremap  U                  J
-nnoremap <Leader><C-k>      :<C-u>help<Space>
-nnoremap <Leader><C-k><C-k> :<C-u>help <C-r><C-w><CR>
 
 " ^Mを取り除く
 command! RemoveCr call s:ExecuteKeepView('silent! %substitute/\r$//g | nohlsearch')
@@ -2529,7 +2540,9 @@ nmap     <silent> G     GzOzz:<C-u>call   <SID>RefreshScreen()<CR>
 noremap  <silent> <C-i> <C-i>zz:<C-u>call <SID>RefreshScreen()<CR>
 noremap  <silent> <C-o> <C-o>zz:<C-u>call <SID>RefreshScreen()<CR>
 map      <silent> H     :<C-u>call <SID>DisableVirtualCursor()<CR>^:<C-u>call <SID>RefreshScreen()<CR>
-map      <silent> L     :<C-u>call <SID>DisableVirtualCursor()<CR>$:<C-u>call <SID>RefreshScreen()<CR>
+map      <silent> L     :<C-u>call <SID>DisableVirtualCursor()<CR>g$:<C-u>call <SID>RefreshScreen()<CR>
+
+nmap     <silent> <Leader>m `
 
 function! s:UpCursor(repeat)
   call s:EnableVirtualCursor()
@@ -2586,7 +2599,6 @@ endfunction
 augroup MyAutoGroup
   autocmd InsertEnter * call s:DisableVirtualCursor()
 augroup END
-
 " }}}
 " ウィンドウ操作 {{{
 set splitbelow                    " 縦分割したら新しいウィンドウは下に
@@ -2646,10 +2658,10 @@ nnoremap <silent> <F1> :<C-u>call <SID>SmartOpen($MYVIMRC)<CR>
 nnoremap <silent> <F2> :<C-u>call <SID>SmartOpen($MYGVIMRC)<CR>
 nnoremap <silent> <F3> :<C-u>source $MYVIMRC<CR>:<C-u>source $MYGVIMRC<CR>
 " }}}
-" マーク {{{
-nmap <silent> <Leader>m `
-" }}}
 " ヘルプ {{{
+nnoremap <Leader><C-k>      :<C-u>help<Space>
+nnoremap <Leader><C-k><C-k> :<C-u>help <C-r><C-w><CR>
+
 set helplang=ja,en
 set rtp+=$VIM/plugins/vimdoc-ja
 " }}}
