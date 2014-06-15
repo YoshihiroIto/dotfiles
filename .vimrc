@@ -511,55 +511,14 @@ function! s:SetNeoBundle() " {{{
   endif
   " }}}
   " Unite {{{
-  NeoBundleLazy 'Shougo/unite.vim', {
-        \   'depends':  ['Shougo/vimproc'],
-        \   'autoload': {
-        \     'commands': ['Unite', 'UniteResume', 'UniteWithCursorWord']
-        \   }
-        \ }
-
-  NeoBundleLazy 'Shougo/unite-outline', {
-        \   'depends':  ['Shougo/unite.vim'],
-        \   'autoload': {
-        \     'unite_sources': ['outline']
-        \   }
-        \ }
-
-  NeoBundleLazy 'tsukkee/unite-tag', {
-        \   'depends':  ['Shougo/unite.vim'],
-        \   'autoload': {
-        \     'unite_sources': ['tag']
-        \   }
-        \ }
-
-  NeoBundleLazy 'osyo-manga/unite-quickfix', {
-        \   'depends':  ['Shougo/unite.vim'],
-        \   'autoload': {
-        \     'unite_sources': ['quickfix']
-        \   }
-        \ }
-
-  NeoBundleLazy 'osyo-manga/unite-fold', {
-        \   'depends':  ['Shougo/unite.vim'],
-        \   'autoload': {
-        \     'unite_sources': ['fold']
-        \   }
-        \ }
-
-  NeoBundleLazy 'Shougo/neomru.vim', {
-        \   'depends':  ['Shougo/unite.vim'],
-        \   'autoload': {
-        \     'unite_sources': ['neomru/file']
-        \   }
-        \ }
+  NeoBundleLazy 'Shougo/unite.vim',          { 'depends': ['Shougo/vimproc']   }
+  NeoBundleLazy 'Shougo/unite-outline',      { 'depends': ['Shougo/unite.vim'] }
+  NeoBundleLazy 'osyo-manga/unite-quickfix', { 'depends': ['Shougo/unite.vim'] }
+  NeoBundleLazy 'osyo-manga/unite-fold',     { 'depends': ['Shougo/unite.vim'] }
+  NeoBundleLazy 'Shougo/neomru.vim',         { 'depends': ['Shougo/unite.vim'] }
 
   if IsWindows()
-    NeoBundleLazy 'sgur/unite-everything', {
-          \   'depends':  ['Shougo/unite.vim'],
-          \   'autoload': {
-          \     'unite_sources': ['everything', 'everything/async'],
-          \   }
-          \ }
+    NeoBundleLazy 'sgur/unite-everything',   { 'depends': ['Shougo/unite.vim'] }
   endif
   " }}}
 endfunction " }}}
@@ -1454,84 +1413,143 @@ endif
 " }}}
 " }}}
 " Unite {{{
-nnoremap [Unite] <Nop>
-xnoremap [Unite] <Nop>
-nmap     <Space> [Unite]
-xmap     <Space> [Unite]
+" unite.vim {{{
+if neobundle#tap('unite.vim')
+  call neobundle#config({
+        \   'autoload': {
+        \     'commands': ['Unite', 'UniteResume', 'UniteWithCursorWord']
+        \   }
+        \ })
 
-nnoremap <silent> [Unite]g  :<C-u>Unite grep -prompt-direction=top -auto-preview -no-split -buffer-name=search-buffer<CR>
-nnoremap <silent> [Unite]pg :<C-u>call <SID>unite_grep_project('-prompt-direction=top -auto-preview -no-split -buffer-name=search-buffer')<CR>
-nnoremap <silent> [Unite]r  :<C-u>UniteResume -prompt-direction=top -no-split search-buffer<CR>
+  nnoremap [Unite] <Nop>
+  xnoremap [Unite] <Nop>
+  nmap     <Space> [Unite]
+  xmap     <Space> [Unite]
 
-nnoremap <silent> [Unite]f  :<C-u>Unite -prompt-direction=top -no-split file<CR>
-nnoremap <silent> [Unite]b  :<C-u>Unite -prompt-direction=top -no-split buffer<CR>
-nnoremap <silent> [Unite]t  :<C-u>Unite -prompt-direction=top -no-split tab<CR>
-nnoremap <silent> [Unite]l  :<C-u>Unite -prompt-direction=top -no-split line<CR>
-nnoremap <silent> [Unite]o  :<C-u>Unite -prompt-direction=top -no-split outline<CR>
-nnoremap <silent> [Unite]z  :<C-u>Unite -prompt-direction=top -no-split fold<CR>
-nnoremap <silent> [Unite]q  :<C-u>Unite -prompt-direction=top -no-quit -horizontal quickfix<CR>
+  nnoremap <silent> [Unite]g  :<C-u>Unite grep -prompt-direction=top -auto-preview -no-split -buffer-name=search-buffer<CR>
+  nnoremap <silent> [Unite]pg :<C-u>call <SID>unite_grep_project('-prompt-direction=top -auto-preview -no-split -buffer-name=search-buffer')<CR>
+  nnoremap <silent> [Unite]r  :<C-u>UniteResume -prompt-direction=top -no-split search-buffer<CR>
 
-if IsWindows()
-  nnoremap <silent> [Unite]m  :<C-u>Unite -prompt-direction=top -no-split neomru/file everything<CR>
-  nnoremap <silent> [Unite]e  :<C-u>Unite -prompt-direction=top -no-split everything<CR>
-else
-  nnoremap <silent> [Unite]m  :<C-u>Unite -prompt-direction=top -no-split neomru/file<CR>
-endif
+  nnoremap <silent> [Unite]f  :<C-u>Unite -prompt-direction=top -no-split file<CR>
+  nnoremap <silent> [Unite]b  :<C-u>Unite -prompt-direction=top -no-split buffer<CR>
+  nnoremap <silent> [Unite]t  :<C-u>Unite -prompt-direction=top -no-split tab<CR>
+  nnoremap <silent> [Unite]l  :<C-u>Unite -prompt-direction=top -no-split line<CR>
+  nnoremap <silent> [Unite]o  :<C-u>Unite -prompt-direction=top -no-split outline<CR>
+  nnoremap <silent> [Unite]z  :<C-u>Unite -prompt-direction=top -no-split fold<CR>
+  nnoremap <silent> [Unite]q  :<C-u>Unite -prompt-direction=top -no-quit -horizontal quickfix<CR>
 
-nnoremap          [Unite]uu :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
-nnoremap          [Unite]ui :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
-nnoremap          [Unite]uc :<C-u>NeoBundleClearCache<CR>
-
-" http://sanrinsha.lolipop.jp/blog/2013/03/%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E5%86%85%E3%81%AE%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92unite-grep%E3%81%99%E3%82%8B.html
-function! s:unite_grep_project(...)
-  let opts = (a:0 ? join(a:000, ' ') : '')
-  let dir = unite#util#path2project_directory(expand('%'))
-  exe 'Unite' opts 'grep:' . dir
-endfunction
-
-let s:bundle = neobundle#get('unite.vim')
-function! s:bundle.hooks.on_source(bundle)
-
-  " let g:unite_winwidth = s:rightWindowWidth
-
-  let g:unite_enable_split_vertically         = 1
-  let g:unite_split_rule                      = 'rightbelow'
-
-  " insert modeで開始
-  let g:unite_enable_start_insert             = 1
-
-  let g:unite_force_overwrite_statusline = 0
-
-  call unite#custom#source('fold', 'matchers', 'matcher_migemo')
-
-  " http://blog.monochromegane.com/blog/2014/01/16/the-platinum-searcher/
-  " https://github.com/monochromegane/the_platinum_searcher
-  if executable('pt')
-    let g:unite_source_grep_command       = 'pt'
-    let g:unite_source_grep_default_opts  = '--nogroup --nocolor -S'
-    let g:unite_source_grep_recursive_opt = ''
-    let g:unite_source_grep_encoding      = 'utf-8'
+  if IsWindows()
+    nnoremap <silent> [Unite]m  :<C-u>Unite -prompt-direction=top -no-split neomru/file everything<CR>
+    nnoremap <silent> [Unite]e  :<C-u>Unite -prompt-direction=top -no-split everything<CR>
+  else
+    nnoremap <silent> [Unite]m  :<C-u>Unite -prompt-direction=top -no-split neomru/file<CR>
   endif
-endfunction
-unlet s:bundle
-" unite-everything {{{
-if IsWindows()
-  let s:bundle = neobundle#get('unite-everything')
-  function! s:bundle.hooks.on_source(bundle)
-    call unite#custom_max_candidates('everything', 300)
 
-    let g:unite_source_everything_full_path_search = 1
+  nnoremap          [Unite]uu :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
+  nnoremap          [Unite]ui :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
+  nnoremap          [Unite]uc :<C-u>NeoBundleClearCache<CR>
+
+  " http://sanrinsha.lolipop.jp/blog/2013/03/%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E5%86%85%E3%81%AE%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92unite-grep%E3%81%99%E3%82%8B.html
+  function! s:unite_grep_project(...)
+    let opts = (a:0 ? join(a:000, ' ') : '')
+    let dir = unite#util#path2project_directory(expand('%'))
+    exe 'Unite' opts 'grep:' . dir
   endfunction
-  unlet s:bundle
+
+  function! neobundle#hooks.on_source(bundle)
+
+    " let g:unite_winwidth = s:rightWindowWidth
+
+    let g:unite_enable_split_vertically         = 1
+    let g:unite_split_rule                      = 'rightbelow'
+
+    " insert modeで開始
+    let g:unite_enable_start_insert             = 1
+
+    let g:unite_force_overwrite_statusline = 0
+
+    call unite#custom#source('fold', 'matchers', 'matcher_migemo')
+
+    " http://blog.monochromegane.com/blog/2014/01/16/the-platinum-searcher/
+    " https://github.com/monochromegane/the_platinum_searcher
+    if executable('pt')
+      let g:unite_source_grep_command       = 'pt'
+      let g:unite_source_grep_default_opts  = '--nogroup --nocolor -S'
+      let g:unite_source_grep_recursive_opt = ''
+      let g:unite_source_grep_encoding      = 'utf-8'
+    endif
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
+" unite-outline {{{
+if neobundle#tap('unite-outline')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'unite_sources': ['outline']
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" unite-quickfix {{{
+if neobundle#tap('unite-quickfix')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'unite_sources': ['quickfix']
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" unite-fold {{{
+if neobundle#tap('unite-fold')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'unite_sources': ['fold']
+        \   }
+        \ })
+
+  call neobundle#untap()
 endif
 " }}}
 " neomru.vim {{{
-let s:bundle = neobundle#get('neomru.vim')
-function! s:bundle.hooks.on_source(bundle)
-  let g:neomru#update_interval = 1
-  let g:neomru#file_mru_limit  = 500
-endfunction
-unlet s:bundle
+if neobundle#tap('neomru.vim')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'unite_sources': ['neomru/file']
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    let g:neomru#update_interval = 1
+    let g:neomru#file_mru_limit  = 500
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
+" unite-everything {{{
+if IsWindows()
+  if neobundle#tap('unite-everything')
+    call neobundle#config({
+          \   'autoload' : {
+          \     'unite_sources': ['everything', 'everything/async'],
+          \   }
+          \ })
+
+    function! neobundle#hooks.on_source(bundle)
+      call unite#custom_max_candidates('everything', 300)
+
+      let g:unite_source_everything_full_path_search = 1
+    endfunction
+
+    call neobundle#untap()
+  endif
+endif
 " }}}
 " }}}
 " その他 {{{
