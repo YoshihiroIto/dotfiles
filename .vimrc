@@ -241,20 +241,10 @@ function! s:SetNeoBundle() " {{{
         \ }
   " }}}
   " 検索 {{{
-  NeoBundleLazy 'osyo-manga/vim-anzu'
   NeoBundleLazy 'matchit.zip'
-
-  NeoBundleLazy 'rhysd/clever-f.vim', {
-        \   'autoload': {
-        \     'mappings': 'f',
-        \   }
-        \ }
-
-  NeoBundleLazy 'thinca/vim-visualstar', {
-        \   'autoload': {
-        \     'mappings': ['<Plug>(visualstar-']
-        \   }
-        \ }
+  NeoBundleLazy 'osyo-manga/vim-anzu'
+  NeoBundleLazy 'rhysd/clever-f.vim'
+  NeoBundleLazy 'thinca/vim-visualstar'
   " }}}
   " 言語 {{{
   NeoBundleLazy 'scrooloose/syntastic'
@@ -778,59 +768,83 @@ endfunction
 unlet s:bundle
 " }}}
 " 検索 {{{
+" vim-anzu {{{
+if neobundle#tap('vim-anzu')
+
+  nmap <silent> n <Plug>(anzu-n)zOzz:<C-u>call <SID>BeginDisplayAnzu()<CR>:<C-u>call <SID>RefreshScreen()<CR>
+  nmap <silent> N <Plug>(anzu-N)zOzz:<C-u>call <SID>BeginDisplayAnzu()<CR>:<C-u>call <SID>RefreshScreen()<CR>
+  nmap <silent> * <Plug>(anzu-star):<C-u>call  <SID>RefreshScreen()<CR>
+  nmap <silent> # <Plug>(anzu-sharp):<C-u>call <SID>RefreshScreen()<CR>
+
+  function! neobundle#hooks.on_source(bundle)
+    augroup MyAutoGroup
+      " 一定時間キー入力がないとき、ウインドウを移動したとき、タブを移動したときに
+      " 検索ヒット数の表示を消去する
+      autocmd CursorHold,CursorHoldI * call s:UpdateDisplayAnzu()
+      autocmd WinLeave,TabLeave      * call s:ClearDisplayAnzu()
+
+      " anzuを表示する時間
+      let s:anzuDisplayTime = 2000
+
+      let s:anzuDisplayCount = 0
+      function! s:BeginDisplayAnzu()
+        let s:anzuDisplayCount = s:anzuDisplayTime / &updatetime
+      endfunction
+
+      function! s:UpdateDisplayAnzu()
+        if s:anzuDisplayCount >= 0
+          let s:anzuDisplayCount = s:anzuDisplayCount - 1
+
+          call s:ContinueCursorHold()
+        else
+          call s:ClearDisplayAnzu()
+        endif
+      endfunction
+
+      function! s:ClearDisplayAnzu()
+        " let s:anzuDisplayCount = 0
+        call anzu#clear_search_status()
+      endfunction
+    augroup END
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
 " clever-f.vim {{{
-let g:clever_f_ignore_case           = 1
-let g:clever_f_smart_case            = 1
-let g:clever_f_across_no_line        = 1
-let g:clever_f_use_migemo            = 1
-let g:clever_f_chars_match_any_signs = ';'
+if neobundle#tap('clever-f.vim')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'mappings': 'f',
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    let g:clever_f_ignore_case           = 1
+    let g:clever_f_smart_case            = 1
+    let g:clever_f_across_no_line        = 1
+    let g:clever_f_use_migemo            = 1
+    let g:clever_f_chars_match_any_signs = ';'
+  endfunction
+
+  call neobundle#untap()
+endif
 " }}}
 " vim-visualstar {{{
-map *  <Plug>(visualstar-*)
-map #  <Plug>(visualstar-#)
-map g* <Plug>(visualstar-g*)
-map g# <Plug>(visualstar-g#)
-" }}}
-" vim-anzu {{{
-nmap <silent> n <Plug>(anzu-n)zOzz:<C-u>call <SID>BeginDisplayAnzu()<CR>:<C-u>call <SID>RefreshScreen()<CR>
-nmap <silent> N <Plug>(anzu-N)zOzz:<C-u>call <SID>BeginDisplayAnzu()<CR>:<C-u>call <SID>RefreshScreen()<CR>
-nmap <silent> * <Plug>(anzu-star):<C-u>call  <SID>RefreshScreen()<CR>
-nmap <silent> # <Plug>(anzu-sharp):<C-u>call <SID>RefreshScreen()<CR>
+if neobundle#tap('vim-visualstar')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'mappings': ['<Plug>(visualstar-']
+        \   }
+        \ })
 
-let s:bundle = neobundle#get('vim-anzu')
-function! s:bundle.hooks.on_source(bundle)
+  map *  <Plug>(visualstar-*)
+  map #  <Plug>(visualstar-#)
+  map g* <Plug>(visualstar-g*)
+  map g# <Plug>(visualstar-g#)
 
-  augroup MyAutoGroup
-    " 一定時間キー入力がないとき、ウインドウを移動したとき、タブを移動したときに
-    " 検索ヒット数の表示を消去する
-    autocmd CursorHold,CursorHoldI * call s:UpdateDisplayAnzu()
-    autocmd WinLeave,TabLeave      * call s:ClearDisplayAnzu()
-
-    " anzuを表示する時間
-    let s:anzuDisplayTime = 2000
-
-    let s:anzuDisplayCount = 0
-    function! s:BeginDisplayAnzu()
-      let s:anzuDisplayCount = s:anzuDisplayTime / &updatetime
-    endfunction
-
-    function! s:UpdateDisplayAnzu()
-      if s:anzuDisplayCount >= 0
-        let s:anzuDisplayCount = s:anzuDisplayCount - 1
-
-        call s:ContinueCursorHold()
-      else
-        call s:ClearDisplayAnzu()
-      endif
-    endfunction
-
-    function! s:ClearDisplayAnzu()
-      " let s:anzuDisplayCount = 0
-      call anzu#clear_search_status()
-    endfunction
-  augroup END
-endfunction
-unlet s:bundle
+  call neobundle#untap()
+endif
 " }}}
 " }}}
 " 言語 {{{
