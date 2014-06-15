@@ -234,11 +234,7 @@ function! s:SetNeoBundle() " {{{
         \ }
   " }}}
   " ファイル {{{
-  NeoBundleLazy 'kana/vim-altr', {
-        \   'autoload': {
-        \     'mappings': [['scxino', '<Plug>(altr-']]
-        \   }
-        \ }
+  NeoBundleLazy 'kana/vim-altr'
   " }}}
   " 検索 {{{
   NeoBundleLazy 'matchit.zip'
@@ -754,18 +750,26 @@ unlet s:bundle
 " }}}
 " }}}
 " ファイル {{{
-nmap <F5>  <Plug>(altr-back)
-nmap <F6>  <Plug>(altr-forward)
+if neobundle#tap('vim-altr')
+  call neobundle#config({
+        \   'autoload' : {
+        \     'mappings': [['scxino', '<Plug>(altr-']]
+        \   }
+        \ })
 
-let s:bundle = neobundle#get('vim-altr')
-function! s:bundle.hooks.on_source(bundle)
-  call altr#define('Models/%Model.cs',       'ViewModels/%Vm.cs',       'Views/%.xaml',       'Views/%.xaml.cs')
-  call altr#define('Models/*/%Model.cs',     'ViewModels/*/%Vm.cs',     'Views/*/%.xaml',     'Views/*/%.xaml.cs')
-  call altr#define('Models/*/*/%Model.cs',   'ViewModels/*/*/%Vm.cs',   'Views/*/*/%.xaml',   'Views/*/*/%.xaml.cs')
-  call altr#define('Models/*/*/*/%Model.cs', 'ViewModels/*/*/*/%Vm.cs', 'Views/*/*/*/%.xaml', 'Views/*/*/*/%.xaml.cs')
-  call altr#define('%Model.cs',              '%Vm.cs',                  '%.xaml',             '%.xaml.cs')
-endfunction
-unlet s:bundle
+  nmap <F5>  <Plug>(altr-back)
+  nmap <F6>  <Plug>(altr-forward)
+
+  function! neobundle#hooks.on_source(bundle)
+    call altr#define('Models/%Model.cs',       'ViewModels/%Vm.cs',       'Views/%.xaml',       'Views/%.xaml.cs')
+    call altr#define('Models/*/%Model.cs',     'ViewModels/*/%Vm.cs',     'Views/*/%.xaml',     'Views/*/%.xaml.cs')
+    call altr#define('Models/*/*/%Model.cs',   'ViewModels/*/*/%Vm.cs',   'Views/*/*/%.xaml',   'Views/*/*/%.xaml.cs')
+    call altr#define('Models/*/*/*/%Model.cs', 'ViewModels/*/*/*/%Vm.cs', 'Views/*/*/*/%.xaml', 'Views/*/*/*/%.xaml.cs')
+    call altr#define('%Model.cs',              '%Vm.cs',                  '%.xaml',             '%.xaml.cs')
+  endfunction
+
+  call neobundle#untap()
+endif
 " }}}
 " 検索 {{{
 " vim-anzu {{{
