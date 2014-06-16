@@ -13,7 +13,6 @@ colorscheme molokai
 hi Comment          guifg=#AEDEDE
 hi DiffText                       guibg=#4C4745 gui=bold
 hi Macro            guifg=#C4BE89               gui=none
-hi SpecialKey       guifg=#66D9EF               gui=none
 hi Special          guifg=#66D9EF guibg=bg      gui=none
 hi StorageClass     guifg=#FD971F               gui=none
 hi Tag              guifg=#F92672               gui=none
@@ -22,19 +21,10 @@ hi Folded           guifg=#465457 guibg=#242526
 hi VertSplit        guifg=#202020 guibg=#202020 gui=bold    " 見えなくする
 
 " タブ表示など
-if IsMac()
-  hi SpecialKey       guifg=#303030 guibg=#121212 gui=none
-else
-  hi SpecialKey       guifg=#B0D0F0 guibg=#121212 gui=none
-endif
-
-" vim-indent-guides
-hi IndentGuidesOdd                guibg=#181818
-hi IndentGuidesEven               guibg=#181818
+hi SpecialKey       guifg=#303030 guibg=#121212 gui=none
 
 " 日本語入力中のカーソルの色
 hi CursorIM         guifg=NONE    guibg=Red
-
 " }}}
 " 見た目 {{{
 " ツールバー削除

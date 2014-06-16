@@ -36,10 +36,10 @@ function! IsStarting()
 endfunction
 " }}}
 
-let s:baseColumns  = IsWindows() ? 140 : 120
-let g:mapleader    = ','
-let s:vimrc_local  = expand('~/.vimrc_local')
-let $DOTVIM        = expand('~/.vim')
+let s:baseColumns = IsWindows() ? 140 : 120
+let g:mapleader   = ','
+let s:vimrc_local = expand('~/.vimrc_local')
+let $DOTVIM       = expand('~/.vim')
 set viminfo+=!
 
 augroup MyAutoGroup
@@ -112,9 +112,9 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'kana/vim-smartinput'
 
   " 補完
-  NeoBundleLazy 'Shougo/neosnippet-snippets'
   NeoBundleLazy 'Shougo/neocomplete.vim'
   NeoBundleLazy 'Shougo/neosnippet.vim'
+  NeoBundleLazy 'Shougo/neosnippet-snippets'
   NeoBundleLazy 'nosami/Omnisharp'
 
   " ファイル
@@ -133,7 +133,7 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'osyo-manga/shabadou.vim'
   NeoBundleLazy 'plasticboy/vim-markdown'
   NeoBundleLazy 'vim-jp/cpp-vim'
-  NeoBundleLazy 'YoshihiroIto/vim-gocode'
+  NeoBundle     'YoshihiroIto/vim-gocode'
   NeoBundleLazy 'dgryski/vim-godef'
   NeoBundleLazy 'Mizuchi/STL-Syntax'
   NeoBundleLazy 'beyondmarc/hlsl.vim'
@@ -165,20 +165,22 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'deris/vim-rengbang'
 
   " アプリ
-  NeoBundleLazy 'Shougo/vimproc'
-  NeoBundleLazy 'basyura/twibill.vim'
-  NeoBundleLazy 'LeafCage/nebula.vim'
   NeoBundleLazy 'tsukkee/lingr-vim'
   NeoBundleLazy 'mattn/benchvimrc-vim'
   NeoBundleLazy 'tpope/vim-fugitive'
-  NeoBundleLazy 'mattn/webapi-vim'
   NeoBundleLazy 'Shougo/vimshell.vim'
-  NeoBundleLazy 'tyru/open-browser.vim'
   NeoBundleLazy 'Shougo/vimfiler.vim'
   NeoBundleLazy 'basyura/TweetVim'
   if IsMac()
     NeoBundleLazy 'itchyny/dictionary.vim'
   endif
+
+  " ライブラリ
+  NeoBundleLazy 'Shougo/vimproc'
+  NeoBundleLazy 'basyura/twibill.vim'
+  NeoBundleLazy 'LeafCage/nebula.vim'
+  NeoBundleLazy 'mattn/webapi-vim'
+  NeoBundleLazy 'tyru/open-browser.vim'
   if IsWindows() && IsGuiRunning()
     NeoBundleLazy 'YoshihiroIto/vim-icondrag'
   endif
@@ -367,11 +369,12 @@ let g:lightline = {
       \ }
 
 function! MyMode()
-  return  &ft ==   'unite'    ? 'Unite'    :
-        \ &ft ==   'vimfiler' ? 'VimFiler' :
-        \ &ft ==   'vimshell' ? 'VimShell' :
-        \ &ft ==   'quickrun' ? 'quickrun' :
-        \ &ft =~? 'lingr'     ? 'lingr'    :
+  return  &ft ==  'unite'    ? 'Unite'    :
+        \ &ft ==  'vimfiler' ? 'VimFiler' :
+        \ &ft ==  'vimshell' ? 'VimShell' :
+        \ &ft ==  'tweetvim' ? 'TweetVim' :
+        \ &ft ==  'quickrun' ? 'quickrun' :
+        \ &ft =~? 'lingr'    ? 'lingr'    :
         \ winwidth(0) > 60 ? lightline#mode() : ''
 endfunction
 
@@ -736,25 +739,25 @@ if neobundle#tap('neosnippet.vim')
         \     'filetypes': ['neosnippet'],
         \     'commands': [
         \       'NeoSnippetClearMarkers',
-        \         {
-        \           'name':     'NeoSnippetSource',
-        \           'complete': 'file'
-        \         },
-        \         {
-        \           'name':     'NeoSnippetMakeCache',
-        \           'complete': 'customlist,neosnippet#commands#_filetype_complete'
-        \         },
-        \         {
-        \            'name':     'NeoSnippetEdit',
-        \            'complete': 'customlist,neosnippet#commands#_edit_complete'
-        \         }
-        \       ],
-        \       'mappings': [['sxi', '<Plug>(neosnippet_']],
-        \       'unite_sources': [
-        \         'neosnippet',
-        \         'neosnippet_file',
-        \         'neosnippet_target'
-        \       ]
+        \       {
+        \         'name':     'NeoSnippetSource',
+        \         'complete': 'file'
+        \       },
+        \       {
+        \         'name':     'NeoSnippetMakeCache',
+        \         'complete': 'customlist,neosnippet#commands#_filetype_complete'
+        \       },
+        \       {
+        \          'name':     'NeoSnippetEdit',
+        \          'complete': 'customlist,neosnippet#commands#_edit_complete'
+        \       }
+        \     ],
+        \     'mappings': [['sxi', '<Plug>(neosnippet_']],
+        \     'unite_sources': [
+        \       'neosnippet',
+        \       'neosnippet_file',
+        \       'neosnippet_target'
+        \     ]
         \   }
         \ })
 
@@ -1389,90 +1392,6 @@ endif
 " }}}
 " }}}
 " アプリ {{{
-" vimproc {{{
-if neobundle#tap('vimproc')
-  call neobundle#config({
-        \   'autoload': {
-        \     'function_prefix': 'vimproc',
-        \   },
-        \   'build': {
-        \     'mac':  'make -f make_mac.mak',
-        \     'unix': 'make -f make_unix.mak',
-        \   },
-        \ })
-
-  call neobundle#untap()
-endif
-" }}}
-" nebula.vim {{{
-if neobundle#tap('nebula.vim')
-  call neobundle#config({
-        \   'autoload': {
-        \     'commands': [
-        \       'NebulaPutLazy',
-        \       'NebulaPutFromClipboard',
-        \       'NebulaYankOptions',
-        \       'NebulaYankConfig',
-        \       'NebulaPutConfig',
-        \       'NebulaYankTap'
-        \     ]
-        \   }
-        \ })
-
-  call neobundle#untap()
-endif
-" }}}
-" vimshell.vim {{{
-if neobundle#tap('vimshell.vim')
-  call neobundle#config({
-        \   'depends':  ['Shougo/vimproc'],
-        \   'autoload': {
-        \     'commands' : [ 'VimShell', 'VimShellPop' ]
-        \   }
-        \ })
-
-  noremap <silent> [App]s :<C-u>VimShellPop<CR>
-
-  function! neobundle#hooks.on_source(bundle)
-    let g:vimshell_popup_height = 40
-  endfunction
-
-  call neobundle#untap()
-endif
-" }}}
-" vimfiler.vim {{{
-if neobundle#tap('vimfiler.vim')
-  call neobundle#config({
-        \   'depends':  ['Shougo/vimproc', 'Shougo/unite.vim', 'Shougo/vimshell.vim'],
-        \   'autoload': {
-        \     'commands': ['VimFilerBufferDir'],
-        \   }
-        \ })
-
-  noremap <silent> [App]f :<C-u>VimFilerBufferDir<CR>
-
-  function! neobundle#hooks.on_source(bundle)
-    augroup MyAutoGroup
-      autocmd FileType vimfiler call s:SetVimfiler()
-
-      function! s:SetVimfiler()
-        nmap <buffer><expr> <Enter> vimfiler#smart_cursor_map("\<Plug>(vimfiler_cd_file)", "\<Plug>(vimfiler_edit_file)")
-        nmap <buffer><expr> <C-j>   vimfiler#smart_cursor_map("\<Plug>(vimfiler_exit)",    "\<Plug>(vimfiler_exit)")
-
-        " dotfile表示状態に設定
-        exe ':normal .'
-      endfunction
-    augroup END
-
-    let g:vimfiler_as_default_explorer        = 1
-    let g:vimfiler_force_overwrite_statusline = 0
-    let g:vimfiler_tree_leaf_icon             = ' '
-    let g:unite_kind_file_use_trashbox        = 1
-  endfunction
-
-  call neobundle#untap()
-endif
-" }}}
 " lingr-vim {{{
 if neobundle#tap('lingr-vim')
   call neobundle#config({
@@ -1527,6 +1446,72 @@ if neobundle#tap('benchvimrc-vim')
   call neobundle#untap()
 endif
 " }}}
+" vim-fugitive {{{
+if neobundle#tap('vim-fugitive')
+  call neobundle#config({
+        \   'autoload': {
+        \     'function_prefix': 'fugitive'
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" vimshell.vim {{{
+if neobundle#tap('vimshell.vim')
+  call neobundle#config({
+        \   'depends':  ['Shougo/vimproc'],
+        \   'autoload': {
+        \     'commands' : [ 'VimShell', 'VimShellPop' ]
+        \   }
+        \ })
+
+  noremap <silent> [App]s :<C-u>VimShellPop<CR>
+
+  function! neobundle#hooks.on_source(bundle)
+    let g:vimshell_popup_height = 40
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
+" vimfiler.vim {{{
+if neobundle#tap('vimfiler.vim')
+  call neobundle#config({
+        \   'depends':  ['Shougo/vimproc', 'Shougo/unite.vim', 'Shougo/vimshell.vim'],
+        \   'autoload': {
+        \     'commands': ['VimFilerBufferDir'],
+        \   }
+        \ })
+
+  noremap <silent> [App]f :<C-u>VimFilerBufferDir<CR>
+
+  function! neobundle#hooks.on_source(bundle)
+    augroup MyAutoGroup
+      autocmd FileType vimfiler call s:SetVimfiler()
+
+      " http://qiita.com/Linda_pp/items/f1cb09ac94202abfba0e
+      autocmd FileType vimfiler nnoremap <buffer><silent> / :<C-u>Unite file -horizontal -default-action=vimfiler<CR>
+
+      function! s:SetVimfiler()
+        nmap <buffer><expr> <Enter> vimfiler#smart_cursor_map("\<Plug>(vimfiler_cd_file)", "\<Plug>(vimfiler_edit_file)")
+        nmap <buffer><expr> <C-j>   vimfiler#smart_cursor_map("\<Plug>(vimfiler_exit)",    "\<Plug>(vimfiler_exit)")
+
+        " dotfile表示状態に設定
+        exe ':normal .'
+      endfunction
+    augroup END
+
+    let g:vimfiler_as_default_explorer        = 1
+    let g:vimfiler_force_overwrite_statusline = 0
+    let g:vimfiler_tree_leaf_icon             = ' '
+    let g:vimfiler_enable_auto_cd             = 1
+    let g:unite_kind_file_use_trashbox        = 1
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
 " Tweetvim {{{
 if neobundle#tap('TweetVim')
   call neobundle#config({
@@ -1567,11 +1552,35 @@ if neobundle#tap('TweetVim')
   call neobundle#untap()
 endif
 " }}}
-" vim-fugitive {{{
-if neobundle#tap('vim-fugitive')
+" }}}
+" ライブラリ {{{
+" vimproc {{{
+if neobundle#tap('vimproc')
   call neobundle#config({
         \   'autoload': {
-        \     'function_prefix': 'fugitive'
+        \     'function_prefix': 'vimproc',
+        \   },
+        \   'build': {
+        \     'mac':  'make -f make_mac.mak',
+        \     'unix': 'make -f make_unix.mak',
+        \   },
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" nebula.vim {{{
+if neobundle#tap('nebula.vim')
+  call neobundle#config({
+        \   'autoload': {
+        \     'commands': [
+        \       'NebulaPutLazy',
+        \       'NebulaPutFromClipboard',
+        \       'NebulaYankOptions',
+        \       'NebulaYankConfig',
+        \       'NebulaPutConfig',
+        \       'NebulaYankTap'
+        \     ]
         \   }
         \ })
 
@@ -1650,23 +1659,23 @@ if neobundle#tap('unite.vim')
   nmap     <Space> [Unite]
   xmap     <Space> [Unite]
 
-  nnoremap <silent> [Unite]g  :<C-u>Unite grep -prompt-direction=top -auto-preview -no-split -buffer-name=search-buffer<CR>
-  nnoremap <silent> [Unite]pg :<C-u>call <SID>unite_grep_project('-prompt-direction=top -auto-preview -no-split -buffer-name=search-buffer')<CR>
-  nnoremap <silent> [Unite]r  :<C-u>UniteResume -prompt-direction=top -no-split search-buffer<CR>
+  nnoremap <silent> [Unite]g  :<C-u>Unite grep -auto-preview -no-split -buffer-name=search-buffer<CR>
+  nnoremap <silent> [Unite]pg :<C-u>call <SID>unite_grep_project('-auto-preview -no-split -buffer-name=search-buffer')<CR>
+  nnoremap <silent> [Unite]r  :<C-u>UniteResume -no-split search-buffer<CR>
 
-  nnoremap <silent> [Unite]f  :<C-u>Unite -prompt-direction=top -no-split file<CR>
-  nnoremap <silent> [Unite]b  :<C-u>Unite -prompt-direction=top -no-split buffer<CR>
-  nnoremap <silent> [Unite]t  :<C-u>Unite -prompt-direction=top -no-split tab<CR>
-  nnoremap <silent> [Unite]l  :<C-u>Unite -prompt-direction=top -no-split line<CR>
-  nnoremap <silent> [Unite]o  :<C-u>Unite -prompt-direction=top -no-split outline<CR>
-  nnoremap <silent> [Unite]z  :<C-u>Unite -prompt-direction=top -no-split fold<CR>
-  nnoremap <silent> [Unite]q  :<C-u>Unite -prompt-direction=top -no-quit  quickfix<CR>
+  nnoremap <silent> [Unite]f  :<C-u>Unite -no-split file<CR>
+  nnoremap <silent> [Unite]b  :<C-u>Unite -no-split buffer<CR>
+  nnoremap <silent> [Unite]t  :<C-u>Unite -no-split tab<CR>
+  nnoremap <silent> [Unite]l  :<C-u>Unite -no-split line<CR>
+  nnoremap <silent> [Unite]o  :<C-u>Unite -no-split outline<CR>
+  nnoremap <silent> [Unite]z  :<C-u>Unite -no-split fold<CR>
+  nnoremap <silent> [Unite]q  :<C-u>Unite -no-quit quickfix<CR>
 
   if IsWindows()
-    nnoremap <silent> [Unite]m  :<C-u>Unite -prompt-direction=top -no-split neomru/file everything<CR>
-    nnoremap <silent> [Unite]e  :<C-u>Unite -prompt-direction=top -no-split everything<CR>
+    nnoremap <silent> [Unite]m  :<C-u>Unite -no-split neomru/file everything<CR>
+    nnoremap <silent> [Unite]e  :<C-u>Unite -no-split everything<CR>
   else
-    nnoremap <silent> [Unite]m  :<C-u>Unite -prompt-direction=top -no-split neomru/file<CR>
+    nnoremap <silent> [Unite]m  :<C-u>Unite -no-split neomru/file<CR>
   endif
 
   nnoremap          [Unite]uu :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
@@ -1692,7 +1701,10 @@ if neobundle#tap('unite.vim')
 
     let g:unite_force_overwrite_statusline = 0
 
-    call unite#custom#source('fold', 'matchers', 'matcher_migemo')
+    call unite#custom#source( 'fold',    'matchers',   'matcher_migemo')
+    call unite#custom#profile('default', 'context',    { 'prompt_direction': 'top'})
+    call unite#custom#profile('default', 'ignorecase', 1)
+    call unite#custom#profile('default', 'smartcase',  1)
 
     " http://blog.monochromegane.com/blog/2014/01/16/the-platinum-searcher/
     " https://github.com/monochromegane/the_platinum_searcher
@@ -2134,7 +2146,7 @@ set nrformats+=alpha
 set completeopt=longest,menuone
 set backspace=indent,eol,start
 
-noremap  U                  J
+noremap U J
 
 " ^Mを取り除く
 command! RemoveCr call s:ExecuteKeepView('silent! %substitute/\r$//g | nohlsearch')
@@ -2365,7 +2377,6 @@ set shortmess+=I                  " 起動時のメッセージを表示しな�
 set lazyredraw                    " スクリプト実行中に画面を描画しない
 set wildmenu
 set wildmode=list:full            " コマンドライン補完を便利に
-" set wildignorecase                " 補完時に大文字小文字を区別しない
 set showfulltag
 set wildoptions=tagfile
 set fillchars=vert:\              " 縦分割の境界線
