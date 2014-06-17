@@ -107,7 +107,6 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'nishigori/increment-activator'
   NeoBundleLazy 'osyo-manga/vim-over'
   NeoBundleLazy 'thinca/vim-qfreplace'
-  NeoBundleLazy 'terryma/vim-expand-region'
   NeoBundleLazy 'junegunn/vim-easy-align'
   NeoBundleLazy 'kana/vim-smartinput'
 
@@ -212,7 +211,7 @@ else
 endif
 
 call neobundle#end()
-
+" }}}
 " 表示 {{{
 " tagbar {{{
 if neobundle#tap('tagbar')
@@ -241,7 +240,7 @@ endif
 if neobundle#tap('foldCC')
   call neobundle#config({
         \   'autoload': {
-        \     'filetypes': ['vim']
+        \     'filetypes': ['vim', 'xml']
         \   }
         \ })
 
@@ -623,29 +622,6 @@ if neobundle#tap('vim-qfreplace')
         \     'commands':  ['Qfreplace']
         \   }
         \ })
-
-  call neobundle#untap()
-endif
-" }}}
-" vim-expand-region {{{
-if neobundle#tap('vim-expand-region')
-  call neobundle#config({
-        \   'autoload': {
-        \     'mappings': [['sxn', '<Plug>(expand_region_']]
-        \   }
-        \ })
-
-  map J <Plug>(expand_region_expand)
-  map K <Plug>(expand_region_shrink)
-
-  function! neobundle#hooks.on_source(bundle)
-    let g:expand_region_text_objects = {
-          \   'il': 0,
-          \   'ii': 0,
-          \   'ai': 0,
-          \   'ip': 0,
-          \ }
-  endfunction
 
   call neobundle#untap()
 endif
@@ -1527,7 +1503,7 @@ if neobundle#tap('TweetVim')
 
     let g:tweetvim_include_rts       = 1
     let g:tweetvim_display_separator = 0
-    let g:tweetvim_tweet_per_page    = 35
+    let g:tweetvim_tweet_per_page    = 30
     let g:tweetvim_display_icon      = 1
 
     augroup MyAutoGroup
@@ -1827,7 +1803,6 @@ augroup auto-source
   autocmd!
   autocmd FocusLost * call s:source()
 augroup END
-" }}}
 " }}}
 " }}}
 " キー無効 {{{
@@ -2550,8 +2525,8 @@ nmap     <silent> G     GzOzz:<C-u>call   <SID>RefreshScreen()<CR>
 
 noremap  <silent> <C-i> <C-i>zz:<C-u>call <SID>RefreshScreen()<CR>
 noremap  <silent> <C-o> <C-o>zz:<C-u>call <SID>RefreshScreen()<CR>
-map      <silent> H     :<C-u>call <SID>DisableVirtualCursor()<CR>^:<C-u>call <SID>RefreshScreen()<CR>
-map      <silent> L     :<C-u>call <SID>DisableVirtualCursor()<CR>g$:<C-u>call <SID>RefreshScreen()<CR>
+map      <silent> <C-h> :<C-u>call <SID>DisableVirtualCursor()<CR>^:<C-u>call <SID>RefreshScreen()<CR>
+map      <silent> <C-l> :<C-u>call <SID>DisableVirtualCursor()<CR>g$:<C-u>call <SID>RefreshScreen()<CR>
 
 nmap     <silent> <Leader>m `
 
@@ -2645,12 +2620,12 @@ for s:n in range(1, 9)
   exe 'nnoremap <silent> [Tab]' . s:n  ':<C-u>tabnext' . s:n . '<CR>'
 endfor
 
-nnoremap <silent> <C-K> :<C-u>tabp<CR>
-nnoremap <silent> <C-J> :<C-u>tabn<CR>
+nnoremap <silent> K :<C-u>tabp<CR>
+nnoremap <silent> J :<C-u>tabn<CR>
 
 " Vimですべてのバッファをタブ化する
 " http://qiita.com/kuwa72/items/deef2703af74d2d993ee
-nnoremap <silent> <C-L> :<C-u>call <SID>CleanEmptyBuffers()<CR>:<C-u>tab ba<CR>
+nnoremap <silent> L :<C-u>call <SID>CleanEmptyBuffers()<CR>:<C-u>tab ba<CR>
 " }}}
 " バッファ操作 {{{
 nnoremap [Buffer]  <Nop>
