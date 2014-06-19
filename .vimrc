@@ -190,6 +190,7 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'osyo-manga/unite-quickfix'
   NeoBundleLazy 'osyo-manga/unite-fold'
   NeoBundleLazy 'Shougo/neomru.vim'
+  NeoBundleLazy 'YoshihiroIto/vim-unite-giti'
 
   if IsWindows()
     NeoBundleLazy 'sgur/unite-everything'
@@ -266,28 +267,28 @@ endif
 " lightline {{{
 let s:p = lightline#colorscheme#default#palette
 
-let s:p.normal.left     = [['#195E00', '#07AF00', 'bold'], ['gray7', 'gray2']]
-let s:p.normal.fugitive = [['white', 'gray4']]
+let s:p.normal.left   = [['#195E00', '#07AF00', 'bold'], ['gray7', 'gray2']]
+let s:p.normal.branch = [['white', 'gray4']]
 
-let s:p.insert.left     = [['darkestcyan', 'white', 'bold'], ['mediumcyan', 'darkestblue']]
-let s:p.insert.middle   = [['mediumcyan', 'darkestblue']]
-let s:p.insert.right    = [['darkestcyan', 'mediumcyan'], ['mediumcyan', 'darkblue'], ['mediumcyan', 'darkestblue']]
-let s:p.insert.fugitive = [['white', 'darkblue']]
+let s:p.insert.left   = [['darkestcyan', 'white', 'bold'], ['mediumcyan', 'darkestblue']]
+let s:p.insert.middle = [['mediumcyan', 'darkestblue']]
+let s:p.insert.right  = [['darkestcyan', 'mediumcyan'], ['mediumcyan', 'darkblue'], ['mediumcyan', 'darkestblue']]
+let s:p.insert.branch = [['white', 'darkblue']]
 
-let s:p.visual.left     = [['#AB2362', 'white', 'bold'], ['#FF84BA', '#870036']]
-let s:p.visual.middle   = [['#FF84BA', '#870036']]
-let s:p.visual.right    = [['#75003D', '#FF87BB'], ['#FE86BB', '#AF0053'], ['#FF84BA', '#870036']]
-let s:p.visual.fugitive = [['white', '#AF0053']]
+let s:p.visual.left   = [['#AB2362', 'white', 'bold'], ['#FF84BA', '#870036']]
+let s:p.visual.middle = [['#FF84BA', '#870036']]
+let s:p.visual.right  = [['#75003D', '#FF87BB'], ['#FE86BB', '#AF0053'], ['#FF84BA', '#870036']]
+let s:p.visual.branch = [['white', '#AF0053']]
 
-" let s:p.visual.left     = [['#671B12', 'white', 'bold'], ['#FFB586', '#873700']]
-" let s:p.visual.middle   = [['#FFB586', '#873700']]
-" let s:p.visual.right    = [['#672021', '#FFB587'], ['#FEB386', '#AF3C00'], ['#FFB586', '#873700']]
-" let s:p.visual.fugitive = [['white', '#AF3C00']]
+" let s:p.visual.left   = [['#671B12', 'white', 'bold'], ['#FFB586', '#873700']]
+" let s:p.visual.middle = [['#FFB586', '#873700']]
+" let s:p.visual.right  = [['#672021', '#FFB587'], ['#FEB386', '#AF3C00'], ['#FFB586', '#873700']]
+" let s:p.visual.branch = [['white', '#AF3C00']]
 
-" let s:p.normal.left     = [['#0E3D00', 'white', 'bold'], ['#65DE65', '#006600']]
-" let s:p.normal.middle   = [['#65DE65', '#006600']]
-" let s:p.normal.right    = [['#005300', '#66DE66'], ['#65DE65', '#008E00'], ['#65DE65', '#006600']]
-" let s:p.normal.fugitive = [['white', '#008E00']]
+" let s:p.normal.left   = [['#0E3D00', 'white', 'bold'], ['#65DE65', '#006600']]
+" let s:p.normal.middle = [['#65DE65', '#006600']]
+" let s:p.normal.right  = [['#005300', '#66DE66'], ['#65DE65', '#008E00'], ['#65DE65', '#006600']]
+" let s:p.normal.branch = [['white', '#008E00']]
 
 let g:lightline#colorscheme#yoi#palette = lightline#colorscheme#fill(s:p)
 
@@ -298,7 +299,7 @@ let g:lightline = {
       \   'active': {
       \     'left': [
       \       ['mode',     'paste'],
-      \       ['fugitive', 'filename', 'anzu']
+      \       ['branch',   'filename', 'anzu']
       \     ],
       \     'right': [
       \       ['syntastic', 'lineinfo'],
@@ -322,11 +323,11 @@ let g:lightline = {
       \   },
       \   'component_expand': {
       \     'syntastic':    'SyntasticStatuslineFlag',
-      \     'fugitive':     'MyFugitive'
+      \     'branch':       'GetCurrentBranch'
       \   },
       \   'component_type': {
       \     'syntastic':    'error',
-      \     'fugitive':     'fugitive'
+      \     'branch':       'branch'
       \   },
       \   'separator': {
       \     'left':  '⮀',
@@ -399,11 +400,10 @@ function! MyFilename()
         \ ('' != MyModified()  ? ' ' . MyModified() : '')
 endfunction
 
-function! MyFugitive()
+function! GetCurrentBranch()
 
   if &ft !~? 'vimfiler'
     let _ = fugitive#head()
-
     return strlen(_) ? '⭠ ' . _ : ''
   endif
   return ''
@@ -895,7 +895,7 @@ endif
 if neobundle#tap('syntastic')
   call neobundle#config({
         \   'autoload': {
-        \     'filetypes': ['go', 'ruby']
+        \     'filetypes': ['go', 'ruby', 'cs']
         \   }
         \ })
 
@@ -903,7 +903,7 @@ if neobundle#tap('syntastic')
     let g:syntastic_cs_checkers = ['syntax', 'issues']
 
     augroup MyAutoGroup
-      autocmd BufWritePost *.{go,rb} call s:SyntasticCheck()
+      autocmd BufWritePost *.{go,rb,cs,xaml} call s:SyntasticCheck()
 
       function! s:SyntasticCheck()
         SyntasticCheck
@@ -1430,8 +1430,19 @@ if neobundle#tap('vim-fugitive')
         \   }
         \ })
 
+  function! neobundle#hooks.on_source(bundle)
+    augroup MyAutoGroup
+      autocmd FocusGained * call s:UpdateFugitive()
+    augroup END
+  endfunction
+
   call neobundle#untap()
 endif
+
+function! s:UpdateFugitive()
+  call fugitive#detect(expand('<amatch>:p'))
+  call lightline#update()
+endfunction
 " }}}
 " vimshell.vim {{{
 if neobundle#tap('vimshell.vim')
@@ -1646,6 +1657,7 @@ if neobundle#tap('unite.vim')
   nnoremap <silent> [Unite]o  :<C-u>Unite -no-split outline<CR>
   nnoremap <silent> [Unite]z  :<C-u>Unite -no-split fold<CR>
   nnoremap <silent> [Unite]q  :<C-u>Unite -no-quit quickfix<CR>
+  nnoremap <silent> [Unite]s  :<C-u>Unite giti<CR>
 
   if IsWindows()
     nnoremap <silent> [Unite]m  :<C-u>Unite -no-split neomru/file everything<CR>
@@ -1669,18 +1681,18 @@ if neobundle#tap('unite.vim')
 
     " let g:unite_winwidth = s:rightWindowWidth
 
-    let g:unite_enable_split_vertically         = 1
-    let g:unite_split_rule                      = 'rightbelow'
-
-    " insert modeで開始
-    let g:unite_enable_start_insert             = 1
-
     let g:unite_force_overwrite_statusline = 0
 
-    call unite#custom#source( 'fold',    'matchers',   'matcher_migemo')
-    call unite#custom#profile('default', 'context',    { 'prompt_direction': 'top'})
+    call unite#custom#profile('default', 'context', {
+        \   'direction':        'rightbelow',
+        \   'prompt_direction': 'top',
+        \   'split_vertically': 1,
+        \   'start_insert':     1
+        \ })
+
     call unite#custom#profile('default', 'ignorecase', 1)
     call unite#custom#profile('default', 'smartcase',  1)
+    call unite#custom#source( 'fold',    'matchers',   'matcher_migemo')
 
     " http://blog.monochromegane.com/blog/2014/01/16/the-platinum-searcher/
     " https://github.com/monochromegane/the_platinum_searcher
@@ -1743,6 +1755,41 @@ if neobundle#tap('neomru.vim')
   function! neobundle#hooks.on_source(bundle)
     let g:neomru#update_interval = 1
     let g:neomru#file_mru_limit  = 500
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-unite-giti {{{
+if neobundle#tap('vim-unite-giti')
+  call neobundle#config({
+        \   'depends':  ['Shougo/unite.vim'],
+        \   'autoload': {
+        \     'unite_sources':   ['giti', 'giti/branch', 'giti/branch_all', 'giti/config', 'giti/log', 'giti/remote', 'giti/status'],
+        \     'function_prefix': 'giti',
+        \     'commands': [
+        \       'Giti',
+        \       'GitiWithConfirm',
+        \       'GitiFetch',
+        \       'GitiPush',
+        \       'GitiPushWithSettingUpstream',
+        \       'GitiPushExpressly',
+        \       'GitiPull',
+        \       'GitiPullSquash',
+        \       'GitiPullRebase',
+        \       'GitiPullExpressly',
+        \       'GitiDiff',
+        \       'GitiDiffCached',
+        \       'GitiLog',
+        \       'GitiLogLine'
+        \     ]
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    augroup MyAutoGroup
+      autocmd User UniteGitiGitExecuted call s:UpdateFugitive()
+    augroup END
   endfunction
 
   call neobundle#untap()
