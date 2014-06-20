@@ -2719,6 +2719,8 @@ nnoremap [Git]     <Nop>
 nmap     <Leader>g [Git]
 
 nnoremap <silent> [Git]b     :<C-u>Gblame<CR>
+nnoremap <silent> [Git]a     :<C-u>Gwrite<CR>
+nnoremap <silent> [Git]c     :<C-u>Gcommit<CR>
 nnoremap <silent> [Git]f     :<C-u>GitiFetch<CR>
 nnoremap <silent> [Git]push  :<C-u>GitiPush<CR>
 nnoremap <silent> [Git]pull  :<C-u>GitiPull<CR>
