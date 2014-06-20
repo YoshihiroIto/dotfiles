@@ -97,6 +97,7 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'majutsushi/tagbar'
   NeoBundleLazy 'LeafCage/foldCC'
   NeoBundleLazy 'movewin.vim'
+  " NeoBundleLazy 'osyo-manga/vim-spice'
 
   " 編集
   NeoBundleLazy 'tomtom/tcomment_vim'
@@ -166,7 +167,7 @@ function! s:SetNeoBundle() " {{{
   " アプリ
   NeoBundleLazy 'tsukkee/lingr-vim'
   NeoBundleLazy 'mattn/benchvimrc-vim'
-  NeoBundleLazy 'tpope/vim-fugitive'
+  NeoBundleLazy 'YoshihiroIto/vim-fugitive'
   NeoBundleLazy 'Shougo/vimshell.vim'
   NeoBundleLazy 'Shougo/vimfiler.vim'
   NeoBundleLazy 'basyura/TweetVim'
@@ -406,6 +407,7 @@ function! GetCurrentBranch()
     let _ = fugitive#head()
     return strlen(_) ? '⭠ ' . _ : ''
   endif
+
   return ''
 endfunction
 
@@ -494,6 +496,17 @@ augroup MyAutoGroup
   endfunction
 augroup END
 " }}}
+" " vim-spice {{{
+" if neobundle#tap('vim-spice')
+"
+"   function! neobundle#hooks.on_source(bundle)
+"     hi Spice guifg=Red
+"     let g:spice#cursor_word_higilight = "Spice"
+"   endfunction
+"
+"   call neobundle#untap()
+" endif
+" " }}}
 " }}}
 " 編集 {{{
 " vim-easy-align {{{
@@ -903,7 +916,7 @@ if neobundle#tap('syntastic')
     let g:syntastic_cs_checkers = ['syntax', 'issues']
 
     augroup MyAutoGroup
-      autocmd BufWritePost *.{go,rb,cs,xaml} call s:SyntasticCheck()
+      autocmd BufWritePost *.{go,rb,cs} call s:SyntasticCheck()
 
       function! s:SyntasticCheck()
         SyntasticCheck
@@ -1425,14 +1438,16 @@ endif
 " vim-fugitive {{{
 if neobundle#tap('vim-fugitive')
   call neobundle#config({
+        \   'depends':  ['Shougo/vimproc'],
         \   'autoload': {
+        \     'insert':          1,
         \     'function_prefix': 'fugitive'
         \   }
         \ })
 
   function! neobundle#hooks.on_source(bundle)
     augroup MyAutoGroup
-      autocmd FocusGained * call s:UpdateFugitive()
+      autocmd FocusGained,FocusLost * call s:UpdateFugitive()
     augroup END
   endfunction
 
@@ -1441,6 +1456,11 @@ endif
 
 function! s:UpdateFugitive()
   call fugitive#detect(expand('<amatch>:p'))
+
+  if exists(':SyntasticCheck')
+    SyntasticCheck
+  endif
+
   call lightline#update()
 endfunction
 " }}}
@@ -1651,13 +1671,14 @@ if neobundle#tap('unite.vim')
   nnoremap <silent> [Unite]r  :<C-u>UniteResume -no-split search-buffer<CR>
 
   nnoremap <silent> [Unite]f  :<C-u>Unite -no-split file<CR>
-  nnoremap <silent> [Unite]b  :<C-u>Unite -no-split buffer<CR>
+  " nnoremap <silent> [Unite]b  :<C-u>Unite -no-split buffer<CR>
   nnoremap <silent> [Unite]t  :<C-u>Unite -no-split tab<CR>
   nnoremap <silent> [Unite]l  :<C-u>Unite -no-split line<CR>
   nnoremap <silent> [Unite]o  :<C-u>Unite -no-split outline<CR>
   nnoremap <silent> [Unite]z  :<C-u>Unite -no-split fold<CR>
   nnoremap <silent> [Unite]q  :<C-u>Unite -no-quit quickfix<CR>
-  nnoremap <silent> [Unite]s  :<C-u>Unite giti<CR>
+  nnoremap <silent> [Unite]v  :<C-u>call <SID>SafeExecuteUniteGiti('giti')<CR>
+  nnoremap <silent> [Unite]b  :<C-u>call <SID>SafeExecuteUniteGiti('giti/branch_all')<CR>
 
   if IsWindows()
     nnoremap <silent> [Unite]m  :<C-u>Unite -no-split neomru/file everything<CR>
@@ -1670,6 +1691,15 @@ if neobundle#tap('unite.vim')
   nnoremap          [Unite]ui :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
   nnoremap          [Unite]uc :<C-u>NeoBundleClearCache<CR>
 
+  function! s:SafeExecuteUniteGiti(source)
+    if !s:IsInGitBranch()
+      echo 'not in git branch'
+      return
+    endif
+
+    execute 'Unite ' . a:source
+  endfunction
+
   " http://sanrinsha.lolipop.jp/blog/2013/03/%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E5%86%85%E3%81%AE%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92unite-grep%E3%81%99%E3%82%8B.html
   function! s:unite_grep_project(...)
     let opts = (a:0 ? join(a:000, ' ') : '')
@@ -1679,15 +1709,17 @@ if neobundle#tap('unite.vim')
 
   function! neobundle#hooks.on_source(bundle)
 
-    " let g:unite_winwidth = s:rightWindowWidth
-
     let g:unite_force_overwrite_statusline = 0
 
     call unite#custom#profile('default', 'context', {
         \   'direction':        'rightbelow',
         \   'prompt_direction': 'top',
-        \   'split_vertically': 1,
+        \   'vertical':         0,
         \   'start_insert':     1
+        \ })
+
+    call unite#custom#profile('source/giti,source/giti/branch_all', 'context', {
+        \   'vertical': 1
         \ })
 
     call unite#custom#profile('default', 'ignorecase', 1)
@@ -1753,8 +1785,9 @@ if neobundle#tap('neomru.vim')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    let g:neomru#update_interval = 1
-    let g:neomru#file_mru_limit  = 500
+    let g:neomru#update_interval         = 1
+    let g:neomru#file_mru_limit          = 500
+    let g:neomru#file_mru_ignore_pattern = 'fugitiveblame'
   endfunction
 
   call neobundle#untap()
@@ -1763,25 +1796,18 @@ endif
 " vim-unite-giti {{{
 if neobundle#tap('vim-unite-giti')
   call neobundle#config({
-        \   'depends':  ['Shougo/unite.vim'],
+        \   'depends':  ['Shougo/unite.vim', 'Shougo/vimproc'],
         \   'autoload': {
-        \     'unite_sources':   ['giti', 'giti/branch', 'giti/branch_all', 'giti/config', 'giti/log', 'giti/remote', 'giti/status'],
         \     'function_prefix': 'giti',
+        \     'unite_sources':   [
+        \       'giti',     'giti/branch', 'giti/branch_all', 'giti/config',
+        \       'giti/log', 'giti/remote', 'giti/status'
+        \     ],
         \     'commands': [
-        \       'Giti',
-        \       'GitiWithConfirm',
-        \       'GitiFetch',
-        \       'GitiPush',
-        \       'GitiPushWithSettingUpstream',
-        \       'GitiPushExpressly',
-        \       'GitiPull',
-        \       'GitiPullSquash',
-        \       'GitiPullRebase',
-        \       'GitiPullExpressly',
-        \       'GitiDiff',
-        \       'GitiDiffCached',
-        \       'GitiLog',
-        \       'GitiLogLine'
+        \       'Giti',                        'GitiWithConfirm',   'GitiFetch', 'GitiPush',
+        \       'GitiPushWithSettingUpstream', 'GitiPushExpressly', 'GitiPull',  'GitiPullSquash',
+        \       'GitiPullRebase',              'GitiPullExpressly', 'GitiDiff',  'GitiDiffCached',
+        \       'GitiLog',                     'GitiLogLine'
         \     ]
         \   }
         \ })
@@ -1892,6 +1918,7 @@ function! s:FirstOneShot() " {{{
     " NeoBundleSource indentLine
     " NeoBundleSource lightline.vim
     NeoBundleSource matchparenpp
+    " NeoBundleSource vim-spice
     " }}}
     " 編集 {{{
     NeoBundleSource tcomment_vim
@@ -2453,10 +2480,6 @@ augroup MyAutoGroup
     setlocal cursorline
     let s:cursorline_lock = 1
   endfunction
-
-  function! s:IsUniteRunning()
-    return &ft == 'unite'
-  endfunction
 augroup END
 " }}}
 " 全角スペースをハイライト {{{
@@ -2690,6 +2713,15 @@ endfor
 nnoremap <silent> <F1> :<C-u>call <SID>SmartOpen($MYVIMRC)<CR>
 nnoremap <silent> <F2> :<C-u>call <SID>SmartOpen($MYGVIMRC)<CR>
 nnoremap <silent> <F3> :<C-u>source $MYVIMRC<CR>:<C-u>source $MYGVIMRC<CR>
+" }}}
+" Git {{{
+nnoremap [Git]     <Nop>
+nmap     <Leader>g [Git]
+
+nnoremap <silent> [Git]b     :<C-u>Gblame<CR>
+nnoremap <silent> [Git]f     :<C-u>GitiFetch<CR>
+nnoremap <silent> [Git]push  :<C-u>GitiPush<CR>
+nnoremap <silent> [Git]pull  :<C-u>GitiPull<CR>
 " }}}
 " ヘルプ {{{
 nnoremap <Leader><C-k>      :<C-u>help<Space>
@@ -3038,6 +3070,18 @@ function! s:SmartFormat()
   else
     echo 'Format : Not supported. : ' . &ft
   endif
+endfunction
+" }}}
+" Unite 実行中か {{{
+function! s:IsUniteRunning()
+
+  return &ft == 'unite'
+endfunction
+" }}}
+" Git ブランチにいるか {{{
+function! s:IsInGitBranch()
+
+  return fugitive#head() != ''
 endfunction
 " }}}
 " }}}
