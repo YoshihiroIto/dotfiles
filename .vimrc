@@ -101,13 +101,22 @@ function! s:SetNeoBundle() " {{{
   " 表示
   NeoBundle     'tomasr/molokai'
   NeoBundle     'Yggdroot/indentLine'
+  " NeoBundle     'itchyny/lightline.vim', {
+  "       \         'depends': [
+  "       \           'Shodepenugo/vimproc',
+  "       \           'tpodepenpe/vim-fugitive',
+  "       \           'airdepenblade/vim-gitgutter',
+  "       \           'osydepeno-manga/vim-anzu',
+  "       \           'scrdepenooloose/syntastic'
+  "       \         ]
+  "       \       }
   NeoBundle     'itchyny/lightline.vim', {
         \         'depends': [
-        \           'Shodepenugo/vimproc',
-        \           'tpodepenpe/vim-fugitive',
-        \           'airdepenblade/vim-gitgutter',
-        \           'osydepeno-manga/vim-anzu',
-        \           'scrdepenooloose/syntastic'
+        \           'vimproc',
+        \           'vim-fugitive',
+        \           'vim-gitgutter',
+        \           'vim-anzu',
+        \           'syntastic'
         \         ]
         \       }
   NeoBundleLazy 'vim-scripts/matchparenpp'
@@ -186,6 +195,7 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'mattn/benchvimrc-vim'
   NeoBundleLazy 'tpope/vim-fugitive'
   NeoBundleLazy 'airblade/vim-gitgutter'
+  " NeoBundleLazy 'sgur/vim-gitgutter'
   NeoBundleLazy 'Shougo/vimshell.vim'
   NeoBundleLazy 'Shougo/vimfiler.vim'
   NeoBundleLazy 'basyura/TweetVim'
@@ -199,6 +209,7 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'LeafCage/nebula.vim'
   NeoBundleLazy 'mattn/webapi-vim'
   NeoBundleLazy 'tyru/open-browser.vim'
+  NeoBundleLazy 'kana/vim-submode'
   if IsWindows() && IsGuiRunning()
     NeoBundleLazy 'YoshihiroIto/vim-icondrag'
   endif
@@ -837,10 +848,10 @@ if neobundle#tap('vim-altr')
         \   }
         \ })
 
-  nmap <F5>  <Plug>(altr-back)
-  nmap <F6>  <Plug>(altr-forward)
-
   function! neobundle#hooks.on_source(bundle)
+    nmap <F5> <Plug>(altr-forward)
+    nmap <F6> <Plug>(altr-back)
+
     call altr#define('Models/%Model.cs',       'ViewModels/%Vm.cs',       'Views/%.xaml',       'Views/%.xaml.cs')
     call altr#define('Models/*/%Model.cs',     'ViewModels/*/%Vm.cs',     'Views/*/%.xaml',     'Views/*/%.xaml.cs')
     call altr#define('Models/*/*/%Model.cs',   'ViewModels/*/*/%Vm.cs',   'Views/*/*/%.xaml',   'Views/*/*/%.xaml.cs')
@@ -1016,7 +1027,7 @@ endif
 " wandbox-vim {{{
 if neobundle#tap('wandbox-vim')
   call neobundle#config({
-        \   'depends':  ['Shougo/vimproc'],
+        \   'depends':  ['vimproc'],
         \   'autoload': {
         \     'filetypes': ['c', 'cpp', 'objc'],
         \     'commands': [
@@ -1239,7 +1250,7 @@ endif
 " previm {{{
 if neobundle#tap('previm')
   call neobundle#config({
-        \   'depends':  ['tyru/open-browser.vim'],
+        \   'depends':  ['open-browser.vim'],
         \   'autoload': {
         \     'filetypes': ['markdown']
         \   }
@@ -1509,6 +1520,7 @@ endfunction
 " vim-gitgutter {{{
 if neobundle#tap('vim-gitgutter')
   call neobundle#config({
+        \   'depends':  ['Shougo/vimproc'],
         \   'autoload': {
         \     'function_prefix': 'GitGutter'
         \   }
@@ -1517,8 +1529,12 @@ if neobundle#tap('vim-gitgutter')
   function! neobundle#hooks.on_source(bundle)
     let g:gitgutter_map_keys = 0
 
-    nmap gn <Plug>GitGutterNextHunkzz
-    nmap gp <Plug>GitGutterPrevHunkzz
+    " http://sgur.tumblr.com/post/48446647896/vim-gitgutter
+    let g:gitgutter_system_function       = 'vimproc#system'
+    let g:gitgutter_system_error_function = 'vimproc#get_last_status'
+
+    nmap <F7> zo<Plug>GitGutterNextHunkzz
+    nmap <F8> zo<Plug>GitGutterPrevHunkzz
   endfunction
 
   call neobundle#untap()
@@ -1696,6 +1712,33 @@ if neobundle#tap('open-browser.vim')
 
   call neobundle#untap()
 endif
+" }}}
+" vim-submode {{{
+if neobundle#tap('vim-submode')
+  call neobundle#config({
+        \   'autoload': {
+        \     'function_prefix': 'submode'
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    call submode#enter_with('gitgutter', 'n', 'r', '<Leader>j', 'zo<Plug>GitGutterNextHunkzz')
+    call submode#map(       'gitgutter', 'n', 'r', 'j',         'zo<Plug>GitGutterNextHunkzz')
+    call submode#map(       'gitgutter', 'n', 'r', 'k',         'zo<Plug>GitGutterPrevHunkzz')
+
+    call submode#enter_with('winsize', 'n', '', '<C-w>>', '<C-w>>')
+    call submode#enter_with('winsize', 'n', '', '<C-w><', '<C-w><')
+    call submode#enter_with('winsize', 'n', '', '<C-w>+', '<C-w>-')
+    call submode#enter_with('winsize', 'n', '', '<C-w>-', '<C-w>+')
+    call submode#map(       'winsize', 'n', '', '>',      '<C-w>>')
+    call submode#map(       'winsize', 'n', '', '<',      '<C-w><')
+    call submode#map(       'winsize', 'n', '', '+',      '<C-w>-')
+    call submode#map(       'winsize', 'n', '', '-',      '<C-w>+')
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
 " dictionary.vim {{{
 if IsMac()
   if neobundle#tap('dictionary.vim')
@@ -1708,7 +1751,6 @@ if IsMac()
     call neobundle#untap()
   endif
 endif
-" }}}
 " }}}
 " }}}
 " Unite {{{
@@ -2006,6 +2048,9 @@ function! s:FirstOneShot() " {{{
     " }}}
     " 言語 {{{
     NeoBundleSource syntastic
+    " }}}
+    " ライブラリ {{{
+    NeoBundleSource vim-submode
     " }}}
 
     set incsearch                     " インクリメンタルサーチ
