@@ -36,6 +36,22 @@ function! IsStarting()
 endfunction
 " }}}
 
+if IsStarting()
+  let s:git_dotvimrc  = expand('~/dotfiles/.vimrc')
+  let s:git_dotgvimrc = expand('~/dotfiles/.gvimrc')
+
+  if filereadable(s:git_dotvimrc)
+    let $MYVIMRC = s:git_dotvimrc
+  endif
+
+  if filereadable(s:git_dotgvimrc)
+    let $MYGVIMRC = s:git_dotgvimrc
+  endif
+
+  unlet s:git_dotvimrc
+  unlet s:git_dotgvimrc
+endif
+
 let s:baseColumns = IsWindows() ? 140 : 120
 let g:mapleader   = ','
 let s:vimrc_local = expand('~/.vimrc_local')
@@ -79,20 +95,13 @@ let g:did_install_default_menus = 1
 
 nnoremap [App] <Nop>
 nmap     ;     [App]
-
-if !IsGuiRunning()
-  let $MYGVIMRC = expand('~/.gvimrc')
-endif
-
-" 右ウィンドウ幅
-let s:rightWindowWidth = 40
 " }}}
 " プラグイン {{{
 function! s:SetNeoBundle() " {{{
   " 表示
   NeoBundle     'tomasr/molokai'
   NeoBundle     'Yggdroot/indentLine'
-  NeoBundle     'itchyny/lightline.vim', { 'depends': ['Shougo/vimproc', 'tpope/vim-fugitive', 'osyo-manga/vim-anzu', 'scrooloose/syntastic'] }
+  NeoBundle     'itchyny/lightline.vim', { 'depends': ['Shougo/vimproc', 'tpope/vim-fugitive', 'airblade/vim-gitgutter', 'osyo-manga/vim-anzu', 'scrooloose/syntastic'] }
   NeoBundleLazy 'vim-scripts/matchparenpp'
   NeoBundleLazy 'majutsushi/tagbar'
   NeoBundleLazy 'LeafCage/foldCC'
@@ -131,7 +140,7 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'Rip-Rip/clang_complete'
   NeoBundleLazy 'rhysd/vim-clang-format'
   NeoBundleLazy 'osyo-manga/shabadou.vim'
-  NeoBundleLazy 'plasticboy/vim-markdown'
+  NeoBundleLazy 'rcmdnk/vim-markdown'
   NeoBundleLazy 'vim-jp/cpp-vim'
   NeoBundle     'YoshihiroIto/vim-gocode'
   NeoBundleLazy 'dgryski/vim-godef'
@@ -145,6 +154,7 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'jelera/vim-javascript-syntax'
   NeoBundleLazy 'rhysd/wandbox-vim'
   NeoBundleLazy 'thinca/vim-quickrun'
+  NeoBundleLazy 'kannokanno/previm'
 
   " テキストオブジェクト
   NeoBundleLazy 'kana/vim-textobj-user'
@@ -167,7 +177,8 @@ function! s:SetNeoBundle() " {{{
   " アプリ
   NeoBundleLazy 'tsukkee/lingr-vim'
   NeoBundleLazy 'mattn/benchvimrc-vim'
-  NeoBundleLazy 'YoshihiroIto/vim-fugitive'
+  NeoBundleLazy 'tpope/vim-fugitive'
+  NeoBundleLazy 'airblade/vim-gitgutter'
   NeoBundleLazy 'Shougo/vimshell.vim'
   NeoBundleLazy 'Shougo/vimfiler.vim'
   NeoBundleLazy 'basyura/TweetVim'
@@ -223,17 +234,7 @@ if neobundle#tap('tagbar')
         \   }
         \ })
 
-  noremap <silent> <F8>    :<C-u>call <SID>ToggleTagBar()<CR>
-
-  function! s:ToggleTagBar()
-    if bufwinnr(bufnr('__Tagbar__')) != -1
-      TagbarToggle
-      let &columns = &columns - (s:rightWindowWidth + 1)
-    else
-      let &columns = &columns + (s:rightWindowWidth + 1)
-      TagbarToggle
-    endif
-  endfunction
+  noremap <silent> t :<C-u>TagbarToggle<CR>
 
   call neobundle#untap()
 endif
@@ -299,8 +300,8 @@ let g:lightline = {
       \   'colorscheme': 'yoi',
       \   'active': {
       \     'left': [
-      \       ['mode',     'paste'],
-      \       ['branch',   'filename', 'anzu']
+      \       ['mode',   'paste'],
+      \       ['branch', 'gitgutter', 'filename', 'anzu']
       \     ],
       \     'right': [
       \       ['syntastic', 'lineinfo'],
@@ -324,11 +325,13 @@ let g:lightline = {
       \   },
       \   'component_expand': {
       \     'syntastic':    'SyntasticStatuslineFlag',
-      \     'branch':       'GetCurrentBranch'
+      \     'branch':       'GetCurrentBranch',
+      \     'gitgutter':    'MyGitGutter',
       \   },
       \   'component_type': {
       \     'syntastic':    'error',
-      \     'branch':       'branch'
+      \     'branch':       'branch',
+      \     'gitgutter':    'branch'
       \   },
       \   'separator': {
       \     'left':  '⮀',
@@ -436,6 +439,34 @@ function! MyFileencoding()
   endif
 
   return winwidth(0) > 70 ? (strlen(&fenc) ? &fenc : &enc) : ''
+endfunction
+
+augroup MyAutoGroup
+  autocmd CursorHold,CursorHoldI * call lightline#update()
+augroup END
+
+" http://qiita.com/yuyuchu3333/items/20a0acfe7e0d0e167ccc
+function! MyGitGutter()
+  if ! exists('*GitGutterGetHunkSummary')
+        \ || ! get(g:, 'gitgutter_enabled', 0)
+        \ || winwidth('.') <= 90
+    return ''
+  endif
+
+  let symbols = [
+        \ g:gitgutter_sign_added,
+        \ g:gitgutter_sign_modified,
+        \ g:gitgutter_sign_removed
+        \ ]
+
+  let hunks = GitGutterGetHunkSummary()
+  let ret = []
+  for i in [0, 1, 2]
+    if hunks[i] > 0
+      call add(ret, symbols[i] . hunks[i])
+    endif
+  endfor
+  return join(ret, ' ')
 endfunction
 
 function! MyCharCode()
@@ -1074,12 +1105,13 @@ endif
 if neobundle#tap('vim-markdown')
   call neobundle#config({
         \   'autoload': {
-        \     'filetypes': ['markdown', 'mkd']
+        \     'filetypes': ['markdown']
         \   }
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    let g:vim_markdown_folding_disabled = 0
+    let g:vim_markdown_no_default_key_mappings = 1
+    let g:vim_markdown_initial_foldlevel       = 99
   endfunction
 
   call neobundle#untap()
@@ -1200,6 +1232,18 @@ if neobundle#tap('vim-javascript-syntax')
   call neobundle#config({
         \   'autoload': {
         \     'filetypes': ['javascript']
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" previm {{{
+if neobundle#tap('previm')
+  call neobundle#config({
+        \   'depends':  ['tyru/open-browser.vim'],
+        \   'autoload': {
+        \     'filetypes': ['markdown']
         \   }
         \ })
 
@@ -1674,15 +1718,14 @@ if neobundle#tap('unite.vim')
   " nnoremap <silent> [Unite]b  :<C-u>Unite -no-split buffer<CR>
   nnoremap <silent> [Unite]t  :<C-u>Unite -no-split tab<CR>
   nnoremap <silent> [Unite]l  :<C-u>Unite -no-split line<CR>
-  nnoremap <silent> [Unite]o  :<C-u>Unite -no-split outline<CR>
-  nnoremap <silent> [Unite]z  :<C-u>Unite -no-split fold<CR>
+  nnoremap <silent> [Unite]o  :<C-u>Unite outline<CR>
+  nnoremap <silent> [Unite]z  :<C-u>Unite fold<CR>
   nnoremap <silent> [Unite]q  :<C-u>Unite -no-quit quickfix<CR>
   nnoremap <silent> [Unite]v  :<C-u>call <SID>SafeExecuteUniteGiti('giti')<CR>
   nnoremap <silent> [Unite]b  :<C-u>call <SID>SafeExecuteUniteGiti('giti/branch_all')<CR>
 
   if IsWindows()
     nnoremap <silent> [Unite]m  :<C-u>Unite -no-split neomru/file everything<CR>
-    nnoremap <silent> [Unite]e  :<C-u>Unite -no-split everything<CR>
   else
     nnoremap <silent> [Unite]m  :<C-u>Unite -no-split neomru/file<CR>
   endif
@@ -1718,7 +1761,7 @@ if neobundle#tap('unite.vim')
         \   'start_insert':     1
         \ })
 
-    call unite#custom#profile('source/giti,source/giti/branch_all', 'context', {
+    call unite#custom#profile('source/outline,source/fold,source/giti,source/giti/branch_all', 'context', {
         \   'vertical': 1
         \ })
 
@@ -1918,6 +1961,7 @@ function! s:FirstOneShot() " {{{
     " NeoBundleSource indentLine
     " NeoBundleSource lightline.vim
     NeoBundleSource matchparenpp
+    NeoBundleSource foldcc
     " NeoBundleSource vim-spice
     " }}}
     " 編集 {{{
@@ -1993,12 +2037,13 @@ augroup FirstOneShot
 augroup END
 
 augroup MyAutoGroup
-  autocmd BufEnter,WinEnter,BufWinEnter,BufWritePost *                   call s:UpdateAll()
-  autocmd BufNewFile,BufRead                         *.xaml              setlocal ft=xml
-  autocmd BufNewFile,BufRead                         *.json              setlocal ft=json
-  autocmd BufNewFile,BufRead                         *.{fx,fxc,fxh,hlsl} setlocal ft=hlsl
-  autocmd BufNewFile,BufRead                         *.{fsh,vsh}         setlocal ft=glsl
-  autocmd BufWritePost                               $MYVIMRC            NeoBundleClearCache
+  autocmd BufEnter,WinEnter,BufWinEnter,BufWritePost *                          call s:UpdateAll()
+  autocmd BufNewFile,BufRead                         *.xaml                     setlocal ft=xml
+  autocmd BufNewFile,BufRead                         *.json                     setlocal ft=json
+  autocmd BufNewFile,BufRead                         *.{fx,fxc,fxh,hlsl}        setlocal ft=hlsl
+  autocmd BufNewFile,BufRead                         *.{fsh,vsh}                setlocal ft=glsl
+  autocmd BufNewFile,BufRead                         *.{md,mdwn,mkd,mkdn,mark*} setlocal ft=markdown
+  autocmd BufWritePost                               $MYVIMRC                   NeoBundleClearCache
 
   autocmd FileType *          call s:SetAll()
   autocmd FileType ruby       call s:SetRuby()
@@ -2064,7 +2109,7 @@ augroup MyAutoGroup
     let g:xml_syntax_folding = 1
 
     setlocal foldmethod=syntax
-    setlocal foldlevel=100
+    setlocal foldlevel=99
     setlocal foldcolumn=5
   endfunction
 
@@ -2104,7 +2149,7 @@ augroup MyAutoGroup
     setlocal foldmethod=syntax
     let g:omnicomplete_fetch_full_documentation = 0
 
-    nnoremap <buffer> <F12>   :<C-u>call OmniSharp#GotoDefinition()<CR>zz
+    nnoremap <buffer> <C-P>   :<C-u>call OmniSharp#GotoDefinition()<CR>zz
     nnoremap <buffer> <S-F12> :<C-u>call OmniSharp#FindUsages()<CR>
   endfunction
 
@@ -2194,6 +2239,8 @@ set nrformats-=octal
 set nrformats+=alpha
 set completeopt=longest,menuone
 set backspace=indent,eol,start
+set spell
+set spelllang+=cjk
 
 noremap U J
 
@@ -2707,6 +2754,10 @@ nnoremap <silent> <Leader>x :bdelete<CR>
 for s:n in range(1, 9)
   exe 'nnoremap <silent> [Buffer]' . s:n  ':<C-u>b' . s:n . '<CR>'
 endfor
+
+nnoremap <silent> <C-k> :<C-u>bprevious<CR>
+nnoremap <silent> <C-j> :<C-u>bnext<CR>
+
 " }}}
 " ファイル操作 {{{
 " vimrc / gvimrc の編集
@@ -2718,7 +2769,7 @@ nnoremap <silent> <F3> :<C-u>source $MYVIMRC<CR>:<C-u>source $MYGVIMRC<CR>
 nnoremap [Git]     <Nop>
 nmap     <Leader>g [Git]
 
-nnoremap <silent> [Git]b     :<C-u>Gblame<CR>
+nnoremap <silent> [Git]b     :<C-u>Gblame w<CR>
 nnoremap <silent> [Git]a     :<C-u>Gwrite<CR>
 nnoremap <silent> [Git]c     :<C-u>Gcommit<CR>
 nnoremap <silent> [Git]f     :<C-u>GitiFetch<CR>
