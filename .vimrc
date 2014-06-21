@@ -101,12 +101,19 @@ function! s:SetNeoBundle() " {{{
   " 表示
   NeoBundle     'tomasr/molokai'
   NeoBundle     'Yggdroot/indentLine'
-  NeoBundle     'itchyny/lightline.vim', { 'depends': ['Shougo/vimproc', 'tpope/vim-fugitive', 'airblade/vim-gitgutter', 'osyo-manga/vim-anzu', 'scrooloose/syntastic'] }
+  NeoBundle     'itchyny/lightline.vim', {
+        \         'depends': [
+        \           'Shodepenugo/vimproc',
+        \           'tpodepenpe/vim-fugitive',
+        \           'airdepenblade/vim-gitgutter',
+        \           'osydepeno-manga/vim-anzu',
+        \           'scrdepenooloose/syntastic'
+        \         ]
+        \       }
   NeoBundleLazy 'vim-scripts/matchparenpp'
   NeoBundleLazy 'majutsushi/tagbar'
   NeoBundleLazy 'LeafCage/foldCC'
   NeoBundleLazy 'movewin.vim'
-  " NeoBundleLazy 'osyo-manga/vim-spice'
 
   " 編集
   NeoBundleLazy 'tomtom/tcomment_vim'
@@ -453,6 +460,10 @@ function! MyGitGutter()
     return ''
   endif
 
+  if ! s:IsInGitBranch()
+    return ''
+  endif
+
   let symbols = [
         \ g:gitgutter_sign_added,
         \ g:gitgutter_sign_modified,
@@ -462,9 +473,7 @@ function! MyGitGutter()
   let hunks = GitGutterGetHunkSummary()
   let ret = []
   for i in [0, 1, 2]
-    if hunks[i] > 0
-      call add(ret, symbols[i] . hunks[i])
-    endif
+    call add(ret, symbols[i] . hunks[i])
   endfor
   return join(ret, ' ')
 endfunction
@@ -527,17 +536,6 @@ augroup MyAutoGroup
   endfunction
 augroup END
 " }}}
-" " vim-spice {{{
-" if neobundle#tap('vim-spice')
-"
-"   function! neobundle#hooks.on_source(bundle)
-"     hi Spice guifg=Red
-"     let g:spice#cursor_word_higilight = "Spice"
-"   endfunction
-"
-"   call neobundle#untap()
-" endif
-" " }}}
 " }}}
 " 編集 {{{
 " vim-easy-align {{{
@@ -1508,6 +1506,24 @@ function! s:UpdateFugitive()
   call lightline#update()
 endfunction
 " }}}
+" vim-gitgutter {{{
+if neobundle#tap('vim-gitgutter')
+  call neobundle#config({
+        \   'autoload': {
+        \     'function_prefix': 'GitGutter'
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    let g:gitgutter_map_keys = 0
+
+    nmap gn <Plug>GitGutterNextHunkzz
+    nmap gp <Plug>GitGutterPrevHunkzz
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
 " vimshell.vim {{{
 if neobundle#tap('vimshell.vim')
   call neobundle#config({
@@ -1978,6 +1994,7 @@ function! s:FirstOneShot() " {{{
     " }}}
     " アプリ {{{
     NeoBundleSource vim-fugitive
+    NeoBundleSource vim-gitgutter
     if IsWindows() && IsGuiRunning()
       NeoBundleSource vim-icondrag
       IconDragEnable
@@ -2239,8 +2256,8 @@ set nrformats-=octal
 set nrformats+=alpha
 set completeopt=longest,menuone
 set backspace=indent,eol,start
-set spell
-set spelllang+=cjk
+" set spell
+" set spelllang+=cjk
 
 noremap U J
 
@@ -2769,12 +2786,12 @@ nnoremap <silent> <F3> :<C-u>source $MYVIMRC<CR>:<C-u>source $MYGVIMRC<CR>
 nnoremap [Git]     <Nop>
 nmap     <Leader>g [Git]
 
-nnoremap <silent> [Git]b     :<C-u>Gblame w<CR>
-nnoremap <silent> [Git]a     :<C-u>Gwrite<CR>
-nnoremap <silent> [Git]c     :<C-u>Gcommit<CR>
-nnoremap <silent> [Git]f     :<C-u>GitiFetch<CR>
-nnoremap <silent> [Git]push  :<C-u>GitiPush<CR>
-nnoremap <silent> [Git]pull  :<C-u>GitiPull<CR>
+nnoremap <silent> [Git]b    :<C-u>Gblame w<CR>
+nnoremap <silent> [Git]a    :<C-u>Gwrite<CR>
+nnoremap <silent> [Git]c    :<C-u>Gcommit<CR>
+nnoremap <silent> [Git]f    :<C-u>GitiFetch<CR>
+nnoremap <silent> [Git]push :<C-u>GitiPush<CR>
+nnoremap <silent> [Git]pull :<C-u>GitiPull<CR>
 " }}}
 " ヘルプ {{{
 nnoremap <Leader><C-k>      :<C-u>help<Space>
