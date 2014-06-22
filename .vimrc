@@ -101,15 +101,6 @@ function! s:SetNeoBundle() " {{{
   " 表示
   NeoBundle     'tomasr/molokai'
   NeoBundle     'Yggdroot/indentLine'
-  " NeoBundle     'itchyny/lightline.vim', {
-  "       \         'depends': [
-  "       \           'Shodepenugo/vimproc',
-  "       \           'tpodepenpe/vim-fugitive',
-  "       \           'airdepenblade/vim-gitgutter',
-  "       \           'osydepeno-manga/vim-anzu',
-  "       \           'scrdepenooloose/syntastic'
-  "       \         ]
-  "       \       }
   NeoBundle     'itchyny/lightline.vim', {
         \         'depends': [
         \           'vimproc',
@@ -129,12 +120,11 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'tpope/vim-surround'
   NeoBundleLazy 'tpope/vim-repeat'
   NeoBundleLazy 'LeafCage/yankround.vim'
-  NeoBundleLazy 'cohama/vim-smartinput-endwise'
+  NeoBundleLazy 'kana/vim-smartinput'
   NeoBundleLazy 'nishigori/increment-activator'
   NeoBundleLazy 'osyo-manga/vim-over'
   NeoBundleLazy 'thinca/vim-qfreplace'
   NeoBundleLazy 'junegunn/vim-easy-align'
-  NeoBundleLazy 'kana/vim-smartinput'
 
   " 補完
   NeoBundleLazy 'Shougo/neocomplete.vim'
@@ -194,8 +184,7 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'tsukkee/lingr-vim'
   NeoBundleLazy 'mattn/benchvimrc-vim'
   NeoBundleLazy 'tpope/vim-fugitive'
-  NeoBundleLazy 'airblade/vim-gitgutter'
-  " NeoBundleLazy 'sgur/vim-gitgutter'
+  NeoBundleLazy 'airblade/vim-gitgutter', 'xolox'
   NeoBundleLazy 'Shougo/vimshell.vim'
   NeoBundleLazy 'Shougo/vimfiler.vim'
   NeoBundleLazy 'basyura/TweetVim'
@@ -210,6 +199,8 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'mattn/webapi-vim'
   NeoBundleLazy 'tyru/open-browser.vim'
   NeoBundleLazy 'kana/vim-submode'
+  NeoBundleLazy 'xolox/vim-misc'
+  NeoBundleLazy 'xolox/vim-shell'
   if IsWindows() && IsGuiRunning()
     NeoBundleLazy 'YoshihiroIto/vim-icondrag'
   endif
@@ -605,25 +596,14 @@ endif
 " vim-smartinput {{{
 if neobundle#tap('vim-smartinput')
   call neobundle#config({
-        \   'depends':  ['cohama/vim-smartinput-endwise'],
-        \   'autoload': {
-        \     'insert': 1,
-        \   }
-        \ })
-
-  call neobundle#untap()
-endif
-" }}}
-" vim-smartinput-endwise {{{
-if neobundle#tap('vim-smartinput-endwise')
-  call neobundle#config({
         \   'autoload': {
         \     'insert': 1,
         \   }
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    call smartinput_endwise#define_default_rules()
+    call smartinput#clear_rules()
+    call smartinput#define_default_rules()
   endfunction
 
   call neobundle#untap()
@@ -684,7 +664,7 @@ endif
 " neocomplete.vim {{{
 if neobundle#tap('neocomplete.vim')
   call neobundle#config({
-        \   'depends':  ['Shougo/vimproc'],
+        \   'depends':  ['vimproc'],
         \   'autoload': {
         \     'insert': 1,
         \   }
@@ -762,7 +742,7 @@ endif
 " neosnippet.vim {{{
 if neobundle#tap('neosnippet.vim')
   call neobundle#config({
-        \   'depends':  ['Shougo/neosnippet-snippets', 'Shougo/neocomplete.vim'],
+        \   'depends':  ['neosnippet-snippets', 'neocomplete.vim'],
         \   'autoload': {
         \     'insert': 1,
         \     'filetypes': ['neosnippet'],
@@ -819,7 +799,7 @@ endif
 " Omnisharp {{{
 if neobundle#tap('Omnisharp')
   call neobundle#config({
-        \   'depends':  ['Shougo/neocomplete.vim', 'Shougo/vimproc', 'scrooloose/syntastic'],
+        \   'depends':  ['neocomplete.vim', 'vimproc', 'syntastic'],
         \   'autoload': {
         \     'filetypes': ['cs']
         \   },
@@ -1066,7 +1046,7 @@ endif
 " vim-quickrun {{{
 if neobundle#tap('vim-quickrun')
   call neobundle#config({
-        \   'depends':  ['osyo-manga/shabadou.vim', 'rhysd/wandbox-vim', 'Shougo/vimproc'],
+        \   'depends':  ['shabadou.vim', 'wandbox-vim', 'vimproc'],
         \   'autoload': {
         \     'mappings': [['sxn', '<Plug>(quickrun']],
         \     'commands': [
@@ -1265,7 +1245,7 @@ endif
 " vim-textobj-entire {{{
 if neobundle#tap('vim-textobj-entire')
   call neobundle#config({
-        \   'depends':  ['kana/vim-textobj-user'],
+        \   'depends':  ['vim-textobj-user'],
         \   'autoload': {
         \     'mappings': [['xo', 'ae'], ['xo', 'ie']]
         \   }
@@ -1277,7 +1257,7 @@ endif
 " vim-textobj-indent {{{
 if neobundle#tap('vim-textobj-indent')
   call neobundle#config({
-        \   'depends':  ['kana/vim-textobj-user'],
+        \   'depends':  ['vim-textobj-user'],
         \   'autoload': {
         \     'mappings': [['xo', 'ai'], ['xo', 'aI'], ['xo', 'ii'], ['xo', 'iI']]
         \   }
@@ -1289,7 +1269,7 @@ endif
 " vim-textobj-line {{{
 if neobundle#tap('vim-textobj-line')
   call neobundle#config({
-        \   'depends':  ['kana/vim-textobj-user'],
+        \   'depends':  ['vim-textobj-user'],
         \   'autoload': {
         \     'mappings': [['xo', 'al'], ['xo', 'il']]
         \   }
@@ -1301,7 +1281,7 @@ endif
 " vim-textobj-word-column {{{
 if neobundle#tap('vim-textobj-word-column')
   call neobundle#config({
-        \   'depends':  ['kana/vim-textobj-user'],
+        \   'depends':  ['vim-textobj-user'],
         \   'autoload': {
         \     'mappings': [['xo', 'av'], ['xo', 'aV'], ['xo', 'iv'], ['xo', 'iV']]
         \   }
@@ -1313,7 +1293,7 @@ endif
 " vim-textobj-comment {{{
 if neobundle#tap('vim-textobj-comment')
   call neobundle#config({
-        \   'depends':  ['kana/vim-textobj-user'],
+        \   'depends':  ['vim-textobj-user'],
         \   'autoload': {
         \     'mappings': [['xo', 'ac'], ['xo', 'ic']]
         \   }
@@ -1325,7 +1305,7 @@ endif
 " vim-textobj-parameter {{{
 if neobundle#tap('vim-textobj-parameter')
   call neobundle#config({
-        \   'depends':  ['kana/vim-textobj-user'],
+        \   'depends':  ['vim-textobj-user'],
         \   'autoload': {
         \     'mappings': [['xo', '<Plug>(textobj-parameter']]
         \   }
@@ -1342,7 +1322,7 @@ endif
 " vim-textobj-anyblock {{{
 if neobundle#tap('vim-textobj-anyblock')
   call neobundle#config({
-        \   'depends':  ['kana/vim-textobj-user'],
+        \   'depends':  ['vim-textobj-user'],
         \   'autoload': {
         \     'mappings': [['xo', 'ab'], ['xo', 'ib']]
         \   }
@@ -1354,7 +1334,7 @@ endif
 " textobj-wiw {{{
 if neobundle#tap('textobj-wiw')
   call neobundle#config({
-        \   'depends':  ['kana/vim-textobj-user'],
+        \   'depends':  ['vim-textobj-user'],
         \   'autoload': {
         \     'mappings': [['xo', '<Plug>(textobj-wiw']]
         \   }
@@ -1374,7 +1354,7 @@ endif
 " vim-operator-replace {{{
 if neobundle#tap('vim-operator-replace')
   call neobundle#config({
-        \   'depends':  ['kana/vim-operator-user'],
+        \   'depends':  ['vim-operator-user'],
         \   'autoload': {
         \     'mappings': [['nx', '<Plug>(operator-replace)']]
         \   }
@@ -1389,7 +1369,7 @@ endif
 " operator-camelize.vim {{{
 if neobundle#tap('operator-camelize.vim')
   call neobundle#config({
-        \   'depends':  ['kana/vim-operator-user'],
+        \   'depends':  ['vim-operator-user'],
         \   'autoload': {
         \     'mappings': [['nx', '<Plug>(operator-camelize-toggle)']]
         \   }
@@ -1404,7 +1384,7 @@ endif
 " vim-operator-sort {{{
 if neobundle#tap('vim-operator-sort')
   call neobundle#config({
-        \   'depends':  ['kana/vim-operator-user'],
+        \   'depends':  ['vim-operator-user'],
         \   'autoload': {
         \     'mappings': [['nx', '<Plug>(operator-sort']]
         \   }
@@ -1419,7 +1399,7 @@ endif
 " vim-rengbang {{{
 if neobundle#tap('vim-vim-rengbang-sort')
   call neobundle#config({
-        \   'depends':  ['kana/vim-operator-user'],
+        \   'depends':  ['vim-operator-user'],
         \   'autoload': {
         \     'commands': ['RengBang'],
         \     'mappings': [['nx', '<Plug>(operator-rengbang']]
@@ -1491,7 +1471,7 @@ endif
 " vim-fugitive {{{
 if neobundle#tap('vim-fugitive')
   call neobundle#config({
-        \   'depends':  ['Shougo/vimproc'],
+        \   'depends':  ['vimproc'],
         \   'autoload': {
         \     'insert':          1,
         \     'function_prefix': 'fugitive'
@@ -1520,18 +1500,16 @@ endfunction
 " vim-gitgutter {{{
 if neobundle#tap('vim-gitgutter')
   call neobundle#config({
-        \   'depends':  ['Shougo/vimproc'],
+        \   'depends':  ['vim-misc', 'vim-shell'],
         \   'autoload': {
         \     'function_prefix': 'GitGutter'
         \   }
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    let g:gitgutter_map_keys = 0
-
-    " http://sgur.tumblr.com/post/48446647896/vim-gitgutter
-    let g:gitgutter_system_function       = 'vimproc#system'
-    let g:gitgutter_system_error_function = 'vimproc#get_last_status'
+    let g:gitgutter_map_keys                    = 0
+    let g:gitgutter_eager                       = 0
+    let g:gitgutter_avoid_cmd_prompt_on_windows = 0
 
     nmap <F7> zo<Plug>GitGutterNextHunkzz
     nmap <F8> zo<Plug>GitGutterPrevHunkzz
@@ -1543,7 +1521,7 @@ endif
 " vimshell.vim {{{
 if neobundle#tap('vimshell.vim')
   call neobundle#config({
-        \   'depends':  ['Shougo/vimproc'],
+        \   'depends':  ['vimproc'],
         \   'autoload': {
         \     'commands' : [ 'VimShell', 'VimShellPop' ]
         \   }
@@ -1561,7 +1539,7 @@ endif
 " vimfiler.vim {{{
 if neobundle#tap('vimfiler.vim')
   call neobundle#config({
-        \   'depends':  ['Shougo/vimproc', 'Shougo/unite.vim', 'Shougo/vimshell.vim'],
+        \   'depends':  ['vimproc', 'unite.vim', 'vimshell.vim'],
         \   'autoload': {
         \     'commands': ['VimFilerBufferDir'],
         \   }
@@ -1598,7 +1576,7 @@ endif
 " Tweetvim {{{
 if neobundle#tap('TweetVim')
   call neobundle#config({
-        \   'depends':  ['Shougo/vimproc', 'basyura/twibill.vim', 'tyru/open-browser.vim', 'mattn/webapi-vim'],
+        \   'depends':  ['vimproc', 'twibill.vim', 'open-browser.vim', 'webapi-vim'],
         \   'autoload': {
         \     'commands': ['TweetVimHomeTimeline', 'TweetVimUserStream']
         \   }
@@ -1684,7 +1662,7 @@ endif
 " open-browser.vim {{{
 if neobundle#tap('open-browser.vim')
   call neobundle#config({
-        \   'depends':  ['Shougo/vimproc'],
+        \   'depends':  ['vimproc'],
         \   'autoload': {
         \     'mappings': ['<Plug>(openbrowser-'],
         \     'commands': [
@@ -1722,18 +1700,10 @@ if neobundle#tap('vim-submode')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
+    " todo:gvimで動作しない
     call submode#enter_with('gitgutter', 'n', 'r', '<Leader>j', 'zo<Plug>GitGutterNextHunkzz')
     call submode#map(       'gitgutter', 'n', 'r', 'j',         'zo<Plug>GitGutterNextHunkzz')
     call submode#map(       'gitgutter', 'n', 'r', 'k',         'zo<Plug>GitGutterPrevHunkzz')
-
-    call submode#enter_with('winsize', 'n', '', '<C-w>>', '<C-w>>')
-    call submode#enter_with('winsize', 'n', '', '<C-w><', '<C-w><')
-    call submode#enter_with('winsize', 'n', '', '<C-w>+', '<C-w>-')
-    call submode#enter_with('winsize', 'n', '', '<C-w>-', '<C-w>+')
-    call submode#map(       'winsize', 'n', '', '>',      '<C-w>>')
-    call submode#map(       'winsize', 'n', '', '<',      '<C-w><')
-    call submode#map(       'winsize', 'n', '', '+',      '<C-w>-')
-    call submode#map(       'winsize', 'n', '', '-',      '<C-w>+')
   endfunction
 
   call neobundle#untap()
@@ -1757,7 +1727,7 @@ endif
 " unite.vim {{{
 if neobundle#tap('unite.vim')
   call neobundle#config({
-        \   'depends':  ['Shougo/vimproc'],
+        \   'depends':  ['vimproc'],
         \   'autoload': {
         \     'commands': ['Unite', 'UniteResume', 'UniteWithCursorWord']
         \   }
@@ -1843,7 +1813,7 @@ endif
 " unite-outline {{{
 if neobundle#tap('unite-outline')
   call neobundle#config({
-        \   'depends':  ['Shougo/unite.vim'],
+        \   'depends':  ['unite.vim'],
         \   'autoload': {
         \     'unite_sources': ['outline']
         \   }
@@ -1855,7 +1825,7 @@ endif
 " unite-quickfix {{{
 if neobundle#tap('unite-quickfix')
   call neobundle#config({
-        \   'depends':  ['Shougo/unite.vim'],
+        \   'depends':  ['unite.vim'],
         \   'autoload': {
         \     'unite_sources': ['quickfix']
         \   }
@@ -1867,7 +1837,7 @@ endif
 " unite-fold {{{
 if neobundle#tap('unite-fold')
   call neobundle#config({
-        \   'depends':  ['Shougo/unite.vim'],
+        \   'depends':  ['unite.vim'],
         \   'autoload': {
         \     'unite_sources': ['fold']
         \   }
@@ -1879,7 +1849,7 @@ endif
 " neomru.vim {{{
 if neobundle#tap('neomru.vim')
   call neobundle#config({
-        \   'depends':  ['Shougo/unite.vim'],
+        \   'depends':  ['unite.vim'],
         \   'autoload': {
         \     'unite_sources': ['neomru/file']
         \   }
@@ -1897,7 +1867,7 @@ endif
 " vim-unite-giti {{{
 if neobundle#tap('vim-unite-giti')
   call neobundle#config({
-        \   'depends':  ['Shougo/unite.vim', 'Shougo/vimproc'],
+        \   'depends':  ['unite.vim', 'vimproc'],
         \   'autoload': {
         \     'function_prefix': 'giti',
         \     'unite_sources':   [
@@ -1926,7 +1896,7 @@ endif
 if IsWindows()
   if neobundle#tap('unite-everything')
     call neobundle#config({
-          \   'depends':  ['Shougo/unite.vim'],
+          \   'depends':  ['unite.vim'],
           \   'autoload': {
           \     'unite_sources': ['everything', 'everything/async'],
           \   }
@@ -2026,6 +1996,7 @@ function! s:FirstOneShot() " {{{
     NeoBundleSource tcomment_vim
     NeoBundleSource vim-surround
     NeoBundleSource vim-repeat
+    NeoBundleSource vim-smartinput
     " }}}
     " ファイル {{{
     NeoBundleSource vim-altr
