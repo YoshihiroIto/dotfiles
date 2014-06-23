@@ -291,16 +291,6 @@ let s:p.visual.middle = [['#FF84BA', '#870036']]
 let s:p.visual.right  = [['#75003D', '#FF87BB'], ['#FE86BB', '#AF0053'], ['#FF84BA', '#870036']]
 let s:p.visual.branch = [['white', '#AF0053']]
 
-" let s:p.visual.left   = [['#671B12', 'white', 'bold'], ['#FFB586', '#873700']]
-" let s:p.visual.middle = [['#FFB586', '#873700']]
-" let s:p.visual.right  = [['#672021', '#FFB587'], ['#FEB386', '#AF3C00'], ['#FFB586', '#873700']]
-" let s:p.visual.branch = [['white', '#AF3C00']]
-
-" let s:p.normal.left   = [['#0E3D00', 'white', 'bold'], ['#65DE65', '#006600']]
-" let s:p.normal.middle = [['#65DE65', '#006600']]
-" let s:p.normal.right  = [['#005300', '#66DE66'], ['#65DE65', '#008E00'], ['#65DE65', '#006600']]
-" let s:p.normal.branch = [['white', '#008E00']]
-
 let g:lightline#colorscheme#yoi#palette = lightline#colorscheme#fill(s:p)
 
 unlet s:p
@@ -415,6 +405,10 @@ endfunction
 
 function! GetCurrentBranch()
 
+  if &ft =~? s:lightlineNoDispFt
+    return ''
+  endif
+
   if &ft !~? 'vimfiler'
     let _ = fugitive#head()
     return strlen(_) ? '⭠ ' . _ : ''
@@ -463,6 +457,10 @@ function! MyGitGutter()
   endif
 
   if ! s:IsInGitBranch()
+    return ''
+  endif
+
+  if &ft =~? s:lightlineNoDispFt
     return ''
   endif
 
@@ -770,12 +768,8 @@ if neobundle#tap('neosnippet.vim')
         \   }
         \ })
 
-  " Plugin key-mappings.
-  imap <C-k>  <Plug>(neosnippet_expand_or_jump)
-  smap <C-k>  <plug>(neosnippet_expand_or_jump)
-
-  imap <expr> <Tab> neosnippet#expandable() <Bar><Bar> neosnippet#jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : '<Tab>'
-  smap <expr> <Tab> neosnippet#expandable() <Bar><Bar> neosnippet#jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : '<Tab>'
+  imap <expr> <Tab> neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : pumvisible() ? '<C-n>' : '<Tab>'
+  smap <expr> <Tab> neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : '<Tab>'
 
   function! neobundle#hooks.on_source(bundle)
     let g:neosnippet#enable_snipmate_compatibility = 1
@@ -847,8 +841,8 @@ endif
 " vim-anzu {{{
 if neobundle#tap('vim-anzu')
 
-  nmap <silent> n <Plug>(anzu-n)zOzz:<C-u>call <SID>BeginDisplayAnzu()<CR>:<C-u>call <SID>RefreshScreen()<CR>
-  nmap <silent> N <Plug>(anzu-N)zOzz:<C-u>call <SID>BeginDisplayAnzu()<CR>:<C-u>call <SID>RefreshScreen()<CR>
+  nmap <silent> n <Plug>(anzu-n)zvzz:<C-u>call <SID>BeginDisplayAnzu()<CR>:<C-u>call <SID>RefreshScreen()<CR>
+  nmap <silent> N <Plug>(anzu-N)zvzz:<C-u>call <SID>BeginDisplayAnzu()<CR>:<C-u>call <SID>RefreshScreen()<CR>
   nmap <silent> * <Plug>(anzu-star):<C-u>call  <SID>RefreshScreen()<CR>
   nmap <silent> # <Plug>(anzu-sharp):<C-u>call <SID>RefreshScreen()<CR>
 
@@ -1510,9 +1504,10 @@ if neobundle#tap('vim-gitgutter')
     let g:gitgutter_map_keys                    = 0
     let g:gitgutter_eager                       = 0
     let g:gitgutter_avoid_cmd_prompt_on_windows = 0
+    let g:gitgutter_diff_args                   = '-w'
 
-    nmap <F7> zo<Plug>GitGutterNextHunkzz
-    nmap <F8> zo<Plug>GitGutterPrevHunkzz
+    nmap <F7>   <Plug>GitGutterNextHunkzvzz
+    nmap <S-F7> <Plug>GitGutterPrevHunkzvzz
   endfunction
 
   call neobundle#untap()
@@ -1700,10 +1695,10 @@ if neobundle#tap('vim-submode')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    " todo:gvimで動作しない
-    call submode#enter_with('gitgutter', 'n', 'r', '<Leader>j', 'zo<Plug>GitGutterNextHunkzz')
-    call submode#map(       'gitgutter', 'n', 'r', 'j',         'zo<Plug>GitGutterNextHunkzz')
-    call submode#map(       'gitgutter', 'n', 'r', 'k',         'zo<Plug>GitGutterPrevHunkzz')
+    " todo:gvimで動作しない。なぜ？
+    call submode#enter_with('gitgutter', 'n', 'r', '<Leader>j', '<Plug>GitGutterNextHunkzvzz')
+    call submode#map(       'gitgutter', 'n', 'r', 'j',         '<Plug>GitGutterNextHunkzvzz')
+    call submode#map(       'gitgutter', 'n', 'r', 'k',         '<Plug>GitGutterPrevHunkzvzz')
   endfunction
 
   call neobundle#untap()
@@ -2516,6 +2511,7 @@ set laststatus=0
 set cmdheight=1
 set laststatus=2
 set showtabline=2
+set diffopt=vertical,filler
 
 " 'cursorline' を必要な時にだけ有効にする {{{
 " http://d.hatena.ne.jp/thinca/20090530/1243615055
@@ -2670,8 +2666,8 @@ nnoremap <silent> <C-e> <C-e>j
 nnoremap <silent> <C-y> <C-y>k
 vnoremap <silent> <C-e> <C-e>j
 vnoremap <silent> <C-y> <C-y>k
-nmap     <silent> gg    ggzOzz:<C-u>call  <SID>RefreshScreen()<CR>
-nmap     <silent> G     GzOzz:<C-u>call   <SID>RefreshScreen()<CR>
+nmap     <silent> gg    ggzvzz:<C-u>call  <SID>RefreshScreen()<CR>
+nmap     <silent> G     Gzvzz:<C-u>call   <SID>RefreshScreen()<CR>
 
 noremap  <silent> <C-i> <C-i>zz:<C-u>call <SID>RefreshScreen()<CR>
 noremap  <silent> <C-o> <C-o>zz:<C-u>call <SID>RefreshScreen()<CR>
@@ -2788,8 +2784,8 @@ for s:n in range(1, 9)
   exe 'nnoremap <silent> [Buffer]' . s:n  ':<C-u>b' . s:n . '<CR>'
 endfor
 
-nnoremap <silent> <C-k> :<C-u>bprevious<CR>
-nnoremap <silent> <C-j> :<C-u>bnext<CR>
+" nnoremap <silent> <C-k> :<C-u>bprevious<CR>
+" nnoremap <silent> <C-j> :<C-u>bnext<CR>
 
 " }}}
 " ファイル操作 {{{
@@ -2806,6 +2802,7 @@ nnoremap <silent> [Git]b    :<C-u>Gblame w<CR>
 nnoremap <silent> [Git]a    :<C-u>Gwrite<CR>
 nnoremap <silent> [Git]c    :<C-u>Gcommit<CR>
 nnoremap <silent> [Git]f    :<C-u>GitiFetch<CR>
+nnoremap <silent> [Git]d    :<C-u>Gdiff<CR>
 nnoremap <silent> [Git]push :<C-u>GitiPush<CR>
 nnoremap <silent> [Git]pull :<C-u>GitiPull<CR>
 " }}}
