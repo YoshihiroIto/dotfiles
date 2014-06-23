@@ -98,6 +98,17 @@ nmap     ;     [App]
 " }}}
 " プラグイン {{{
 function! s:SetNeoBundle() " {{{
+  " ライブラリ
+  NeoBundle     'Shougo/vimproc'
+  NeoBundle     'tpope/vim-dispatch'
+  NeoBundleLazy 'basyura/twibill.vim'
+  NeoBundleLazy 'LeafCage/nebula.vim'
+  NeoBundleLazy 'mattn/webapi-vim'
+  NeoBundleLazy 'tyru/open-browser.vim'
+  NeoBundleLazy 'kana/vim-submode'
+  NeoBundleLazy 'xolox/vim-misc'
+  NeoBundleLazy 'xolox/vim-shell'
+
   " 表示
   NeoBundle     'tomasr/molokai'
   NeoBundle     'Yggdroot/indentLine'
@@ -148,7 +159,8 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'osyo-manga/shabadou.vim'
   NeoBundleLazy 'rcmdnk/vim-markdown'
   NeoBundleLazy 'vim-jp/cpp-vim'
-  NeoBundle     'YoshihiroIto/vim-gocode'
+  " NeoBundle     'YoshihiroIto/vim-gocode'
+  NeoBundle     'Blackrush/vim-gocode'
   NeoBundleLazy 'dgryski/vim-godef'
   NeoBundleLazy 'Mizuchi/STL-Syntax'
   NeoBundleLazy 'beyondmarc/hlsl.vim'
@@ -192,15 +204,6 @@ function! s:SetNeoBundle() " {{{
     NeoBundleLazy 'itchyny/dictionary.vim'
   endif
 
-  " ライブラリ
-  NeoBundleLazy 'Shougo/vimproc'
-  NeoBundleLazy 'basyura/twibill.vim'
-  NeoBundleLazy 'LeafCage/nebula.vim'
-  NeoBundleLazy 'mattn/webapi-vim'
-  NeoBundleLazy 'tyru/open-browser.vim'
-  NeoBundleLazy 'kana/vim-submode'
-  NeoBundleLazy 'xolox/vim-misc'
-  NeoBundleLazy 'xolox/vim-shell'
   if IsWindows() && IsGuiRunning()
     NeoBundleLazy 'YoshihiroIto/vim-icondrag'
   endif
@@ -233,6 +236,126 @@ else
 endif
 
 call neobundle#end()
+" }}}
+" ライブラリ {{{
+" vimproc {{{
+if neobundle#tap('vimproc')
+  call neobundle#config({
+        \   'autoload': {
+        \     'function_prefix': 'vimproc',
+        \   },
+        \   'build': {
+        \     'mac':  'make -f make_mac.mak',
+        \     'unix': 'make -f make_unix.mak',
+        \   },
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" nebula.vim {{{
+if neobundle#tap('nebula.vim')
+  call neobundle#config({
+        \   'autoload': {
+        \     'commands': [
+        \       'NebulaPutLazy',
+        \       'NebulaPutFromClipboard',
+        \       'NebulaYankOptions',
+        \       'NebulaYankConfig',
+        \       'NebulaPutConfig',
+        \       'NebulaYankTap'
+        \     ]
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" webapi-vim {{{
+if neobundle#tap('webapi-vim')
+  call neobundle#config({
+        \   'autoload': {
+        \     'function_prefix': 'webapi'
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" open-browser.vim {{{
+if neobundle#tap('open-browser.vim')
+  call neobundle#config({
+        \   'depends':  ['vimproc'],
+        \   'autoload': {
+        \     'mappings': ['<Plug>(openbrowser-'],
+        \     'commands': [
+        \       {
+        \         'name':     'OpenBrowserSearch',
+        \         'complete': 'customlist,openbrowser#_cmd_complete'
+        \       },
+        \       {
+        \         'name':     'OpenBrowserSmartSearch',
+        \         'complete': 'customlist,openbrowser#_cmd_complete'
+        \       },
+        \       {
+        \         'name':     'OpenBrowser',
+        \         'complete': 'file'
+        \       }
+        \     ],
+        \   }
+        \ })
+
+  let g:netrw_nogx                   = 1 " disable netrw's gx mapping.
+  let g:openbrowser_no_default_menus = 1
+
+  nmap gx <Plug>(openbrowser-smart-search)
+  vmap gx <Plug>(openbrowser-smart-search)
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-submode {{{
+if neobundle#tap('vim-submode')
+  call neobundle#config({
+        \   'autoload': {
+        \     'function_prefix': 'submode'
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    " todo:gvimで動作しない。なぜ？
+    call submode#enter_with('gitgutter', 'n', 'r', '<Leader>j', '<Plug>GitGutterNextHunkzvzz')
+    call submode#map(       'gitgutter', 'n', 'r', 'j',         '<Plug>GitGutterNextHunkzvzz')
+    call submode#map(       'gitgutter', 'n', 'r', 'k',         '<Plug>GitGutterPrevHunkzvzz')
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-shell {{{
+if neobundle#tap('vim-shell')
+  call neobundle#config({
+        \   'depends':  ['vim-misc'],
+        \   'autoload': {
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" dictionary.vim {{{
+if IsMac()
+  if neobundle#tap('dictionary.vim')
+    call neobundle#config({
+          \   'autoload': {
+          \     'commands': ['Dictionary']
+          \   }
+          \ })
+
+    call neobundle#untap()
+  endif
+endif
+" }}}
 " }}}
 " 表示 {{{
 " tagbar {{{
@@ -406,6 +529,10 @@ endfunction
 function! GetCurrentBranch()
 
   if &ft =~? s:lightlineNoDispFt
+    return ''
+  endif
+
+  if !exists('*fugitive#head')
     return ''
   endif
 
@@ -793,7 +920,7 @@ endif
 " Omnisharp {{{
 if neobundle#tap('Omnisharp')
   call neobundle#config({
-        \   'depends':  ['neocomplete.vim', 'vimproc', 'syntastic'],
+        \   'depends':  ['neocomplete.vim', 'vimproc', 'syntastic', 'vim-dispatch'],
         \   'autoload': {
         \     'filetypes': ['cs']
         \   },
@@ -933,7 +1060,10 @@ if neobundle#tap('syntastic')
       autocmd BufWritePost *.{go,rb,cs} call s:SyntasticCheck()
 
       function! s:SyntasticCheck()
-        SyntasticCheck
+        if exists(':SyntasticCheck')
+          SyntasticCheck
+        endif
+
         call lightline#update()
       endfunction
     augroup END
@@ -1494,17 +1624,16 @@ endfunction
 " vim-gitgutter {{{
 if neobundle#tap('vim-gitgutter')
   call neobundle#config({
-        \   'depends':  ['vim-misc', 'vim-shell'],
+        \   'depends':  ['vim-shell'],
         \   'autoload': {
         \     'function_prefix': 'GitGutter'
         \   }
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    let g:gitgutter_map_keys                    = 0
-    let g:gitgutter_eager                       = 0
-    let g:gitgutter_avoid_cmd_prompt_on_windows = 0
-    let g:gitgutter_diff_args                   = '-w'
+    let g:gitgutter_map_keys  = 0
+    let g:gitgutter_eager     = 0
+    let g:gitgutter_diff_args = '-w'
 
     nmap <F7>   <Plug>GitGutterNextHunkzvzz
     nmap <S-F7> <Plug>GitGutterPrevHunkzvzz
@@ -1609,115 +1738,6 @@ if neobundle#tap('TweetVim')
 endif
 " }}}
 " }}}
-" ライブラリ {{{
-" vimproc {{{
-if neobundle#tap('vimproc')
-  call neobundle#config({
-        \   'autoload': {
-        \     'function_prefix': 'vimproc',
-        \   },
-        \   'build': {
-        \     'mac':  'make -f make_mac.mak',
-        \     'unix': 'make -f make_unix.mak',
-        \   },
-        \ })
-
-  call neobundle#untap()
-endif
-" }}}
-" nebula.vim {{{
-if neobundle#tap('nebula.vim')
-  call neobundle#config({
-        \   'autoload': {
-        \     'commands': [
-        \       'NebulaPutLazy',
-        \       'NebulaPutFromClipboard',
-        \       'NebulaYankOptions',
-        \       'NebulaYankConfig',
-        \       'NebulaPutConfig',
-        \       'NebulaYankTap'
-        \     ]
-        \   }
-        \ })
-
-  call neobundle#untap()
-endif
-" }}}
-" webapi-vim {{{
-if neobundle#tap('webapi-vim')
-  call neobundle#config({
-        \   'autoload': {
-        \     'function_prefix': 'webapi'
-        \   }
-        \ })
-
-  call neobundle#untap()
-endif
-" }}}
-" open-browser.vim {{{
-if neobundle#tap('open-browser.vim')
-  call neobundle#config({
-        \   'depends':  ['vimproc'],
-        \   'autoload': {
-        \     'mappings': ['<Plug>(openbrowser-'],
-        \     'commands': [
-        \       {
-        \         'name':     'OpenBrowserSearch',
-        \         'complete': 'customlist,openbrowser#_cmd_complete'
-        \       },
-        \       {
-        \         'name':     'OpenBrowserSmartSearch',
-        \         'complete': 'customlist,openbrowser#_cmd_complete'
-        \       },
-        \       {
-        \         'name':     'OpenBrowser',
-        \         'complete': 'file'
-        \       }
-        \     ],
-        \   }
-        \ })
-
-  let g:netrw_nogx                   = 1 " disable netrw's gx mapping.
-  let g:openbrowser_no_default_menus = 1
-
-  nmap gx <Plug>(openbrowser-smart-search)
-  vmap gx <Plug>(openbrowser-smart-search)
-
-  call neobundle#untap()
-endif
-" }}}
-" vim-submode {{{
-if neobundle#tap('vim-submode')
-  call neobundle#config({
-        \   'autoload': {
-        \     'function_prefix': 'submode'
-        \   }
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    " todo:gvimで動作しない。なぜ？
-    call submode#enter_with('gitgutter', 'n', 'r', '<Leader>j', '<Plug>GitGutterNextHunkzvzz')
-    call submode#map(       'gitgutter', 'n', 'r', 'j',         '<Plug>GitGutterNextHunkzvzz')
-    call submode#map(       'gitgutter', 'n', 'r', 'k',         '<Plug>GitGutterPrevHunkzvzz')
-  endfunction
-
-  call neobundle#untap()
-endif
-" }}}
-" dictionary.vim {{{
-if IsMac()
-  if neobundle#tap('dictionary.vim')
-    call neobundle#config({
-          \   'autoload': {
-          \     'commands': ['Dictionary']
-          \   }
-          \ })
-
-    call neobundle#untap()
-  endif
-endif
-" }}}
-" }}}
 " Unite {{{
 " unite.vim {{{
 if neobundle#tap('unite.vim')
@@ -1744,8 +1764,8 @@ if neobundle#tap('unite.vim')
   nnoremap <silent> [Unite]o  :<C-u>Unite outline<CR>
   nnoremap <silent> [Unite]z  :<C-u>Unite fold<CR>
   nnoremap <silent> [Unite]q  :<C-u>Unite -no-quit quickfix<CR>
-  nnoremap <silent> [Unite]v  :<C-u>call <SID>SafeExecuteUniteGiti('giti')<CR>
-  nnoremap <silent> [Unite]b  :<C-u>call <SID>SafeExecuteUniteGiti('giti/branch_all')<CR>
+  nnoremap <silent> [Unite]v  :<C-u>call <SID>ExecuteIfOnGitBranch('Unite giti')<CR>
+  nnoremap <silent> [Unite]b  :<C-u>call <SID>ExecuteIfOnGitBranch('Unite giti/branch_all')<CR>
 
   if IsWindows()
     nnoremap <silent> [Unite]m  :<C-u>Unite -no-split neomru/file everything<CR>
@@ -1756,15 +1776,6 @@ if neobundle#tap('unite.vim')
   nnoremap          [Unite]uu :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
   nnoremap          [Unite]ui :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
   nnoremap          [Unite]uc :<C-u>NeoBundleClearCache<CR>
-
-  function! s:SafeExecuteUniteGiti(source)
-    if !s:IsInGitBranch()
-      echo 'not in git branch'
-      return
-    endif
-
-    execute 'Unite ' . a:source
-  endfunction
 
   " http://sanrinsha.lolipop.jp/blog/2013/03/%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E5%86%85%E3%81%AE%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92unite-grep%E3%81%99%E3%82%8B.html
   function! s:unite_grep_project(...)
@@ -1799,6 +1810,8 @@ if neobundle#tap('unite.vim')
       let g:unite_source_grep_default_opts  = '--nogroup --nocolor -S'
       let g:unite_source_grep_recursive_opt = ''
       let g:unite_source_grep_encoding      = 'utf-8'
+
+      let g:unite_source_rec_async_command  = 'pt --nocolor --nogroup -g .'
     endif
   endfunction
 
@@ -1980,6 +1993,12 @@ function! s:FirstOneShot() " {{{
 
     filetype plugin indent on
 
+    " ライブラリ {{{
+    NeoBundleSource vim-submode
+    NeoBundleSource vim-misc
+    NeoBundleSource vim-shell
+    NeoBundleSource vim-dispatch
+    " }}}
     " 表示 {{{
     " NeoBundleSource indentLine
     " NeoBundleSource lightline.vim
@@ -2014,9 +2033,6 @@ function! s:FirstOneShot() " {{{
     " }}}
     " 言語 {{{
     NeoBundleSource syntastic
-    " }}}
-    " ライブラリ {{{
-    NeoBundleSource vim-submode
     " }}}
 
     set incsearch                     " インクリメンタルサーチ
@@ -2505,7 +2521,8 @@ set showfulltag
 set wildoptions=tagfile
 set fillchars=vert:\              " 縦分割の境界線
 set synmaxcol=500                 " ハイライトする文字数を制限する
-set updatetime=220
+" set updatetime=220
+set updatetime=750
 set previewheight=24
 set laststatus=0
 set cmdheight=1
@@ -2798,13 +2815,13 @@ nnoremap <silent> <F3> :<C-u>source $MYVIMRC<CR>:<C-u>source $MYGVIMRC<CR>
 nnoremap [Git]     <Nop>
 nmap     <Leader>g [Git]
 
-nnoremap <silent> [Git]b    :<C-u>Gblame w<CR>
-nnoremap <silent> [Git]a    :<C-u>Gwrite<CR>
-nnoremap <silent> [Git]c    :<C-u>Gcommit<CR>
-nnoremap <silent> [Git]f    :<C-u>GitiFetch<CR>
-nnoremap <silent> [Git]d    :<C-u>Gdiff<CR>
-nnoremap <silent> [Git]push :<C-u>GitiPush<CR>
-nnoremap <silent> [Git]pull :<C-u>GitiPull<CR>
+nnoremap <silent> [Git]b    :<C-u>call <SID>ExecuteIfOnGitBranch('Gblame w')<CR>
+nnoremap <silent> [Git]a    :<C-u>call <SID>ExecuteIfOnGitBranch('Gwrite')<CR>
+nnoremap <silent> [Git]c    :<C-u>call <SID>ExecuteIfOnGitBranch('Gcommit')<CR>
+nnoremap <silent> [Git]f    :<C-u>call <SID>ExecuteIfOnGitBranch('GitiFetch')<CR>
+nnoremap <silent> [Git]d    :<C-u>call <SID>ExecuteIfOnGitBranch('Gdiff')<CR>
+nnoremap <silent> [Git]push :<C-u>call <SID>ExecuteIfOnGitBranch('GitiPush')<CR>
+nnoremap <silent> [Git]pull :<C-u>call <SID>ExecuteIfOnGitBranch('GitiPull')<CR>
 " }}}
 " ヘルプ {{{
 nnoremap <Leader><C-k>      :<C-u>help<Space>
@@ -3161,10 +3178,25 @@ function! s:IsUniteRunning()
   return &ft == 'unite'
 endfunction
 " }}}
-" Git ブランチにいるか {{{
+" Gitブランチにいるか {{{
 function! s:IsInGitBranch()
 
+  if !exists('*fugitive#head')
+    return 0
+  endif
+
   return fugitive#head() != ''
+endfunction
+" }}}
+" Gitブランチ上であれば実行 {{{
+function! s:ExecuteIfOnGitBranch(line)
+
+  if !s:IsInGitBranch()
+    echo 'not in git branch : ' . a:line
+    return
+  endif
+
+  execute a:line
 endfunction
 " }}}
 " }}}
