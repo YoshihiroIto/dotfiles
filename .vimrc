@@ -101,13 +101,13 @@ function! s:SetNeoBundle() " {{{
   " ライブラリ
   NeoBundle     'Shougo/vimproc'
   NeoBundle     'tpope/vim-dispatch'
+  NeoBundle     'xolox/vim-misc'
+  NeoBundleLazy 'xolox/vim-shell'
   NeoBundleLazy 'basyura/twibill.vim'
   NeoBundleLazy 'LeafCage/nebula.vim'
   NeoBundleLazy 'mattn/webapi-vim'
   NeoBundleLazy 'tyru/open-browser.vim'
   NeoBundleLazy 'kana/vim-submode'
-  NeoBundleLazy 'xolox/vim-misc'
-  NeoBundleLazy 'xolox/vim-shell'
 
   " 表示
   NeoBundle     'tomasr/molokai'
@@ -159,8 +159,8 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'osyo-manga/shabadou.vim'
   NeoBundleLazy 'rcmdnk/vim-markdown'
   NeoBundleLazy 'vim-jp/cpp-vim'
-  " NeoBundle     'YoshihiroIto/vim-gocode'
-  NeoBundle     'Blackrush/vim-gocode'
+  NeoBundle     'YoshihiroIto/vim-gocode'
+  " NeoBundle  'Blackrush/vim-gocode'
   NeoBundleLazy 'dgryski/vim-godef'
   NeoBundleLazy 'Mizuchi/STL-Syntax'
   NeoBundleLazy 'beyondmarc/hlsl.vim'
@@ -196,7 +196,7 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'tsukkee/lingr-vim'
   NeoBundleLazy 'mattn/benchvimrc-vim'
   NeoBundleLazy 'tpope/vim-fugitive'
-  NeoBundleLazy 'airblade/vim-gitgutter', 'xolox'
+  NeoBundleLazy 'airblade/vim-gitgutter'
   NeoBundleLazy 'Shougo/vimshell.vim'
   NeoBundleLazy 'Shougo/vimfiler.vim'
   NeoBundleLazy 'basyura/TweetVim'
@@ -920,7 +920,7 @@ endif
 " Omnisharp {{{
 if neobundle#tap('Omnisharp')
   call neobundle#config({
-        \   'depends':  ['neocomplete.vim', 'vimproc', 'syntastic', 'vim-dispatch'],
+        \   'depends':  ['neocomplete.vim', 'syntastic', 'vim-dispatch'],
         \   'autoload': {
         \     'filetypes': ['cs']
         \   },
@@ -1049,7 +1049,7 @@ endif
 if neobundle#tap('syntastic')
   call neobundle#config({
         \   'autoload': {
-        \     'filetypes': ['go', 'ruby', 'cs']
+        \     'filetypes': ['ruby', 'cs']
         \   }
         \ })
 
@@ -1058,19 +1058,26 @@ if neobundle#tap('syntastic')
 
     augroup MyAutoGroup
       autocmd BufWritePost *.{go,rb,cs} call s:SyntasticCheck()
-
-      function! s:SyntasticCheck()
-        if exists(':SyntasticCheck')
-          SyntasticCheck
-        endif
-
-        call lightline#update()
-      endfunction
     augroup END
   endfunction
 
   call neobundle#untap()
 endif
+
+function! s:SyntasticCheck()
+
+  let syntastic_ft = 'ruby\|cs'
+
+  " if &ft =~? syntastic_ft
+  "   if exists(':SyntasticCheck')
+  "     SyntasticCheck
+  "   endif
+  "
+  "   call lightline#update()
+  " endif
+
+  call lightline#update()
+endfunction
 " }}}
 " clang_complete {{{
 if neobundle#tap('clang_complete')
@@ -1614,11 +1621,7 @@ endif
 function! s:UpdateFugitive()
   call fugitive#detect(expand('<amatch>:p'))
 
-  if exists(':SyntasticCheck')
-    SyntasticCheck
-  endif
-
-  call lightline#update()
+  call s:SyntasticCheck()
 endfunction
 " }}}
 " vim-gitgutter {{{
@@ -1635,8 +1638,8 @@ if neobundle#tap('vim-gitgutter')
     let g:gitgutter_eager     = 0
     let g:gitgutter_diff_args = '-w'
 
-    nmap <F7>   <Plug>GitGutterNextHunkzvzz
-    nmap <S-F7> <Plug>GitGutterPrevHunkzvzz
+    nmap <F7> <Plug>GitGutterNextHunkzvzz
+    nmap <F8> <Plug>GitGutterPrevHunkzvzz
   endfunction
 
   call neobundle#untap()
@@ -1997,7 +2000,6 @@ function! s:FirstOneShot() " {{{
     NeoBundleSource vim-submode
     NeoBundleSource vim-misc
     NeoBundleSource vim-shell
-    NeoBundleSource vim-dispatch
     " }}}
     " 表示 {{{
     " NeoBundleSource indentLine
