@@ -102,7 +102,7 @@ function! s:SetNeoBundle() " {{{
   NeoBundle     'Shougo/vimproc'
   NeoBundle     'tpope/vim-dispatch'
   NeoBundle     'xolox/vim-misc'
-  NeoBundleLazy 'xolox/vim-shell'
+  NeoBundle     'xolox/vim-shell'
   NeoBundleLazy 'basyura/twibill.vim'
   NeoBundleLazy 'LeafCage/nebula.vim'
   NeoBundleLazy 'mattn/webapi-vim'
@@ -153,14 +153,13 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'thinca/vim-visualstar'
 
   " 言語
-  NeoBundleLazy 'scrooloose/syntastic'
+  NeoBundleLazy 'YoshihiroIto/syntastic'
   NeoBundleLazy 'Rip-Rip/clang_complete'
   NeoBundleLazy 'rhysd/vim-clang-format'
   NeoBundleLazy 'osyo-manga/shabadou.vim'
   NeoBundleLazy 'rcmdnk/vim-markdown'
   NeoBundleLazy 'vim-jp/cpp-vim'
-  NeoBundle     'YoshihiroIto/vim-gocode'
-  " NeoBundle  'Blackrush/vim-gocode'
+  NeoBundle     'Blackrush/vim-gocode'
   NeoBundleLazy 'dgryski/vim-godef'
   NeoBundleLazy 'Mizuchi/STL-Syntax'
   NeoBundleLazy 'beyondmarc/hlsl.vim'
@@ -328,17 +327,6 @@ if neobundle#tap('vim-submode')
     call submode#map(       'gitgutter', 'n', 'r', 'j',         '<Plug>GitGutterNextHunkzvzz')
     call submode#map(       'gitgutter', 'n', 'r', 'k',         '<Plug>GitGutterPrevHunkzvzz')
   endfunction
-
-  call neobundle#untap()
-endif
-" }}}
-" vim-shell {{{
-if neobundle#tap('vim-shell')
-  call neobundle#config({
-        \   'depends':  ['vim-misc'],
-        \   'autoload': {
-        \   }
-        \ })
 
   call neobundle#untap()
 endif
@@ -1088,9 +1076,9 @@ if neobundle#tap('clang_complete')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    let g:clang_use_library   = 1
-    let g:clang_complete_auto = 0
-    let g:clang_auto_select   = 0
+    let g:clang_use_library              = 1
+    let g:clang_complete_auto            = 0
+    let g:clang_auto_select              = 0
 
     if IsWindows()
       let g:clang_user_options = '-I C:/Development/boost_1_55_0 -I "C:/Program Files (x86)/Microsoft Visual Studio 11.0/VC/include" -std=c++11 -fms-extensions -fmsc-version=1300 -fgnu-runtime -D__MSVCRT_VERSION__=0x700 -D_WIN32_WINNT=0x0500 2> NUL || exit 0"'
@@ -1251,10 +1239,18 @@ endif
 " vim-gocode {{{
 if neobundle#tap('vim-gocode')
   call neobundle#config({
+        \   'depends':  ['vimproc'],
         \   'autoload': {
         \     'filetypes': ['go']
         \   }
         \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    if IsWindows()
+      let g:gocomplete#system_function = 'vimproc#system'
+      let g:go_fmt_autofmt             = 0
+    endif
+  endfunction
 
   call neobundle#untap()
 endif
@@ -1924,42 +1920,6 @@ if IsWindows()
 endif
 " }}}
 " }}}
-" その他 {{{
-" NeoBundleLazy したプラグインをフォーカスが外れている時に自動的に読み込む {{{
-" http://d.hatena.ne.jp/osyo-manga/20140212
-
-" Lazy しているプラグイン名をリストアップ
-function! s:get_lazy_plugins()
-  return map(filter(neobundle#config#get_neobundles(), 'v:val.lazy'), 'v:val.name')
-endfunction
-
-function! s:is_not_sourced(source)
-  return neobundle#config#is_installed(a:source) && !neobundle#config#is_sourced(a:source)
-endfunction
-
-function! s:source()
-  let sources = map(filter(s:get_lazy_plugins(), 's:is_not_sourced(v:val)'), 'v:val')
-
-  for s in sources
-    call neobundle#source(s)
-  endfor
-
-  " 明示的に初期化したいものはここで
-  " call over#load()
-
-  augroup auto-source
-    autocmd!
-  augroup END
-
-  echom ''
-endfunction
-
-augroup auto-source
-  autocmd!
-  autocmd FocusLost * call s:source()
-augroup END
-" }}}
-" }}}
 " キー無効 {{{
 " Vimを閉じない
 nnoremap ZZ <Nop>
@@ -1998,8 +1958,6 @@ function! s:FirstOneShot() " {{{
 
     " ライブラリ {{{
     NeoBundleSource vim-submode
-    NeoBundleSource vim-misc
-    NeoBundleSource vim-shell
     " }}}
     " 表示 {{{
     " NeoBundleSource indentLine
@@ -2532,6 +2490,10 @@ set laststatus=2
 set showtabline=2
 set diffopt=vertical,filler
 
+if (v:version >= 704 && has('patch338'))
+  set breakindent
+endif
+
 " 'cursorline' を必要な時にだけ有効にする {{{
 " http://d.hatena.ne.jp/thinca/20090530/1243615055
 augroup MyAutoGroup
@@ -2823,7 +2785,7 @@ nnoremap <silent> [Git]c    :<C-u>call <SID>ExecuteIfOnGitBranch('Gcommit')<CR>
 nnoremap <silent> [Git]f    :<C-u>call <SID>ExecuteIfOnGitBranch('GitiFetch')<CR>
 nnoremap <silent> [Git]d    :<C-u>call <SID>ExecuteIfOnGitBranch('Gdiff')<CR>
 nnoremap <silent> [Git]push :<C-u>call <SID>ExecuteIfOnGitBranch('GitiPush')<CR>
-nnoremap <silent> [Git]pull :<C-u>call <SID>ExecuteIfOnGitBranch('GitiPull')<CR>
+nnoremap <silent> [Git]pull :<C-u>call <SID>ExecuteIfOnGitBranch('Gpull')<CR>
 " }}}
 " ヘルプ {{{
 nnoremap <Leader><C-k>      :<C-u>help<Space>
@@ -3073,9 +3035,9 @@ function! s:CopyFile(sourceFilepath, targetFilepath)
   let etarget = vimproc#shellescape(expand(a:targetFilepath))
 
   if IsWindows()
-    call vimproc#system('copy ' . esource . ' ' . etarget)
+    call vimproc#system_bg('copy ' . esource . ' ' . etarget)
   elseif IsMac()
-    call vimproc#system('cp ' . esource . ' ' . etarget)
+    call vimproc#system_bg('cp ' . esource . ' ' . etarget)
   else
     echo 'CopyFile : Not supported.'
   endif
