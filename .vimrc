@@ -235,7 +235,7 @@ else
 endif
 
 call neobundle#end()
-" }}}
+
 " ライブラリ {{{
 " vimproc {{{
 if neobundle#tap('vimproc')
@@ -430,7 +430,6 @@ let g:lightline = {
       \     'readonly':     'MyReadonly',
       \     'filename':     'MyFilename',
       \     'mode':         'MyMode',
-      \     'charcode':     'MyCharCode',
       \     'anzu':         'anzu#search_status'
       \   },
       \   'component_expand': {
@@ -591,46 +590,6 @@ function! MyGitGutter()
     call add(ret, symbols[i] . hunks[i])
   endfor
   return join(ret, ' ')
-endfunction
-
-function! MyCharCode()
-
-  if &ft =~? s:lightlineNoDispFt
-    return ''
-  endif
-
-  if winwidth(0) <= 80
-    return ''
-  endif
-
-  " Get the output of :ascii
-  redir => ascii
-  silent! ascii
-  redir END
-
-  if match(ascii, 'NUL') != -1
-    return 'NUL'
-  endif
-
-  " Zero pad hex values
-  let nrformat = '0x%02x'
-
-  let encoding = (&fenc == '' ? &enc : &fenc)
-
-  if encoding == 'utf-8'
-    " Zero pad with 4 zeroes in unicode files
-    let nrformat = '0x%04x'
-  endif
-
-  " Get the character and the numeric value from the return value of :ascii
-  " This matches the two first pieces of the return value, e.g.
-  " "<F>  70" => char: 'F', nr: '70'
-  let [str, char, nr; rest] = matchlist(ascii, '\v\<(.{-1,})\>\s*([0-9]+)')
-
-  " Format the numeric value
-  let nr = printf(nrformat, nr)
-
-  return "'". char ."' ". nr
 endfunction
 " }}}
 " indentLine {{{
@@ -937,10 +896,10 @@ if neobundle#tap('vim-altr')
         \   }
         \ })
 
-  function! neobundle#hooks.on_source(bundle)
-    nmap <F5> <Plug>(altr-forward)
-    nmap <F6> <Plug>(altr-back)
+  nmap <F5> <Plug>(altr-forward)
+  nmap <F6> <Plug>(altr-back)
 
+  function! neobundle#hooks.on_source(bundle)
     call altr#define('Models/%Model.cs',       'ViewModels/%Vm.cs',       'Views/%.xaml',       'Views/%.xaml.cs')
     call altr#define('Models/*/%Model.cs',     'ViewModels/*/%Vm.cs',     'Views/*/%.xaml',     'Views/*/%.xaml.cs')
     call altr#define('Models/*/*/%Model.cs',   'ViewModels/*/*/%Vm.cs',   'Views/*/*/%.xaml',   'Views/*/*/%.xaml.cs')
@@ -955,7 +914,6 @@ endif
 " 検索 {{{
 " vim-anzu {{{
 if neobundle#tap('vim-anzu')
-
   nmap <silent> n <Plug>(anzu-n)zvzz:<C-u>call <SID>BeginDisplayAnzu()<CR>:<C-u>call <SID>RefreshScreen()<CR>
   nmap <silent> N <Plug>(anzu-N)zvzz:<C-u>call <SID>BeginDisplayAnzu()<CR>:<C-u>call <SID>RefreshScreen()<CR>
   nmap <silent> * <Plug>(anzu-star):<C-u>call  <SID>RefreshScreen()<CR>
@@ -1248,8 +1206,10 @@ if neobundle#tap('vim-gocode')
   function! neobundle#hooks.on_source(bundle)
     if IsWindows()
       let g:gocomplete#system_function = 'vimproc#system'
-      let g:go_fmt_autofmt             = 0
     endif
+
+    let g:gofmt_command  = 'goimports'
+    let g:go_fmt_autofmt = 0
   endfunction
 
   call neobundle#untap()
@@ -1258,10 +1218,17 @@ endif
 " vim-godef {{{
 if neobundle#tap('vim-godef')
   call neobundle#config({
+        \   'depends':  ['vimproc'],
         \   'autoload': {
         \     'filetypes': ['go']
         \   }
         \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    let g:godef_split                    = 0
+    let g:godef_same_file_in_same_window = 1
+    let g:godef_system_function          = 'vimproc#system'
+  endfunction
 
   call neobundle#untap()
 endif
@@ -1552,7 +1519,6 @@ if neobundle#tap('lingr-vim')
   noremap <silent> [App]1 :<C-u>call <SID>ToggleLingr()<CR>
 
   function! neobundle#hooks.on_source(bundle)
-
     let g:lingr_vim_say_buffer_height = 15
 
     augroup MyAutoGroup
@@ -1629,13 +1595,13 @@ if neobundle#tap('vim-gitgutter')
         \   }
         \ })
 
+  nmap <F7> <Plug>GitGutterNextHunkzvzz
+  nmap <F8> <Plug>GitGutterPrevHunkzvzz
+
   function! neobundle#hooks.on_source(bundle)
     let g:gitgutter_map_keys  = 0
     let g:gitgutter_eager     = 0
     let g:gitgutter_diff_args = '-w'
-
-    nmap <F7> <Plug>GitGutterNextHunkzvzz
-    nmap <F8> <Plug>GitGutterPrevHunkzvzz
   endfunction
 
   call neobundle#untap()
@@ -1708,7 +1674,6 @@ if neobundle#tap('TweetVim')
   noremap <silent> [App]2 :<C-u>call <SID>ToggleTweetVim()<CR>
 
   function! neobundle#hooks.on_source(bundle)
-
     let g:tweetvim_include_rts       = 1
     let g:tweetvim_display_separator = 0
     let g:tweetvim_tweet_per_page    = 30
@@ -1784,8 +1749,18 @@ if neobundle#tap('unite.vim')
   endfunction
 
   function! neobundle#hooks.on_source(bundle)
-
     let g:unite_force_overwrite_statusline = 0
+
+    " http://blog.monochromegane.com/blog/2014/01/16/the-platinum-searcher/
+    " https://github.com/monochromegane/the_platinum_searcher
+    if executable('pt')
+      let g:unite_source_grep_command       = 'pt'
+      let g:unite_source_grep_default_opts  = '--nogroup --nocolor -S'
+      let g:unite_source_grep_recursive_opt = ''
+      let g:unite_source_grep_encoding      = 'utf-8'
+
+      let g:unite_source_rec_async_command  = 'pt --nocolor --nogroup -g .'
+    endif
 
     call unite#custom#profile('default', 'context', {
         \   'direction':        'rightbelow',
@@ -1801,17 +1776,6 @@ if neobundle#tap('unite.vim')
     call unite#custom#profile('default', 'ignorecase', 1)
     call unite#custom#profile('default', 'smartcase',  1)
     call unite#custom#source( 'fold',    'matchers',   'matcher_migemo')
-
-    " http://blog.monochromegane.com/blog/2014/01/16/the-platinum-searcher/
-    " https://github.com/monochromegane/the_platinum_searcher
-    if executable('pt')
-      let g:unite_source_grep_command       = 'pt'
-      let g:unite_source_grep_default_opts  = '--nogroup --nocolor -S'
-      let g:unite_source_grep_recursive_opt = ''
-      let g:unite_source_grep_encoding      = 'utf-8'
-
-      let g:unite_source_rec_async_command  = 'pt --nocolor --nogroup -g .'
-    endif
   endfunction
 
   call neobundle#untap()
@@ -1910,14 +1874,15 @@ if IsWindows()
           \ })
 
     function! neobundle#hooks.on_source(bundle)
-      call unite#custom_max_candidates('everything', 300)
-
       let g:unite_source_everything_full_path_search = 1
+
+      call unite#custom_max_candidates('everything', 300)
     endfunction
 
     call neobundle#untap()
   endif
 endif
+" }}}
 " }}}
 " }}}
 " キー無効 {{{
@@ -1936,18 +1901,6 @@ vnoremap u  <Nop>
 onoremap u  <Nop>
 " }}}
 " ファイルタイプごとの設定 {{{
-" golang {{{
-if IsStarting()
-  if !exists('$GOROOT')
-    if IsMac()
-      let $GOROOT = '/usr/local/opt/go/libexec'
-    endif
-  endif
-
-  exe 'set rtp+=' . globpath($GOROOT, 'misc/vim')
-endif
-" }}}
-
 let s:firstOneShotDelay = 2
 let s:firstOneShotPhase = 0
 function! s:FirstOneShot() " {{{
@@ -2014,11 +1967,6 @@ function! s:FirstOneShot() " {{{
   endfunction
 
   function! s:FirstOneShotPhase1()
-
-    " call over#load()
-  endfunction
-
-  function! s:FirstOneShotPhase2()
     augroup FirstOneShot
       autocmd!
     augroup END
@@ -2124,10 +2072,8 @@ augroup MyAutoGroup
     setlocal tabstop=4
     compiler go
 
-    let g:godef_split                    = 0
-    let g:godef_same_file_in_same_window = 1
-
-    nnoremap <buffer> <Leader><C-k><C-k> :<C-u>Godoc<CR>zz
+    nmap <silent><buffer> <Leader><C-k><C-k> :<C-u>Godoc<CR>zz
+    nmap <silent><buffer> <C-]>              :<C-u>call GodefUnderCursor()<CR>zz
   endfunction
 
   function! s:SetGodoc()
@@ -2153,7 +2099,7 @@ augroup MyAutoGroup
     setlocal foldmethod=syntax
     let g:omnicomplete_fetch_full_documentation = 0
 
-    nnoremap <buffer> <C-P>   :<C-u>call OmniSharp#GotoDefinition()<CR>zz
+    nnoremap <buffer> <C-]>   :<C-u>call OmniSharp#GotoDefinition()<CR>zz
     nnoremap <buffer> <S-F12> :<C-u>call OmniSharp#FindUsages()<CR>
   endfunction
 
@@ -2785,7 +2731,7 @@ nnoremap <silent> [Git]c    :<C-u>call <SID>ExecuteIfOnGitBranch('Gcommit')<CR>
 nnoremap <silent> [Git]f    :<C-u>call <SID>ExecuteIfOnGitBranch('GitiFetch')<CR>
 nnoremap <silent> [Git]d    :<C-u>call <SID>ExecuteIfOnGitBranch('Gdiff')<CR>
 nnoremap <silent> [Git]push :<C-u>call <SID>ExecuteIfOnGitBranch('GitiPush')<CR>
-nnoremap <silent> [Git]pull :<C-u>call <SID>ExecuteIfOnGitBranch('Gpull')<CR>
+nnoremap <silent> [Git]pull :<C-u>call <SID>ExecuteIfOnGitBranch('GitiPull')<CR>
 " }}}
 " ヘルプ {{{
 nnoremap <Leader><C-k>      :<C-u>help<Space>
