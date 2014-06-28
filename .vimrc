@@ -28,11 +28,7 @@ function! IsGuiRunning()
 endfunction
 
 function! IsStarting()
-  if !exists('g:vimrc_isStarting')
-    let g:vimrc_isStarting = has('vim_starting')
-  endif
-
-  return g:vimrc_isStarting
+  return has('vim_starting')
 endfunction
 " }}}
 
@@ -199,6 +195,7 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'Shougo/vimshell.vim'
   NeoBundleLazy 'Shougo/vimfiler.vim'
   NeoBundleLazy 'basyura/TweetVim'
+  NeoBundle 'gregsexton/gitv'
   if IsMac()
     NeoBundleLazy 'itchyny/dictionary.vim'
   endif
