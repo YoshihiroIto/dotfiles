@@ -2740,6 +2740,7 @@ nnoremap <silent> [Git]a    :<C-u>call <SID>ExecuteIfOnGitBranch('Gwrite')<CR>
 nnoremap <silent> [Git]c    :<C-u>call <SID>ExecuteIfOnGitBranch('Gcommit')<CR>
 nnoremap <silent> [Git]f    :<C-u>call <SID>ExecuteIfOnGitBranch('GitiFetch')<CR>
 nnoremap <silent> [Git]d    :<C-u>call <SID>ExecuteIfOnGitBranch('Gdiff')<CR>
+nnoremap <silent> [Git]v    :<C-u>call <SID>ExecuteIfOnGitBranch('Gitv')<CR>
 nnoremap <silent> [Git]push :<C-u>call <SID>ExecuteIfOnGitBranch('GitiPush')<CR>
 nnoremap <silent> [Git]pull :<C-u>call <SID>ExecuteIfOnGitBranch('GitiPull')<CR>
 " }}}
