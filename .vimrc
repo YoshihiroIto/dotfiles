@@ -26,13 +26,9 @@ function! IsGuiRunning()
 
   return g:vimrc_isGuiRunning
 endfunction
-
-function! IsStarting()
-  return has('vim_starting')
-endfunction
 " }}}
 
-if IsStarting()
+if has('vim_starting')
   let s:git_dotvimrc  = expand('~/dotfiles/.vimrc')
   let s:git_dotgvimrc = expand('~/dotfiles/.gvimrc')
 
@@ -217,7 +213,7 @@ function! s:SetNeoBundle() " {{{
   endif
 endfunction " }}}
 
-if IsStarting()
+if has('vim_starting')
   set rtp+=$DOTVIM/bundle/neobundle.vim/
 endif
 
@@ -3142,5 +3138,5 @@ endif
 " |  cmap  |        |        |        |        |        |   ○   |
 " +--------+--------+--------+--------+--------+--------+--------+
 " }}}
-" vim: set ts=2 sw=2 sts=2 et :
+" vim: set ts=2 sw=2 sts=2 et
 
