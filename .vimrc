@@ -185,7 +185,6 @@ function! s:SetNeoBundle() " {{{
 
   " アプリ
   NeoBundleLazy 'tsukkee/lingr-vim'
-  NeoBundleLazy 'mattn/benchvimrc-vim'
   NeoBundleLazy 'tpope/vim-fugitive'
   NeoBundleLazy 'airblade/vim-gitgutter'
   NeoBundleLazy 'Shougo/vimshell.vim'
@@ -1542,17 +1541,6 @@ if neobundle#tap('lingr-vim')
   call neobundle#untap()
 endif
 " }}}
-" benchvimrc-vim {{{
-if neobundle#tap('benchvimrc-vim')
-  call neobundle#config({
-        \   'autoload': {
-        \     'commands': ['BenchVimrc']
-        \   }
-        \ })
-
-  call neobundle#untap()
-endif
-" }}}
 " vim-fugitive {{{
 if neobundle#tap('vim-fugitive')
   call neobundle#config({
@@ -1725,9 +1713,8 @@ if neobundle#tap('unite.vim')
   nnoremap <silent> [Unite]pg :<C-u>call <SID>unite_grep_project('-auto-preview -no-split -buffer-name=search-buffer')<CR>
   nnoremap <silent> [Unite]r  :<C-u>UniteResume -no-split search-buffer<CR>
 
-  nnoremap <silent> [Unite]f  :<C-u>Unite -no-split file<CR>
-  " nnoremap <silent> [Unite]b  :<C-u>Unite -no-split buffer<CR>
-  nnoremap <silent> [Unite]t  :<C-u>Unite -no-split tab<CR>
+  nnoremap <silent> [Unite]f  :<C-u>Unite buffer<CR>
+  nnoremap <silent> [Unite]t  :<C-u>Unite tab<CR>
   nnoremap <silent> [Unite]l  :<C-u>Unite -no-split line<CR>
   nnoremap <silent> [Unite]o  :<C-u>Unite outline<CR>
   nnoremap <silent> [Unite]z  :<C-u>Unite fold<CR>
