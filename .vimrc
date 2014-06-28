@@ -195,7 +195,7 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'Shougo/vimshell.vim'
   NeoBundleLazy 'Shougo/vimfiler.vim'
   NeoBundleLazy 'basyura/TweetVim'
-  NeoBundle 'gregsexton/gitv'
+  NeoBundleLazy 'gregsexton/gitv'
   if IsMac()
     NeoBundleLazy 'itchyny/dictionary.vim'
   endif
@@ -1609,7 +1609,7 @@ if neobundle#tap('vimshell.vim')
   call neobundle#config({
         \   'depends':  ['vimproc'],
         \   'autoload': {
-        \     'commands' : [ 'VimShell', 'VimShellPop' ]
+        \     'commands': ['VimShell', 'VimShellPop']
         \   }
         \ })
 
@@ -1698,6 +1698,19 @@ if neobundle#tap('TweetVim')
   call neobundle#untap()
 endif
 " }}}
+" gitv {{{
+if neobundle#tap('gitv')
+  call neobundle#config({
+        \   'depends':  ['vim-fugitive'],
+        \   'autoload': {
+        \     'commands': ['Gitv', 'Gitv!']
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+J
 " }}}
 " Unite {{{
 " unite.vim {{{
