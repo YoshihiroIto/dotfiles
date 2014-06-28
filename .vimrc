@@ -228,7 +228,6 @@ else
 endif
 
 call neobundle#end()
-
 " ライブラリ {{{
 " vimproc {{{
 if neobundle#tap('vimproc')
