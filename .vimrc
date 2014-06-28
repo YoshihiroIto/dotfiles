@@ -151,7 +151,7 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'osyo-manga/shabadou.vim'
   NeoBundleLazy 'rcmdnk/vim-markdown'
   NeoBundleLazy 'vim-jp/cpp-vim'
-  NeoBundle     'Blackrush/vim-gocode'
+  NeoBundle     'YoshihiroIto/vim-gocode'
   NeoBundleLazy 'dgryski/vim-godef'
   NeoBundleLazy 'Mizuchi/STL-Syntax'
   NeoBundleLazy 'beyondmarc/hlsl.vim'
