@@ -1706,7 +1706,6 @@ if neobundle#tap('gitv')
   call neobundle#untap()
 endif
 " }}}
-J
 " }}}
 " Unite {{{
 " unite.vim {{{
