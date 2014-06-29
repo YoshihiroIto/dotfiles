@@ -467,17 +467,17 @@ let g:lightline = {
       \     'right': '⮃'
       \   },
       \   'mode_map': {
-      \     'n':      'N',
-      \     'i':      'I',
-      \     'R':      'R',
-      \     'v':      'V',
-      \     'V':      'VL',
-      \     'c':      'C',
-      \     "\<C-v>": 'VB',
-      \     's':      'S',
-      \     'S':      'SL',
-      \     "\<C-s>": 'SB',
-      \     '?':      ' '
+      \     'n':     'N',
+      \     'i':     'I',
+      \     'R':     'R',
+      \     'v':     'V',
+      \     'V':     'VL',
+      \     'c':     'C',
+      \     '<C-v>': 'VB',
+      \     's':     'S',
+      \     'S':     'SL',
+      \     '<C-s>': 'SB',
+      \     '?':     ' '
       \   }
       \ }
 
@@ -707,7 +707,7 @@ if neobundle#tap('vim-over')
         \   }
         \ })
 
-  noremap <silent> <Leader>s :<C-u>OverCommandLine<CR>
+  noremap <silent> <Leader>s :OverCommandLine<CR>
 
   function! neobundle#hooks.on_source(bundle)
     let g:over_command_line_key_mappings = {
@@ -1630,8 +1630,8 @@ if neobundle#tap('vimfiler.vim')
       autocmd FileType vimfiler nnoremap <silent><buffer> / :<C-u>Unite file -horizontal -default-action=vimfiler<CR>
 
       function! s:SetVimfiler()
-        nmap <buffer><expr> <Enter> vimfiler#smart_cursor_map("\<Plug>(vimfiler_cd_file)", "\<Plug>(vimfiler_edit_file)")
-        nmap <buffer><expr> <C-j>   vimfiler#smart_cursor_map("\<Plug>(vimfiler_exit)",    "\<Plug>(vimfiler_exit)")
+        nmap <buffer><expr> <CR>  vimfiler#smart_cursor_map('<Plug>(vimfiler_cd_file)', '<Plug>(vimfiler_edit_file)')
+        nmap <buffer><expr> <C-j> vimfiler#smart_cursor_map('<Plug>(vimfiler_exit)',    '<Plug>(vimfiler_exit)')
 
         " dotfile表示状態に設定
         execute ':normal .'
@@ -1936,7 +1936,6 @@ function! s:FirstOneShot() " {{{
     " NeoBundleSource lightline.vim
     NeoBundleSource matchparenpp
     NeoBundleSource foldcc
-    " NeoBundleSource vim-spice
     " }}}
     " 編集 {{{
     NeoBundleSource tcomment_vim
