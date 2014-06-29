@@ -1967,9 +1967,9 @@ function! s:FirstOneShot() " {{{
     NeoBundleSource syntastic
     " }}}
 
-    set incsearch                     " インクリメンタルサーチ
-    set ignorecase                    " 検索パターンにおいて大文字と小文字を区別しない。
-    set smartcase                     " 検索パターンが大文字を含んでいたらオプション 'ignorecase' を上書きする。
+    set incsearch
+    set ignorecase
+    set smartcase
 
     if filereadable(s:VimrcLocal)
       execute 'source' s:VimrcLocal
@@ -2205,7 +2205,7 @@ augroup END
 " 編集 {{{
 set browsedir=buffer              " バッファで開いているファイルのディレクトリ
 set clipboard=unnamedplus,unnamed " クリップボードを使う
-set modeline                      " モードラインを有効
+set modeline
 set virtualedit=block
 set autoread                      " 他で書き換えられたら自動で読み直す
 set whichwrap=b,s,h,l,<,>,[,]     " カーソルを行頭、行末で止まらないようにする
@@ -2219,6 +2219,8 @@ set nrformats-=octal
 set nrformats+=alpha
 set completeopt=longest,menuone
 set backspace=indent,eol,start
+set noswapfile
+set nobackup
 " set spell
 " set spelllang+=cjk
 
@@ -2344,7 +2346,7 @@ augroup END
 " }}}
 " インデント {{{
 set autoindent
-set cindent                       " Cプログラムファイルの自動インデントを始める
+set cindent
 
 set list
 set listchars=tab:\⭟\ ,eol:↲,extends:»,precedes:«,nbsp:%
@@ -2357,10 +2359,6 @@ set tabstop=4                     " ファイル内の <Tab> が対応する空�
 set softtabstop=4                 " <Tab> の挿入や <BS> の使用等の編集操作をするときに、<Tab> が対応する空白の数。
 set shiftwidth=4                  " インデントの各段階に使われる空白の数。
 set expandtab                     " Insertモードで <Tab> を挿入するとき、代わりに適切な数の空白を使う。
-" }}}
-" バックアップ・スワップファイル {{{
-set noswapfile                    " スワップファイルを作らない
-set nobackup                      " バックアップファイルを使わない
 " }}}
 " 検索 {{{
 if executable('pt')
@@ -2408,7 +2406,7 @@ set noshowmode                    " モードを表示しない（ステータ�
 set shortmess+=I                  " 起動時のメッセージを表示しない
 set lazyredraw                    " スクリプト実行中に画面を描画しない
 set wildmenu
-set wildmode=list:full            " コマンドライン補完を便利に
+set wildmode=list:full
 set showfulltag
 set wildoptions=tagfile
 set fillchars=vert:\              " 縦分割の境界線
