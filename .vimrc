@@ -46,7 +46,7 @@ endif
 
 let s:baseColumns = IsWindows() ? 140 : 120
 let g:mapleader   = ','
-let s:vimrc_local = expand('~/.vimrc_local')
+let s:VimrcLocal  = expand('~/.vimrc_local')
 let $DOTVIM       = expand('~/.vim')
 set viminfo+=!
 
@@ -1983,8 +1983,8 @@ function! s:FirstOneShot() " {{{
     set ignorecase                    " 検索パターンにおいて大文字と小文字を区別しない。
     set smartcase                     " 検索パターンが大文字を含んでいたらオプション 'ignorecase' を上書きする。
 
-    if filereadable(s:vimrc_local)
-      execute 'source' s:vimrc_local
+    if filereadable(s:VimrcLocal)
+      execute 'source' s:VimrcLocal
     endif
 
     " 意図的に vital.vim を読み込み
@@ -2203,9 +2203,9 @@ augroup MyAutoGroup
 
   " 場所ごとに設定を用意する {{{
   " http://vim-users.jp/2009/12/hack112/
-  autocmd BufNewFile,BufReadPost * call s:vimrc_local(expand('<afile>:p:h'))
+  autocmd BufNewFile,BufReadPost * call s:LoadVimLocal(expand('<afile>:p:h'))
 
-  function! s:vimrc_local(loc)
+  function! s:LoadVimLocal(loc)
     let files = findfile('.vimrc.local', escape(a:loc, ' ') . ';', -1)
     for i in reverse(filter(files, 'filereadable(v:val)'))
       source `=i`
