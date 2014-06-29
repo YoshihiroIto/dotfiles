@@ -44,8 +44,8 @@ if has('vim_starting')
   unlet s:git_dotgvimrc
 endif
 
-let s:baseColumns = IsWindows() ? 140 : 120
 let g:mapleader   = ','
+let s:baseColumns = IsWindows() ? 140 : 120
 let s:VimrcLocal  = expand('~/.vimrc_local')
 let $DOTVIM       = expand('~/.vim')
 set viminfo+=!
@@ -578,22 +578,19 @@ function! MyGitGutter()
     return ''
   endif
 
-  let symbols = [
-        \ g:gitgutter_sign_added,
-        \ g:gitgutter_sign_modified,
-        \ g:gitgutter_sign_removed
-        \ ]
+  let symbols = [g:gitgutter_sign_added, g:gitgutter_sign_modified, g:gitgutter_sign_removed]
+  let hunks   = GitGutterGetHunkSummary()
+  let ret     = []
 
-  let hunks = GitGutterGetHunkSummary()
-  let ret = []
   for i in [0, 1, 2]
     call add(ret, symbols[i] . hunks[i])
   endfor
+
   return join(ret, ' ')
 endfunction
 " }}}
 " indentLine {{{
-let g:indentLine_fileType    = ['c', 'cpp', 'cs', 'vim', 'rb', 'go', 'glsl', 'hlsl', 'xml', 'json']
+let g:indentLine_fileType    = ['c', 'cpp', 'cs', 'ruby', 'vim', 'go', 'json', 'glsl', 'hlsl', 'xml', 'markdown']
 let g:indentLine_faster      = 1
 let g:indentLine_color_term  = 0
 let g:indentLine_indentLevel = 20
@@ -758,9 +755,7 @@ if neobundle#tap('neocomplete.vim')
     let g:neocomplete#sources#syntax#min_keyword_length = 3
     let g:neocomplete#min_keyword_length                = 3
     let g:neocomplete#force_overwrite_completefunc      = 1
-
-    let g:neocomplete#skip_auto_completion_time               = ''
-    let g:neocomplete#disable_auto_select_buffer_name_pattern = '\[Command Line\]'
+    let g:neocomplete#skip_auto_completion_time         = ''
 
     let g:neocomplete#sources#dictionary#dictionaries = {
           \   'default':  '',
@@ -1282,6 +1277,10 @@ if neobundle#tap('vim-markdown')
         \     'filetypes': ['markdown']
         \   }
         \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    let g:markdown_fenced_languages = ['c', 'cpp', 'cs', 'ruby', 'vim', 'go', 'json']
+  endfunction
 
   call neobundle#untap()
 endif
@@ -1921,16 +1920,6 @@ vnoremap u  <Nop>
 onoremap u  <Nop>
 " }}}
 " ファイルタイプごとの設定 {{{
-let g:markdown_fenced_languages = [
-  \  'cpp',
-  \  'ruby',
-  \  'vim',
-  \  'd',
-  \  'go',
-  \  'haskell',
-  \  'json',
-  \ ]
-
 let s:firstOneShotDelay = 2
 let s:firstOneShotPhase = 0
 function! s:FirstOneShot() " {{{
@@ -2247,7 +2236,9 @@ command! Format call s:SmartFormat()
 
 " http://lsifrontend.hatenablog.com/entry/2013/10/11/052640
 nmap     <silent> <C-CR> yy:<C-u>TComment<CR>p
+nmap     <silent> <C-m>  yy:<C-u>TComment<CR>p
 vnoremap <silent> <C-CR> :<C-u>call <SID>CopyAddComment()<CR>
+vnoremap <silent> <C-m>  :<C-u>call <SID>CopyAddComment()<CR>
 
 " http://qiita.com/akira-hamada/items/2417d0bcb563475deddb をもとに調整
 function! s:CopyAddComment() range
