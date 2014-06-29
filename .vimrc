@@ -518,7 +518,7 @@ function! GetCurrentBranch()
     return ''
   endif
 
-  if !exists('*fugitive#head')
+  if !s:IsInGitBranch()
     return ''
   endif
 
@@ -569,7 +569,7 @@ function! MyGitGutter()
     return ''
   endif
 
-  if ! s:IsInGitBranch()
+  if !s:IsInGitBranch()
     return ''
   endif
 
@@ -603,9 +603,11 @@ augroup MyAutoGroup
   autocmd BufReadPost * call s:SafeIndentLinesEnable()
 
   function! s:SafeIndentLinesEnable()
-    if exists(':IndentLinesEnable')
-      IndentLinesEnable
+    if !exists(':IndentLinesEnable')
+      NeoBundleSource indentLine
     endif
+
+    IndentLinesEnable
   endfunction
 augroup END
 " }}}
@@ -2937,55 +2939,12 @@ function! s:CleanEmptyBuffers()
   endif
 endfunction
 " }}}
-" 現在位置にテキストを挿入する {{{
-function! s:InsertTextAtCurrent(text)
-
-  let pos = getpos('.')
-  exe ':normal i' . a:text
-  call setpos('.', pos)
-endfunction
-" }}}
 " コマンド実行後の表示状態を維持する {{{
 function! s:ExecuteKeepView(expr)
 
   let wininfo = winsaveview()
   exe a:expr
   call winrestview(wininfo)
-endfunction
-" }}}
-" カーソル位置のn文字前を取得する {{{
-" http://d.hatena.ne.jp/eagletmt/20100623/1277289728
-function! s:GetPrevCursorChar(n)
-
-  let chars = split(getline('.')[0 : col('.') - 1], '\zs')
-  let len = len(chars)
-  if a:n >= len
-    return ''
-  else
-    return chars[len(chars) - a:n - 1]
-  endif
-endfunction
-" }}}
-" 現在位置が括弧上にあるか 0:ない 1:開括弧 2:閉括弧 {{{
-function! s:GetOnBraceChar()
-
-  let s:openBraces  = ['(', '{', '[', '<', '"', "'"]
-  let s:closeBraces = [')', '}', ']', '>']
-
-  let s:currentChar = s:GetPrevCursorChar(0)
-  for s:b in s:openBraces
-    if s:b == s:currentChar
-      return 1
-    endif
-  endfor
-
-  for s:b in s:closeBraces
-    if s:b == s:currentChar
-      return 2
-    endif
-  endfor
-
-  return 0
 endfunction
 " }}}
 " 整形 {{{
@@ -3016,7 +2975,7 @@ endfunction
 function! s:IsInGitBranch()
 
   if !exists('*fugitive#head')
-    return 0
+    NeoBundleSource vim-fugitive
   endif
 
   return fugitive#head() != ''
