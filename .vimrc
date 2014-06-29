@@ -194,7 +194,6 @@ function! s:SetNeoBundle() " {{{
   if IsMac()
     NeoBundleLazy 'itchyny/dictionary.vim'
   endif
-
   if IsWindows() && IsGuiRunning()
     NeoBundleLazy 'YoshihiroIto/vim-icondrag'
   endif
@@ -206,7 +205,6 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'osyo-manga/unite-fold'
   NeoBundleLazy 'Shougo/neomru.vim'
   NeoBundleLazy 'YoshihiroIto/vim-unite-giti'
-
   if IsWindows()
     NeoBundleLazy 'sgur/unite-everything'
   endif
@@ -313,7 +311,7 @@ if neobundle#tap('vim-submode')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    " todo:gvimで動作しない。なぜ？
+    " todo:mac gvimで動作しない。なぜ？
     call submode#enter_with('gitgutter', 'n', 'r', '<Leader>j', '<Plug>GitGutterNextHunkzvzz')
     call submode#map(       'gitgutter', 'n', 'r', 'j',         '<Plug>GitGutterNextHunkzvzz')
     call submode#map(       'gitgutter', 'n', 'r', 'k',         '<Plug>GitGutterPrevHunkzvzz')
@@ -1199,8 +1197,9 @@ if neobundle#tap('vim-gocode')
       let g:gocomplete#system_function = 'vimproc#system'
     endif
 
-    let g:gofmt_command  = 'goimports'
-    let g:go_fmt_autofmt = 0
+    let g:gofmt_command   = 'goimports'
+    let g:go_fmt_autofmt  = 0
+    let g:go_fmt_commands = 0
   endfunction
 
   call neobundle#untap()
@@ -1621,7 +1620,7 @@ if neobundle#tap('vimfiler.vim')
       autocmd FileType vimfiler call s:SetVimfiler()
 
       " http://qiita.com/Linda_pp/items/f1cb09ac94202abfba0e
-      autocmd FileType vimfiler nnoremap <buffer><silent> / :<C-u>Unite file -horizontal -default-action=vimfiler<CR>
+      autocmd FileType vimfiler nnoremap <silent><buffer> / :<C-u>Unite file -horizontal -default-action=vimfiler<CR>
 
       function! s:SetVimfiler()
         nmap <buffer><expr> <Enter> vimfiler#smart_cursor_map("\<Plug>(vimfiler_cd_file)", "\<Plug>(vimfiler_edit_file)")
@@ -2065,6 +2064,12 @@ augroup MyAutoGroup
 
     nmap <silent><buffer> <Leader><C-k><C-k> :<C-u>Godoc<CR>zz
     nmap <silent><buffer> <C-]>              :<C-u>call GodefUnderCursor()<CR>zz
+
+    command! -buffer Fmt call s:GolangFormat()
+
+    augroup MyAutoGroup
+      autocmd BufWritePost <buffer> call s:GolangFormat()
+    augroup END
   endfunction
 
   function! s:SetGodoc()
@@ -2090,8 +2095,8 @@ augroup MyAutoGroup
     setlocal foldmethod=syntax
     let g:omnicomplete_fetch_full_documentation = 0
 
-    nnoremap <buffer> <C-]>   :<C-u>call OmniSharp#GotoDefinition()<CR>zz
-    nnoremap <buffer> <S-F12> :<C-u>call OmniSharp#FindUsages()<CR>
+    nnoremap <silent><buffer> <C-]>   :<C-u>call OmniSharp#GotoDefinition()<CR>zz
+    nnoremap <silent><buffer> <S-F12> :<C-u>call OmniSharp#FindUsages()<CR>
   endfunction
 
   function! s:SetUnite()
@@ -2101,9 +2106,9 @@ augroup MyAutoGroup
       imap <silent><buffer><expr> <C-r> unite#do_action('replace')
     endif
 
-    nmap <buffer> <C-v> <Plug>(unite_toggle_auto_preview)
-    imap <buffer> <C-v> <Plug>(unite_toggle_auto_preview)
-    nmap <buffer> <C-j> <Plug>(unite_exit)
+    nmap <silent><buffer> <C-v> <Plug>(unite_toggle_auto_preview)
+    imap <silent><buffer> <C-v> <Plug>(unite_toggle_auto_preview)
+    nmap <silent><buffer> <C-j> <Plug>(unite_exit)
   endfunction
 
   function! s:SetHelp()
@@ -2721,6 +2726,7 @@ nnoremap <silent> [Git]a    :<C-u>call <SID>ExecuteIfOnGitBranch('Gwrite')<CR>
 nnoremap <silent> [Git]c    :<C-u>call <SID>ExecuteIfOnGitBranch('Gcommit')<CR>
 nnoremap <silent> [Git]f    :<C-u>call <SID>ExecuteIfOnGitBranch('GitiFetch')<CR>
 nnoremap <silent> [Git]d    :<C-u>call <SID>ExecuteIfOnGitBranch('Gdiff')<CR>
+nnoremap <silent> [Git]s    :<C-u>call <SID>ExecuteIfOnGitBranch('Gstatus')<CR>
 nnoremap <silent> [Git]v    :<C-u>call <SID>ExecuteIfOnGitBranch('Gitv')<CR>
 nnoremap <silent> [Git]push :<C-u>call <SID>ExecuteIfOnGitBranch('GitiPush')<CR>
 nnoremap <silent> [Git]pull :<C-u>call <SID>ExecuteIfOnGitBranch('GitiPull')<CR>
@@ -3101,6 +3107,28 @@ function! s:ExecuteIfOnGitBranch(line)
   execute a:line
 endfunction
 " }}}
+" GolangFormat {{{
+function! s:GolangFormat()
+
+  let pos_save                     = getpos('.')
+  let sel_save                     = &l:selection
+  let &l:selection                 = 'inclusive'
+  let [save_g_reg, save_g_regtype] = [getreg('g'), getregtype('g')]
+
+  try
+    let formatted = vimproc#system('goimports ' . expand('%:p'))
+
+    if vimproc#get_last_status() == 0
+      call setreg('g', formatted, 'v')
+      silent keepjumps normal! ggVG"gp
+    endif
+  finally
+    call setreg('g', save_g_reg, save_g_regtype)
+    let &l:selection = sel_save
+    call setpos('.', pos_save)
+  endtry
+endfunction
+" }}}
 " }}}
 " コンソール用 {{{
 if !IsGuiRunning()
@@ -3123,5 +3151,5 @@ endif
 " |  cmap  |        |        |        |        |        |   ○   |
 " +--------+--------+--------+--------+--------+--------+--------+
 " }}}
-" vim: set ts=2 sw=2 sts=2 et
+" vim: set ts=2 sw=2 sts=2 et :
 
