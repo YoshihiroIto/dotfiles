@@ -150,7 +150,6 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'Rip-Rip/clang_complete'
   NeoBundleLazy 'rhysd/vim-clang-format'
   NeoBundleLazy 'osyo-manga/shabadou.vim'
-  NeoBundleLazy 'rcmdnk/vim-markdown'
   NeoBundleLazy 'vim-jp/cpp-vim'
   NeoBundle     'YoshihiroIto/vim-gocode'
   NeoBundleLazy 'dgryski/vim-godef'
@@ -192,6 +191,7 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'Shougo/vimfiler.vim'
   NeoBundleLazy 'basyura/TweetVim'
   NeoBundleLazy 'gregsexton/gitv'
+  NeoBundleLazy 'glidenote/memolist.vim'
   if IsMac()
     NeoBundleLazy 'itchyny/dictionary.vim'
   endif
@@ -1168,22 +1168,6 @@ if neobundle#tap('vim-quickrun')
   call neobundle#untap()
 endif
 " }}}
-" vim-markdown {{{
-if neobundle#tap('vim-markdown')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': ['markdown']
-        \   }
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    let g:vim_markdown_no_default_key_mappings = 1
-    let g:vim_markdown_initial_foldlevel       = 99
-  endfunction
-
-  call neobundle#untap()
-endif
-" }}}
 " cpp-vim {{{
 if neobundle#tap('cpp-vim')
   call neobundle#config({
@@ -1283,7 +1267,7 @@ endif
 if neobundle#tap('JSON.vim')
   call neobundle#config({
         \   'autoload': {
-        \     'filetypes': ['json']
+        \     'filetypes': ['json', 'markdown']
         \   }
         \ })
 
@@ -1704,6 +1688,28 @@ if neobundle#tap('gitv')
   call neobundle#untap()
 endif
 " }}}
+" memolist {{{
+if neobundle#tap('memolist.vim')
+  call neobundle#config({
+        \   'depends':  ['unite.vim'],
+        \   'autoload': {
+        \     'commands': ['MemoNew', 'MemoList', 'MemoGrep']
+        \   }
+        \ })
+
+  noremap <silent> [App]mn :<C-u>MemoNew<CR>
+  noremap <silent> [App]ml :<C-u>MemoList<CR>
+  noremap <silent> [App]mg :<C-u>MemoGrep<CR>
+
+  function! neobundle#hooks.on_source(bundle)
+    let g:memolist_unite        = 1
+    let g:memolist_path         = expand('~/Dropbox/memo')
+    let g:memolist_memo_suffix  = 'md'
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
 " }}}
 " Unite {{{
 " unite.vim {{{
@@ -1903,6 +1909,16 @@ vnoremap u  <Nop>
 onoremap u  <Nop>
 " }}}
 " ファイルタイプごとの設定 {{{
+let g:markdown_fenced_languages = [
+  \  'cpp',
+  \  'ruby',
+  \  'vim',
+  \  'd',
+  \  'go',
+  \  'haskell',
+  \  'json',
+  \ ]
+
 let s:firstOneShotDelay = 2
 let s:firstOneShotPhase = 0
 function! s:FirstOneShot() " {{{
@@ -1992,13 +2008,13 @@ augroup FirstOneShot
 augroup END
 
 augroup MyAutoGroup
-  autocmd BufEnter,WinEnter,BufWinEnter,BufWritePost *                          call s:UpdateAll()
-  autocmd BufNewFile,BufRead                         *.xaml                     setlocal ft=xml
-  autocmd BufNewFile,BufRead                         *.json                     setlocal ft=json
-  autocmd BufNewFile,BufRead                         *.{fx,fxc,fxh,hlsl}        setlocal ft=hlsl
-  autocmd BufNewFile,BufRead                         *.{fsh,vsh}                setlocal ft=glsl
-  autocmd BufNewFile,BufRead                         *.{md,mdwn,mkd,mkdn,mark*} setlocal ft=markdown
-  autocmd BufWritePost                               $MYVIMRC                   NeoBundleClearCache
+  autocmd BufEnter,WinEnter,BufWinEnter,BufWritePost *                   call     s:UpdateAll()
+  autocmd BufNewFile,BufRead                         *.xaml              setlocal ft=xml
+  autocmd BufNewFile,BufRead                         *.json              setlocal ft=json
+  autocmd BufNewFile,BufRead                         *.{fx,fxc,fxh,hlsl} setlocal ft=hlsl
+  autocmd BufNewFile,BufRead                         *.{fsh,vsh}         setlocal ft=glsl
+  autocmd BufNewFile,BufRead                         *.{md,mkd,markdown} setlocal ft=markdown
+  autocmd BufWritePost                               $MYVIMRC            NeoBundleClearCache
 
   autocmd FileType *          call s:SetAll()
   autocmd FileType ruby       call s:SetRuby()
@@ -2014,6 +2030,7 @@ augroup MyAutoGroup
   autocmd FileType json       call s:SetJson()
   autocmd FileType xml,html   call s:SetXml()
   autocmd FileType neosnippet call s:SetNeosnippet()
+  autocmd FileType markdown   call s:SetMarkdown()
 
   function! s:UpdateAll()
 
@@ -2125,11 +2142,15 @@ augroup MyAutoGroup
   endfunction
 
   function! s:SetHelp()
-    noremap  <silent><buffer> q     :<C-u>close<CR>
+    noremap <silent><buffer> q     :<C-u>close<CR>
   endfunction
 
   function! s:SetNeosnippet()
     setlocal noexpandtab
+  endfunction
+
+  function! s:SetMarkdown()
+    nnoremap <silent><buffer> [App]p :<C-u>PrevimOpen<CR>
   endfunction
 
   function! s:SetQuickFix()
