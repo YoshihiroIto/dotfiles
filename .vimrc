@@ -158,6 +158,7 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'tikhomirov/vim-glsl'
   NeoBundleLazy 'vim-ruby/vim-ruby'
   NeoBundleLazy 'vim-scripts/JSON.vim'
+  NeoBundleLazy 'tpope/vim-markdown'
   NeoBundleLazy 'pangloss/vim-javascript'
   NeoBundleLazy 'kchmck/vim-coffee-script'
   NeoBundleLazy 'jelera/vim-javascript-syntax'
@@ -709,7 +710,7 @@ if neobundle#tap('vim-over')
         \   }
         \ })
 
-  noremap <silent> <Leader>s :OverCommandLine<CR>
+  noremap <silent> <Leader>s :<C-u>OverCommandLine<CR>
 
   function! neobundle#hooks.on_source(bundle)
     let g:over_command_line_key_mappings = {
@@ -1136,7 +1137,7 @@ if neobundle#tap('vim-quickrun')
         \   }
         \ })
 
-  map <silent> [App]r    :<C-u>QuickRun<CR>
+  map <silent> [App]r :<C-u>QuickRun<CR>
 
   function! neobundle#hooks.on_source(bundle)
     let g:quickrun_config = {
@@ -1268,6 +1269,17 @@ if neobundle#tap('JSON.vim')
   call neobundle#config({
         \   'autoload': {
         \     'filetypes': ['json', 'markdown']
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-markdown {{{
+if neobundle#tap('vim-markdown')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': ['markdown']
         \   }
         \ })
 
@@ -2117,7 +2129,7 @@ augroup MyAutoGroup
   function! s:SetCpp()
     setlocal foldmethod=syntax
 
-    map <silent><buffer> [App]r    :<C-u>QuickRun cpp/wandbox<CR>
+    map <silent><buffer> [App]r :<C-u>QuickRun cpp/wandbox<CR>
   endfunction
 
   function! s:SetCs()
@@ -2142,7 +2154,7 @@ augroup MyAutoGroup
   endfunction
 
   function! s:SetHelp()
-    noremap <silent><buffer> q     :<C-u>close<CR>
+    noremap <silent><buffer> q :<C-u>close<CR>
   endfunction
 
   function! s:SetNeosnippet()
@@ -2658,10 +2670,10 @@ if IsGuiRunning()
   noremap <silent> [Window]J :<C-u>call <SID>ResizeWin()<CR>
   noremap <silent> [Window]K :<C-u>call <SID>ResizeWin()<CR>
   noremap <silent> [Window]L :<C-u>call <SID>ResizeWin()<CR>
-  noremap <silent> [Window]h :MoveWin<CR>
-  noremap <silent> [Window]j :MoveWin<CR>
-  noremap <silent> [Window]k :MoveWin<CR>
-  noremap <silent> [Window]l :MoveWin<CR>
+  noremap <silent> [Window]h :<C-u>MoveWin<CR>
+  noremap <silent> [Window]j :<C-u>MoveWin<CR>
+  noremap <silent> [Window]k :<C-u>MoveWin<CR>
+  noremap <silent> [Window]l :<C-u>MoveWin<CR>
   noremap <silent> [Window]f :<C-u>call <SID>FullWindow()<CR>
 endif
 " }}}
