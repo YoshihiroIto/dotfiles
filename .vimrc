@@ -2207,13 +2207,13 @@ set browsedir=buffer              " バッファで開いているファイル�
 set clipboard=unnamedplus,unnamed " クリップボードを使う
 set modeline
 set virtualedit=block
-set autoread                      " 他で書き換えられたら自動で読み直す
+set autoread
 set whichwrap=b,s,h,l,<,>,[,]     " カーソルを行頭、行末で止まらないようにする
 set mouse=a                       " 全モードでマウスを有効化
 set hidden                        " 変更中のファイルでも、保存しないで他のファイルを表示
 set timeoutlen=2000
-set iminsert=0                    " 挿入モードでのデフォルトのIME状態設定
-set imsearch=0                    " 検索モードでのデフォルトのIME状態設定
+set iminsert=0
+set imsearch=0
 set formatexpr=autofmt#japanese#formatexpr()
 set nrformats-=octal
 set nrformats+=alpha
@@ -2344,21 +2344,22 @@ augroup MyAutoGroup
   endfunction
 augroup END
 " }}}
-" インデント {{{
+" タブ・インデント {{{
 set autoindent
 set cindent
-
-set list
-set listchars=tab:\⭟\ ,eol:↲,extends:»,precedes:«,nbsp:%
-
-vnoremap < <gv
-vnoremap > >gv
-" }}}
-" タブ {{{
 set tabstop=4                     " ファイル内の <Tab> が対応する空白の数。
 set softtabstop=4                 " <Tab> の挿入や <BS> の使用等の編集操作をするときに、<Tab> が対応する空白の数。
 set shiftwidth=4                  " インデントの各段階に使われる空白の数。
 set expandtab                     " Insertモードで <Tab> を挿入するとき、代わりに適切な数の空白を使う。
+set list
+set listchars=tab:\⭟\ ,eol:↲,extends:»,precedes:«,nbsp:%
+
+if (v:version >= 704 && has('patch338'))
+  set breakindent
+endif
+
+vnoremap < <gv
+vnoremap > >gv
 " }}}
 " 検索 {{{
 if executable('pt')
@@ -2397,14 +2398,14 @@ endfunction
 " }}}
 " 表示 {{{
 syntax enable                     " 構文ごとに色分けをする
-set number                        " 行番号表示
+set number
 set textwidth=0                   " 一行に長い文章を書いていても自動折り返しをしない
 set showcmd                       " コマンドをステータス行に表示
 set showmatch                     " 括弧の対応をハイライト
-set wrap                          " ウィンドウの幅より長い行は折り返して、次の行に続けて表示する
-set noshowmode                    " モードを表示しない（ステータスラインで表示するため）
+set wrap
+set noshowmode
 set shortmess+=I                  " 起動時のメッセージを表示しない
-set lazyredraw                    " スクリプト実行中に画面を描画しない
+set lazyredraw
 set wildmenu
 set wildmode=list:full
 set showfulltag
@@ -2418,10 +2419,6 @@ set cmdheight=1
 set laststatus=2
 set showtabline=2
 set diffopt=vertical,filler
-
-if (v:version >= 704 && has('patch338'))
-  set breakindent
-endif
 
 " 'cursorline' を必要な時にだけ有効にする {{{
 " http://d.hatena.ne.jp/thinca/20090530/1243615055
