@@ -2700,6 +2700,7 @@ nnoremap <silent> [Git]pull :<C-u>call <SID>ExecuteIfOnGitBranch('GitiPull')<CR>
 " ヘルプ {{{
 nnoremap <Leader><C-k>      :<C-u>help<Space>
 nnoremap <Leader><C-k><C-k> :<C-u>help <C-r><C-w><CR>
+vnoremap <Leader><C-k><C-k> :<C-u>help <C-r><C-w><CR>
 
 set helplang=ja,en
 set rtp+=$VIM/plugins/vimdoc-ja
