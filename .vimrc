@@ -4,27 +4,27 @@ scriptencoding utf-8
 " 基本 {{{
 " グローバル関数 {{{
 function! IsWindows()
-  if !exists('g:vimrc_isWindows')
-    let g:vimrc_isWindows = has('win32') || has('win64')
+  if !exists('s:vimrc_isWindows')
+    let s:vimrc_isWindows = has('win32') || has('win64')
   endif
 
-  return g:vimrc_isWindows
+  return s:vimrc_isWindows
 endfunction
 
 function! IsMac()
-  if !exists('g:vimrc_isMac')
-    let g:vimrc_isMac = has('mac')
+  if !exists('s:vimrc_isMac')
+    let s:vimrc_isMac = has('mac')
   endif
 
-  return g:vimrc_isMac
+  return s:vimrc_isMac
 endfunction
 
 function! IsGuiRunning()
-  if !exists('g:vimrc_isGuiRunning')
-    let g:vimrc_isGuiRunning = has('gui_running')
+  if !exists('s:vimrc_isGuiRunning')
+    let s:vimrc_isGuiRunning = has('gui_running')
   endif
 
-  return g:vimrc_isGuiRunning
+  return s:vimrc_isGuiRunning
 endfunction
 " }}}
 
@@ -94,7 +94,7 @@ function! s:SetNeoBundle() " {{{
   NeoBundle     'Shougo/vimproc'
   NeoBundle     'tpope/vim-dispatch'
   NeoBundle     'xolox/vim-misc'
-  NeoBundle     'xolox/vim-shell'
+  NeoBundleLazy 'xolox/vim-shell'
   NeoBundleLazy 'basyura/twibill.vim'
   NeoBundleLazy 'LeafCage/nebula.vim'
   NeoBundleLazy 'mattn/webapi-vim'
@@ -137,6 +137,7 @@ function! s:SetNeoBundle() " {{{
 
   " ファイル
   NeoBundleLazy 'kana/vim-altr'
+  NeoBundleLazy 'YoshihiroIto/vim-auto-mirroring'
 
   " 検索
   NeoBundleLazy 'matchit.zip'
@@ -237,6 +238,15 @@ if neobundle#tap('vimproc')
         \     'unix': 'make -f make_unix.mak',
         \   },
         \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-shell {{{
+if neobundle#tap('vim-shell')
+  function! neobundle#hooks.on_source(bundle)
+    let g:shell_mappings_enabled = 0
+  endfunction
 
   call neobundle#untap()
 endif
@@ -1023,9 +1033,9 @@ if neobundle#tap('clang_complete')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    let g:clang_use_library              = 1
-    let g:clang_complete_auto            = 0
-    let g:clang_auto_select              = 0
+    let g:clang_use_library   = 1
+    let g:clang_complete_auto = 0
+    let g:clang_auto_select   = 0
 
     if IsWindows()
       let g:clang_user_options = '-I C:/Development/boost_1_55_0 -I "C:/Program Files (x86)/Microsoft Visual Studio 11.0/VC/include" -std=c++11 -fms-extensions -fmsc-version=1300 -fgnu-runtime -D__MSVCRT_VERSION__=0x700 -D_WIN32_WINNT=0x0500 2> NUL || exit 0"'
@@ -1917,6 +1927,7 @@ function! s:FirstOneShot() " {{{
     " }}}
     " ファイル {{{
     NeoBundleSource vim-altr
+    NeoBundleSource vim-auto-mirroring
     " }}}
     " 検索 {{{
     NeoBundleSource vim-anzu
@@ -2325,52 +2336,6 @@ set expandtab                     " Insertモードで <Tab> を挿入すると�
 " バックアップ・スワップファイル {{{
 set noswapfile                    " スワップファイルを作らない
 set nobackup                      " バックアップファイルを使わない
-
-" 自動ミラーリング {{{
-let s:mirrorDir = expand('$DOTVIM/mirror')
-let s:mirrorMaxHistory = 7
-augroup MyAutoGroup
-  autocmd VimEnter    * call s:TrimMirrorDirs()
-  autocmd BufWritePre * call s:MirrorCurrentFile()
-
-  " 古いミラーディレクトリを削除する
-  function! s:TrimMirrorDirs()
-
-    let mirrorDirs = sort(split(glob(s:mirrorDir . '/*'),  '\n'))
-
-    while len(mirrorDirs) > s:mirrorMaxHistory
-      let dir = remove(mirrorDirs, 0)
-      call s:RemoveDir(dir)
-    endwhile
-  endfunction
-
-  " カレントファイルをミラーリングする
-  function! s:MirrorCurrentFile()
-
-    let sourceFilepath = expand('%:p')
-
-    if filereadable(sourceFilepath)
-      " ファイルパス作成
-      let currentMirrorDir = s:mirrorDir . '/' . strftime('%Y%m%d')
-      let currentPostfix   = strftime('%H%M%S')
-      let filename         = expand('%:p:t:r')
-      let ext              = expand('%:p:t:e')
-
-      if ext != ''
-        let ext = '.' . ext
-      endif
-
-      let outputFilepath = currentMirrorDir . '/' . filename . currentPostfix . ext
-
-      " ミラー先ディレクトリを確認
-      call s:MakeDir(currentMirrorDir)
-
-      " 保存直前状態をミラー先にコピーする
-      call s:CopyFile(sourceFilepath, outputFilepath)
-    endif
-  endfunction
-augroup END
-" }}}
 " }}}
 " 検索 {{{
 if executable('pt')
@@ -2969,45 +2934,6 @@ function! s:CleanEmptyBuffers()
   let buffers = filter(range(1, bufnr('$')), "buflisted(v:val) && empty(bufname(v:val)) && bufwinnr(v:val)<0 && getbufvar(v:val, '&modified', 0)==0")
   if !empty(buffers)
     exe 'bd ' join(buffers, ' ')
-  endif
-endfunction
-" }}}
-" ファイルコピー{{{
-function! s:CopyFile(sourceFilepath, targetFilepath)
-
-  let esource = vimproc#shellescape(expand(a:sourceFilepath))
-  let etarget = vimproc#shellescape(expand(a:targetFilepath))
-
-  if IsWindows()
-    call vimproc#system_bg('copy ' . esource . ' ' . etarget)
-  elseif IsMac()
-    call vimproc#system_bg('cp ' . esource . ' ' . etarget)
-  else
-    echo 'CopyFile : Not supported.'
-  endif
-endfunction
-" }}}
-" ディレクトリ作成 {{{
-function! s:MakeDir(path)
-
-  if isdirectory(a:path) == 0
-    call mkdir(a:path, 'p')
-  endif
-endfunction
-" }}}
-" ディレクトリ削除 {{{
-function! s:RemoveDir(path)
-
-  let epath = vimproc#shellescape(expand(a:path))
-
-  if isdirectory(a:path)
-    if IsWindows()
-      call vimproc#system_bg('rd /S /Q ' . epath)
-    elseif IsMac()
-      call vimproc#system_bg('rm -rf ' . epath)
-    else
-      echo 'RemoveDir : Not supported.'
-    endif
   endif
 endfunction
 " }}}
