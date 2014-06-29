@@ -1543,7 +1543,7 @@ if neobundle#tap('lingr-vim')
     if bufnr('lingr-messages') == -1
       tabnew
       LingrLaunch
-      exe 'wincmd l'
+      execute 'wincmd l'
     else
       LingrExit
     endif
@@ -1639,7 +1639,7 @@ if neobundle#tap('vimfiler.vim')
         nmap <buffer><expr> <C-j>   vimfiler#smart_cursor_map("\<Plug>(vimfiler_exit)",    "\<Plug>(vimfiler_exit)")
 
         " dotfile表示状態に設定
-        exe ':normal .'
+        execute ':normal .'
       endfunction
     augroup END
 
@@ -1685,7 +1685,7 @@ if neobundle#tap('TweetVim')
       tabnew
       TweetVimHomeTimeline
     else
-      silent! exe 'bwipeout tweetvim'
+      silent! execute 'bwipeout tweetvim'
     endif
   endfunction
 
@@ -1747,7 +1747,7 @@ if neobundle#tap('unite.vim')
   function! s:unite_grep_project(...)
     let opts = (a:0 ? join(a:000, ' ') : '')
     let dir = unite#util#path2project_directory(expand('%'))
-    exe 'Unite' opts 'grep:' . dir
+    execute 'Unite' opts 'grep:' . dir
   endfunction
 
   function! neobundle#hooks.on_source(bundle)
@@ -1956,7 +1956,7 @@ function! s:FirstOneShot() " {{{
     set smartcase                     " 検索パターンが大文字を含んでいたらオプション 'ignorecase' を上書きする。
 
     if filereadable(s:vimrc_local)
-      exe 'source' s:vimrc_local
+      execute 'source' s:vimrc_local
     endif
 
     " 意図的に vital.vim を読み込み
@@ -2028,7 +2028,7 @@ augroup MyAutoGroup
 
     " ファイルの場所をカレントにする
     if &ft != '' && &ft != 'vimfiler'
-      silent! exe 'lcd' fnameescape(expand('%:p:h'))
+      silent! execute 'lcd' fnameescape(expand('%:p:h'))
     endif
 
     call s:SetAll()
@@ -2158,7 +2158,7 @@ augroup MyAutoGroup
     let w:qf_history = history
     unlet! qf[a:firstline - 1 : a:lastline - 1]
     call setqflist(qf, 'r')
-    exe a:firstline
+    execute a:firstline
   endfunction
 
   function! s:undo_entry()
@@ -2228,19 +2228,19 @@ function! s:CopyAddComment() range
 
   " 元のコードを選択
   if selectedCount == 0
-    exe 'normal V'
+    execute 'normal V'
   else
-    exe 'normal V' . selectedCount . 'j'
+    execute 'normal V' . selectedCount . 'j'
   endif
 
   " コメントアウトする
   normal gc
 
   " ビジュアルモードからエスケープ
-  exe "normal! \e\e"
+  execute "normal! \e\e"
 
   " 元の位置に戻る
-  exe 'normal ' . (selectedCount + 1) . 'j'
+  execute 'normal ' . (selectedCount + 1) . 'j'
 endfunction
 
 " http://vim.wikia.com/wiki/Pretty-formatting_XML
@@ -2252,25 +2252,25 @@ function! s:DoFormatXML() range
   set ft=
 
   " Add fake initial tag (so we can process multiple top-level elements)
-  exe ":let l:beforeFirstLine=" . a:firstline . "-1"
+  execute ":let l:beforeFirstLine=" . a:firstline . "-1"
   if l:beforeFirstLine < 0
     let l:beforeFirstLine=0
   endif
-  exe a:lastline . "put ='</PrettyXML>'"
-  exe l:beforeFirstLine . "put ='<PrettyXML>'"
-  exe ":let l:newLastLine=" . a:lastline . "+2"
+  execute a:lastline . "put ='</PrettyXML>'"
+  execute l:beforeFirstLine . "put ='<PrettyXML>'"
+  execute ":let l:newLastLine=" . a:lastline . "+2"
   if l:newLastLine > line('$')
     let l:newLastLine=line('$')
   endif
 
   " Remove XML header
-  exe ":" . a:firstline . "," . a:lastline . "s/<\?xml\\_.*\?>\\_s*//e"
+  execute ":" . a:firstline . "," . a:lastline . "s/<\?xml\\_.*\?>\\_s*//e"
 
   " Recalculate last line of the edited code
   let l:newLastLine=search('</PrettyXML>')
 
   " Execute external formatter
-  exe ":silent " . a:firstline . "," . l:newLastLine . "!xmllint --noblanks --format --recover -"
+  execute ":silent " . a:firstline . "," . l:newLastLine . "!xmllint --noblanks --format --recover -"
 
   " Recalculate first and last lines of the edited code
   let l:newFirstLine=search('<PrettyXML>')
@@ -2281,17 +2281,17 @@ function! s:DoFormatXML() range
   let l:innerLastLine=l:newLastLine-1
 
   " Remove extra unnecessary indentation
-  exe ":silent " . l:innerFirstLine . "," . l:innerLastLine "s/^  //e"
+  execute ":silent " . l:innerFirstLine . "," . l:innerLastLine "s/^  //e"
 
   " Remove fake tag
-  exe l:newLastLine . "d"
-  exe l:newFirstLine . "d"
+  execute l:newLastLine . "d"
+  execute l:newFirstLine . "d"
 
   " Put the cursor at the first line of the edited code
-  exe ":" . l:newFirstLine
+  execute ":" . l:newFirstLine
 
   " Restore the file type
-  exe "set ft=" . l:origft
+  execute "set ft=" . l:origft
 endfunction
 command! -range=% XmlFormat <line1>,<line2>call s:DoFormatXML()
 
@@ -2303,7 +2303,7 @@ function! s:Jq(...)
     let l:arg = a:1
   endif
 
-  exe "%! jq \"" . l:arg . "\""
+  execute "%! jq \"" . l:arg . "\""
 endfunction
 command! -nargs=? JsonFormat call s:Jq(<f-args>)
 
@@ -2390,7 +2390,6 @@ set showfulltag
 set wildoptions=tagfile
 set fillchars=vert:\              " 縦分割の境界線
 set synmaxcol=500                 " ハイライトする文字数を制限する
-" set updatetime=220
 set updatetime=750
 set previewheight=24
 set laststatus=0
@@ -2653,7 +2652,7 @@ nnoremap <silent> [Tab]c :tabnew<CR>
 nnoremap <silent> [Tab]x :tabclose<CR>
 
 for s:n in range(1, 9)
-  exe 'nnoremap <silent> [Tab]' . s:n  ':<C-u>tabnext' . s:n . '<CR>'
+  execute 'nnoremap <silent> [Tab]' . s:n  ':<C-u>tabnext' . s:n . '<CR>'
 endfor
 
 nnoremap <silent> K :<C-u>tabp<CR>
@@ -2671,7 +2670,7 @@ nnoremap <silent> [Buffer]x :bdelete<CR>
 nnoremap <silent> <Leader>x :bdelete<CR>
 
 for s:n in range(1, 9)
-  exe 'nnoremap <silent> [Buffer]' . s:n  ':<C-u>b' . s:n . '<CR>'
+  execute 'nnoremap <silent> [Buffer]' . s:n  ':<C-u>b' . s:n . '<CR>'
 endfor
 
 " nnoremap <silent> <C-k> :<C-u>bprevious<CR>
@@ -2777,8 +2776,8 @@ endfunction
 " }}}
 " アプリケーションウィンドウを最大高さにする {{{
 function! s:FullWindow()
-  exe 'winpos' getwinposx() '0'
-  exe 'set lines=9999'
+  execute 'winpos' getwinposx() '0'
+  execute 'set lines=9999'
 endfunction
 " }}}
 " 縦分割する {{{
@@ -2804,7 +2803,7 @@ function! s:OpenVSplitWide()
 
   let s:depthVsp += 1
   let &columns = s:baseColumns * s:depthVsp
-  exe 'botright vertical' s:baseColumns 'split'
+  execute 'botright vertical' s:baseColumns 'split'
 endf
 
 function! s:CloseVSplitWide()
@@ -2814,7 +2813,7 @@ function! s:CloseVSplitWide()
   call s:SmartClose()
 
   if s:depthVsp == 1
-    exe 'winpos' s:opendLeftVsp s:opendTopVsp
+    execute 'winpos' s:opendLeftVsp s:opendTopVsp
   end
 endf
 " }}}
@@ -2845,7 +2844,7 @@ function! s:SmartClose()
   let windows                 = range(1, winnr('$'))
 
   if (len(windows) == 1) && (s:GetListedBufferCount() == 1) && (tabCount == 1)
-    if  &columns == s:baseColumns
+    if &columns == s:baseColumns
       if isCurrentBufferModified == 0
         quit
       elseif confirm('未保存です。閉じますか？', "&Yes\n&No", 1, 'Question') == 1
@@ -2880,12 +2879,12 @@ function! s:SmartOpen(filepath)
 
   " 新規タブであればそこに開く、そうでなければ新規新規タブに開く
   " if (&ft == '') && (s:GetIsCurrentBufferModified() == 0) && (s:GetCurrentBufferSize() == 0)
-  "   exe 'edit' a:filepath
+  "   execute 'edit' a:filepath
   " else
-  "   exe 'tabnew' a:filepath
+  "   execute 'tabnew' a:filepath
   " endif
 
-  exe ':edit' a:filepath
+  execute ':edit' a:filepath
   call s:CleanEmptyBuffers()
 endfunction
 " }}}
@@ -2935,7 +2934,7 @@ function! s:CleanEmptyBuffers()
 
   let buffers = filter(range(1, bufnr('$')), "buflisted(v:val) && empty(bufname(v:val)) && bufwinnr(v:val)<0 && getbufvar(v:val, '&modified', 0)==0")
   if !empty(buffers)
-    exe 'bd ' join(buffers, ' ')
+    execute 'bd ' join(buffers, ' ')
   endif
 endfunction
 " }}}
@@ -2943,7 +2942,7 @@ endfunction
 function! s:ExecuteKeepView(expr)
 
   let wininfo = winsaveview()
-  exe a:expr
+  execute a:expr
   call winrestview(wininfo)
 endfunction
 " }}}
