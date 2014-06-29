@@ -2150,7 +2150,7 @@ augroup MyAutoGroup
   endfunction
 
   function! s:SetMarkdown()
-    nnoremap <silent><buffer> [App]p :<C-u>PrevimOpen<CR>
+    nnoremap <silent><buffer> [App]v :<C-u>PrevimOpen<CR>
   endfunction
 
   function! s:SetQuickFix()
