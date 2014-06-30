@@ -1770,14 +1770,11 @@ if neobundle#tap('unite.vim')
   function! neobundle#hooks.on_source(bundle)
     let g:unite_force_overwrite_statusline = 0
 
-    " http://blog.monochromegane.com/blog/2014/01/16/the-platinum-searcher/
-    " https://github.com/monochromegane/the_platinum_searcher
     if executable('pt')
       let g:unite_source_grep_command       = 'pt'
       let g:unite_source_grep_default_opts  = '--nogroup --nocolor -S'
       let g:unite_source_grep_recursive_opt = ''
       let g:unite_source_grep_encoding      = 'utf-8'
-
       let g:unite_source_rec_async_command  = 'pt --nocolor --nogroup -g .'
     endif
 
