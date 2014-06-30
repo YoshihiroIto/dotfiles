@@ -2091,7 +2091,7 @@ augroup MyAutoGroup
     " todo:Windowsだと重い
     if !IsWindows()
       augroup MyAutoGroup
-        autocmd BufWritePost <buffer> call s:GolangFormat()
+        autocmd BufWritePost <buffer> call s:GolangFormat(1)
       augroup END
     endif
   endfunction
@@ -2957,9 +2957,9 @@ function! s:SmartFormat()
   elseif &ft == 'xml'
     XmlFormat
   elseif &ft == 'json'
-    call s:JsonFormat()
+    call s:JsonFormat(0)
   elseif &ft == 'go'
-    call s:GolangFormat()
+    call s:GolangFormat(0)
   else
     echo 'Format : Not supported. : ' . &ft
   endif
@@ -2993,17 +2993,17 @@ function! s:ExecuteIfOnGitBranch(line)
 endfunction
 " }}}
 " GolangFormat {{{
-function! s:GolangFormat()
-  call s:FilterCurrent('goimports')
+function! s:GolangFormat(isSilent)
+  call s:FilterCurrent('goimports', a:isSilent)
 endfunction
 " }}}
 " JsonFormat {{{
-function! s:JsonFormat()
-  call s:FilterCurrent('jq .')
+function! s:JsonFormat(isSilent)
+  call s:FilterCurrent('jq .', a:isSilent)
 endfunction
 " }}}
 " フィルタリング処理を行う {{{
-function! s:FilterCurrent(cmd)
+function! s:FilterCurrent(cmd, isSilent)
   let pos_save                     = getpos('.')
   let sel_save                     = &l:selection
   let &l:selection                 = 'inclusive'
@@ -3019,7 +3019,9 @@ function! s:FilterCurrent(cmd)
       call setreg('g', formatted, 'v')
       silent keepjumps normal! ggVG"gp
     else
-      echo 's:FilterCurrent : Error'
+      if !a:isSilent
+        echo 's:FilterCurrent : Error'
+      endif
     endif
   finally
     call delete(temp)
