@@ -94,7 +94,7 @@ function! s:SetNeoBundle() " {{{
   NeoBundle     'Shougo/vimproc'
   NeoBundle     'tpope/vim-dispatch'
   NeoBundle     'xolox/vim-misc'
-  NeoBundleLazy 'xolox/vim-shell'
+  NeoBundle     'xolox/vim-shell'
   NeoBundleLazy 'basyura/twibill.vim'
   NeoBundleLazy 'LeafCage/nebula.vim'
   NeoBundleLazy 'mattn/webapi-vim'
@@ -114,7 +114,7 @@ function! s:SetNeoBundle() " {{{
         \         ]
         \       }
   NeoBundleLazy 'vim-scripts/matchparenpp'
-  NeoBundleLazy 'majutsushi/tagbar'
+  NeoBundleLazy 'YoshihiroIto/tagbar'
   NeoBundleLazy 'LeafCage/foldCC'
   NeoBundleLazy 'movewin.vim'
 
@@ -191,7 +191,6 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'Shougo/vimshell.vim'
   NeoBundleLazy 'Shougo/vimfiler.vim'
   NeoBundleLazy 'basyura/TweetVim'
-  NeoBundleLazy 'gregsexton/gitv'
   NeoBundleLazy 'glidenote/memolist.vim'
   if IsMac()
     NeoBundleLazy 'itchyny/dictionary.vim'
@@ -244,10 +243,13 @@ if neobundle#tap('vimproc')
 endif
 " }}}
 " vim-shell {{{
-if neobundle#tap('vim-shell')
-  function! neobundle#hooks.on_source(bundle)
-    let g:shell_mappings_enabled = 0
-  endfunction
+let g:shell_mappings_enabled = 0
+" }}}
+" twibill.vim {{{
+if neobundle#tap('twibill.vim')
+  call neobundle#config({
+        \   'depends':  ['vimproc'],
+        \ })
 
   call neobundle#untap()
 endif
@@ -349,6 +351,7 @@ endif
 " tagbar {{{
 if neobundle#tap('tagbar')
   call neobundle#config({
+        \   'depends':  ['vimproc'],
         \   'autoload': {
         \     'commands': ['TagbarToggle']
         \   }
@@ -467,17 +470,17 @@ let g:lightline = {
       \     'right': '⮃'
       \   },
       \   'mode_map': {
-      \     'n':     'N',
-      \     'i':     'I',
-      \     'R':     'R',
-      \     'v':     'V',
-      \     'V':     'VL',
-      \     'c':     'C',
-      \     '<C-v>': 'VB',
-      \     's':     'S',
-      \     'S':     'SL',
-      \     '<C-s>': 'SB',
-      \     '?':     ' '
+      \     'n':      'N',
+      \     'i':      'I',
+      \     'R':      'R',
+      \     'v':      'V',
+      \     'V':      'VL',
+      \     'c':      'C',
+      \     "\<C-v>": 'VB',
+      \     's':      'S',
+      \     'S':      'SL',
+      \     "\<C-s>": 'SB',
+      \     '?':      ' '
       \   }
       \ }
 
@@ -711,7 +714,7 @@ if neobundle#tap('vim-over')
 
   function! neobundle#hooks.on_source(bundle)
     let g:over_command_line_key_mappings = {
-          \   '\<C-j>': '\<Esc>',
+          \   "\<C-j>" : "\<Esc>",
           \ }
   endfunction
 
@@ -1009,8 +1012,8 @@ endif
 
 function! s:SyntasticCheck()
 
-  let syntastic_ft = 'ruby\|cs'
-
+  " let syntastic_ft = 'ruby\|cs'
+  "
   " if &ft =~? syntastic_ft
   "   if exists(':SyntasticCheck')
   "     SyntasticCheck
@@ -1177,24 +1180,30 @@ endif
 " }}}
 " vim-gocode {{{
 if neobundle#tap('vim-gocode')
-  call neobundle#config({
-        \   'depends':  ['vimproc'],
-        \   'autoload': {
-        \     'filetypes': ['go']
-        \   }
-        \ })
+  " call neobundle#config({
+  "       \   'depends':  ['vimproc'],
+  "       \   'autoload': {
+  "       \     'filetypes': ['go']
+  "       \   }
+  "       \ })
+  "
+  " function! neobundle#hooks.on_source(bundle)
+  "   if IsWindows()
+  "     let g:gocomplete#system_function = 'vimproc#system'
+  "   endif
+  "
+  "   let g:go_fmt_autofmt  = 0
+  "   let g:go_fmt_commands = 0
+  " endfunction
+  "
+  " call neobundle#untap()
 
-  function! neobundle#hooks.on_source(bundle)
-    if IsWindows()
-      let g:gocomplete#system_function = 'vimproc#system'
-    endif
+  if IsWindows()
+    let g:gocomplete#system_function = 'vimproc#system'
+  endif
 
-    let g:gofmt_command   = 'goimports'
-    let g:go_fmt_autofmt  = 0
-    let g:go_fmt_commands = 0
-  endfunction
-
-  call neobundle#untap()
+  let g:go_fmt_autofmt  = 0
+  let g:go_fmt_commands = 0
 endif
 " }}}
 " vim-godef {{{
@@ -1550,7 +1559,6 @@ endif
 " vim-fugitive {{{
 if neobundle#tap('vim-fugitive')
   call neobundle#config({
-        \   'depends':  ['vimproc'],
         \   'autoload': {
         \     'insert':          1,
         \     'function_prefix': 'fugitive'
@@ -1683,18 +1691,6 @@ if neobundle#tap('TweetVim')
       silent! execute 'bwipeout tweetvim'
     endif
   endfunction
-
-  call neobundle#untap()
-endif
-" }}}
-" gitv {{{
-if neobundle#tap('gitv')
-  call neobundle#config({
-        \   'depends':  ['vim-fugitive'],
-        \   'autoload': {
-        \     'commands': ['Gitv', 'Gitv!']
-        \   }
-        \ })
 
   call neobundle#untap()
 endif
@@ -2087,16 +2083,17 @@ augroup MyAutoGroup
     setlocal shiftwidth=4
     setlocal noexpandtab
     setlocal tabstop=4
-    compiler go
+    " compiler go
 
     nmap <silent><buffer> <Leader><C-k><C-k> :<C-u>Godoc<CR>zz
     nmap <silent><buffer> <C-]>              :<C-u>call GodefUnderCursor()<CR>zz
 
-    command! -buffer Fmt call s:GolangFormat()
-
-    augroup MyAutoGroup
-      autocmd BufWritePost <buffer> call s:GolangFormat()
-    augroup END
+    " todo:Windowsだと重い
+    if !IsWindows()
+      augroup MyAutoGroup
+        autocmd BufWritePost <buffer> call s:GolangFormat()
+      augroup END
+    endif
   endfunction
 
   function! s:SetGodoc()
@@ -2231,6 +2228,7 @@ command! RemoveEolSpace call s:ExecuteKeepView('silent! %substitute/ \+$//g | no
 
 " 整形
 command! Format call s:SmartFormat()
+map <silent> [App]c :<C-u>Format<CR>
 
 " http://lsifrontend.hatenablog.com/entry/2013/10/11/052640
 nmap     <silent> <C-CR> yy:<C-u>TComment<CR>p
@@ -2316,18 +2314,6 @@ function! s:DoFormatXML() range
   execute "set ft=" . l:origft
 endfunction
 command! -range=% XmlFormat <line1>,<line2>call s:DoFormatXML()
-
-" http://qiita.com/tekkoc/items/324d736f68b0f27680b8
-function! s:Jq(...)
-  if 0 == a:0
-    let l:arg = "."
-  else
-    let l:arg = a:1
-  endif
-
-  execute "%! jq \"" . l:arg . "\""
-endfunction
-command! -nargs=? JsonFormat call s:Jq(<f-args>)
 
 " 自動的にディレクトリを作成する
 " http://vim-users.jp/2011/02/hack202/
@@ -2708,7 +2694,6 @@ nnoremap <silent> [Git]c    :<C-u>call <SID>ExecuteIfOnGitBranch('Gcommit')<CR>
 nnoremap <silent> [Git]f    :<C-u>call <SID>ExecuteIfOnGitBranch('GitiFetch')<CR>
 nnoremap <silent> [Git]d    :<C-u>call <SID>ExecuteIfOnGitBranch('Gdiff')<CR>
 nnoremap <silent> [Git]s    :<C-u>call <SID>ExecuteIfOnGitBranch('Gstatus')<CR>
-nnoremap <silent> [Git]v    :<C-u>call <SID>ExecuteIfOnGitBranch('Gitv')<CR>
 nnoremap <silent> [Git]push :<C-u>call <SID>ExecuteIfOnGitBranch('GitiPush')<CR>
 nnoremap <silent> [Git]pull :<C-u>call <SID>ExecuteIfOnGitBranch('GitiPull')<CR>
 " }}}
@@ -2972,9 +2957,9 @@ function! s:SmartFormat()
   elseif &ft == 'xml'
     XmlFormat
   elseif &ft == 'json'
-    JsonFormat
+    call s:JsonFormat()
   elseif &ft == 'go'
-    Fmt
+    call s:GolangFormat()
   else
     echo 'Format : Not supported. : ' . &ft
   endif
@@ -3009,20 +2994,36 @@ endfunction
 " }}}
 " GolangFormat {{{
 function! s:GolangFormat()
-
+  call s:FilterCurrent('goimports')
+endfunction
+" }}}
+" JsonFormat {{{
+function! s:JsonFormat()
+  call s:FilterCurrent('jq .')
+endfunction
+" }}}
+" フィルタリング処理を行う {{{
+function! s:FilterCurrent(cmd)
   let pos_save                     = getpos('.')
   let sel_save                     = &l:selection
   let &l:selection                 = 'inclusive'
   let [save_g_reg, save_g_regtype] = [getreg('g'), getregtype('g')]
 
+  let temp=tempname()
+  call writefile(getline(1, '$'), temp)
+
   try
-    let formatted = vimproc#system('goimports ' . expand('%:p'))
+    let formatted = vimproc#system(a:cmd . ' ' . substitute(temp, '\', '/', 'g'))
 
     if vimproc#get_last_status() == 0
       call setreg('g', formatted, 'v')
       silent keepjumps normal! ggVG"gp
+    else
+      echo 's:FilterCurrent : Error'
     endif
   finally
+    call delete(temp)
+
     call setreg('g', save_g_reg, save_g_regtype)
     let &l:selection = sel_save
     call setpos('.', pos_save)
