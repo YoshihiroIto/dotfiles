@@ -2556,12 +2556,12 @@ nnoremap <silent> <C-e> <C-e>j
 nnoremap <silent> <C-y> <C-y>k
 vnoremap <silent> <C-e> <C-e>j
 vnoremap <silent> <C-y> <C-y>k
-nmap     <silent> gg    ggzvzz:<C-u>call  <SID>RefreshScreen()<CR>
-nmap     <silent> G     Gzvzz:<C-u>call   <SID>RefreshScreen()<CR>
+nmap     <silent> gg    ggzvzz:<C-u>call <SID>RefreshScreen()<CR>
+nmap     <silent> G     Gzvzz:<C-u>call  <SID>RefreshScreen()<CR>
 
 noremap  <silent> <C-i> <C-i>zz:<C-u>call <SID>RefreshScreen()<CR>
 noremap  <silent> <C-o> <C-o>zz:<C-u>call <SID>RefreshScreen()<CR>
-map      <silent> <C-h> :<C-u>call <SID>DisableVirtualCursor()<CR>^:<C-u>call <SID>RefreshScreen()<CR>
+map      <silent> <C-h> :<C-u>call <SID>DisableVirtualCursor()<CR>^:<C-u>call  <SID>RefreshScreen()<CR>
 map      <silent> <C-l> :<C-u>call <SID>DisableVirtualCursor()<CR>g$:<C-u>call <SID>RefreshScreen()<CR>
 
 nmap     <silent> <Leader>m `
@@ -2653,7 +2653,7 @@ nnoremap <silent> [Tab]c :tabnew<CR>
 nnoremap <silent> [Tab]x :tabclose<CR>
 
 for s:n in range(1, 9)
-  execute 'nnoremap <silent> [Tab]' . s:n  ':<C-u>tabnext' . s:n . '<CR>'
+  execute 'nnoremap <silent> [Tab]' . s:n ':<C-u>tabnext' . s:n . '<CR>'
 endfor
 
 nnoremap <silent> K :<C-u>tabp<CR>
