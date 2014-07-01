@@ -593,7 +593,13 @@ function! MyGitGutter()
 endfunction
 " }}}
 " indentLine {{{
-let g:indentLine_fileType    = ['c', 'cpp', 'cs', 'ruby', 'vim', 'go', 'lua', 'json', 'glsl', 'hlsl', 'xml', 'markdown']
+let g:indentLine_fileType = [
+      \   'c',    'cpp',  'cs', 'go',
+      \   'ruby', 'lua',
+      \   'vim',
+      \   'glsl', 'hlsl',
+      \   'xml',  'json', 'markdown'
+      \ ]
 let g:indentLine_faster      = 1
 let g:indentLine_color_term  = 0
 let g:indentLine_indentLevel = 20
@@ -1268,7 +1274,12 @@ if neobundle#tap('vim-markdown')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    let g:markdown_fenced_languages = ['c', 'cpp', 'cs', 'ruby', 'vim', 'go', 'lua', 'json']
+    let g:markdown_fenced_languages = [
+        \   'c',    'cpp',  'cs', 'go',
+        \   'ruby', 'lua',
+        \   'vim',
+        \   'xml',  'json',
+        \ ]
   endfunction
 
   call neobundle#untap()
