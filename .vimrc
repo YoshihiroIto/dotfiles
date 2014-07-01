@@ -593,7 +593,7 @@ function! MyGitGutter()
 endfunction
 " }}}
 " indentLine {{{
-let g:indentLine_fileType    = ['c', 'cpp', 'cs', 'ruby', 'vim', 'go', 'json', 'glsl', 'hlsl', 'xml', 'markdown']
+let g:indentLine_fileType    = ['c', 'cpp', 'cs', 'ruby', 'vim', 'go', 'lua', 'json', 'glsl', 'hlsl', 'xml', 'markdown']
 let g:indentLine_faster      = 1
 let g:indentLine_color_term  = 0
 let g:indentLine_indentLevel = 20
@@ -1179,32 +1179,12 @@ if neobundle#tap('cpp-vim')
 endif
 " }}}
 " vim-gocode {{{
-if neobundle#tap('vim-gocode')
-  " call neobundle#config({
-  "       \   'depends':  ['vimproc'],
-  "       \   'autoload': {
-  "       \     'filetypes': ['go']
-  "       \   }
-  "       \ })
-  "
-  " function! neobundle#hooks.on_source(bundle)
-  "   if IsWindows()
-  "     let g:gocomplete#system_function = 'vimproc#system'
-  "   endif
-  "
-  "   let g:go_fmt_autofmt  = 0
-  "   let g:go_fmt_commands = 0
-  " endfunction
-  "
-  " call neobundle#untap()
-
-  if IsWindows()
-    let g:gocomplete#system_function = 'vimproc#system'
-  endif
-
-  let g:go_fmt_autofmt  = 0
-  let g:go_fmt_commands = 0
+if IsWindows()
+  let g:gocomplete#system_function = 'vimproc#system'
 endif
+
+let g:go_fmt_autofmt  = 0
+let g:go_fmt_commands = 0
 " }}}
 " vim-godef {{{
 if neobundle#tap('vim-godef')
@@ -1288,7 +1268,7 @@ if neobundle#tap('vim-markdown')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    let g:markdown_fenced_languages = ['c', 'cpp', 'cs', 'ruby', 'vim', 'go', 'json']
+    let g:markdown_fenced_languages = ['c', 'cpp', 'cs', 'ruby', 'vim', 'go', 'lua', 'json']
   endfunction
 
   call neobundle#untap()
@@ -1460,8 +1440,8 @@ if neobundle#tap('vim-operator-replace')
         \   }
         \ })
 
-  nmap R         <Plug>(operator-replace)
-  xmap R         <Plug>(operator-replace)
+  nmap R <Plug>(operator-replace)
+  xmap R <Plug>(operator-replace)
 
   call neobundle#untap()
 endif
@@ -1596,6 +1576,10 @@ if neobundle#tap('vim-gitgutter')
     let g:gitgutter_map_keys  = 0
     let g:gitgutter_eager     = 0
     let g:gitgutter_diff_args = '-w'
+
+    augroup MyAutoGroup
+      autocmd FocusGained,FocusLost * GitGutter
+    augroup END
   endfunction
 
   call neobundle#untap()
@@ -1925,8 +1909,6 @@ function! s:FirstOneShot() " {{{
     NeoBundleSource vim-submode
     " }}}
     " 表示 {{{
-    " NeoBundleSource indentLine
-    " NeoBundleSource lightline.vim
     NeoBundleSource matchparenpp
     NeoBundleSource foldcc
     " }}}
@@ -2961,7 +2943,7 @@ function! s:SmartFormat()
   elseif &ft == 'go'
     call s:GolangFormat(0)
   else
-    echo 'Format : Not supported. : ' . &ft
+    echo 'SmartFormat : Not supported. : ' . &ft
   endif
 endfunction
 " }}}
@@ -3009,7 +2991,7 @@ function! s:FilterCurrent(cmd, isSilent)
   let &l:selection                 = 'inclusive'
   let [save_g_reg, save_g_regtype] = [getreg('g'), getregtype('g')]
 
-  let temp=tempname()
+  let temp = tempname()
   call writefile(getline(1, '$'), temp)
 
   try
@@ -3020,7 +3002,7 @@ function! s:FilterCurrent(cmd, isSilent)
       silent keepjumps normal! ggVG"gp
     else
       if !a:isSilent
-        echo 's:FilterCurrent : Error'
+        echo 'FilterCurrent : Error'
       endif
     endif
   finally
@@ -3035,7 +3017,6 @@ endfunction
 " }}}
 " コンソール用 {{{
 if !IsGuiRunning()
-
   source $MYGVIMRC
 endif
 " }}}
