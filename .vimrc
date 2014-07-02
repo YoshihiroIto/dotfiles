@@ -191,6 +191,8 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'Shougo/vimshell.vim'
   NeoBundleLazy 'Shougo/vimfiler.vim'
   NeoBundleLazy 'basyura/TweetVim'
+  " NeoBundle     'mattn/benchvimrc-vim'
+
   NeoBundleLazy 'glidenote/memolist.vim'
   if IsMac()
     NeoBundleLazy 'itchyny/dictionary.vim'
@@ -504,16 +506,9 @@ function! MyFilename()
         \ ('' != MyModified()  ? ' ' . MyModified() : '')
 endfunction
 
-" Gitブランチにいるか {{{
 function! s:IsInGitBranch()
-
-  if !exists('*fugitive#head')
-    NeoBundleSource vim-fugitive
-  endif
-
   return fugitive#head() != ''
 endfunction
-" }}}
 
 function! GetCurrentBranch()
 
@@ -604,15 +599,7 @@ let g:indentLine_char        = '⭟'
 let g:indentLine_color_gui   = '#505050'
 
 augroup MyAutoGroup
-  autocmd BufReadPost * call s:SafeIndentLinesEnable()
-
-  function! s:SafeIndentLinesEnable()
-    if !exists(':IndentLinesEnable')
-      NeoBundleSource indentLine
-    endif
-
-    IndentLinesEnable
-  endfunction
+  autocmd BufReadPost * IndentLinesEnable
 augroup END
 " }}}
 " }}}
@@ -709,7 +696,7 @@ endif
 if neobundle#tap('vim-over')
   call neobundle#config({
         \   'autoload': {
-        \     'commands': ['OverCommandLineNoremap', 'OverCommandLine']
+        \     'commands': ['OverCommandLine']
         \   }
         \ })
 
@@ -992,7 +979,7 @@ endif
 if neobundle#tap('syntastic')
   call neobundle#config({
         \   'autoload': {
-        \     'filetypes':       ['ruby', 'cs', 'go'],
+        \     'filetypes':       ['cs', 'go', 'ruby'],
         \     'function_prefix': 'submode'
         \   }
         \ })
@@ -1001,7 +988,7 @@ if neobundle#tap('syntastic')
     let g:syntastic_cs_checkers = ['syntax', 'issues']
 
     augroup MyAutoGroup
-      autocmd BufWritePost *.{go,rb,cs} call lightline#update()
+      autocmd BufWritePost *.{cs,go,rb} call lightline#update()
     augroup END
   endfunction
 
@@ -1688,9 +1675,9 @@ if neobundle#tap('memolist.vim')
 
   call neobundle#untap()
 endif
+" }}}
 " vim-icondrag {{{
 let g:icondrag_auto_start = 1
-" }}}
 " }}}
 " }}}
 " Unite {{{
@@ -1727,9 +1714,9 @@ if neobundle#tap('unite.vim')
     nnoremap <silent> [Unite]m  :<C-u>Unite -no-split neomru/file<CR>
   endif
 
-  nnoremap          [Unite]uu :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
-  nnoremap          [Unite]ui :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
-  nnoremap          [Unite]uc :<C-u>NeoBundleClearCache<CR>
+  nnoremap [Unite]uu :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
+  nnoremap [Unite]ui :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
+  nnoremap [Unite]uc :<C-u>NeoBundleClearCache<CR>
 
   " http://sanrinsha.lolipop.jp/blog/2013/03/%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E5%86%85%E3%81%AE%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92unite-grep%E3%81%99%E3%82%8B.html
   function! s:unite_grep_project(...)
@@ -2110,8 +2097,6 @@ set completeopt=longest,menuone
 set backspace=indent,eol,start
 set noswapfile
 set nobackup
-" set spell
-" set spelllang+=cjk
 
 noremap U J
 
@@ -2319,9 +2304,11 @@ augroup MyAutoGroup
     if a:event ==# 'WinEnter'
       setlocal cursorline
       let s:cursorline_lock = 2
+
     elseif a:event ==# 'WinLeave'
       " setlocal nocursorline
       setlocal cursorline
+
     elseif a:event ==# 'CursorMoved'
       if s:cursorline_lock
         if 1 < s:cursorline_lock
@@ -2331,6 +2318,7 @@ augroup MyAutoGroup
           let s:cursorline_lock = 0
         endif
       endif
+
     elseif a:event ==# 'CursorHold'
       setlocal cursorline
       let s:cursorline_lock = 1
@@ -2720,9 +2708,6 @@ endf
 " 画面リフレッシュ{{{
 function! s:RefreshScreen()
 
-  " ステータスライン上のanzuが更新されない
-  " silent doautocmd CursorHold <buffer>
-
   call s:ForceShowCursolLine()
 endfunction
 " }}}
@@ -2793,27 +2778,6 @@ function! s:GetListedBufferCount()
   return bufferCount
 endfunction
 " }}}
-" 現在のバッファが編集済みか？ {{{
-function! s:GetIsCurrentBufferModified()
-
-  let currentWindow           = winnr()
-  let currentBuffer           = winbufnr(currentWindow)
-  let isCurrentBufferModified = getbufvar(currentBuffer, '&modified')
-
-  return isCurrentBufferModified
-endfunction
-" }}}
-" カレントバッファのサイズを取得 {{{
-function! s:GetCurrentBufferSize()
-
-  let byte = line2byte(line('$') + 1)
-  if byte == -1
-    return 0
-  else
-    return byte - 1
-  endif
-endfunction
-" }}}
 " 空バッファを削除 {{{
 " http://stackoverflow.com/questions/6552295/deleting-all-empty-buffers-in-vim
 function! s:CleanEmptyBuffers()
@@ -2879,6 +2843,7 @@ endfunction
 " }}}
 " フィルタリング処理を行う {{{
 function! s:FilterCurrent(cmd, isSilent)
+
   let pos_save                     = getpos('.')
   let sel_save                     = &l:selection
   let &l:selection                 = 'inclusive'
