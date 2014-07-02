@@ -47,13 +47,13 @@ set visualbell
 set t_vb=
 
 " 半透明化
-augroup transparency
-  autocmd!
-  if IsMac()
+if IsMac()
+  augroup Transparency
+    autocmd!
     autocmd GuiEnter,FocusGained * set transparency=3   " アクティブ時の透過率
     autocmd FocusLost            * set transparency=48  " 非アクティブ時の透過率
-  endif
-augroup END
+  augroup END
+endif
 " }}}
 " フォント設定 {{{
 if IsGuiRunning()
@@ -76,7 +76,7 @@ endif
 " }}}
 " ウィンドウの位置とサイズを記憶する {{{
 if IsGuiRunning()
-  " http://vim-users.jp/2010/01/hack120/
+  " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
   let g:save_window_file = expand('~/.vimwinpos')
   augroup SaveWindow
     autocmd!
