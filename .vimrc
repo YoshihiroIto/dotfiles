@@ -99,7 +99,7 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'LeafCage/nebula.vim'
   NeoBundleLazy 'mattn/webapi-vim'
   NeoBundleLazy 'tyru/open-browser.vim'
-  NeoBundleLazy 'kana/vim-submode'
+  NeoBundle     'kana/vim-submode'
 
   " 表示
   NeoBundle     'tomasr/molokai'
@@ -113,15 +113,15 @@ function! s:SetNeoBundle() " {{{
         \           'syntastic'
         \         ]
         \       }
-  NeoBundleLazy 'vim-scripts/matchparenpp'
+  NeoBundle     'vim-scripts/matchparenpp'
   NeoBundleLazy 'YoshihiroIto/tagbar'
   NeoBundleLazy 'LeafCage/foldCC'
   NeoBundleLazy 'movewin.vim'
 
   " 編集
-  NeoBundleLazy 'tomtom/tcomment_vim'
-  NeoBundleLazy 'tpope/vim-surround'
-  NeoBundleLazy 'tpope/vim-repeat'
+  NeoBundle     'tomtom/tcomment_vim'
+  NeoBundle     'tpope/vim-surround'
+  NeoBundle     'tpope/vim-repeat'
   NeoBundleLazy 'LeafCage/yankround.vim'
   NeoBundleLazy 'kana/vim-smartinput'
   NeoBundleLazy 'nishigori/increment-activator'
@@ -137,11 +137,11 @@ function! s:SetNeoBundle() " {{{
 
   " ファイル
   NeoBundleLazy 'kana/vim-altr'
-  NeoBundleLazy 'YoshihiroIto/vim-auto-mirroring'
+  NeoBundle     'YoshihiroIto/vim-auto-mirroring'
 
   " 検索
-  NeoBundleLazy 'matchit.zip'
-  NeoBundleLazy 'osyo-manga/vim-anzu'
+  NeoBundle     'matchit.zip'
+  NeoBundle     'osyo-manga/vim-anzu'
   NeoBundleLazy 'rhysd/clever-f.vim'
   NeoBundleLazy 'thinca/vim-visualstar'
 
@@ -196,15 +196,15 @@ function! s:SetNeoBundle() " {{{
     NeoBundleLazy 'itchyny/dictionary.vim'
   endif
   if IsWindows() && IsGuiRunning()
-    NeoBundleLazy 'YoshihiroIto/vim-icondrag'
+    NeoBundle 'YoshihiroIto/vim-icondrag'
   endif
 
   " Unite
-  NeoBundleLazy 'Shougo/unite.vim'
+  NeoBundle     'Shougo/unite.vim'
+  NeoBundle     'Shougo/neomru.vim'
   NeoBundleLazy 'Shougo/unite-outline'
   NeoBundleLazy 'osyo-manga/unite-quickfix'
   NeoBundleLazy 'osyo-manga/unite-fold'
-  NeoBundleLazy 'Shougo/neomru.vim'
   NeoBundleLazy 'YoshihiroIto/vim-unite-giti'
   if IsWindows()
     NeoBundleLazy 'sgur/unite-everything'
@@ -316,22 +316,10 @@ if neobundle#tap('open-browser.vim')
 endif
 " }}}
 " vim-submode {{{
-if neobundle#tap('vim-submode')
-  call neobundle#config({
-        \   'autoload': {
-        \     'function_prefix': 'submode'
-        \   }
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    " todo:mac gvimで動作しない。なぜ？
-    call submode#enter_with('gitgutter', 'n', 'r', '<Leader>j', '<Plug>GitGutterNextHunkzvzz')
-    call submode#map(       'gitgutter', 'n', 'r', 'j',         '<Plug>GitGutterNextHunkzvzz')
-    call submode#map(       'gitgutter', 'n', 'r', 'k',         '<Plug>GitGutterPrevHunkzvzz')
-  endfunction
-
-  call neobundle#untap()
-endif
+" todo:mac gvimで動作しない。なぜ？
+call submode#enter_with('gitgutter', 'n', 'r', '<Leader>j', '<Plug>GitGutterNextHunkzvzz')
+call submode#map(       'gitgutter', 'n', 'r', 'j',         '<Plug>GitGutterNextHunkzvzz')
+call submode#map(       'gitgutter', 'n', 'r', 'k',         '<Plug>GitGutterPrevHunkzvzz')
 " }}}
 " dictionary.vim {{{
 if IsMac()
@@ -516,6 +504,17 @@ function! MyFilename()
         \ ('' != MyModified()  ? ' ' . MyModified() : '')
 endfunction
 
+" Gitブランチにいるか {{{
+function! s:IsInGitBranch()
+
+  if !exists('*fugitive#head')
+    NeoBundleSource vim-fugitive
+  endif
+
+  return fugitive#head() != ''
+endfunction
+" }}}
+
 function! GetCurrentBranch()
 
   if &ft =~? s:lightlineNoDispFt
@@ -567,9 +566,7 @@ augroup END
 
 " http://qiita.com/yuyuchu3333/items/20a0acfe7e0d0e167ccc
 function! MyGitGutter()
-  if ! exists('*GitGutterGetHunkSummary')
-        \ || ! get(g:, 'gitgutter_enabled', 0)
-        \ || winwidth('.') <= 90
+  if winwidth('.') <= 90
     return ''
   endif
 
@@ -581,8 +578,8 @@ function! MyGitGutter()
     return ''
   endif
 
+  let hunks   = gitgutter#hunk#summary()
   let symbols = [g:gitgutter_sign_added, g:gitgutter_sign_modified, g:gitgutter_sign_removed]
-  let hunks   = GitGutterGetHunkSummary()
   let ret     = []
 
   for i in [0, 1, 2]
@@ -919,46 +916,40 @@ endif
 " }}}
 " 検索 {{{
 " vim-anzu {{{
-if neobundle#tap('vim-anzu')
-  nmap <silent> n <Plug>(anzu-n)zvzz:<C-u>call <SID>BeginDisplayAnzu()<CR>:<C-u>call <SID>RefreshScreen()<CR>
-  nmap <silent> N <Plug>(anzu-N)zvzz:<C-u>call <SID>BeginDisplayAnzu()<CR>:<C-u>call <SID>RefreshScreen()<CR>
-  nmap <silent> * <Plug>(anzu-star):<C-u>call  <SID>RefreshScreen()<CR>
-  nmap <silent> # <Plug>(anzu-sharp):<C-u>call <SID>RefreshScreen()<CR>
+nmap <silent> n <Plug>(anzu-n)zvzz:<C-u>call <SID>BeginDisplayAnzu()<CR>:<C-u>call <SID>RefreshScreen()<CR>
+nmap <silent> N <Plug>(anzu-N)zvzz:<C-u>call <SID>BeginDisplayAnzu()<CR>:<C-u>call <SID>RefreshScreen()<CR>
+nmap <silent> * <Plug>(anzu-star):<C-u>call  <SID>RefreshScreen()<CR>
+nmap <silent> # <Plug>(anzu-sharp):<C-u>call <SID>RefreshScreen()<CR>
 
-  function! neobundle#hooks.on_source(bundle)
-    augroup MyAutoGroup
-      " 一定時間キー入力がないとき、ウインドウを移動したとき、タブを移動したときに
-      " 検索ヒット数の表示を消去する
-      autocmd CursorHold,CursorHoldI * call s:UpdateDisplayAnzu()
-      autocmd WinLeave,TabLeave      * call s:ClearDisplayAnzu()
+augroup MyAutoGroup
+  " 一定時間キー入力がないとき、ウインドウを移動したとき、タブを移動したときに
+  " 検索ヒット数の表示を消去する
+  autocmd CursorHold,CursorHoldI * call s:UpdateDisplayAnzu()
+  autocmd WinLeave,TabLeave      * call s:ClearDisplayAnzu()
 
-      " anzuを表示する時間
-      let s:anzuDisplayTime = 2000
+  " anzuを表示する時間
+  let s:anzuDisplayTime = 2000
 
-      let s:anzuDisplayCount = 0
-      function! s:BeginDisplayAnzu()
-        let s:anzuDisplayCount = s:anzuDisplayTime / &updatetime
-      endfunction
-
-      function! s:UpdateDisplayAnzu()
-        if s:anzuDisplayCount >= 0
-          let s:anzuDisplayCount = s:anzuDisplayCount - 1
-
-          call s:ContinueCursorHold()
-        else
-          call s:ClearDisplayAnzu()
-        endif
-      endfunction
-
-      function! s:ClearDisplayAnzu()
-        " let s:anzuDisplayCount = 0
-        call anzu#clear_search_status()
-      endfunction
-    augroup END
+  let s:anzuDisplayCount = 0
+  function! s:BeginDisplayAnzu()
+    let s:anzuDisplayCount = s:anzuDisplayTime / &updatetime
   endfunction
 
-  call neobundle#untap()
-endif
+  function! s:UpdateDisplayAnzu()
+    if s:anzuDisplayCount >= 0
+      let s:anzuDisplayCount = s:anzuDisplayCount - 1
+
+      call s:ContinueCursorHold()
+    else
+      call s:ClearDisplayAnzu()
+    endif
+  endfunction
+
+  function! s:ClearDisplayAnzu()
+    " let s:anzuDisplayCount = 0
+    call anzu#clear_search_status()
+  endfunction
+augroup END
 " }}}
 " clever-f.vim {{{
 if neobundle#tap('clever-f.vim')
@@ -1001,7 +992,8 @@ endif
 if neobundle#tap('syntastic')
   call neobundle#config({
         \   'autoload': {
-        \     'filetypes': ['ruby', 'cs']
+        \     'filetypes':       ['ruby', 'cs', 'go'],
+        \     'function_prefix': 'submode'
         \   }
         \ })
 
@@ -1009,27 +1001,12 @@ if neobundle#tap('syntastic')
     let g:syntastic_cs_checkers = ['syntax', 'issues']
 
     augroup MyAutoGroup
-      autocmd BufWritePost *.{go,rb,cs} call s:SyntasticCheck()
+      autocmd BufWritePost *.{go,rb,cs} call lightline#update()
     augroup END
   endfunction
 
   call neobundle#untap()
 endif
-
-function! s:SyntasticCheck()
-
-  " let syntastic_ft = 'ruby\|cs'
-  "
-  " if &ft =~? syntastic_ft
-  "   if exists(':SyntasticCheck')
-  "     SyntasticCheck
-  "   endif
-  "
-  "   call lightline#update()
-  " endif
-
-  call lightline#update()
-endfunction
 " }}}
 " clang_complete {{{
 if neobundle#tap('clang_complete')
@@ -1568,7 +1545,7 @@ endif
 function! s:UpdateFugitive()
   call fugitive#detect(expand('<amatch>:p'))
 
-  call s:SyntasticCheck()
+  call lightline#update()
 endfunction
 " }}}
 " vim-gitgutter {{{
@@ -1576,7 +1553,7 @@ if neobundle#tap('vim-gitgutter')
   call neobundle#config({
         \   'depends':  ['vim-shell'],
         \   'autoload': {
-        \     'function_prefix': 'GitGutter'
+        \     'function_prefix': 'gitgutter'
         \   }
         \ })
 
@@ -1711,6 +1688,9 @@ if neobundle#tap('memolist.vim')
 
   call neobundle#untap()
 endif
+" vim-icondrag {{{
+let g:icondrag_auto_start = 1
+" }}}
 " }}}
 " }}}
 " Unite {{{
@@ -1891,108 +1871,15 @@ if IsWindows()
 endif
 " }}}
 " }}}
+" 初期設定 {{{
+filetype plugin indent on
+
+if filereadable(s:VimrcLocal)
+  execute 'source' s:VimrcLocal
+endif
 " }}}
-" キー無効 {{{
-" Vimを閉じない
-nnoremap ZZ <Nop>
-nnoremap ZQ <Nop>
-
-" ミス操作で削除してしまうため
-nnoremap dh <Nop>
-nnoremap dj <Nop>
-nnoremap dk <Nop>
-nnoremap dl <Nop>
-
-" よくミスるため
-vnoremap u  <Nop>
-onoremap u  <Nop>
 " }}}
 " ファイルタイプごとの設定 {{{
-let s:firstOneShotDelay = 2
-let s:firstOneShotPhase = 0
-function! s:FirstOneShot() " {{{
-
-  function! s:FirstOneShotPhase0()
-
-    filetype plugin indent on
-
-    " ライブラリ {{{
-    NeoBundleSource vim-submode
-    " }}}
-    " 表示 {{{
-    NeoBundleSource matchparenpp
-    NeoBundleSource foldcc
-    " }}}
-    " 編集 {{{
-    NeoBundleSource tcomment_vim
-    NeoBundleSource vim-surround
-    NeoBundleSource vim-repeat
-    NeoBundleSource vim-smartinput
-    " }}}
-    " ファイル {{{
-    NeoBundleSource vim-altr
-    NeoBundleSource vim-auto-mirroring
-    " }}}
-    " 検索 {{{
-    NeoBundleSource vim-anzu
-    NeoBundleSource matchit.zip
-    " }}}
-    " アプリ {{{
-    NeoBundleSource vim-fugitive
-    NeoBundleSource vim-gitgutter
-    if IsWindows() && IsGuiRunning()
-      NeoBundleSource vim-icondrag
-      IconDragEnable
-    endif
-    " }}}
-    " Unite {{{
-    NeoBundleSource unite.vim
-    NeoBundleSource neomru.vim
-    " }}}
-    " 言語 {{{
-    NeoBundleSource syntastic
-    " }}}
-
-    set incsearch
-    set ignorecase
-    set smartcase
-
-    if filereadable(s:VimrcLocal)
-      execute 'source' s:VimrcLocal
-    endif
-
-    " 意図的に vital.vim を読み込み
-    call unite#util#strchars('')
-    call unite#util#sort_by([], '')
-    call unite#util#get_vital().import('Vim.Message')
-
-    if exists(':IndentLinesReset')
-      IndentLinesReset
-    endif
-  endfunction
-
-  function! s:FirstOneShotPhase1()
-    augroup FirstOneShot
-      autocmd!
-    augroup END
-  endfunction
-
-  if s:firstOneShotDelay > 0
-    let s:firstOneShotDelay = s:firstOneShotDelay - 1
-    " call s:ContinueCursorHold()
-  else
-    call call(printf('s:FirstOneShotPhase%d', s:firstOneShotPhase), [])
-    let s:firstOneShotPhase = s:firstOneShotPhase + 1
-  endif
-
-  " call s:ContinueCursorHold()
-endfunction " }}}
-
-augroup FirstOneShot
-  autocmd!
-  autocmd CursorHold,BufEnter,WinEnter,BufWinEnter * call s:FirstOneShot()
-augroup END
-
 augroup MyAutoGroup
   autocmd BufEnter,WinEnter,BufWinEnter,BufWritePost *                   call     s:UpdateAll()
   autocmd BufNewFile,BufRead                         *.xaml              setlocal ft=xml
@@ -2189,6 +2076,21 @@ augroup MyAutoGroup
   " }}}
 augroup END
 " }}}
+" キー無効 {{{
+" Vimを閉じない
+nnoremap ZZ <Nop>
+nnoremap ZQ <Nop>
+
+" ミス操作で削除してしまうため
+nnoremap dh <Nop>
+nnoremap dj <Nop>
+nnoremap dk <Nop>
+nnoremap dl <Nop>
+
+" よくミスるため
+vnoremap u  <Nop>
+onoremap u  <Nop>
+" }}}
 " 編集 {{{
 set browsedir=buffer              " バッファで開いているファイルのディレクトリ
 set clipboard=unnamedplus,unnamed " クリップボードを使う
@@ -2338,6 +2240,10 @@ vnoremap < <gv
 vnoremap > >gv
 " }}}
 " 検索 {{{
+set incsearch
+set ignorecase
+set smartcase
+
 if executable('pt')
   set grepprg=pt\ --nogroup\ --nocolor\ -S
   set grepformat=%f:%l:%m
@@ -2673,8 +2579,8 @@ endfor
 " }}}
 " ファイル操作 {{{
 " vimrc / gvimrc の編集
-nnoremap <silent> <F1> :<C-u>call <SID>SmartOpen($MYVIMRC)<CR>
-nnoremap <silent> <F2> :<C-u>call <SID>SmartOpen($MYGVIMRC)<CR>
+nnoremap <silent> <F1> :edit $MYVIMRC<CR>
+nnoremap <silent> <F2> :edit $MYGVIMRC<CR>
 nnoremap <silent> <F3> :<C-u>source $MYVIMRC<CR>:<C-u>source $MYGVIMRC<CR>
 " }}}
 " Git {{{
@@ -2868,20 +2774,6 @@ function! s:SmartClose()
   endif
 endfunction
 " }}}
-" 賢いファイルオープン {{{
-function! s:SmartOpen(filepath)
-
-  " 新規タブであればそこに開く、そうでなければ新規新規タブに開く
-  " if (&ft == '') && (s:GetIsCurrentBufferModified() == 0) && (s:GetCurrentBufferSize() == 0)
-  "   execute 'edit' a:filepath
-  " else
-  "   execute 'tabnew' a:filepath
-  " endif
-
-  execute ':edit' a:filepath
-  call s:CleanEmptyBuffers()
-endfunction
-" }}}
 " 読み込み済みのバッファ数を得る {{{
 function! s:GetListedBufferCount()
 
@@ -2962,16 +2854,6 @@ endfunction
 function! s:IsUniteRunning()
 
   return &ft == 'unite'
-endfunction
-" }}}
-" Gitブランチにいるか {{{
-function! s:IsInGitBranch()
-
-  if !exists('*fugitive#head')
-    NeoBundleSource vim-fugitive
-  endif
-
-  return fugitive#head() != ''
 endfunction
 " }}}
 " Gitブランチ上であれば実行 {{{
