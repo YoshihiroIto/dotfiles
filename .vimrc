@@ -117,6 +117,7 @@ function! s:SetNeoBundle() " {{{
   NeoBundleLazy 'YoshihiroIto/tagbar'
   NeoBundleLazy 'LeafCage/foldCC'
   NeoBundleLazy 'movewin.vim'
+  NeoBundleLazy 'YoshihiroIto/vim-resize-win'
 
   " 編集
   NeoBundle     'tomtom/tcomment_vim'
@@ -373,6 +374,17 @@ if neobundle#tap('movewin.vim')
   call neobundle#config({
         \   'autoload': {
         \     'commands': ['MoveWin']
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-resize-win {{{
+if neobundle#tap('vim-resize-win')
+  call neobundle#config({
+        \   'autoload': {
+        \     'commands': ['ResizeWin']
         \   }
         \ })
 
@@ -2521,10 +2533,10 @@ noremap  <silent> [Window]w :<C-u>call <SID>SmartClose()<CR>
 
 " アプリウィンドウ操作
 if IsGuiRunning()
-  noremap <silent> [Window]H :<C-u>call <SID>ResizeWin()<CR>
-  noremap <silent> [Window]J :<C-u>call <SID>ResizeWin()<CR>
-  noremap <silent> [Window]K :<C-u>call <SID>ResizeWin()<CR>
-  noremap <silent> [Window]L :<C-u>call <SID>ResizeWin()<CR>
+  noremap <silent> [Window]H :<C-u>ResizeWin<CR>
+  noremap <silent> [Window]J :<C-u>ResizeWin<CR>
+  noremap <silent> [Window]K :<C-u>ResizeWin<CR>
+  noremap <silent> [Window]L :<C-u>ResizeWin<CR>
   noremap <silent> [Window]h :<C-u>MoveWin<CR>
   noremap <silent> [Window]j :<C-u>MoveWin<CR>
   noremap <silent> [Window]k :<C-u>MoveWin<CR>
@@ -2604,62 +2616,6 @@ function! s:ContinueCursorHold()
 
   " http://d.hatena.ne.jp/osyo-manga/20121102/1351836801
   call feedkeys(mode() ==# 'i' ? "\<C-g>\<Esc>" : "g\<Esc>", 'n')
-endfunction
-" }}}
-" アプリケーションウィンドウサイズの変更 {{{
-function! s:ResizeWin()
-
-  let d1 = 4
-  let d2 = 4
-
-  let t = &titlestring
-  let x = &columns
-  let y = &lines
-  let k = 'k'
-
-  if x == -1 || y == -1
-    echoerr 'Can not get window position'
-  else
-    while stridx('hjklHJKL', k) >= 0
-      let &titlestring = 'Resizeing window: (' . x . ', ' . y . ')'
-      redraw
-
-      let k = nr2char(getchar())
-
-      if k ==? 'h'
-        let x = x - d1
-        if k == 'h'
-          let x = x - d2
-        endif
-      endif
-
-      if k ==? 'j'
-        let y = y + d1
-        if k == 'j'
-          let y = y + d2
-        endif
-      endif
-
-      if k ==? 'k'
-        let y = y - d1
-        if k == 'k'
-          let y = y - d2
-        endif
-      endif
-
-      if k ==? 'l'
-        let x = x + d1
-        if k == 'l'
-          let x = x + d2
-        endif
-      endif
-
-      let &columns = x
-      let &lines = y
-    endwhile
-  endif
-
-  let &titlestring = t
 endfunction
 " }}}
 " アプリケーションウィンドウを最大高さにする {{{
