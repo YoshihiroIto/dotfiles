@@ -4,27 +4,27 @@ scriptencoding utf-8
 " 基本 {{{
 " グローバル関数 {{{
 function! IsWindows()
-  if !exists('s:vimrc_isWindows')
-    let s:vimrc_isWindows = has('win32') || has('win64')
+  if !exists('s:vimrc_is_windows')
+    let s:vimrc_is_windows = has('win32') || has('win64')
   endif
 
-  return s:vimrc_isWindows
+  return s:vimrc_is_windows
 endfunction
 
 function! IsMac()
-  if !exists('s:vimrc_isMac')
-    let s:vimrc_isMac = has('mac')
+  if !exists('s:vimrc_is_mac')
+    let s:vimrc_is_mac = has('mac')
   endif
 
-  return s:vimrc_isMac
+  return s:vimrc_is_mac
 endfunction
 
 function! IsGuiRunning()
-  if !exists('s:vimrc_isGuiRunning')
-    let s:vimrc_isGuiRunning = has('gui_running')
+  if !exists('s:vimrc_is_gui_running')
+    let s:vimrc_is_gui_running = has('gui_running')
   endif
 
-  return s:vimrc_isGuiRunning
+  return s:vimrc_is_gui_running
 endfunction
 " }}}
 
