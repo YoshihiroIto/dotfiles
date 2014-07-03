@@ -77,7 +77,8 @@ endif
 " ウィンドウの位置とサイズを記憶する {{{
 if IsGuiRunning()
   " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
-  let g:save_window_file = expand('~/.vimwinpos')
+  let s:save_window_file = expand('~/.vimwinpos')
+
   augroup SaveWindow
     autocmd!
     autocmd VimLeavePre * call s:save_window()
@@ -88,13 +89,15 @@ if IsGuiRunning()
             \ 'set lines=' . &lines,
             \ 'winpos ' . getwinposx() . ' ' . getwinposy(),
             \ ]
-      call writefile(options, g:save_window_file)
+      call writefile(options, s:save_window_file)
     endfunction
   augroup END
 
-  if filereadable(g:save_window_file)
-    exe 'source' g:save_window_file
+  if filereadable(s:save_window_file)
+    exe 'source' s:save_window_file
   endif
+
+  unlet s:save_window_file
 endif
 " }}}
 " vim: set ts=2 sw=2 sts=2 et :
