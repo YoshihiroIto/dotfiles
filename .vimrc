@@ -1452,7 +1452,7 @@ if neobundle#tap('vim-operator-sort')
 endif
 " }}}
 " vim-rengbang {{{
-if neobundle#tap('vim-vim-rengbang-sort')
+if neobundle#tap('vim-rengbang')
   call neobundle#config({
         \   'depends':  ['vim-operator-user'],
         \   'autoload': {
