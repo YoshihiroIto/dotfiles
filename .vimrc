@@ -3,51 +3,43 @@ set encoding=utf-8
 scriptencoding utf-8
 " 基本 {{{
 " グローバル関数 {{{
-function! IsWindows()
-  if !exists('s:vimrc_is_windows')
-    let s:vimrc_is_windows = has('win32') || has('win64')
-  endif
+let s:vimrc_is_windows     = has('win32') || has('win64')
+let s:vimrc_is_mac         = has('mac')
+let s:vimrc_is_gui_running = has('gui_running')
 
+function! IsWindows()
   return s:vimrc_is_windows
 endfunction
 
 function! IsMac()
-  if !exists('s:vimrc_is_mac')
-    let s:vimrc_is_mac = has('mac')
-  endif
-
   return s:vimrc_is_mac
 endfunction
 
 function! IsGuiRunning()
-  if !exists('s:vimrc_is_gui_running')
-    let s:vimrc_is_gui_running = has('gui_running')
-  endif
-
   return s:vimrc_is_gui_running
 endfunction
 " }}}
 
 if has('vim_starting')
-  let s:git_dotvimrc  = expand('~/dotfiles/.vimrc')
-  let s:git_dotgvimrc = expand('~/dotfiles/.gvimrc')
+  let s:git_dot_vimrc  = expand('~/dotfiles/.vimrc')
+  let s:git_dot_gvimrc = expand('~/dotfiles/.gvimrc')
 
-  if filereadable(s:git_dotvimrc)
-    let $MYVIMRC = s:git_dotvimrc
+  if filereadable(s:git_dot_vimrc)
+    let $MYVIMRC = s:git_dot_vimrc
   endif
 
-  if filereadable(s:git_dotgvimrc)
-    let $MYGVIMRC = s:git_dotgvimrc
+  if filereadable(s:git_dot_gvimrc)
+    let $MYGVIMRC = s:git_dot_gvimrc
   endif
 
-  unlet s:git_dotvimrc
-  unlet s:git_dotgvimrc
+  unlet s:git_dot_vimrc
+  unlet s:git_dot_gvimrc
 endif
 
-let g:mapleader   = ','
-let s:baseColumns = IsWindows() ? 140 : 120
-let s:VimrcLocal  = expand('~/.vimrc_local')
-let $DOTVIM       = expand('~/.vim')
+let g:mapleader    = ','
+let s:base_columns = IsWindows() ? 140 : 120
+let s:vimrc_local  = expand('~/.vimrc_local')
+let $DOTVIM        = expand('~/.vim')
 set viminfo+=!
 
 augroup MyAutoGroup
@@ -89,7 +81,7 @@ nnoremap [App] <Nop>
 nmap     ;     [App]
 " }}}
 " プラグイン {{{
-function! s:SetNeoBundle() " {{{
+function! s:set_neobundle() " {{{
   " ライブラリ
   NeoBundle     'Shougo/vimproc'
   NeoBundle     'tpope/vim-dispatch'
@@ -224,7 +216,7 @@ if neobundle#has_cache()
   NeoBundleLoadCache
 else
   NeoBundleFetch 'Shougo/neobundle.vim'
-  call s:SetNeoBundle()
+  call s:set_neobundle()
   NeoBundleSaveCache
 endif
 
@@ -251,7 +243,7 @@ let g:shell_mappings_enabled = 0
 " twibill.vim {{{
 if neobundle#tap('twibill.vim')
   call neobundle#config({
-        \   'depends':  ['vimproc'],
+        \   'depends': ['vimproc'],
         \ })
 
   call neobundle#untap()
@@ -428,19 +420,19 @@ let g:lightline = {
       \     'lineinfo': '%4l/%L : %-3v'
       \   },
       \   'component_function': {
-      \     'fileformat':   'MyFileformat',
-      \     'filetype':     'MyFiletype',
-      \     'fileencoding': 'MyFileencoding',
-      \     'modified':     'MyModified',
-      \     'readonly':     'MyReadonly',
-      \     'filename':     'MyFilename',
-      \     'mode':         'MyMode',
+      \     'fileformat':   'LightlineFileformat',
+      \     'filetype':     'LightlineFiletype',
+      \     'fileencoding': 'LightlineFileencoding',
+      \     'modified':     'LightlineModified',
+      \     'readonly':     'LightlineReadonly',
+      \     'filename':     'LightlineFilename',
+      \     'mode':         'LightlineMode',
       \     'anzu':         'anzu#search_status'
       \   },
       \   'component_expand': {
       \     'syntastic':    'SyntasticStatuslineFlag',
-      \     'branch':       'GetCurrentBranch',
-      \     'gitgutter':    'MyGitGutter',
+      \     'branch':       'LightlineCurrentBranch',
+      \     'gitgutter':    'LightlineGitSummary',
       \   },
       \   'component_type': {
       \     'syntastic':    'error',
@@ -486,7 +478,7 @@ let g:lightline = {
       \   }
       \ }
 
-function! MyMode()
+function! LightlineMode()
   return  &ft ==  'unite'    ? 'Unite'    :
         \ &ft ==  'vimfiler' ? 'VimFiler' :
         \ &ft ==  'vimshell' ? 'VimShell' :
@@ -496,18 +488,18 @@ function! MyMode()
         \ winwidth(0) > 60 ? lightline#mode() : ''
 endfunction
 
-let s:lightlineNoDispFt = 'vimfiler\|unite\|vimshell\|tweetvim\|quickrun\|lingr'
+let s:lighline_no_disp_ft = 'vimfiler\|unite\|vimshell\|tweetvim\|quickrun\|lingr'
 
-function! MyModified()
-  return &ft =~ s:lightlineNoDispFt ? '' : &modified ? '+' : &modifiable ? '' : '-'
+function! LightlineModified()
+  return &ft =~ s:lighline_no_disp_ft ? '' : &modified ? '+' : &modifiable ? '' : '-'
 endfunction
 
-function! MyReadonly()
-  return &ft !~? s:lightlineNoDispFt && &readonly ? '⭤' : ''
+function! LightlineReadonly()
+  return &ft !~? s:lighline_no_disp_ft && &readonly ? '⭤' : ''
 endfunction
 
-function! MyFilename()
-  return ('' != MyReadonly() ? MyReadonly() . ' ' : '') .
+function! LightlineFilename()
+  return ('' != LightlineReadonly() ? LightlineReadonly() . ' ' : '') .
         \ (&ft ==  'vimfiler'  ? vimfiler#get_status_string() :
         \  &ft ==  'unite'     ? unite#get_status_string() :
         \  &ft ==  'vimshell'  ? vimshell#get_status_string() :
@@ -515,20 +507,20 @@ function! MyFilename()
         \  &ft ==  'tweetvim'  ? '' :
         \  &ft ==  'quickrun'  ? '' :
         \ ''  != expand('%:t') ? expand('%:t') : '[No Name]') .
-        \ ('' != MyModified()  ? ' ' . MyModified() : '')
+        \ ('' != LightlineModified()  ? ' ' . LightlineModified() : '')
 endfunction
 
-function! s:IsInGitBranch()
+function! s:is_in_git_branch()
   return fugitive#head() != ''
 endfunction
 
-function! GetCurrentBranch()
+function! LightlineCurrentBranch()
 
-  if &ft =~? s:lightlineNoDispFt
+  if &ft =~? s:lighline_no_disp_ft
     return ''
   endif
 
-  if !s:IsInGitBranch()
+  if !s:is_in_git_branch()
     return ''
   endif
 
@@ -540,27 +532,27 @@ function! GetCurrentBranch()
   return ''
 endfunction
 
-function! MyFileformat()
+function! LightlineFileformat()
 
-  if &ft =~? s:lightlineNoDispFt
+  if &ft =~? s:lighline_no_disp_ft
     return ''
   endif
 
   return winwidth(0) > 70 ? &fileformat : ''
 endfunction
 
-function! MyFiletype()
+function! LightlineFiletype()
 
-  if &ft =~? s:lightlineNoDispFt
+  if &ft =~? s:lighline_no_disp_ft
     return ''
   endif
 
   return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype : 'no ft') : ''
 endfunction
 
-function! MyFileencoding()
+function! LightlineFileencoding()
 
-  if &ft =~? s:lightlineNoDispFt
+  if &ft =~? s:lighline_no_disp_ft
     return ''
   endif
 
@@ -572,16 +564,17 @@ augroup MyAutoGroup
 augroup END
 
 " http://qiita.com/yuyuchu3333/items/20a0acfe7e0d0e167ccc
-function! MyGitGutter()
+function! LightlineGitSummary()
+
   if winwidth('.') <= 90
     return ''
   endif
 
-  if !s:IsInGitBranch()
+  if !s:is_in_git_branch()
     return ''
   endif
 
-  if &ft =~? s:lightlineNoDispFt
+  if &ft =~? s:lighline_no_disp_ft
     return ''
   endif
 
@@ -723,7 +716,7 @@ if neobundle#tap('vim-over')
   call neobundle#untap()
 endif
 " }}}
-" vim-qfreplace' {{{
+" vim-qfreplace {{{
 if neobundle#tap('vim-qfreplace')
   call neobundle#config({
         \   'autoload': {
@@ -915,37 +908,37 @@ endif
 " }}}
 " 検索 {{{
 " vim-anzu {{{
-nmap <silent> n <Plug>(anzu-n)zvzz:<C-u>call <SID>BeginDisplayAnzu()<CR>:<C-u>call <SID>RefreshScreen()<CR>
-nmap <silent> N <Plug>(anzu-N)zvzz:<C-u>call <SID>BeginDisplayAnzu()<CR>:<C-u>call <SID>RefreshScreen()<CR>
-nmap <silent> * <Plug>(anzu-star):<C-u>call  <SID>RefreshScreen()<CR>
-nmap <silent> # <Plug>(anzu-sharp):<C-u>call <SID>RefreshScreen()<CR>
+nmap <silent> n <Plug>(anzu-n)zvzz:<C-u>call <SID>begin_display_anzu()<CR>:<C-u>call <SID>refresh_screen()<CR>
+nmap <silent> N <Plug>(anzu-N)zvzz:<C-u>call <SID>begin_display_anzu()<CR>:<C-u>call <SID>refresh_screen()<CR>
+nmap <silent> * <Plug>(anzu-star):<C-u>call  <SID>refresh_screen()<CR>
+nmap <silent> # <Plug>(anzu-sharp):<C-u>call <SID>refresh_screen()<CR>
 
 augroup MyAutoGroup
   " 一定時間キー入力がないとき、ウインドウを移動したとき、タブを移動したときに
   " 検索ヒット数の表示を消去する
-  autocmd CursorHold,CursorHoldI * call s:UpdateDisplayAnzu()
-  autocmd WinLeave,TabLeave      * call s:ClearDisplayAnzu()
+  autocmd CursorHold,CursorHoldI * call s:update_display_anzu()
+  autocmd WinLeave,TabLeave      * call s:clear_display_anzu()
 
   " anzuを表示する時間
-  let s:anzuDisplayTime = 2000
+  let s:anzu_display_time = 2000
 
-  let s:anzuDisplayCount = 0
-  function! s:BeginDisplayAnzu()
-    let s:anzuDisplayCount = s:anzuDisplayTime / &updatetime
+  let s:anzu_display_count = 0
+  function! s:begin_display_anzu()
+    let s:anzu_display_count = s:anzu_display_time / &updatetime
   endfunction
 
-  function! s:UpdateDisplayAnzu()
-    if s:anzuDisplayCount >= 0
-      let s:anzuDisplayCount = s:anzuDisplayCount - 1
+  function! s:update_display_anzu()
+    if s:anzu_display_count >= 0
+      let s:anzu_display_count = s:anzu_display_count - 1
 
-      call s:ContinueCursorHold()
+      call s:continue_cursor_hold()
     else
-      call s:ClearDisplayAnzu()
+      call s:clear_display_anzu()
     endif
   endfunction
 
-  function! s:ClearDisplayAnzu()
-    " let s:anzuDisplayCount = 0
+  function! s:clear_display_anzu()
+    " let s:anzu_display_count = 0
     call anzu#clear_search_status()
   endfunction
 augroup END
@@ -1069,7 +1062,7 @@ if neobundle#tap('wandbox-vim')
         \   'depends':  ['vimproc'],
         \   'autoload': {
         \     'filetypes': ['c', 'cpp', 'objc'],
-        \     'commands': [
+        \     'commands':  [
         \       {
         \         'name':     'WandboxAsync',
         \         'complete': 'customlist,wandbox#complete_command'
@@ -1095,7 +1088,7 @@ if neobundle#tap('wandbox-vim')
     let g:wandbox#open_quickfix_window = 0
 
     let g:wandbox#default_compiler = {
-          \   'cpp' : 'clang-head',
+          \   'cpp': 'clang-head',
           \ }
   endfunction
 
@@ -1489,28 +1482,28 @@ if neobundle#tap('lingr-vim')
         \   }
         \ })
 
-  noremap <silent> [App]1 :<C-u>call <SID>ToggleLingr()<CR>
+  noremap <silent> [App]1 :<C-u>call <SID>toggle_lingr()<CR>
 
   function! neobundle#hooks.on_source(bundle)
     let g:lingr_vim_say_buffer_height = 15
 
     augroup MyAutoGroup
-      autocmd FileType lingr-rooms    call s:SetLingr()
-      autocmd FileType lingr-members  call s:SetLingr()
-      autocmd FileType lingr-messages call s:SetLingr()
+      autocmd FileType lingr-rooms    call s:set_lingr()
+      autocmd FileType lingr-members  call s:set_lingr()
+      autocmd FileType lingr-messages call s:set_lingr()
 
-      function! s:SetLingr()
-        let b:disableSmartClose = 0
+      function! s:set_lingr()
+        let b:disable_smart_close = 0
 
-        noremap  <silent><buffer> <Leader>w :<C-u>call <SID>ToggleLingr()<CR>
-        nnoremap <silent><buffer> q         :<C-u>call <SID>ToggleLingr()<CR>
+        noremap  <silent><buffer> <Leader>w :<C-u>call <SID>toggle_lingr()<CR>
+        nnoremap <silent><buffer> q         :<C-u>call <SID>toggle_lingr()<CR>
 
         setlocal nolist
       endfunction
     augroup END
   endfunction
 
-  function! s:ToggleLingr()
+  function! s:toggle_lingr()
     if bufnr('lingr-messages') == -1
       tabnew
       LingrLaunch
@@ -1534,14 +1527,14 @@ if neobundle#tap('vim-fugitive')
 
   function! neobundle#hooks.on_source(bundle)
     augroup MyAutoGroup
-      autocmd FocusGained,FocusLost * call s:UpdateFugitive()
+      autocmd FocusGained,FocusLost * call s:update_fugitive()
     augroup END
   endfunction
 
   call neobundle#untap()
 endif
 
-function! s:UpdateFugitive()
+function! s:update_fugitive()
   call fugitive#detect(expand('<amatch>:p'))
 
   call lightline#update()
@@ -1603,12 +1596,12 @@ if neobundle#tap('vimfiler.vim')
 
   function! neobundle#hooks.on_source(bundle)
     augroup MyAutoGroup
-      autocmd FileType vimfiler call s:SetVimfiler()
+      autocmd FileType vimfiler call s:set_vimfiler()
 
       " http://qiita.com/Linda_pp/items/f1cb09ac94202abfba0e
       autocmd FileType vimfiler nnoremap <silent><buffer> / :<C-u>Unite file -horizontal -default-action=vimfiler<CR>
 
-      function! s:SetVimfiler()
+      function! s:set_vimfiler()
         nmap <buffer><expr> <CR>  vimfiler#smart_cursor_map('<Plug>(vimfiler_cd_file)', '<Plug>(vimfiler_edit_file)')
         nmap <buffer><expr> <C-j> vimfiler#smart_cursor_map('<Plug>(vimfiler_exit)',    '<Plug>(vimfiler_exit)')
 
@@ -1636,7 +1629,7 @@ if neobundle#tap('TweetVim')
         \   }
         \ })
 
-  noremap <silent> [App]2 :<C-u>call <SID>ToggleTweetVim()<CR>
+  noremap <silent> [App]2 :<C-u>call <SID>toggle_tweetvim()<CR>
 
   function! neobundle#hooks.on_source(bundle)
     let g:tweetvim_include_rts       = 1
@@ -1645,16 +1638,16 @@ if neobundle#tap('TweetVim')
     let g:tweetvim_display_icon      = 1
 
     augroup MyAutoGroup
-      autocmd FileType tweetvim call s:SetTweetVim()
+      autocmd FileType tweetvim call s:set_tweetvim()
 
-      function! s:SetTweetVim()
+      function! s:set_tweetvim()
         nmap     <silent><buffer> rr <Plug>(tweetvim_action_reload)
-        nnoremap <silent><buffer> q  :<C-u>call <SID>ToggleTweetVim()<CR>
+        nnoremap <silent><buffer> q  :<C-u>call <SID>toggle_tweetvim()<CR>
       endfunction
     augroup END
   endfunction
 
-  function! s:ToggleTweetVim()
+  function! s:toggle_tweetvim()
     if bufnr('tweetvim') == -1
       tabnew
       TweetVimHomeTimeline
@@ -1671,7 +1664,8 @@ if neobundle#tap('memolist.vim')
   call neobundle#config({
         \   'depends':  ['unite.vim'],
         \   'autoload': {
-        \     'commands': ['MemoNew', 'MemoList', 'MemoGrep']
+        \     'unite_sources': ['memolist'],
+        \     'commands':      ['MemoNew', 'MemoList', 'MemoGrep']
         \   }
         \ })
 
@@ -1681,8 +1675,11 @@ if neobundle#tap('memolist.vim')
 
   function! neobundle#hooks.on_source(bundle)
     let g:memolist_unite        = 1
-    let g:memolist_path         = expand('~/Dropbox/memo')
     let g:memolist_memo_suffix  = 'md'
+    let g:memolist_unite_source = 'memolist'
+    let g:memolist_path         = expand('~/Dropbox/memo')
+
+    call unite#custom#source('memolist', 'sorters', ['sorter_ftime', 'sorter_reverse'])
   endfunction
 
   call neobundle#untap()
@@ -1717,8 +1714,8 @@ if neobundle#tap('unite.vim')
   nnoremap <silent> [Unite]o  :<C-u>Unite outline<CR>
   nnoremap <silent> [Unite]z  :<C-u>Unite fold<CR>
   nnoremap <silent> [Unite]q  :<C-u>Unite -no-quit quickfix<CR>
-  nnoremap <silent> [Unite]v  :<C-u>call <SID>ExecuteIfOnGitBranch('Unite giti')<CR>
-  nnoremap <silent> [Unite]b  :<C-u>call <SID>ExecuteIfOnGitBranch('Unite giti/branch_all')<CR>
+  nnoremap <silent> [Unite]v  :<C-u>call <SID>execute_if_on_git_branch('Unite giti')<CR>
+  nnoremap <silent> [Unite]b  :<C-u>call <SID>execute_if_on_git_branch('Unite giti/branch_all')<CR>
 
   if IsWindows()
     nnoremap <silent> [Unite]m  :<C-u>Unite -no-split neomru/file everything<CR>
@@ -1739,6 +1736,10 @@ if neobundle#tap('unite.vim')
 
   function! neobundle#hooks.on_source(bundle)
     let g:unite_force_overwrite_statusline = 0
+
+    let g:unite_source_alias_aliases = {
+          \   'memolist' : {'source': 'file'},
+          \ }
 
     if executable('pt')
       let g:unite_source_grep_command       = 'pt'
@@ -1831,7 +1832,7 @@ if neobundle#tap('vim-unite-giti')
         \       'giti',     'giti/branch', 'giti/branch_all', 'giti/config',
         \       'giti/log', 'giti/remote', 'giti/status'
         \     ],
-        \     'commands': [
+        \     'commands':        [
         \       'Giti',                        'GitiWithConfirm',   'GitiFetch', 'GitiPush',
         \       'GitiPushWithSettingUpstream', 'GitiPushExpressly', 'GitiPull',  'GitiPullSquash',
         \       'GitiPullRebase',              'GitiPullExpressly', 'GitiDiff',  'GitiDiffCached',
@@ -1842,7 +1843,7 @@ if neobundle#tap('vim-unite-giti')
 
   function! neobundle#hooks.on_source(bundle)
     augroup MyAutoGroup
-      autocmd User UniteGitiGitExecuted call s:UpdateFugitive()
+      autocmd User UniteGitiGitExecuted call s:update_fugitive()
     augroup END
   endfunction
 
@@ -1873,14 +1874,14 @@ endif
 " 初期設定 {{{
 filetype plugin indent on
 
-if filereadable(s:VimrcLocal)
-  execute 'source' s:VimrcLocal
+if filereadable(s:vimrc_local)
+  execute 'source' s:vimrc_local
 endif
 " }}}
 " }}}
 " ファイルタイプごとの設定 {{{
 augroup MyAutoGroup
-  autocmd BufEnter,WinEnter,BufWinEnter,BufWritePost *                   call     s:UpdateAll()
+  autocmd BufEnter,WinEnter,BufWinEnter,BufWritePost *                   call     s:update_all()
   autocmd BufNewFile,BufRead                         *.xaml              setlocal ft=xml
   autocmd BufNewFile,BufRead                         *.json              setlocal ft=json
   autocmd BufNewFile,BufRead                         *.{fx,fxc,fxh,hlsl} setlocal ft=hlsl
@@ -1888,23 +1889,23 @@ augroup MyAutoGroup
   autocmd BufNewFile,BufRead                         *.{md,mkd,markdown} setlocal ft=markdown
   autocmd BufWritePost                               $MYVIMRC            NeoBundleClearCache
 
-  autocmd FileType *          call s:SetAll()
-  autocmd FileType ruby       call s:SetRuby()
-  autocmd FileType vim        call s:SetVim()
-  autocmd FileType qf         call s:SetQuickFix()
-  autocmd FileType help       call s:SetHelp()
-  autocmd FileType unite      call s:SetUnite()
-  autocmd FileType cs         call s:SetCs()
-  autocmd FileType c,cpp      call s:SetCpp()
-  autocmd FileType go         call s:SetGo()
-  autocmd FileType godoc      call s:SetGodoc()
-  autocmd FileType coffee     call s:SetCoffee()
-  autocmd FileType json       call s:SetJson()
-  autocmd FileType xml,html   call s:SetXml()
-  autocmd FileType neosnippet call s:SetNeosnippet()
-  autocmd FileType markdown   call s:SetMarkdown()
+  autocmd FileType *          call s:set_all()
+  autocmd FileType ruby       call s:set_ruby()
+  autocmd FileType vim        call s:set_vim()
+  autocmd FileType qf         call s:set_quick_fix()
+  autocmd FileType help       call s:set_help()
+  autocmd FileType unite      call s:set_unite()
+  autocmd FileType cs         call s:set_cs()
+  autocmd FileType c,cpp      call s:set_cpp()
+  autocmd FileType go         call s:set_go()
+  autocmd FileType godoc      call s:set_godoc()
+  autocmd FileType coffee     call s:set_coffee()
+  autocmd FileType json       call s:set_json()
+  autocmd FileType xml,html   call s:set_xml()
+  autocmd FileType neosnippet call s:set_neosnippet()
+  autocmd FileType markdown   call s:set_markdown()
 
-  function! s:UpdateAll()
+  function! s:update_all()
 
     " 行番号表示幅を設定する
     " http://d.hatena.ne.jp/osyo-manga/20140303/1393854617
@@ -1920,22 +1921,22 @@ augroup MyAutoGroup
       silent! execute 'lcd' fnameescape(expand('%:p:h'))
     endif
 
-    call s:SetAll()
+    call s:set_all()
   endfunction
 
-  function! s:SetAll()
+  function! s:set_all()
     setlocal formatoptions-=ro
     setlocal textwidth=0
   endfunction
 
-  function! s:SetRuby()
+  function! s:set_ruby()
     setlocal foldmethod=syntax
     setlocal tabstop=2
     setlocal shiftwidth=2
     setlocal softtabstop=2
   endfunction
 
-  function! s:SetVim()
+  function! s:set_vim()
     setlocal foldmethod=marker
     setlocal foldlevel=0
     setlocal foldcolumn=5
@@ -1945,7 +1946,7 @@ augroup MyAutoGroup
     setlocal softtabstop=2
   endfunction
 
-  function! s:SetXml()
+  function! s:set_xml()
     " Hack #22: XMLの閉じタグを補完する
     " http://vim-users.jp/2009/06/hack22/
     inoremap <buffer> </ </<C-x><C-o>
@@ -1957,12 +1958,11 @@ augroup MyAutoGroup
     setlocal foldcolumn=5
   endfunction
 
-  function! s:SetGo()
+  function! s:set_go()
     setlocal foldmethod=syntax
     setlocal shiftwidth=4
     setlocal noexpandtab
     setlocal tabstop=4
-    " compiler go
 
     nmap <silent><buffer> <Leader><C-k><C-k> :<C-u>Godoc<CR>zz
     nmap <silent><buffer> <C-]>              :<C-u>call GodefUnderCursor()<CR>zz
@@ -1970,30 +1970,30 @@ augroup MyAutoGroup
     " todo:Windowsだと重い
     if !IsWindows()
       augroup MyAutoGroup
-        autocmd BufWritePost <buffer> call s:GolangFormat(1)
+        autocmd BufWritePost <buffer> call s:golang_format(1)
       augroup END
     endif
   endfunction
 
-  function! s:SetGodoc()
+  function! s:set_godoc()
     nnoremap <silent><buffer> q :<C-u>close<CR>
   endfunction
 
-  function! s:SetCoffee()
+  function! s:set_coffee()
     setlocal shiftwidth=2
   endfunction
 
-  function! s:SetJson()
+  function! s:set_json()
     setlocal shiftwidth=2
   endfunction
 
-  function! s:SetCpp()
+  function! s:set_cpp()
     setlocal foldmethod=syntax
 
     map <silent><buffer> [App]r :<C-u>QuickRun cpp/wandbox<CR>
   endfunction
 
-  function! s:SetCs()
+  function! s:set_cs()
     setlocal omnifunc=OmniSharp#Complete
     setlocal foldmethod=syntax
     let g:omnicomplete_fetch_full_documentation = 0
@@ -2002,7 +2002,7 @@ augroup MyAutoGroup
     nnoremap <silent><buffer> <S-F12> :<C-u>call OmniSharp#FindUsages()<CR>
   endfunction
 
-  function! s:SetUnite()
+  function! s:set_unite()
     let unite = unite#get_current_unite()
     if unite.buffer_name =~# '^search'
       nmap <silent><buffer><expr> <C-r> unite#do_action('replace')
@@ -2014,19 +2014,19 @@ augroup MyAutoGroup
     nmap <silent><buffer> <C-j> <Plug>(unite_exit)
   endfunction
 
-  function! s:SetHelp()
+  function! s:set_help()
     noremap <silent><buffer> q :<C-u>close<CR>
   endfunction
 
-  function! s:SetNeosnippet()
+  function! s:set_neosnippet()
     setlocal noexpandtab
   endfunction
 
-  function! s:SetMarkdown()
+  function! s:set_markdown()
     nnoremap <silent><buffer> [App]v :<C-u>PrevimOpen<CR>
   endfunction
 
-  function! s:SetQuickFix()
+  function! s:set_quick_fix()
     noremap  <silent><buffer> p     <CR>zz<C-w>p
     nnoremap <silent><buffer> r     :<C-u>Qfreplace<CR>
     nnoremap <silent><buffer> q     :<C-u>cclose<CR>
@@ -2064,9 +2064,9 @@ augroup MyAutoGroup
 
   " 場所ごとに設定を用意する {{{
   " http://vim-users.jp/2009/12/hack112/
-  autocmd BufNewFile,BufReadPost * call s:LoadVimLocal(expand('<afile>:p:h'))
+  autocmd BufNewFile,BufReadPost * call s:load_vim_local(expand('<afile>:p:h'))
 
-  function! s:LoadVimLocal(loc)
+  function! s:load_vim_local(loc)
     let files = findfile('.vimrc.local', escape(a:loc, ' ') . ';', -1)
     for i in reverse(filter(files, 'filereadable(v:val)'))
       source `=i`
@@ -2109,28 +2109,29 @@ set completeopt=longest,menuone
 set backspace=indent,eol,start
 set noswapfile
 set nobackup
+set cryptmethod=blowfish
 
 noremap U J
 
 " ^Mを取り除く
-command! RemoveCr call s:ExecuteKeepView('silent! %substitute/\r$//g | nohlsearch')
+command! RemoveCr call s:execute_keep_view('silent! %substitute/\r$//g | nohlsearch')
 
 " 行末のスペースを取り除く
-command! RemoveEolSpace call s:ExecuteKeepView('silent! %substitute/ \+$//g | nohlsearch')
+command! RemoveEolSpace call s:execute_keep_view('silent! %substitute/ \+$//g | nohlsearch')
 
 " 整形
-command! Format call s:SmartFormat()
+command! Format call s:smart_format()
 map <silent> [App]c :<C-u>Format<CR>
 
 " http://lsifrontend.hatenablog.com/entry/2013/10/11/052640
 nmap     <silent> <C-CR> yy:<C-u>TComment<CR>p
 nmap     <silent> <C-m>  yy:<C-u>TComment<CR>p
-vnoremap <silent> <C-CR> :<C-u>call <SID>CopyAddComment()<CR>
-vnoremap <silent> <C-m>  :<C-u>call <SID>CopyAddComment()<CR>
+vnoremap <silent> <C-CR> :<C-u>call <SID>copy_add_comment()<CR>
+vnoremap <silent> <C-m>  :<C-u>call <SID>copy_add_comment()<CR>
 
 " http://qiita.com/akira-hamada/items/2417d0bcb563475deddb をもとに調整
-function! s:CopyAddComment() range
-  let selectedCount = line("'>") - line("'<")
+function! s:copy_add_comment() range
+  let selected_count = line("'>") - line("'<")
 
   " 選択中の行をyank
   normal! ""gvy
@@ -2139,10 +2140,10 @@ function! s:CopyAddComment() range
   normal P
 
   " 元のコードを選択
-  if selectedCount == 0
+  if selected_count == 0
     execute 'normal V'
   else
-    execute 'normal V' . selectedCount . 'j'
+    execute 'normal V' . selected_count . 'j'
   endif
 
   " コメントアウトする
@@ -2152,11 +2153,11 @@ function! s:CopyAddComment() range
   execute "normal! \e\e"
 
   " 元の位置に戻る
-  execute 'normal ' . (selectedCount + 1) . 'j'
+  execute 'normal ' . (selected_count + 1) . 'j'
 endfunction
 
 " http://vim.wikia.com/wiki/Pretty-formatting_XML
-function! s:DoFormatXML() range
+function! s:xml_format() range
   " Save the file type
   let l:origft = &ft
 
@@ -2205,10 +2206,10 @@ function! s:DoFormatXML() range
   " Restore the file type
   execute "set ft=" . l:origft
 endfunction
-command! -range=% XmlFormat <line1>,<line2>call s:DoFormatXML()
+command! -range=% XmlFormat <line1>,<line2>call s:xml_format()
 
 " 自動的にディレクトリを作成する
-" http://vim-users.jp/2011/02/hack202/
+" http://vim-jp.org/vim-users-jp/2011/02/20/Hack-202.html
 augroup MyAutoGroup
   autocmd BufWritePre * call s:auto_mkdir(expand('<afile>:p:h'), v:cmdbang)
   function! s:auto_mkdir(dir, force)
@@ -2265,9 +2266,9 @@ nnoremap <silent> <Leader>/   :nohlsearch<CR>
 nnoremap / /\v
 
 " *による検索時に初回は移動しない
-nnoremap <silent> * viw:<C-u>call <SID>StarSearch()<CR>:<C-u>set hlsearch<CR>`<
-vnoremap <silent> * :<C-u>call    <SID>StarSearch()<CR>:<C-u>set hlsearch<CR>
-function! s:StarSearch()
+nnoremap <silent> * viw:<C-u>call <SID>star_search()<CR>:<C-u>set hlsearch<CR>`<
+vnoremap <silent> * :<C-u>call    <SID>star_search()<CR>:<C-u>set hlsearch<CR>
+function! s:star_search()
   let orig = @"
   normal! gvy
   let text = @"
@@ -2309,7 +2310,7 @@ augroup MyAutoGroup
 
   let s:cursorline_lock = 0
   function! s:auto_cursorline(event)
-    if s:IsUniteRunning()
+    if s:is_unite_running()
       return
     endif
 
@@ -2337,8 +2338,8 @@ augroup MyAutoGroup
     endif
   endfunction
 
-  function! s:ForceShowCursolLine()
-    if s:IsUniteRunning()
+  function! s:force_show_cursol_line()
+    if s:is_unite_running()
       return
     endif
 
@@ -2350,7 +2351,7 @@ augroup END
 " 全角スペースをハイライト {{{
 " http://fifnel.com/2009/04/07/2300/
 if has('syntax')
-  function! s:ActivateInvisibleIndicator()
+  function! s:activate_invisible_indicator()
     syntax match InvisibleJISX0208Space '　' display containedin=ALL
     highlight InvisibleJISX0208Space term=underline guibg=#112233
 
@@ -2359,7 +2360,7 @@ if has('syntax')
   endf
 
   augroup MyAutoGroup
-    autocmd BufNew,BufRead * call s:ActivateInvisibleIndicator()
+    autocmd BufNew,BufRead * call s:activate_invisible_indicator()
   augroup END
 endif
 " }}}
@@ -2386,11 +2387,11 @@ augroup MyAutoGroup
   endfunction
 
   function! s:hl_cword()
-    let word = expand("<cword>")
-    if word == ""
+    let word = expand('<cword>')
+    if word == ''
       return
     endif
-    if get(b:, "highlight_cursor_word", "") ==# word
+    if get(b:, 'highlight_cursor_word', '') ==# word
       return
     endif
 
@@ -2399,12 +2400,12 @@ augroup MyAutoGroup
       return
     endif
 
-    if !empty(filter(split(word, '\zs'), "strlen(v:val) > 1"))
+    if !empty(filter(split(word, '\zs'), 'strlen(v:val) > 1'))
       return
     endif
 
-    let pattern = printf("\\<%s\\>", expand("<cword>"))
-    silent! let b:highlight_cursor_word_id = matchadd("CursorWord", pattern)
+    let pattern = printf('\\<%s\\>', expand('<cword>'))
+    silent! let b:highlight_cursor_word_id = matchadd('CursorWord', pattern)
     let b:highlight_cursor_word = word
   endfunction
 augroup END
@@ -2440,10 +2441,10 @@ cnoremap <C-n> <Down>
 cnoremap <C-p> <Up>
 " }}}
 " カーソル移動 {{{
-nnoremap <silent> k     :<C-u>call <SID>UpCursor(v:count1)<CR>
-nnoremap <silent> j     :<C-u>call <SID>DownCursor(v:count1)<CR>
-nnoremap <silent> h     :<C-u>call <SID>LeftCursor(v:count1)<CR>
-nnoremap <silent> l     :<C-u>call <SID>RightCursor(v:count1)<CR>
+nnoremap <silent> k     :<C-u>call <SID>up_cursor(v:count1)<CR>
+nnoremap <silent> j     :<C-u>call <SID>down_cursor(v:count1)<CR>
+nnoremap <silent> h     :<C-u>call <SID>left_cursor(v:count1)<CR>
+nnoremap <silent> l     :<C-u>call <SID>right_cursor(v:count1)<CR>
 
 vnoremap <silent> k     gk
 vnoremap <silent> j     gj
@@ -2455,18 +2456,18 @@ nnoremap <silent> <C-e> <C-e>j
 nnoremap <silent> <C-y> <C-y>k
 vnoremap <silent> <C-e> <C-e>j
 vnoremap <silent> <C-y> <C-y>k
-nmap     <silent> gg    ggzvzz:<C-u>call <SID>RefreshScreen()<CR>
-nmap     <silent> G     Gzvzz:<C-u>call  <SID>RefreshScreen()<CR>
+nmap     <silent> gg    ggzvzz:<C-u>call <SID>refresh_screen()<CR>
+nmap     <silent> G     Gzvzz:<C-u>call  <SID>refresh_screen()<CR>
 
-noremap  <silent> <C-i> <C-i>zz:<C-u>call <SID>RefreshScreen()<CR>
-noremap  <silent> <C-o> <C-o>zz:<C-u>call <SID>RefreshScreen()<CR>
-map      <silent> <C-h> :<C-u>call <SID>DisableVirtualCursor()<CR>^:<C-u>call  <SID>RefreshScreen()<CR>
-map      <silent> <C-l> :<C-u>call <SID>DisableVirtualCursor()<CR>g$:<C-u>call <SID>RefreshScreen()<CR>
+noremap  <silent> <C-i> <C-i>zz:<C-u>call <SID>refresh_screen()<CR>
+noremap  <silent> <C-o> <C-o>zz:<C-u>call <SID>refresh_screen()<CR>
+map      <silent> <C-h> :<C-u>call <SID>disable_virtual_cursor()<CR>^:<C-u>call  <SID>refresh_screen()<CR>
+map      <silent> <C-l> :<C-u>call <SID>disable_virtual_cursor()<CR>g$:<C-u>call <SID>refresh_screen()<CR>
 
 nmap     <silent> <Leader>m `
 
-function! s:UpCursor(repeat)
-  call s:EnableVirtualCursor()
+function! s:up_cursor(repeat)
+  call s:enable_virtual_cursor()
 
   let c = a:repeat
   while c > 0
@@ -2475,8 +2476,8 @@ function! s:UpCursor(repeat)
   endwhile
 endfunction
 
-function! s:DownCursor(repeat)
-  call s:EnableVirtualCursor()
+function! s:down_cursor(repeat)
+  call s:enable_virtual_cursor()
 
   let c = a:repeat
   while c > 0
@@ -2485,8 +2486,8 @@ function! s:DownCursor(repeat)
   endwhile
 endfunction
 
-function! s:LeftCursor(repeat)
-  call s:DisableVirtualCursor()
+function! s:left_cursor(repeat)
+  call s:disable_virtual_cursor()
 
   let c = a:repeat
   while c > 0
@@ -2495,8 +2496,8 @@ function! s:LeftCursor(repeat)
   endwhile
 endfunction
 
-function! s:RightCursor(repeat)
-  call s:DisableVirtualCursor()
+function! s:right_cursor(repeat)
+  call s:disable_virtual_cursor()
 
   let c = a:repeat
   while c > 0
@@ -2509,16 +2510,16 @@ function! s:RightCursor(repeat)
   endif
 endfunction
 
-function! s:EnableVirtualCursor()
+function! s:enable_virtual_cursor()
   set virtualedit=all
 endfunction
 
-function! s:DisableVirtualCursor()
+function! s:disable_virtual_cursor()
   set virtualedit=block
 endfunction
 
 augroup MyAutoGroup
-  autocmd InsertEnter * call s:DisableVirtualCursor()
+  autocmd InsertEnter * call s:disable_virtual_cursor()
 augroup END
 " }}}
 " ウィンドウ操作 {{{
@@ -2528,8 +2529,8 @@ set splitright                    " 横分割したら新しいウィンドウ�
 nnoremap [Window]  <Nop>
 nmap     <Leader>w [Window]
 
-noremap  <silent> [Window]e :<C-u>call <SID>ToggleVSplitWide()<CR>
-noremap  <silent> [Window]w :<C-u>call <SID>SmartClose()<CR>
+noremap  <silent> [Window]e :<C-u>call <SID>toggle_v_split_wide()<CR>
+noremap  <silent> [Window]w :<C-u>call <SID>smart_close()<CR>
 
 " アプリウィンドウ操作
 if IsGuiRunning()
@@ -2541,7 +2542,7 @@ if IsGuiRunning()
   noremap <silent> [Window]j :<C-u>MoveWin<CR>
   noremap <silent> [Window]k :<C-u>MoveWin<CR>
   noremap <silent> [Window]l :<C-u>MoveWin<CR>
-  noremap <silent> [Window]f :<C-u>call <SID>FullWindow()<CR>
+  noremap <silent> [Window]f :<C-u>call <SID>full_window()<CR>
 endif
 " }}}
 " タブライン操作 {{{
@@ -2560,7 +2561,7 @@ nnoremap <silent> J :<C-u>tabn<CR>
 
 " Vimですべてのバッファをタブ化する
 " http://qiita.com/kuwa72/items/deef2703af74d2d993ee
-nnoremap <silent> L :<C-u>call <SID>CleanEmptyBuffers()<CR>:<C-u>tab ba<CR>
+nnoremap <silent> L :<C-u>call <SID>clean_empty_buffers()<CR>:<C-u>tab ba<CR>
 " }}}
 " バッファ操作 {{{
 nnoremap [Buffer]  <Nop>
@@ -2572,10 +2573,6 @@ nnoremap <silent> <Leader>x :bdelete<CR>
 for s:n in range(1, 9)
   execute 'nnoremap <silent> [Buffer]' . s:n  ':<C-u>b' . s:n . '<CR>'
 endfor
-
-" nnoremap <silent> <C-k> :<C-u>bprevious<CR>
-" nnoremap <silent> <C-j> :<C-u>bnext<CR>
-
 " }}}
 " ファイル操作 {{{
 " vimrc / gvimrc の編集
@@ -2587,14 +2584,14 @@ nnoremap <silent> <F3> :<C-u>source $MYVIMRC<CR>:<C-u>source $MYGVIMRC<CR>
 nnoremap [Git]     <Nop>
 nmap     <Leader>g [Git]
 
-nnoremap <silent> [Git]b    :<C-u>call <SID>ExecuteIfOnGitBranch('Gblame w')<CR>
-nnoremap <silent> [Git]a    :<C-u>call <SID>ExecuteIfOnGitBranch('Gwrite')<CR>
-nnoremap <silent> [Git]c    :<C-u>call <SID>ExecuteIfOnGitBranch('Gcommit')<CR>
-nnoremap <silent> [Git]f    :<C-u>call <SID>ExecuteIfOnGitBranch('GitiFetch')<CR>
-nnoremap <silent> [Git]d    :<C-u>call <SID>ExecuteIfOnGitBranch('Gdiff')<CR>
-nnoremap <silent> [Git]s    :<C-u>call <SID>ExecuteIfOnGitBranch('Gstatus')<CR>
-nnoremap <silent> [Git]push :<C-u>call <SID>ExecuteIfOnGitBranch('GitiPush')<CR>
-nnoremap <silent> [Git]pull :<C-u>call <SID>ExecuteIfOnGitBranch('GitiPull')<CR>
+nnoremap <silent> [Git]b    :<C-u>call <SID>execute_if_on_git_branch('Gblame w')<CR>
+nnoremap <silent> [Git]a    :<C-u>call <SID>execute_if_on_git_branch('Gwrite')<CR>
+nnoremap <silent> [Git]c    :<C-u>call <SID>execute_if_on_git_branch('Gcommit')<CR>
+nnoremap <silent> [Git]f    :<C-u>call <SID>execute_if_on_git_branch('GitiFetch')<CR>
+nnoremap <silent> [Git]d    :<C-u>call <SID>execute_if_on_git_branch('Gdiff')<CR>
+nnoremap <silent> [Git]s    :<C-u>call <SID>execute_if_on_git_branch('Gstatus')<CR>
+nnoremap <silent> [Git]push :<C-u>call <SID>execute_if_on_git_branch('GitiPush')<CR>
+nnoremap <silent> [Git]pull :<C-u>call <SID>execute_if_on_git_branch('GitiPull')<CR>
 " }}}
 " ヘルプ {{{
 nnoremap <Leader><C-k>      :<C-u>help<Space>
@@ -2605,109 +2602,103 @@ set helplang=ja,en
 set rtp+=$VIM/plugins/vimdoc-ja
 " }}}
 " 汎用関数 {{{
-" SID取得 {{{
-function! s:SID()
-
-  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID$')
-endfunction
-" }}}
 " CursorHold を継続させる{{{
-function! s:ContinueCursorHold()
+function! s:continue_cursor_hold()
 
   " http://d.hatena.ne.jp/osyo-manga/20121102/1351836801
   call feedkeys(mode() ==# 'i' ? "\<C-g>\<Esc>" : "g\<Esc>", 'n')
 endfunction
 " }}}
 " アプリケーションウィンドウを最大高さにする {{{
-function! s:FullWindow()
+function! s:full_window()
   execute 'winpos' getwinposx() '0'
   execute 'set lines=9999'
 endfunction
 " }}}
 " 縦分割する {{{
-let s:depthVsp     = 1
-let s:opendLeftVsp = 0
-let s:opendTopVsp  = 0
+let s:depth_vsp      = 1
+let s:opend_left_vsp = 0
+let s:opend_top_vsp  = 0
 
-function! s:ToggleVSplitWide()
+function! s:toggle_v_split_wide()
 
-  if s:depthVsp <= 1
-    call s:OpenVSplitWide()
+  if s:depth_vsp <= 1
+    call s:open_v_split_wide()
   else
-    call s:CloseVSplitWide()
+    call s:close_v_split_wide()
   endif
 endfunction
 
-function! s:OpenVSplitWide()
+function! s:open_v_split_wide()
 
-  if s:depthVsp == 1
-    let s:opendLeftVsp = getwinposx()
-    let s:opendTopVsp  = getwinposy()
+  if s:depth_vsp == 1
+    let s:opend_left_vsp = getwinposx()
+    let s:opend_top_vsp  = getwinposy()
   endif
 
-  let s:depthVsp += 1
-  let &columns = s:baseColumns * s:depthVsp
-  execute 'botright vertical' s:baseColumns 'split'
+  let s:depth_vsp += 1
+  let &columns = s:base_columns * s:depth_vsp
+  execute 'botright vertical' s:base_columns 'split'
 endf
 
-function! s:CloseVSplitWide()
+function! s:close_v_split_wide()
 
-  let s:depthVsp -= 1
-  let &columns = s:baseColumns * s:depthVsp
-  call s:SmartClose()
+  let s:depth_vsp -= 1
+  let &columns = s:base_columns * s:depth_vsp
+  call s:smart_close()
 
-  if s:depthVsp == 1
-    execute 'winpos' s:opendLeftVsp s:opendTopVsp
+  if s:depth_vsp == 1
+    execute 'winpos' s:opend_left_vsp s:opend_top_vsp
   end
 endf
 " }}}
 " 画面リフレッシュ{{{
-function! s:RefreshScreen()
+function! s:refresh_screen()
 
-  call s:ForceShowCursolLine()
+  call s:force_show_cursol_line()
 endfunction
 " }}}
 " 賢いクローズ {{{
-" ウィンドウが１つかつバッファが一つかつ&columns が s:baseColumns            :quit
-" ウィンドウが１つかつバッファが一つかつ&columns が s:baseColumnsでない      &columns = s:baseColumns
+" ウィンドウが１つかつバッファが一つかつ&columns が s:base_columns            :quit
+" ウィンドウが１つかつバッファが一つかつ&columns が s:base_columnsでない      &columns = s:base_columns
 " 現在のウィンドウに表示しているバッファが他のウィンドウでも表示されてる     :close
 "                                                           表示されていない :bdelete
-function! s:SmartClose()
+function! s:smart_close()
 
-  if exists('b:disableSmartClose')
+  if exists('b:disable_smart_close')
     return
   end
 
-  let currentWindow           = winnr()
-  let currentBuffer           = winbufnr(currentWindow)
-  let isCurrentBufferModified = getbufvar(currentBuffer, '&modified')
-  let tabCount                = tabpagenr('$')
-  let windows                 = range(1, winnr('$'))
+  let current_window             = winnr()
+  let current_buffer             = winbufnr(current_window)
+  let is_current_buffer_modified = getbufvar(current_buffer, '&modified')
+  let tab_count                  = tabpagenr('$')
+  let windows                    = range(1, winnr('$'))
 
-  if (len(windows) == 1) && (s:GetListedBufferCount() == 1) && (tabCount == 1)
-    if &columns == s:baseColumns
-      if isCurrentBufferModified == 0
+  if (len(windows) == 1) && (s:get_listed_buffer_count() == 1) && (tab_count == 1)
+    if &columns == s:base_columns
+      if is_current_buffer_modified == 0
         quit
       elseif confirm('未保存です。閉じますか？', "&Yes\n&No", 1, 'Question') == 1
         quit!
       endif
     else
-      let &columns   = s:baseColumns
-      let s:depthVsp = 1
+      let &columns    = s:base_columns
+      let s:depth_vsp = 1
     endif
   else
     for i in windows
       " 現在のウィンドウは無視
-      if i != currentWindow
+      if i != current_window
         " 他のウィンドウでも表示されている
-        if winbufnr(i) == currentBuffer
+        if winbufnr(i) == current_buffer
           close
           return
         endif
       endif
     endfor
 
-    if isCurrentBufferModified == 0
+    if is_current_buffer_modified == 0
       bdelete
     elseif confirm('未保存です。閉じますか？', "&Yes\n&No", 1, 'Question') == 1
       bdelete!
@@ -2716,27 +2707,27 @@ function! s:SmartClose()
 endfunction
 " }}}
 " 読み込み済みのバッファ数を得る {{{
-function! s:GetListedBufferCount()
+function! s:get_listed_buffer_count()
 
-  let bufferCount = 0
+  let buffer_count = 0
 
-  let lastBuffer = bufnr('$')
+  let last_buffer = bufnr('$')
   let buf = 1
-  while buf <= lastBuffer
+  while buf <= last_buffer
 
     if buflisted(buf)
-      let bufferCount += 1
+      let buffer_count += 1
     endif
 
     let buf += 1
   endwhile
 
-  return bufferCount
+  return buffer_count
 endfunction
 " }}}
 " 空バッファを削除 {{{
 " http://stackoverflow.com/questions/6552295/deleting-all-empty-buffers-in-vim
-function! s:CleanEmptyBuffers()
+function! s:clean_empty_buffers()
 
   let buffers = filter(range(1, bufnr('$')), "buflisted(v:val) && empty(bufname(v:val)) && bufwinnr(v:val)<0 && getbufvar(v:val, '&modified', 0)==0")
   if !empty(buffers)
@@ -2745,7 +2736,7 @@ function! s:CleanEmptyBuffers()
 endfunction
 " }}}
 " コマンド実行後の表示状態を維持する {{{
-function! s:ExecuteKeepView(expr)
+function! s:execute_keep_view(expr)
 
   let wininfo = winsaveview()
   execute a:expr
@@ -2753,7 +2744,7 @@ function! s:ExecuteKeepView(expr)
 endfunction
 " }}}
 " 整形 {{{
-function! s:SmartFormat()
+function! s:smart_format()
 
   if &ft == 'cpp'
     CppFormat
@@ -2762,24 +2753,24 @@ function! s:SmartFormat()
   elseif &ft == 'xml'
     XmlFormat
   elseif &ft == 'json'
-    call s:JsonFormat(0)
+    call s:json_format(0)
   elseif &ft == 'go'
-    call s:GolangFormat(0)
+    call s:golang_format(0)
   else
-    echo 'SmartFormat : Not supported. : ' . &ft
+    echo 'smart_format : Not supported. : ' . &ft
   endif
 endfunction
 " }}}
 " Unite 実行中か {{{
-function! s:IsUniteRunning()
+function! s:is_unite_running()
 
   return &ft == 'unite'
 endfunction
 " }}}
 " Gitブランチ上であれば実行 {{{
-function! s:ExecuteIfOnGitBranch(line)
+function! s:execute_if_on_git_branch(line)
 
-  if !s:IsInGitBranch()
+  if !s:is_in_git_branch()
     echo 'not in git branch : ' . a:line
     return
   endif
@@ -2787,18 +2778,18 @@ function! s:ExecuteIfOnGitBranch(line)
   execute a:line
 endfunction
 " }}}
-" GolangFormat {{{
-function! s:GolangFormat(isSilent)
-  call s:FilterCurrent('goimports', a:isSilent)
+" golang_format {{{
+function! s:golang_format(is_silent)
+  call s:filter_current('goimports', a:is_silent)
 endfunction
 " }}}
-" JsonFormat {{{
-function! s:JsonFormat(isSilent)
-  call s:FilterCurrent('jq .', a:isSilent)
+" json_format {{{
+function! s:json_format(is_silent)
+  call s:filter_current('jq .', a:is_silent)
 endfunction
 " }}}
 " フィルタリング処理を行う {{{
-function! s:FilterCurrent(cmd, isSilent)
+function! s:filter_current(cmd, is_silent)
 
   let pos_save                     = getpos('.')
   let sel_save                     = &l:selection
@@ -2815,8 +2806,8 @@ function! s:FilterCurrent(cmd, isSilent)
       call setreg('g', formatted, 'v')
       silent keepjumps normal! ggVG"gp
     else
-      if !a:isSilent
-        echo 'FilterCurrent : Error'
+      if !a:is_silent
+        echo 'filter_current : Error'
       endif
     endif
   finally
