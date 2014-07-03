@@ -515,7 +515,6 @@ function! s:is_in_git_branch()
 endfunction
 
 function! LightlineCurrentBranch()
-
   if &ft =~? s:lighline_no_disp_ft
     return ''
   endif
@@ -533,7 +532,6 @@ function! LightlineCurrentBranch()
 endfunction
 
 function! LightlineFileformat()
-
   if &ft =~? s:lighline_no_disp_ft
     return ''
   endif
@@ -542,7 +540,6 @@ function! LightlineFileformat()
 endfunction
 
 function! LightlineFiletype()
-
   if &ft =~? s:lighline_no_disp_ft
     return ''
   endif
@@ -551,7 +548,6 @@ function! LightlineFiletype()
 endfunction
 
 function! LightlineFileencoding()
-
   if &ft =~? s:lighline_no_disp_ft
     return ''
   endif
@@ -565,7 +561,6 @@ augroup END
 
 " http://qiita.com/yuyuchu3333/items/20a0acfe7e0d0e167ccc
 function! LightlineGitSummary()
-
   if winwidth('.') <= 90
     return ''
   endif
@@ -1906,7 +1901,6 @@ augroup MyAutoGroup
   autocmd FileType markdown   call s:set_markdown()
 
   function! s:update_all()
-
     " 行番号表示幅を設定する
     " http://d.hatena.ne.jp/osyo-manga/20140303/1393854617
     let w = len(line('$')) + 2
@@ -2604,7 +2598,6 @@ set rtp+=$VIM/plugins/vimdoc-ja
 " 汎用関数 {{{
 " CursorHold を継続させる{{{
 function! s:continue_cursor_hold()
-
   " http://d.hatena.ne.jp/osyo-manga/20121102/1351836801
   call feedkeys(mode() ==# 'i' ? "\<C-g>\<Esc>" : "g\<Esc>", 'n')
 endfunction
@@ -2621,7 +2614,6 @@ let s:opend_left_vsp = 0
 let s:opend_top_vsp  = 0
 
 function! s:toggle_v_split_wide()
-
   if s:depth_vsp <= 1
     call s:open_v_split_wide()
   else
@@ -2630,7 +2622,6 @@ function! s:toggle_v_split_wide()
 endfunction
 
 function! s:open_v_split_wide()
-
   if s:depth_vsp == 1
     let s:opend_left_vsp = getwinposx()
     let s:opend_top_vsp  = getwinposy()
@@ -2642,7 +2633,6 @@ function! s:open_v_split_wide()
 endf
 
 function! s:close_v_split_wide()
-
   let s:depth_vsp -= 1
   let &columns = s:base_columns * s:depth_vsp
   call s:smart_close()
@@ -2654,7 +2644,6 @@ endf
 " }}}
 " 画面リフレッシュ{{{
 function! s:refresh_screen()
-
   call s:force_show_cursol_line()
 endfunction
 " }}}
@@ -2664,7 +2653,6 @@ endfunction
 " 現在のウィンドウに表示しているバッファが他のウィンドウでも表示されてる     :close
 "                                                           表示されていない :bdelete
 function! s:smart_close()
-
   if exists('b:disable_smart_close')
     return
   end
@@ -2708,7 +2696,6 @@ endfunction
 " }}}
 " 読み込み済みのバッファ数を得る {{{
 function! s:get_listed_buffer_count()
-
   let buffer_count = 0
 
   let last_buffer = bufnr('$')
@@ -2728,7 +2715,6 @@ endfunction
 " 空バッファを削除 {{{
 " http://stackoverflow.com/questions/6552295/deleting-all-empty-buffers-in-vim
 function! s:clean_empty_buffers()
-
   let buffers = filter(range(1, bufnr('$')), "buflisted(v:val) && empty(bufname(v:val)) && bufwinnr(v:val)<0 && getbufvar(v:val, '&modified', 0)==0")
   if !empty(buffers)
     execute 'bd ' join(buffers, ' ')
@@ -2737,7 +2723,6 @@ endfunction
 " }}}
 " コマンド実行後の表示状態を維持する {{{
 function! s:execute_keep_view(expr)
-
   let wininfo = winsaveview()
   execute a:expr
   call winrestview(wininfo)
@@ -2745,7 +2730,6 @@ endfunction
 " }}}
 " 整形 {{{
 function! s:smart_format()
-
   if &ft == 'cpp'
     CppFormat
   elseif &ft == 'c'
@@ -2763,13 +2747,11 @@ endfunction
 " }}}
 " Unite 実行中か {{{
 function! s:is_unite_running()
-
   return &ft == 'unite'
 endfunction
 " }}}
 " Gitブランチ上であれば実行 {{{
 function! s:execute_if_on_git_branch(line)
-
   if !s:is_in_git_branch()
     echo 'not in git branch : ' . a:line
     return
@@ -2790,7 +2772,6 @@ endfunction
 " }}}
 " フィルタリング処理を行う {{{
 function! s:filter_current(cmd, is_silent)
-
   let pos_save                     = getpos('.')
   let sel_save                     = &l:selection
   let &l:selection                 = 'inclusive'
