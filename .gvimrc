@@ -96,8 +96,6 @@ if IsGuiRunning()
   if filereadable(s:save_window_file)
     exe 'source' s:save_window_file
   endif
-
-  unlet s:save_window_file
 endif
 " }}}
 " vim: set ts=2 sw=2 sts=2 et :

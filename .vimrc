@@ -184,9 +184,8 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'Shougo/vimshell.vim'
   NeoBundleLazy 'Shougo/vimfiler.vim'
   NeoBundleLazy 'basyura/TweetVim'
-  " NeoBundle     'mattn/benchvimrc-vim'
-
   NeoBundleLazy 'glidenote/memolist.vim'
+  " NeoBundle     'mattn/benchvimrc-vim'
   if IsMac()
     NeoBundleLazy 'itchyny/dictionary.vim'
   endif
@@ -207,6 +206,8 @@ function! s:set_neobundle() " {{{
 endfunction " }}}
 
 if has('vim_starting')
+  let g:neobundle#install_max_processes = 8
+
   set rtp+=$DOTVIM/bundle/neobundle.vim/
 endif
 
