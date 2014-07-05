@@ -165,10 +165,11 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'kana/vim-textobj-indent'
   NeoBundleLazy 'kana/vim-textobj-line'
   NeoBundleLazy 'rhysd/vim-textobj-word-column'
-  NeoBundleLazy 'thinca/vim-textobj-comment'
+  NeoBundleLazy 'glts/vim-textobj-comment'
   NeoBundleLazy 'sgur/vim-textobj-parameter'
   NeoBundleLazy 'rhysd/vim-textobj-anyblock'
   NeoBundleLazy 'h1mesuke/textobj-wiw'
+  NeoBundleLazy 'whatyouhide/vim-textobj-xmlattr'
 
   " オペレータ
   NeoBundleLazy 'kana/vim-operator-user'
@@ -1297,6 +1298,7 @@ endif
 " }}}
 " }}}
 " テキストオブジェクト {{{
+" https://github.com/kana/vim-textobj-user/wiki
 " http://d.hatena.ne.jp/osyo-manga/20130717/1374069987
 " vim-textobj-entire {{{
 if neobundle#tap('vim-textobj-entire')
@@ -1400,6 +1402,18 @@ if neobundle#tap('textobj-wiw')
   xmap i. <Plug>(textobj-wiw-i)
   omap a. <Plug>(textobj-wiw-a)
   omap i. <Plug>(textobj-wiw-i)
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-textobj-xmlattr {{{
+if neobundle#tap('vim-textobj-xmlattr')
+  call neobundle#config({
+        \   'depends':  ['vim-textobj-user'],
+        \   'autoload': {
+        \     'mappings': [['xo', 'ax'], ['xo', 'ix']]
+        \   }
+        \ })
 
   call neobundle#untap()
 endif
