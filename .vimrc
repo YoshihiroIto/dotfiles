@@ -186,7 +186,6 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'Shougo/vimfiler.vim'
   NeoBundleLazy 'basyura/TweetVim'
   NeoBundleLazy 'glidenote/memolist.vim'
-  " NeoBundle     'mattn/benchvimrc-vim'
   if IsMac()
     NeoBundleLazy 'itchyny/dictionary.vim'
   endif
@@ -2122,6 +2121,9 @@ set cryptmethod=blowfish
 
 noremap U J
 
+" http://vim-jp.org/vim-users-jp/2011/01/16/Hack-195.html
+nnoremap <expr> p (col('.') >= col('$') ? '$' : '') . 'p'
+
 " ^Mを取り除く
 command! RemoveCr call s:execute_keep_view('silent! %substitute/\r$//g | nohlsearch')
 
@@ -2308,6 +2310,7 @@ set cmdheight=1
 set laststatus=2
 set showtabline=2
 set diffopt=vertical,filler
+set noequalalways
 
 " 'cursorline' を必要な時にだけ有効にする {{{
 " http://d.hatena.ne.jp/thinca/20090530/1243615055
