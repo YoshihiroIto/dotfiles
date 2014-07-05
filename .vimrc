@@ -511,10 +511,6 @@ function! LightlineFilename()
         \ ('' != LightlineModified()  ? ' ' . LightlineModified() : '')
 endfunction
 
-function! s:is_in_git_branch()
-  return fugitive#head() != ''
-endfunction
-
 function! LightlineCurrentBranch()
   if &ft =~? s:lighline_no_disp_ft
     return ''
@@ -1614,6 +1610,8 @@ if neobundle#tap('vimfiler.vim')
         nmap <buffer><expr> <CR>  vimfiler#smart_cursor_map('<Plug>(vimfiler_cd_file)', '<Plug>(vimfiler_edit_file)')
         nmap <buffer><expr> <C-j> vimfiler#smart_cursor_map('<Plug>(vimfiler_exit)',    '<Plug>(vimfiler_exit)')
 
+        nmap <silent><buffer> J :<C-u>Unite bookmark<CR>
+
         " dotfile表示状態に設定
         execute ':normal .'
       endfunction
@@ -1702,7 +1700,7 @@ let g:icondrag_auto_start = 1
 " unite.vim {{{
 if neobundle#tap('unite.vim')
   call neobundle#config({
-        \   'depends':  ['vimproc'],
+        \   'depends':  ['vimproc', 'vimfiler.vim'],
         \   'autoload': {
         \     'commands': ['Unite', 'UniteResume', 'UniteWithCursorWord']
         \   }
@@ -1718,6 +1716,7 @@ if neobundle#tap('unite.vim')
   nnoremap <silent> [Unite]r  :<C-u>UniteResume -no-split search-buffer<CR>
 
   nnoremap <silent> [Unite]f  :<C-u>Unite buffer<CR>
+  nnoremap <silent> [Unite]j  :<C-u>Unite bookmark<CR>
   nnoremap <silent> [Unite]t  :<C-u>Unite tab<CR>
   nnoremap <silent> [Unite]l  :<C-u>Unite -no-split line<CR>
   nnoremap <silent> [Unite]o  :<C-u>Unite outline<CR>
@@ -1772,6 +1771,8 @@ if neobundle#tap('unite.vim')
     call unite#custom#profile('default', 'ignorecase', 1)
     call unite#custom#profile('default', 'smartcase',  1)
     call unite#custom#source( 'fold',    'matchers',   'matcher_migemo')
+
+    call unite#custom_default_action('source/bookmark/directory' , 'vimfiler')
   endfunction
 
   call neobundle#untap()
@@ -2766,6 +2767,11 @@ endfunction
 " Unite 実行中か {{{
 function! s:is_unite_running()
   return &ft == 'unite'
+endfunction
+" }}}
+" Gitブランチ上にいるか {{{
+function! s:is_in_git_branch()
+  return fugitive#head() != ''
 endfunction
 " }}}
 " Gitブランチ上であれば実行 {{{
