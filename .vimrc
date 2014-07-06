@@ -866,6 +866,8 @@ if neobundle#tap('Omnisharp')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
+    let g:omnicomplete_fetch_full_documentation = 0
+
     let g:Omnisharp_stop_server         = 0
     let g:OmniSharp_typeLookupInPreview = 1
   endfunction
@@ -1975,12 +1977,12 @@ augroup MyAutoGroup
     nmap <silent><buffer> <Leader><C-k><C-k> :<C-u>Godoc<CR>zz
     nmap <silent><buffer> <C-]>              :<C-u>call GodefUnderCursor()<CR>zz
 
-    " todo:Windowsだと重い
-    if !IsWindows()
-      augroup MyAutoGroup
-        autocmd BufWritePost <buffer> call s:golang_format(1)
-      augroup END
-    endif
+    " " todo:Windowsだと重い
+    " if !IsWindows()
+    "   augroup MyAutoGroup
+    "     autocmd BufWritePost <buffer> call s:golang_format(1)
+    "   augroup END
+    " endif
   endfunction
 
   function! s:set_godoc()
@@ -2004,10 +2006,8 @@ augroup MyAutoGroup
   function! s:set_cs()
     setlocal omnifunc=OmniSharp#Complete
     setlocal foldmethod=syntax
-    let g:omnicomplete_fetch_full_documentation = 0
 
-    nnoremap <silent><buffer> <C-]>   :<C-u>call OmniSharp#GotoDefinition()<CR>zz
-    nnoremap <silent><buffer> <S-F12> :<C-u>call OmniSharp#FindUsages()<CR>
+    nnoremap <silent><buffer> <C-]> :<C-u>call OmniSharp#GotoDefinition()<CR>zz
   endfunction
 
   function! s:set_unite()
@@ -2071,7 +2071,7 @@ augroup MyAutoGroup
   endfunction
 
   " 場所ごとに設定を用意する {{{
-  " http://vim-users.jp/2009/12/hack112/
+  " http://vim-jp.org/vim-users-jp/2009/12/27/Hack-112.html
   autocmd BufNewFile,BufReadPost * call s:load_vim_local(expand('<afile>:p:h'))
 
   function! s:load_vim_local(loc)
