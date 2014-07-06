@@ -1711,8 +1711,8 @@ if neobundle#tap('unite.vim')
   nmap     <Space> [Unite]
   xmap     <Space> [Unite]
 
-  nnoremap <silent> [Unite]g  :<C-u>Unite grep -auto-preview -no-split -buffer-name=search-buffer<CR>
-  nnoremap <silent> [Unite]pg :<C-u>call <SID>unite_grep_project('-auto-preview -no-split -buffer-name=search-buffer')<CR>
+  nnoremap <silent> [Unite]g  :<C-u>Unite grep -no-split -buffer-name=search-buffer<CR>
+  nnoremap <silent> [Unite]pg :<C-u>call <SID>unite_grep_project('-no-split -buffer-name=search-buffer')<CR>
   nnoremap <silent> [Unite]r  :<C-u>UniteResume -no-split search-buffer<CR>
 
   nnoremap <silent> [Unite]f  :<C-u>Unite buffer<CR>
@@ -2379,8 +2379,6 @@ endif
 " }}}
 " Vim でカーソル下の単語を移動するたびにハイライトする {{{
 " http://d.hatena.ne.jp/osyo-manga/20140121/1390309901
-let g:enable_highlight_cursor_word = 1
-
 augroup MyAutoGroup
   " autocmd CursorMoved * call s:hl_cword()
   autocmd CursorHold  * call s:hl_cword()
@@ -2409,15 +2407,12 @@ augroup MyAutoGroup
     endif
 
     call s:hl_clear()
-    if !g:enable_highlight_cursor_word
-      return
-    endif
 
     if !empty(filter(split(word, '\zs'), 'strlen(v:val) > 1'))
       return
     endif
 
-    let pattern = printf('\\<%s\\>', expand('<cword>'))
+    let pattern = printf('\<%s\>', expand('<cword>'))
     silent! let b:highlight_cursor_word_id = matchadd('CursorWord', pattern)
     let b:highlight_cursor_word = word
   endfunction
