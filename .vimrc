@@ -558,7 +558,7 @@ augroup END
 
 " http://qiita.com/yuyuchu3333/items/20a0acfe7e0d0e167ccc
 function! LightlineGitSummary()
-  if winwidth('.') <= 90
+  if winwidth(0) <= 70
     return ''
   endif
 
@@ -1956,8 +1956,7 @@ augroup MyAutoGroup
   endfunction
 
   function! s:set_xml()
-    " Hack #22: XMLの閉じタグを補完する
-    " http://vim-users.jp/2009/06/hack22/
+    " XMLの閉じタグを補完
     inoremap <buffer> </ </<C-x><C-o>
 
     let g:xml_syntax_folding = 1
