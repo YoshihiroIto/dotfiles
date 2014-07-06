@@ -556,7 +556,6 @@ augroup MyAutoGroup
   autocmd CursorHold,CursorHoldI * call lightline#update()
 augroup END
 
-" http://qiita.com/yuyuchu3333/items/20a0acfe7e0d0e167ccc
 function! LightlineGitSummary()
   if winwidth(0) <= 70
     return ''
@@ -570,15 +569,12 @@ function! LightlineGitSummary()
     return ''
   endif
 
-  let hunks   = gitgutter#hunk#summary()
-  let symbols = [g:gitgutter_sign_added, g:gitgutter_sign_modified, g:gitgutter_sign_removed]
-  let ret     = []
+  let summary = gitgutter#hunk#summary()
 
-  for i in [0, 1, 2]
-    call add(ret, symbols[i] . hunks[i])
-  endfor
-
-  return join(ret, ' ')
+  return printf('%s%d %s%d %s%d',
+        \ g:gitgutter_sign_added,    summary[0],
+        \ g:gitgutter_sign_modified, summary[1],
+        \ g:gitgutter_sign_removed,  summary[2])
 endfunction
 " }}}
 " indentLine {{{
