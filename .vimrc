@@ -561,11 +561,11 @@ function! LightlineGitSummary()
     return ''
   endif
 
-  if !s:is_in_git_branch()
+  if &ft =~? s:lighline_no_disp_ft
     return ''
   endif
 
-  if &ft =~? s:lighline_no_disp_ft
+  if !s:is_in_git_branch()
     return ''
   endif
 
