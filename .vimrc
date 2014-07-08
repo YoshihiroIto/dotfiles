@@ -1498,8 +1498,6 @@ if neobundle#tap('lingr-vim')
       autocmd FileType lingr-messages call s:set_lingr()
 
       function! s:set_lingr()
-        let b:disable_smart_close = 0
-
         noremap  <silent><buffer> <Leader>w :<C-u>call <SID>toggle_lingr()<CR>
         nnoremap <silent><buffer> q         :<C-u>call <SID>toggle_lingr()<CR>
 
@@ -2538,11 +2536,10 @@ set splitright                    " 横分割したら新しいウィンドウ�
 nnoremap [Window]  <Nop>
 nmap     <Leader>w [Window]
 
-noremap  <silent> [Window]e :<C-u>call <SID>toggle_v_split_wide()<CR>
-noremap  <silent> [Window]w :<C-u>call <SID>smart_close()<CR>
-
 " アプリウィンドウ操作
 if IsGuiRunning()
+  noremap  <silent> [Window]e :<C-u>call <SID>toggle_v_split_wide()<CR>
+
   noremap <silent> [Window]H :<C-u>ResizeWin<CR>
   noremap <silent> [Window]J :<C-u>ResizeWin<CR>
   noremap <silent> [Window]K :<C-u>ResizeWin<CR>
@@ -2572,7 +2569,6 @@ nnoremap <silent> L :<C-u>call <SID>clean_empty_buffers()<CR>:<C-u>tab ba<CR>
 nnoremap [Buffer]  <Nop>
 nmap     <Leader>b [Buffer]
 
-" nnoremap <silent> <Leader>x :<C-u>bdelete<CR>
 nnoremap <silent> <Leader>x :<C-u>call <SID>delete_current_buffer()<CR>
 " }}}
 " ファイル操作 {{{
@@ -2642,7 +2638,7 @@ endf
 function! s:close_v_split_wide()
   let s:depth_vsp -= 1
   let &columns = s:base_columns * s:depth_vsp
-  call s:smart_close()
+  only
 
   if s:depth_vsp == 1
     execute 'winpos' s:opend_left_vsp s:opend_top_vsp
@@ -2655,65 +2651,19 @@ function! s:refresh_screen()
   call s:force_show_cursol_line()
 endfunction
 " }}}
-" 賢いクローズ {{{
-" ウィンドウが１つかつバッファが一つかつ&columns が s:base_columns           :quit
-" ウィンドウが１つかつバッファが一つかつ&columns が s:base_columnsでない     &columns = s:base_columns
-" 現在のウィンドウに表示しているバッファが他のウィンドウでも表示されてる     :close
-"                                                           表示されていない :bdelete
-function! s:smart_close()
-  if exists('b:disable_smart_close')
-    return
-  end
-
-  let current_window             = winnr()
-  let current_buffer             = winbufnr(current_window)
-  let is_current_buffer_modified = getbufvar(current_buffer, '&modified')
-  let tab_count                  = tabpagenr('$')
-  let windows                    = range(1, winnr('$'))
-
-  if (len(windows) == 1) && (s:get_listed_buffer_count() == 1) && (tab_count == 1)
-    if &columns == s:base_columns
-      if is_current_buffer_modified == 0
-        quit
-      elseif confirm('未保存です。閉じますか？', "&Yes\n&No", 1, 'Question') == 1
-        quit!
-      endif
-    else
-      let &columns    = s:base_columns
-      let s:depth_vsp = 1
-    endif
-  else
-    for i in windows
-      " 現在のウィンドウは無視
-      if i != current_window
-        " 他のウィンドウでも表示されている
-        if winbufnr(i) == current_buffer
-          close
-          return
-        endif
-      endif
-    endfor
-
-    if is_current_buffer_modified == 0
-      bdelete
-    elseif confirm('未保存です。閉じますか？', "&Yes\n&No", 1, 'Question') == 1
-      bdelete!
-    endif
-  endif
-endfunction
-" }}}
 " ウィンドウをとじないで現在のバッファを削除 {{{
 function! s:delete_current_buffer()
-
+  let confirm_msg             = '未保存です。閉じますか？'
   let current_win             = winnr()
   let current_buf             = winbufnr(current_win)
   let is_current_buf_modified = getbufvar(current_buf, '&modified')
+  let buf_list                = filter(range(1, bufnr('$')), 'buflisted(v:val)')
 
-  if s:get_listed_buffer_count() == 1
+  if len(buf_list) == 1
     if !is_current_buf_modified
       bdelete
 
-    elseif confirm('未保存です。閉じますか？', "&Yes\n&No", 1, 'Question') == 1
+    elseif confirm(confirm_msg, "&Yes\n&No", 1, 'Question') == 1
       bdelete!
     endif
 
@@ -2721,12 +2671,11 @@ function! s:delete_current_buffer()
   endif
 
   if is_current_buf_modified
-    if confirm('未保存です。閉じますか？', "&Yes\n&No", 1, 'Question') != 1
+    if confirm(confirm_msg, "&Yes\n&No", 1, 'Question') != 1
       return
     endif
   endif
 
-  let buf_list       = filter(range(1, bufnr('$')), 'buflisted(v:val)')
   let next_buf_index = match(buf_list, current_buf) + 1
 
   if next_buf_index == len(buf_list)
@@ -2747,24 +2696,6 @@ function! s:delete_current_buffer()
 
   execute 'bdelete' . current_buf
   execute current_win . 'wincmd w'
-endfunction
-" }}}
-" 読み込み済みのバッファ数を得る {{{
-function! s:get_listed_buffer_count()
-  let buffer_count = 0
-
-  let last_buffer = bufnr('$')
-  let buf = 1
-  while buf <= last_buffer
-
-    if buflisted(buf)
-      let buffer_count += 1
-    endif
-
-    let buf += 1
-  endwhile
-
-  return buffer_count
 endfunction
 " }}}
 " 空バッファを削除 {{{
