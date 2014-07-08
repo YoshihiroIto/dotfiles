@@ -343,7 +343,7 @@ if neobundle#tap('tagbar')
         \   }
         \ })
 
-  noremap <silent> t :<C-u>TagbarToggle<CR>
+  noremap <silent> <C-t> :<C-u>TagbarToggle<CR>
 
   call neobundle#untap()
 endif
@@ -2538,9 +2538,11 @@ set splitright                    " 横分割したら新しいウィンドウ�
 nnoremap [Window]  <Nop>
 nmap     <Leader>w [Window]
 
+noremap <silent> [Window]x :<C-u>close<CR>
+
 " アプリウィンドウ操作
 if IsGuiRunning()
-  noremap  <silent> [Window]e :<C-u>call <SID>toggle_v_split_wide()<CR>
+  noremap <silent> [Window]e :<C-u>call <SID>toggle_v_split_wide()<CR>
 
   noremap <silent> [Window]H :<C-u>ResizeWin<CR>
   noremap <silent> [Window]J :<C-u>ResizeWin<CR>
@@ -2593,9 +2595,9 @@ nnoremap <silent> [Git]push :<C-u>call <SID>execute_if_on_git_branch('GitiPush')
 nnoremap <silent> [Git]pull :<C-u>call <SID>execute_if_on_git_branch('GitiPull')<CR>
 " }}}
 " ヘルプ {{{
-nnoremap <Leader><C-k>      :<C-u>help<Space>
-nnoremap <Leader><C-k><C-k> :<C-u>help <C-r><C-w><CR>:<C-u>call <SID>refresh_screen()<CR>
-vnoremap <Leader><C-k><C-k> :<C-u>help <C-r><C-w><CR>:<C-u>call <SID>refresh_screen()<CR>
+nnoremap          <Leader><C-k>      :<C-u>help<Space>
+nnoremap <silent> <Leader><C-k><C-k> :<C-u>help <C-r><C-w><CR>:<C-u>call <SID>refresh_screen()<CR>
+vnoremap <silent> <Leader><C-k><C-k> :<C-u>help <C-r><C-w><CR>:<C-u>call <SID>refresh_screen()<CR>
 
 set helplang=ja,en
 set rtp+=$VIM/plugins/vimdoc-ja
