@@ -2638,7 +2638,8 @@ endf
 function! s:close_v_split_wide()
   let s:depth_vsp -= 1
   let &columns = s:base_columns * s:depth_vsp
-  only
+  close
+  " only
 
   if s:depth_vsp == 1
     execute 'winpos' s:opend_left_vsp s:opend_top_vsp
@@ -2647,7 +2648,6 @@ endf
 " }}}
 " 画面リフレッシュ{{{
 function! s:refresh_screen()
-
   call s:force_show_cursol_line()
 endfunction
 " }}}
