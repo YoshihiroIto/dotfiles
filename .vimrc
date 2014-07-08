@@ -1973,8 +1973,8 @@ augroup MyAutoGroup
     setlocal noexpandtab
     setlocal tabstop=4
 
-    nmap <silent><buffer> <Leader><C-k><C-k> :<C-u>Godoc<CR>zz
-    nmap <silent><buffer> <C-]>              :<C-u>call GodefUnderCursor()<CR>zz
+    nmap <silent><buffer> <Leader><C-k><C-k> :<C-u>Godoc<CR>zz:<C-u>call <SID>refresh_screen()<CR>
+    nmap <silent><buffer> <C-]>              :<C-u>call GodefUnderCursor()<CR>zz:<C-u>call <SID>refresh_screen()<CR>
 
     " " todo:Windowsだと重い
     " if !IsWindows()
@@ -2006,7 +2006,7 @@ augroup MyAutoGroup
     setlocal omnifunc=OmniSharp#Complete
     setlocal foldmethod=syntax
 
-    nnoremap <silent><buffer> <C-]> :<C-u>call OmniSharp#GotoDefinition()<CR>zz
+    nnoremap <silent><buffer> <C-]> :<C-u>call OmniSharp#GotoDefinition()<CR>zz:<C-u>call <SID>refresh_screen()<CR>
   endfunction
 
   function! s:set_unite()
@@ -2311,6 +2311,7 @@ set showtabline=2
 set diffopt=vertical,filler
 set noequalalways
 set scrolloff=8
+set cursorline
 
 " 'cursorline' を必要な時にだけ有効にする {{{
 " http://d.hatena.ne.jp/thinca/20090530/1243615055
@@ -2350,13 +2351,15 @@ augroup MyAutoGroup
     endif
   endfunction
 
-  function! s:force_show_cursol_line()
+  function! s:force_show_cursorline()
     if s:is_unite_running()
       return
     endif
 
     setlocal cursorline
     let s:cursorline_lock = 1
+
+    echo "CCC"
   endfunction
 augroup END
 " }}}
@@ -2376,10 +2379,9 @@ if has('syntax')
   augroup END
 endif
 " }}}
-" Vim でカーソル下の単語を移動するたびにハイライトする {{{
+" カーソル下の単語を移動するたびにハイライトする {{{
 " http://d.hatena.ne.jp/osyo-manga/20140121/1390309901
 augroup MyAutoGroup
-  " autocmd CursorMoved * call s:hl_cword()
   autocmd CursorHold  * call s:hl_cword()
   autocmd BufLeave    * call s:hl_clear()
   autocmd WinLeave    * call s:hl_clear()
@@ -2592,8 +2594,8 @@ nnoremap <silent> [Git]pull :<C-u>call <SID>execute_if_on_git_branch('GitiPull')
 " }}}
 " ヘルプ {{{
 nnoremap <Leader><C-k>      :<C-u>help<Space>
-nnoremap <Leader><C-k><C-k> :<C-u>help <C-r><C-w><CR>
-vnoremap <Leader><C-k><C-k> :<C-u>help <C-r><C-w><CR>
+nnoremap <Leader><C-k><C-k> :<C-u>help <C-r><C-w><CR>:<C-u>call <SID>refresh_screen()<CR>
+vnoremap <Leader><C-k><C-k> :<C-u>help <C-r><C-w><CR>:<C-u>call <SID>refresh_screen()<CR>
 
 set helplang=ja,en
 set rtp+=$VIM/plugins/vimdoc-ja
@@ -2648,7 +2650,7 @@ endf
 " }}}
 " 画面リフレッシュ{{{
 function! s:refresh_screen()
-  call s:force_show_cursol_line()
+  call s:force_show_cursorline()
 endfunction
 " }}}
 " ウィンドウをとじないで現在のバッファを削除 {{{
@@ -2703,7 +2705,7 @@ endfunction
 function! s:clean_empty_buffers()
   let buffers = filter(range(1, bufnr('$')), "buflisted(v:val) && empty(bufname(v:val)) && bufwinnr(v:val)<0 && getbufvar(v:val, '&modified', 0)==0")
   if !empty(buffers)
-    execute 'bd ' join(buffers, ' ')
+    execute 'bdelete ' join(buffers, ' ')
   endif
 endfunction
 " }}}
