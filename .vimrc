@@ -108,8 +108,10 @@ function! s:set_neobundle() " {{{
   NeoBundle     'vim-scripts/matchparenpp'
   NeoBundleLazy 'YoshihiroIto/tagbar'
   NeoBundleLazy 'LeafCage/foldCC'
-  NeoBundleLazy 'movewin.vim'
-  NeoBundleLazy 'YoshihiroIto/vim-resize-win'
+  if IsGuiRunning()
+    NeoBundleLazy 'movewin.vim'
+    NeoBundleLazy 'YoshihiroIto/vim-resize-win'
+  endif
 
   " 編集
   NeoBundle     'tomtom/tcomment_vim'
@@ -693,7 +695,7 @@ if neobundle#tap('vim-over')
         \   }
         \ })
 
-  noremap <silent> <Leader>s :OverCommandLine<CR>
+  noremap <silent> <Leader>s :<C-u>OverCommandLine<CR>
 
   function! neobundle#hooks.on_source(bundle)
     let g:over_command_line_key_mappings = {
@@ -1770,7 +1772,9 @@ if neobundle#tap('unite.vim')
     call unite#custom#profile('default', 'smartcase',  1)
     call unite#custom#source( 'fold',    'matchers',   'matcher_migemo')
 
-    call unite#custom_default_action('source/bookmark/directory' , 'vimfiler')
+    call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
+    call unite#custom_default_action('directory',                 'vimfiler')
+    call unite#custom_default_action('neomru/directory',          'vimfiler')
   endfunction
 
   call neobundle#untap()
@@ -1817,7 +1821,7 @@ if neobundle#tap('neomru.vim')
   call neobundle#config({
         \   'depends':  ['unite.vim'],
         \   'autoload': {
-        \     'unite_sources': ['neomru/file']
+        \     'unite_sources': ['neomru/file', 'neomru/directory']
         \   }
         \ })
 
@@ -1889,13 +1893,14 @@ endif
 " }}}
 " ファイルタイプごとの設定 {{{
 augroup MyAutoGroup
-  autocmd BufEnter,WinEnter,BufWinEnter,BufWritePost *                   call     s:update_all()
+  autocmd BufEnter,WinEnter,BufWinEnter,BufWritePost *                   call s:update_all()
+  autocmd BufReadPost                                *                   call s:clean_empty_buffers()
   autocmd BufNewFile,BufRead                         *.xaml              setlocal ft=xml
   autocmd BufNewFile,BufRead                         *.json              setlocal ft=json
   autocmd BufNewFile,BufRead                         *.{fx,fxc,fxh,hlsl} setlocal ft=hlsl
   autocmd BufNewFile,BufRead                         *.{fsh,vsh}         setlocal ft=glsl
   autocmd BufNewFile,BufRead                         *.{md,mkd,markdown} setlocal ft=markdown
-  autocmd BufWritePost                               $MYVIMRC            NeoBundleClearCache
+  autocmd BufReadPost                                $MYVIMRC            NeoBundleClearCache
 
   autocmd FileType *          call s:set_all()
   autocmd FileType ruby       call s:set_ruby()
@@ -2237,7 +2242,7 @@ set expandtab                     " Insertモードで <Tab> を挿入すると�
 set list
 set listchars=tab:\⭟\ ,eol:↲,extends:»,precedes:«,nbsp:%
 
-if (v:version >= 704 && has('patch338'))
+if (v:version == 704 && has('patch338')) || (v:version > 704)
   set breakindent
 endif
 
@@ -2266,7 +2271,7 @@ if has('migemo')
 endif
 
 " 検索時のハイライトを解除
-nnoremap <silent> <Leader>/   :nohlsearch<CR>
+nnoremap <silent> <Leader>/   :<C-u>nohlsearch<CR>
 
 " http://deris.hatenablog.jp/entry/2013/05/15/024932
 " very magic
@@ -2307,6 +2312,7 @@ set laststatus=2
 set showtabline=2
 set diffopt=vertical,filler
 set noequalalways
+set scrolloff=8
 
 " 'cursorline' を必要な時にだけ有効にする {{{
 " http://d.hatena.ne.jp/thinca/20090530/1243615055
@@ -2327,13 +2333,13 @@ augroup MyAutoGroup
       let s:cursorline_lock = 2
 
     elseif a:event ==# 'WinLeave'
-      " setlocal nocursorline
-      setlocal cursorline
+      setlocal nocursorline
 
     elseif a:event ==# 'CursorMoved'
       if s:cursorline_lock
         if 1 < s:cursorline_lock
           let s:cursorline_lock = 1
+
         else
           setlocal nocursorline
           let s:cursorline_lock = 0
@@ -2548,16 +2554,12 @@ if IsGuiRunning()
   noremap <silent> [Window]f :<C-u>call <SID>full_window()<CR>
 endif
 " }}}
-" タブライン操作 {{{
+" タブ操作 {{{
 nnoremap [Tab]     <Nop>
 nmap     <Leader>t [Tab]
 
-nnoremap <silent> [Tab]c :tabnew<CR>
-nnoremap <silent> [Tab]x :tabclose<CR>
-
-for s:n in range(1, 9)
-  execute 'nnoremap <silent> [Tab]' . s:n ':<C-u>tabnext' . s:n . '<CR>'
-endfor
+nnoremap <silent> [Tab]c :<C-u>tabnew<CR>
+nnoremap <silent> [Tab]x :<C-u>tabclose<CR>
 
 nnoremap <silent> K :<C-u>tabp<CR>
 nnoremap <silent> J :<C-u>tabn<CR>
@@ -2570,17 +2572,13 @@ nnoremap <silent> L :<C-u>call <SID>clean_empty_buffers()<CR>:<C-u>tab ba<CR>
 nnoremap [Buffer]  <Nop>
 nmap     <Leader>b [Buffer]
 
-nnoremap <silent> [Buffer]x :bdelete<CR>
-nnoremap <silent> <Leader>x :bdelete<CR>
-
-for s:n in range(1, 9)
-  execute 'nnoremap <silent> [Buffer]' . s:n  ':<C-u>b' . s:n . '<CR>'
-endfor
+" nnoremap <silent> <Leader>x :<C-u>bdelete<CR>
+nnoremap <silent> <Leader>x :<C-u>call <SID>delete_current_buffer()<CR>
 " }}}
 " ファイル操作 {{{
 " vimrc / gvimrc の編集
-nnoremap <silent> <F1> :edit $MYVIMRC<CR>
-nnoremap <silent> <F2> :edit $MYGVIMRC<CR>
+nnoremap <silent> <F1> :<C-u>edit $MYVIMRC<CR>
+nnoremap <silent> <F2> :<C-u>edit $MYGVIMRC<CR>
 nnoremap <silent> <F3> :<C-u>source $MYVIMRC<CR>:<C-u>source $MYGVIMRC<CR>
 " }}}
 " Git {{{
@@ -2653,12 +2651,13 @@ endf
 " }}}
 " 画面リフレッシュ{{{
 function! s:refresh_screen()
+
   call s:force_show_cursol_line()
 endfunction
 " }}}
 " 賢いクローズ {{{
-" ウィンドウが１つかつバッファが一つかつ&columns が s:base_columns            :quit
-" ウィンドウが１つかつバッファが一つかつ&columns が s:base_columnsでない      &columns = s:base_columns
+" ウィンドウが１つかつバッファが一つかつ&columns が s:base_columns           :quit
+" ウィンドウが１つかつバッファが一つかつ&columns が s:base_columnsでない     &columns = s:base_columns
 " 現在のウィンドウに表示しているバッファが他のウィンドウでも表示されてる     :close
 "                                                           表示されていない :bdelete
 function! s:smart_close()
@@ -2701,6 +2700,53 @@ function! s:smart_close()
       bdelete!
     endif
   endif
+endfunction
+" }}}
+" ウィンドウをとじないで現在のバッファを削除 {{{
+function! s:delete_current_buffer()
+
+  let current_win             = winnr()
+  let current_buf             = winbufnr(current_win)
+  let is_current_buf_modified = getbufvar(current_buf, '&modified')
+
+  if s:get_listed_buffer_count() == 1
+    if !is_current_buf_modified
+      bdelete
+
+    elseif confirm('未保存です。閉じますか？', "&Yes\n&No", 1, 'Question') == 1
+      bdelete!
+    endif
+
+    return
+  endif
+
+  if is_current_buf_modified
+    if confirm('未保存です。閉じますか？', "&Yes\n&No", 1, 'Question') != 1
+      return
+    endif
+  endif
+
+  let buf_list       = filter(range(1, bufnr('$')), 'buflisted(v:val)')
+  let next_buf_index = match(buf_list, current_buf) + 1
+
+  if next_buf_index == len(buf_list)
+    let next_buf_index = 0
+  endif
+
+  let next_buf = buf_list[next_buf_index]
+
+  while 1
+    let winnr = bufwinnr(current_buf)
+    if winnr == -1
+      break
+    endif
+
+    execute winnr . 'wincmd w'
+    execute 'buffer ' . next_buf
+  endwhile
+
+  execute 'bdelete' . current_buf
+  execute current_win . 'wincmd w'
 endfunction
 " }}}
 " 読み込み済みのバッファ数を得る {{{
