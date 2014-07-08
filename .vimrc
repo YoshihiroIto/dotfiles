@@ -2358,8 +2358,6 @@ augroup MyAutoGroup
 
     setlocal cursorline
     let s:cursorline_lock = 1
-
-    echo "CCC"
   endfunction
 augroup END
 " }}}
