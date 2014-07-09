@@ -2302,7 +2302,7 @@ set showfulltag
 set wildoptions=tagfile
 set fillchars=vert:\              " 縦分割の境界線
 set synmaxcol=500                 " ハイライトする文字数を制限する
-set updatetime=750
+set updatetime=500
 set previewheight=24
 set laststatus=0
 set cmdheight=1
