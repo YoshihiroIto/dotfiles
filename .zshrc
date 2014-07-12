@@ -42,9 +42,12 @@ setopt print_eight_bit
 # http://blog.hekt.org/archives/5085
 alias sudo='sudo '
  
-# コンソールvim
+# vim
 alias vim='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
 alias vi='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
+
+# gvim
+alias gvim='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/mvim "$@"'
 
 # rvm
 eval "$(rbenv init -)"
