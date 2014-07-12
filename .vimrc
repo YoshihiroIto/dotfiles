@@ -946,7 +946,7 @@ if neobundle#tap('clever-f.vim')
   function! neobundle#hooks.on_source(bundle)
     let g:clever_f_ignore_case           = 1
     let g:clever_f_smart_case            = 1
-    let g:clever_f_across_no_line        = 1
+    let g:clever_f_across_no_line        = 0
     let g:clever_f_use_migemo            = 0
     let g:clever_f_chars_match_any_signs = ';'
   endfunction
@@ -2308,7 +2308,6 @@ set laststatus=2
 set showtabline=2
 set diffopt=vertical,filler
 set noequalalways
-set scrolloff=8
 set cursorline
 
 " 'cursorline' を必要な時にだけ有効にする {{{
