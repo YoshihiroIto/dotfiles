@@ -947,7 +947,7 @@ if neobundle#tap('clever-f.vim')
     let g:clever_f_ignore_case           = 1
     let g:clever_f_smart_case            = 1
     let g:clever_f_across_no_line        = 1
-    let g:clever_f_use_migemo            = 1
+    let g:clever_f_use_migemo            = 0
     let g:clever_f_chars_match_any_signs = ';'
   endfunction
 
@@ -2135,9 +2135,7 @@ map <silent> [App]c :<C-u>Format<CR>
 
 " http://lsifrontend.hatenablog.com/entry/2013/10/11/052640
 nmap     <silent> <C-CR> yy:<C-u>TComment<CR>p
-nmap     <silent> <C-m>  yy:<C-u>TComment<CR>p
 vnoremap <silent> <C-CR> :<C-u>call <SID>copy_add_comment()<CR>
-vnoremap <silent> <C-m>  :<C-u>call <SID>copy_add_comment()<CR>
 
 " http://qiita.com/akira-hamada/items/2417d0bcb563475deddb をもとに調整
 function! s:copy_add_comment() range
