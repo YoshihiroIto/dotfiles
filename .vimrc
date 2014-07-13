@@ -2327,7 +2327,6 @@ augroup MyAutoGroup
   autocmd WinLeave    * call s:hl_clear()
   autocmd InsertEnter * call s:hl_clear()
   autocmd CursorMoved * call s:hl_clear()
-
   autocmd ColorScheme * highlight CursorWord guifg=Red
 
   function! s:hl_clear()
