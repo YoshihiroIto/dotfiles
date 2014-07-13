@@ -2562,7 +2562,7 @@ nnoremap <silent> J :<C-u>tabn<CR>
 
 " Vimですべてのバッファをタブ化する
 " http://qiita.com/kuwa72/items/deef2703af74d2d993ee
-nnoremap <silent> L :<C-u>call <SID>clean_empty_buffers()<CR>:<C-u>tab ba<CR>
+nnoremap <silent> [Tab]t :<C-u>call <SID>clean_empty_buffers()<CR>:<C-u>tab ba<CR>
 " }}}
 " バッファ操作 {{{
 nnoremap [Buffer]  <Nop>
