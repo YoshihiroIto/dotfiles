@@ -2319,6 +2319,46 @@ set t_vb=
 set visualbell
 set errorbells
 
+" カーソル下の単語を移動するたびにハイライトする {{{
+" http://d.hatena.ne.jp/osyo-manga/20140121/1390309901
+augroup MyAutoGroup
+  autocmd CursorHold  * call s:hl_cword()
+  autocmd BufLeave    * call s:hl_clear()
+  autocmd WinLeave    * call s:hl_clear()
+  autocmd InsertEnter * call s:hl_clear()
+  autocmd CursorMoved * call s:hl_clear()
+
+  autocmd ColorScheme * highlight CursorWord guifg=Red
+
+  function! s:hl_clear()
+    if exists('b:highlight_cursor_word_id') && exists('b:highlight_cursor_word')
+      silent! call matchdelete(b:highlight_cursor_word_id)
+      unlet b:highlight_cursor_word_id
+      unlet b:highlight_cursor_word
+    endif
+  endfunction
+
+  function! s:hl_cword()
+    let word = expand('<cword>')
+    if word == ''
+      return
+    endif
+    if get(b:, 'highlight_cursor_word', '') ==# word
+      return
+    endif
+
+    call s:hl_clear()
+
+    if !empty(filter(split(word, '\zs'), 'strlen(v:val) > 1'))
+      return
+    endif
+
+    let pattern = printf('\<%s\>', expand('<cword>'))
+    silent! let b:highlight_cursor_word_id = matchadd('CursorWord', pattern)
+    let b:highlight_cursor_word = word
+  endfunction
+augroup END
+" }}}
 " カラースキーマ {{{
 set t_Co=256
 colorscheme molokai
@@ -2338,6 +2378,20 @@ highlight SpecialKey       guifg=#303030 guibg=#121212 gui=none
 
 " 日本語入力中のカーソルの色
 highlight CursorIM         guifg=NONE    guibg=Red
+
+" 全角スペースをハイライト {{{
+function! s:activate_invisible_indicator()
+  syntax match InvisibleJISX0208Space '　' display containedin=ALL
+  syntax match InvisibleTab           '\t' display containedin=ALL
+
+  highlight InvisibleJISX0208Space term=underline guibg=#112233
+  highlight InvisibleTab           term=underline guibg=#121212 ctermbg=Gray
+endf
+
+augroup MyAutoGroup
+  autocmd BufNew,BufRead * call s:activate_invisible_indicator()
+augroup END
+" }}}
 " }}}
 " 半透明化 {{{
 if s:is_mac
@@ -2409,62 +2463,6 @@ augroup MyAutoGroup
 
     setlocal cursorline
     let s:cursorline_lock = 1
-  endfunction
-augroup END
-" }}}
-" 全角スペースをハイライト {{{
-" http://fifnel.com/2009/04/07/2300/
-if has('syntax')
-  function! s:activate_invisible_indicator()
-    syntax match InvisibleJISX0208Space '　' display containedin=ALL
-    highlight InvisibleJISX0208Space term=underline guibg=#112233
-
-    syntax match InvisibleTab '\t' display containedin=ALL
-    highlight InvisibleTab term=underline ctermbg=Gray guibg=#121212
-  endf
-
-  augroup MyAutoGroup
-    autocmd BufNew,BufRead * call s:activate_invisible_indicator()
-  augroup END
-endif
-" }}}
-" カーソル下の単語を移動するたびにハイライトする {{{
-" http://d.hatena.ne.jp/osyo-manga/20140121/1390309901
-augroup MyAutoGroup
-  autocmd CursorHold  * call s:hl_cword()
-  autocmd BufLeave    * call s:hl_clear()
-  autocmd WinLeave    * call s:hl_clear()
-  autocmd InsertEnter * call s:hl_clear()
-  autocmd CursorMoved * call s:hl_clear()
-
-  autocmd ColorScheme * highlight CursorWord guifg=Red
-
-  function! s:hl_clear()
-    if exists('b:highlight_cursor_word_id') && exists('b:highlight_cursor_word')
-      silent! call matchdelete(b:highlight_cursor_word_id)
-      unlet b:highlight_cursor_word_id
-      unlet b:highlight_cursor_word
-    endif
-  endfunction
-
-  function! s:hl_cword()
-    let word = expand('<cword>')
-    if word == ''
-      return
-    endif
-    if get(b:, 'highlight_cursor_word', '') ==# word
-      return
-    endif
-
-    call s:hl_clear()
-
-    if !empty(filter(split(word, '\zs'), 'strlen(v:val) > 1'))
-      return
-    endif
-
-    let pattern = printf('\<%s\>', expand('<cword>'))
-    silent! let b:highlight_cursor_word_id = matchadd('CursorWord', pattern)
-    let b:highlight_cursor_word = word
   endfunction
 augroup END
 " }}}
