@@ -2,42 +2,23 @@ set nocompatible
 set encoding=utf-8
 scriptencoding utf-8
 " 基本 {{{
-" グローバル関数 {{{
-let s:vimrc_is_windows     = has('win32') || has('win64')
-let s:vimrc_is_mac         = has('mac')
-let s:vimrc_is_gui_running = has('gui_running')
+let s:is_windows     = has('win32') || has('win64')
+let s:is_mac         = has('mac')
+let s:is_gui_running = has('gui_running')
+let s:is_starting    = has('vim_starting')
 
-function! IsWindows()
-  return s:vimrc_is_windows
-endfunction
-
-function! IsMac()
-  return s:vimrc_is_mac
-endfunction
-
-function! IsGuiRunning()
-  return s:vimrc_is_gui_running
-endfunction
-" }}}
-
-if has('vim_starting')
+if s:is_starting
   let s:git_dot_vimrc  = expand('~/dotfiles/.vimrc')
-  let s:git_dot_gvimrc = expand('~/dotfiles/.gvimrc')
 
   if filereadable(s:git_dot_vimrc)
     let $MYVIMRC = s:git_dot_vimrc
   endif
 
-  if filereadable(s:git_dot_gvimrc)
-    let $MYGVIMRC = s:git_dot_gvimrc
-  endif
-
   unlet s:git_dot_vimrc
-  unlet s:git_dot_gvimrc
 endif
 
 let g:mapleader    = ','
-let s:base_columns = IsWindows() ? 140 : 120
+let s:base_columns = s:is_windows ? 140 : 120
 let s:vimrc_local  = expand('~/.vimrc_local')
 let $DOTVIM        = expand('~/.vim')
 set viminfo+=!
@@ -56,12 +37,12 @@ if has('iconv')
 endif
 
 " WinではPATHに$VIMが含まれていないときにexeを見つけ出せないので修正
-if IsWindows() && $PATH !~? '\(^\|;\)' . escape($VIM, '\\') . '\(;\|$\)'
+if s:is_windows && $PATH !~? '\(^\|;\)' . escape($VIM, '\\') . '\(;\|$\)'
   let $PATH = $VIM . ';' . $PATH
 endif
 
 " Macではデフォルトの'iskeyword'がcp932に対応しきれていないので修正
-if IsMac()
+if s:is_mac
   set iskeyword=@,48-57,_,128-167,224-235
   let $PATH = simplify($VIM . '/../../MacOS') . ':' . $PATH
 endif
@@ -73,12 +54,30 @@ if filereadable($VIM . '/vimrc') && filereadable($VIM . '/ViMrC')
   set tags=./tags,tags
 endif
 
-" メニューを読み込まない
-set guioptions+=M
-let g:did_install_default_menus = 1
-
 nnoremap [App] <Nop>
 nmap     ;     [App]
+
+" guioptions {{{
+" メニューを読み込まない
+let g:did_install_default_menus = 1
+
+set guioptions+=M
+
+" ツールバー削除
+set guioptions-=T
+
+" メニューバー削除
+set guioptions-=m
+
+" スクロールバー削除
+set guioptions-=r
+set guioptions-=l
+set guioptions-=R
+set guioptions-=L
+
+" テキストベースタブ
+set guioptions-=e
+" }}}
 " }}}
 " プラグイン {{{
 function! s:set_neobundle() " {{{
@@ -108,7 +107,7 @@ function! s:set_neobundle() " {{{
   NeoBundle     'vim-scripts/matchparenpp'
   NeoBundleLazy 'YoshihiroIto/tagbar'
   NeoBundleLazy 'LeafCage/foldCC'
-  if IsGuiRunning()
+  if s:is_gui_running
     NeoBundleLazy 'movewin.vim'
     NeoBundleLazy 'YoshihiroIto/vim-resize-win'
   endif
@@ -188,10 +187,10 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'Shougo/vimfiler.vim'
   NeoBundleLazy 'basyura/TweetVim'
   NeoBundleLazy 'glidenote/memolist.vim'
-  if IsMac()
+  if s:is_mac
     NeoBundleLazy 'itchyny/dictionary.vim'
   endif
-  if IsWindows() && IsGuiRunning()
+  if s:is_windows && s:is_gui_running
     NeoBundle 'YoshihiroIto/vim-icondrag'
   endif
 
@@ -202,14 +201,13 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'osyo-manga/unite-quickfix'
   NeoBundleLazy 'osyo-manga/unite-fold'
   NeoBundleLazy 'YoshihiroIto/vim-unite-giti'
-  if IsWindows()
+  if s:is_windows
     NeoBundleLazy 'sgur/unite-everything'
   endif
 endfunction " }}}
 
-if has('vim_starting')
+if s:is_starting
   let g:neobundle#install_max_processes = 8
-
   set rtp+=$DOTVIM/bundle/neobundle.vim/
 endif
 
@@ -304,7 +302,7 @@ if neobundle#tap('open-browser.vim')
         \   }
         \ })
 
-  let g:netrw_nogx                   = 1 " disable netrw's gx mapping.
+  let g:netrw_nogx                   = 1
   let g:openbrowser_no_default_menus = 1
 
   nmap gx <Plug>(openbrowser-smart-search)
@@ -320,7 +318,7 @@ call submode#map(       'gitgutter', 'n', 'r', 'j',         '<Plug>GitGutterNext
 call submode#map(       'gitgutter', 'n', 'r', 'k',         '<Plug>GitGutterPrevHunkzvzz')
 " }}}
 " dictionary.vim {{{
-if IsMac()
+if s:is_mac
   if neobundle#tap('dictionary.vim')
     call neobundle#config({
           \   'autoload': {
@@ -1005,10 +1003,10 @@ if neobundle#tap('clang_complete')
     let g:clang_complete_auto = 0
     let g:clang_auto_select   = 0
 
-    if IsWindows()
+    if s:is_windows
       let g:clang_user_options = '-I C:/Development/boost_1_55_0 -I "C:/Program Files (x86)/Microsoft Visual Studio 11.0/VC/include" -std=c++11 -fms-extensions -fmsc-version=1300 -fgnu-runtime -D__MSVCRT_VERSION__=0x700 -D_WIN32_WINNT=0x0500 2> NUL || exit 0"'
       let g:clang_library_path = 'C:/Development/llvm/build/bin/Release/'
-    elseif IsMac()
+    elseif s:is_mac
       let g:clang_user_options = '-std=c++11'
     endif
   endfunction
@@ -1025,7 +1023,7 @@ if neobundle#tap('vim-clang-format')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    if IsWindows()
+    if s:is_windows
       let g:clang_format#command = 'C:/Development/llvm/build/bin/Release/clang-format'
     else
       let g:clang_format#command = 'clang-format-3.4'
@@ -1146,7 +1144,7 @@ if neobundle#tap('cpp-vim')
 endif
 " }}}
 " vim-gocode {{{
-if IsWindows()
+if s:is_windows
   let g:gocomplete#system_function = 'vimproc#system'
 endif
 
@@ -1723,7 +1721,7 @@ if neobundle#tap('unite.vim')
   nnoremap <silent> [Unite]v  :<C-u>call <SID>execute_if_on_git_branch('Unite giti')<CR>
   nnoremap <silent> [Unite]b  :<C-u>call <SID>execute_if_on_git_branch('Unite giti/branch_all')<CR>
 
-  if IsWindows()
+  if s:is_windows
     nnoremap <silent> [Unite]m  :<C-u>Unite -no-split neomru/file everything<CR>
   else
     nnoremap <silent> [Unite]m  :<C-u>Unite -no-split neomru/file<CR>
@@ -1861,7 +1859,7 @@ if neobundle#tap('vim-unite-giti')
 endif
 " }}}
 " unite-everything {{{
-if IsWindows()
+if s:is_windows
   if neobundle#tap('unite-everything')
     call neobundle#config({
           \   'depends':  ['unite.vim'],
@@ -1977,7 +1975,7 @@ augroup MyAutoGroup
     nmap <silent><buffer> <C-]>              :<C-u>call GodefUnderCursor()<CR>zz:<C-u>call <SID>refresh_screen()<CR>
 
     " " todo:Windowsだと重い
-    " if !IsWindows()
+    " if !s:is_windows
     "   augroup MyAutoGroup
     "     autocmd BufWritePost <buffer> call s:golang_format(1)
     "   augroup END
@@ -2117,6 +2115,14 @@ set backspace=indent,eol,start
 set noswapfile
 set nobackup
 set cryptmethod=blowfish
+set noimdisable
+
+" MacVim-KaoriYa 自動IM on禁止
+if s:is_mac
+  set imdisableactivate
+endif
+
+nnoremap <silent> <F1> :<C-u>edit $MYVIMRC<CR>
 
 noremap U J
 
@@ -2259,9 +2265,9 @@ endif
 if has('migemo')
   set migemo
 
-  if IsWindows()
+  if s:is_windows
     set migemodict=$VIM/dict/utf-8/migemo-dict
-  elseif IsMac()
+  elseif s:is_mac
     set migemodict=$VIMRUNTIME/dict/migemo-dict
   endif
 endif
@@ -2309,7 +2315,55 @@ set showtabline=2
 set diffopt=vertical,filler
 set noequalalways
 set cursorline
+set t_vb=
+set visualbell
+set errorbells
 
+" カラースキーマ {{{
+set t_Co=256
+colorscheme molokai
+
+highlight Comment          guifg=#AEDEDE
+highlight DiffText                       guibg=#4C4745 gui=bold
+highlight Macro            guifg=#C4BE89               gui=none
+highlight Special          guifg=#66D9EF guibg=bg      gui=none
+highlight StorageClass     guifg=#FD971F               gui=none
+highlight Tag              guifg=#F92672               gui=none
+highlight FoldColumn       guifg=#465457 guibg=#242526
+highlight Folded           guifg=#465457 guibg=#242526
+highlight VertSplit        guifg=#202020 guibg=#202020 gui=bold    " 見えなくする
+
+" タブ表示など
+highlight SpecialKey       guifg=#303030 guibg=#121212 gui=none
+
+" 日本語入力中のカーソルの色
+highlight CursorIM         guifg=NONE    guibg=Red
+" }}}
+" 半透明化 {{{
+if s:is_mac
+  augroup MyAutoGroup
+    autocmd GuiEnter,FocusGained * set transparency=3   " アクティブ時の透過率
+    autocmd FocusLost            * set transparency=48  " 非アクティブ時の透過率
+  augroup END
+endif
+" }}}
+" フォント設定 {{{
+if s:is_gui_running
+  if s:is_windows
+    set guifont=Ricty\ Regular\ for\ Powerline:h11
+  elseif s:is_mac
+    set guifont=Ricty\ Regular\ for\ Powerline:h12
+    set antialias
+  endif
+endif
+
+if s:is_windows
+  " 一部のUCS文字の幅を自動計測して決める
+  set ambiwidth=auto
+elseif s:is_mac
+  set ambiwidth=double
+endif
+" }}}
 " 'cursorline' を必要な時にだけ有効にする {{{
 " http://d.hatena.ne.jp/thinca/20090530/1243615055
 augroup MyAutoGroup
@@ -2536,7 +2590,7 @@ nmap     <Leader>w [Window]
 noremap <silent> [Window]x :<C-u>close<CR>
 
 " アプリウィンドウ操作
-if IsGuiRunning()
+if s:is_gui_running
   noremap <silent> [Window]e :<C-u>call <SID>toggle_v_split_wide()<CR>
 
   noremap <silent> [Window]H :<C-u>ResizeWin<CR>
@@ -2549,6 +2603,30 @@ if IsGuiRunning()
   noremap <silent> [Window]l :<C-u>MoveWin<CR>
   noremap <silent> [Window]f :<C-u>call <SID>full_window()<CR>
 endif
+
+" ウィンドウの位置とサイズを記憶する {{{
+if s:is_gui_running
+  " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
+  let s:save_window_file = expand('~/.vimwinpos')
+
+  augroup MyAutoGroup
+    autocmd VimLeavePre * call s:save_window()
+
+    function! s:save_window()
+      let options = [
+            \ 'set columns=' . &columns,
+            \ 'set lines=' . &lines,
+            \ 'winpos ' . getwinposx() . ' ' . getwinposy(),
+            \ ]
+      call writefile(options, s:save_window_file)
+    endfunction
+  augroup END
+
+  if filereadable(s:save_window_file)
+    exe 'source' s:save_window_file
+  endif
+endif
+" }}}
 " }}}
 " タブ操作 {{{
 nnoremap [Tab]     <Nop>
@@ -2569,12 +2647,6 @@ nnoremap [Buffer]  <Nop>
 nmap     <Leader>b [Buffer]
 
 nnoremap <silent> <Leader>x :<C-u>call <SID>delete_current_buffer()<CR>
-" }}}
-" ファイル操作 {{{
-" vimrc / gvimrc の編集
-nnoremap <silent> <F1> :<C-u>edit $MYVIMRC<CR>
-nnoremap <silent> <F2> :<C-u>edit $MYGVIMRC<CR>
-nnoremap <silent> <F3> :<C-u>source $MYVIMRC<CR>:<C-u>source $MYGVIMRC<CR>
 " }}}
 " Git {{{
 nnoremap [Git]     <Nop>
@@ -2790,11 +2862,6 @@ function! s:filter_current(cmd, is_silent)
   endtry
 endfunction
 " }}}
-" }}}
-" コンソール用 {{{
-if !IsGuiRunning()
-  source $MYGVIMRC
-endif
 " }}}
 " メモ {{{
 " +--------+--------+--------+--------+--------+--------+--------+
