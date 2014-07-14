@@ -2317,7 +2317,7 @@ set noequalalways
 set cursorline
 
 augroup MyAutoGroup
-  autocmd GUIEnter * call s:disable_beep()
+  autocmd VimEnter * call s:disable_beep()
 
   function! s:disable_beep()
     set t_vb=
