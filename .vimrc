@@ -8,7 +8,7 @@ let s:is_gui_running = has('gui_running')
 let s:is_starting    = has('vim_starting')
 
 if s:is_starting
-  let s:git_dot_vimrc  = expand('~/dotfiles/.vimrc')
+  let s:git_dot_vimrc = expand('~/dotfiles/.vimrc')
 
   if filereadable(s:git_dot_vimrc)
     let $MYVIMRC = s:git_dot_vimrc
@@ -22,6 +22,9 @@ let s:base_columns = s:is_windows ? 140 : 120
 let s:vimrc_local  = expand('~/.vimrc_local')
 let $DOTVIM        = expand('~/.vim')
 set viminfo+=!
+
+" メニューを読み込まない
+let g:did_install_default_menus = 1
 
 augroup MyAutoGroup
   autocmd!
@@ -58,9 +61,6 @@ nnoremap [App] <Nop>
 nmap     ;     [App]
 
 " guioptions {{{
-" メニューを読み込まない
-let g:did_install_default_menus = 1
-
 set guioptions+=M
 
 " ツールバー削除
@@ -2315,9 +2315,16 @@ set showtabline=2
 set diffopt=vertical,filler
 set noequalalways
 set cursorline
-set t_vb=
-set visualbell
-set errorbells
+
+augroup MyAutoGroup
+  autocmd GUIEnter * call s:disable_beep()
+
+  function! s:disable_beep()
+    set t_vb=
+    set visualbell
+    set errorbells
+  endfunction
+augroup END
 
 " カーソル下の単語を移動するたびにハイライトする {{{
 " http://d.hatena.ne.jp/osyo-manga/20140121/1390309901
