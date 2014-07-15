@@ -2512,8 +2512,8 @@ vnoremap <silent> k     gk
 vnoremap <silent> j     gj
 nnoremap <silent> 0     g0
 nnoremap <silent> g0    0
-nnoremap <silent> $     g$
-nnoremap <silent> g$    $
+nnoremap <silent> $     :<C-u>call <SID>disable_virtual_cursor()<CR>g$
+nnoremap <silent> g$    :<C-u>call <SID>disable_virtual_cursor()<CR>$
 nnoremap <silent> <C-e> <C-e>j
 nnoremap <silent> <C-y> <C-y>k
 vnoremap <silent> <C-e> <C-e>j
