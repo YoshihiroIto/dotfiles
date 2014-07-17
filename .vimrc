@@ -187,6 +187,7 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'Shougo/vimshell.vim'
   NeoBundleLazy 'Shougo/vimfiler.vim'
   NeoBundleLazy 'basyura/TweetVim'
+  " NeoBundleLazy 'basyura/J6uil.vim'
   NeoBundleLazy 'glidenote/memolist.vim'
   if s:is_mac
     NeoBundleLazy 'itchyny/dictionary.vim'
@@ -488,10 +489,11 @@ function! LightlineMode()
         \ &ft ==  'tweetvim' ? 'TweetVim' :
         \ &ft ==  'quickrun' ? 'quickrun' :
         \ &ft =~? 'lingr'    ? 'lingr'    :
+        \ &ft =~? 'J6uil'    ? 'J6uil'    :
         \ winwidth(0) > 60 ? lightline#mode() : ''
 endfunction
 
-let s:lighline_no_disp_ft = 'vimfiler\|unite\|vimshell\|tweetvim\|quickrun\|lingr'
+let s:lighline_no_disp_ft = 'vimfiler\|unite\|vimshell\|tweetvim\|quickrun\|lingr\|J6uil'
 
 function! LightlineModified()
   return &ft =~ s:lighline_no_disp_ft ? '' : &modified ? '+' : &modifiable ? '' : '-'
@@ -508,6 +510,7 @@ function! LightlineFilename()
         \  &ft ==  'vimshell'  ? vimshell#get_status_string() :
         \  &ft =~? 'lingr'     ? lingr#status() :
         \  &ft ==  'tweetvim'  ? '' :
+        \  &ft ==  'J6uil'     ? '' :
         \  &ft ==  'quickrun'  ? '' :
         \ ''  != expand('%:t') ? expand('%:t') : '[No Name]') .
         \ ('' != LightlineModified()  ? ' ' . LightlineModified() : '')
@@ -864,10 +867,15 @@ if neobundle#tap('Omnisharp')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    let g:omnicomplete_fetch_full_documentation = 0
+    let g:omnicomplete_fetch_full_documentation = 1
 
     let g:Omnisharp_stop_server         = 0
-    let g:OmniSharp_typeLookupInPreview = 1
+    let g:OmniSharp_typeLookupInPreview = 0
+
+    augroup MyAutoGroup
+      autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
+      " autocmd CursorHold *.cs call OmniSharp#TypeLookupWithDocumentation()
+    augroup END
   endfunction
 
   call neobundle#untap()
@@ -1510,8 +1518,7 @@ if neobundle#tap('lingr-vim')
       autocmd FileType lingr-messages call s:set_lingr()
 
       function! s:set_lingr()
-        noremap  <silent><buffer> <Leader>w :<C-u>call <SID>toggle_lingr()<CR>
-        nnoremap <silent><buffer> q         :<C-u>call <SID>toggle_lingr()<CR>
+        nnoremap <silent><buffer> q :<C-u>call <SID>toggle_lingr()<CR>
 
         setlocal nolist
       endfunction
@@ -1676,6 +1683,41 @@ if neobundle#tap('TweetVim')
   call neobundle#untap()
 endif
 " }}}
+" " J6uil.vim {{{
+" if neobundle#tap('J6uil.vim')
+"   call neobundle#config({
+"         \   'autoload': {
+"         \     'commands': ['J6uil']
+"         \   }
+"         \ })
+"
+"   noremap <silent> [App]1 :<C-u>call <SID>toggle_j6uil()<CR>
+"
+"   function! neobundle#hooks.on_source(bundle)
+"     let g:J6uil_display_separator = 0
+"     " let g:J6uil_display_icon      = 1
+"
+"     augroup MyAutoGroup
+"       autocmd FileType J6uil call s:set_j6uil()
+"
+"       function! s:set_j6uil()
+"         nnoremap <silent><buffer> q :<C-u>call <SID>toggle_j6uil()<CR>
+"       endfunction
+"     augroup END
+"   endfunction
+"
+"   function! s:toggle_j6uil()
+"     if bufnr('j6uil') == -1
+"       tabnew
+"       J6uil
+"     else
+"       silent! execute 'bwipeout j6uil'
+"     endif
+"   endfunction
+"   
+"   call neobundle#untap()
+" endif
+" " }}}
 " memolist {{{
 if neobundle#tap('memolist.vim')
   call neobundle#config({
@@ -2164,7 +2206,6 @@ command! RemoveEolSpace call s:execute_keep_view('silent! %substitute/ \+$//g | 
 
 " 整形
 command! Format call s:smart_format()
-map <silent> [App]c :<C-u>Format<CR>
 
 " http://lsifrontend.hatenablog.com/entry/2013/10/11/052640
 nmap     <silent> <C-CR> yy:<C-u>TComment<CR>p
@@ -2336,7 +2377,8 @@ set synmaxcol=500                 " ハイライトする文字数を制限す�
 set updatetime=500
 set previewheight=24
 set laststatus=0
-set cmdheight=1
+" set cmdheight=1
+set cmdheight=4
 set laststatus=2
 set showtabline=2
 set diffopt=vertical,filler
@@ -2515,7 +2557,7 @@ nnoremap <expr> zO foldclosed(line('.')) != -1 ? 'zO' : ''
 " }}}
 " 補完 {{{
 " http://sgur.tumblr.com/post/91906146884/codic-vim
-inoremap <silent> <C-w>  <C-R>=<SID>codic_complete()<CR>
+inoremap <silent> <C-w> <C-R>=<SID>codic_complete()<CR>
 
 function! s:codic_complete()
   let line = getline('.')
