@@ -698,12 +698,24 @@ if neobundle#tap('vim-over')
         \   }
         \ })
 
-  noremap <silent> <Leader>s :<C-u>OverCommandLine<CR>
+  noremap <silent> <Leader>s :OverCommandLine<CR>
 
   function! neobundle#hooks.on_source(bundle)
     let g:over_command_line_key_mappings = {
           \   "\<C-j>" : "\<Esc>",
           \ }
+  endfunction
+
+  augroup InitializeOver
+    autocmd FocusLost,CursorHold,CursorHoldI * call s:initialize_over()
+  augroup END
+
+  function! s:initialize_over()
+    call over#load()
+
+    augroup InitializeOver
+      autocmd!
+    augroup END
   endfunction
 
   call neobundle#untap()
@@ -2435,7 +2447,7 @@ augroup MyAutoGroup
 augroup END
 " }}}
 " カラースキーマ {{{
-set t_Co=256
+" set t_Co=256
 colorscheme molokai
 
 highlight Comment          guifg=#AEDEDE
@@ -2630,6 +2642,9 @@ noremap  <silent> <C-i> <C-i>zz:<C-u>call <SID>refresh_screen()<CR>
 noremap  <silent> <C-o> <C-o>zz:<C-u>call <SID>refresh_screen()<CR>
 map      <silent> <C-h> :<C-u>call <SID>disable_virtual_cursor()<CR>^:<C-u>call  <SID>refresh_screen()<CR>
 map      <silent> <C-l> :<C-u>call <SID>disable_virtual_cursor()<CR>g$:<C-u>call <SID>refresh_screen()<CR>
+
+nmap     <silent> <Tab> %
+vmap     <silent> <Tab> %
 
 nmap     <silent> <Leader>m `
 
