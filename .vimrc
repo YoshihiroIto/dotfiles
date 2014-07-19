@@ -187,7 +187,6 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'Shougo/vimshell.vim'
   NeoBundleLazy 'Shougo/vimfiler.vim'
   NeoBundleLazy 'basyura/TweetVim'
-  " NeoBundleLazy 'basyura/J6uil.vim'
   NeoBundleLazy 'glidenote/memolist.vim'
   if s:is_mac
     NeoBundleLazy 'itchyny/dictionary.vim'
@@ -489,11 +488,10 @@ function! LightlineMode()
         \ &ft ==  'tweetvim' ? 'TweetVim' :
         \ &ft ==  'quickrun' ? 'quickrun' :
         \ &ft =~? 'lingr'    ? 'lingr'    :
-        \ &ft =~? 'J6uil'    ? 'J6uil'    :
         \ winwidth(0) > 60 ? lightline#mode() : ''
 endfunction
 
-let s:lighline_no_disp_ft = 'vimfiler\|unite\|vimshell\|tweetvim\|quickrun\|lingr\|J6uil'
+let s:lighline_no_disp_ft = 'vimfiler\|unite\|vimshell\|tweetvim\|quickrun\|lingr'
 
 function! LightlineModified()
   return &ft =~ s:lighline_no_disp_ft ? '' : &modified ? '+' : &modifiable ? '' : '-'
@@ -510,7 +508,6 @@ function! LightlineFilename()
         \  &ft ==  'vimshell'  ? vimshell#get_status_string() :
         \  &ft =~? 'lingr'     ? lingr#status() :
         \  &ft ==  'tweetvim'  ? '' :
-        \  &ft ==  'J6uil'     ? '' :
         \  &ft ==  'quickrun'  ? '' :
         \ ''  != expand('%:t') ? expand('%:t') : '[No Name]') .
         \ ('' != LightlineModified()  ? ' ' . LightlineModified() : '')
@@ -707,6 +704,7 @@ if neobundle#tap('vim-over')
   endfunction
 
   augroup InitializeOver
+    autocmd!
     autocmd FocusLost,CursorHold,CursorHoldI * call s:initialize_over()
   augroup END
 
@@ -901,6 +899,20 @@ if neobundle#tap('codic-vim')
         \     'function_prefix': 'codic'
         \   }
         \ })
+
+  augroup InitializeCodic
+    autocmd!
+    autocmd FocusLost * call s:initialize_codic()
+  augroup END
+
+  function! s:initialize_codic()
+    call codic#search('a',  1)
+    call codic#search('あ', 1)
+
+    augroup InitializeCodic
+      autocmd!
+    augroup END
+  endfunction
 
   call neobundle#untap()
 endif
@@ -1695,41 +1707,6 @@ if neobundle#tap('TweetVim')
   call neobundle#untap()
 endif
 " }}}
-" " J6uil.vim {{{
-" if neobundle#tap('J6uil.vim')
-"   call neobundle#config({
-"         \   'autoload': {
-"         \     'commands': ['J6uil']
-"         \   }
-"         \ })
-"
-"   noremap <silent> [App]1 :<C-u>call <SID>toggle_j6uil()<CR>
-"
-"   function! neobundle#hooks.on_source(bundle)
-"     let g:J6uil_display_separator = 0
-"     " let g:J6uil_display_icon      = 1
-"
-"     augroup MyAutoGroup
-"       autocmd FileType J6uil call s:set_j6uil()
-"
-"       function! s:set_j6uil()
-"         nnoremap <silent><buffer> q :<C-u>call <SID>toggle_j6uil()<CR>
-"       endfunction
-"     augroup END
-"   endfunction
-"
-"   function! s:toggle_j6uil()
-"     if bufnr('j6uil') == -1
-"       tabnew
-"       J6uil
-"     else
-"       silent! execute 'bwipeout j6uil'
-"     endif
-"   endfunction
-"   
-"   call neobundle#untap()
-" endif
-" " }}}
 " memolist {{{
 if neobundle#tap('memolist.vim')
   call neobundle#config({
