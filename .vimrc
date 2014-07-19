@@ -905,13 +905,23 @@ if neobundle#tap('codic-vim')
     autocmd FocusLost * call s:initialize_codic()
   augroup END
 
-  function! s:initialize_codic()
-    call codic#search('a',  1)
-    call codic#search('あ', 1)
+  let s:codic_init_state = 0
 
-    augroup InitializeCodic
-      autocmd!
-    augroup END
+  function! s:initialize_codic()
+    if s:codic_init_state == 0
+      call codic#search('a',  1)
+
+      let s:codic_init_state = 1
+
+    elseif s:codic_init_state == 1
+      call codic#search('あ', 1)
+
+      unlet s:codic_init_state
+
+      augroup InitializeCodic
+        autocmd!
+      augroup END
+    endif
   endfunction
 
   call neobundle#untap()
@@ -2584,9 +2594,6 @@ endfunction
 inoremap <C-j> <Esc>
 nnoremap <C-j> <Esc>
 vnoremap <C-j> <Esc>
-inoremap <Esc> <Nop>
-cnoremap <Esc> <Nop>
-vnoremap <Esc> <Nop>
 " }}}
 " コマンドラインモード {{{
 cnoremap <C-a> <Home>
@@ -2606,8 +2613,8 @@ vnoremap <silent> k     gk
 vnoremap <silent> j     gj
 nnoremap <silent> 0     g0
 nnoremap <silent> g0    0
-nnoremap <silent> $     :<C-u>call <SID>disable_virtual_cursor()<CR>g$
-nnoremap <silent> g$    :<C-u>call <SID>disable_virtual_cursor()<CR>$
+nnoremap <silent> $     g$
+nnoremap <silent> g$    $
 nnoremap <silent> <C-e> <C-e>j
 nnoremap <silent> <C-y> <C-y>k
 vnoremap <silent> <C-e> <C-e>j
@@ -2617,8 +2624,8 @@ nmap     <silent> G     Gzvzz:<C-u>call  <SID>refresh_screen()<CR>
 
 noremap  <silent> <C-i> <C-i>zz:<C-u>call <SID>refresh_screen()<CR>
 noremap  <silent> <C-o> <C-o>zz:<C-u>call <SID>refresh_screen()<CR>
-map      <silent> <C-h> :<C-u>call <SID>disable_virtual_cursor()<CR>^:<C-u>call  <SID>refresh_screen()<CR>
-map      <silent> <C-l> :<C-u>call <SID>disable_virtual_cursor()<CR>g$:<C-u>call <SID>refresh_screen()<CR>
+map      <silent> <C-h> ^
+map      <silent> <C-l> g$
 
 nmap     <silent> <Tab> %
 vmap     <silent> <Tab> %
