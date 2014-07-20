@@ -26,7 +26,7 @@ set viminfo+=!
 " メニューを読み込まない
 let g:did_install_default_menus = 1
 
-augroup MyAutoGroup
+augroup MyAutoCmd
   autocmd!
 augroup END
 
@@ -554,7 +554,7 @@ function! LightlineFileencoding()
   return winwidth(0) > 70 ? (strlen(&fenc) ? &fenc : &enc) : ''
 endfunction
 
-augroup MyAutoGroup
+augroup MyAutoCmd
   autocmd CursorHold,CursorHoldI * call lightline#update()
 augroup END
 
@@ -593,7 +593,7 @@ let g:indentLine_indentLevel = 20
 let g:indentLine_char        = '⭟'
 let g:indentLine_color_gui   = '#505050'
 
-augroup MyAutoGroup
+augroup MyAutoCmd
   autocmd BufReadPost * IndentLinesEnable
 augroup END
 " }}}
@@ -882,7 +882,7 @@ if neobundle#tap('Omnisharp')
     let g:Omnisharp_stop_server         = 0
     let g:OmniSharp_typeLookupInPreview = 0
 
-    augroup MyAutoGroup
+    augroup MyAutoCmd
       autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
       " autocmd CursorHold *.cs call OmniSharp#TypeLookupWithDocumentation()
     augroup END
@@ -959,7 +959,7 @@ nmap <silent> N <Plug>(anzu-N)zvzz:<C-u>call <SID>begin_display_anzu()<CR>:<C-u>
 nmap <silent> * <Plug>(anzu-star):<C-u>call  <SID>refresh_screen()<CR>
 nmap <silent> # <Plug>(anzu-sharp):<C-u>call <SID>refresh_screen()<CR>
 
-augroup MyAutoGroup
+augroup MyAutoCmd
   " 一定時間キー入力がないとき、ウインドウを移動したとき、タブを移動したときに
   " 検索ヒット数の表示を消去する
   autocmd CursorHold,CursorHoldI * call s:update_display_anzu()
@@ -1038,7 +1038,7 @@ if neobundle#tap('syntastic')
   function! neobundle#hooks.on_source(bundle)
     let g:syntastic_cs_checkers = ['syntax', 'issues']
 
-    augroup MyAutoGroup
+    augroup MyAutoCmd
       autocmd BufWritePost *.{cs,go,rb} call lightline#update()
     augroup END
   endfunction
@@ -1546,7 +1546,7 @@ if neobundle#tap('lingr-vim')
   function! neobundle#hooks.on_source(bundle)
     let g:lingr_vim_say_buffer_height = 15
 
-    augroup MyAutoGroup
+    augroup MyAutoCmd
       autocmd FileType lingr-rooms    call s:set_lingr()
       autocmd FileType lingr-members  call s:set_lingr()
       autocmd FileType lingr-messages call s:set_lingr()
@@ -1582,7 +1582,7 @@ if neobundle#tap('vim-fugitive')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    augroup MyAutoGroup
+    augroup MyAutoCmd
       autocmd FocusGained,FocusLost * call s:update_fugitive()
     augroup END
   endfunction
@@ -1613,7 +1613,7 @@ if neobundle#tap('vim-gitgutter')
     let g:gitgutter_eager     = 0
     let g:gitgutter_diff_args = '-w'
 
-    augroup MyAutoGroup
+    augroup MyAutoCmd
       autocmd FocusGained,FocusLost * GitGutter
     augroup END
   endfunction
@@ -1651,7 +1651,7 @@ if neobundle#tap('vimfiler.vim')
   noremap <silent> [App]f :<C-u>VimFilerBufferDir<CR>
 
   function! neobundle#hooks.on_source(bundle)
-    augroup MyAutoGroup
+    augroup MyAutoCmd
       autocmd FileType vimfiler call s:set_vimfiler()
 
       " http://qiita.com/Linda_pp/items/f1cb09ac94202abfba0e
@@ -1695,7 +1695,7 @@ if neobundle#tap('TweetVim')
     let g:tweetvim_tweet_per_page    = 30
     let g:tweetvim_display_icon      = 1
 
-    augroup MyAutoGroup
+    augroup MyAutoCmd
       autocmd FileType tweetvim call s:set_tweetvim()
 
       function! s:set_tweetvim()
@@ -1906,7 +1906,7 @@ if neobundle#tap('vim-unite-giti')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    augroup MyAutoGroup
+    augroup MyAutoCmd
       autocmd User UniteGitiGitExecuted call s:update_fugitive()
     augroup END
   endfunction
@@ -1956,7 +1956,7 @@ endif
 " }}}
 " }}}
 " ファイルタイプごとの設定 {{{
-augroup MyAutoGroup
+augroup MyAutoCmd
   autocmd BufEnter,WinEnter,BufWinEnter,BufWritePost *                   call s:update_all()
   autocmd BufReadPost                                *                   call s:clean_empty_buffers()
   autocmd BufNewFile,BufRead                         *.xaml              setlocal ft=xml
@@ -2044,7 +2044,7 @@ augroup MyAutoGroup
 
     " " todo:Windowsだと重い
     " if !s:is_windows
-    "   augroup MyAutoGroup
+    "   augroup MyAutoCmd
     "     autocmd BufWritePost <buffer> call s:golang_format(1)
     "   augroup END
     " endif
@@ -2291,7 +2291,7 @@ command! -range=% XmlFormat <line1>,<line2>call s:xml_format()
 
 " 自動的にディレクトリを作成する
 " http://vim-jp.org/vim-users-jp/2011/02/20/Hack-202.html
-augroup MyAutoGroup
+augroup MyAutoCmd
   autocmd BufWritePre * call s:auto_mkdir(expand('<afile>:p:h'), v:cmdbang)
   function! s:auto_mkdir(dir, force)
     if !isdirectory(a:dir) && (a:force ||
@@ -2384,7 +2384,7 @@ set diffopt=vertical,filler
 set noequalalways
 set cursorline
 
-augroup MyAutoGroup
+augroup MyAutoCmd
   autocmd VimEnter * call s:disable_beep()
 
   function! s:disable_beep()
@@ -2396,7 +2396,7 @@ augroup END
 
 " カーソル下の単語を移動するたびにハイライトする {{{
 " http://d.hatena.ne.jp/osyo-manga/20140121/1390309901
-augroup MyAutoGroup
+augroup MyAutoCmd
   autocmd CursorHold  * call s:hl_cword()
   autocmd BufLeave    * call s:hl_clear()
   autocmd WinLeave    * call s:hl_clear()
@@ -2462,14 +2462,14 @@ function! s:activate_invisible_indicator()
   highlight InvisibleTab           term=underline guibg=#121212 ctermbg=Gray
 endf
 
-augroup MyAutoGroup
+augroup MyAutoCmd
   autocmd BufNew,BufRead * call s:activate_invisible_indicator()
 augroup END
 " }}}
 " }}}
 " 半透明化 {{{
 if s:is_mac
-  augroup MyAutoGroup
+  augroup MyAutoCmd
     autocmd GuiEnter,FocusGained * set transparency=3   " アクティブ時の透過率
     autocmd FocusLost            * set transparency=48  " 非アクティブ時の透過率
   augroup END
@@ -2494,7 +2494,7 @@ endif
 " }}}
 " 'cursorline' を必要な時にだけ有効にする {{{
 " http://d.hatena.ne.jp/thinca/20090530/1243615055
-augroup MyAutoGroup
+augroup MyAutoCmd
   autocmd CursorMoved,CursorMovedI * call s:auto_cursorline('CursorMoved')
   autocmd CursorHold,CursorHoldI   * call s:auto_cursorline('CursorHold')
   autocmd WinEnter                 * call s:auto_cursorline('WinEnter')
@@ -2684,7 +2684,7 @@ function! s:disable_virtual_cursor()
   set virtualedit=block
 endfunction
 
-augroup MyAutoGroup
+augroup MyAutoCmd
   autocmd InsertEnter * call s:disable_virtual_cursor()
 augroup END
 " }}}
@@ -2717,7 +2717,7 @@ if s:is_gui_running
   " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
   let s:save_window_file = expand('~/.vimwinpos')
 
-  augroup MyAutoGroup
+  augroup MyAutoCmd
     autocmd VimLeavePre * call s:save_window()
 
     function! s:save_window()
