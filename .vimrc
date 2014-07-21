@@ -4,6 +4,8 @@ scriptencoding utf-8
 " 基本 {{{
 let s:is_windows     = has('win32') || has('win64')
 let s:is_mac         = has('mac')
+let s:is_unix        = has('unix')
+let s:is_linux       = s:is_unix && !s:is_windows && !s:is_mac
 let s:is_gui_running = has('gui_running')
 let s:is_starting    = has('vim_starting')
 
@@ -91,6 +93,9 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'mattn/webapi-vim'
   NeoBundleLazy 'tyru/open-browser.vim'
   NeoBundle     'kana/vim-submode'
+  if s:is_linux
+    NeoBundle     'vim-jp/vimdoc-ja'
+  endif
 
   " 表示
   NeoBundle     'tomasr/molokai'
@@ -215,7 +220,7 @@ endif
 
 call neobundle#begin(expand('$DOTVIM/bundle/'))
 
-if neobundle#has_cache()
+if neobundle#has_fresh_cache()
   NeoBundleLoadCache
 else
   NeoBundleFetch 'Shougo/neobundle.vim'
@@ -1964,7 +1969,6 @@ augroup MyAutoCmd
   autocmd BufNewFile,BufRead                         *.{fx,fxc,fxh,hlsl} setlocal ft=hlsl
   autocmd BufNewFile,BufRead                         *.{fsh,vsh}         setlocal ft=glsl
   autocmd BufNewFile,BufRead                         *.{md,mkd,markdown} setlocal ft=markdown
-  autocmd BufReadPost                                $MYVIMRC            NeoBundleClearCache
 
   autocmd FileType *          call s:set_all()
   autocmd FileType ruby       call s:set_ruby()
@@ -2376,7 +2380,6 @@ set synmaxcol=500                 " ハイライトする文字数を制限す�
 set updatetime=500
 set previewheight=24
 set laststatus=0
-" set cmdheight=1
 set cmdheight=4
 set laststatus=2
 set showtabline=2
@@ -2434,7 +2437,9 @@ augroup MyAutoCmd
 augroup END
 " }}}
 " カラースキーマ {{{
-" set t_Co=256
+if !s:is_windows
+  set t_Co=256
+endif
 colorscheme molokai
 
 highlight Comment          guifg=#AEDEDE
@@ -2482,13 +2487,14 @@ if s:is_gui_running
   elseif s:is_mac
     set guifont=Ricty\ Regular\ for\ Powerline:h12
     set antialias
+  elseif s:is_linux
+    set guifont=Ricty\ for\ Powerline\ 10
   endif
 endif
 
 if s:is_windows
-  " 一部のUCS文字の幅を自動計測して決める
   set ambiwidth=auto
-elseif s:is_mac
+else
   set ambiwidth=double
 endif
 " }}}
