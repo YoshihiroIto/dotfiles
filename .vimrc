@@ -93,8 +93,8 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'mattn/webapi-vim'
   NeoBundleLazy 'tyru/open-browser.vim'
   NeoBundle     'kana/vim-submode'
-  if s:is_linux
-    NeoBundle     'vim-jp/vimdoc-ja'
+  if !has('kaoriya')
+    NeoBundle 'vim-jp/vimdoc-ja'
   endif
 
   " 表示
@@ -587,7 +587,7 @@ endfunction
 " indentLine {{{
 let g:indentLine_fileType = [
       \   'c',    'cpp',  'cs', 'go',
-      \   'ruby', 'lua',
+      \   'ruby', 'lua',  'python',
       \   'vim',
       \   'glsl', 'hlsl',
       \   'xml',  'json', 'markdown'
@@ -1044,7 +1044,7 @@ if neobundle#tap('syntastic')
     let g:syntastic_cs_checkers = ['syntax', 'issues']
 
     augroup MyAutoCmd
-      autocmd BufWritePost *.{cs,go,rb} call lightline#update()
+      autocmd BufWritePost *.{cs,go,rb,py} call lightline#update()
     augroup END
   endfunction
 
@@ -1295,8 +1295,8 @@ if neobundle#tap('vim-markdown')
 
   function! neobundle#hooks.on_source(bundle)
     let g:markdown_fenced_languages = [
-        \   'c',    'cpp',  'cs', 'go',
-        \   'ruby', 'lua',
+        \   'c',    'cpp', 'cs', 'go',
+        \   'ruby', 'lua', 'python',
         \   'vim',
         \   'xml',  'json',
         \ ]
@@ -2493,6 +2493,7 @@ if s:is_gui_running
 endif
 
 if s:is_windows
+  " 一部のUCS文字の幅を自動計測して決める
   set ambiwidth=auto
 else
   set ambiwidth=double
@@ -2781,7 +2782,11 @@ nnoremap <silent> <Leader><C-k><C-k> :<C-u>help <C-r><C-w><CR>:<C-u>call <SID>re
 vnoremap <silent> <Leader><C-k><C-k> :<C-u>help <C-r><C-w><CR>:<C-u>call <SID>refresh_screen()<CR>
 
 set helplang=ja,en
-set rtp+=$VIM/plugins/vimdoc-ja
+
+if has('kaoriya')
+  set rtp+=$VIM/plugins/vimdoc-ja
+endif
+
 " }}}
 " 汎用関数 {{{
 " CursorHold を継続させる{{{
@@ -2993,4 +2998,3 @@ endfunction
 " +--------+--------+--------+--------+--------+--------+--------+
 " }}}
 " vim: set ts=2 sw=2 sts=2 et :
-
