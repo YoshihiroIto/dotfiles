@@ -905,29 +905,29 @@ if neobundle#tap('codic-vim')
         \   }
         \ })
 
-  augroup InitializeCodic
-    autocmd!
-    autocmd FocusLost * call s:initialize_codic()
-  augroup END
-
-  let s:codic_init_state = 0
-
-  function! s:initialize_codic()
-    if s:codic_init_state == 0
-      call codic#search('a',  1)
-
-      let s:codic_init_state = 1
-
-    elseif s:codic_init_state == 1
-      call codic#search('あ', 1)
-
-      unlet s:codic_init_state
-
-      augroup InitializeCodic
-        autocmd!
-      augroup END
-    endif
-  endfunction
+  " augroup InitializeCodic
+  "   autocmd!
+  "   autocmd FocusLost * call s:initialize_codic()
+  " augroup END
+  "
+  " let s:codic_init_state = 0
+  "
+  " function! s:initialize_codic()
+  "   if s:codic_init_state == 0
+  "     call codic#search('a',  1)
+  "
+  "     let s:codic_init_state = 1
+  "
+  "   elseif s:codic_init_state == 1
+  "     call codic#search('あ', 1)
+  "
+  "     unlet s:codic_init_state
+  "
+  "     augroup InitializeCodic
+  "       autocmd!
+  "     augroup END
+  "   endif
+  " endfunction
 
   call neobundle#untap()
 endif
