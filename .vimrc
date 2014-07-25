@@ -2483,7 +2483,7 @@ endif
 " フォント設定 {{{
 if s:is_gui_running
   if s:is_windows
-    set guifont=Ricty\ Regular\ for\ Powerline:h11
+    set guifont=Ricty\ Regular\ for\ Powerline:h12
   elseif s:is_mac
     set guifont=Ricty\ Regular\ for\ Powerline:h12
     set antialias
@@ -2563,7 +2563,7 @@ nnoremap <expr> zO foldclosed(line('.')) != -1 ? 'zO' : ''
 " }}}
 " 補完 {{{
 " http://sgur.tumblr.com/post/91906146884/codic-vim
-inoremap <silent> <C-w> <C-R>=<SID>codic_complete()<CR>
+inoremap <silent> <C-d> <C-R>=<SID>codic_complete()<CR>
 
 function! s:codic_complete()
   let line = getline('.')
@@ -2822,17 +2822,16 @@ function! s:open_v_split_wide()
 
   let s:depth_vsp += 1
   let &columns = s:base_columns * s:depth_vsp
-  execute 'botright vertical' s:base_columns 'split'
+  silent! execute 'botright vertical' s:base_columns 'split'
 endf
 
 function! s:close_v_split_wide()
   let s:depth_vsp -= 1
   let &columns = s:base_columns * s:depth_vsp
-  close
-  " only
+  silent! close
 
   if s:depth_vsp == 1
-    execute 'winpos' s:opend_left_vsp s:opend_top_vsp
+    silent! execute 'winpos' s:opend_left_vsp s:opend_top_vsp
   end
 endf
 " }}}
