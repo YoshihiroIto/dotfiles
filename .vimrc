@@ -3,9 +3,8 @@ set encoding=utf-8
 scriptencoding utf-8
 " 基本 {{{
 let s:is_windows     = has('win32') || has('win64')
-let s:is_mac         = has('mac')
-let s:is_unix        = has('unix')
-let s:is_linux       = s:is_unix && !s:is_windows && !s:is_mac
+let s:is_mac         = has('mac') || has('macunix')
+let s:is_linux       = has('unix') && !s:is_windows && !s:is_mac
 let s:is_gui_running = has('gui_running')
 let s:is_starting    = has('vim_starting')
 
@@ -904,30 +903,6 @@ if neobundle#tap('codic-vim')
         \     'function_prefix': 'codic'
         \   }
         \ })
-
-  " augroup InitializeCodic
-  "   autocmd!
-  "   autocmd FocusLost * call s:initialize_codic()
-  " augroup END
-  "
-  " let s:codic_init_state = 0
-  "
-  " function! s:initialize_codic()
-  "   if s:codic_init_state == 0
-  "     call codic#search('a',  1)
-  "
-  "     let s:codic_init_state = 1
-  "
-  "   elseif s:codic_init_state == 1
-  "     call codic#search('あ', 1)
-  "
-  "     unlet s:codic_init_state
-  "
-  "     augroup InitializeCodic
-  "       autocmd!
-  "     augroup END
-  "   endif
-  " endfunction
 
   call neobundle#untap()
 endif
