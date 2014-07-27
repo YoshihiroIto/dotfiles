@@ -2434,7 +2434,9 @@ highlight SpecialKey       guifg=#303030 guibg=#121212 gui=none
 highlight CursorIM         guifg=NONE    guibg=Red
 
 " 全角スペースをハイライト {{{
-function! s:activate_invisible_indicator()
+function! s:set_color()
+  syntax match CtrlHHide /.\b/ contained conceal
+
   syntax match InvisibleJISX0208Space '　' display containedin=ALL
   syntax match InvisibleTab           '\t' display containedin=ALL
 
@@ -2443,7 +2445,7 @@ function! s:activate_invisible_indicator()
 endf
 
 augroup MyAutoCmd
-  autocmd BufNew,BufRead * call s:activate_invisible_indicator()
+  autocmd BufNew,BufRead * call s:set_color()
 augroup END
 " }}}
 " }}}
