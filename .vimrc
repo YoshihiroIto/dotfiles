@@ -19,7 +19,7 @@ if s:is_starting
 endif
 
 let g:mapleader    = ','
-let s:base_columns = s:is_windows ? 140 : 120
+let s:base_columns = 120
 let s:vimrc_local  = expand('~/.vimrc_local')
 let $DOTVIM        = expand('~/.vim')
 set viminfo+=!
@@ -591,11 +591,12 @@ let g:indentLine_fileType = [
       \   'glsl', 'hlsl',
       \   'xml',  'json', 'markdown'
       \ ]
-let g:indentLine_faster      = 1
-let g:indentLine_color_term  = 0
-let g:indentLine_indentLevel = 20
-let g:indentLine_char        = '⭟'
-let g:indentLine_color_gui   = '#505050'
+let g:indentLine_faster          = 1
+let g:indentLine_color_term      = 0
+let g:indentLine_indentLevel     = 20
+let g:indentLine_char            = '⭟'
+let g:indentLine_color_gui       = '#505050'
+let g:indentLine_noConcealCursor = 1
 
 augroup MyAutoCmd
   autocmd BufReadPost * IndentLinesEnable
@@ -856,11 +857,6 @@ if neobundle#tap('neosnippet.vim')
     endif
 
     call neocomplete#custom#source('neosnippet', 'rank', 1000)
-
-    " for snippet_complete marker.
-    if has('conceal')
-      set conceallevel=2 concealcursor=i
-    endif
   endfunction
 
   call neobundle#untap()
@@ -980,7 +976,7 @@ if neobundle#tap('clever-f.vim')
   function! neobundle#hooks.on_source(bundle)
     let g:clever_f_ignore_case           = 1
     let g:clever_f_smart_case            = 1
-    let g:clever_f_across_no_line        = 0
+    let g:clever_f_across_no_line        = 1
     let g:clever_f_use_migemo            = 0
     let g:clever_f_chars_match_any_signs = ';'
   endfunction
@@ -1803,6 +1799,7 @@ if neobundle#tap('unite.vim')
     call unite#custom#profile('default', 'ignorecase', 1)
     call unite#custom#profile('default', 'smartcase',  1)
     call unite#custom#source( 'fold',    'matchers',   'matcher_migemo')
+    call unite#custom#source( 'file',    'matchers',   'matcher_default')
 
     call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
     call unite#custom_default_action('directory',                 'vimfiler')
@@ -1937,13 +1934,13 @@ endif
 " }}}
 " ファイルタイプごとの設定 {{{
 augroup MyAutoCmd
-  autocmd BufEnter,WinEnter,BufWinEnter,BufWritePost *                   call s:update_all()
-  autocmd BufReadPost                                *                   call s:clean_empty_buffers()
-  autocmd BufNewFile,BufRead                         *.xaml              setlocal ft=xml
-  autocmd BufNewFile,BufRead                         *.json              setlocal ft=json
-  autocmd BufNewFile,BufRead                         *.{fx,fxc,fxh,hlsl} setlocal ft=hlsl
-  autocmd BufNewFile,BufRead                         *.{fsh,vsh}         setlocal ft=glsl
-  autocmd BufNewFile,BufRead                         *.{md,mkd,markdown} setlocal ft=markdown
+  autocmd BufEnter,WinEnter,BufWinEnter,BufWritePost *                         call s:update_all()
+  autocmd BufReadPost                                *                         call s:clean_empty_buffers()
+  autocmd BufNewFile,BufRead                         *.xaml                    setlocal ft=xml
+  autocmd BufNewFile,BufRead                         *.json                    setlocal ft=json
+  autocmd BufNewFile,BufRead                         *.{fx,fxc,fxh,hlsl,hlsli} setlocal ft=hlsl
+  autocmd BufNewFile,BufRead                         *.{fsh,vsh}               setlocal ft=glsl
+  autocmd BufNewFile,BufRead                         *.{md,mkd,markdown}       setlocal ft=markdown
 
   autocmd FileType *          call s:set_all()
   autocmd FileType ruby       call s:set_ruby()
@@ -2362,6 +2359,9 @@ set diffopt=vertical,filler
 set noequalalways
 set cursorline
 
+set conceallevel=2
+set concealcursor=i
+
 augroup MyAutoCmd
   autocmd VimEnter * call s:disable_beep()
 
@@ -2433,21 +2433,20 @@ highlight SpecialKey       guifg=#303030 guibg=#121212 gui=none
 " 日本語入力中のカーソルの色
 highlight CursorIM         guifg=NONE    guibg=Red
 
-" 全角スペースをハイライト {{{
 function! s:set_color()
-  syntax match CtrlHHide /.\b/ contained conceal
-
   syntax match InvisibleJISX0208Space '　' display containedin=ALL
   syntax match InvisibleTab           '\t' display containedin=ALL
 
   highlight InvisibleJISX0208Space term=underline guibg=#112233
   highlight InvisibleTab           term=underline guibg=#121212 ctermbg=Gray
+
+  " ^M を非表示
+  syntax match HideCtrlM /\r$/ conceal
 endf
 
 augroup MyAutoCmd
   autocmd BufNew,BufRead * call s:set_color()
 augroup END
-" }}}
 " }}}
 " 半透明化 {{{
 if s:is_mac
