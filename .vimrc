@@ -2286,10 +2286,7 @@ set shiftwidth=4                  " インデントの各段階に使われる�
 set expandtab                     " Insertモードで <Tab> を挿入するとき、代わりに適切な数の空白を使う。
 set list
 set listchars=tab:\⭟\ ,eol:↲,extends:»,precedes:«,nbsp:%
-
-if (v:version == 704 && has('patch338')) || (v:version > 704)
-  set breakindent
-endif
+set breakindent
 
 vnoremap < <gv
 vnoremap > >gv
@@ -2375,11 +2372,12 @@ augroup END
 " カーソル下の単語を移動するたびにハイライトする {{{
 " http://d.hatena.ne.jp/osyo-manga/20140121/1390309901
 augroup MyAutoCmd
-  autocmd CursorHold  * call s:hl_cword()
+  autocmd CursorMoved  * call s:hl_cword()
+  " autocmd CursorHold  * call s:hl_cword()
   autocmd BufLeave    * call s:hl_clear()
   autocmd WinLeave    * call s:hl_clear()
   autocmd InsertEnter * call s:hl_clear()
-  autocmd CursorMoved * call s:hl_clear()
+  " autocmd CursorMoved * call s:hl_clear()
   autocmd ColorScheme * highlight CursorWord guifg=Red
 
   function! s:hl_clear()
