@@ -976,7 +976,7 @@ if neobundle#tap('clever-f.vim')
     let g:clever_f_ignore_case           = 1
     let g:clever_f_smart_case            = 1
     let g:clever_f_across_no_line        = 1
-    let g:clever_f_use_migemo            = 0
+    let g:clever_f_use_migemo            = 1
     let g:clever_f_chars_match_any_signs = ';'
     let g:clever_f_mark_char_color       = 'Clever_f_mark_char'
 
@@ -1042,6 +1042,7 @@ if neobundle#tap('clang_complete')
       let g:clang_library_path = 'C:/Development/llvm/build/bin/Release/'
     elseif s:is_mac
       let g:clang_user_options = '-std=c++11'
+      let g:clang_library_path = '/Library/Developer/CommandLineTools/usr/lib/'
     endif
   endfunction
 
