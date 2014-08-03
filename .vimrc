@@ -979,6 +979,9 @@ if neobundle#tap('clever-f.vim')
     let g:clever_f_across_no_line        = 1
     let g:clever_f_use_migemo            = 0
     let g:clever_f_chars_match_any_signs = ';'
+    let g:clever_f_mark_char_color       = 'Clever_f_mark_char'
+
+    highlight default Clever_f_mark_char ctermfg=Green ctermbg=NONE cterm=underline guifg=Green guibg=NONE gui=underline
   endfunction
 
   call neobundle#untap()
@@ -2435,8 +2438,8 @@ function! s:set_color()
   syntax match InvisibleJISX0208Space '　' display containedin=ALL
   syntax match InvisibleTab           '\t' display containedin=ALL
 
-  highlight InvisibleJISX0208Space term=underline guibg=#112233
-  highlight InvisibleTab           term=underline guibg=#121212 ctermbg=Gray
+  highlight InvisibleJISX0208Space guibg=#112233
+  highlight InvisibleTab           guibg=#121212
 
   " ^M を非表示
   syntax match HideCtrlM /\r$/ conceal
