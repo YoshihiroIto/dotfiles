@@ -2370,10 +2370,11 @@ augroup END
 augroup MyAutoCmd
   autocmd CursorMoved  * call s:hl_cword()
   " autocmd CursorHold  * call s:hl_cword()
+  " autocmd CursorMoved * call s:hl_clear()
+
   autocmd BufLeave    * call s:hl_clear()
   autocmd WinLeave    * call s:hl_clear()
   autocmd InsertEnter * call s:hl_clear()
-  " autocmd CursorMoved * call s:hl_clear()
   autocmd ColorScheme * highlight CursorWord guifg=Red
 
   function! s:hl_clear()
