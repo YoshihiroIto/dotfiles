@@ -142,6 +142,7 @@ function! s:set_neobundle() " {{{
   NeoBundle     'matchit.zip'
   NeoBundle     'osyo-manga/vim-anzu'
   NeoBundleLazy 'rhysd/clever-f.vim'
+  NeoBundleLazy 'Lokaltog/vim-easymotion'
   NeoBundleLazy 'thinca/vim-visualstar'
 
   " 言語
@@ -981,6 +982,26 @@ if neobundle#tap('clever-f.vim')
     let g:clever_f_mark_char_color       = 'Clever_f_mark_char'
 
     highlight default Clever_f_mark_char ctermfg=Green ctermbg=NONE cterm=underline guifg=Green guibg=NONE gui=underline
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-easymotion {{{
+if neobundle#tap('vim-easymotion')
+  call neobundle#config({
+        \   'autoload': {
+        \     'mappings': ['<Plug>(easymotion-']
+        \   }
+        \ })
+
+  map t <Plug>(easymotion-s2)
+
+  function! neobundle#hooks.on_source(bundle)
+    let g:EasyMotion_do_mapping  = 0
+    let g:EasyMotion_smartcase   = 1
+    let g:EasyMotion_keys        = 'ghfjtyrubnvmdkeiwoqp47382'
+    let g:EasyMotion_startofline = 1
   endfunction
 
   call neobundle#untap()
