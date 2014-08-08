@@ -243,7 +243,7 @@ abbr		Parallel.For
 
 snippet		TryGetValue
 abbr		Dictionary.TryGetValue
-	${1:TValue} value = default($1);
+	var value = default(${1:TValue});
 	if (${2:dict}.TryGetValue(${3:key}, out value))
 	{
 		${0}

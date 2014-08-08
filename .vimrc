@@ -846,7 +846,7 @@ if neobundle#tap('neosnippet.vim')
         \   }
         \ })
 
-  imap <expr> <Tab> neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : pumvisible() ? '<C-n>' : '<Tab>'
+  imap <expr> <Tab> neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : '<Tab>'
   smap <expr> <Tab> neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : '<Tab>'
 
   function! neobundle#hooks.on_source(bundle)
@@ -922,8 +922,13 @@ if neobundle#tap('vim-altr')
     call altr#define('Models/*/*/%Model.cs',   'ViewModels/*/*/%Vm.cs',   'Views/*/*/%.xaml',   'Views/*/*/%.xaml.cs')
     call altr#define('Models/*/*/*/%Model.cs', 'ViewModels/*/*/*/%Vm.cs', 'Views/*/*/*/%.xaml', 'Views/*/*/*/%.xaml.cs')
     call altr#define('%Model.cs',              '%Vm.cs',                  '%.xaml',             '%.xaml.cs')
-  endfunction
 
+    call altr#define('%.cpp',           '%.h')
+    call altr#define('src/%.cpp',       'include/%.h')
+    call altr#define('src/*/%.cpp',     'include/*/%.h')
+    call altr#define('src/*/*/%.cpp',   'include/*/*/%.h')
+    call altr#define('src/*/*/*/%.cpp', 'include/*/*/*/%.h')
+  endfunction
   call neobundle#untap()
 endif
 " }}}
@@ -1027,18 +1032,25 @@ endif
 " 言語 {{{
 " syntastic {{{
 if neobundle#tap('syntastic')
+  " call neobundle#config({
+  "       \   'autoload': {
+  "       \     'filetypes':       ['cs', 'go', 'ruby'],
+  "       \     'function_prefix': 'submode'
+  "       \   }
+  "       \ })
   call neobundle#config({
         \   'autoload': {
-        \     'filetypes':       ['cs', 'go', 'ruby'],
+        \     'filetypes':       ['go', 'ruby'],
         \     'function_prefix': 'submode'
         \   }
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    let g:syntastic_cs_checkers = ['syntax', 'issues']
+    " let g:syntastic_cs_checkers = ['syntax', 'issues']
 
     augroup MyAutoCmd
-      autocmd BufWritePost *.{cs,go,rb,py} call lightline#update()
+      " autocmd BufWritePost *.{cs,go,rb,py} call lightline#update()
+      autocmd BufWritePost *.{go,rb,py} call lightline#update()
     augroup END
   endfunction
 
@@ -2389,9 +2401,9 @@ augroup END
 " カーソル下の単語を移動するたびにハイライトする {{{
 " http://d.hatena.ne.jp/osyo-manga/20140121/1390309901
 augroup MyAutoCmd
-  autocmd CursorMoved  * call s:hl_cword()
-  " autocmd CursorHold  * call s:hl_cword()
-  " autocmd CursorMoved * call s:hl_clear()
+  " autocmd CursorMoved  * call s:hl_cword()
+  autocmd CursorHold  * call s:hl_cword()
+  autocmd CursorMoved * call s:hl_clear()
 
   autocmd BufLeave    * call s:hl_clear()
   autocmd WinLeave    * call s:hl_clear()
@@ -2477,6 +2489,7 @@ endif
 if s:is_gui_running
   if s:is_windows
     set guifont=Ricty\ Regular\ for\ Powerline:h12
+    set renderoptions=type:directx,geom=1,renmode:6,taamode:0
   elseif s:is_mac
     set guifont=Ricty\ Regular\ for\ Powerline:h12
     set antialias
