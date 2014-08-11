@@ -882,10 +882,6 @@ if neobundle#tap('Omnisharp')
 
     let g:Omnisharp_stop_server         = 0
     let g:OmniSharp_typeLookupInPreview = 0
-
-    augroup MyAutoCmd
-      autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
-    augroup END
   endfunction
 
   call neobundle#untap()
@@ -974,17 +970,25 @@ augroup END
 if neobundle#tap('clever-f.vim')
   call neobundle#config({
         \   'autoload': {
-        \     'mappings': 'f',
+        \     'mappings': ['<Plug>(clever-f']
         \   }
         \ })
 
+  nmap f <Plug>(clever-f-f)
+  xmap f <Plug>(clever-f-f)
+  omap f <Plug>(clever-f-f)
+  nmap F <Plug>(clever-f-F)
+  xmap F <Plug>(clever-f-F)
+  omap F <Plug>(clever-f-F)
+
   function! neobundle#hooks.on_source(bundle)
-    let g:clever_f_ignore_case           = 1
-    let g:clever_f_smart_case            = 1
-    let g:clever_f_across_no_line        = 1
-    let g:clever_f_use_migemo            = 1
-    let g:clever_f_chars_match_any_signs = ';'
-    let g:clever_f_mark_char_color       = 'Clever_f_mark_char'
+    let g:clever_f_not_overwrites_standard_mappings = 1
+    let g:clever_f_ignore_case                      = 1
+    let g:clever_f_smart_case                       = 1
+    let g:clever_f_across_no_line                   = 1
+    let g:clever_f_use_migemo                       = 1
+    let g:clever_f_chars_match_any_signs            = ';'
+    let g:clever_f_mark_char_color                  = 'Clever_f_mark_char'
 
     highlight default Clever_f_mark_char ctermfg=Green ctermbg=NONE cterm=underline guifg=Green guibg=NONE gui=underline
   endfunction
