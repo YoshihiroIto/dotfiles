@@ -193,6 +193,7 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'Shougo/vimfiler.vim'
   NeoBundleLazy 'basyura/TweetVim'
   NeoBundleLazy 'glidenote/memolist.vim'
+  NeoBundleLazy 'Shougo/vinarise.vim'
   if s:is_mac
     NeoBundleLazy 'itchyny/dictionary.vim'
   endif
@@ -1759,6 +1760,17 @@ if neobundle#tap('memolist.vim')
   call neobundle#untap()
 endif
 " }}}
+" vinarise.vim {{{
+if neobundle#tap('vinarise.vim')
+  call neobundle#config({
+        \   'autoload': {
+        \     'commands': ['Vinarise']
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
 " vim-icondrag {{{
 let g:icondrag_auto_start = 1
 " }}}
@@ -1890,7 +1902,7 @@ if neobundle#tap('neomru.vim')
   call neobundle#config({
         \   'depends':  ['unite.vim'],
         \   'autoload': {
-        \     'unite_sources': ['neomru/file', 'neomru/directory']
+        \     'unite_sources': ['neomru']
         \   }
         \ })
 
@@ -1909,11 +1921,8 @@ if neobundle#tap('vim-unite-giti')
         \   'depends':  ['unite.vim', 'vimproc'],
         \   'autoload': {
         \     'function_prefix': 'giti',
-        \     'unite_sources':   [
-        \       'giti',     'giti/branch', 'giti/branch_all', 'giti/config',
-        \       'giti/log', 'giti/remote', 'giti/status'
-        \     ],
-        \     'commands':        [
+        \     'unite_sources': ['giti'],
+        \     'commands':      [
         \       'Giti',                        'GitiWithConfirm',   'GitiFetch', 'GitiPush',
         \       'GitiPushWithSettingUpstream', 'GitiPushExpressly', 'GitiPull',  'GitiPullSquash',
         \       'GitiPullRebase',              'GitiPullExpressly', 'GitiDiff',  'GitiDiffCached',
@@ -1949,7 +1958,7 @@ if s:is_windows
     call neobundle#config({
           \   'depends':  ['unite.vim'],
           \   'autoload': {
-          \     'unite_sources': ['everything', 'everything/async'],
+          \     'unite_sources': ['everything']
           \   }
           \ })
 
@@ -2368,7 +2377,7 @@ syntax enable                     " 構文ごとに色分けをする
 set number
 set textwidth=0                   " 一行に長い文章を書いていても自動折り返しをしない
 set showcmd                       " コマンドをステータス行に表示
-set showmatch                     " 括弧の対応をハイライト
+set noshowmatch                   " 括弧の対応をハイライト
 set wrap
 set noshowmode
 set shortmess+=I                  " 起動時のメッセージを表示しない
