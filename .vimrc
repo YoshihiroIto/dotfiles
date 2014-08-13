@@ -194,6 +194,7 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'basyura/TweetVim'
   NeoBundleLazy 'glidenote/memolist.vim'
   NeoBundleLazy 'Shougo/vinarise.vim'
+  NeoBundleLazy 'cohama/agit.vim'
   if s:is_mac
     NeoBundleLazy 'itchyny/dictionary.vim'
   endif
@@ -1765,6 +1766,17 @@ if neobundle#tap('vinarise.vim')
   call neobundle#config({
         \   'autoload': {
         \     'commands': ['Vinarise']
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" agit.vim {{{
+if neobundle#tap('agit.vim')
+  call neobundle#config({
+        \   'autoload': {
+        \     'commands': ['Agit']
         \   }
         \ })
 
