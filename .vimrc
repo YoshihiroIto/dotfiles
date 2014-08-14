@@ -91,7 +91,6 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'LeafCage/nebula.vim'
   NeoBundleLazy 'mattn/webapi-vim'
   NeoBundleLazy 'tyru/open-browser.vim'
-  NeoBundle     'kana/vim-submode'
   if !has('kaoriya')
     NeoBundle 'vim-jp/vimdoc-ja'
   endif
@@ -109,9 +108,9 @@ function! s:set_neobundle() " {{{
   endif
 
   " 編集
-  NeoBundle     'tomtom/tcomment_vim'
   NeoBundle     'tpope/vim-surround'
   NeoBundle     'tpope/vim-repeat'
+  NeoBundleLazy 'tomtom/tcomment_vim'
   NeoBundleLazy 'LeafCage/yankround.vim'
   NeoBundleLazy 'kana/vim-smartinput'
   NeoBundleLazy 'nishigori/increment-activator'
@@ -127,23 +126,23 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'koron/codic-vim'
 
   " ファイル
-  NeoBundleLazy 'kana/vim-altr'
   NeoBundle     'YoshihiroIto/vim-auto-mirroring'
+  NeoBundleLazy 'kana/vim-altr'
 
   " 検索
   NeoBundle     'matchit.zip'
-  NeoBundle     'osyo-manga/vim-anzu'
+  NeoBundleLazy 'osyo-manga/vim-anzu'
   NeoBundleLazy 'rhysd/clever-f.vim'
   NeoBundleLazy 'Lokaltog/vim-easymotion'
   NeoBundleLazy 'thinca/vim-visualstar'
 
   " 言語
+  NeoBundle     'YoshihiroIto/vim-gocode'
   NeoBundleLazy 'YoshihiroIto/syntastic'
   NeoBundleLazy 'Rip-Rip/clang_complete'
   NeoBundleLazy 'rhysd/vim-clang-format'
   NeoBundleLazy 'osyo-manga/shabadou.vim'
   NeoBundleLazy 'vim-jp/cpp-vim'
-  NeoBundle     'YoshihiroIto/vim-gocode'
   NeoBundleLazy 'dgryski/vim-godef'
   NeoBundleLazy 'Mizuchi/STL-Syntax'
   NeoBundleLazy 'beyondmarc/hlsl.vim'
@@ -312,12 +311,6 @@ if neobundle#tap('open-browser.vim')
   call neobundle#untap()
 endif
 " }}}
-" vim-submode {{{
-" todo:mac gvimで動作しない。なぜ？
-call submode#enter_with('gitgutter', 'n', 'r', '<Leader>j', '<Plug>GitGutterNextHunkzvzz')
-call submode#map(       'gitgutter', 'n', 'r', 'j',         '<Plug>GitGutterNextHunkzvzz')
-call submode#map(       'gitgutter', 'n', 'r', 'k',         '<Plug>GitGutterPrevHunkzvzz')
-" }}}
 " dictionary.vim {{{
 if s:is_mac
   if neobundle#tap('dictionary.vim')
@@ -386,20 +379,33 @@ if neobundle#tap('vim-resize-win')
 endif
 " }}}
 " lightline {{{
-let s:p = lightline#colorscheme#default#palette
 
-let s:p.normal.left   = [['#195E00', '#07AF00', 'bold'], ['gray7', 'gray2']]
-let s:p.normal.branch = [['white', 'gray4']]
-
-let s:p.insert.left   = [['darkestcyan', 'white', 'bold'], ['mediumcyan', 'darkestblue']]
-let s:p.insert.middle = [['mediumcyan', 'darkestblue']]
-let s:p.insert.right  = [['darkestcyan', 'mediumcyan'], ['mediumcyan', 'darkblue'], ['mediumcyan', 'darkestblue']]
-let s:p.insert.branch = [['white', 'darkblue']]
-
-let s:p.visual.left   = [['#AB2362', 'white', 'bold'], ['#FF84BA', '#870036']]
-let s:p.visual.middle = [['#FF84BA', '#870036']]
-let s:p.visual.right  = [['#75003D', '#FF87BB'], ['#FE86BB', '#AF0053'], ['#FF84BA', '#870036']]
-let s:p.visual.branch = [['white', '#AF0053']]
+" g:lightline#colorscheme#powerline#palette
+let s:p                = {'normal': {}, 'inactive': {}, 'insert': {}, 'replace': {}, 'visual': {}, 'tabline': {}}
+let s:p.normal.right   = [['gray5', 'gray10'], ['gray9', 'gray4'], ['gray8', 'gray2']]
+let s:p.inactive.right = [['gray1', 'gray5'], ['gray4', 'gray1'], ['gray4', 'gray0']]
+let s:p.inactive.left  = s:p.inactive.right[1:]
+let s:p.replace.left   = [['white', 'brightred', 'bold'], ['white', 'gray4']]
+let s:p.normal.middle  = [['gray7', 'gray2']]
+let s:p.replace.middle = s:p.normal.middle
+let s:p.replace.right  = s:p.normal.right
+let s:p.tabline.left   = [['gray9', 'gray4']]
+let s:p.tabline.tabsel = [['gray9', 'gray1']]
+let s:p.tabline.middle = [['gray2', 'gray8']]
+let s:p.tabline.right  = [['gray9', 'gray3']]
+let s:p.normal.error   = [['gray9', 'brightestred']]
+let s:p.normal.warning = [['gray1', 'yellow']]
+" 以下yoi固有
+let s:p.normal.left    = [['#195E00', '#07AF00', 'bold'], ['gray7', 'gray2']]
+let s:p.normal.branch  = [['white', 'gray4']]
+let s:p.insert.left    = [['darkestcyan', 'white', 'bold'], ['mediumcyan', 'darkestblue']]
+let s:p.insert.middle  = [['mediumcyan', 'darkestblue']]
+let s:p.insert.right   = [['darkestcyan', 'mediumcyan'], ['mediumcyan', 'darkblue'], ['mediumcyan', 'darkestblue']]
+let s:p.insert.branch  = [['white', 'darkblue']]
+let s:p.visual.left    = [['#AB2362', 'white', 'bold'], ['#FF84BA', '#870036']]
+let s:p.visual.middle  = [['#FF84BA', '#870036']]
+let s:p.visual.right   = [['#75003D', '#FF87BB'], ['#FE86BB', '#AF0053'], ['#FF84BA', '#870036']]
+let s:p.visual.branch  = [['white', '#AF0053']]
 
 let g:lightline#colorscheme#yoi#palette = lightline#colorscheme#fill(s:p)
 
@@ -487,10 +493,11 @@ function! LightlineMode()
         \ &ft ==  'tweetvim' ? 'TweetVim' :
         \ &ft ==  'quickrun' ? 'quickrun' :
         \ &ft =~? 'lingr'    ? 'lingr'    :
+        \ &ft =~? 'agit'     ? 'Agit'     :
         \ winwidth(0) > 60 ? lightline#mode() : ''
 endfunction
 
-let s:lighline_no_disp_ft = 'vimfiler\|unite\|vimshell\|tweetvim\|quickrun\|lingr'
+let s:lighline_no_disp_ft = 'vimfiler\|unite\|vimshell\|tweetvim\|quickrun\|lingr\|agit'
 
 function! LightlineModified()
   return &ft =~ s:lighline_no_disp_ft ? '' : &modified ? '+' : &modifiable ? '' : '-'
@@ -624,6 +631,18 @@ if neobundle#tap('vim-easy-align')
   xmap <silent> <Leader>a:       <Leader>m:
   xmap <silent> <Leader>a,       <Leader>m*,
   xmap <silent> <Leader>a<Space> <Leader>m*<Space>
+
+  call neobundle#untap()
+endif
+" }}}
+" tcomment_vim {{{
+if neobundle#tap('tcomment_vim')
+  call neobundle#config({
+        \   'autoload': {
+        \     'mappings': ['gc'],
+        \     'commands': ['TComment']
+        \   }
+        \ })
 
   call neobundle#untap()
 endif
@@ -860,7 +879,7 @@ endif
 " Omnisharp {{{
 if neobundle#tap('Omnisharp')
   call neobundle#config({
-        \   'depends':  ['neocomplete.vim', 'syntastic', 'vim-dispatch'],
+        \   'depends':  ['neocomplete.vim', 'vim-dispatch'],
         \   'autoload': {
         \     'filetypes': ['cs']
         \   },
@@ -929,6 +948,16 @@ nmap <silent> n <Plug>(anzu-n)zvzz:<C-u>call <SID>begin_display_anzu()<CR>:<C-u>
 nmap <silent> N <Plug>(anzu-N)zvzz:<C-u>call <SID>begin_display_anzu()<CR>:<C-u>call <SID>refresh_screen()<CR>
 nmap <silent> * <Plug>(anzu-star):<C-u>call  <SID>refresh_screen()<CR>
 nmap <silent> # <Plug>(anzu-sharp):<C-u>call <SID>refresh_screen()<CR>
+
+if neobundle#tap('vim-anzu')
+  call neobundle#config({
+        \   'autoload': {
+        \     'mappings': ['<Plug>(anzu']
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
 
 augroup MyAutoCmd
   " 一定時間キー入力がないとき、ウインドウを移動したとき、タブを移動したときに
@@ -1044,10 +1073,7 @@ if neobundle#tap('syntastic')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    " let g:syntastic_cs_checkers = ['syntax', 'issues']
-
     augroup MyAutoCmd
-      " autocmd BufWritePost *.{cs,go,rb,py} call lightline#update()
       autocmd BufWritePost *.{go,rb,py} call lightline#update()
     augroup END
   endfunction
@@ -1652,7 +1678,7 @@ endif
 " vimfiler.vim {{{
 if neobundle#tap('vimfiler.vim')
   call neobundle#config({
-        \   'depends':  ['vimproc', 'unite.vim', 'vimshell.vim'],
+        \   'depends':  ['vimproc', 'unite.vim'],
         \   'autoload': {
         \     'commands': ['VimFilerBufferDir'],
         \   }
@@ -1783,7 +1809,7 @@ let g:icondrag_auto_start = 1
 " unite.vim {{{
 if neobundle#tap('unite.vim')
   call neobundle#config({
-        \   'depends':  ['vimproc', 'vimfiler.vim'],
+        \   'depends':  ['vimproc'],
         \   'autoload': {
         \     'commands': ['Unite', 'UniteResume', 'UniteWithCursorWord']
         \   }
@@ -2798,6 +2824,7 @@ nnoremap <silent> [Git]d    :<C-u>call <SID>execute_if_on_git_branch('Gdiff')<CR
 nnoremap <silent> [Git]s    :<C-u>call <SID>execute_if_on_git_branch('Gstatus')<CR>
 nnoremap <silent> [Git]push :<C-u>call <SID>execute_if_on_git_branch('GitiPush')<CR>
 nnoremap <silent> [Git]pull :<C-u>call <SID>execute_if_on_git_branch('GitiPull')<CR>
+nnoremap <silent> [Git]g    :<C-u>call <SID>execute_if_on_git_branch('Agit')<CR>
 " }}}
 " ヘルプ {{{
 nnoremap          <Leader><C-k>      :<C-u>help<Space>
