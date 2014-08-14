@@ -99,15 +99,7 @@ function! s:set_neobundle() " {{{
   " 表示
   NeoBundle     'tomasr/molokai'
   NeoBundle     'Yggdroot/indentLine'
-  NeoBundle     'itchyny/lightline.vim', {
-        \         'depends': [
-        \           'vimproc',
-        \           'vim-fugitive',
-        \           'vim-gitgutter',
-        \           'vim-anzu',
-        \           'syntastic'
-        \         ]
-        \       }
+  NeoBundle     'itchyny/lightline.vim'
   NeoBundle     'vim-scripts/matchparenpp'
   NeoBundleLazy 'YoshihiroIto/tagbar'
   NeoBundleLazy 'LeafCage/foldCC'
@@ -1673,7 +1665,7 @@ if neobundle#tap('vimfiler.vim')
       autocmd FileType vimfiler call s:set_vimfiler()
 
       " http://qiita.com/Linda_pp/items/f1cb09ac94202abfba0e
-      autocmd FileType vimfiler nnoremap <silent><buffer> / :<C-u>Unite file -horizontal -default-action=vimfiler<CR>
+      autocmd FileType vimfiler nnoremap <silent><buffer> / :<C-u>Unite file -horizontal<CR>
 
       function! s:set_vimfiler()
         nmap <buffer><expr> <CR>  vimfiler#smart_cursor_map('<Plug>(vimfiler_cd_file)', '<Plug>(vimfiler_edit_file)')
