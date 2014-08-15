@@ -240,15 +240,6 @@ endif
 " vim-shell {{{
 let g:shell_mappings_enabled = 0
 " }}}
-" twibill.vim {{{
-if neobundle#tap('twibill.vim')
-  call neobundle#config({
-        \   'depends': 'vimproc',
-        \ })
-
-  call neobundle#untap()
-endif
-" }}}
 " webapi-vim {{{
 if neobundle#tap('webapi-vim')
   call neobundle#config({
@@ -263,7 +254,6 @@ endif
 " open-browser.vim {{{
 if neobundle#tap('open-browser.vim')
   call neobundle#config({
-        \   'depends':  'vimproc',
         \   'autoload': {
         \     'mappings': '<Plug>(openbrowser-',
         \     'commands': [
@@ -310,7 +300,6 @@ endif
 " tagbar {{{
 if neobundle#tap('tagbar')
   call neobundle#config({
-        \   'depends':  'vimproc',
         \   'autoload': {
         \     'commands': 'TagbarToggle'
         \   }
@@ -744,7 +733,6 @@ endif
 " neocomplete.vim {{{
 if neobundle#tap('neocomplete.vim')
   call neobundle#config({
-        \   'depends':  'vimproc',
         \   'autoload': {
         \     'insert': 1,
         \   }
@@ -868,7 +856,7 @@ endif
 " Omnisharp {{{
 if neobundle#tap('Omnisharp')
   call neobundle#config({
-        \   'depends':  ['neocomplete.vim', 'vim-dispatch'],
+        \   'depends':  'neocomplete.vim',
         \   'autoload': {
         \     'filetypes': 'cs'
         \   },
@@ -1104,7 +1092,6 @@ endif
 " wandbox-vim {{{
 if neobundle#tap('wandbox-vim')
   call neobundle#config({
-        \   'depends':  'vimproc',
         \   'autoload': {
         \     'filetypes': ['c', 'cpp', 'objc'],
         \     'commands':  [
@@ -1143,7 +1130,7 @@ endif
 " vim-quickrun {{{
 if neobundle#tap('vim-quickrun')
   call neobundle#config({
-        \   'depends':  ['shabadou.vim', 'wandbox-vim', 'vimproc'],
+        \   'depends':  ['shabadou.vim', 'wandbox-vim'],
         \   'autoload': {
         \     'mappings': [['sxn', '<Plug>']],
         \     'commands': [
@@ -1209,7 +1196,6 @@ let g:go_fmt_commands = 0
 " vim-godef {{{
 if neobundle#tap('vim-godef')
   call neobundle#config({
-        \   'depends':  'vimproc',
         \   'autoload': {
         \     'filetypes': 'go'
         \   }
@@ -1598,7 +1584,6 @@ endfunction
 " vim-gitgutter {{{
 if neobundle#tap('vim-gitgutter')
   call neobundle#config({
-        \   'depends':  'vim-shell',
         \   'autoload': {
         \     'function_prefix': 'gitgutter'
         \   }
@@ -1623,7 +1608,6 @@ endif
 " vimshell.vim {{{
 if neobundle#tap('vimshell.vim')
   call neobundle#config({
-        \   'depends':  'vimproc',
         \   'autoload': {
         \     'commands': ['VimShell', 'VimShellPop']
         \   }
@@ -1641,7 +1625,7 @@ endif
 " vimfiler.vim {{{
 if neobundle#tap('vimfiler.vim')
   call neobundle#config({
-        \   'depends':  ['vimproc', 'unite.vim'],
+        \   'depends':  'unite.vim',
         \   'autoload': {
         \     'commands': 'VimFilerBufferDir',
         \   }
@@ -1680,7 +1664,7 @@ endif
 " Tweetvim {{{
 if neobundle#tap('TweetVim')
   call neobundle#config({
-        \   'depends':  ['vimproc', 'twibill.vim', 'open-browser.vim', 'webapi-vim'],
+        \   'depends':  ['twibill.vim', 'open-browser.vim', 'webapi-vim'],
         \   'autoload': {
         \     'commands': 'TweetVimHomeTimeline'
         \   }
@@ -1783,7 +1767,6 @@ let g:icondrag_auto_start = 1
 " unite.vim {{{
 if neobundle#tap('unite.vim')
   call neobundle#config({
-        \   'depends':  'vimproc',
         \   'autoload': {
         \     'commands': ['Unite', 'UniteResume', 'UniteWithCursorWord']
         \   }
@@ -1922,7 +1905,7 @@ endif
 " vim-unite-giti {{{
 if neobundle#tap('vim-unite-giti')
   call neobundle#config({
-        \   'depends':  ['unite.vim', 'vimproc'],
+        \   'depends':  'unite.vim',
         \   'autoload': {
         \     'function_prefix': 'giti',
         \     'unite_sources':   'giti',
