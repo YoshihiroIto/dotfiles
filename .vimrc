@@ -645,7 +645,7 @@ endif
 if neobundle#tap('tcomment_vim')
   call neobundle#config({
         \   'autoload': {
-        \     'mappings': ['gc'],
+        \     'mappings': ['gc', 'gcc'],
         \     'commands': ['TComment']
         \   }
         \ })
@@ -2384,9 +2384,9 @@ endif
 " 検索時のハイライトを解除
 nnoremap <silent> <Leader>/   :<C-u>nohlsearch<CR>
 
-" http://deris.hatenablog.jp/entry/2013/05/15/024932
-" very magic
-nnoremap / /\v
+" " http://deris.hatenablog.jp/entry/2013/05/15/024932
+" " very magic
+" nnoremap / /\v
 
 " *による検索時に初回は移動しない
 nnoremap <silent> * viw:<C-u>call <SID>star_search()<CR>:<C-u>set hlsearch<CR>`<
