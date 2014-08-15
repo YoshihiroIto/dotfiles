@@ -133,7 +133,6 @@ function! s:set_neobundle() " {{{
   NeoBundle     'matchit.zip'
   NeoBundleLazy 'osyo-manga/vim-anzu'
   NeoBundleLazy 'rhysd/clever-f.vim'
-  NeoBundleLazy 'Lokaltog/vim-easymotion'
   NeoBundleLazy 'thinca/vim-visualstar'
 
   " 言語
@@ -186,6 +185,7 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'glidenote/memolist.vim'
   NeoBundleLazy 'Shougo/vinarise.vim'
   NeoBundleLazy 'cohama/agit.vim'
+  NeoBundleLazy 'thinca/vim-prettyprint'
   if s:is_mac
     NeoBundleLazy 'itchyny/dictionary.vim'
   endif
@@ -194,8 +194,8 @@ function! s:set_neobundle() " {{{
   endif
 
   " Unite
-  NeoBundle     'Shougo/unite.vim'
   NeoBundle     'Shougo/neomru.vim'
+  NeoBundleLazy 'Shougo/unite.vim'
   NeoBundleLazy 'Shougo/unite-outline'
   NeoBundleLazy 'osyo-manga/unite-quickfix'
   NeoBundleLazy 'osyo-manga/unite-fold'
@@ -379,37 +379,43 @@ if neobundle#tap('vim-resize-win')
 endif
 " }}}
 " lightline {{{
-
-" g:lightline#colorscheme#powerline#palette
-let s:p                = {'normal': {}, 'inactive': {}, 'insert': {}, 'replace': {}, 'visual': {}, 'tabline': {}}
-let s:p.normal.right   = [['gray5', 'gray10'], ['gray9', 'gray4'], ['gray8', 'gray2']]
-let s:p.inactive.right = [['gray1', 'gray5'], ['gray4', 'gray1'], ['gray4', 'gray0']]
-let s:p.inactive.left  = s:p.inactive.right[1:]
-let s:p.replace.left   = [['white', 'brightred', 'bold'], ['white', 'gray4']]
-let s:p.normal.middle  = [['gray7', 'gray2']]
-let s:p.replace.middle = s:p.normal.middle
-let s:p.replace.right  = s:p.normal.right
-let s:p.tabline.left   = [['gray9', 'gray4']]
-let s:p.tabline.tabsel = [['gray9', 'gray1']]
-let s:p.tabline.middle = [['gray2', 'gray8']]
-let s:p.tabline.right  = [['gray9', 'gray3']]
-let s:p.normal.error   = [['gray9', 'brightestred']]
-let s:p.normal.warning = [['gray1', 'yellow']]
-" 以下yoi固有
-let s:p.normal.left    = [['#195E00', '#07AF00', 'bold'], ['gray7', 'gray2']]
-let s:p.normal.branch  = [['white', 'gray4']]
-let s:p.insert.left    = [['darkestcyan', 'white', 'bold'], ['mediumcyan', 'darkestblue']]
-let s:p.insert.middle  = [['mediumcyan', 'darkestblue']]
-let s:p.insert.right   = [['darkestcyan', 'mediumcyan'], ['mediumcyan', 'darkblue'], ['mediumcyan', 'darkestblue']]
-let s:p.insert.branch  = [['white', 'darkblue']]
-let s:p.visual.left    = [['#AB2362', 'white', 'bold'], ['#FF84BA', '#870036']]
-let s:p.visual.middle  = [['#FF84BA', '#870036']]
-let s:p.visual.right   = [['#75003D', '#FF87BB'], ['#FE86BB', '#AF0053'], ['#FF84BA', '#870036']]
-let s:p.visual.branch  = [['white', '#AF0053']]
-
-let g:lightline#colorscheme#yoi#palette = lightline#colorscheme#fill(s:p)
-
-unlet s:p
+let g:lightline#colorscheme#yoi#palette = {
+      \   'inactive': {
+      \     'left':   [['#585858', '#262626', 240, 235], ['#585858', '#121212', 240, 233]],
+      \     'right':  [['#262626', '#606060', 235, 241], ['#585858', '#262626', 240, 235], ['#585858', '#121212', 240, 233]]
+      \   },
+      \   'insert':   {
+      \     'branch': [['#ffffff', '#0087af', 231,  31]],
+      \     'left':   [['#005f5f', '#ffffff',  23, 231], ['#87dfff', '#005f87', 117,  24]],
+      \     'middle': [['#87dfff', '#005f87', 117,  24]],
+      \     'right':  [['#005f5f', '#87dfff',  23, 117], ['#87dfff', '#0087af', 117,  31], ['#87dfff', '#005f87', 117,  24]]
+      \   },
+      \   'normal':   {
+      \     'branch': [['#ffffff', '#585858', 231, 240]],
+      \     'error':  [['#bcbcbc', '#ff0000', 250, 196]],
+      \     'left':   [['#195E00', '#07AF00',  22,  34], ['#8a8a8a', '#303030', 245, 236]],
+      \     'middle': [['#8a8a8a', '#303030', 245, 236]],
+      \     'right':  [['#606060', '#d0d0d0', 241, 252], ['#bcbcbc', '#585858', 250, 240], ['#9e9e9e', '#303030', 247, 236]],
+      \     'warning':[['#262626', '#b58900', 235, 136]]
+      \   },
+      \   'replace':  {
+      \     'left':   [['#ffffff', '#df0000', 231, 160], ['#ffffff', '#585858', 231, 240]],
+      \     'middle': [['#8a8a8a', '#303030', 245, 236]],
+      \     'right':  [['#606060', '#d0d0d0', 241, 252], ['#bcbcbc', '#585858', 250, 240], ['#9e9e9e', '#303030', 247, 236]]
+      \   },
+      \   'tabline':  {
+      \     'left':   [['#bcbcbc', '#585858', 250, 240]],
+      \     'middle': [['#303030', '#9e9e9e', 236, 247]],
+      \     'right':  [['#bcbcbc', '#4e4e4e', 250, 239]],
+      \     'tabsel': [['#bcbcbc', '#262626', 250, 235]]
+      \   },
+      \   'visual':   {
+      \     'branch': [['#ffffff', '#AF0053', 231, 125]],
+      \     'left':   [['#AB2362', '#ffffff', 125, 231], ['#FF84BA', '#870036', 211,  89]],
+      \     'middle': [['#FF84BA', '#870036', 211,  89]],
+      \     'right':  [['#75003D', '#FF87BB',  89, 211], ['#FE86BB', '#AF0053', 211, 125], ['#FF84BA', '#870036', 211,  89]]
+      \   }
+      \ }
 
 let g:lightline = {
       \   'colorscheme': 'yoi',
@@ -1014,26 +1020,6 @@ if neobundle#tap('clever-f.vim')
     let g:clever_f_mark_char_color                  = 'Clever_f_mark_char'
 
     highlight default Clever_f_mark_char ctermfg=Green ctermbg=NONE cterm=underline guifg=Green guibg=NONE gui=underline
-  endfunction
-
-  call neobundle#untap()
-endif
-" }}}
-" vim-easymotion {{{
-if neobundle#tap('vim-easymotion')
-  call neobundle#config({
-        \   'autoload': {
-        \     'mappings': ['<Plug>(easymotion-']
-        \   }
-        \ })
-
-  map t <Plug>(easymotion-s2)
-
-  function! neobundle#hooks.on_source(bundle)
-    let g:EasyMotion_do_mapping  = 0
-    let g:EasyMotion_smartcase   = 1
-    let g:EasyMotion_keys        = 'ghfjtyrubnvmdkeiwoqp47382'
-    let g:EasyMotion_startofline = 1
   endfunction
 
   call neobundle#untap()
@@ -1801,6 +1787,17 @@ if neobundle#tap('agit.vim')
   call neobundle#untap()
 endif
 " }}}
+" vim-prettyprint {{{
+if neobundle#tap('vim-prettyprint')
+  call neobundle#config({
+        \   'autoload': {
+        \     'commands': ['PP']
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
 " vim-icondrag {{{
 let g:icondrag_auto_start = 1
 " }}}
@@ -2483,10 +2480,6 @@ augroup MyAutoCmd
 augroup END
 " }}}
 " カラースキーマ {{{
-if !s:is_windows
-  set t_Co=256
-endif
-
 colorscheme molokai
 
 highlight Comment          guifg=#AEDEDE
@@ -3030,20 +3023,5 @@ function! s:filter_current(cmd, is_silent)
   endtry
 endfunction
 " }}}
-" }}}
-" メモ {{{
-" +--------+--------+--------+--------+--------+--------+--------+
-" |        | normal | visual | select |  wait  | insert |command |
-" +--------+--------+--------+--------+--------+--------+--------+
-" |  map   |   ○   |   ○   |        |   ○   |        |        |
-" |  map!  |        |        |        |        |   ○   |   ○   |
-" |  nmap  |   ○   |        |        |        |        |        |
-" |  vmap  |        |   ○   |   ○   |        |        |        |
-" |  xmap  |        |   ○   |        |        |        |        |
-" |  smap  |        |        |   ○   |        |        |        |
-" |  omap  |        |        |        |   ○   |        |        |
-" |  imap  |        |        |        |        |   ○   |        |
-" |  cmap  |        |        |        |        |        |   ○   |
-" +--------+--------+--------+--------+--------+--------+--------+
 " }}}
 " vim: set ts=2 sw=2 sts=2 et :
