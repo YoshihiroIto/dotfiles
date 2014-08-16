@@ -1,6 +1,7 @@
 set nocompatible
 set encoding=utf-8
 scriptencoding utf-8
+
 " 基本 {{{
 let s:is_windows     = has('win32') || has('win64')
 let s:is_mac         = has('mac') || has('macunix')
@@ -586,27 +587,22 @@ augroup END
 if neobundle#tap('vim-easy-align')
   call neobundle#config({
         \   'autoload': {
-        \     'commands': ['EasyAlign', 'LiveEasyAlign'],
-        \     'mappings': [
-        \       '<Plug>(EasyAlignOperator)',
-        \       ['sxn', '<Plug>(EasyAlign)'],
-        \       ['sxn', '<Plug>(LiveEasyAlign)'],
-        \       ['sxn', '<Plug>(EasyAlignRepeat)']
-        \     ]
+        \     'mappings': '<Plug>(EasyAlign)'
         \   }
         \ })
 
-  nmap <Leader>m <Plug>(EasyAlign)
-  vmap <Leader>m <Plug>(EasyAlign)
+  " todo:直接埋め込むと正しく動作しないことがある
+  nmap <Leader>0easyalign <Plug>(EasyAlign)
+  vmap <Leader>0easyalign <Plug>(EasyAlign)
 
-  nmap <silent> <Leader>a=       vii<Leader>m=
-  nmap <silent> <Leader>a:       vii<Leader>m:
-  nmap <silent> <Leader>a,       vii<Leader>m*,
-  nmap <silent> <Leader>a<Space> vii<Leader>m*<Space>
-  xmap <silent> <Leader>a=       <Leader>m=
-  xmap <silent> <Leader>a:       <Leader>m:
-  xmap <silent> <Leader>a,       <Leader>m*,
-  xmap <silent> <Leader>a<Space> <Leader>m*<Space>
+  nmap <silent> <Leader>a=       vii<Leader>0easyalign=
+  nmap <silent> <Leader>a:       vii<Leader>0easyalign:
+  nmap <silent> <Leader>a,       vii<Leader>0easyalign*,
+  nmap <silent> <Leader>a<Space> vii<Leader>0easyalign*<Space>
+  xmap <silent> <Leader>a=       <Leader>0easyalign=
+  xmap <silent> <Leader>a:       <Leader>0easyalign:
+  xmap <silent> <Leader>a,       <Leader>0easyalign*,
+  xmap <silent> <Leader>a<Space> <Leader>0easyalign*<Space>
 
   call neobundle#untap()
 endif
@@ -720,8 +716,7 @@ endif
 if neobundle#tap('vim-qfreplace')
   call neobundle#config({
         \   'autoload': {
-        \     'filetypes': ['unite', 'quickfix'],
-        \     'commands':  'Qfreplace'
+        \     'filetypes': ['unite', 'quickfix']
         \   }
         \ })
 
@@ -1018,8 +1013,7 @@ endif
 if neobundle#tap('syntastic')
   call neobundle#config({
         \   'autoload': {
-        \     'filetypes':       ['go', 'ruby'],
-        \     'function_prefix': 'submode'
+        \     'filetypes': ['go', 'ruby']
         \   }
         \ })
 
@@ -1609,7 +1603,7 @@ endif
 if neobundle#tap('vimshell.vim')
   call neobundle#config({
         \   'autoload': {
-        \     'commands': ['VimShell', 'VimShellPop']
+        \     'commands': 'VimShellPop'
         \   }
         \ })
 
