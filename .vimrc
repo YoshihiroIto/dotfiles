@@ -6,6 +6,7 @@ scriptencoding utf-8
 let s:is_windows     = has('win32') || has('win64')
 let s:is_mac         = has('mac') || has('macunix')
 let s:is_linux       = has('unix') && !s:is_windows && !s:is_mac
+let s:is_neovim      = has('neovim')
 let s:is_gui_running = has('gui_running')
 let s:is_starting    = has('vim_starting')
 
@@ -256,7 +257,7 @@ endif
 if neobundle#tap('open-browser.vim')
   call neobundle#config({
         \   'autoload': {
-        \     'mappings': '<Plug>(openbrowser-',
+        \     'mappings': '<Plug>(openbrowser',
         \     'commands': [
         \       {
         \         'name':     'OpenBrowserSearch',
@@ -1621,7 +1622,8 @@ if neobundle#tap('vimfiler.vim')
   call neobundle#config({
         \   'depends':  'unite.vim',
         \   'autoload': {
-        \     'commands': 'VimFilerBufferDir',
+        \     'commands' : 'VimFilerBufferDir',
+        \     'mappings' : '<Plug>'
         \   }
         \ })
 
@@ -2181,12 +2183,15 @@ set completeopt=longest,menuone
 set backspace=indent,eol,start
 set noswapfile
 set nobackup
-set cryptmethod=blowfish
 set noimdisable
 
-" MacVim-KaoriYa 自動IM on禁止
-if s:is_mac
-  set imdisableactivate
+if !s:is_neovim
+  set cryptmethod=blowfish
+
+  " MacVim-KaoriYa 自動IM on禁止
+  if s:is_mac
+    set imdisableactivate
+  endif
 endif
 
 nnoremap <silent> <F1> :<C-u>edit $MYVIMRC<CR>
@@ -2306,7 +2311,10 @@ set shiftwidth=4                  " インデントの各段階に使われる�
 set expandtab                     " Insertモードで <Tab> を挿入するとき、代わりに適切な数の空白を使う。
 set list
 set listchars=tab:\⭟\ ,eol:↲,extends:»,precedes:«,nbsp:%
-set breakindent
+
+if !s:is_neovim
+  set breakindent
+endif
 
 vnoremap < <gv
 vnoremap > >gv
