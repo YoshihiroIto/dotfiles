@@ -111,7 +111,7 @@ function! s:set_neobundle() " {{{
   " 編集
   NeoBundle     'tpope/vim-surround'
   NeoBundle     'tpope/vim-repeat'
-  NeoBundleLazy 'tomtom/tcomment_vim'
+  NeoBundle     'tomtom/tcomment_vim'
   NeoBundleLazy 'LeafCage/yankround.vim'
   NeoBundleLazy 'kana/vim-smartinput'
   NeoBundleLazy 'nishigori/increment-activator'
@@ -608,18 +608,6 @@ if neobundle#tap('vim-easy-align')
   call neobundle#untap()
 endif
 " }}}
-" tcomment_vim {{{
-if neobundle#tap('tcomment_vim')
-  call neobundle#config({
-        \   'autoload': {
-        \     'mappings': 'gc',
-        \     'commands': 'TComment'
-        \   }
-        \ })
-
-  call neobundle#untap()
-endif
-" }}}
 " yankround {{{
 if neobundle#tap('yankround.vim')
   call neobundle#config({
@@ -629,12 +617,12 @@ if neobundle#tap('yankround.vim')
         \ })
 
   " http://vim-jp.org/vim-users-jp/2011/01/16/Hack-195.html
-  nmap <expr> p  (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR><Plug>(yankround-p)'
-  xmap <expr> p  (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR><Plug>(yankround-p)'
-  nmap <expr> P  (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR><Plug>(yankround-P)'
-  nmap <expr> gp (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR><Plug>(yankround-gp)'
-  xmap <expr> gp (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR><Plug>(yankround-gp)'
-  nmap <expr> gP (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR><Plug>(yankround-gP)'
+  nmap <silent><expr> p  (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR><Plug>(yankround-p)'
+  xmap <silent><expr> p  (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR><Plug>(yankround-p)'
+  nmap <silent><expr> P  (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR><Plug>(yankround-P)'
+  nmap <silent><expr> gp (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR><Plug>(yankround-gp)'
+  xmap <silent><expr> gp (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR><Plug>(yankround-gp)'
+  nmap <silent><expr> gP (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR><Plug>(yankround-gP)'
 
   nmap <C-p> <Plug>(yankround-prev)
   nmap <C-n> <Plug>(yankround-next)
@@ -1620,7 +1608,6 @@ endif
 " vimfiler.vim {{{
 if neobundle#tap('vimfiler.vim')
   call neobundle#config({
-        \   'depends':  'unite.vim',
         \   'autoload': {
         \     'commands' : 'VimFilerBufferDir',
         \     'mappings' : '<Plug>'
@@ -1763,6 +1750,7 @@ let g:icondrag_auto_start = 1
 " unite.vim {{{
 if neobundle#tap('unite.vim')
   call neobundle#config({
+        \   'depends':  'vimfiler.vim',
         \   'autoload': {
         \     'commands': ['Unite', 'UniteResume', 'UniteWithCursorWord']
         \   }
