@@ -2299,10 +2299,7 @@ set shiftwidth=4                  " インデントの各段階に使われる�
 set expandtab                     " Insertモードで <Tab> を挿入するとき、代わりに適切な数の空白を使う。
 set list
 set listchars=tab:\⭟\ ,eol:↲,extends:»,precedes:«,nbsp:%
-
-if !s:is_neovim
-  set breakindent
-endif
+set breakindent
 
 vnoremap < <gv
 vnoremap > >gv
