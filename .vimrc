@@ -2450,7 +2450,7 @@ function! s:set_color()
   highlight InvisibleTab           guibg=#121212
 
   " ^M を非表示
-  syntax match HideCtrlM /\r$/ conceal
+  syntax match HideCtrlM containedin=ALL /\r$/ conceal
 endf
 
 augroup MyAutoCmd
