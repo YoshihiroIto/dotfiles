@@ -6,7 +6,7 @@ scriptencoding utf-8
 let s:is_windows     = has('win32') || has('win64')
 let s:is_mac         = has('mac') || has('macunix')
 let s:is_linux       = has('unix') && !s:is_windows && !s:is_mac
-let s:is_neovim      = has('neovim')
+" let s:is_neovim      = has('neovim')
 let s:is_gui_running = has('gui_running')
 let s:is_starting    = has('vim_starting')
 
@@ -1144,10 +1144,6 @@ if neobundle#tap('vim-quickrun')
           \     'runner/wandbox/compiler':                      'clang-head',
           \     'runner/wandbox/options':                       'warning,c++1y,boost-1.55',
           \   },
-          \   'json': {
-          \     'command':                                      'jq',
-          \     'exec':                                         "%c '.' %s"
-          \   },
           \   'lua': {
           \     'type':                                         'lua/vim'
           \   }
@@ -2173,13 +2169,12 @@ set noswapfile
 set nobackup
 set noimdisable
 
-if !s:is_neovim
+if exists('+cryptmethod')
   set cryptmethod=blowfish
+endif
 
-  " MacVim-KaoriYa 自動IM on禁止
-  if s:is_mac
-    set imdisableactivate
-  endif
+if exists('+imdisableactivate')
+  set imdisableactivate
 endif
 
 nnoremap <silent> <F1> :<C-u>edit $MYVIMRC<CR>
@@ -2452,6 +2447,10 @@ function! s:set_color()
   " ^M を非表示
   syntax match HideCtrlM containedin=ALL /\r$/ conceal
 endf
+
+if s:is_starting
+  call s:set_color()
+endif
 
 augroup MyAutoCmd
   autocmd BufNew,BufRead * call s:set_color()
