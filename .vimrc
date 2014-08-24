@@ -2735,8 +2735,8 @@ nmap     <Leader>t [Tab]
 nnoremap <silent> [Tab]c :<C-u>tabnew<CR>
 nnoremap <silent> [Tab]x :<C-u>tabclose<CR>
 
-nnoremap <silent> K :<C-u>tabp<CR>
-nnoremap <silent> J :<C-u>tabn<CR>
+nnoremap <silent> <F2> :<C-u>tabprevious<CR>
+nnoremap <silent> <F3> :<C-u>tabnext<CR>
 
 " Vimですべてのバッファをタブ化する
 " http://qiita.com/kuwa72/items/deef2703af74d2d993ee
@@ -2745,6 +2745,9 @@ nnoremap <silent> [Tab]t :<C-u>call <SID>clean_empty_buffers()<CR>:<C-u>tab ba<C
 " バッファ操作 {{{
 nnoremap [Buffer]  <Nop>
 nmap     <Leader>b [Buffer]
+
+nnoremap <silent> K :<C-u>bnext<CR>
+nnoremap <silent> J :<C-u>bprevious<CR>
 
 nnoremap <silent> <Leader>x :<C-u>call <SID>delete_current_buffer()<CR>
 " }}}
@@ -2814,7 +2817,8 @@ endf
 function! s:close_v_split_wide()
   let s:depth_vsp -= 1
   let &columns = s:base_columns * s:depth_vsp
-  silent! close
+  " silent! close
+  silent! only
 
   if s:depth_vsp == 1
     silent! execute 'winpos' s:opend_left_vsp s:opend_top_vsp
