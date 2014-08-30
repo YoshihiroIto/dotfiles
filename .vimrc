@@ -893,6 +893,8 @@ if neobundle#tap('vim-altr')
     call altr#define('Models/*/*/*/%Model.cs', 'ViewModels/*/*/*/%Vm.cs', 'Views/*/*/*/%.xaml', 'Views/*/*/*/%.xaml.cs')
     call altr#define('%Model.cs',              '%Vm.cs',                  '%.xaml',             '%.xaml.cs')
 
+    call altr#define('%.cs', '%.xaml.cs')
+
     call altr#define('%.cpp',           '%.h')
     call altr#define('src/%.cpp',       'include/%.h')
     call altr#define('src/*/%.cpp',     'include/*/%.h')
