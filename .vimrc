@@ -617,12 +617,12 @@ if neobundle#tap('yankround.vim')
         \ })
 
   " http://vim-jp.org/vim-users-jp/2011/01/16/Hack-195.html
-  nmap <silent><expr> p  (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR><Plug>(yankround-p)'
-  xmap <silent><expr> p  (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR><Plug>(yankround-p)'
-  nmap <silent><expr> P  (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR><Plug>(yankround-P)'
-  nmap <silent><expr> gp (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR><Plug>(yankround-gp)'
-  xmap <silent><expr> gp (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR><Plug>(yankround-gp)'
-  nmap <silent><expr> gP (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR><Plug>(yankround-gP)'
+  nmap <silent><expr> p  (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR>' . v:count1 . '<Plug>(yankround-p)'
+  xmap <silent><expr> p  (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR>' . v:count1 . '<Plug>(yankround-p)'
+  nmap <silent><expr> P  (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR>' . v:count1 . '<Plug>(yankround-P)'
+  nmap <silent><expr> gp (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR>' . v:count1 . '<Plug>(yankround-gp)'
+  xmap <silent><expr> gp (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR>' . v:count1 . '<Plug>(yankround-gp)'
+  nmap <silent><expr> gP (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR>' . v:count1 . '<Plug>(yankround-gP)'
 
   nmap <C-p> <Plug>(yankround-prev)
   nmap <C-n> <Plug>(yankround-next)
@@ -2607,8 +2607,8 @@ vnoremap <silent> k     gk
 vnoremap <silent> j     gj
 nnoremap <silent> 0     g0
 nnoremap <silent> g0    0
-nnoremap <silent> $     g$
-nnoremap <silent> g$    $
+nnoremap <silent> $     :<C-u>set virtualedit=block<CR>g$:<C-u>set virtualedit=all<CR>
+nnoremap <silent> g$    :<C-u>set virtualedit=block<CR>$:<C-u>set virtualedit=all<CR>
 nnoremap <silent> <C-e> <C-e>j
 nnoremap <silent> <C-y> <C-y>k
 vnoremap <silent> <C-e> <C-e>j
@@ -2618,8 +2618,8 @@ nmap     <silent> G     Gzvzz:<C-u>call  <SID>refresh_screen()<CR>
 
 noremap  <silent> <C-i> <C-i>zz:<C-u>call <SID>refresh_screen()<CR>
 noremap  <silent> <C-o> <C-o>zz:<C-u>call <SID>refresh_screen()<CR>
-map      <silent> <C-h> ^
-map      <silent> <C-l> g$
+map      <silent> <C-h> ^:<C-u>set virtualedit=all<CR>
+map      <silent> <C-l> $:<C-u>set virtualedit=all<CR>
 
 nmap     <silent> <Tab> %
 vmap     <silent> <Tab> %
