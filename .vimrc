@@ -1726,6 +1726,12 @@ if neobundle#tap('agit.vim')
         \   }
         \ })
 
+  function! neobundle#hooks.on_source(bundle)
+    if s:is_windows
+      let g:agit_enable_auto_show_commit = 0
+    endif
+  endfunction
+
   call neobundle#untap()
 endif
 " }}}
