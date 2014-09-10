@@ -20,10 +20,11 @@ if s:is_starting
   unlet s:git_dot_vimrc
 endif
 
-let g:mapleader    = ','
-let s:base_columns = 120
-let s:vimrc_local  = expand('~/.vimrc_local')
-let $DOTVIM        = expand('~/.vim')
+let g:mapleader      = ','
+let g:maplocalleader = ','
+let s:base_columns   = 120
+let s:vimrc_local    = expand('~/.vimrc_local')
+let $DOTVIM          = expand('~/.vim')
 set viminfo+=!
 
 " メニューを読み込まない
