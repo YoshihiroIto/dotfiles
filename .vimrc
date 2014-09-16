@@ -6,7 +6,6 @@ scriptencoding utf-8
 let s:is_windows     = has('win32') || has('win64')
 let s:is_mac         = has('mac') || has('macunix')
 let s:is_linux       = has('unix') && !s:is_windows && !s:is_mac
-" let s:is_neovim      = has('neovim')
 let s:is_gui_running = has('gui_running')
 let s:is_starting    = has('vim_starting')
 
@@ -21,7 +20,6 @@ if s:is_starting
 endif
 
 let g:mapleader      = ','
-let g:maplocalleader = ','
 let s:base_columns   = 120
 let s:vimrc_local    = expand('~/.vimrc_local')
 let $DOTVIM          = expand('~/.vim')
@@ -1766,20 +1764,20 @@ if neobundle#tap('unite.vim')
   nmap     <Space> [Unite]
   xmap     <Space> [Unite]
 
-  nnoremap <silent> [Unite]g  :<C-u>Unite grep -no-split -buffer-name=search-buffer<CR>
-  nnoremap <silent> [Unite]pg :<C-u>call <SID>unite_grep_project('-no-split -buffer-name=search-buffer')<CR>
-  nnoremap <silent> [Unite]r  :<C-u>UniteResume -no-split search-buffer<CR>
+  nnoremap <silent> [Unite]g :<C-u>Unite grep -no-split -buffer-name=search-buffer<CR>
+  nnoremap <silent> [Unite]p :<C-u>call <SID>unite_grep_project('-no-split -buffer-name=search-buffer')<CR>
+  nnoremap <silent> [Unite]r :<C-u>UniteResume -no-split search-buffer<CR>
 
-  nnoremap <silent> [Unite]f  :<C-u>Unite buffer<CR>
-  nnoremap <silent> [Unite]j  :<C-u>Unite bookmark<CR>
-  nnoremap <silent> [Unite]t  :<C-u>Unite tab<CR>
-  nnoremap <silent> [Unite]l  :<C-u>Unite -no-split line<CR>
-  nnoremap <silent> [Unite]o  :<C-u>Unite outline<CR>
-  nnoremap <silent> [Unite]z  :<C-u>Unite fold<CR>
-  nnoremap <silent> [Unite]c  :<C-u>Unite codic<CR>
-  nnoremap <silent> [Unite]q  :<C-u>Unite -no-quit quickfix<CR>
-  nnoremap <silent> [Unite]v  :<C-u>call <SID>execute_if_on_git_branch('Unite giti')<CR>
-  nnoremap <silent> [Unite]b  :<C-u>call <SID>execute_if_on_git_branch('Unite giti/branch_all')<CR>
+  nnoremap <silent> [Unite]f :<C-u>Unite buffer<CR>
+  nnoremap <silent> [Unite]j :<C-u>Unite bookmark<CR>
+  nnoremap <silent> [Unite]t :<C-u>Unite tab<CR>
+  nnoremap <silent> [Unite]l :<C-u>Unite -no-split line<CR>
+  nnoremap <silent> [Unite]o :<C-u>Unite outline<CR>
+  nnoremap <silent> [Unite]z :<C-u>Unite fold<CR>
+  nnoremap <silent> [Unite]c :<C-u>Unite codic<CR>
+  nnoremap <silent> [Unite]q :<C-u>Unite -no-quit quickfix<CR>
+  nnoremap <silent> [Unite]v :<C-u>call <SID>execute_if_on_git_branch('Unite giti')<CR>
+  nnoremap <silent> [Unite]b :<C-u>call <SID>execute_if_on_git_branch('Unite giti/branch_all')<CR>
 
   if s:is_windows
     nnoremap <silent> [Unite]m  :<C-u>Unite -no-split neomru/file everything<CR>
