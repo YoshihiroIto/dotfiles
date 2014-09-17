@@ -1815,6 +1815,8 @@ if neobundle#tap('unite.vim')
         \   'direction':        'rightbelow',
         \   'prompt_direction': 'top',
         \   'vertical':         0,
+        \   'ignorecase':       1,
+        \   'smartcase':        1,
         \   'start_insert':     1
         \ })
 
@@ -1822,10 +1824,8 @@ if neobundle#tap('unite.vim')
         \   'vertical': 1
         \ })
 
-    call unite#custom#profile('default', 'ignorecase', 1)
-    call unite#custom#profile('default', 'smartcase',  1)
-    call unite#custom#source( 'fold',    'matchers',   'matcher_migemo')
-    call unite#custom#source( 'file',    'matchers',   'matcher_default')
+    call unite#custom#source('fold', 'matchers', 'matcher_migemo')
+    call unite#custom#source('file', 'matchers', 'matcher_default')
 
     call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
     call unite#custom_default_action('directory',                 'vimfiler')
