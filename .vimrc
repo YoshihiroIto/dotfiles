@@ -101,7 +101,7 @@ function! s:set_neobundle() " {{{
   NeoBundle     'itchyny/lightline.vim'
   NeoBundle     'vim-scripts/matchparenpp'
   NeoBundleLazy 'YoshihiroIto/tagbar'
-  NeoBundleLazy 'LeafCage/foldCC'
+  NeoBundleLazy 'LeafCage/foldCC.vim'
   if s:is_gui_running
     NeoBundleLazy 'movewin.vim'
     NeoBundleLazy 'YoshihiroIto/vim-resize-win'
@@ -311,8 +311,8 @@ if neobundle#tap('tagbar')
   call neobundle#untap()
 endif
 " }}}
-" foldCC {{{
-if neobundle#tap('foldCC')
+" foldCC.vim {{{
+if neobundle#tap('foldCC.vim')
   call neobundle#config({
         \   'autoload': {
         \     'filetypes': ['vim', 'xml']
@@ -321,7 +321,7 @@ if neobundle#tap('foldCC')
 
   function! neobundle#hooks.on_source(bundle)
     let g:foldCCtext_enable_autofdc_adjuster = 1
-    set foldtext=foldCC#foldtext()
+    set foldtext=FoldCCtext()
   endfunction
 
   call neobundle#untap()
