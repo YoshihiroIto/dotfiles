@@ -91,6 +91,7 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'basyura/twibill.vim'
   NeoBundleLazy 'mattn/webapi-vim'
   NeoBundleLazy 'tyru/open-browser.vim'
+  NeoBundleLazy 'Shougo/tabpagebuffer.vim'
   if !has('kaoriya')
     NeoBundle 'vim-jp/vimdoc-ja'
   endif
@@ -131,6 +132,7 @@ function! s:set_neobundle() " {{{
 
   " 検索
   NeoBundle     'matchit.zip'
+  NeoBundleLazy 'haya14busa/incsearch.vim'
   NeoBundleLazy 'osyo-manga/vim-anzu'
   NeoBundleLazy 'rhysd/clever-f.vim'
   NeoBundleLazy 'thinca/vim-visualstar'
@@ -154,7 +156,7 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'jelera/vim-javascript-syntax'
   NeoBundleLazy 'rhysd/wandbox-vim'
   NeoBundleLazy 'thinca/vim-quickrun'
-  NeoBundleLazy 'kannokanno/previm'
+  NeoBundleLazy 'tukiyo/previm'
 
   " テキストオブジェクト
   NeoBundleLazy 'kana/vim-textobj-user'
@@ -905,6 +907,37 @@ endif
 " }}}
 " }}}
 " 検索 {{{
+" incsearch.vim {{{
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+
+if neobundle#tap('incsearch.vim')
+  call neobundle#config({
+        \   'autoload': {
+        \     'commands': 'IncSearchNoreMap',
+        \     'mappings': '<Plug>'
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    let g:incsearch#magic = '\v'
+    let g:incsearch#emacs_like_keymap = 1
+  endfunction
+
+  augroup incsearch-keymap
+    autocmd!
+    autocmd VimEnter * call s:incsearch_keymap()
+  augroup END
+
+  function! s:incsearch_keymap()
+    IncSearchNoreMap <C-j> <Esc>
+    IncSearchNoreMap <C-i> <Over>(incsearch-scroll-f)
+    IncSearchNoreMap <C-o> <Over>(incsearch-scroll-b)
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
 " vim-anzu {{{
 nmap <silent> n <Plug>(anzu-n)zvzz:<C-u>call <SID>begin_display_anzu()<CR>:<C-u>call <SID>refresh_screen()<CR>
 nmap <silent> N <Plug>(anzu-N)zvzz:<C-u>call <SID>begin_display_anzu()<CR>:<C-u>call <SID>refresh_screen()<CR>
@@ -1588,6 +1621,7 @@ endif
 " vimshell.vim {{{
 if neobundle#tap('vimshell.vim')
   call neobundle#config({
+        \   'depends':  'tabpagebuffer.vim',
         \   'autoload': {
         \     'commands': 'VimShellPop'
         \   }
@@ -1605,6 +1639,7 @@ endif
 " vimfiler.vim {{{
 if neobundle#tap('vimfiler.vim')
   call neobundle#config({
+        \   'depends':  'tabpagebuffer.vim',
         \   'autoload': {
         \     'commands' : 'VimFilerBufferDir',
         \     'mappings' : '<Plug>'
@@ -1753,7 +1788,7 @@ let g:icondrag_auto_start = 1
 " unite.vim {{{
 if neobundle#tap('unite.vim')
   call neobundle#config({
-        \   'depends':  'vimfiler.vim',
+        \   'depends':  ['vimfiler.vim', 'tabpagebuffer.vim'],
         \   'autoload': {
         \     'commands': ['Unite', 'UniteResume', 'UniteWithCursorWord']
         \   }
@@ -2197,6 +2232,10 @@ command! RemoveEolSpace call s:execute_keep_view('silent! %substitute/ \+$//g | 
 " 整形
 command! Format call s:smart_format()
 
+" to html
+let g:loaded_2html_plugin = 'vim7.4_v1'
+command -range=% -bar TOhtml :call tohtml#Convert2HTML(<line1>, <line2>)
+
 " http://lsifrontend.hatenablog.com/entry/2013/10/11/052640
 nmap     <silent> <C-CR> yy:<C-u>TComment<CR>p
 vnoremap <silent> <C-CR> :<C-u>call <SID>copy_add_comment()<CR>
@@ -2310,6 +2349,7 @@ vnoremap > >gv
 set incsearch
 set ignorecase
 set smartcase
+set hlsearch
 
 if executable('pt')
   set grepprg=pt\ --nogroup\ --nocolor\ -S
@@ -2593,6 +2633,7 @@ endfunction
 inoremap <C-j> <Esc>
 nnoremap <C-j> <Esc>
 vnoremap <C-j> <Esc>
+cnoremap <C-j> <Esc>
 " }}}
 " コマンドラインモード {{{
 cnoremap <C-a> <Home>
