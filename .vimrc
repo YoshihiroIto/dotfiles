@@ -354,39 +354,39 @@ endif
 " lightline {{{
 let g:lightline#colorscheme#yoi#palette = {
       \   'inactive': {
-      \     'left':   [['#585858', '#262626', 240, 235], ['#585858', '#121212', 240, 233]],
-      \     'right':  [['#262626', '#606060', 235, 241], ['#585858', '#262626', 240, 235], ['#585858', '#121212', 240, 233]]
+      \     'left':    [['#585858', '#262626', 240, 235], ['#585858', '#121212', 240, 233]],
+      \     'right':   [['#262626', '#606060', 235, 241], ['#585858', '#262626', 240, 235], ['#585858', '#121212', 240, 233]]
       \   },
-      \   'insert':   {
-      \     'branch': [['#ffffff', '#0087af', 231,  31]],
-      \     'left':   [['#005f5f', '#ffffff',  23, 231], ['#87dfff', '#005f87', 117,  24]],
-      \     'middle': [['#87dfff', '#005f87', 117,  24]],
-      \     'right':  [['#005f5f', '#87dfff',  23, 117], ['#87dfff', '#0087af', 117,  31], ['#87dfff', '#005f87', 117,  24]]
+      \   'insert':    {
+      \     'branch':  [['#ffffff', '#0087af', 231,  31]],
+      \     'left':    [['#005f5f', '#ffffff',  23, 231], ['#87dfff', '#005f87', 117,  24]],
+      \     'middle':  [['#87dfff', '#005f87', 117,  24]],
+      \     'right':   [['#005f5f', '#87dfff',  23, 117], ['#87dfff', '#0087af', 117,  31], ['#87dfff', '#005f87', 117,  24]]
       \   },
-      \   'normal':   {
-      \     'branch': [['#ffffff', '#585858', 231, 240]],
-      \     'error':  [['#bcbcbc', '#ff0000', 250, 196]],
-      \     'left':   [['#195E00', '#07AF00',  22,  34], ['#8a8a8a', '#303030', 245, 236]],
-      \     'middle': [['#8a8a8a', '#303030', 245, 236]],
-      \     'right':  [['#606060', '#d0d0d0', 241, 252], ['#bcbcbc', '#585858', 250, 240], ['#9e9e9e', '#303030', 247, 236]],
-      \     'warning':[['#262626', '#b58900', 235, 136]]
+      \   'normal':    {
+      \     'branch':  [['#ffffff', '#585858', 231, 240]],
+      \     'error':   [['#bcbcbc', '#ff0000', 250, 196]],
+      \     'left':    [['#195E00', '#07AF00',  22,  34], ['#8a8a8a', '#303030', 245, 236]],
+      \     'middle':  [['#8a8a8a', '#303030', 245, 236]],
+      \     'right':   [['#606060', '#d0d0d0', 241, 252], ['#bcbcbc', '#585858', 250, 240], ['#9e9e9e', '#303030', 247, 236]],
+      \     'warning': [['#262626', '#b58900', 235, 136]]
       \   },
-      \   'replace':  {
-      \     'left':   [['#ffffff', '#df0000', 231, 160], ['#ffffff', '#585858', 231, 240]],
-      \     'middle': [['#8a8a8a', '#303030', 245, 236]],
-      \     'right':  [['#606060', '#d0d0d0', 241, 252], ['#bcbcbc', '#585858', 250, 240], ['#9e9e9e', '#303030', 247, 236]]
+      \   'replace':   {
+      \     'left':    [['#ffffff', '#df0000', 231, 160], ['#ffffff', '#585858', 231, 240]],
+      \     'middle':  [['#8a8a8a', '#303030', 245, 236]],
+      \     'right':   [['#606060', '#d0d0d0', 241, 252], ['#bcbcbc', '#585858', 250, 240], ['#9e9e9e', '#303030', 247, 236]]
       \   },
-      \   'tabline':  {
-      \     'left':   [['#bcbcbc', '#585858', 250, 240]],
-      \     'middle': [['#303030', '#9e9e9e', 236, 247]],
-      \     'right':  [['#bcbcbc', '#4e4e4e', 250, 239]],
-      \     'tabsel': [['#bcbcbc', '#262626', 250, 235]]
+      \   'tabline':   {
+      \     'left':    [['#bcbcbc', '#585858', 250, 240]],
+      \     'middle':  [['#303030', '#9e9e9e', 236, 247]],
+      \     'right':   [['#bcbcbc', '#4e4e4e', 250, 239]],
+      \     'tabsel':  [['#bcbcbc', '#262626', 250, 235]]
       \   },
-      \   'visual':   {
-      \     'branch': [['#ffffff', '#AF0053', 231, 125]],
-      \     'left':   [['#AB2362', '#ffffff', 125, 231], ['#FF84BA', '#870036', 211,  89]],
-      \     'middle': [['#FF84BA', '#870036', 211,  89]],
-      \     'right':  [['#75003D', '#FF87BB',  89, 211], ['#FE86BB', '#AF0053', 211, 125], ['#FF84BA', '#870036', 211,  89]]
+      \   'visual':    {
+      \     'branch':  [['#ffffff', '#AF0053', 231, 125]],
+      \     'left':    [['#AB2362', '#ffffff', 125, 231], ['#FF84BA', '#870036', 211,  89]],
+      \     'middle':  [['#FF84BA', '#870036', 211,  89]],
+      \     'right':   [['#75003D', '#FF87BB',  89, 211], ['#FE86BB', '#AF0053', 211, 125], ['#FF84BA', '#870036', 211,  89]]
       \   }
       \ }
 
@@ -566,7 +566,7 @@ endfunction
 " }}}
 " indentLine {{{
 let g:indentLine_fileType = [
-      \   'c',    'cpp',  'cs', 'go',
+      \   'c',    'cpp',  'cs',     'go',
       \   'ruby', 'lua',  'python',
       \   'vim',
       \   'glsl', 'hlsl',
@@ -838,7 +838,7 @@ if neobundle#tap('neosnippet.vim')
   call neobundle#untap()
 endif
 " }}}
-" Omnisharp {{{
+" omnisharp {{{
 if neobundle#tap('Omnisharp')
   call neobundle#config({
         \   'depends':  'neocomplete.vim',
@@ -908,8 +908,8 @@ endif
 " }}}
 " 検索 {{{
 " incsearch.vim {{{
-map /  <Plug>(incsearch-forward)
-map ?  <Plug>(incsearch-backward)
+map / <Plug>(incsearch-forward)
+map ? <Plug>(incsearch-backward)
 
 if neobundle#tap('incsearch.vim')
   call neobundle#config({
@@ -920,7 +920,7 @@ if neobundle#tap('incsearch.vim')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    let g:incsearch#magic = '\v'
+    let g:incsearch#magic             = '\v'
     let g:incsearch#emacs_like_keymap = 1
   endfunction
 
