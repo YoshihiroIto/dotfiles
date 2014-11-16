@@ -1974,7 +1974,8 @@ if s:is_windows
     function! neobundle#hooks.on_source(bundle)
       let g:unite_source_everything_full_path_search = 1
 
-      call unite#custom_max_candidates('everything', 300)
+      " call unite#custom_max_candidates('everything', 100)
+      call unite#custom#source('everything', 'max_candidates', 100)
     endfunction
 
     call neobundle#untap()
@@ -2943,7 +2944,9 @@ endfunction
 " }}}
 " 整形 {{{
 function! s:smart_format()
-  if &ft == 'cpp'
+  if &ft == 'cs'
+    OmniSharpCodeFormat
+  elseif &ft == 'cpp'
     CppFormat
   elseif &ft == 'c'
     CppFormat
