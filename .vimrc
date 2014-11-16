@@ -123,7 +123,7 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'Shougo/neocomplete.vim'
   NeoBundleLazy 'Shougo/neosnippet.vim'
   NeoBundleLazy 'Shougo/neosnippet-snippets'
-  NeoBundleLazy 'nosami/Omnisharp'
+  NeoBundleLazy 'OmniSharp/omnisharp-vim'
   NeoBundleLazy 'koron/codic-vim'
 
   " ファイル
@@ -838,8 +838,8 @@ if neobundle#tap('neosnippet.vim')
   call neobundle#untap()
 endif
 " }}}
-" omnisharp {{{
-if neobundle#tap('Omnisharp')
+" omnisharp-vim {{{
+if neobundle#tap('omnisharp-vim')
   call neobundle#config({
         \   'depends':  'neocomplete.vim',
         \   'autoload': {
