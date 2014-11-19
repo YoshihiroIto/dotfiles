@@ -288,29 +288,44 @@ abbr		ObservableCollection
 
 snippet		new List
 abbr		new List
+alias		List
 	var ${1:value} = new List<${2:T}>();
 	${0}
 
 snippet		new HashSet
 abbr		new HashSet
+alias		HashSet
 	var ${1:value} = new HashSet<${2:T}>();
 	${0}
 
 snippet		new Dictionary
 abbr		new Dictionary
+alias		Dictionary
 	var ${1:value} = new Dictionary<${2:TKey}, ${3:TValue}>();
 	${0}
 
+snippet		new ReadOnlyDictionary
+abbr		new ReadOnlyDictionary
+alias		ReadOnlyDictionary
+	public static readonly ReadOnlyDictionary<${1:TKey}, ${2:TValue}> ${3:value} = new ReadOnlyDictionary<$1, $2>(
+		new Dictionary<$1, $2>
+		{
+			{${0}},
+		});
+
 snippet		new ObservableCollection
 abbr		new ObservableCollection
+alias		ObservableCollection
 	new ObservableCollection<${1:T}>();
 
 snippet		new PropertyChangedEventListener
 abbr		new PropertyChangedEventListener
+alias		PropertyChangedEventListener
 	new PropertyChangedEventListener(${0})
 
 snippet		string IsNullOrEmpty
 abbr		if string.IsNullOrEmpty
+alias		IsNullOrEmpty
 	if (string.IsNullOrEmpty(${1:value}))
 	{
 		${0}

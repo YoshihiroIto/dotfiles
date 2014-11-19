@@ -1064,7 +1064,7 @@ if neobundle#tap('clang_complete')
 
     if s:is_windows
       let g:clang_user_options = '-I C:/Development/boost_1_55_0 -I "C:/Program Files (x86)/Microsoft Visual Studio 11.0/VC/include" -std=c++11 -fms-extensions -fmsc-version=1300 -fgnu-runtime -D__MSVCRT_VERSION__=0x700 -D_WIN32_WINNT=0x0500 2> NUL || exit 0"'
-      let g:clang_library_path = 'C:/Development/llvm/build/bin/Release/'
+      let g:clang_library_path = 'C:/Development/LLVM/bin/'
     elseif s:is_mac
       let g:clang_user_options = '-std=c++11'
       let g:clang_library_path = '/Library/Developer/CommandLineTools/usr/lib/'
@@ -1084,21 +1084,21 @@ if neobundle#tap('vim-clang-format')
 
   function! neobundle#hooks.on_source(bundle)
     if s:is_windows
-      let g:clang_format#command = 'C:/Development/llvm/build/bin/Release/clang-format'
+      let g:clang_format#command = 'C:/Development/LLVM/bin/clang-format.exe'
     else
       let g:clang_format#command = 'clang-format-3.4'
     endif
 
     let g:clang_format#style_options = {
           \   'AccessModifierOffset':                -4,
-          \   'ColumnLimit':                         120,
-          \   'AllowShortIfStatementsOnASingleLine': 'true',
-          \   'AlwaysBreakTemplateDeclarations':     'true',
-          \   'Standard':                            'C++11',
-          \   'BreakBeforeBraces':                   'Stroustrup',
+          \   'AllowShortIfStatementsOnASingleLine': 'false',
+          \   'AlwaysBreakBeforeMultilineStrings':   'false',
+          \   'BreakBeforeBraces':                   'Allman',
+          \   'ColumnLimit':                         0,
+          \   'IndentCaseLabels':                    'false',
+          \   'IndentWidth':                         4,
+          \   'UseTab':                              'Never',
           \ }
-
-    let g:clang_format#code_style = 'Chromium'
 
     command! -range=% -nargs=0 CppFormat call clang_format#replace(<line1>, <line2>)
   endfunction
@@ -1974,7 +1974,6 @@ if s:is_windows
     function! neobundle#hooks.on_source(bundle)
       let g:unite_source_everything_full_path_search = 1
 
-      " call unite#custom_max_candidates('everything', 100)
       call unite#custom#source('everything', 'max_candidates', 100)
     endfunction
 
