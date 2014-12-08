@@ -926,6 +926,7 @@ if neobundle#tap('incsearch.vim')
 
   function! s:incsearch_keymap()
     IncSearchNoreMap <C-j> <Esc>
+    IncSearchNoreMap <C-h> <BS>
     IncSearchNoreMap <C-i> <Over>(incsearch-scroll-f)
     IncSearchNoreMap <C-o> <Over>(incsearch-scroll-b)
   endfunction
