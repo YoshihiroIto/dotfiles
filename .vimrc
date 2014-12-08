@@ -112,7 +112,7 @@ function! s:set_neobundle() " {{{
   NeoBundle     'tpope/vim-repeat'
   NeoBundle     'tomtom/tcomment_vim'
   NeoBundleLazy 'LeafCage/yankround.vim'
-  NeoBundleLazy 'kana/vim-smartinput'
+  NeoBundleLazy 'cohama/lexima.vim'
   NeoBundleLazy 'nishigori/increment-activator'
   NeoBundleLazy 'osyo-manga/vim-over'
   NeoBundleLazy 'thinca/vim-qfreplace'
@@ -634,18 +634,13 @@ if neobundle#tap('yankround.vim')
   call neobundle#untap()
 endif
 " }}}
-" vim-smartinput {{{
-if neobundle#tap('vim-smartinput')
+" lexima.vim {{{
+if neobundle#tap('lexima.vim')
   call neobundle#config({
         \   'autoload': {
         \     'insert': 1,
         \   }
         \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    call smartinput#clear_rules()
-    call smartinput#define_default_rules()
-  endfunction
 
   call neobundle#untap()
 endif
@@ -807,8 +802,8 @@ if neobundle#tap('neosnippet.vim')
         \         'complete': 'customlist,neosnippet#commands#_filetype_complete'
         \       },
         \       {
-        \          'name':     'NeoSnippetEdit',
-        \          'complete': 'customlist,neosnippet#commands#_edit_complete'
+        \         'name':     'NeoSnippetEdit',
+        \         'complete': 'customlist,neosnippet#commands#_edit_complete'
         \       }
         \     ],
         \     'mappings': [['sxi', '<Plug>']],
@@ -895,7 +890,8 @@ if neobundle#tap('vim-altr')
 
     call altr#define('%.cs', '%.xaml.cs')
 
-    call altr#define('%.cpp',           '%.h')
+    call altr#define('%.cpp', '%.h', '%.*.cpp')
+
     call altr#define('src/%.cpp',       'include/%.h')
     call altr#define('src/*/%.cpp',     'include/*/%.h')
     call altr#define('src/*/*/%.cpp',   'include/*/*/%.h')
@@ -1812,11 +1808,10 @@ if neobundle#tap('unite.vim')
   nnoremap <silent> [Unite]q :<C-u>Unite -no-quit quickfix<CR>
   nnoremap <silent> [Unite]v :<C-u>call <SID>execute_if_on_git_branch('Unite giti')<CR>
   nnoremap <silent> [Unite]b :<C-u>call <SID>execute_if_on_git_branch('Unite giti/branch_all')<CR>
+  nnoremap <silent> [Unite]m :<C-u>Unite -no-split neomru/file<CR>
 
   if s:is_windows
-    nnoremap <silent> [Unite]m  :<C-u>Unite -no-split neomru/file everything<CR>
-  else
-    nnoremap <silent> [Unite]m  :<C-u>Unite -no-split neomru/file<CR>
+    nnoremap <silent> [Unite]e :<C-u>Unite -no-split everything<CR>
   endif
 
   nnoremap [Unite]uu :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
@@ -1916,7 +1911,7 @@ if neobundle#tap('neomru.vim')
 
   function! neobundle#hooks.on_source(bundle)
     let g:neomru#update_interval         = 1
-    let g:neomru#file_mru_limit          = 500
+    let g:neomru#file_mru_limit          = 150
     let g:neomru#file_mru_ignore_pattern = 'fugitiveblame'
   endfunction
 
@@ -1973,7 +1968,7 @@ if s:is_windows
     function! neobundle#hooks.on_source(bundle)
       let g:unite_source_everything_full_path_search = 1
 
-      call unite#custom#source('everything', 'max_candidates', 100)
+      call unite#custom#source('everything', 'max_candidates', 500)
     endfunction
 
     call neobundle#untap()
