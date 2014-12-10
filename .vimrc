@@ -87,42 +87,42 @@ function! s:set_neobundle() " {{{
   NeoBundle     'tpope/vim-dispatch'
   NeoBundle     'xolox/vim-misc'
   NeoBundle     'xolox/vim-shell'
+  NeoBundleLazy 'Shougo/tabpagebuffer.vim'
   NeoBundleLazy 'basyura/twibill.vim'
   NeoBundleLazy 'mattn/webapi-vim'
   NeoBundleLazy 'tyru/open-browser.vim'
-  NeoBundleLazy 'Shougo/tabpagebuffer.vim'
   if !has('kaoriya')
     NeoBundle 'vim-jp/vimdoc-ja'
   endif
 
   " 表示
-  NeoBundle     'tomasr/molokai'
   NeoBundle     'Yggdroot/indentLine'
   NeoBundle     'itchyny/lightline.vim'
+  NeoBundle     'tomasr/molokai'
   NeoBundle     'vim-scripts/matchparenpp'
-  NeoBundleLazy 'YoshihiroIto/tagbar'
   NeoBundleLazy 'LeafCage/foldCC.vim'
+  NeoBundleLazy 'YoshihiroIto/tagbar'
   if s:is_gui_running
-    NeoBundleLazy 'movewin.vim'
     NeoBundleLazy 'YoshihiroIto/vim-resize-win'
+    NeoBundleLazy 'movewin.vim'
   endif
 
   " 編集
-  NeoBundle     'tpope/vim-surround'
-  NeoBundle     'tpope/vim-repeat'
   NeoBundle     'tomtom/tcomment_vim'
+  NeoBundle     'tpope/vim-repeat'
+  NeoBundle     'tpope/vim-surround'
   NeoBundleLazy 'LeafCage/yankround.vim'
   NeoBundleLazy 'cohama/lexima.vim'
+  NeoBundleLazy 'junegunn/vim-easy-align'
   NeoBundleLazy 'nishigori/increment-activator'
   NeoBundleLazy 'osyo-manga/vim-over'
   NeoBundleLazy 'thinca/vim-qfreplace'
-  NeoBundleLazy 'junegunn/vim-easy-align'
 
   " 補完
-  NeoBundleLazy 'Shougo/neocomplete.vim'
-  NeoBundleLazy 'Shougo/neosnippet.vim'
-  NeoBundleLazy 'Shougo/neosnippet-snippets'
   NeoBundleLazy 'OmniSharp/omnisharp-vim'
+  NeoBundleLazy 'Shougo/neocomplete.vim'
+  NeoBundleLazy 'Shougo/neosnippet-snippets'
+  NeoBundleLazy 'Shougo/neosnippet.vim'
   NeoBundleLazy 'koron/codic-vim'
 
   " ファイル
@@ -134,59 +134,59 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'haya14busa/incsearch.vim'
   NeoBundleLazy 'osyo-manga/vim-anzu'
   NeoBundleLazy 'rhysd/clever-f.vim'
-  NeoBundleLazy 'thinca/vim-visualstar'
+  NeoBundleLazy 'haya14busa/vim-asterisk'
 
   " 言語
   NeoBundle     'YoshihiroIto/vim-gocode'
-  NeoBundleLazy 'YoshihiroIto/syntastic'
-  NeoBundleLazy 'Rip-Rip/clang_complete'
-  NeoBundleLazy 'rhysd/vim-clang-format'
-  NeoBundleLazy 'osyo-manga/shabadou.vim'
-  NeoBundleLazy 'vim-jp/cpp-vim'
-  NeoBundleLazy 'dgryski/vim-godef'
   NeoBundleLazy 'Mizuchi/STL-Syntax'
+  NeoBundleLazy 'Rip-Rip/clang_complete'
+  NeoBundleLazy 'YoshihiroIto/syntastic'
   NeoBundleLazy 'beyondmarc/hlsl.vim'
-  NeoBundleLazy 'tikhomirov/vim-glsl'
-  NeoBundleLazy 'vim-ruby/vim-ruby'
-  NeoBundleLazy 'vim-scripts/JSON.vim'
-  NeoBundleLazy 'tpope/vim-markdown'
-  NeoBundleLazy 'pangloss/vim-javascript'
-  NeoBundleLazy 'kchmck/vim-coffee-script'
+  NeoBundleLazy 'dgryski/vim-godef'
   NeoBundleLazy 'jelera/vim-javascript-syntax'
+  NeoBundleLazy 'kchmck/vim-coffee-script'
+  NeoBundleLazy 'osyo-manga/shabadou.vim'
+  NeoBundleLazy 'pangloss/vim-javascript'
+  NeoBundleLazy 'rhysd/vim-clang-format'
   NeoBundleLazy 'rhysd/wandbox-vim'
   NeoBundleLazy 'thinca/vim-quickrun'
+  NeoBundleLazy 'tikhomirov/vim-glsl'
+  NeoBundleLazy 'tpope/vim-markdown'
   NeoBundleLazy 'tukiyo/previm'
+  NeoBundleLazy 'vim-jp/cpp-vim'
+  NeoBundleLazy 'vim-ruby/vim-ruby'
+  NeoBundleLazy 'vim-scripts/JSON.vim'
 
   " テキストオブジェクト
   NeoBundleLazy 'kana/vim-textobj-user'
+  NeoBundleLazy 'glts/vim-textobj-comment'
+  NeoBundleLazy 'h1mesuke/textobj-wiw'
   NeoBundleLazy 'kana/vim-textobj-entire'
   NeoBundleLazy 'kana/vim-textobj-indent'
   NeoBundleLazy 'kana/vim-textobj-line'
-  NeoBundleLazy 'rhysd/vim-textobj-word-column'
-  NeoBundleLazy 'glts/vim-textobj-comment'
-  NeoBundleLazy 'sgur/vim-textobj-parameter'
   NeoBundleLazy 'rhysd/vim-textobj-anyblock'
-  NeoBundleLazy 'h1mesuke/textobj-wiw'
+  NeoBundleLazy 'rhysd/vim-textobj-word-column'
+  NeoBundleLazy 'sgur/vim-textobj-parameter'
   NeoBundleLazy 'whatyouhide/vim-textobj-xmlattr'
 
   " オペレータ
   NeoBundleLazy 'kana/vim-operator-user'
+  NeoBundleLazy 'deris/vim-rengbang'
+  NeoBundleLazy 'emonkak/vim-operator-sort'
   NeoBundleLazy 'kana/vim-operator-replace'
   NeoBundleLazy 'tyru/operator-camelize.vim'
-  NeoBundleLazy 'emonkak/vim-operator-sort'
-  NeoBundleLazy 'deris/vim-rengbang'
 
   " アプリ
-  NeoBundleLazy 'tsukkee/lingr-vim'
-  NeoBundleLazy 'tpope/vim-fugitive'
-  NeoBundleLazy 'airblade/vim-gitgutter'
-  NeoBundleLazy 'Shougo/vimshell.vim'
   NeoBundleLazy 'Shougo/vimfiler.vim'
-  NeoBundleLazy 'basyura/TweetVim'
-  NeoBundleLazy 'glidenote/memolist.vim'
+  NeoBundleLazy 'Shougo/vimshell.vim'
   NeoBundleLazy 'Shougo/vinarise.vim'
+  NeoBundleLazy 'airblade/vim-gitgutter'
+  NeoBundleLazy 'basyura/TweetVim'
   NeoBundleLazy 'cohama/agit.vim'
+  NeoBundleLazy 'glidenote/memolist.vim'
   NeoBundleLazy 'thinca/vim-prettyprint'
+  NeoBundleLazy 'tpope/vim-fugitive'
+  NeoBundleLazy 'tsukkee/lingr-vim'
   if s:is_mac
     NeoBundleLazy 'itchyny/dictionary.vim'
   endif
@@ -196,11 +196,11 @@ function! s:set_neobundle() " {{{
 
   " Unite
   NeoBundle     'Shougo/neomru.vim'
-  NeoBundleLazy 'Shougo/unite.vim'
   NeoBundleLazy 'Shougo/unite-outline'
-  NeoBundleLazy 'osyo-manga/unite-quickfix'
-  NeoBundleLazy 'osyo-manga/unite-fold'
+  NeoBundleLazy 'Shougo/unite.vim'
   NeoBundleLazy 'YoshihiroIto/vim-unite-giti'
+  NeoBundleLazy 'osyo-manga/unite-fold'
+  NeoBundleLazy 'osyo-manga/unite-quickfix'
   NeoBundleLazy 'rhysd/unite-codic.vim'
   if s:is_windows
     NeoBundleLazy 'sgur/unite-everything'
@@ -1010,18 +1010,18 @@ if neobundle#tap('clever-f.vim')
   call neobundle#untap()
 endif
 " }}}
-" vim-visualstar {{{
-if neobundle#tap('vim-visualstar')
+" vim-asterisk {{{
+if neobundle#tap('vim-asterisk')
   call neobundle#config({
         \   'autoload': {
         \     'mappings': '<Plug>'
         \   }
         \ })
 
-  map *  <Plug>(visualstar-*)
-  map #  <Plug>(visualstar-#)
-  map g* <Plug>(visualstar-g*)
-  map g# <Plug>(visualstar-g#)
+  map *  <Plug>(asterisk-z*)
+  map #  <Plug>(asterisk-z#)
+  map g* <Plug>(asterisk-gz*)
+  map g# <Plug>(asterisk-gz#)
 
   call neobundle#untap()
 endif
@@ -1812,7 +1812,8 @@ if neobundle#tap('unite.vim')
   nnoremap <silent> [Unite]m :<C-u>Unite -no-split neomru/file<CR>
 
   if s:is_windows
-    nnoremap <silent> [Unite]e :<C-u>Unite -no-split everything<CR>
+    nnoremap <silent> [Unite]e :<C-u>Unite -no-split -update-time=50 everything/async<CR>
+    " nnoremap <silent> [Unite]e :<C-u>Unite -no-split everything<CR>
   endif
 
   nnoremap [Unite]uu :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
@@ -1962,7 +1963,7 @@ if s:is_windows
     call neobundle#config({
           \   'depends':  'unite.vim',
           \   'autoload': {
-          \     'unite_sources': 'everything'
+          \     'unite_sources': ['everything', 'everything/async']
           \   }
           \ })
 
@@ -2363,22 +2364,7 @@ if has('migemo')
 endif
 
 " 検索時のハイライトを解除
-nnoremap <silent> <Leader>/   :<C-u>nohlsearch<CR>
-
-" " http://deris.hatenablog.jp/entry/2013/05/15/024932
-" " very magic
-" nnoremap / /\v
-
-" *による検索時に初回は移動しない
-nnoremap <silent> * viw:<C-u>call <SID>star_search()<CR>:<C-u>set hlsearch<CR>`<
-vnoremap <silent> * :<C-u>call    <SID>star_search()<CR>:<C-u>set hlsearch<CR>
-function! s:star_search()
-  let orig = @"
-  normal! gvy
-  let text = @"
-  let @/ = '\V' . substitute(escape(text, '\/'), '\n', '\\n', 'g')
-  let @" = orig
-endfunction
+nnoremap <silent> <Leader>/ :<C-u>nohlsearch<CR>
 " }}}
 " 表示 {{{
 syntax enable                     " 構文ごとに色分けをする
