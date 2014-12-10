@@ -1,6 +1,5 @@
 set encoding=utf-8
 scriptencoding utf-8
-
 " 基本 {{{
 let s:is_windows     = has('win32') || has('win64')
 let s:is_mac         = has('mac') || has('macunix')
@@ -102,6 +101,7 @@ function! s:set_neobundle() " {{{
   NeoBundle     'vim-scripts/matchparenpp'
   NeoBundleLazy 'LeafCage/foldCC.vim'
   NeoBundleLazy 'YoshihiroIto/tagbar'
+  NeoBundleLazy 'tukiyo/previm'
   if s:is_gui_running
     NeoBundleLazy 'YoshihiroIto/vim-resize-win'
     NeoBundleLazy 'movewin.vim'
@@ -152,7 +152,6 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'thinca/vim-quickrun'
   NeoBundleLazy 'tikhomirov/vim-glsl'
   NeoBundleLazy 'tpope/vim-markdown'
-  NeoBundleLazy 'tukiyo/previm'
   NeoBundleLazy 'vim-jp/cpp-vim'
   NeoBundleLazy 'vim-ruby/vim-ruby'
   NeoBundleLazy 'vim-scripts/JSON.vim'
@@ -284,19 +283,6 @@ if neobundle#tap('open-browser.vim')
   call neobundle#untap()
 endif
 " }}}
-" dictionary.vim {{{
-if s:is_mac
-  if neobundle#tap('dictionary.vim')
-    call neobundle#config({
-          \   'autoload': {
-          \     'commands': 'Dictionary'
-          \   }
-          \ })
-
-    call neobundle#untap()
-  endif
-endif
-" }}}
 " }}}
 " 表示 {{{
 " tagbar {{{
@@ -350,7 +336,7 @@ if neobundle#tap('vim-resize-win')
   call neobundle#untap()
 endif
 " }}}
-" lightline {{{
+" lightline.vim {{{
 let g:lightline#colorscheme#yoi#palette = {
       \   'inactive': {
       \     'left':    [['#585858', '#262626', 240, 235], ['#585858', '#121212', 240, 233]],
@@ -608,7 +594,7 @@ if neobundle#tap('vim-easy-align')
   call neobundle#untap()
 endif
 " }}}
-" yankround {{{
+" yankround.vim {{{
 if neobundle#tap('yankround.vim')
   call neobundle#config({
         \   'autoload': {
@@ -1711,7 +1697,7 @@ if neobundle#tap('TweetVim')
   call neobundle#untap()
 endif
 " }}}
-" memolist {{{
+" memolist.vim {{{
 if neobundle#tap('memolist.vim')
   call neobundle#config({
         \   'depends':  'unite.vim',
@@ -1778,6 +1764,19 @@ endif
 " }}}
 " vim-icondrag {{{
 let g:icondrag_auto_start = 1
+" }}}
+" dictionary.vim {{{
+if s:is_mac
+  if neobundle#tap('dictionary.vim')
+    call neobundle#config({
+          \   'autoload': {
+          \     'commands': 'Dictionary'
+          \   }
+          \ })
+
+    call neobundle#untap()
+  endif
+endif
 " }}}
 " }}}
 " Unite {{{
