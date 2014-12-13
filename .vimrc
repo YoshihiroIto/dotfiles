@@ -2786,8 +2786,8 @@ nnoremap <silent> [Git]c  :<C-u>call <SID>execute_if_on_git_branch('Gcommit')<CR
 nnoremap <silent> [Git]f  :<C-u>call <SID>execute_if_on_git_branch('GitiFetch')<CR>
 nnoremap <silent> [Git]d  :<C-u>call <SID>execute_if_on_git_branch('Gdiff')<CR>
 nnoremap <silent> [Git]s  :<C-u>call <SID>execute_if_on_git_branch('Gstatus')<CR>
-nnoremap <silent> [Git]ps :<C-u>call <SID>execute_if_on_git_branch('GitiPush')<CR>
-nnoremap <silent> [Git]pl :<C-u>call <SID>execute_if_on_git_branch('GitiPull')<CR>
+nnoremap <silent> [Git]ps :<C-u>call <SID>execute_if_on_git_branch('GitiPush')<CR>y<CR>
+nnoremap <silent> [Git]pl :<C-u>call <SID>execute_if_on_git_branch('GitiPull')<CR>y<CR>
 nnoremap <silent> [Git]g  :<C-u>call <SID>execute_if_on_git_branch('Agit')<CR>
 " }}}
 " ヘルプ {{{
