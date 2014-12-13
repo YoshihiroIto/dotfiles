@@ -83,9 +83,9 @@ set guioptions-=e
 function! s:set_neobundle() " {{{
   " ライブラリ
   NeoBundle     'Shougo/vimproc'
-  NeoBundle     'tpope/vim-dispatch'
-  NeoBundle     'xolox/vim-misc'
-  NeoBundle     'xolox/vim-shell'
+  " NeoBundle     'tpope/vim-dispatch'
+  " NeoBundle     'xolox/vim-misc'
+  " NeoBundle     'xolox/vim-shell'
   NeoBundleLazy 'Shougo/tabpagebuffer.vim'
   NeoBundleLazy 'basyura/twibill.vim'
   NeoBundleLazy 'mattn/webapi-vim'
@@ -343,33 +343,33 @@ let g:lightline#colorscheme#yoi#palette = {
       \     'right':   [['#262626', '#606060', 235, 241], ['#585858', '#262626', 240, 235], ['#585858', '#121212', 240, 233]]
       \   },
       \   'insert':    {
-      \     'branch':  [['#ffffff', '#0087af', 231,  31]],
-      \     'left':    [['#005f5f', '#ffffff',  23, 231], ['#87dfff', '#005f87', 117,  24]],
-      \     'middle':  [['#87dfff', '#005f87', 117,  24]],
-      \     'right':   [['#005f5f', '#87dfff',  23, 117], ['#87dfff', '#0087af', 117,  31], ['#87dfff', '#005f87', 117,  24]]
+      \     'branch':  [['#FFFFFF', '#0087AF', 231,  31]],
+      \     'left':    [['#005F5F', '#FFFFFF',  23, 231], ['#87DFFF', '#005F87', 117,  24]],
+      \     'middle':  [['#87DFFF', '#005F87', 117,  24]],
+      \     'right':   [['#005F5F', '#87DFFF',  23, 117], ['#87DFFF', '#0087AF', 117,  31], ['#87DFFF', '#005F87', 117,  24]]
       \   },
       \   'normal':    {
-      \     'branch':  [['#ffffff', '#585858', 231, 240]],
-      \     'error':   [['#bcbcbc', '#ff0000', 250, 196]],
-      \     'left':    [['#195E00', '#07AF00',  22,  34], ['#8a8a8a', '#303030', 245, 236]],
-      \     'middle':  [['#8a8a8a', '#303030', 245, 236]],
-      \     'right':   [['#606060', '#d0d0d0', 241, 252], ['#bcbcbc', '#585858', 250, 240], ['#9e9e9e', '#303030', 247, 236]],
-      \     'warning': [['#262626', '#b58900', 235, 136]]
+      \     'branch':  [['#FFFFFF', '#585858', 231, 240]],
+      \     'error':   [['#BCBCBC', '#FF0000', 250, 196]],
+      \     'left':    [['#195E00', '#07AF00',  22,  34], ['#8A8A8A', '#303030', 245, 236]],
+      \     'middle':  [['#8A8A8A', '#303030', 245, 236]],
+      \     'right':   [['#606060', '#D0D0D0', 241, 252], ['#BCBCBC', '#585858', 250, 240], ['#9E9E9E', '#303030', 247, 236]],
+      \     'warning': [['#262626', '#B58900', 235, 136]]
       \   },
       \   'replace':   {
-      \     'left':    [['#ffffff', '#df0000', 231, 160], ['#ffffff', '#585858', 231, 240]],
-      \     'middle':  [['#8a8a8a', '#303030', 245, 236]],
-      \     'right':   [['#606060', '#d0d0d0', 241, 252], ['#bcbcbc', '#585858', 250, 240], ['#9e9e9e', '#303030', 247, 236]]
+      \     'left':    [['#FFFFFF', '#DF0000', 231, 160], ['#FFFFFF', '#585858', 231, 240]],
+      \     'middle':  [['#8A8A8A', '#303030', 245, 236]],
+      \     'right':   [['#606060', '#D0D0D0', 241, 252], ['#BCBCBC', '#585858', 250, 240], ['#9E9E9E', '#303030', 247, 236]]
       \   },
       \   'tabline':   {
-      \     'left':    [['#bcbcbc', '#585858', 250, 240]],
-      \     'middle':  [['#303030', '#9e9e9e', 236, 247]],
-      \     'right':   [['#bcbcbc', '#4e4e4e', 250, 239]],
-      \     'tabsel':  [['#bcbcbc', '#262626', 250, 235]]
+      \     'left':    [['#BCBCBC', '#585858', 250, 240]],
+      \     'middle':  [['#303030', '#9E9E9E', 236, 247]],
+      \     'right':   [['#BCBCBC', '#4E4E4E', 250, 239]],
+      \     'tabsel':  [['#BCBCBC', '#262626', 250, 235]]
       \   },
       \   'visual':    {
-      \     'branch':  [['#ffffff', '#AF0053', 231, 125]],
-      \     'left':    [['#AB2362', '#ffffff', 125, 231], ['#FF84BA', '#870036', 211,  89]],
+      \     'branch':  [['#FFFFFF', '#AF0053', 231, 125]],
+      \     'left':    [['#AB2362', '#FFFFFF', 125, 231], ['#FF84BA', '#870036', 211,  89]],
       \     'middle':  [['#FF84BA', '#870036', 211,  89]],
       \     'right':   [['#75003D', '#FF87BB',  89, 211], ['#FE86BB', '#AF0053', 211, 125], ['#FF84BA', '#870036', 211,  89]]
       \   }
@@ -883,6 +883,7 @@ if neobundle#tap('vim-altr')
     call altr#define('src/*/*/%.cpp',   'include/*/*/%.h')
     call altr#define('src/*/*/*/%.cpp', 'include/*/*/*/%.h')
   endfunction
+
   call neobundle#untap()
 endif
 " }}}
@@ -2765,10 +2766,6 @@ nnoremap <silent> [Tab]x :<C-u>tabclose<CR>
 
 nnoremap <silent> <F2> :<C-u>tabprevious<CR>
 nnoremap <silent> <F3> :<C-u>tabnext<CR>
-
-" Vimですべてのバッファをタブ化する
-" http://qiita.com/kuwa72/items/deef2703af74d2d993ee
-nnoremap <silent> [Tab]t :<C-u>call <SID>clean_empty_buffers()<CR>:<C-u>tab ba<CR>
 " }}}
 " バッファ操作 {{{
 nnoremap [Buffer]  <Nop>
@@ -2953,7 +2950,7 @@ endfunction
 " Gitブランチ上であれば実行 {{{
 function! s:execute_if_on_git_branch(line)
   if !s:is_in_git_branch()
-    echo 'not in git branch : ' . a:line
+    echo 'not on git branch : ' . a:line
     return
   endif
 
