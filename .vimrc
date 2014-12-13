@@ -8,7 +8,7 @@ let s:is_gui_running = has('gui_running')
 let s:is_starting    = has('vim_starting')
 
 if s:is_starting
-  let s:git_dot_vimrc = expand('~/dotfiles/.vimrc')
+  let s:git_dot_vimrc = expand('~/Dropbox/dotfiles/.vimrc')
 
   if filereadable(s:git_dot_vimrc)
     let $MYVIMRC = s:git_dot_vimrc
@@ -2780,15 +2780,15 @@ nnoremap <silent> <Leader>x :<C-u>call <SID>delete_current_buffer()<CR>
 nnoremap [Git]     <Nop>
 nmap     <Leader>g [Git]
 
-nnoremap <silent> [Git]b    :<C-u>call <SID>execute_if_on_git_branch('Gblame w')<CR>
-nnoremap <silent> [Git]a    :<C-u>call <SID>execute_if_on_git_branch('Gwrite')<CR>
-nnoremap <silent> [Git]c    :<C-u>call <SID>execute_if_on_git_branch('Gcommit')<CR>
-nnoremap <silent> [Git]f    :<C-u>call <SID>execute_if_on_git_branch('GitiFetch')<CR>
-nnoremap <silent> [Git]d    :<C-u>call <SID>execute_if_on_git_branch('Gdiff')<CR>
-nnoremap <silent> [Git]s    :<C-u>call <SID>execute_if_on_git_branch('Gstatus')<CR>
-nnoremap <silent> [Git]push :<C-u>call <SID>execute_if_on_git_branch('GitiPush')<CR>
-nnoremap <silent> [Git]pull :<C-u>call <SID>execute_if_on_git_branch('GitiPull')<CR>
-nnoremap <silent> [Git]g    :<C-u>call <SID>execute_if_on_git_branch('Agit')<CR>
+nnoremap <silent> [Git]b  :<C-u>call <SID>execute_if_on_git_branch('Gblame w')<CR>
+nnoremap <silent> [Git]a  :<C-u>call <SID>execute_if_on_git_branch('Gwrite')<CR>
+nnoremap <silent> [Git]c  :<C-u>call <SID>execute_if_on_git_branch('Gcommit')<CR>
+nnoremap <silent> [Git]f  :<C-u>call <SID>execute_if_on_git_branch('GitiFetch')<CR>
+nnoremap <silent> [Git]d  :<C-u>call <SID>execute_if_on_git_branch('Gdiff')<CR>
+nnoremap <silent> [Git]s  :<C-u>call <SID>execute_if_on_git_branch('Gstatus')<CR>
+nnoremap <silent> [Git]ps :<C-u>call <SID>execute_if_on_git_branch('GitiPush')<CR>
+nnoremap <silent> [Git]pl :<C-u>call <SID>execute_if_on_git_branch('GitiPull')<CR>
+nnoremap <silent> [Git]g  :<C-u>call <SID>execute_if_on_git_branch('Agit')<CR>
 " }}}
 " ヘルプ {{{
 nnoremap          <Leader><C-k>      :<C-u>help<Space>
