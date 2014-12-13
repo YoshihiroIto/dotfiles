@@ -97,7 +97,6 @@ function! s:set_neobundle() " {{{
   NeoBundle     'tomasr/molokai'
   NeoBundle     'vim-scripts/matchparenpp'
   NeoBundleLazy 'LeafCage/foldCC.vim'
-  NeoBundleLazy 'YoshihiroIto/tagbar'
   NeoBundleLazy 'tukiyo/previm'
   if s:is_gui_running
     NeoBundleLazy 'YoshihiroIto/vim-resize-win'
@@ -284,19 +283,6 @@ endif
 " }}}
 " }}}
 " 表示 {{{
-" tagbar {{{
-if neobundle#tap('tagbar')
-  call neobundle#config({
-        \   'autoload': {
-        \     'commands': 'TagbarToggle'
-        \   }
-        \ })
-
-  noremap <silent> <C-t> :<C-u>TagbarToggle<CR>
-
-  call neobundle#untap()
-endif
-" }}}
 " foldCC.vim {{{
 if neobundle#tap('foldCC.vim')
   call neobundle#config({
