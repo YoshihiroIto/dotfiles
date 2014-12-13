@@ -235,9 +235,6 @@ if neobundle#tap('vimproc')
   call neobundle#untap()
 endif
 " }}}
-" vim-shell {{{
-let g:shell_mappings_enabled = 0
-" }}}
 " webapi-vim {{{
 if neobundle#tap('webapi-vim')
   call neobundle#config({
