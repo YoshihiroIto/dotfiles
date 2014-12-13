@@ -105,8 +105,6 @@ function! s:set_neobundle() " {{{
 
   " 編集
   NeoBundle     'tomtom/tcomment_vim'
-  NeoBundle     'tpope/vim-repeat'
-  NeoBundle     'tpope/vim-surround'
   NeoBundleLazy 'LeafCage/yankround.vim'
   NeoBundleLazy 'cohama/lexima.vim'
   NeoBundleLazy 'junegunn/vim-easy-align'
@@ -169,6 +167,7 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'deris/vim-rengbang'
   NeoBundleLazy 'emonkak/vim-operator-sort'
   NeoBundleLazy 'kana/vim-operator-replace'
+  NeoBundleLazy 'rhysd/vim-operator-surround'
   NeoBundleLazy 'tyru/operator-camelize.vim'
 
   " アプリ
@@ -1462,6 +1461,29 @@ if neobundle#tap('operator-camelize.vim')
 
   nmap <Leader>c <Plug>(operator-camelize-toggle)iw
   xmap <Leader>c <Plug>(operator-camelize-toggle)iw
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-operator-surround {{{
+if neobundle#tap('vim-operator-surround')
+  call neobundle#config({
+        \   'depends':  'vim-operator-user',
+        \   'autoload': {
+        \     'mappings': [['nx', '<Plug>']]
+        \   }
+        \ })
+
+  let g:operator#surround#blocks =
+        \ {
+        \   '-' : [
+        \       { 'block' : ["{\<CR>", "\<CR>}"], 'motionwise' : ['line'], 'keys' : ['{', '}'] },
+        \   ]
+        \ }
+
+  map  <silent>S  <Plug>(operator-surround-append)
+  nmap <silent>sd <Plug>(operator-surround-delete)ab
+  nmap <silent>sr <Plug>(operator-surround-replace)ab
 
   call neobundle#untap()
 endif
@@ -2984,4 +3006,3 @@ endfunction
 " }}}
 " }}}
 " vim: set ts=2 sw=2 sts=2 et :
-
