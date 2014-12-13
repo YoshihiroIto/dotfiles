@@ -83,9 +83,6 @@ set guioptions-=e
 function! s:set_neobundle() " {{{
   " ライブラリ
   NeoBundle     'Shougo/vimproc'
-  " NeoBundle     'tpope/vim-dispatch'
-  " NeoBundle     'xolox/vim-misc'
-  " NeoBundle     'xolox/vim-shell'
   NeoBundleLazy 'Shougo/tabpagebuffer.vim'
   NeoBundleLazy 'basyura/twibill.vim'
   NeoBundleLazy 'mattn/webapi-vim'
@@ -208,6 +205,8 @@ endfunction " }}}
 
 if s:is_starting
   let g:neobundle#install_max_processes = 8
+  let g:neobundle#install_process_timeout = 10*60
+
   set rtp+=$DOTVIM/bundle/neobundle.vim/
 endif
 
