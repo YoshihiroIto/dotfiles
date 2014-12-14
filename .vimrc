@@ -117,7 +117,6 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'Shougo/neocomplete.vim'
   NeoBundleLazy 'Shougo/neosnippet-snippets'
   NeoBundleLazy 'Shougo/neosnippet.vim'
-  NeoBundleLazy 'koron/codic-vim'
 
   " ファイル
   NeoBundle     'YoshihiroIto/vim-auto-mirroring'
@@ -195,7 +194,6 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'YoshihiroIto/vim-unite-giti'
   NeoBundleLazy 'osyo-manga/unite-fold'
   NeoBundleLazy 'osyo-manga/unite-quickfix'
-  NeoBundleLazy 'rhysd/unite-codic.vim'
   if s:is_windows
     NeoBundleLazy 'sgur/unite-everything'
   endif
@@ -819,18 +817,6 @@ if neobundle#tap('omnisharp-vim')
     let g:Omnisharp_stop_server         = 0
     let g:OmniSharp_typeLookupInPreview = 0
   endfunction
-
-  call neobundle#untap()
-endif
-" }}}
-" codic-vim {{{
-if neobundle#tap('codic-vim')
-  call neobundle#config({
-        \   'autoload': {
-        \     'commands':        'Codic',
-        \     'function_prefix': 'codic'
-        \   }
-        \ })
 
   call neobundle#untap()
 endif
@@ -1809,7 +1795,6 @@ if neobundle#tap('unite.vim')
   nnoremap <silent> [Unite]l :<C-u>Unite -no-split line<CR>
   nnoremap <silent> [Unite]o :<C-u>Unite outline<CR>
   nnoremap <silent> [Unite]z :<C-u>Unite fold<CR>
-  nnoremap <silent> [Unite]c :<C-u>Unite codic<CR>
   nnoremap <silent> [Unite]q :<C-u>Unite -no-quit quickfix<CR>
   nnoremap <silent> [Unite]v :<C-u>call <SID>execute_if_on_git_branch('Unite giti')<CR>
   nnoremap <silent> [Unite]b :<C-u>call <SID>execute_if_on_git_branch('Unite giti/branch_all')<CR>
@@ -1817,7 +1802,6 @@ if neobundle#tap('unite.vim')
 
   if s:is_windows
     nnoremap <silent> [Unite]e :<C-u>Unite -no-split -update-time=50 everything/async<CR>
-    " nnoremap <silent> [Unite]e :<C-u>Unite -no-split everything<CR>
   endif
 
   nnoremap [Unite]uu :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
@@ -1945,18 +1929,6 @@ if neobundle#tap('vim-unite-giti')
       autocmd User UniteGitiGitExecuted call s:update_fugitive()
     augroup END
   endfunction
-
-  call neobundle#untap()
-endif
-" }}}
-" unite-codic.vim {{{
-if neobundle#tap('unite-codic.vim')
-  call neobundle#config({
-        \   'depends':  'unite.vim',
-        \   'autoload': {
-        \     'unite_sources': 'codic'
-        \   }
-        \ })
 
   call neobundle#untap()
 endif
@@ -2577,42 +2549,6 @@ nnoremap <expr> zl foldclosed(line('.')) != -1 ? 'zo' : '<C-l>'
 
 " 折り畳み外であれば何もしない
 nnoremap <expr> zO foldclosed(line('.')) != -1 ? 'zO' : ''
-" }}}
-" 補完 {{{
-" http://sgur.tumblr.com/post/91906146884/codic-vim
-inoremap <silent> <C-d> <C-R>=<SID>codic_complete()<CR>
-
-function! s:codic_complete()
-  let line = getline('.')
-  let start = match(line, '\k\+$')
-  let cand = s:codic_candidates(line[start :])
-  call complete(start +1, cand)
-  return ''
-endfunction
-
-function! s:codic_candidates(arglead)
-  let cand = codic#search(a:arglead, 30)
-  " error
-  if type(cand) == type(0)
-    return []
-  endif
-  " english -> english terms
-  if a:arglead =~# '^\w\+$'
-    return map(cand, '{"word": v:val["label"], "menu": join(map(copy(v:val["values"]), "v:val.word"), ",")}')
-  endif
-  " japanese -> english terms
-  return s:reverse_candidates(cand)
-endfunction
-
-function! s:reverse_candidates(cand)
-  let _ = []
-  for c in a:cand
-    for v in c.values
-      call add(_, {"word": v.word, "menu": !empty(v.desc) ? v.desc : c.label })
-    endfor
-  endfor
-  return _
-endfunction
 " }}}
 " モード移行 {{{
 inoremap <C-j> <Esc>
