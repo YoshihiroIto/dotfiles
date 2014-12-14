@@ -177,7 +177,6 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'basyura/TweetVim'
   NeoBundleLazy 'cohama/agit.vim'
   NeoBundleLazy 'glidenote/memolist.vim'
-  NeoBundleLazy 'thinca/vim-prettyprint'
   NeoBundleLazy 'tpope/vim-fugitive'
   NeoBundleLazy 'tsukkee/lingr-vim'
   if s:is_mac
@@ -186,6 +185,7 @@ function! s:set_neobundle() " {{{
   if s:is_windows && s:is_gui_running
     NeoBundle 'YoshihiroIto/vim-icondrag'
   endif
+  " NeoBundle 'thinca/vim-prettyprint'
 
   " Unite
   NeoBundle     'Shougo/neomru.vim'
@@ -1738,17 +1738,6 @@ if neobundle#tap('agit.vim')
       let g:agit_enable_auto_show_commit = 0
     endif
   endfunction
-
-  call neobundle#untap()
-endif
-" }}}
-" vim-prettyprint {{{
-if neobundle#tap('vim-prettyprint')
-  call neobundle#config({
-        \   'autoload': {
-        \     'commands': 'PP'
-        \   }
-        \ })
 
   call neobundle#untap()
 endif
