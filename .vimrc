@@ -857,9 +857,6 @@ endif
 " }}}
 " 検索 {{{
 " incsearch.vim {{{
-map / <Plug>(incsearch-forward)
-map ? <Plug>(incsearch-backward)
-
 if neobundle#tap('incsearch.vim')
   call neobundle#config({
         \   'autoload': {
@@ -869,6 +866,7 @@ if neobundle#tap('incsearch.vim')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
+    let g:incsearch#auto_nohlsearch   = 1
     let g:incsearch#magic             = '\v'
     let g:incsearch#emacs_like_keymap = 1
   endfunction
@@ -889,11 +887,6 @@ if neobundle#tap('incsearch.vim')
 endif
 " }}}
 " vim-anzu {{{
-nmap <silent> n <Plug>(anzu-n)zvzz:<C-u>call <SID>begin_display_anzu()<CR>:<C-u>call <SID>refresh_screen()<CR>
-nmap <silent> N <Plug>(anzu-N)zvzz:<C-u>call <SID>begin_display_anzu()<CR>:<C-u>call <SID>refresh_screen()<CR>
-nmap <silent> * <Plug>(anzu-star):<C-u>call  <SID>refresh_screen()<CR>
-nmap <silent> # <Plug>(anzu-sharp):<C-u>call <SID>refresh_screen()<CR>
-
 if neobundle#tap('vim-anzu')
   call neobundle#config({
         \   'autoload': {
@@ -971,11 +964,6 @@ if neobundle#tap('vim-asterisk')
         \     'mappings': '<Plug>'
         \   }
         \ })
-
-  map *  <Plug>(asterisk-z*)
-  map #  <Plug>(asterisk-z#)
-  map g* <Plug>(asterisk-gz*)
-  map g# <Plug>(asterisk-gz#)
 
   call neobundle#untap()
 endif
@@ -2330,8 +2318,19 @@ if has('migemo')
   endif
 endif
 
-" 検索時のハイライトを解除
-nnoremap <silent> <Leader>/ :<C-u>nohlsearch<CR>
+" http://haya14busa.com/enrich-your-search-experience-with-incsearch-vim/
+map / <Plug>(incsearch-forward)
+map ? <Plug>(incsearch-backward)
+
+nmap <silent> n <Plug>(incsearch-nohl)<Plug>(anzu-n)zvzz:<C-u>call <SID>begin_display_anzu()<CR>:<C-u>call <SID>refresh_screen()<CR>
+nmap <silent> N <Plug>(incsearch-nohl)<Plug>(anzu-N)zvzz:<C-u>call <SID>begin_display_anzu()<CR>:<C-u>call <SID>refresh_screen()<CR>
+nmap <silent> * <Plug>(anzu-star):<C-u>call  <SID>refresh_screen()<CR>
+nmap <silent> # <Plug>(anzu-sharp):<C-u>call <SID>refresh_screen()<CR>
+
+map *  <Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
+map g* <Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
+map #  <Plug>(incsearch-nohl0)<Plug>(asterisk-z#)
+map g# <Plug>(incsearch-nohl0)<Plug>(asterisk-gz#)
 " }}}
 " 表示 {{{
 syntax enable                     " 構文ごとに色分けをする
