@@ -97,6 +97,7 @@ function! s:set_neobundle() " {{{
   NeoBundle     'tomasr/molokai'
   NeoBundle     'vim-scripts/matchparenpp'
   NeoBundleLazy 'LeafCage/foldCC.vim'
+  NeoBundleLazy 'YoshihiroIto/syntastic'
   NeoBundleLazy 'tukiyo/previm'
   if s:is_gui_running
     NeoBundleLazy 'YoshihiroIto/vim-resize-win'
@@ -110,6 +111,7 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'junegunn/vim-easy-align'
   NeoBundleLazy 'nishigori/increment-activator'
   NeoBundleLazy 'osyo-manga/vim-over'
+  NeoBundleLazy 'rhysd/vim-clang-format'
   NeoBundleLazy 'thinca/vim-qfreplace'
 
   " 補完
@@ -117,6 +119,7 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'Shougo/neocomplete.vim'
   NeoBundleLazy 'Shougo/neosnippet-snippets'
   NeoBundleLazy 'Shougo/neosnippet.vim'
+  NeoBundleLazy 'Rip-Rip/clang_complete'
 
   " ファイル
   NeoBundle     'YoshihiroIto/vim-auto-mirroring'
@@ -132,17 +135,10 @@ function! s:set_neobundle() " {{{
   " 言語
   NeoBundle     'YoshihiroIto/vim-gocode'
   NeoBundleLazy 'Mizuchi/STL-Syntax'
-  NeoBundleLazy 'Rip-Rip/clang_complete'
-  NeoBundleLazy 'YoshihiroIto/syntastic'
   NeoBundleLazy 'beyondmarc/hlsl.vim'
   NeoBundleLazy 'dgryski/vim-godef'
-  NeoBundleLazy 'jelera/vim-javascript-syntax'
   NeoBundleLazy 'kchmck/vim-coffee-script'
-  NeoBundleLazy 'osyo-manga/shabadou.vim'
   NeoBundleLazy 'pangloss/vim-javascript'
-  NeoBundleLazy 'rhysd/vim-clang-format'
-  NeoBundleLazy 'rhysd/wandbox-vim'
-  NeoBundleLazy 'thinca/vim-quickrun'
   NeoBundleLazy 'tikhomirov/vim-glsl'
   NeoBundleLazy 'tpope/vim-markdown'
   NeoBundleLazy 'vim-jp/cpp-vim'
@@ -177,6 +173,9 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'basyura/TweetVim'
   NeoBundleLazy 'cohama/agit.vim'
   NeoBundleLazy 'glidenote/memolist.vim'
+  NeoBundleLazy 'osyo-manga/shabadou.vim'
+  NeoBundleLazy 'rhysd/wandbox-vim'
+  NeoBundleLazy 'thinca/vim-quickrun'
   NeoBundleLazy 'tpope/vim-fugitive'
   NeoBundleLazy 'tsukkee/lingr-vim'
   if s:is_mac
@@ -288,6 +287,23 @@ if neobundle#tap('foldCC.vim')
   function! neobundle#hooks.on_source(bundle)
     let g:foldCCtext_enable_autofdc_adjuster = 1
     set foldtext=FoldCCtext()
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
+" syntastic {{{
+if neobundle#tap('syntastic')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': ['go', 'ruby']
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    augroup MyAutoCmd
+      autocmd BufWritePost *.{go,rb,py} call lightline#update()
+    augroup END
   endfunction
 
   call neobundle#untap()
@@ -797,6 +813,31 @@ if neobundle#tap('neosnippet.vim')
   call neobundle#untap()
 endif
 " }}}
+" clang_complete {{{
+if neobundle#tap('clang_complete')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': ['c', 'cpp', 'objc']
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    let g:clang_use_library   = 1
+    let g:clang_complete_auto = 0
+    let g:clang_auto_select   = 0
+
+    if s:is_windows
+      let g:clang_user_options = '-I C:/Development/boost_1_55_0 -I "C:/Program Files (x86)/Microsoft Visual Studio 11.0/VC/include" -std=c++11 -fms-extensions -fmsc-version=1300 -fgnu-runtime -D__MSVCRT_VERSION__=0x700 -D_WIN32_WINNT=0x0500 2> NUL || exit 0"'
+      let g:clang_library_path = 'C:/Development/LLVM/bin/'
+    elseif s:is_mac
+      let g:clang_user_options = '-std=c++11'
+      let g:clang_library_path = '/Library/Developer/CommandLineTools/usr/lib/'
+    endif
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
 " omnisharp-vim {{{
 if neobundle#tap('omnisharp-vim')
   call neobundle#config({
@@ -970,161 +1011,6 @@ endif
 " }}}
 " }}}
 " 言語 {{{
-" syntastic {{{
-if neobundle#tap('syntastic')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': ['go', 'ruby']
-        \   }
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    augroup MyAutoCmd
-      autocmd BufWritePost *.{go,rb,py} call lightline#update()
-    augroup END
-  endfunction
-
-  call neobundle#untap()
-endif
-" }}}
-" clang_complete {{{
-if neobundle#tap('clang_complete')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': ['c', 'cpp', 'objc']
-        \   }
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    let g:clang_use_library   = 1
-    let g:clang_complete_auto = 0
-    let g:clang_auto_select   = 0
-
-    if s:is_windows
-      let g:clang_user_options = '-I C:/Development/boost_1_55_0 -I "C:/Program Files (x86)/Microsoft Visual Studio 11.0/VC/include" -std=c++11 -fms-extensions -fmsc-version=1300 -fgnu-runtime -D__MSVCRT_VERSION__=0x700 -D_WIN32_WINNT=0x0500 2> NUL || exit 0"'
-      let g:clang_library_path = 'C:/Development/LLVM/bin/'
-    elseif s:is_mac
-      let g:clang_user_options = '-std=c++11'
-      let g:clang_library_path = '/Library/Developer/CommandLineTools/usr/lib/'
-    endif
-  endfunction
-
-  call neobundle#untap()
-endif
-" }}}
-" vim-clang-format {{{
-if neobundle#tap('vim-clang-format')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': ['c', 'cpp', 'objc']
-        \   }
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    if s:is_windows
-      let g:clang_format#command = 'C:/Development/LLVM/bin/clang-format.exe'
-    else
-      let g:clang_format#command = 'clang-format-3.4'
-    endif
-
-    let g:clang_format#style_options = {
-          \   'AccessModifierOffset':                -4,
-          \   'AllowShortIfStatementsOnASingleLine': 'false',
-          \   'AlwaysBreakBeforeMultilineStrings':   'false',
-          \   'BreakBeforeBraces':                   'Allman',
-          \   'ColumnLimit':                         0,
-          \   'IndentCaseLabels':                    'false',
-          \   'IndentWidth':                         4,
-          \   'UseTab':                              'Never',
-          \ }
-
-    command! -range=% -nargs=0 CppFormat call clang_format#replace(<line1>, <line2>)
-  endfunction
-
-  call neobundle#untap()
-endif
-" }}}
-" wandbox-vim {{{
-if neobundle#tap('wandbox-vim')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': ['c', 'cpp', 'objc'],
-        \     'commands':  [
-        \       {
-        \         'name':     'WandboxAsync',
-        \         'complete': 'customlist,wandbox#complete_command'
-        \       },
-        \       {
-        \         'name':     'WandboxSync',
-        \         'complete': 'customlist,wandbox#complete_command'
-        \       },
-        \       {
-        \         'name':     'Wandbox',
-        \         'complete': 'customlist,wandbox#complete_command'
-        \       },
-        \       'WandboxOptionList',
-        \       'WandboxOpenBrowser',
-        \       'WandboxOptionListAsync',
-        \       'WandboxAbortAsyncWorks'
-        \     ]
-        \   }
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    " wandbox.vim で quickfix を開かないようにする
-    let g:wandbox#open_quickfix_window = 0
-
-    let g:wandbox#default_compiler = {
-          \   'cpp': 'clang-head',
-          \ }
-  endfunction
-
-  call neobundle#untap()
-endif
-" }}}
-" vim-quickrun {{{
-if neobundle#tap('vim-quickrun')
-  call neobundle#config({
-        \   'depends':  ['shabadou.vim', 'wandbox-vim'],
-        \   'autoload': {
-        \     'mappings': [['sxn', '<Plug>']],
-        \     'commands': [
-        \       {
-        \         'complete': 'customlist,quickrun#complete',
-        \         'name':     'QuickRun'
-        \       }
-        \     ]
-        \   }
-        \ })
-
-  map <silent> [App]r :<C-u>QuickRun<CR>
-
-  function! neobundle#hooks.on_source(bundle)
-    let g:quickrun_config = {
-          \   '_': {
-          \     'hook/close_unite_quickfix/enable_hook_loaded': 1,
-          \     'hook/unite_quickfix/enable_failure':           1,
-          \     'hook/close_quickfix/enable_exit':              1,
-          \     'hook/close_buffer/enable_failure':             1,
-          \     'hook/close_buffer/enable_empty_data':          1,
-          \     'outputter':                                    'multi:buffer:quickfix',
-          \     'runner':                                       'vimproc',
-          \     'runner/vimproc/updatetime':                    40,
-          \   },
-          \   'cpp/wandbox': {
-          \     'runner':                                       'wandbox',
-          \     'runner/wandbox/compiler':                      'clang-head',
-          \     'runner/wandbox/options':                       'warning,c++1y,boost-1.55',
-          \   },
-          \   'lua': {
-          \     'type':                                         'lua/vim'
-          \   }
-          \ }
-  endfunction
-
-  call neobundle#untap()
-endif
-" }}}
 " cpp-vim {{{
 if neobundle#tap('cpp-vim')
   call neobundle#config({
@@ -1252,17 +1138,6 @@ if neobundle#tap('vim-coffee-script')
   call neobundle#config({
         \   'autoload': {
         \     'filetypes': 'coffee'
-        \   }
-        \ })
-
-  call neobundle#untap()
-endif
-" }}}
-" vim-javascript-syntax {{{
-if neobundle#tap('vim-javascript-syntax')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': 'javascript'
         \   }
         \ })
 
@@ -1417,6 +1292,38 @@ if neobundle#tap('vim-operator-replace')
 
   nmap R <Plug>(operator-replace)
   xmap R <Plug>(operator-replace)
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-clang-format {{{
+if neobundle#tap('vim-clang-format')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': ['c', 'cpp', 'objc']
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    if s:is_windows
+      let g:clang_format#command = 'C:/Development/LLVM/bin/clang-format.exe'
+    else
+      let g:clang_format#command = 'clang-format-3.4'
+    endif
+
+    let g:clang_format#style_options = {
+          \   'AccessModifierOffset':                -4,
+          \   'AllowShortIfStatementsOnASingleLine': 'false',
+          \   'AlwaysBreakBeforeMultilineStrings':   'false',
+          \   'BreakBeforeBraces':                   'Allman',
+          \   'ColumnLimit':                         0,
+          \   'IndentCaseLabels':                    'false',
+          \   'IndentWidth':                         4,
+          \   'UseTab':                              'Never',
+          \ }
+
+    command! -range=% -nargs=0 CppFormat call clang_format#replace(<line1>, <line2>)
+  endfunction
 
   call neobundle#untap()
 endif
@@ -1699,6 +1606,87 @@ if neobundle#tap('memolist.vim')
     let g:memolist_path         = expand('~/Dropbox/memo')
 
     call unite#custom#source('memolist', 'sorters', ['sorter_ftime', 'sorter_reverse'])
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
+" wandbox-vim {{{
+if neobundle#tap('wandbox-vim')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': ['c', 'cpp', 'objc'],
+        \     'commands':  [
+        \       {
+        \         'name':     'WandboxAsync',
+        \         'complete': 'customlist,wandbox#complete_command'
+        \       },
+        \       {
+        \         'name':     'WandboxSync',
+        \         'complete': 'customlist,wandbox#complete_command'
+        \       },
+        \       {
+        \         'name':     'Wandbox',
+        \         'complete': 'customlist,wandbox#complete_command'
+        \       },
+        \       'WandboxOptionList',
+        \       'WandboxOpenBrowser',
+        \       'WandboxOptionListAsync',
+        \       'WandboxAbortAsyncWorks'
+        \     ]
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    " wandbox.vim で quickfix を開かないようにする
+    let g:wandbox#open_quickfix_window = 0
+
+    let g:wandbox#default_compiler = {
+          \   'cpp': 'clang-head',
+          \ }
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-quickrun {{{
+if neobundle#tap('vim-quickrun')
+  call neobundle#config({
+        \   'depends':  ['shabadou.vim', 'wandbox-vim'],
+        \   'autoload': {
+        \     'mappings': [['sxn', '<Plug>']],
+        \     'commands': [
+        \       {
+        \         'complete': 'customlist,quickrun#complete',
+        \         'name':     'QuickRun'
+        \       }
+        \     ]
+        \   }
+        \ })
+
+  map <silent> [App]r :<C-u>QuickRun<CR>
+
+  function! neobundle#hooks.on_source(bundle)
+    let g:quickrun_config = {
+          \   '_': {
+          \     'hook/close_unite_quickfix/enable_hook_loaded': 1,
+          \     'hook/unite_quickfix/enable_failure':           1,
+          \     'hook/close_quickfix/enable_exit':              1,
+          \     'hook/close_buffer/enable_failure':             1,
+          \     'hook/close_buffer/enable_empty_data':          1,
+          \     'outputter':                                    'multi:buffer:quickfix',
+          \     'runner':                                       'vimproc',
+          \     'runner/vimproc/updatetime':                    40,
+          \   },
+          \   'cpp/wandbox': {
+          \     'runner':                                       'wandbox',
+          \     'runner/wandbox/compiler':                      'clang-head',
+          \     'runner/wandbox/options':                       'warning,c++1y,boost-1.55',
+          \   },
+          \   'lua': {
+          \     'type':                                         'lua/vim'
+          \   }
+          \ }
   endfunction
 
   call neobundle#untap()
