@@ -1457,16 +1457,18 @@ if neobundle#tap('vim-operator-surround')
         \   }
         \ })
 
-  let g:operator#surround#blocks =
-        \ {
-        \   '-' : [
-        \       { 'block' : ["{\<CR>", "\<CR>}"], 'motionwise' : ['line'], 'keys' : ['{', '}'] },
-        \   ]
-        \ }
-
   map  <silent>S  <Plug>(operator-surround-append)
   nmap <silent>sd <Plug>(operator-surround-delete)ab
   nmap <silent>sr <Plug>(operator-surround-replace)ab
+
+  function! neobundle#hooks.on_source(bundle)
+    let g:operator#surround#blocks =
+          \ {
+          \   '-' : [
+          \       { 'block' : ["{\<CR>", "\<CR>}"], 'motionwise' : ['line'], 'keys' : ['{', '}'] },
+          \   ]
+          \ }
+  endfunction
 
   call neobundle#untap()
 endif
