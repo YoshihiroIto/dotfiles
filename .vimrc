@@ -83,6 +83,8 @@ set guioptions-=e
 function! s:set_neobundle() " {{{
   " ライブラリ
   NeoBundle     'Shougo/vimproc'
+  NeoBundle     'xolox/vim-misc'
+  NeoBundle     'xolox/vim-shell'
   NeoBundleLazy 'Shougo/tabpagebuffer.vim'
   NeoBundleLazy 'basyura/twibill.vim'
   NeoBundleLazy 'mattn/webapi-vim'
