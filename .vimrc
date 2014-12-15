@@ -234,6 +234,9 @@ if neobundle#tap('vimproc')
   call neobundle#untap()
 endif
 " }}}
+" vim-shell {{{
+let g:shell_mappings_enabled = 0
+" }}}
 " webapi-vim {{{
 if neobundle#tap('webapi-vim')
   call neobundle#config({
@@ -824,9 +827,9 @@ if neobundle#tap('clang_complete')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    let g:clang_use_library   = 1
-    let g:clang_complete_auto = 0
-    let g:clang_auto_select   = 0
+    let g:clang_use_library              = 1
+    let g:clang_complete_auto            = 0
+    let g:clang_auto_select              = 0
 
     if s:is_windows
       let g:clang_user_options = '-I C:/Development/boost_1_55_0 -I "C:/Program Files (x86)/Microsoft Visual Studio 11.0/VC/include" -std=c++11 -fms-extensions -fmsc-version=1300 -fgnu-runtime -D__MSVCRT_VERSION__=0x700 -D_WIN32_WINNT=0x0500 2> NUL || exit 0"'
