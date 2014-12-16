@@ -119,7 +119,7 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'Shougo/neocomplete.vim'
   NeoBundleLazy 'Shougo/neosnippet-snippets'
   NeoBundleLazy 'Shougo/neosnippet.vim'
-  NeoBundleLazy 'Rip-Rip/clang_complete'
+  NeoBundleLazy 'osyo-manga/vim-marching'
 
   " ファイル
   NeoBundle     'YoshihiroIto/vim-auto-mirroring'
@@ -816,8 +816,8 @@ if neobundle#tap('neosnippet.vim')
   call neobundle#untap()
 endif
 " }}}
-" clang_complete {{{
-if neobundle#tap('clang_complete')
+" vim-marching {{{
+if neobundle#tap('vim-marching')
   call neobundle#config({
         \   'autoload': {
         \     'filetypes': ['c', 'cpp', 'objc']
@@ -825,20 +825,15 @@ if neobundle#tap('clang_complete')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    let g:clang_use_library   = 1
-    let g:clang_complete_auto = 0
-    let g:clang_auto_select   = 0
-
     if s:is_windows
-      let g:clang_user_options = '-I C:/Development/boost_1_55_0 -I "C:/Program Files (x86)/Microsoft Visual Studio 11.0/VC/include" -std=c++11 -fms-extensions -fmsc-version=1300 -fgnu-runtime -D__MSVCRT_VERSION__=0x700 -D_WIN32_WINNT=0x0500 2> NUL || exit 0"'
-      let g:clang_library_path = 'C:/Development/LLVM/bin/'
-    elseif s:is_mac
-      let g:clang_user_options = '-std=c++11'
-      let g:clang_library_path = '/Library/Developer/CommandLineTools/usr/lib/'
+      let g:marching_clang_command = 'C:/Development/LLVM/bin/clang.exe'
+    else
+      let g:marching_clang_command = 'clang'
     endif
-  endfunction
 
-  call neobundle#untap()
+    let g:marching_enable_neocomplete   = 1
+    let g:marching_clang_command_option = '-std=c++1y'
+  endfunction
 endif
 " }}}
 " omnisharp-vim {{{
