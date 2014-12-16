@@ -202,7 +202,7 @@ if s:is_starting
   let g:neobundle#install_max_processes = 8
   let g:neobundle#install_process_timeout = 10*60
 
-  set rtp+=$DOTVIM/bundle/neobundle.vim/
+  set runtimepath+=$DOTVIM/bundle/neobundle.vim/
 endif
 
 call neobundle#begin(expand('$DOTVIM/bundle/'))
@@ -449,40 +449,40 @@ let g:lightline = {
       \ }
 
 function! LightlineMode()
-  return  &ft ==  'unite'    ? 'Unite'    :
-        \ &ft ==  'vimfiler' ? 'VimFiler' :
-        \ &ft ==  'vimshell' ? 'VimShell' :
-        \ &ft ==  'tweetvim' ? 'TweetVim' :
-        \ &ft ==  'quickrun' ? 'quickrun' :
-        \ &ft =~? 'lingr'    ? 'lingr'    :
-        \ &ft =~? 'agit'     ? 'Agit'     :
+  return  &filetype ==  'unite'    ? 'Unite'    :
+        \ &filetype ==  'vimfiler' ? 'VimFiler' :
+        \ &filetype ==  'vimshell' ? 'VimShell' :
+        \ &filetype ==  'tweetvim' ? 'TweetVim' :
+        \ &filetype ==  'quickrun' ? 'quickrun' :
+        \ &filetype =~? 'lingr'    ? 'lingr'    :
+        \ &filetype =~? 'agit'     ? 'Agit'     :
         \ winwidth(0) > 60 ? lightline#mode() : ''
 endfunction
 
 let s:lighline_no_disp_ft = 'vimfiler\|unite\|vimshell\|tweetvim\|quickrun\|lingr\|agit'
 
 function! LightlineModified()
-  return &ft =~ s:lighline_no_disp_ft ? '' : &modified ? '+' : &modifiable ? '' : '-'
+  return &filetype =~ s:lighline_no_disp_ft ? '' : &modified ? '+' : &modifiable ? '' : '-'
 endfunction
 
 function! LightlineReadonly()
-  return &ft !~? s:lighline_no_disp_ft && &readonly ? '⭤' : ''
+  return &filetype !~? s:lighline_no_disp_ft && &readonly ? '⭤' : ''
 endfunction
 
 function! LightlineFilename()
   return ('' != LightlineReadonly() ? LightlineReadonly() . ' ' : '') .
-        \ (&ft ==  'vimfiler'  ? vimfiler#get_status_string() :
-        \  &ft ==  'unite'     ? unite#get_status_string() :
-        \  &ft ==  'vimshell'  ? vimshell#get_status_string() :
-        \  &ft =~? 'lingr'     ? lingr#status() :
-        \  &ft ==  'tweetvim'  ? '' :
-        \  &ft ==  'quickrun'  ? '' :
+        \ (&filetype ==  'vimfiler'  ? vimfiler#get_status_string() :
+        \  &filetype ==  'unite'     ? unite#get_status_string() :
+        \  &filetype ==  'vimshell'  ? vimshell#get_status_string() :
+        \  &filetype =~? 'lingr'     ? lingr#status() :
+        \  &filetype ==  'tweetvim'  ? '' :
+        \  &filetype ==  'quickrun'  ? '' :
         \ ''  != expand('%:t') ? expand('%:t') : '[No Name]') .
         \ ('' != LightlineModified()  ? ' ' . LightlineModified() : '')
 endfunction
 
 function! LightlineCurrentBranch()
-  if &ft =~? s:lighline_no_disp_ft
+  if &filetype =~? s:lighline_no_disp_ft
     return ''
   endif
 
@@ -490,7 +490,7 @@ function! LightlineCurrentBranch()
     return ''
   endif
 
-  if &ft !~? 'vimfiler'
+  if &filetype !~? 'vimfiler'
     let _ = fugitive#head()
     return strlen(_) ? '⭠ ' . _ : ''
   endif
@@ -499,7 +499,7 @@ function! LightlineCurrentBranch()
 endfunction
 
 function! LightlineFileformat()
-  if &ft =~? s:lighline_no_disp_ft
+  if &filetype =~? s:lighline_no_disp_ft
     return ''
   endif
 
@@ -507,19 +507,19 @@ function! LightlineFileformat()
 endfunction
 
 function! LightlineFiletype()
-  if &ft =~? s:lighline_no_disp_ft
+  if &filetype =~? s:lighline_no_disp_ft
     return ''
   endif
 
-  return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype : 'no ft') : ''
+  return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype : 'no filetype') : ''
 endfunction
 
 function! LightlineFileencoding()
-  if &ft =~? s:lighline_no_disp_ft
+  if &filetype =~? s:lighline_no_disp_ft
     return ''
   endif
 
-  return winwidth(0) > 70 ? (strlen(&fenc) ? &fenc : &enc) : ''
+  return winwidth(0) > 70 ? (strlen(&fileencoding) ? &fileencoding : &encoding) : ''
 endfunction
 
 augroup MyAutoCmd
@@ -531,7 +531,7 @@ function! LightlineGitSummary()
     return ''
   endif
 
-  if &ft =~? s:lighline_no_disp_ft
+  if &filetype =~? s:lighline_no_disp_ft
     return ''
   endif
 
@@ -1938,11 +1938,11 @@ endif
 augroup MyAutoCmd
   autocmd BufEnter,WinEnter,BufWinEnter,BufWritePost *                         call s:update_all()
   autocmd BufReadPost                                *                         call s:clean_empty_buffers()
-  autocmd BufNewFile,BufRead                         *.xaml                    setlocal ft=xml
-  autocmd BufNewFile,BufRead                         *.json                    setlocal ft=json
-  autocmd BufNewFile,BufRead                         *.{fx,fxc,fxh,hlsl,hlsli} setlocal ft=hlsl
-  autocmd BufNewFile,BufRead                         *.{fsh,vsh}               setlocal ft=glsl
-  autocmd BufNewFile,BufRead                         *.{md,mkd,markdown}       setlocal ft=markdown
+  autocmd BufNewFile,BufRead                         *.xaml                    setlocal filetype=xml
+  autocmd BufNewFile,BufRead                         *.json                    setlocal filetype=json
+  autocmd BufNewFile,BufRead                         *.{fx,fxc,fxh,hlsl,hlsli} setlocal filetype=hlsl
+  autocmd BufNewFile,BufRead                         *.{fsh,vsh}               setlocal filetype=glsl
+  autocmd BufNewFile,BufRead                         *.{md,mkd,markdown}       setlocal filetype=markdown
 
   autocmd FileType *          call s:set_all()
   autocmd FileType ruby       call s:set_ruby()
@@ -1971,7 +1971,7 @@ augroup MyAutoCmd
     let &l:numberwidth = w
 
     " ファイルの場所をカレントにする
-    if &ft != '' && &ft != 'vimfiler'
+    if &filetype != '' && &filetype != 'vimfiler'
       silent! execute 'lcd' fnameescape(expand('%:p:h'))
     endif
 
@@ -2214,10 +2214,10 @@ endfunction
 " http://vim.wikia.com/wiki/Pretty-formatting_XML
 function! s:xml_format() range
   " Save the file type
-  let l:origft = &ft
+  let l:origft = &filetype
 
   " Clean the file type
-  set ft=
+  set filetype=
 
   " Add fake initial tag (so we can process multiple top-level elements)
   execute ":let l:beforeFirstLine=" . a:firstline . "-1"
@@ -2259,7 +2259,7 @@ function! s:xml_format() range
   execute ":" . l:newFirstLine
 
   " Restore the file type
-  execute "set ft=" . l:origft
+  execute "set filetype=" . l:origft
 endfunction
 command! -range=% XmlFormat <line1>,<line2>call s:xml_format()
 
@@ -2721,7 +2721,7 @@ vnoremap <silent> <Leader><C-k><C-k> :<C-u>help <C-r><C-w><CR>:<C-u>call <SID>re
 set helplang=ja,en
 
 if has('kaoriya')
-  set rtp+=$VIM/plugins/vimdoc-ja
+  set runtimepath+=$VIM/plugins/vimdoc-ja
 endif
 
 " }}}
@@ -2843,26 +2843,26 @@ endfunction
 " }}}
 " 整形 {{{
 function! s:smart_format()
-  if &ft == 'cs'
+  if &filetype == 'cs'
     OmniSharpCodeFormat
-  elseif &ft == 'cpp'
+  elseif &filetype == 'cpp'
     CppFormat
-  elseif &ft == 'c'
+  elseif &filetype == 'c'
     CppFormat
-  elseif &ft == 'xml'
+  elseif &filetype == 'xml'
     XmlFormat
-  elseif &ft == 'json'
+  elseif &filetype == 'json'
     call s:json_format(0)
-  elseif &ft == 'go'
+  elseif &filetype == 'go'
     call s:golang_format(0)
   else
-    echo 'smart_format : Not supported. : ' . &ft
+    echo 'smart_format : Not supported. : ' . &filetype
   endif
 endfunction
 " }}}
 " Unite 実行中か {{{
 function! s:is_unite_running()
-  return &ft == 'unite'
+  return &filetype == 'unite'
 endfunction
 " }}}
 " Gitブランチ上にいるか {{{
