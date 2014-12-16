@@ -31,12 +31,10 @@ augroup MyAutoCmd
 augroup END
 
 " 文字コード自動判断
-if has('iconv')
-  if has('guess_encode')
-    set fileencodings=guess,iso-2022-jp,cp932,euc-jp,ucs-bom
-  else
-    set fileencodings=iso-2022-jp,cp932,euc-jp,ucs-bom
-  endif
+if has('guess_encode')
+  set fileencodings=guess,iso-2022-jp,cp932,euc-jp,ucs-bom
+else
+  set fileencodings=iso-2022-jp,cp932,euc-jp,ucs-bom
 endif
 
 " WinではPATHに$VIMが含まれていないときにexeを見つけ出せないので修正
@@ -827,9 +825,9 @@ if neobundle#tap('clang_complete')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    let g:clang_use_library              = 1
-    let g:clang_complete_auto            = 0
-    let g:clang_auto_select              = 0
+    let g:clang_use_library   = 1
+    let g:clang_complete_auto = 0
+    let g:clang_auto_select   = 0
 
     if s:is_windows
       let g:clang_user_options = '-I C:/Development/boost_1_55_0 -I "C:/Program Files (x86)/Microsoft Visual Studio 11.0/VC/include" -std=c++11 -fms-extensions -fmsc-version=1300 -fgnu-runtime -D__MSVCRT_VERSION__=0x700 -D_WIN32_WINNT=0x0500 2> NUL || exit 0"'
@@ -1483,7 +1481,8 @@ if neobundle#tap('vim-gitgutter')
   function! neobundle#hooks.on_source(bundle)
     let g:gitgutter_map_keys  = 0
     let g:gitgutter_eager     = 0
-    let g:gitgutter_diff_args = '-w'
+    " let g:gitgutter_diff_args = '-w'
+    let g:gitgutter_diff_args = ''
 
     augroup MyAutoCmd
       autocmd FocusGained,FocusLost * GitGutter
@@ -1773,7 +1772,8 @@ if neobundle#tap('unite.vim')
   nnoremap <silent> [Unite]m :<C-u>Unite -no-split neomru/file<CR>
 
   if s:is_windows
-    nnoremap <silent> [Unite]e :<C-u>Unite -no-split -update-time=50 everything/async<CR>
+    " nnoremap <silent> [Unite]e :<C-u>Unite -no-split -update-time=50 everything/async<CR>
+    nnoremap <silent> [Unite]e :<C-u>Unite -no-split everything<CR>
   endif
 
   nnoremap [Unite]uu :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
