@@ -191,7 +191,6 @@ function! s:set_neobundle() " {{{
   if s:is_windows && s:is_gui_running
     NeoBundle 'YoshihiroIto/vim-icondrag'
   endif
-  " NeoBundle 'thinca/vim-prettyprint'
 
   " Unite
   NeoBundle     'Shougo/neomru.vim'
@@ -397,19 +396,19 @@ let g:lightline = {
       \     'lineinfo': '%4l/%L : %-3v'
       \   },
       \   'component_function': {
-      \     'fileformat':   'LightlineFileformat',
-      \     'filetype':     'LightlineFiletype',
-      \     'fileencoding': 'LightlineFileencoding',
-      \     'modified':     'LightlineModified',
-      \     'readonly':     'LightlineReadonly',
-      \     'filename':     'LightlineFilename',
-      \     'mode':         'LightlineMode',
+      \     'fileformat':   s:sid . 'lightlineFileformat',
+      \     'filetype':     s:sid . 'lightlineFiletype',
+      \     'fileencoding': s:sid . 'lightlineFileencoding',
+      \     'modified':     s:sid . 'lightlineModified',
+      \     'readonly':     s:sid . 'lightlineReadonly',
+      \     'filename':     s:sid . 'lightlineFilename',
+      \     'mode':         s:sid . 'lightlineMode',
       \     'anzu':         'anzu#search_status'
       \   },
       \   'component_expand': {
       \     'syntastic':    'SyntasticStatuslineFlag',
-      \     'branch':       'LightlineCurrentBranch',
-      \     'gitgutter':    'LightlineGitSummary',
+      \     'branch':       s:sid . 'lightlineCurrentBranch',
+      \     'gitgutter':    s:sid . 'lightlineGitSummary',
       \   },
       \   'component_type': {
       \     'syntastic':    'error',
@@ -455,7 +454,7 @@ let g:lightline = {
       \   }
       \ }
 
-function! LightlineMode()
+function! s:lightlineMode()
   return  &filetype ==  'unite'    ? 'Unite'    :
         \ &filetype ==  'vimfiler' ? 'VimFiler' :
         \ &filetype ==  'vimshell' ? 'VimShell' :
@@ -468,16 +467,16 @@ endfunction
 
 let s:lighline_no_disp_ft = 'vimfiler\|unite\|vimshell\|tweetvim\|quickrun\|lingr\|agit'
 
-function! LightlineModified()
+function! s:lightlineModified()
   return &filetype =~ s:lighline_no_disp_ft ? '' : &modified ? '+' : &modifiable ? '' : '-'
 endfunction
 
-function! LightlineReadonly()
+function! s:lightlineReadonly()
   return &filetype !~? s:lighline_no_disp_ft && &readonly ? '⭤' : ''
 endfunction
 
-function! LightlineFilename()
-  return ('' != LightlineReadonly() ? LightlineReadonly() . ' ' : '') .
+function! s:lightlineFilename()
+  return ('' != s:lightlineReadonly() ? s:lightlineReadonly() . ' ' : '') .
         \ (&filetype ==  'vimfiler'  ? vimfiler#get_status_string() :
         \  &filetype ==  'unite'     ? unite#get_status_string() :
         \  &filetype ==  'vimshell'  ? vimshell#get_status_string() :
@@ -485,10 +484,10 @@ function! LightlineFilename()
         \  &filetype ==  'tweetvim'  ? '' :
         \  &filetype ==  'quickrun'  ? '' :
         \ ''  != expand('%:t') ? expand('%:t') : '[No Name]') .
-        \ ('' != LightlineModified()  ? ' ' . LightlineModified() : '')
+        \ ('' != s:lightlineModified()  ? ' ' . s:lightlineModified() : '')
 endfunction
 
-function! LightlineCurrentBranch()
+function! s:lightlineCurrentBranch()
   if &filetype =~? s:lighline_no_disp_ft
     return ''
   endif
@@ -505,7 +504,7 @@ function! LightlineCurrentBranch()
   return ''
 endfunction
 
-function! LightlineFileformat()
+function! s:lightlineFileformat()
   if &filetype =~? s:lighline_no_disp_ft
     return ''
   endif
@@ -513,7 +512,7 @@ function! LightlineFileformat()
   return winwidth(0) > 70 ? &fileformat : ''
 endfunction
 
-function! LightlineFiletype()
+function! s:lightlineFiletype()
   if &filetype =~? s:lighline_no_disp_ft
     return ''
   endif
@@ -521,7 +520,7 @@ function! LightlineFiletype()
   return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype : 'no filetype') : ''
 endfunction
 
-function! LightlineFileencoding()
+function! s:lightlineFileencoding()
   if &filetype =~? s:lighline_no_disp_ft
     return ''
   endif
@@ -533,7 +532,7 @@ augroup MyAutoCmd
   autocmd CursorHold,CursorHoldI * call lightline#update()
 augroup END
 
-function! LightlineGitSummary()
+function! s:lightlineGitSummary()
   if winwidth(0) <= 70
     return ''
   endif
