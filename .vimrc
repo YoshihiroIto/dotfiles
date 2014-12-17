@@ -171,6 +171,7 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'kana/vim-operator-replace'
   NeoBundleLazy 'rhysd/vim-operator-surround'
   NeoBundleLazy 'tyru/operator-camelize.vim'
+  NeoBundleLazy 'YoshihiroIto/vim-operator-tcomment'
 
   " アプリ
   NeoBundleLazy 'Shougo/vimfiler.vim'
@@ -1322,33 +1323,6 @@ endif
 " }}}
 " オペレータ {{{
 " http://qiita.com/rbtnn/items/a47ed6684f1f0bc52906
-" vim-operator-user {{{
-if neobundle#tap('vim-operator-user')
-  call neobundle#config({
-        \   'autoload': {
-        \     'mappings': [['nx', '<Plug>(operator-tcomment)']]
-        \   }
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    call operator#user#define('tcomment', s:sid . 'op_tcomment')
-  endfunction
-
-  function! s:op_tcomment(motion_wiseness)
-    if a:motion_wiseness == 'char'
-      " todo:起動１度目に暴発してしまう
-      " TCommentInline
-    else
-      execute "silent! normal" "`[V`]\gc"
-    endif
-  endfunction
-
-  nmap c <Plug>(operator-tcomment)
-  xmap c <Plug>(operator-tcomment)
-
-  call neobundle#untap()
-endif
-" }}}
 " vim-operator-replace {{{
 if neobundle#tap('vim-operator-replace')
   call neobundle#config({
@@ -1360,6 +1334,21 @@ if neobundle#tap('vim-operator-replace')
 
   nmap R <Plug>(operator-replace)
   xmap R <Plug>(operator-replace)
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-operator-tcomment {{{
+if neobundle#tap('vim-operator-tcomment')
+  call neobundle#config({
+        \   'depends':  'vim-operator-user',
+        \   'autoload': {
+        \     'mappings': [['nx', '<Plug>']]
+        \   }
+        \ })
+
+  nmap t <Plug>(operator-tcomment)
+  xmap t <Plug>(operator-tcomment)
 
   call neobundle#untap()
 endif
