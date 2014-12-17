@@ -1354,8 +1354,8 @@ if neobundle#tap('vim-operator-user')
     endif
   endfunction
 
-  nmap cc <Plug>(operator-tcomment)
-  xmap cc <Plug>(operator-tcomment)
+  nmap c  <Plug>(operator-tcomment)
+  xmap c  <Plug>(operator-tcomment)
 
   call neobundle#untap()
 endif
