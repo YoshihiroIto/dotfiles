@@ -7,6 +7,12 @@ let s:is_linux       = has('unix') && !s:is_windows && !s:is_mac
 let s:is_gui_running = has('gui_running')
 let s:is_starting    = has('vim_starting')
 
+function! s:get_sid()
+  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeget_sid$')
+endfunction
+let s:sid = s:get_sid()
+delfunction s:get_sid
+
 if s:is_starting
   let s:git_dot_vimrc = expand('~/Dropbox/dotfiles/.vimrc')
 
@@ -1329,6 +1335,31 @@ endif
 " }}}
 " オペレータ {{{
 " http://qiita.com/rbtnn/items/a47ed6684f1f0bc52906
+" vim-operator-user {{{
+if neobundle#tap('vim-operator-user')
+  call neobundle#config({
+        \   'autoload': {
+        \     'mappings': [['nx', '<Plug>(operator-tcomment)']]
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    call operator#user#define('tcomment', s:sid.'op_tcomment')
+  endfunction
+
+  function! s:op_tcomment(motion_wiseness)
+    if a:motion_wiseness == 'char'
+    else
+      execute "silent! normal" "`[V`]\gc"
+    endif
+  endfunction
+
+  nmap cc <Plug>(operator-tcomment)
+  xmap cc <Plug>(operator-tcomment)
+
+  call neobundle#untap()
+endif
+" }}}
 " vim-operator-replace {{{
 if neobundle#tap('vim-operator-replace')
   call neobundle#config({
