@@ -114,7 +114,6 @@ function! s:set_neobundle() " {{{
   " 編集
   NeoBundle     'tomtom/tcomment_vim'
   NeoBundleLazy 'LeafCage/yankround.vim'
-  " NeoBundleLazy 'cohama/lexima.vim'
   NeoBundleLazy 'kana/vim-smartinput'
   NeoBundleLazy 'junegunn/vim-easy-align'
   NeoBundleLazy 'nishigori/increment-activator'
@@ -626,17 +625,6 @@ if neobundle#tap('yankround.vim')
   call neobundle#untap()
 endif
 " }}}
-" " lexima.vim {{{
-" if neobundle#tap('lexima.vim')
-"   call neobundle#config({
-"         \   'autoload': {
-"         \     'insert': 1,
-"         \   }
-"         \ })
-"
-"   call neobundle#untap()
-" endif
-" " }}}
 " vim-smartinput {{{
 if neobundle#tap('vim-smartinput')
   call neobundle#config({
@@ -1344,18 +1332,20 @@ if neobundle#tap('vim-operator-user')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    call operator#user#define('tcomment', s:sid.'op_tcomment')
+    call operator#user#define('tcomment', s:sid . 'op_tcomment')
   endfunction
 
   function! s:op_tcomment(motion_wiseness)
     if a:motion_wiseness == 'char'
+      " todo:起動１度目に暴発してしまう
+      " TCommentInline
     else
       execute "silent! normal" "`[V`]\gc"
     endif
   endfunction
 
-  nmap c  <Plug>(operator-tcomment)
-  xmap c  <Plug>(operator-tcomment)
+  nmap c <Plug>(operator-tcomment)
+  xmap c <Plug>(operator-tcomment)
 
   call neobundle#untap()
 endif
