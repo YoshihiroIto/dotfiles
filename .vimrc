@@ -709,6 +709,38 @@ if neobundle#tap('vim-qfreplace')
   call neobundle#untap()
 endif
 " }}}
+" vim-clang-format {{{
+if neobundle#tap('vim-clang-format')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': ['c', 'cpp', 'objc', 'objcpp']
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    if s:is_windows
+      let g:clang_format#command = 'C:/Development/LLVM/bin/clang-format.exe'
+    else
+      let g:clang_format#command = 'clang-format-3.4'
+    endif
+
+    let g:clang_format#style_options = {
+          \   'AccessModifierOffset':                -4,
+          \   'AllowShortIfStatementsOnASingleLine': 'false',
+          \   'AlwaysBreakBeforeMultilineStrings':   'false',
+          \   'BreakBeforeBraces':                   'Allman',
+          \   'ColumnLimit':                         0,
+          \   'IndentCaseLabels':                    'false',
+          \   'IndentWidth':                         4,
+          \   'UseTab':                              'Never',
+          \ }
+
+    command! -range=% -nargs=0 CppFormat call clang_format#replace(<line1>, <line2>)
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
 " }}}
 " 補完 {{{
 " neocomplete.vim {{{
@@ -1308,38 +1340,6 @@ if neobundle#tap('vim-operator-replace')
 
   nmap R <Plug>(operator-replace)
   xmap R <Plug>(operator-replace)
-
-  call neobundle#untap()
-endif
-" }}}
-" vim-clang-format {{{
-if neobundle#tap('vim-clang-format')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': ['c', 'cpp', 'objc', 'objcpp']
-        \   }
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    if s:is_windows
-      let g:clang_format#command = 'C:/Development/LLVM/bin/clang-format.exe'
-    else
-      let g:clang_format#command = 'clang-format-3.4'
-    endif
-
-    let g:clang_format#style_options = {
-          \   'AccessModifierOffset':                -4,
-          \   'AllowShortIfStatementsOnASingleLine': 'false',
-          \   'AlwaysBreakBeforeMultilineStrings':   'false',
-          \   'BreakBeforeBraces':                   'Allman',
-          \   'ColumnLimit':                         0,
-          \   'IndentCaseLabels':                    'false',
-          \   'IndentWidth':                         4,
-          \   'UseTab':                              'Never',
-          \ }
-
-    command! -range=% -nargs=0 CppFormat call clang_format#replace(<line1>, <line2>)
-  endfunction
 
   call neobundle#untap()
 endif
