@@ -81,6 +81,7 @@ set guioptions-=e
 function! s:set_neobundle() " {{{
   " ライブラリ
   NeoBundle     'Shougo/vimproc'
+  NeoBundle     'tpope/vim-dispatch'
   NeoBundle     'xolox/vim-misc'
   NeoBundle     'xolox/vim-shell'
   NeoBundleLazy 'Shougo/tabpagebuffer.vim'
@@ -107,7 +108,8 @@ function! s:set_neobundle() " {{{
   " 編集
   NeoBundle     'tomtom/tcomment_vim'
   NeoBundleLazy 'LeafCage/yankround.vim'
-  NeoBundleLazy 'cohama/lexima.vim'
+  " NeoBundleLazy 'cohama/lexima.vim'
+  NeoBundleLazy 'kana/vim-smartinput'
   NeoBundleLazy 'junegunn/vim-easy-align'
   NeoBundleLazy 'nishigori/increment-activator'
   NeoBundleLazy 'osyo-manga/vim-over'
@@ -618,13 +620,29 @@ if neobundle#tap('yankround.vim')
   call neobundle#untap()
 endif
 " }}}
-" lexima.vim {{{
-if neobundle#tap('lexima.vim')
+" " lexima.vim {{{
+" if neobundle#tap('lexima.vim')
+"   call neobundle#config({
+"         \   'autoload': {
+"         \     'insert': 1,
+"         \   }
+"         \ })
+"
+"   call neobundle#untap()
+" endif
+" " }}}
+" vim-smartinput {{{
+if neobundle#tap('vim-smartinput')
   call neobundle#config({
         \   'autoload': {
         \     'insert': 1,
         \   }
         \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    call smartinput#clear_rules()
+    call smartinput#define_default_rules()
+  endfunction
 
   call neobundle#untap()
 endif
@@ -820,7 +838,7 @@ endif
 if neobundle#tap('vim-marching')
   call neobundle#config({
         \   'autoload': {
-        \     'filetypes': ['c', 'cpp', 'objc']
+        \     'filetypes': ['c', 'cpp', 'objc', 'objcpp']
         \   }
         \ })
 
@@ -1298,7 +1316,7 @@ endif
 if neobundle#tap('vim-clang-format')
   call neobundle#config({
         \   'autoload': {
-        \     'filetypes': ['c', 'cpp', 'objc']
+        \     'filetypes': ['c', 'cpp', 'objc', 'objcpp']
         \   }
         \ })
 
@@ -1614,7 +1632,7 @@ endif
 if neobundle#tap('wandbox-vim')
   call neobundle#config({
         \   'autoload': {
-        \     'filetypes': ['c', 'cpp', 'objc'],
+        \     'filetypes': ['c', 'cpp', 'objc', 'objcpp'],
         \     'commands':  [
         \       {
         \         'name':     'WandboxAsync',
