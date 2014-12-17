@@ -1706,7 +1706,7 @@ endif
 if neobundle#tap('agit.vim')
   call neobundle#config({
         \   'autoload': {
-        \     'commands': 'Agit'
+        \     'commands': ['Agit', 'AgitFile']
         \   }
         \ })
 
@@ -2139,8 +2139,6 @@ set whichwrap=b,s,h,l,<,>,[,]     " カーソルを行頭、行末で止まら�
 set mouse=a                       " 全モードでマウスを有効化
 set hidden                        " 変更中のファイルでも、保存しないで他のファイルを表示
 set timeoutlen=2000
-set iminsert=0
-set imsearch=0
 set formatexpr=autofmt#japanese#formatexpr()
 set nrformats-=octal
 set nrformats+=alpha
@@ -2148,15 +2146,19 @@ set completeopt=longest,menuone
 set backspace=indent,eol,start
 set noswapfile
 set nobackup
-set noimdisable
 
 if exists('+cryptmethod')
   set cryptmethod=blowfish
 endif
 
+" インプットメソッド {{{
+set noimdisable
+set imsearch=0
+set iminsert=0
 if exists('+imdisableactivate')
   set imdisableactivate
 endif
+" }}}
 
 nnoremap <silent> <F1> :<C-u>edit $MYVIMRC<CR>
 
