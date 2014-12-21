@@ -456,40 +456,40 @@ let g:lightline = {
       \ }
 
 function! s:lightlineMode()
-  return  &filetype ==  'unite'    ? 'Unite'    :
-        \ &filetype ==  'vimfiler' ? 'VimFiler' :
-        \ &filetype ==  'vimshell' ? 'VimShell' :
-        \ &filetype ==  'tweetvim' ? 'TweetVim' :
-        \ &filetype ==  'quickrun' ? 'quickrun' :
-        \ &filetype =~? 'lingr'    ? 'lingr'    :
-        \ &filetype =~? 'agit'     ? 'Agit'     :
+  return  &filetype ==# 'unite'    ? 'Unite'    :
+        \ &filetype ==# 'vimfiler' ? 'VimFiler' :
+        \ &filetype ==# 'vimshell' ? 'VimShell' :
+        \ &filetype ==# 'tweetvim' ? 'TweetVim' :
+        \ &filetype ==# 'quickrun' ? 'Quickrun' :
+        \ &filetype =~# 'lingr'    ? 'Lingr'    :
+        \ &filetype ==# 'agit'     ? 'Agit'     :
         \ winwidth(0) > 60 ? lightline#mode() : ''
 endfunction
 
 let s:lighline_no_disp_ft = 'vimfiler\|unite\|vimshell\|tweetvim\|quickrun\|lingr\|agit'
 
 function! s:lightlineModified()
-  return &filetype =~ s:lighline_no_disp_ft ? '' : &modified ? '+' : &modifiable ? '' : '-'
+  return &filetype =~# s:lighline_no_disp_ft ? '' : &modified ? '+' : &modifiable ? '' : '-'
 endfunction
 
 function! s:lightlineReadonly()
-  return &filetype !~? s:lighline_no_disp_ft && &readonly ? '⭤' : ''
+  return &filetype !~# s:lighline_no_disp_ft && &readonly ? '⭤' : ''
 endfunction
 
 function! s:lightlineFilename()
-  return ('' != s:lightlineReadonly() ? s:lightlineReadonly() . ' ' : '') .
-        \ (&filetype ==  'vimfiler'  ? vimfiler#get_status_string() :
-        \  &filetype ==  'unite'     ? unite#get_status_string() :
-        \  &filetype ==  'vimshell'  ? vimshell#get_status_string() :
-        \  &filetype =~? 'lingr'     ? lingr#status() :
-        \  &filetype ==  'tweetvim'  ? '' :
-        \  &filetype ==  'quickrun'  ? '' :
-        \ ''  != expand('%:t') ? expand('%:t') : '[No Name]') .
-        \ ('' != s:lightlineModified()  ? ' ' . s:lightlineModified() : '')
+  return ('' !=? s:lightlineReadonly() ? s:lightlineReadonly() . ' ' : '') .
+        \ (&filetype ==# 'vimfiler'  ? vimfiler#get_status_string() :
+        \  &filetype ==# 'unite'     ? unite#get_status_string() :
+        \  &filetype ==# 'vimshell'  ? vimshell#get_status_string() :
+        \  &filetype =~# 'lingr'     ? lingr#status() :
+        \  &filetype ==# 'tweetvim'  ? '' :
+        \  &filetype ==# 'quickrun'  ? '' :
+        \ ''  !=# expand('%:t') ? expand('%:t') : '[No Name]') .
+        \ ('' !=# s:lightlineModified()  ? ' ' . s:lightlineModified() : '')
 endfunction
 
 function! s:lightlineCurrentBranch()
-  if &filetype =~? s:lighline_no_disp_ft
+  if &filetype =~# s:lighline_no_disp_ft
     return ''
   endif
 
@@ -1993,7 +1993,7 @@ augroup MyAutoCmd
     let &l:numberwidth = w
 
     " ファイルの場所をカレントにする
-    if &filetype != '' && &filetype != 'vimfiler'
+    if &filetype !=? '' && &filetype !=# 'vimfiler'
       silent! execute 'lcd' fnameescape(expand('%:p:h'))
     endif
 
@@ -2365,7 +2365,7 @@ set showfulltag
 set wildoptions=tagfile
 set fillchars=vert:\              " 縦分割の境界線
 set synmaxcol=500                 " ハイライトする文字数を制限する
-set updatetime=500
+set updatetime=200
 set previewheight=24
 set laststatus=0
 set cmdheight=4
@@ -2410,7 +2410,7 @@ augroup MyAutoCmd
 
   function! s:hl_cword()
     let word = expand('<cword>')
-    if word == ''
+    if word ==# ''
       return
     endif
     if get(b:, 'highlight_cursor_word', '') ==# word
@@ -2867,17 +2867,17 @@ endfunction
 " }}}
 " 整形 {{{
 function! s:smart_format()
-  if &filetype == 'cs'
+  if &filetype ==# 'cs'
     OmniSharpCodeFormat
-  elseif &filetype == 'cpp'
+  elseif &filetype ==# 'cpp'
     CppFormat
-  elseif &filetype == 'c'
+  elseif &filetype ==# 'c'
     CppFormat
-  elseif &filetype == 'xml'
+  elseif &filetype ==# 'xml'
     XmlFormat
-  elseif &filetype == 'json'
+  elseif &filetype ==# 'json'
     call s:json_format(0)
-  elseif &filetype == 'go'
+  elseif &filetype ==# 'go'
     call s:golang_format(0)
   else
     echo 'smart_format : Not supported. : ' . &filetype
@@ -2886,12 +2886,12 @@ endfunction
 " }}}
 " Unite 実行中か {{{
 function! s:is_unite_running()
-  return &filetype == 'unite'
+  return &filetype ==# 'unite'
 endfunction
 " }}}
 " Gitブランチ上にいるか {{{
 function! s:is_in_git_branch()
-  return fugitive#head() != ''
+  return fugitive#head() !=# ''
 endfunction
 " }}}
 " Gitブランチ上であれば実行 {{{
