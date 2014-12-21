@@ -2235,58 +2235,6 @@ function! s:copy_add_comment() range
   execute 'normal ' . (selected_count + 1) . 'j'
 endfunction
 
-" http://vim.wikia.com/wiki/Pretty-formatting_XML
-function! s:xml_format() range
-  " Save the file type
-  let l:origft = &filetype
-
-  " Clean the file type
-  set filetype=
-
-  " Add fake initial tag (so we can process multiple top-level elements)
-  execute ":let l:beforeFirstLine=" . a:firstline . "-1"
-  if l:beforeFirstLine < 0
-    let l:beforeFirstLine=0
-  endif
-  execute a:lastline . "put ='</PrettyXML>'"
-  execute l:beforeFirstLine . "put ='<PrettyXML>'"
-  execute ":let l:newLastLine=" . a:lastline . "+2"
-  if l:newLastLine > line('$')
-    let l:newLastLine=line('$')
-  endif
-
-  " Remove XML header
-  execute ":" . a:firstline . "," . a:lastline . "s/<\?xml\\_.*\?>\\_s*//e"
-
-  " Recalculate last line of the edited code
-  let l:newLastLine=search('</PrettyXML>')
-
-  " Execute external formatter
-  execute ":silent " . a:firstline . "," . l:newLastLine . "!xmllint --noblanks --format --recover -"
-
-  " Recalculate first and last lines of the edited code
-  let l:newFirstLine=search('<PrettyXML>')
-  let l:newLastLine=search('</PrettyXML>')
-
-  " Get inner range
-  let l:innerFirstLine=l:newFirstLine+1
-  let l:innerLastLine=l:newLastLine-1
-
-  " Remove extra unnecessary indentation
-  execute ":silent " . l:innerFirstLine . "," . l:innerLastLine "s/^  //e"
-
-  " Remove fake tag
-  execute l:newLastLine . "d"
-  execute l:newFirstLine . "d"
-
-  " Put the cursor at the first line of the edited code
-  execute ":" . l:newFirstLine
-
-  " Restore the file type
-  execute "set filetype=" . l:origft
-endfunction
-command! -range=% XmlFormat <line1>,<line2>call s:xml_format()
-
 " 自動的にディレクトリを作成する
 " http://vim-jp.org/vim-users-jp/2011/02/20/Hack-202.html
 augroup MyAutoCmd
@@ -2873,8 +2821,6 @@ function! s:smart_format()
     CppFormat
   elseif &filetype ==# 'c'
     CppFormat
-  elseif &filetype ==# 'xml'
-    XmlFormat
   elseif &filetype ==# 'json'
     call s:json_format(0)
   elseif &filetype ==# 'go'
