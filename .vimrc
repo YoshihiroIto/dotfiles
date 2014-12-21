@@ -477,7 +477,7 @@ function! s:lightlineReadonly()
 endfunction
 
 function! s:lightlineFilename()
-  return ('' !=? s:lightlineReadonly() ? s:lightlineReadonly() . ' ' : '') .
+  return ('' !=# s:lightlineReadonly() ? s:lightlineReadonly() . ' ' : '') .
         \ (&filetype ==# 'vimfiler'  ? vimfiler#get_status_string() :
         \  &filetype ==# 'unite'     ? unite#get_status_string() :
         \  &filetype ==# 'vimshell'  ? vimshell#get_status_string() :
@@ -497,7 +497,7 @@ function! s:lightlineCurrentBranch()
     return ''
   endif
 
-  if &filetype !~? 'vimfiler'
+  if &filetype !=# 'vimfiler'
     let _ = fugitive#head()
     return strlen(_) ? '⭠ ' . _ : ''
   endif
@@ -1993,7 +1993,7 @@ augroup MyAutoCmd
     let &l:numberwidth = w
 
     " ファイルの場所をカレントにする
-    if &filetype !=? '' && &filetype !=# 'vimfiler'
+    if &filetype !=# '' && &filetype !=# 'vimfiler'
       silent! execute 'lcd' fnameescape(expand('%:p:h'))
     endif
 
