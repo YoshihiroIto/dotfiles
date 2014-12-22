@@ -114,8 +114,8 @@ function! s:set_neobundle() " {{{
   " 編集
   NeoBundle     'tomtom/tcomment_vim'
   NeoBundleLazy 'LeafCage/yankround.vim'
-  NeoBundleLazy 'kana/vim-smartinput'
   NeoBundleLazy 'junegunn/vim-easy-align'
+  NeoBundleLazy 'kana/vim-smartinput'
   NeoBundleLazy 'nishigori/increment-activator'
   NeoBundleLazy 'osyo-manga/vim-over'
   NeoBundleLazy 'rhysd/vim-clang-format'
@@ -127,6 +127,7 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'Shougo/neosnippet-snippets'
   NeoBundleLazy 'Shougo/neosnippet.vim'
   NeoBundleLazy 'osyo-manga/vim-marching'
+  NeoBundleLazy 'nsf/gocode'
 
   " ファイル
   NeoBundle     'YoshihiroIto/vim-auto-mirroring'
@@ -135,17 +136,14 @@ function! s:set_neobundle() " {{{
   " 検索
   NeoBundle     'matchit.zip'
   NeoBundleLazy 'haya14busa/incsearch.vim'
+  NeoBundleLazy 'haya14busa/vim-asterisk'
   NeoBundleLazy 'osyo-manga/vim-anzu'
   NeoBundleLazy 'rhysd/clever-f.vim'
-  NeoBundleLazy 'haya14busa/vim-asterisk'
 
-  " 言語
-  NeoBundleLazy 'google/vim-ft-go'
-  NeoBundleLazy 'vim-jp/vim-go-extra'
-  NeoBundleLazy 'nsf/gocode'
+  " ファイルタイプ
   NeoBundleLazy 'Mizuchi/STL-Syntax'
   NeoBundleLazy 'beyondmarc/hlsl.vim'
-  NeoBundleLazy 'dgryski/vim-godef'
+  NeoBundleLazy 'google/vim-ft-go'
   NeoBundleLazy 'kchmck/vim-coffee-script'
   NeoBundleLazy 'pangloss/vim-javascript'
   NeoBundleLazy 'tikhomirov/vim-glsl'
@@ -155,25 +153,25 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'vim-scripts/JSON.vim'
 
   " テキストオブジェクト
-  NeoBundleLazy 'kana/vim-textobj-user'
   NeoBundleLazy 'glts/vim-textobj-comment'
   NeoBundleLazy 'h1mesuke/textobj-wiw'
   NeoBundleLazy 'kana/vim-textobj-entire'
   NeoBundleLazy 'kana/vim-textobj-indent'
   NeoBundleLazy 'kana/vim-textobj-line'
+  NeoBundleLazy 'kana/vim-textobj-user'
   NeoBundleLazy 'rhysd/vim-textobj-anyblock'
   NeoBundleLazy 'rhysd/vim-textobj-word-column'
   NeoBundleLazy 'sgur/vim-textobj-parameter'
   NeoBundleLazy 'whatyouhide/vim-textobj-xmlattr'
 
   " オペレータ
-  NeoBundleLazy 'kana/vim-operator-user'
+  NeoBundleLazy 'YoshihiroIto/vim-operator-tcomment'
   NeoBundleLazy 'deris/vim-rengbang'
   NeoBundleLazy 'emonkak/vim-operator-sort'
   NeoBundleLazy 'kana/vim-operator-replace'
+  NeoBundleLazy 'kana/vim-operator-user'
   NeoBundleLazy 'rhysd/vim-operator-surround'
   NeoBundleLazy 'tyru/operator-camelize.vim'
-  NeoBundleLazy 'YoshihiroIto/vim-operator-tcomment'
 
   " アプリ
   NeoBundleLazy 'Shougo/vimfiler.vim'
@@ -182,12 +180,14 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'airblade/vim-gitgutter'
   NeoBundleLazy 'basyura/TweetVim'
   NeoBundleLazy 'cohama/agit.vim'
+  NeoBundleLazy 'dgryski/vim-godef'
   NeoBundleLazy 'glidenote/memolist.vim'
   NeoBundleLazy 'osyo-manga/shabadou.vim'
   NeoBundleLazy 'rhysd/wandbox-vim'
   NeoBundleLazy 'thinca/vim-quickrun'
   NeoBundleLazy 'tpope/vim-fugitive'
   NeoBundleLazy 'tsukkee/lingr-vim'
+  NeoBundleLazy 'vim-jp/vim-go-extra'
   if s:is_mac
     NeoBundleLazy 'itchyny/dictionary.vim'
   endif
@@ -208,7 +208,7 @@ function! s:set_neobundle() " {{{
 endfunction " }}}
 
 if s:is_starting
-  let g:neobundle#install_max_processes = 8
+  let g:neobundle#install_max_processes   = 8
   let g:neobundle#install_process_timeout = 10*60
 
   set runtimepath+=$DOTVIM/bundle/neobundle.vim/
@@ -1077,17 +1077,6 @@ if neobundle#tap('vim-ft-go')
   call neobundle#untap()
 endif
 " }}}
-" vim-go-extra {{{
-if neobundle#tap('vim-go-extra')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': 'go'
-        \   }
-        \ })
-
-  call neobundle#untap()
-endif
-" }}}
 " gocode {{{
 if neobundle#tap('gocode')
   call neobundle#config({
@@ -1095,23 +1084,6 @@ if neobundle#tap('gocode')
         \     'filetypes': 'go'
         \   }
         \ })
-
-  call neobundle#untap()
-endif
-" }}}
-" vim-godef {{{
-if neobundle#tap('vim-godef')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': 'go'
-        \   }
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    let g:godef_split                    = 0
-    let g:godef_same_file_in_same_window = 1
-    let g:godef_system_function          = 'vimproc#system'
-  endfunction
 
   call neobundle#untap()
 endif
@@ -1768,6 +1740,34 @@ if neobundle#tap('agit.vim')
     if s:is_windows
       let g:agit_enable_auto_show_commit = 0
     endif
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-go-extra {{{
+if neobundle#tap('vim-go-extra')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': 'go'
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-godef {{{
+if neobundle#tap('vim-godef')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': 'go'
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    let g:godef_split                    = 0
+    let g:godef_same_file_in_same_window = 1
+    let g:godef_system_function          = 'vimproc#system'
   endfunction
 
   call neobundle#untap()
