@@ -140,7 +140,9 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'haya14busa/vim-asterisk'
 
   " 言語
-  NeoBundle     'YoshihiroIto/vim-gocode'
+  NeoBundleLazy 'google/vim-ft-go'
+  NeoBundleLazy 'vim-jp/vim-go-extra'
+  NeoBundleLazy 'nsf/gocode'
   NeoBundleLazy 'Mizuchi/STL-Syntax'
   NeoBundleLazy 'beyondmarc/hlsl.vim'
   NeoBundleLazy 'dgryski/vim-godef'
@@ -484,8 +486,8 @@ function! s:lightlineFilename()
         \  &filetype =~# 'lingr'     ? lingr#status() :
         \  &filetype ==# 'tweetvim'  ? '' :
         \  &filetype ==# 'quickrun'  ? '' :
-        \ ''  !=# expand('%:t') ? expand('%:t') : '[No Name]') .
-        \ ('' !=# s:lightlineModified()  ? ' ' . s:lightlineModified() : '')
+        \  ''  !=# expand('%:t') ? expand('%:t') : '[No Name]') .
+        \ ('' !=# s:lightlineModified() ? ' ' . s:lightlineModified() : '')
 endfunction
 
 function! s:lightlineCurrentBranch()
@@ -1064,13 +1066,38 @@ if neobundle#tap('cpp-vim')
   call neobundle#untap()
 endif
 " }}}
-" vim-gocode {{{
-if s:is_windows
-  let g:gocomplete#system_function = 'vimproc#system'
-endif
+" vim-ft-go {{{
+if neobundle#tap('vim-ft-go')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': 'go'
+        \   }
+        \ })
 
-let g:go_fmt_autofmt  = 0
-let g:go_fmt_commands = 0
+  call neobundle#untap()
+endif
+" }}}
+" vim-go-extra {{{
+if neobundle#tap('vim-go-extra')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': 'go'
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" gocode {{{
+if neobundle#tap('gocode')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': 'go'
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
 " }}}
 " vim-godef {{{
 if neobundle#tap('vim-godef')
