@@ -145,6 +145,7 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'tpope/vim-markdown'
   NeoBundleLazy 'vim-ruby/vim-ruby'
   NeoBundleLazy 'vim-scripts/JSON.vim'
+  NeoBundleLazy 'leafo/moonscript-vim'
 
   " C++
   NeoBundleLazy 'Mizuchi/STL-Syntax'
@@ -1045,6 +1046,17 @@ if neobundle#tap('JSON.vim')
   call neobundle#config({
         \   'autoload': {
         \     'filetypes': ['json', 'markdown']
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" moonscript-vim {{{
+if neobundle#tap('moonscript-vim')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': 'moon'
         \   }
         \ })
 
