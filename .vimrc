@@ -118,7 +118,6 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'kana/vim-smartinput'
   NeoBundleLazy 'nishigori/increment-activator'
   NeoBundleLazy 'osyo-manga/vim-over'
-  NeoBundleLazy 'rhysd/vim-clang-format'
   NeoBundleLazy 'thinca/vim-qfreplace'
 
   " 補完
@@ -126,8 +125,6 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'Shougo/neocomplete.vim'
   NeoBundleLazy 'Shougo/neosnippet-snippets'
   NeoBundleLazy 'Shougo/neosnippet.vim'
-  NeoBundleLazy 'osyo-manga/vim-marching'
-  NeoBundleLazy 'nsf/gocode'
 
   " ファイル
   NeoBundle     'YoshihiroIto/vim-auto-mirroring'
@@ -141,16 +138,25 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'rhysd/clever-f.vim'
 
   " ファイルタイプ
-  NeoBundleLazy 'Mizuchi/STL-Syntax'
   NeoBundleLazy 'beyondmarc/hlsl.vim'
-  NeoBundleLazy 'google/vim-ft-go'
   NeoBundleLazy 'kchmck/vim-coffee-script'
   NeoBundleLazy 'pangloss/vim-javascript'
   NeoBundleLazy 'tikhomirov/vim-glsl'
   NeoBundleLazy 'tpope/vim-markdown'
-  NeoBundleLazy 'vim-jp/cpp-vim'
   NeoBundleLazy 'vim-ruby/vim-ruby'
   NeoBundleLazy 'vim-scripts/JSON.vim'
+
+  " C++
+  NeoBundleLazy 'Mizuchi/STL-Syntax'
+  NeoBundleLazy 'osyo-manga/vim-marching'
+  NeoBundleLazy 'rhysd/vim-clang-format'
+  NeoBundleLazy 'vim-jp/cpp-vim'
+
+  " Go
+  NeoBundleLazy 'nsf/gocode'
+  NeoBundleLazy 'google/vim-ft-go'
+  NeoBundleLazy 'dgryski/vim-godef'
+  NeoBundleLazy 'vim-jp/vim-go-extra'
 
   " テキストオブジェクト
   NeoBundleLazy 'glts/vim-textobj-comment'
@@ -180,14 +186,12 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'airblade/vim-gitgutter'
   NeoBundleLazy 'basyura/TweetVim'
   NeoBundleLazy 'cohama/agit.vim'
-  NeoBundleLazy 'dgryski/vim-godef'
   NeoBundleLazy 'glidenote/memolist.vim'
   NeoBundleLazy 'osyo-manga/shabadou.vim'
   NeoBundleLazy 'rhysd/wandbox-vim'
   NeoBundleLazy 'thinca/vim-quickrun'
   NeoBundleLazy 'tpope/vim-fugitive'
   NeoBundleLazy 'tsukkee/lingr-vim'
-  NeoBundleLazy 'vim-jp/vim-go-extra'
   if s:is_mac
     NeoBundleLazy 'itchyny/dictionary.vim'
   endif
@@ -705,38 +709,6 @@ if neobundle#tap('vim-qfreplace')
   call neobundle#untap()
 endif
 " }}}
-" vim-clang-format {{{
-if neobundle#tap('vim-clang-format')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': ['c', 'cpp', 'objc', 'objcpp']
-        \   }
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    if s:is_windows
-      let g:clang_format#command = 'C:/Development/LLVM/bin/clang-format.exe'
-    else
-      let g:clang_format#command = 'clang-format-3.4'
-    endif
-
-    let g:clang_format#style_options = {
-          \   'AccessModifierOffset':                -4,
-          \   'AllowShortIfStatementsOnASingleLine': 'false',
-          \   'AlwaysBreakBeforeMultilineStrings':   'false',
-          \   'BreakBeforeBraces':                   'Allman',
-          \   'ColumnLimit':                         0,
-          \   'IndentCaseLabels':                    'false',
-          \   'IndentWidth':                         4,
-          \   'UseTab':                              'Never',
-          \ }
-
-    command! -range=% -nargs=0 CppFormat call clang_format#replace(<line1>, <line2>)
-  endfunction
-
-  call neobundle#untap()
-endif
-" }}}
 " }}}
 " 補完 {{{
 " neocomplete.vim {{{
@@ -860,26 +832,6 @@ if neobundle#tap('neosnippet.vim')
   endfunction
 
   call neobundle#untap()
-endif
-" }}}
-" vim-marching {{{
-if neobundle#tap('vim-marching')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': ['c', 'cpp', 'objc', 'objcpp']
-        \   }
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    if s:is_windows
-      let g:marching_clang_command = 'C:/Development/LLVM/bin/clang.exe'
-    else
-      let g:marching_clang_command = 'clang'
-    endif
-
-    let g:marching_enable_neocomplete   = 1
-    let g:marching_clang_command_option = '-std=c++1y'
-  endfunction
 endif
 " }}}
 " omnisharp-vim {{{
@@ -1054,51 +1006,7 @@ if neobundle#tap('vim-asterisk')
 endif
 " }}}
 " }}}
-" 言語 {{{
-" cpp-vim {{{
-if neobundle#tap('cpp-vim')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': 'cpp'
-        \   }
-        \ })
-
-  call neobundle#untap()
-endif
-" }}}
-" vim-ft-go {{{
-if neobundle#tap('vim-ft-go')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': 'go'
-        \   }
-        \ })
-
-  call neobundle#untap()
-endif
-" }}}
-" gocode {{{
-if neobundle#tap('gocode')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': 'go'
-        \   }
-        \ })
-
-  call neobundle#untap()
-endif
-" }}}
-" STL-Syntax {{{
-if neobundle#tap('STL-Syntax')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': 'cpp'
-        \   }
-        \ })
-
-  call neobundle#untap()
-endif
-" }}}
+" ファイルタイプ {{{
 " hlsl.vim {{{
 if neobundle#tap('hlsl.vim')
   call neobundle#config({
@@ -1191,6 +1099,134 @@ if neobundle#tap('previm')
         \   'depends':  'open-browser.vim',
         \   'autoload': {
         \     'filetypes': 'markdown'
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" }}}
+" C++ {{{
+" vim-clang-format {{{
+if neobundle#tap('vim-clang-format')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': ['c', 'cpp', 'objc', 'objcpp']
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    if s:is_windows
+      let g:clang_format#command = 'C:/Development/LLVM/bin/clang-format.exe'
+    else
+      let g:clang_format#command = 'clang-format-3.4'
+    endif
+
+    let g:clang_format#style_options = {
+          \   'AccessModifierOffset':                -4,
+          \   'AllowShortIfStatementsOnASingleLine': 'false',
+          \   'AlwaysBreakBeforeMultilineStrings':   'false',
+          \   'BreakBeforeBraces':                   'Allman',
+          \   'ColumnLimit':                         0,
+          \   'IndentCaseLabels':                    'false',
+          \   'IndentWidth':                         4,
+          \   'UseTab':                              'Never',
+          \ }
+
+    command! -range=% -nargs=0 CppFormat call clang_format#replace(<line1>, <line2>)
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
+" cpp-vim {{{
+if neobundle#tap('cpp-vim')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': 'cpp'
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" STL-Syntax {{{
+if neobundle#tap('STL-Syntax')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': 'cpp'
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-marching {{{
+if neobundle#tap('vim-marching')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': ['c', 'cpp', 'objc', 'objcpp']
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    if s:is_windows
+      let g:marching_clang_command = 'C:/Development/LLVM/bin/clang.exe'
+    else
+      let g:marching_clang_command = 'clang'
+    endif
+
+    let g:marching_enable_neocomplete   = 1
+    let g:marching_clang_command_option = '-std=c++1y'
+  endfunction
+endif
+" }}}
+" }}}
+" Go {{{
+" gocode {{{
+if neobundle#tap('gocode')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': 'go'
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-ft-go {{{
+if neobundle#tap('vim-ft-go')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': 'go'
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-godef {{{
+if neobundle#tap('vim-godef')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': 'go'
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    let g:godef_split                    = 0
+    let g:godef_same_file_in_same_window = 1
+    let g:godef_system_function          = 'vimproc#system'
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-go-extra {{{
+if neobundle#tap('vim-go-extra')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': 'go'
         \   }
         \ })
 
@@ -1740,34 +1776,6 @@ if neobundle#tap('agit.vim')
     if s:is_windows
       let g:agit_enable_auto_show_commit = 0
     endif
-  endfunction
-
-  call neobundle#untap()
-endif
-" }}}
-" vim-go-extra {{{
-if neobundle#tap('vim-go-extra')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': 'go'
-        \   }
-        \ })
-
-  call neobundle#untap()
-endif
-" }}}
-" vim-godef {{{
-if neobundle#tap('vim-godef')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': 'go'
-        \   }
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    let g:godef_split                    = 0
-    let g:godef_same_file_in_same_window = 1
-    let g:godef_system_function          = 'vimproc#system'
   endfunction
 
   call neobundle#untap()
