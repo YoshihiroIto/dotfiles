@@ -94,6 +94,7 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'basyura/twibill.vim'
   NeoBundleLazy 'mattn/webapi-vim'
   NeoBundleLazy 'tyru/open-browser.vim'
+  NeoBundleLazy 'kana/vim-submode'
   if !has('kaoriya')
     NeoBundle 'vim-jp/vimdoc-ja'
   endif
@@ -257,6 +258,10 @@ if neobundle#tap('webapi-vim')
         \   }
         \ })
 
+  function! neobundle#hooks.on_source(bundle)
+    let g:webapi#system_function = 'vimproc#system'
+  endfunction
+
   call neobundle#untap()
 endif
 " }}}
@@ -282,11 +287,44 @@ if neobundle#tap('open-browser.vim')
         \   }
         \ })
 
-  let g:netrw_nogx                   = 1
-  let g:openbrowser_no_default_menus = 1
+  function! neobundle#hooks.on_source(bundle)
+    let g:netrw_nogx                   = 1
+    let g:openbrowser_no_default_menus = 1
+  endfunction
 
   nmap gx <Plug>(openbrowser-smart-search)
   vmap gx <Plug>(openbrowser-smart-search)
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-submode {{{
+if neobundle#tap('vim-submode')
+  call neobundle#config({
+        \   'autoload': {
+        \     'function_prefix': 'submode'
+        \   }
+        \ })
+
+  let g:submode_timeout          = 0
+  let g:submode_keep_leaving_key = 1
+
+  call submode#enter_with('tab',      'n', 's', 'gtj', 'gt')
+  call submode#enter_with('tab',      'n', 's', 'gtk', 'gT')
+  call submode#map(       'tab',      'n', 's', 'j',   'gt')
+  call submode#map(       'tab',      'n', 's', 'k',   'gT')
+  call submode#enter_with('buffer',   'n', 's', 'gbj', ':<C-u>bn<CR>')
+  call submode#enter_with('buffer',   'n', 's', 'gbk', ':<C-u>bp<CR>')
+  call submode#map(       'buffer',   'n', 's', 'j',   ':<C-u>bn<CR>')
+  call submode#map(       'buffer',   'n', 's', 'k',   ':<C-u>bp<CR>')
+  call submode#enter_with('altr',     'n', 's', 'gaj', ':<C-u>call altr#forward()<CR>')
+  call submode#enter_with('altr',     'n', 's', 'gak', ':<C-u>call altr#back()<CR>')
+  call submode#map(       'altr',     'n', 's', 'j',   ':<C-u>call altr#forward()<CR>')
+  call submode#map(       'altr',     'n', 's', 'k',   ':<C-u>call altr#back()<CR>')
+  call submode#enter_with('git_hunk', 'n', 's', 'ghj', ':<C-u>GitGutterNextHunk<CR>zvzz')
+  call submode#enter_with('git_hunk', 'n', 's', 'ghk', ':<C-u>GitGutterPrevHunk<CR>zvzz')
+  call submode#map(       'git_hunk', 'n', 's', 'j',   ':<C-u>GitGutterNextHunk<CR>zvzz')
+  call submode#map(       'git_hunk', 'n', 's', 'k',   ':<C-u>GitGutterPrevHunk<CR>zvzz')
 
   call neobundle#untap()
 endif
@@ -869,8 +907,8 @@ if neobundle#tap('vim-altr')
         \   }
         \ })
 
-  nmap <F5> <Plug>(altr-forward)
-  nmap <F6> <Plug>(altr-back)
+  nmap zj <Plug>(altr-forward)
+  nmap zk <Plug>(altr-back)
 
   function! neobundle#hooks.on_source(bundle)
     call altr#define('Models/%Model.cs',       'ViewModels/%Vm.cs',       'Views/%.xaml',       'Views/%.xaml.cs')
@@ -878,11 +916,9 @@ if neobundle#tap('vim-altr')
     call altr#define('Models/*/*/%Model.cs',   'ViewModels/*/*/%Vm.cs',   'Views/*/*/%.xaml',   'Views/*/*/%.xaml.cs')
     call altr#define('Models/*/*/*/%Model.cs', 'ViewModels/*/*/*/%Vm.cs', 'Views/*/*/*/%.xaml', 'Views/*/*/*/%.xaml.cs')
     call altr#define('%Model.cs',              '%Vm.cs',                  '%.xaml',             '%.xaml.cs')
+    call altr#define('%.xaml',                 '%.xaml.cs')
 
-    call altr#define('%.cs', '%.xaml.cs')
-
-    call altr#define('%.cpp', '%.h', '%.*.cpp')
-
+    call altr#define('%.cpp',           '%.h', '%.*.cpp')
     call altr#define('src/%.cpp',       'include/%.h')
     call altr#define('src/*/%.cpp',     'include/*/%.h')
     call altr#define('src/*/*/%.cpp',   'include/*/*/%.h')
@@ -960,7 +996,10 @@ augroup MyAutoCmd
   endfunction
 
   function! s:clear_display_anzu()
-    " let s:anzu_display_count = 0
+    if !exists('anzu#clear_search_status')
+      return
+    endif
+
     call anzu#clear_search_status()
   endfunction
 augroup END
@@ -1409,8 +1448,8 @@ if neobundle#tap('operator-camelize.vim')
         \   }
         \ })
 
-  nmap <Leader>c <Plug>(operator-camelize-toggle)iw
-  xmap <Leader>c <Plug>(operator-camelize-toggle)iw
+  nmap <Leader>_ <Plug>(operator-camelize-toggle)iw
+  xmap <Leader>_ <Plug>(operator-camelize-toggle)iw
 
   call neobundle#untap()
 endif
@@ -1424,9 +1463,9 @@ if neobundle#tap('vim-operator-surround')
         \   }
         \ })
 
-  map  <silent>S  <Plug>(operator-surround-append)
-  nmap <silent>sd <Plug>(operator-surround-delete)ab
-  nmap <silent>sr <Plug>(operator-surround-replace)ab
+  map  <silent> S  <Plug>(operator-surround-append)
+  nmap <silent> sd <Plug>(operator-surround-delete)ab
+  nmap <silent> sr <Plug>(operator-surround-replace)ab
 
   function! neobundle#hooks.on_source(bundle)
     let g:operator#surround#blocks =
@@ -2718,6 +2757,7 @@ nnoremap <silent> K :<C-u>bnext<CR>
 nnoremap <silent> J :<C-u>bprevious<CR>
 
 nnoremap <silent> <Leader>x :<C-u>call <SID>delete_current_buffer()<CR>
+nnoremap <silent> <Leader>c :<C-u>close<CR>
 " }}}
 " Git {{{
 nnoremap [Git]     <Nop>
