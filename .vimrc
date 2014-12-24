@@ -1544,8 +1544,8 @@ if neobundle#tap('vim-gitgutter')
         \   }
         \ })
 
-  nmap <F7> <Plug>GitGutterNextHunkzvzz
-  nmap <F8> <Plug>GitGutterPrevHunkzvzz
+  nmap gj <Plug>GitGutterNextHunkzvzz
+  nmap gk <Plug>GitGutterPrevHunkzvzz
 
   function! neobundle#hooks.on_source(bundle)
     let g:gitgutter_map_keys  = 0
@@ -2339,10 +2339,10 @@ nmap <silent> N <Plug>(incsearch-nohl)<Plug>(anzu-N)zvzz:<C-u>call <SID>begin_di
 nmap <silent> * <Plug>(anzu-star):<C-u>call  <SID>refresh_screen()<CR>
 nmap <silent> # <Plug>(anzu-sharp):<C-u>call <SID>refresh_screen()<CR>
 
-map *  <Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
-map g* <Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
-map #  <Plug>(incsearch-nohl0)<Plug>(asterisk-z#)
-map g# <Plug>(incsearch-nohl0)<Plug>(asterisk-gz#)
+map <silent> *  <Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
+map <silent> g* <Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
+map <silent> #  <Plug>(incsearch-nohl0)<Plug>(asterisk-z#)
+map <silent> g# <Plug>(incsearch-nohl0)<Plug>(asterisk-gz#)
 " }}}
 " 表示 {{{
 syntax enable                     " 構文ごとに色分けをする
@@ -2706,8 +2706,8 @@ nmap     <Leader>t [Tab]
 nnoremap <silent> [Tab]c :<C-u>tabnew<CR>
 nnoremap <silent> [Tab]x :<C-u>tabclose<CR>
 
-nnoremap <silent> <F2> :<C-u>tabprevious<CR>
-nnoremap <silent> <F3> :<C-u>tabnext<CR>
+nnoremap <silent> <F3> :<C-u>tabprevious<CR>
+nnoremap <silent> <F4> :<C-u>tabnext<CR>
 " }}}
 " バッファ操作 {{{
 nnoremap [Buffer]  <Nop>
