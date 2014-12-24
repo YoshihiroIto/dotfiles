@@ -1548,10 +1548,11 @@ if neobundle#tap('vim-gitgutter')
   nmap gk <Plug>GitGutterPrevHunkzvzz
 
   function! neobundle#hooks.on_source(bundle)
-    let g:gitgutter_map_keys  = 0
-    let g:gitgutter_eager     = 0
-    " let g:gitgutter_diff_args = '-w'
-    let g:gitgutter_diff_args = ''
+    let g:gitgutter_map_keys           = 0
+    let g:gitgutter_eager              = 0
+    let g:gitgutter_sign_column_always = 1
+    " let g:gitgutter_diff_args          = '-w'
+    let g:gitgutter_diff_args          = ''
 
     augroup MyAutoCmd
       autocmd FocusGained,FocusLost * GitGutter
