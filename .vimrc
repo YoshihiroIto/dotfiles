@@ -302,29 +302,30 @@ endif
 if neobundle#tap('vim-submode')
   call neobundle#config({
         \   'autoload': {
-        \     'function_prefix': 'submode'
+        \     'mappings': ['gt', 'gb', 'ga', 'gh']
         \   }
         \ })
 
-  let g:submode_timeout          = 0
-  let g:submode_keep_leaving_key = 1
+  function! neobundle#hooks.on_source(bundle)
+    let g:submode_timeout          = 0
 
-  call submode#enter_with('tab',      'n', 's', 'gtj', 'gt')
-  call submode#enter_with('tab',      'n', 's', 'gtk', 'gT')
-  call submode#map(       'tab',      'n', 's', 'j',   'gt')
-  call submode#map(       'tab',      'n', 's', 'k',   'gT')
-  call submode#enter_with('buffer',   'n', 's', 'gbj', ':<C-u>bn<CR>')
-  call submode#enter_with('buffer',   'n', 's', 'gbk', ':<C-u>bp<CR>')
-  call submode#map(       'buffer',   'n', 's', 'j',   ':<C-u>bn<CR>')
-  call submode#map(       'buffer',   'n', 's', 'k',   ':<C-u>bp<CR>')
-  call submode#enter_with('altr',     'n', 's', 'gaj', ':<C-u>call altr#forward()<CR>')
-  call submode#enter_with('altr',     'n', 's', 'gak', ':<C-u>call altr#back()<CR>')
-  call submode#map(       'altr',     'n', 's', 'j',   ':<C-u>call altr#forward()<CR>')
-  call submode#map(       'altr',     'n', 's', 'k',   ':<C-u>call altr#back()<CR>')
-  call submode#enter_with('git_hunk', 'n', 's', 'ghj', ':<C-u>GitGutterNextHunk<CR>zvzz')
-  call submode#enter_with('git_hunk', 'n', 's', 'ghk', ':<C-u>GitGutterPrevHunk<CR>zvzz')
-  call submode#map(       'git_hunk', 'n', 's', 'j',   ':<C-u>GitGutterNextHunk<CR>zvzz')
-  call submode#map(       'git_hunk', 'n', 's', 'k',   ':<C-u>GitGutterPrevHunk<CR>zvzz')
+    call submode#enter_with('tab',      'n', 's', 'gtj', 'gt')
+    call submode#enter_with('tab',      'n', 's', 'gtk', 'gT')
+    call submode#map(       'tab',      'n', 's', 'j',   'gt')
+    call submode#map(       'tab',      'n', 's', 'k',   'gT')
+    call submode#enter_with('buffer',   'n', 's', 'gbj', ':<C-u>bn<CR>')
+    call submode#enter_with('buffer',   'n', 's', 'gbk', ':<C-u>bp<CR>')
+    call submode#map(       'buffer',   'n', 's', 'j',   ':<C-u>bn<CR>')
+    call submode#map(       'buffer',   'n', 's', 'k',   ':<C-u>bp<CR>')
+    call submode#enter_with('altr',     'n', 's', 'gaj', ':<C-u>call altr#forward()<CR>')
+    call submode#enter_with('altr',     'n', 's', 'gak', ':<C-u>call altr#back()<CR>')
+    call submode#map(       'altr',     'n', 's', 'j',   ':<C-u>call altr#forward()<CR>')
+    call submode#map(       'altr',     'n', 's', 'k',   ':<C-u>call altr#back()<CR>')
+    call submode#enter_with('git_hunk', 'n', 's', 'ghj', ':<C-u>GitGutterNextHunk<CR>zvzz')
+    call submode#enter_with('git_hunk', 'n', 's', 'ghk', ':<C-u>GitGutterPrevHunk<CR>zvzz')
+    call submode#map(       'git_hunk', 'n', 's', 'j',   ':<C-u>GitGutterNextHunk<CR>zvzz')
+    call submode#map(       'git_hunk', 'n', 's', 'k',   ':<C-u>GitGutterPrevHunk<CR>zvzz')
+  endfunction
 
   call neobundle#untap()
 endif
@@ -430,7 +431,7 @@ let g:lightline = {
       \   'active': {
       \     'left': [
       \       ['mode',   'paste'],
-      \       ['branch', 'gitgutter', 'filename', 'anzu']
+      \       ['branch', 'gitgutter', 'filename', 'anzu', 'submode']
       \     ],
       \     'right': [
       \       ['syntastic', 'lineinfo'],
@@ -449,12 +450,13 @@ let g:lightline = {
       \     'readonly':     s:sid . 'lightlineReadonly',
       \     'filename':     s:sid . 'lightlineFilename',
       \     'mode':         s:sid . 'lightlineMode',
-      \     'anzu':         'anzu#search_status'
+      \     'anzu':         'anzu#search_status',
+      \     'submode':      'submode#current'
       \   },
       \   'component_expand': {
       \     'syntastic':    'SyntasticStatuslineFlag',
       \     'branch':       s:sid . 'lightlineCurrentBranch',
-      \     'gitgutter':    s:sid . 'lightlineGitSummary',
+      \     'gitgutter':    s:sid . 'lightlineGitSummary'
       \   },
       \   'component_type': {
       \     'syntastic':    'error',
@@ -911,14 +913,17 @@ if neobundle#tap('vim-altr')
   nmap zk <Plug>(altr-back)
 
   function! neobundle#hooks.on_source(bundle)
+    call altr#define('%Model.cs',              '%Vm.cs',                  '%.xaml',             '%.xaml.cs')
     call altr#define('Models/%Model.cs',       'ViewModels/%Vm.cs',       'Views/%.xaml',       'Views/%.xaml.cs')
     call altr#define('Models/*/%Model.cs',     'ViewModels/*/%Vm.cs',     'Views/*/%.xaml',     'Views/*/%.xaml.cs')
     call altr#define('Models/*/*/%Model.cs',   'ViewModels/*/*/%Vm.cs',   'Views/*/*/%.xaml',   'Views/*/*/%.xaml.cs')
     call altr#define('Models/*/*/*/%Model.cs', 'ViewModels/*/*/*/%Vm.cs', 'Views/*/*/*/%.xaml', 'Views/*/*/*/%.xaml.cs')
-    call altr#define('%Model.cs',              '%Vm.cs',                  '%.xaml',             '%.xaml.cs')
-    call altr#define('%.xaml',                 '%.xaml.cs')
 
-    call altr#define('%.cpp',           '%.h', '%.*.cpp')
+    call altr#define('%.xaml', '%.xaml.cs')
+    call altr#define('%.cs',   '%.*.cs')
+
+    call altr#define('%.cpp', '%.*.cpp', '%.h')
+
     call altr#define('src/%.cpp',       'include/%.h')
     call altr#define('src/*/%.cpp',     'include/*/%.h')
     call altr#define('src/*/*/%.cpp',   'include/*/*/%.h')
@@ -996,10 +1001,6 @@ augroup MyAutoCmd
   endfunction
 
   function! s:clear_display_anzu()
-    if !exists('anzu#clear_search_status')
-      return
-    endif
-
     call anzu#clear_search_status()
   endfunction
 augroup END
@@ -1241,6 +1242,12 @@ if neobundle#tap('gocode')
         \     'filetypes': 'go'
         \   }
         \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    if s:is_windows
+      let g:gocomplete#system_function = 'vimproc#system'
+    endif
+  endfunction
 
   call neobundle#untap()
 endif
@@ -1531,7 +1538,8 @@ if neobundle#tap('lingr-vim')
       autocmd FileType lingr-messages call s:set_lingr()
 
       function! s:set_lingr()
-        nnoremap <silent><buffer> q :<C-u>call <SID>toggle_lingr()<CR>
+        nnoremap <silent><buffer> q  :<C-u>call <SID>toggle_lingr()<CR>
+        nmap     <silent><buffer> ss <Plug>(lingr-messages-show-say-buffer)
 
         setlocal nolist
       endfunction
@@ -1583,15 +1591,17 @@ if neobundle#tap('vim-gitgutter')
         \   }
         \ })
 
-  nmap gj <Plug>GitGutterNextHunkzvzz
-  nmap gk <Plug>GitGutterPrevHunkzvzz
+  " nmap gj <Plug>GitGutterNextHunkzvzz
+  " nmap gk <Plug>GitGutterPrevHunkzvzz
 
   function! neobundle#hooks.on_source(bundle)
     let g:gitgutter_map_keys           = 0
     let g:gitgutter_eager              = 0
-    let g:gitgutter_sign_column_always = 1
     " let g:gitgutter_diff_args          = '-w'
     let g:gitgutter_diff_args          = ''
+
+    " ファイルオープン直後一瞬シンタックスハイライトが無効にになってしまう
+    " let g:gitgutter_sign_column_always = 1
 
     augroup MyAutoCmd
       autocmd FocusGained,FocusLost * GitGutter
@@ -2409,7 +2419,7 @@ set showtabline=2
 set diffopt=vertical,filler
 set noequalalways
 set cursorline
-
+set display=lastline
 set conceallevel=2
 set concealcursor=i
 
@@ -2698,7 +2708,7 @@ set splitright                    " 横分割したら新しいウィンドウ�
 nnoremap [Window]  <Nop>
 nmap     <Leader>w [Window]
 
-noremap <silent> [Window]x :<C-u>close<CR>
+nnoremap <silent> <Leader>c :<C-u>close<CR>
 
 " アプリウィンドウ操作
 if s:is_gui_running
@@ -2746,18 +2756,17 @@ nmap     <Leader>t [Tab]
 nnoremap <silent> [Tab]c :<C-u>tabnew<CR>
 nnoremap <silent> [Tab]x :<C-u>tabclose<CR>
 
-nnoremap <silent> <F3> :<C-u>tabprevious<CR>
-nnoremap <silent> <F4> :<C-u>tabnext<CR>
+" nnoremap <silent> <F3> :<C-u>tabprevious<CR>
+" nnoremap <silent> <F4> :<C-u>tabnext<CR>
 " }}}
 " バッファ操作 {{{
 nnoremap [Buffer]  <Nop>
 nmap     <Leader>b [Buffer]
 
-nnoremap <silent> K :<C-u>bnext<CR>
-nnoremap <silent> J :<C-u>bprevious<CR>
+" nnoremap <silent> K :<C-u>bnext<CR>
+" nnoremap <silent> J :<C-u>bprevious<CR>
 
 nnoremap <silent> <Leader>x :<C-u>call <SID>delete_current_buffer()<CR>
-nnoremap <silent> <Leader>c :<C-u>close<CR>
 " }}}
 " Git {{{
 nnoremap [Git]     <Nop>
