@@ -307,8 +307,9 @@ if neobundle#tap('vim-submode')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    let g:submode_timeout          = 0
+    let g:submode_timeout = 0
 
+    " todo: macvim-kaoriya gvim で動作しない。なぜ？
     call submode#enter_with('tab',      'n', 's', 'gtj', 'gt')
     call submode#enter_with('tab',      'n', 's', 'gtk', 'gT')
     call submode#map(       'tab',      'n', 's', 'j',   'gt')
@@ -1245,6 +1246,7 @@ if neobundle#tap('gocode')
 
   function! neobundle#hooks.on_source(bundle)
     if s:is_windows
+      " todo: macだと補完候補が出てこなくなる
       let g:gocomplete#system_function = 'vimproc#system'
     endif
   endfunction
@@ -2781,6 +2783,7 @@ nnoremap <silent> [Git]s  :<C-u>call <SID>execute_if_on_git_branch('Gstatus')<CR
 nnoremap <silent> [Git]ps :<C-u>call <SID>execute_if_on_git_branch('Gpush')<CR>
 nnoremap <silent> [Git]pl :<C-u>call <SID>execute_if_on_git_branch('Gpull')<CR>
 nnoremap <silent> [Git]g  :<C-u>call <SID>execute_if_on_git_branch('Agit')<CR>
+nnoremap <silent> [Git]h  :<C-u>call <SID>execute_if_on_git_branch('GitGutterPreviewHunk')<CR>
 " }}}
 " ヘルプ {{{
 nnoremap          <Leader><C-k>      :<C-u>help<Space>
