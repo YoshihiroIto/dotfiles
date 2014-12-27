@@ -232,6 +232,10 @@ else
 endif
 
 call neobundle#end()
+
+nnoremap <F2> :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
+nnoremap <F3> :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
+nnoremap <F4> :<C-u>NeoBundleClearCache<CR>
 " ライブラリ {{{
 " vimproc {{{
 if neobundle#tap('vimproc')
@@ -1905,10 +1909,6 @@ if neobundle#tap('unite.vim')
     " nnoremap <silent> [Unite]e :<C-u>Unite -no-split -update-time=50 everything/async<CR>
     nnoremap <silent> [Unite]e :<C-u>Unite -no-split everything<CR>
   endif
-
-  nnoremap [Unite]uu :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
-  nnoremap [Unite]ui :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
-  nnoremap [Unite]uc :<C-u>NeoBundleClearCache<CR>
 
   " http://sanrinsha.lolipop.jp/blog/2013/03/%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E5%86%85%E3%81%AE%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92unite-grep%E3%81%99%E3%82%8B.html
   function! s:unite_grep_project(...)
