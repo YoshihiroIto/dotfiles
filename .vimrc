@@ -308,7 +308,8 @@ if neobundle#tap('vim-submode')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    let g:submode_timeout = 0
+    let g:submode_timeout          = 0
+    let g:submode_keep_leaving_key = 1
 
     call submode#enter_with('tab',      'n', 's', 'gtj', 'gt')
     call submode#enter_with('tab',      'n', 's', 'gtk', 'gT')
@@ -2802,7 +2803,7 @@ nnoremap <silent> [Git]h  :<C-u>call <SID>execute_if_on_git_branch('GitGutterPre
 " ヘルプ {{{
 nnoremap          <Leader><C-k>      :<C-u>help<Space>
 nnoremap <silent> <Leader><C-k><C-k> :<C-u>help <C-r><C-w><CR>:<C-u>call <SID>refresh_screen()<CR>
-vnoremap <silent> <Leader><C-k><C-k> :<C-u>help <C-r><C-w><CR>:<C-u>call <SID>refresh_screen()<CR>
+vnoremap <silent> <Leader><C-k><C-k> y:<C-u>help <C-r>"<CR>:<C-u>call <SID>refresh_screen()<CR>
 
 set helplang=ja,en
 
