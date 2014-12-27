@@ -288,7 +288,7 @@ endif
 if neobundle#tap('open-browser.vim')
   call neobundle#config({
         \   'autoload': {
-        \     'mappings': '<Plug>',
+        \     'mappings': '<Plug>(openbrowser',
         \     'commands': 'OpenBrowser'
         \    }
         \ })
@@ -1752,30 +1752,6 @@ endif
 " }}}
 " wandbox-vim {{{
 if neobundle#tap('wandbox-vim')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': ['c', 'cpp', 'objc', 'objcpp'],
-        \     'commands':  [
-        \       {
-        \         'name':     'WandboxAsync',
-        \         'complete': 'customlist,wandbox#complete_command'
-        \       },
-        \       {
-        \         'name':     'WandboxSync',
-        \         'complete': 'customlist,wandbox#complete_command'
-        \       },
-        \       {
-        \         'name':     'Wandbox',
-        \         'complete': 'customlist,wandbox#complete_command'
-        \       },
-        \       'WandboxOptionList',
-        \       'WandboxOpenBrowser',
-        \       'WandboxOptionListAsync',
-        \       'WandboxAbortAsyncWorks'
-        \     ]
-        \   }
-        \ })
-
   function! neobundle#hooks.on_source(bundle)
     " wandbox.vim で quickfix を開かないようにする
     let g:wandbox#open_quickfix_window = 0
@@ -2302,8 +2278,6 @@ endif
 " }}}
 
 nnoremap <silent> <F1> :<C-u>edit $MYVIMRC<CR>
-
-noremap U J
 
 " ^Mを取り除く
 command! RemoveCr call s:execute_keep_view('silent! %substitute/\r$//g | nohlsearch')
