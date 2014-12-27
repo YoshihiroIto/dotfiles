@@ -2776,16 +2776,15 @@ nnoremap <silent> [Git]g  :<C-u>call <SID>execute_if_on_git_branch('Agit')<CR>
 nnoremap <silent> [Git]h  :<C-u>call <SID>execute_if_on_git_branch('GitGutterPreviewHunk')<CR>
 " }}}
 " ヘルプ {{{
-nnoremap          <Leader><C-k>      :<C-u>help<Space>
-nnoremap <silent> <Leader><C-k><C-k> :<C-u>help <C-r><C-w><CR>:<C-u>call <SID>refresh_screen()<CR>
-vnoremap <silent> <Leader><C-k><C-k> y:<C-u>help <C-r>"<CR>:<C-u>call <SID>refresh_screen()<CR>
-
+" nnoremap          <Leader><C-k>      :<C-u>help<Space>
+" nnoremap <silent> <Leader><C-k><C-k> :<C-u>help <C-r><C-w><CR>:<C-u>call <SID>refresh_screen()<CR>
+" vnoremap <silent> <Leader><C-k><C-k> y:<C-u>help <C-r>"<CR>:<C-u>call <SID>refresh_screen()<CR>
 set helplang=ja,en
+set keywordprg=
 
 if has('kaoriya')
   set runtimepath+=$VIM/plugins/vimdoc-ja
 endif
-
 " }}}
 " 汎用関数 {{{
 " CursorHold を継続させる{{{
