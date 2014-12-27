@@ -1,11 +1,12 @@
 set encoding=utf-8
 scriptencoding utf-8
 " 基本 {{{
-let s:is_windows     = has('win32') || has('win64')
-let s:is_mac         = has('mac') || has('macunix')
-let s:is_linux       = has('unix') && !s:is_windows && !s:is_mac
-let s:is_gui_running = has('gui_running')
-let s:is_starting    = has('vim_starting')
+let s:is_windows         = has('win32') || has('win64')
+let s:is_mac             = has('mac') || has('macunix')
+let s:is_linux           = has('unix') && !s:is_windows && !s:is_mac
+let s:is_gui_running     = has('gui_running')
+let s:is_mac_gui_running = s:is_mac && s:is_gui_running
+let s:is_starting        = has('vim_starting')
 
 function! s:get_sid()
   return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeget_sid$')
@@ -309,7 +310,6 @@ if neobundle#tap('vim-submode')
   function! neobundle#hooks.on_source(bundle)
     let g:submode_timeout = 0
 
-    " todo: macvim-kaoriya gvim で動作しない。なぜ？
     call submode#enter_with('tab',      'n', 's', 'gtj', 'gt')
     call submode#enter_with('tab',      'n', 's', 'gtk', 'gT')
     call submode#map(       'tab',      'n', 's', 'j',   'gt')
@@ -2278,7 +2278,12 @@ if exists('+cryptmethod')
 endif
 
 " インプットメソッド {{{
-set noimdisable
+
+" macvim kaoriya gvim で submode が正しく動作しなくなるため
+if !s:is_mac_gui_running
+  set noimdisable
+endif
+
 set imsearch=0
 set iminsert=0
 if exists('+imdisableactivate')
@@ -2605,10 +2610,17 @@ nnoremap <expr> zl foldclosed(line('.')) != -1 ? 'zo' : '<C-l>'
 nnoremap <expr> zO foldclosed(line('.')) != -1 ? 'zO' : ''
 " }}}
 " モード移行 {{{
-inoremap <C-j> <Esc>
-nnoremap <C-j> <Esc>
-vnoremap <C-j> <Esc>
-cnoremap <C-j> <Esc>
+if !s:is_mac_gui_running
+  inoremap <C-j> <Esc>
+  nnoremap <C-j> <Esc>
+  vnoremap <C-j> <Esc>
+  cnoremap <C-j> <Esc>
+else
+  inoremap <C-j> <Esc>:<C-u>set noimdisable<CR>:<C-u>set imdisable<CR>
+  nnoremap <C-j> <Esc>:<C-u>set noimdisable<CR>:<C-u>set imdisable<CR>
+  vnoremap <C-j> <Esc>:<C-u>set noimdisable<CR>:<C-u>set imdisable<CR>
+  cnoremap <C-j> <Esc>:<C-u>set noimdisable<CR>:<C-u>set imdisable<CR>
+endif
 " }}}
 " コマンドラインモード {{{
 cnoremap <C-a> <Home>
