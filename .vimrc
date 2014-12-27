@@ -93,9 +93,9 @@ function! s:set_neobundle() " {{{
   NeoBundle     'xolox/vim-shell'
   NeoBundleLazy 'Shougo/tabpagebuffer.vim'
   NeoBundleLazy 'basyura/twibill.vim'
+  NeoBundleLazy 'kana/vim-submode'
   NeoBundleLazy 'mattn/webapi-vim'
   NeoBundleLazy 'tyru/open-browser.vim'
-  NeoBundleLazy 'kana/vim-submode'
   if !has('kaoriya')
     NeoBundle 'vim-jp/vimdoc-ja'
   endif
@@ -326,6 +326,14 @@ if neobundle#tap('vim-submode')
     call submode#enter_with('git_hunk', 'n', 's', 'ghk', ':<C-u>GitGutterPrevHunk<CR>zvzz')
     call submode#map(       'git_hunk', 'n', 's', 'j',   ':<C-u>GitGutterNextHunk<CR>zvzz')
     call submode#map(       'git_hunk', 'n', 's', 'k',   ':<C-u>GitGutterPrevHunk<CR>zvzz')
+    call submode#enter_with('winsize',  'n', 's', 'gwh', '8<C-w>>')
+    call submode#enter_with('winsize',  'n', 's', 'gwl', '8<C-w><')
+    call submode#enter_with('winsize',  'n', 's', 'gwj', '4<C-w>-')
+    call submode#enter_with('winsize',  'n', 's', 'gwk', '4<C-w>+')
+    call submode#map(       'winsize',  'n', 's', 'h',   '8<C-w>>')
+    call submode#map(       'winsize',  'n', 's', 'l',   '8<C-w><')
+    call submode#map(       'winsize',  'n', 's', 'j',   '4<C-w>-')
+    call submode#map(       'winsize',  'n', 's', 'k',   '4<C-w>+')
   endfunction
 
   call neobundle#untap()
@@ -2769,16 +2777,10 @@ nmap     <Leader>t [Tab]
 
 nnoremap <silent> [Tab]c :<C-u>tabnew<CR>
 nnoremap <silent> [Tab]x :<C-u>tabclose<CR>
-
-" nnoremap <silent> <F3> :<C-u>tabprevious<CR>
-" nnoremap <silent> <F4> :<C-u>tabnext<CR>
 " }}}
 " バッファ操作 {{{
 nnoremap [Buffer]  <Nop>
 nmap     <Leader>b [Buffer]
-
-" nnoremap <silent> K :<C-u>bnext<CR>
-" nnoremap <silent> J :<C-u>bprevious<CR>
 
 nnoremap <silent> <Leader>x :<C-u>call <SID>delete_current_buffer()<CR>
 " }}}
