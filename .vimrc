@@ -214,6 +214,20 @@ function! s:set_neobundle() " {{{
   endif
 endfunction " }}}
 
+function! s:browse_plugin()
+  normal yib
+  let name = @"
+
+  if match(name, '/') == -1
+    let url = 'http://www.google.jp/search?q=' . name
+  else
+    let url = 'https://github.com/' . name
+  endif
+
+  execute 'OpenBrowser' url
+endfunction
+command! BrowsePlugin call <SID>browse_plugin()
+
 if s:is_starting
   let g:neobundle#install_max_processes   = 8
   let g:neobundle#install_process_timeout = 10*60
@@ -274,22 +288,9 @@ endif
 if neobundle#tap('open-browser.vim')
   call neobundle#config({
         \   'autoload': {
-        \     'mappings': '<Plug>(openbrowser',
-        \     'commands': [
-        \       {
-        \         'name':     'OpenBrowserSearch',
-        \         'complete': 'customlist,openbrowser#_cmd_complete'
-        \       },
-        \       {
-        \         'name':     'OpenBrowserSmartSearch',
-        \         'complete': 'customlist,openbrowser#_cmd_complete'
-        \       },
-        \       {
-        \         'name':     'OpenBrowser',
-        \         'complete': 'file'
-        \       }
-        \     ],
-        \   }
+        \     'mappings': '<Plug>',
+        \     'commands': 'OpenBrowser'
+        \    }
         \ })
 
   function! neobundle#hooks.on_source(bundle)
