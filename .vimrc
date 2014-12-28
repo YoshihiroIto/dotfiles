@@ -1645,9 +1645,6 @@ if neobundle#tap('vim-gitgutter')
         \   }
         \ })
 
-  " nmap gj <Plug>GitGutterNextHunkzvzz
-  " nmap gk <Plug>GitGutterPrevHunkzvzz
-
   function! neobundle#hooks.on_source(bundle)
     let g:gitgutter_map_keys           = 0
     let g:gitgutter_eager              = 0
@@ -1905,14 +1902,13 @@ if neobundle#tap('unite.vim')
   nmap     <Space> [Unite]
   xmap     <Space> [Unite]
 
-  nnoremap <silent> [Unite]g :<C-u>Unite grep -no-split -buffer-name=search-buffer<CR>
-  nnoremap <silent> [Unite]p :<C-u>call <SID>unite_grep_project('-no-split -buffer-name=search-buffer')<CR>
-  nnoremap <silent> [Unite]r :<C-u>UniteResume -no-split search-buffer<CR>
+  nnoremap <silent> [Unite]g :<C-u>Unite grep -no-split -buffer-name=grep-buffer<CR>
+  nnoremap <silent> [Unite]p :<C-u>call <SID>unite_grep_project('-no-split -buffer-name=grep-buffer')<CR>
 
   nnoremap <silent> [Unite]f :<C-u>Unite buffer<CR>
   nnoremap <silent> [Unite]j :<C-u>Unite bookmark<CR>
   nnoremap <silent> [Unite]t :<C-u>Unite tab<CR>
-  nnoremap <silent> [Unite]l :<C-u>Unite -no-split line<CR>
+  nnoremap <silent> [Unite]l :<C-u>Unite -no-split -buffer-name=line-buffer line<CR>
   nnoremap <silent> [Unite]o :<C-u>Unite outline<CR>
   nnoremap <silent> [Unite]z :<C-u>Unite fold<CR>
   nnoremap <silent> [Unite]q :<C-u>Unite -no-quit quickfix<CR>
@@ -1921,9 +1917,11 @@ if neobundle#tap('unite.vim')
   nnoremap <silent> [Unite]m :<C-u>Unite -no-split neomru/file<CR>
 
   if s:is_windows
-    " nnoremap <silent> [Unite]e :<C-u>Unite -no-split -update-time=50 everything/async<CR>
     nnoremap <silent> [Unite]e :<C-u>Unite -no-split everything<CR>
   endif
+
+  nnoremap <silent> [Unite]rg :<C-u>UniteResume -no-split grep-buffer<CR>
+  nnoremap <silent> [Unite]rl :<C-u>UniteResume -no-split line-buffer<CR>
 
   " http://sanrinsha.lolipop.jp/blog/2013/03/%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E5%86%85%E3%81%AE%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92unite-grep%E3%81%99%E3%82%8B.html
   function! s:unite_grep_project(...)
