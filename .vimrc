@@ -97,9 +97,6 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'kana/vim-submode'
   NeoBundleLazy 'mattn/webapi-vim'
   NeoBundleLazy 'tyru/open-browser.vim'
-  if !has('kaoriya')
-    NeoBundle 'vim-jp/vimdoc-ja'
-  endif
 
   " 表示
   NeoBundle     'Yggdroot/indentLine'
@@ -163,6 +160,7 @@ function! s:set_neobundle() " {{{
 
   " テキストオブジェクト
   NeoBundleLazy 'kana/vim-textobj-user'
+  NeoBundleLazy 'anyakichi/vim-textobj-ifdef'         " #
   NeoBundleLazy 'glts/vim-textobj-comment'            " c
   NeoBundleLazy 'h1mesuke/textobj-wiw'                " .
   NeoBundleLazy 'kana/vim-textobj-entire'             " e
@@ -172,7 +170,6 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'rhysd/vim-textobj-word-column'       " v V
   NeoBundleLazy 'sgur/vim-textobj-parameter'          " a
   NeoBundleLazy 'whatyouhide/vim-textobj-xmlattr'     " x
-  NeoBundleLazy 'anyakichi/vim-textobj-ifdef'         " #
 
   " オペレータ
   NeoBundleLazy 'kana/vim-operator-user'
@@ -217,15 +214,7 @@ endfunction " }}}
 
 function! s:browse_plugin()
   normal yib
-  let name = @"
-
-  if match(name, '/') == -1
-    let url = 'http://www.google.jp/search?q=' . name
-  else
-    let url = 'https://github.com/' . name
-  endif
-
-  execute 'OpenBrowser' url
+  execute 'OpenBrowser' 'https://github.com/' . @"
 endfunction
 command! BrowsePlugin call <SID>browse_plugin()
 
