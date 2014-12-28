@@ -173,6 +173,7 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'rhysd/vim-textobj-word-column'       " v V
   NeoBundleLazy 'sgur/vim-textobj-parameter'          " a
   NeoBundleLazy 'whatyouhide/vim-textobj-xmlattr'     " x
+  NeoBundleLazy 'anyakichi/vim-textobj-ifdef'         " #
 
   " オペレータ
   NeoBundleLazy 'kana/vim-operator-user'
@@ -248,9 +249,9 @@ endif
 
 call neobundle#end()
 
-nnoremap <F2> :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
-nnoremap <F3> :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
-nnoremap <F4> :<C-u>NeoBundleClearCache<CR>
+map <F2> :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
+map <F3> :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
+map <F4> :<C-u>NeoBundleClearCache<CR>
 " ライブラリ {{{
 " vimproc {{{
 if neobundle#tap('vimproc')
@@ -1447,6 +1448,18 @@ if neobundle#tap('vim-textobj-xmlattr')
   call neobundle#untap()
 endif
 " }}}
+" vim-textobj-ifdef {{{
+if neobundle#tap('vim-textobj-ifdef')
+  call neobundle#config({
+        \   'depends':  'vim-textobj-user',
+        \   'autoload': {
+        \     'mappings': [['xo', 'a#'], ['xo', 'i#']]
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
 " }}}
 " オペレータ {{{
 " http://qiita.com/rbtnn/items/a47ed6684f1f0bc52906
@@ -2421,7 +2434,7 @@ set showfulltag
 set wildoptions=tagfile
 set fillchars=vert:\              " 縦分割の境界線
 set synmaxcol=500                 " ハイライトする文字数を制限する
-set updatetime=200
+set updatetime=350
 set previewheight=24
 set laststatus=0
 set cmdheight=4
@@ -2723,12 +2736,12 @@ augroup END
 set splitbelow                    " 縦分割したら新しいウィンドウは下に
 set splitright                    " 横分割したら新しいウィンドウは右に
 
+nnoremap <silent> <Leader>c :<C-u>close<CR>
+" }}}
+" アプリウィンドウ操作 {{{
 nnoremap [Window]  <Nop>
 nmap     <Leader>w [Window]
 
-nnoremap <silent> <Leader>c :<C-u>close<CR>
-
-" アプリウィンドウ操作
 if s:is_gui_running
   noremap <silent> [Window]e :<C-u>call <SID>toggle_v_split_wide()<CR>
 
@@ -2796,9 +2809,6 @@ nnoremap <silent> [Git]g  :<C-u>call <SID>execute_if_on_git_branch('Agit')<CR>
 nnoremap <silent> [Git]h  :<C-u>call <SID>execute_if_on_git_branch('GitGutterPreviewHunk')<CR>
 " }}}
 " ヘルプ {{{
-" nnoremap          <Leader><C-k>      :<C-u>help<Space>
-" nnoremap <silent> <Leader><C-k><C-k> :<C-u>help <C-r><C-w><CR>:<C-u>call <SID>refresh_screen()<CR>
-" vnoremap <silent> <Leader><C-k><C-k> y:<C-u>help <C-r>"<CR>:<C-u>call <SID>refresh_screen()<CR>
 set helplang=ja,en
 set keywordprg=
 
