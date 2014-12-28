@@ -176,12 +176,12 @@ function! s:set_neobundle() " {{{
 
   " オペレータ
   NeoBundleLazy 'kana/vim-operator-user'
-  NeoBundleLazy 'YoshihiroIto/vim-operator-tcomment'
-  NeoBundleLazy 'deris/vim-rengbang'
-  NeoBundleLazy 'emonkak/vim-operator-sort'
-  NeoBundleLazy 'kana/vim-operator-replace'
-  NeoBundleLazy 'rhysd/vim-operator-surround'
-  NeoBundleLazy 'tyru/operator-camelize.vim'
+  NeoBundleLazy 'YoshihiroIto/vim-operator-tcomment'  " t
+  NeoBundleLazy 'deris/vim-rengbang'                  " <Leader>r
+  NeoBundleLazy 'emonkak/vim-operator-sort'           " <Leader>o
+  NeoBundleLazy 'kana/vim-operator-replace'           " R
+  NeoBundleLazy 'rhysd/vim-operator-surround'         " S
+  NeoBundleLazy 'tyru/operator-camelize.vim'          " <Leader>_
 
   " アプリ
   NeoBundleLazy 'Shougo/vimfiler.vim'
@@ -1507,8 +1507,8 @@ if neobundle#tap('operator-camelize.vim')
         \   }
         \ })
 
-  nmap <Leader>_ <Plug>(operator-camelize-toggle)iw
-  xmap <Leader>_ <Plug>(operator-camelize-toggle)iw
+  nmap <Leader>_ <Plug>(operator-camelize-toggle)
+  xmap <Leader>_ <Plug>(operator-camelize-toggle)
 
   call neobundle#untap()
 endif
