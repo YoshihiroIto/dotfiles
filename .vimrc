@@ -947,6 +947,12 @@ if neobundle#tap('vim-altr')
     call altr#define('Models/*/*/%Model.cs',   'ViewModels/*/*/%Vm.cs',   'Views/*/*/%.xaml',   'Views/*/*/%.xaml.cs')
     call altr#define('Models/*/*/*/%Model.cs', 'ViewModels/*/*/*/%Vm.cs', 'Views/*/*/*/%.xaml', 'Views/*/*/*/%.xaml.cs')
 
+    call altr#define('%Model.cs',              '%ViewModel.cs',                  '%.xaml',             '%.xaml.cs')
+    call altr#define('Models/%Model.cs',       'ViewModels/%ViewModel.cs',       'Views/%.xaml',       'Views/%.xaml.cs')
+    call altr#define('Models/*/%Model.cs',     'ViewModels/*/%ViewModel.cs',     'Views/*/%.xaml',     'Views/*/%.xaml.cs')
+    call altr#define('Models/*/*/%Model.cs',   'ViewModels/*/*/%ViewModel.cs',   'Views/*/*/%.xaml',   'Views/*/*/%.xaml.cs')
+    call altr#define('Models/*/*/*/%Model.cs', 'ViewModels/*/*/*/%ViewModel.cs', 'Views/*/*/*/%.xaml', 'Views/*/*/*/%.xaml.cs')
+
     call altr#define('%.xaml', '%.xaml.cs')
     call altr#define('%.cs',   '%.*.cs')
 
