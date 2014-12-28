@@ -2301,20 +2301,6 @@ if exists('+cryptmethod')
   set cryptmethod=blowfish
 endif
 
-" インプットメソッド {{{
-
-" macvim kaoriya gvim で submode が正しく動作しなくなるため
-if !s:is_mac_gui_running
-  set noimdisable
-endif
-
-set imsearch=0
-set iminsert=0
-if exists('+imdisableactivate')
-  set imdisableactivate
-endif
-" }}}
-
 nnoremap <silent> <F1> :<C-u>edit $MYVIMRC<CR>
 
 " ^Mを取り除く
@@ -2372,6 +2358,18 @@ augroup MyAutoCmd
     endif
   endfunction
 augroup END
+" }}}
+" インプットメソッド {{{
+" macvim kaoriya gvim で submode が正しく動作しなくなるため
+if !s:is_mac_gui_running
+  set noimdisable
+endif
+
+set imsearch=0
+set iminsert=0
+if exists('+imdisableactivate')
+  set imdisableactivate
+endif
 " }}}
 " タブ・インデント {{{
 set autoindent
