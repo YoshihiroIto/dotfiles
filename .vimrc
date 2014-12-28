@@ -163,23 +163,23 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'vim-jp/vim-go-extra'
 
   " テキストオブジェクト
-  NeoBundleLazy 'glts/vim-textobj-comment'
-  NeoBundleLazy 'h1mesuke/textobj-wiw'
-  NeoBundleLazy 'kana/vim-textobj-entire'
-  NeoBundleLazy 'kana/vim-textobj-indent'
-  NeoBundleLazy 'kana/vim-textobj-line'
   NeoBundleLazy 'kana/vim-textobj-user'
-  NeoBundleLazy 'rhysd/vim-textobj-anyblock'
-  NeoBundleLazy 'rhysd/vim-textobj-word-column'
-  NeoBundleLazy 'sgur/vim-textobj-parameter'
-  NeoBundleLazy 'whatyouhide/vim-textobj-xmlattr'
+  NeoBundleLazy 'glts/vim-textobj-comment'            " c
+  NeoBundleLazy 'h1mesuke/textobj-wiw'                " .
+  NeoBundleLazy 'kana/vim-textobj-entire'             " e
+  NeoBundleLazy 'kana/vim-textobj-indent'             " i I
+  NeoBundleLazy 'kana/vim-textobj-line'               " l
+  NeoBundleLazy 'rhysd/vim-textobj-anyblock'          " b
+  NeoBundleLazy 'rhysd/vim-textobj-word-column'       " v V
+  NeoBundleLazy 'sgur/vim-textobj-parameter'          " a
+  NeoBundleLazy 'whatyouhide/vim-textobj-xmlattr'     " x
 
   " オペレータ
+  NeoBundleLazy 'kana/vim-operator-user'
   NeoBundleLazy 'YoshihiroIto/vim-operator-tcomment'
   NeoBundleLazy 'deris/vim-rengbang'
   NeoBundleLazy 'emonkak/vim-operator-sort'
   NeoBundleLazy 'kana/vim-operator-replace'
-  NeoBundleLazy 'kana/vim-operator-user'
   NeoBundleLazy 'rhysd/vim-operator-surround'
   NeoBundleLazy 'tyru/operator-camelize.vim'
 
@@ -2395,15 +2395,15 @@ endif
 map / <Plug>(incsearch-forward)
 map ? <Plug>(incsearch-backward)
 
-nmap <silent> n <Plug>(incsearch-nohl)<Plug>(anzu-n)zvzz:<C-u>call <SID>begin_display_anzu()<CR>:<C-u>call <SID>refresh_screen()<CR>
-nmap <silent> N <Plug>(incsearch-nohl)<Plug>(anzu-N)zvzz:<C-u>call <SID>begin_display_anzu()<CR>:<C-u>call <SID>refresh_screen()<CR>
-nmap <silent> * <Plug>(anzu-star):<C-u>call  <SID>refresh_screen()<CR>
-nmap <silent> # <Plug>(anzu-sharp):<C-u>call <SID>refresh_screen()<CR>
+map  <silent> n  <Plug>(incsearch-nohl-n)
+map  <silent> N  <Plug>(incsearch-nohl-N)
+nmap <silent> n  <Plug>(incsearch-nohl)<Plug>(anzu-n)zvzz:<C-u>call <SID>begin_display_anzu()<CR>:<C-u>call <SID>refresh_screen()<CR>
+nmap <silent> N  <Plug>(incsearch-nohl)<Plug>(anzu-N)zvzz:<C-u>call <SID>begin_display_anzu()<CR>:<C-u>call <SID>refresh_screen()<CR>
 
-map <silent> *  <Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
-map <silent> g* <Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
-map <silent> #  <Plug>(incsearch-nohl0)<Plug>(asterisk-z#)
-map <silent> g# <Plug>(incsearch-nohl0)<Plug>(asterisk-gz#)
+map  <silent> *  <Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
+map  <silent> g* <Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
+map  <silent> #  <Plug>(incsearch-nohl0)<Plug>(asterisk-z#)
+map  <silent> g# <Plug>(incsearch-nohl0)<Plug>(asterisk-gz#)
 " }}}
 " 表示 {{{
 syntax enable                     " 構文ごとに色分けをする
