@@ -105,7 +105,6 @@ function! s:set_neobundle() " {{{
   NeoBundle     'Yggdroot/indentLine'
   NeoBundle     'itchyny/lightline.vim'
   NeoBundle     'tomasr/molokai'
-  NeoBundle     'vim-scripts/matchparenpp'
   NeoBundleLazy 'LeafCage/foldCC.vim'
   NeoBundleLazy 'YoshihiroIto/syntastic'
   NeoBundleLazy 'tukiyo/previm'
