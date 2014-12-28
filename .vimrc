@@ -261,8 +261,8 @@ if neobundle#tap('vimproc')
         \   },
         \   'build': {
         \     'mac':  'make -f make_mac.mak',
-        \     'unix': 'make -f make_unix.mak',
-        \   },
+        \     'unix': 'make -f make_unix.mak'
+        \   }
         \ })
 
   call neobundle#untap()
@@ -678,7 +678,7 @@ endif
 if neobundle#tap('yankround.vim')
   call neobundle#config({
         \   'autoload': {
-        \     'mappings': '<Plug>',
+        \     'mappings': '<Plug>'
         \   }
         \ })
 
@@ -704,7 +704,7 @@ endif
 if neobundle#tap('vim-smartinput')
   call neobundle#config({
         \   'autoload': {
-        \     'insert': 1,
+        \     'insert': 1
         \   }
         \ })
 
@@ -728,7 +728,7 @@ if neobundle#tap('increment-activator')
     let g:increment_activator_filetype_candidates = {
           \   '_':   [['width', 'height']],
           \   'cs':  [['private', 'protected', 'public', 'internal']],
-          \   'cpp': [['private', 'protected', 'public']],
+          \   'cpp': [['private', 'protected', 'public']]
           \ }
   endfunction
 
@@ -747,7 +747,7 @@ if neobundle#tap('vim-over')
 
   function! neobundle#hooks.on_source(bundle)
     let g:over_command_line_key_mappings = {
-          \   "\<C-j>" : "\<Esc>",
+          \   "\<C-j>" : "\<Esc>"
           \ }
   endfunction
 
@@ -784,7 +784,7 @@ endif
 if neobundle#tap('neocomplete.vim')
   call neobundle#config({
         \   'autoload': {
-        \     'insert': 1,
+        \     'insert': 1
         \   }
         \ })
 
@@ -913,7 +913,7 @@ if neobundle#tap('omnisharp-vim')
         \   'build': {
         \     'windows': 'C:/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe server/OmniSharp.sln /p:Platform="Any CPU"',
         \     'mac':     'xbuild server/OmniSharp.sln',
-        \     'unix':    'xbuild server/OmniSharp.sln',
+        \     'unix':    'xbuild server/OmniSharp.sln'
         \   }
         \ })
 
@@ -1150,7 +1150,7 @@ if neobundle#tap('vim-markdown')
         \   'c',    'cpp', 'cs', 'go',
         \   'ruby', 'lua', 'python',
         \   'vim',
-        \   'xml',  'json',
+        \   'xml',  'json'
         \ ]
   endfunction
 
@@ -1216,7 +1216,7 @@ if neobundle#tap('vim-clang-format')
           \   'ColumnLimit':                         0,
           \   'IndentCaseLabels':                    'false',
           \   'IndentWidth':                         4,
-          \   'UseTab':                              'Never',
+          \   'UseTab':                              'Never'
           \ }
 
     command! -range=% -nargs=0 CppFormat call clang_format#replace(<line1>, <line2>)
@@ -1525,7 +1525,7 @@ if neobundle#tap('vim-operator-surround')
     let g:operator#surround#blocks =
           \ {
           \   '-' : [
-          \       { 'block' : ["{\<CR>", "\<CR>}"], 'motionwise' : ['line'], 'keys' : ['{', '}'] },
+          \       {'block' : ["{\<CR>", "\<CR>}"], 'motionwise' : ['line'], 'keys' : ['{', '}']}
           \   ]
           \ }
   endfunction
