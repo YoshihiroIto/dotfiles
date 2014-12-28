@@ -66,6 +66,7 @@ nnoremap [App] <Nop>
 nmap     ;     [App]
 
 " guioptions {{{
+" メニューを読み込まない
 set guioptions+=M
 
 " ツールバー削除
@@ -308,7 +309,7 @@ endif
 if neobundle#tap('vim-submode')
   call neobundle#config({
         \   'autoload': {
-        \     'mappings': ['gt', 'gb', 'ga', 'gh']
+        \     'mappings': ['gt', 'gb', 'ga', 'gh', 'gw']
         \   }
         \ })
 
@@ -539,15 +540,19 @@ function! s:lightlineReadonly()
 endfunction
 
 function! s:lightlineFilename()
-  return ('' !=# s:lightlineReadonly() ? s:lightlineReadonly() . ' ' : '') .
-        \ (&filetype ==# 'vimfiler'  ? vimfiler#get_status_string() :
-        \  &filetype ==# 'unite'     ? unite#get_status_string() :
-        \  &filetype ==# 'vimshell'  ? vimshell#get_status_string() :
-        \  &filetype =~# 'lingr'     ? lingr#status() :
-        \  &filetype ==# 'tweetvim'  ? '' :
-        \  &filetype ==# 'quickrun'  ? '' :
-        \  ''  !=# expand('%:t') ? expand('%:t') : '[No Name]') .
-        \ ('' !=# s:lightlineModified() ? ' ' . s:lightlineModified() : '')
+  try
+    return ('' !=# s:lightlineReadonly() ? s:lightlineReadonly() . ' ' : '') .
+          \ (&filetype ==# 'vimfiler'  ? vimfiler#get_status_string() :
+          \  &filetype ==# 'unite'     ? unite#get_status_string() :
+          \  &filetype ==# 'vimshell'  ? vimshell#get_status_string() :
+          \  &filetype =~# 'lingr'     ? lingr#status() :
+          \  &filetype ==# 'tweetvim'  ? '' :
+          \  &filetype ==# 'quickrun'  ? '' :
+          \  ''  !=# expand('%:t') ? expand('%:t') : '[No Name]') .
+          \ ('' !=# s:lightlineModified() ? ' ' . s:lightlineModified() : '')
+  catch
+    return ''
+  endtry
 endfunction
 
 function! s:lightlineCurrentBranch()
@@ -560,8 +565,12 @@ function! s:lightlineCurrentBranch()
   endif
 
   if &filetype !=# 'vimfiler'
-    let _ = fugitive#head()
-    return strlen(_) ? '⭠ ' . _ : ''
+    try
+      let _ = fugitive#head()
+      return strlen(_) ? '⭠ ' . _ : ''
+    catch
+      return ''
+    endtry
   endif
 
   return ''
@@ -608,12 +617,15 @@ function! s:lightlineGitSummary()
     return ''
   endif
 
-  let summary = gitgutter#hunk#summary()
-
-  return printf('%s%d %s%d %s%d',
-        \ g:gitgutter_sign_added,    summary[0],
-        \ g:gitgutter_sign_modified, summary[1],
-        \ g:gitgutter_sign_removed,  summary[2])
+  try
+    let summary = gitgutter#hunk#summary()
+    return printf('%s%d %s%d %s%d',
+          \ g:gitgutter_sign_added,    summary[0],
+          \ g:gitgutter_sign_modified, summary[1],
+          \ g:gitgutter_sign_removed,  summary[2])
+  catch
+    return ''
+  endtry
 endfunction
 " }}}
 " indentLine {{{
@@ -1006,17 +1018,23 @@ augroup MyAutoCmd
   endfunction
 
   function! s:update_display_anzu()
-    if s:anzu_display_count >= 0
-      let s:anzu_display_count = s:anzu_display_count - 1
+    try
+      if s:anzu_display_count >= 0
+        let s:anzu_display_count = s:anzu_display_count - 1
 
-      call s:continue_cursor_hold()
-    else
-      call s:clear_display_anzu()
-    endif
+        call s:continue_cursor_hold()
+      else
+        call s:clear_display_anzu()
+      endif
+    catch
+    endtry
   endfunction
 
   function! s:clear_display_anzu()
-    call anzu#clear_search_status()
+    try
+      call anzu#clear_search_status()
+    catch
+    endtry
   endfunction
 augroup END
 " }}}
@@ -1594,9 +1612,11 @@ if neobundle#tap('vim-fugitive')
 endif
 
 function! s:update_fugitive()
-  call fugitive#detect(expand('<amatch>:p'))
-
-  call lightline#update()
+  try
+    call fugitive#detect(expand('<amatch>:p'))
+    call lightline#update()
+  catch
+  endtry
 endfunction
 " }}}
 " vim-gitgutter {{{
@@ -2926,7 +2946,11 @@ endfunction
 " }}}
 " Gitブランチ上にいるか {{{
 function! s:is_in_git_branch()
-  return fugitive#head() !=# ''
+  try
+    return fugitive#head() !=# ''
+  catch
+    return 0
+  endtry
 endfunction
 " }}}
 " Gitブランチ上であれば実行 {{{
