@@ -103,7 +103,7 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'basyura/twibill.vim'
   NeoBundleLazy 'kana/vim-submode'
   NeoBundleLazy 'mattn/webapi-vim'
-  NeoBundleLazy 'tyru/open-browser.vim'
+  NeoBundleLazy 'osyo-manga/shabadou.vim'
 
   " 表示
   NeoBundle     'tomasr/molokai'
@@ -111,7 +111,6 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'LeafCage/foldCC.vim'
   NeoBundleLazy 'Yggdroot/indentLine'
   NeoBundleLazy 'YoshihiroIto/syntastic'
-  NeoBundleLazy 'tukiyo/previm'
   if s:is_gui_running
     NeoBundleLazy 'YoshihiroIto/vim-resize-win'
     NeoBundleLazy 'vim-scripts/movewin.vim'
@@ -154,18 +153,6 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'vim-ruby/vim-ruby'
   NeoBundleLazy 'vim-scripts/JSON.vim'
 
-  " C++
-  NeoBundleLazy 'Mizuchi/STL-Syntax'
-  NeoBundleLazy 'osyo-manga/vim-marching'
-  NeoBundleLazy 'rhysd/vim-clang-format'
-  NeoBundleLazy 'vim-jp/cpp-vim'
-
-  " Go
-  NeoBundleLazy 'nsf/gocode'
-  NeoBundleLazy 'google/vim-ft-go'
-  NeoBundleLazy 'dgryski/vim-godef'
-  NeoBundleLazy 'vim-jp/vim-go-extra'
-
   " テキストオブジェクト
   NeoBundleLazy 'kana/vim-textobj-user'
   NeoBundleLazy 'anyakichi/vim-textobj-ifdef'         " #
@@ -194,15 +181,13 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'Shougo/vimfiler.vim'
   NeoBundleLazy 'Shougo/vimshell.vim'
   NeoBundleLazy 'Shougo/vinarise.vim'
-  NeoBundleLazy 'airblade/vim-gitgutter'
   NeoBundleLazy 'basyura/TweetVim'
-  NeoBundleLazy 'cohama/agit.vim'
   NeoBundleLazy 'glidenote/memolist.vim'
-  NeoBundleLazy 'osyo-manga/shabadou.vim'
   NeoBundleLazy 'rhysd/wandbox-vim'
   NeoBundleLazy 'thinca/vim-quickrun'
-  NeoBundleLazy 'tpope/vim-fugitive'
   NeoBundleLazy 'tsukkee/lingr-vim'
+  NeoBundleLazy 'tukiyo/previm'
+  NeoBundleLazy 'tyru/open-browser.vim'
   if s:is_mac
     NeoBundleLazy 'itchyny/dictionary.vim'
   endif
@@ -220,6 +205,23 @@ function! s:set_neobundle() " {{{
   if s:is_windows
     NeoBundleLazy 'sgur/unite-everything'
   endif
+
+  " C++
+  NeoBundleLazy 'Mizuchi/STL-Syntax'
+  NeoBundleLazy 'osyo-manga/vim-marching'
+  NeoBundleLazy 'rhysd/vim-clang-format'
+  NeoBundleLazy 'vim-jp/cpp-vim'
+
+  " Go
+  NeoBundleLazy 'nsf/gocode'
+  NeoBundleLazy 'google/vim-ft-go'
+  NeoBundleLazy 'dgryski/vim-godef'
+  NeoBundleLazy 'vim-jp/vim-go-extra'
+
+  " Git
+  NeoBundleLazy 'airblade/vim-gitgutter'
+  NeoBundleLazy 'cohama/agit.vim'
+  NeoBundleLazy 'tpope/vim-fugitive'
 endfunction " }}}
 function! s:browse_plugin()
   normal yib
@@ -281,26 +283,6 @@ if neobundle#tap('webapi-vim')
   function! neobundle#hooks.on_source(bundle)
     let g:webapi#system_function = 'vimproc#system'
   endfunction
-
-  call neobundle#untap()
-endif
-" }}}
-" open-browser.vim {{{
-if neobundle#tap('open-browser.vim')
-  call neobundle#config({
-        \   'autoload': {
-        \     'mappings': '<Plug>(openbrowser',
-        \     'commands': 'OpenBrowser'
-        \    }
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    let g:netrw_nogx                   = 1
-    let g:openbrowser_no_default_menus = 1
-  endfunction
-
-  nmap gx <Plug>(openbrowser-smart-search)
-  vmap gx <Plug>(openbrowser-smart-search)
 
   call neobundle#untap()
 endif
@@ -656,18 +638,6 @@ if neobundle#tap('indentLine')
       autocmd BufReadPost * IndentLinesEnable
     augroup END
   endfunction
-
-  call neobundle#untap()
-endif
-" }}}
-" previm {{{
-if neobundle#tap('previm')
-  call neobundle#config({
-        \   'depends':  'open-browser.vim',
-        \   'autoload': {
-        \     'filetypes': 'markdown'
-        \   }
-        \ })
 
   call neobundle#untap()
 endif
@@ -1259,141 +1229,6 @@ if neobundle#tap('vim-toml')
 endif
 " }}}
 " }}}
-" C++ {{{
-" vim-clang-format {{{
-if neobundle#tap('vim-clang-format')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': ['c', 'cpp', 'objc', 'objcpp']
-        \   }
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    if s:is_windows
-      let g:clang_format#command = 'C:/Development/LLVM/bin/clang-format.exe'
-    else
-      let g:clang_format#command = 'clang-format-3.4'
-    endif
-
-    let g:clang_format#style_options = {
-          \   'AccessModifierOffset':                -4,
-          \   'AllowShortIfStatementsOnASingleLine': 'false',
-          \   'AlwaysBreakBeforeMultilineStrings':   'false',
-          \   'BreakBeforeBraces':                   'Allman',
-          \   'ColumnLimit':                         0,
-          \   'IndentCaseLabels':                    'false',
-          \   'IndentWidth':                         4,
-          \   'UseTab':                              'Never'
-          \ }
-
-    command! -range=% -nargs=0 CppFormat call clang_format#replace(<line1>, <line2>)
-  endfunction
-
-  call neobundle#untap()
-endif
-" }}}
-" cpp-vim {{{
-if neobundle#tap('cpp-vim')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': 'cpp'
-        \   }
-        \ })
-
-  call neobundle#untap()
-endif
-" }}}
-" STL-Syntax {{{
-if neobundle#tap('STL-Syntax')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': 'cpp'
-        \   }
-        \ })
-
-  call neobundle#untap()
-endif
-" }}}
-" vim-marching {{{
-if neobundle#tap('vim-marching')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': ['c', 'cpp', 'objc', 'objcpp']
-        \   }
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    if s:is_windows
-      let g:marching_clang_command = 'C:/Development/LLVM/bin/clang.exe'
-    else
-      let g:marching_clang_command = 'clang'
-    endif
-
-    let g:marching_enable_neocomplete   = 1
-    let g:marching_clang_command_option = '-std=c++1y'
-  endfunction
-endif
-" }}}
-" }}}
-" Go {{{
-" gocode {{{
-if neobundle#tap('gocode')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': 'go'
-        \   }
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    if s:is_windows
-      " todo: macだと補完候補が出てこなくなる
-      let g:gocomplete#system_function = 'vimproc#system'
-    endif
-  endfunction
-
-  call neobundle#untap()
-endif
-" }}}
-" vim-ft-go {{{
-if neobundle#tap('vim-ft-go')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': 'go'
-        \   }
-        \ })
-
-  call neobundle#untap()
-endif
-" }}}
-" vim-godef {{{
-if neobundle#tap('vim-godef')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': 'go'
-        \   }
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    let g:godef_split                    = 0
-    let g:godef_same_file_in_same_window = 1
-    let g:godef_system_function          = 'vimproc#system'
-  endfunction
-
-  call neobundle#untap()
-endif
-" }}}
-" vim-go-extra {{{
-if neobundle#tap('vim-go-extra')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': 'go'
-        \   }
-        \ })
-
-  call neobundle#untap()
-endif
-" }}}
-" }}}
 " テキストオブジェクト {{{
 " https://github.com/kana/vim-textobj-user/wiki
 " http://d.hatena.ne.jp/osyo-manga/20130717/1374069987
@@ -1697,57 +1532,6 @@ if neobundle#tap('lingr-vim')
   call neobundle#untap()
 endif
 " }}}
-" vim-fugitive {{{
-if neobundle#tap('vim-fugitive')
-  call neobundle#config({
-        \   'autoload': {
-        \     'insert':          1,
-        \     'function_prefix': 'fugitive'
-        \   }
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    augroup MyAutoCmd
-      autocmd FocusGained,FocusLost * call s:update_fugitive()
-    augroup END
-  endfunction
-
-  call neobundle#untap()
-endif
-
-function! s:update_fugitive()
-  try
-    call fugitive#detect(expand('<amatch>:p'))
-    call lightline#update()
-  catch
-  endtry
-endfunction
-" }}}
-" vim-gitgutter {{{
-if neobundle#tap('vim-gitgutter')
-  call neobundle#config({
-        \   'autoload': {
-        \     'function_prefix': 'gitgutter'
-        \   }
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    let g:gitgutter_map_keys           = 0
-    let g:gitgutter_eager              = 0
-    " let g:gitgutter_diff_args          = '-w'
-    let g:gitgutter_diff_args          = ''
-
-    " ファイルオープン直後一瞬シンタックスハイライトが無効にになってしまう
-    " let g:gitgutter_sign_column_always = 1
-
-    augroup MyAutoCmd
-      autocmd FocusGained,FocusLost * GitGutter
-    augroup END
-  endfunction
-
-  call neobundle#untap()
-endif
-" }}}
 " vimshell.vim {{{
 if neobundle#tap('vimshell.vim')
   call neobundle#config({
@@ -1939,23 +1723,6 @@ if neobundle#tap('vinarise.vim')
   call neobundle#untap()
 endif
 " }}}
-" agit.vim {{{
-if neobundle#tap('agit.vim')
-  call neobundle#config({
-        \   'autoload': {
-        \     'commands': ['Agit', 'AgitFile']
-        \   }
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    if s:is_windows
-      let g:agit_enable_auto_show_commit = 0
-    endif
-  endfunction
-
-  call neobundle#untap()
-endif
-" }}}
 " dictionary.vim {{{
 if s:is_mac
   if neobundle#tap('dictionary.vim')
@@ -1984,6 +1751,38 @@ if s:is_windows && s:is_gui_running
 
     call neobundle#untap()
   endif
+endif
+" }}}
+" previm {{{
+if neobundle#tap('previm')
+  call neobundle#config({
+        \   'depends':  'open-browser.vim',
+        \   'autoload': {
+        \     'filetypes': 'markdown'
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" open-browser.vim {{{
+if neobundle#tap('open-browser.vim')
+  call neobundle#config({
+        \   'autoload': {
+        \     'mappings': '<Plug>(openbrowser',
+        \     'commands': 'OpenBrowser'
+        \    }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    let g:netrw_nogx                   = 1
+    let g:openbrowser_no_default_menus = 1
+  endfunction
+
+  nmap gx <Plug>(openbrowser-smart-search)
+  vmap gx <Plug>(openbrowser-smart-search)
+
+  call neobundle#untap()
 endif
 " }}}
 " }}}
@@ -2168,6 +1967,211 @@ if s:is_windows
     call neobundle#untap()
   endif
 endif
+" }}}
+" }}}
+" C++ {{{
+" vim-clang-format {{{
+if neobundle#tap('vim-clang-format')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': ['c', 'cpp', 'objc', 'objcpp']
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    if s:is_windows
+      let g:clang_format#command = 'C:/Development/LLVM/bin/clang-format.exe'
+    else
+      let g:clang_format#command = 'clang-format-3.4'
+    endif
+
+    let g:clang_format#style_options = {
+          \   'AccessModifierOffset':                -4,
+          \   'AllowShortIfStatementsOnASingleLine': 'false',
+          \   'AlwaysBreakBeforeMultilineStrings':   'false',
+          \   'BreakBeforeBraces':                   'Allman',
+          \   'ColumnLimit':                         0,
+          \   'IndentCaseLabels':                    'false',
+          \   'IndentWidth':                         4,
+          \   'UseTab':                              'Never'
+          \ }
+
+    command! -range=% -nargs=0 CppFormat call clang_format#replace(<line1>, <line2>)
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
+" cpp-vim {{{
+if neobundle#tap('cpp-vim')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': 'cpp'
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" STL-Syntax {{{
+if neobundle#tap('STL-Syntax')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': 'cpp'
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-marching {{{
+if neobundle#tap('vim-marching')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': ['c', 'cpp', 'objc', 'objcpp']
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    if s:is_windows
+      let g:marching_clang_command = 'C:/Development/LLVM/bin/clang.exe'
+    else
+      let g:marching_clang_command = 'clang'
+    endif
+
+    let g:marching_enable_neocomplete   = 1
+    let g:marching_clang_command_option = '-std=c++1y'
+  endfunction
+endif
+" }}}
+" }}}
+" Go {{{
+" gocode {{{
+if neobundle#tap('gocode')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': 'go'
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    if s:is_windows
+      " todo: macだと補完候補が出てこなくなる
+      let g:gocomplete#system_function = 'vimproc#system'
+    endif
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-ft-go {{{
+if neobundle#tap('vim-ft-go')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': 'go'
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-godef {{{
+if neobundle#tap('vim-godef')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': 'go'
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    let g:godef_split                    = 0
+    let g:godef_same_file_in_same_window = 1
+    let g:godef_system_function          = 'vimproc#system'
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-go-extra {{{
+if neobundle#tap('vim-go-extra')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': 'go'
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" }}}
+" Git {{{
+" vim-gitgutter {{{
+if neobundle#tap('vim-gitgutter')
+  call neobundle#config({
+        \   'autoload': {
+        \     'function_prefix': 'gitgutter'
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    let g:gitgutter_map_keys           = 0
+    let g:gitgutter_eager              = 0
+    " let g:gitgutter_diff_args          = '-w'
+    let g:gitgutter_diff_args          = ''
+
+    " ファイルオープン直後一瞬シンタックスハイライトが無効にになってしまう
+    " let g:gitgutter_sign_column_always = 1
+
+    augroup MyAutoCmd
+      autocmd FocusGained,FocusLost * GitGutter
+    augroup END
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
+" agit.vim {{{
+if neobundle#tap('agit.vim')
+  call neobundle#config({
+        \   'autoload': {
+        \     'commands': ['Agit', 'AgitFile']
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    if s:is_windows
+      let g:agit_enable_auto_show_commit = 0
+    endif
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-fugitive {{{
+if neobundle#tap('vim-fugitive')
+  call neobundle#config({
+        \   'autoload': {
+        \     'insert':          1,
+        \     'function_prefix': 'fugitive'
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    augroup MyAutoCmd
+      autocmd FocusGained,FocusLost * call s:update_fugitive()
+    augroup END
+  endfunction
+
+  call neobundle#untap()
+endif
+
+function! s:update_fugitive()
+  try
+    call fugitive#detect(expand('<amatch>:p'))
+    call lightline#update()
+  catch
+  endtry
+endfunction
 " }}}
 " }}}
 " }}}
@@ -2883,9 +2887,6 @@ nnoremap <silent> [Tab]c :<C-u>tabnew<CR>
 nnoremap <silent> [Tab]x :<C-u>tabclose<CR>
 " }}}
 " バッファ操作 {{{
-nnoremap [Buffer]  <Nop>
-nmap     <Leader>b [Buffer]
-
 nnoremap <silent> <Leader>x :<C-u>call <SID>delete_current_buffer()<CR>
 " }}}
 " Git {{{
