@@ -171,6 +171,7 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'rhysd/vim-textobj-anyblock'          " b
   NeoBundleLazy 'rhysd/vim-textobj-word-column'       " v V
   NeoBundleLazy 'sgur/vim-textobj-parameter'          " a
+  NeoBundleLazy 'thinca/vim-textobj-between'          " f{char}
   NeoBundleLazy 'whatyouhide/vim-textobj-xmlattr'     " x
 
   " オペレータ
@@ -1473,6 +1474,18 @@ if neobundle#tap('vim-textobj-parameter')
   xmap ia <Plug>(textobj-parameter-i)
   omap aa <Plug>(textobj-parameter-a)
   omap ia <Plug>(textobj-parameter-i)
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-textobj-between {{{
+if neobundle#tap('vim-textobj-between')
+  call neobundle#config({
+        \   'depends':  'vim-textobj-user',
+        \   'autoload': {
+        \     'mappings': [['xo', 'af'], ['xo', 'if']]
+        \   }
+        \ })
 
   call neobundle#untap()
 endif
