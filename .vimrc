@@ -167,6 +167,7 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'kana/vim-textobj-entire'             " e
   NeoBundleLazy 'kana/vim-textobj-indent'             " i I
   NeoBundleLazy 'kana/vim-textobj-line'               " l
+  NeoBundleLazy 'mattn/vim-textobj-url'               " u
   NeoBundleLazy 'rhysd/vim-textobj-anyblock'          " b
   NeoBundleLazy 'rhysd/vim-textobj-word-column'       " v V
   NeoBundleLazy 'sgur/vim-textobj-parameter'          " a
@@ -1417,6 +1418,18 @@ if neobundle#tap('vim-textobj-line')
         \   'depends':  'vim-textobj-user',
         \   'autoload': {
         \     'mappings': [['xo', 'al'], ['xo', 'il']]
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-textobj-url {{{
+if neobundle#tap('vim-textobj-url')
+  call neobundle#config({
+        \   'depends':  'vim-textobj-user',
+        \   'autoload': {
+        \     'mappings': [['xo', 'au'], ['xo', 'iu']]
         \   }
         \ })
 
