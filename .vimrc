@@ -99,10 +99,10 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'tyru/open-browser.vim'
 
   " 表示
-  NeoBundle     'Yggdroot/indentLine'
-  NeoBundle     'itchyny/lightline.vim'
   NeoBundle     'tomasr/molokai'
+  NeoBundle     'itchyny/lightline.vim'
   NeoBundleLazy 'LeafCage/foldCC.vim'
+  NeoBundleLazy 'Yggdroot/indentLine'
   NeoBundleLazy 'YoshihiroIto/syntastic'
   NeoBundleLazy 'tukiyo/previm'
   if s:is_gui_running
@@ -202,7 +202,7 @@ function! s:set_neobundle() " {{{
   endif
 
   " Unite
-  NeoBundle     'Shougo/neomru.vim'
+  NeoBundleLazy 'Shougo/neomru.vim'
   NeoBundleLazy 'Shougo/unite-outline'
   NeoBundleLazy 'Shougo/unite.vim'
   NeoBundleLazy 'YoshihiroIto/vim-unite-giti'
@@ -619,23 +619,36 @@ function! s:lightlineGitSummary()
 endfunction
 " }}}
 " indentLine {{{
-let g:indentLine_fileType = [
-      \   'c',    'cpp',  'cs',     'go',
-      \   'ruby', 'lua',  'python',
-      \   'vim',
-      \   'glsl', 'hlsl',
-      \   'xml',  'json', 'markdown'
-      \ ]
-let g:indentLine_faster          = 1
-let g:indentLine_color_term      = 0
-let g:indentLine_indentLevel     = 20
-let g:indentLine_char            = '⭟'
-let g:indentLine_color_gui       = '#505050'
-let g:indentLine_noConcealCursor = 1
+if neobundle#tap('indentLine')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': 'all'
+        \   }
+        \ })
 
-augroup MyAutoCmd
-  autocmd BufReadPost * IndentLinesEnable
-augroup END
+  function! neobundle#hooks.on_source(bundle)
+    let g:indentLine_fileType = [
+          \   'c',    'cpp',  'cs',     'go',
+          \   'ruby', 'lua',  'python',
+          \   'vim',
+          \   'glsl', 'hlsl',
+          \   'xml',  'json', 'markdown'
+          \ ]
+    
+    let g:indentLine_faster          = 1
+    let g:indentLine_color_term      = 0
+    let g:indentLine_indentLevel     = 20
+    let g:indentLine_char            = '⭟'
+    let g:indentLine_color_gui       = '#505050'
+    let g:indentLine_noConcealCursor = 1
+
+    augroup MyAutoCmd
+      autocmd BufReadPost * IndentLinesEnable
+    augroup END
+  endfunction
+
+  call neobundle#untap()
+endif
 " }}}
 " previm {{{
 if neobundle#tap('previm')
@@ -2036,9 +2049,10 @@ endif
 " neomru.vim {{{
 if neobundle#tap('neomru.vim')
   call neobundle#config({
-        \   'depends':  'unite.vim',
-        \   'autoload': {
-        \     'unite_sources': 'neomru'
+        \   'depends':   'unite.vim',
+        \   'autoload':  {
+        \     'filetypes':     'all',
+        \     'unite_sources': ['neomru/file', 'neomru/directory']
         \   }
         \ })
 
