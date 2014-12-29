@@ -107,11 +107,11 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'tukiyo/previm'
   if s:is_gui_running
     NeoBundleLazy 'YoshihiroIto/vim-resize-win'
-    NeoBundleLazy 'movewin.vim'
+    NeoBundleLazy 'vim-scripts/movewin.vim'
   endif
 
   " 編集
-  NeoBundle     'tomtom/tcomment_vim'
+  NeoBundleLazy 'tomtom/tcomment_vim'
   NeoBundleLazy 'LeafCage/yankround.vim'
   NeoBundleLazy 'junegunn/vim-easy-align'
   NeoBundleLazy 'kana/vim-smartinput'
@@ -130,7 +130,7 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'kana/vim-altr'
 
   " 検索
-  NeoBundle     'matchit.zip'
+  NeoBundleLazy 'vim-scripts/matchit.zip'
   NeoBundleLazy 'haya14busa/incsearch.vim'
   NeoBundleLazy 'haya14busa/vim-asterisk'
   NeoBundleLazy 'osyo-manga/vim-anzu'
@@ -138,13 +138,14 @@ function! s:set_neobundle() " {{{
 
   " ファイルタイプ
   NeoBundleLazy 'beyondmarc/hlsl.vim'
+  NeoBundleLazy 'cespare/vim-toml'
   NeoBundleLazy 'kchmck/vim-coffee-script'
+  NeoBundleLazy 'leafo/moonscript-vim'
   NeoBundleLazy 'pangloss/vim-javascript'
   NeoBundleLazy 'tikhomirov/vim-glsl'
   NeoBundleLazy 'tpope/vim-markdown'
   NeoBundleLazy 'vim-ruby/vim-ruby'
   NeoBundleLazy 'vim-scripts/JSON.vim'
-  NeoBundleLazy 'leafo/moonscript-vim'
 
   " C++
   NeoBundleLazy 'Mizuchi/STL-Syntax'
@@ -636,8 +637,32 @@ augroup MyAutoCmd
   autocmd BufReadPost * IndentLinesEnable
 augroup END
 " }}}
+" previm {{{
+if neobundle#tap('previm')
+  call neobundle#config({
+        \   'depends':  'open-browser.vim',
+        \   'autoload': {
+        \     'filetypes': 'markdown'
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
 " }}}
 " 編集 {{{
+" tcomment_vim {{{
+if neobundle#tap('tcomment_vim')
+  call neobundle#config({
+        \   'autoload': {
+        \     'mappings': 'gc',
+        \     'commands': 'TComment'
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
 " vim-easy-align {{{
 if neobundle#tap('vim-easy-align')
   call neobundle#config({
@@ -957,6 +982,21 @@ endif
 " }}}
 " }}}
 " 検索 {{{
+" matchit.zip {{{
+if neobundle#tap('matchit.zip')
+  call neobundle#config({
+        \   'autoload': {
+        \     'mappings': [['nxo', '%', 'g%']]
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_post_source(bundle)
+    silent! execute 'doautocmd Filetype' &filetype
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
 " incsearch.vim {{{
 if neobundle#tap('incsearch.vim')
   call neobundle#config({
@@ -1173,12 +1213,11 @@ if neobundle#tap('vim-coffee-script')
   call neobundle#untap()
 endif
 " }}}
-" previm {{{
-if neobundle#tap('previm')
+" vim-toml {{{
+if neobundle#tap('vim-toml')
   call neobundle#config({
-        \   'depends':  'open-browser.vim',
         \   'autoload': {
-        \     'filetypes': 'markdown'
+        \     'filetypes': 'toml'
         \   }
         \ })
 
