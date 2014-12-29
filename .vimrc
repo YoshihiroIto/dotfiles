@@ -30,6 +30,10 @@ let s:vimrc_local    = expand('~/.vimrc_local')
 let $DOTVIM          = expand('~/.vim')
 set viminfo+=!
 
+if s:is_mac
+  let $LUA_DLL = simplify($VIM . '/../../Frameworks/libluajit-5.1.2.dylib')
+endif
+
 " メニューを読み込まない
 let g:did_install_default_menus = 1
 
@@ -62,9 +66,13 @@ if filereadable($VIM . '/vimrc') && filereadable($VIM . '/ViMrC')
   set tags=./tags,tags
 endif
 
+if filereadable(s:vimrc_local)
+  execute 'source' s:vimrc_local
+endif
+
 nnoremap [App] <Nop>
 nmap     ;     [App]
-
+" }}}
 " guioptions {{{
 " メニューを読み込まない
 set guioptions+=M
@@ -83,7 +91,6 @@ set guioptions-=L
 
 " テキストベースタブ
 set guioptions-=e
-" }}}
 " }}}
 " プラグイン {{{
 function! s:set_neobundle() " {{{
@@ -214,7 +221,6 @@ function! s:set_neobundle() " {{{
     NeoBundleLazy 'sgur/unite-everything'
   endif
 endfunction " }}}
-
 function! s:browse_plugin()
   normal yib
   execute 'OpenBrowser' 'https://github.com/' . @"
@@ -239,6 +245,8 @@ else
 endif
 
 call neobundle#end()
+
+filetype plugin indent on
 
 map <F2> :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
 map <F3> :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
@@ -2161,13 +2169,6 @@ if s:is_windows
   endif
 endif
 " }}}
-" }}}
-" 初期設定 {{{
-filetype plugin indent on
-
-if filereadable(s:vimrc_local)
-  execute 'source' s:vimrc_local
-endif
 " }}}
 " }}}
 " ファイルタイプごとの設定 {{{
