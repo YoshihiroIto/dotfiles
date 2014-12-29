@@ -1922,9 +1922,6 @@ if neobundle#tap('agit.vim')
   call neobundle#untap()
 endif
 " }}}
-" vim-icondrag {{{
-let g:icondrag_auto_start = 1
-" }}}
 " dictionary.vim {{{
 if s:is_mac
   if neobundle#tap('dictionary.vim')
@@ -1946,6 +1943,10 @@ if s:is_windows && s:is_gui_running
           \     'filetypes': 'all'
           \   }
           \ })
+
+    function! neobundle#hooks.on_source(bundle)
+      let g:icondrag_auto_start = 1
+    endfunction
 
     call neobundle#untap()
   endif
