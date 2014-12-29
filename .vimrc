@@ -126,7 +126,7 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'Shougo/neosnippet.vim'
 
   " ファイル
-  NeoBundle     'YoshihiroIto/vim-auto-mirroring'
+  NeoBundleLazy 'YoshihiroIto/vim-auto-mirroring'
   NeoBundleLazy 'kana/vim-altr'
 
   " 検索
@@ -198,7 +198,7 @@ function! s:set_neobundle() " {{{
     NeoBundleLazy 'itchyny/dictionary.vim'
   endif
   if s:is_windows && s:is_gui_running
-    NeoBundle 'YoshihiroIto/vim-icondrag'
+    NeoBundleLazy 'YoshihiroIto/vim-icondrag'
   endif
 
   " Unite
@@ -955,6 +955,17 @@ endif
 " }}}
 " }}}
 " ファイル {{{
+" vim-auto-mirroring {{{
+if neobundle#tap('vim-auto-mirroring')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': 'all'
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
 " vim-altr {{{
 if neobundle#tap('vim-altr')
   call neobundle#config({
@@ -1927,6 +1938,19 @@ if s:is_mac
   endif
 endif
 " }}}
+" vim-icondrag {{{
+if s:is_windows && s:is_gui_running
+  if neobundle#tap('vim-icondrag')
+    call neobundle#config({
+          \   'autoload': {
+          \     'filetypes': 'all'
+          \   }
+          \ })
+
+    call neobundle#untap()
+  endif
+endif
+" }}}
 " }}}
 " Unite {{{
 " unite.vim {{{
@@ -2676,10 +2700,10 @@ if !s:is_mac_gui_running
   vnoremap <C-j> <Esc>
   cnoremap <C-j> <Esc>
 else
-  inoremap <C-j> <Esc>:<C-u>set noimdisable<CR>:<C-u>set imdisable<CR>
-  nnoremap <C-j> <Esc>:<C-u>set noimdisable<CR>:<C-u>set imdisable<CR>
-  vnoremap <C-j> <Esc>:<C-u>set noimdisable<CR>:<C-u>set imdisable<CR>
-  cnoremap <C-j> <Esc>:<C-u>set noimdisable<CR>:<C-u>set imdisable<CR>
+  inoremap <silent> <C-j> <Esc>:<C-u>set noimdisable<CR>:<C-u>set imdisable<CR>
+  nnoremap <silent> <C-j> <Esc>:<C-u>set noimdisable<CR>:<C-u>set imdisable<CR>
+  vnoremap <silent> <C-j> <Esc>:<C-u>set noimdisable<CR>:<C-u>set imdisable<CR>
+  cnoremap <silent> <C-j> <Esc>:<C-u>set noimdisable<CR>:<C-u>set imdisable<CR>
 endif
 " }}}
 " コマンドラインモード {{{
