@@ -136,11 +136,12 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'kana/vim-altr'
 
   " 検索
-  NeoBundleLazy 'vim-scripts/matchit.zip'
+  NeoBundleLazy 'Lokaltog/vim-easymotion'
   NeoBundleLazy 'haya14busa/incsearch.vim'
   NeoBundleLazy 'haya14busa/vim-asterisk'
   NeoBundleLazy 'osyo-manga/vim-anzu'
   NeoBundleLazy 'rhysd/clever-f.vim'
+  NeoBundleLazy 'vim-scripts/matchit.zip'
 
   " ファイルタイプ
   NeoBundleLazy 'beyondmarc/hlsl.vim'
@@ -986,6 +987,26 @@ endif
 " }}}
 " }}}
 " 検索 {{{
+" vim-easymotion {{{
+if neobundle#tap('vim-easymotion')
+  call neobundle#config({
+        \   'autoload': {
+        \     'mappings': ['<Plug>(easymotion-']
+        \   }
+        \ })
+
+  map <C-k> <Plug>(easymotion-s2)
+
+  function! neobundle#hooks.on_source(bundle)
+    let g:EasyMotion_do_mapping  = 0
+    let g:EasyMotion_smartcase   = 1
+    let g:EasyMotion_keys        = 'ghfjtyrubnvmdkeiwoqp47382'
+    let g:EasyMotion_startofline = 1
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
 " matchit.zip {{{
 if neobundle#tap('matchit.zip')
   call neobundle#config({
@@ -2188,7 +2209,6 @@ augroup MyAutoCmd
   autocmd FileType *          call s:set_all()
   autocmd FileType ruby       call s:set_ruby()
   autocmd FileType vim        call s:set_vim()
-  autocmd FileType qf         call s:set_quick_fix()
   autocmd FileType help       call s:set_help()
   autocmd FileType unite      call s:set_unite()
   autocmd FileType cs         call s:set_cs()
@@ -2309,42 +2329,6 @@ augroup MyAutoCmd
 
   function! s:set_markdown()
     nnoremap <silent><buffer> [App]v :<C-u>PrevimOpen<CR>
-  endfunction
-
-  function! s:set_quick_fix()
-    noremap  <silent><buffer> p     <CR>zz<C-w>p
-    nnoremap <silent><buffer> r     :<C-u>Qfreplace<CR>
-    nnoremap <silent><buffer> q     :<C-u>cclose<CR>
-    nnoremap <silent><buffer> e     <CR>
-    nnoremap <silent><buffer> <CR>  <CR>zz:<C-u>cclose<CR>
-    nnoremap <silent><buffer> k     kzz
-    nnoremap <silent><buffer> j     jzz
-    nnoremap <silent><buffer> <C-k> kzz<CR>zz<C-w>p
-    nnoremap <silent><buffer> <C-j> jzz<CR>zz<C-w>p
-
-    " http://d.hatena.ne.jp/thinca/20130708/1373210009
-    nnoremap <silent><buffer> dd    :<C-u>call <SID>del_entry()<CR>
-    nnoremap <silent><buffer> x     :<C-u>call <SID>del_entry()<CR>
-    vnoremap <silent><buffer> d     :<C-u>call <SID>del_entry()<CR>
-    vnoremap <silent><buffer> x     :<C-u>call <SID>del_entry()<CR>
-    nnoremap <silent><buffer> u     :<C-u>call <SID>undo_entry()<CR>
-  endfunction
-
-  function! s:del_entry() range
-    let qf = getqflist()
-    let history = get(w:, 'qf_history', [])
-    call add(history, copy(qf))
-    let w:qf_history = history
-    unlet! qf[a:firstline - 1 : a:lastline - 1]
-    call setqflist(qf, 'r')
-    execute a:firstline
-  endfunction
-
-  function! s:undo_entry()
-    let history = get(w:, 'qf_history', [])
-    if !empty(history)
-      call setqflist(remove(history, -1), 'r')
-    endif
   endfunction
 
   " 場所ごとに設定を用意する {{{
