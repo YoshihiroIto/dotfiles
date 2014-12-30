@@ -2278,8 +2278,8 @@ augroup MyAutoCmd
     setlocal noexpandtab
     setlocal tabstop=4
 
-    nmap <silent><buffer> <Leader><C-k><C-k> :<C-u>Godoc<CR>zz:<C-u>call <SID>refresh_screen()<CR>
-    nmap <silent><buffer> <C-]>              :<C-u>call GodefUnderCursor()<CR>zz:<C-u>call <SID>refresh_screen()<CR>
+    nmap <silent><buffer> K     :<C-u>Godoc<CR>zz:<C-u>call <SID>refresh_screen()<CR>
+    nmap <silent><buffer> <C-]> :<C-u>call GodefUnderCursor()<CR>zz:<C-u>call <SID>refresh_screen()<CR>
   endfunction
 
   function! s:set_godoc()
