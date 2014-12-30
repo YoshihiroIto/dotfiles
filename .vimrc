@@ -158,7 +158,7 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'kana/vim-textobj-user'
   NeoBundleLazy 'anyakichi/vim-textobj-ifdef'         " #
   NeoBundleLazy 'glts/vim-textobj-comment'            " c
-  NeoBundleLazy 'h1mesuke/textobj-wiw'                " .
+  NeoBundleLazy 'rhysd/textobj-wiw'                   " .
   NeoBundleLazy 'kana/vim-textobj-entire'             " e
   NeoBundleLazy 'kana/vim-textobj-indent'             " i I
   NeoBundleLazy 'kana/vim-textobj-line'               " l
