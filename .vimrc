@@ -975,11 +975,16 @@ if neobundle#tap('vim-altr')
     call altr#define('%.cs',   '%.*.cs')
 
     call altr#define('%.cpp', '%.*.cpp', '%.h')
-
     call altr#define('src/%.cpp',       'include/%.h')
     call altr#define('src/*/%.cpp',     'include/*/%.h')
     call altr#define('src/*/*/%.cpp',   'include/*/*/%.h')
     call altr#define('src/*/*/*/%.cpp', 'include/*/*/*/%.h')
+
+    call altr#define('%.c', '%.h')
+    call altr#define('src/%.c',       'include/%.h')
+    call altr#define('src/*/%.c',     'include/*/%.h')
+    call altr#define('src/*/*/%.c',   'include/*/*/%.h')
+    call altr#define('src/*/*/*/%.c', 'include/*/*/*/%.h')
   endfunction
 
   call neobundle#untap()
@@ -1822,13 +1827,12 @@ if neobundle#tap('unite.vim')
   nmap     <Space> [Unite]
   xmap     <Space> [Unite]
 
-  nnoremap <silent> [Unite]g :<C-u>Unite grep -no-split -buffer-name=grep-buffer<CR>
-  nnoremap <silent> [Unite]p :<C-u>call <SID>unite_grep_project('-no-split -buffer-name=grep-buffer')<CR>
-
+  nnoremap <silent> [Unite]g :<C-u>Unite -no-split grep<CR>
+  nnoremap <silent> [Unite]p :<C-u>call <SID>unite_grep_project('-no-split')<CR>
   nnoremap <silent> [Unite]f :<C-u>Unite buffer<CR>
   nnoremap <silent> [Unite]j :<C-u>Unite bookmark<CR>
   nnoremap <silent> [Unite]t :<C-u>Unite tab<CR>
-  nnoremap <silent> [Unite]l :<C-u>Unite -no-split -buffer-name=line-buffer line<CR>
+  nnoremap <silent> [Unite]l :<C-u>Unite -no-split line<CR>
   nnoremap <silent> [Unite]o :<C-u>Unite outline<CR>
   nnoremap <silent> [Unite]z :<C-u>Unite fold<CR>
   nnoremap <silent> [Unite]q :<C-u>Unite -no-quit quickfix<CR>
@@ -1840,8 +1844,7 @@ if neobundle#tap('unite.vim')
     nnoremap <silent> [Unite]e :<C-u>Unite -no-split everything<CR>
   endif
 
-  nnoremap <silent> [Unite]rg :<C-u>UniteResume -no-split grep-buffer<CR>
-  nnoremap <silent> [Unite]rl :<C-u>UniteResume -no-split line-buffer<CR>
+  nnoremap <silent> [Unite]r :<C-u>UniteResume<CR>
 
   " http://sanrinsha.lolipop.jp/blog/2013/03/%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E5%86%85%E3%81%AE%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92unite-grep%E3%81%99%E3%82%8B.html
   function! s:unite_grep_project(...)
