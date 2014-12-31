@@ -2400,7 +2400,7 @@ let g:loaded_2html_plugin = 'vim7.4_v1'
 command -range=% -bar TOhtml :call tohtml#Convert2HTML(<line1>, <line2>)
 
 " http://lsifrontend.hatenablog.com/entry/2013/10/11/052640
-nmap     <silent> <C-CR> yy:<C-u>TComment<CR>p
+nmap     <silent> <C-CR> V<C-CR>
 vnoremap <silent> <C-CR> :<C-u>call <SID>copy_add_comment()<CR>
 
 " http://qiita.com/akira-hamada/items/2417d0bcb563475deddb をもとに調整
