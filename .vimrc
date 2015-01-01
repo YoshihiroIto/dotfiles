@@ -627,7 +627,7 @@ if neobundle#tap('indentLine')
           \   'glsl', 'hlsl',
           \   'xml',  'json', 'markdown'
           \ ]
-    
+
     let g:indentLine_faster          = 1
     let g:indentLine_color_term      = 0
     let g:indentLine_indentLevel     = 20
