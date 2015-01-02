@@ -184,6 +184,7 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'Shougo/vinarise.vim'
   NeoBundleLazy 'basyura/TweetVim'
   NeoBundleLazy 'glidenote/memolist.vim'
+  NeoBundleLazy 'mattn/gist-vim'
   NeoBundleLazy 'rhysd/wandbox-vim'
   NeoBundleLazy 'thinca/vim-quickrun'
   NeoBundleLazy 'tsukkee/lingr-vim'
@@ -1677,6 +1678,18 @@ if neobundle#tap('memolist.vim')
 
     call unite#custom#source('memolist', 'sorters', ['sorter_ftime', 'sorter_reverse'])
   endfunction
+
+  call neobundle#untap()
+endif
+" }}}
+" gist-vim {{{
+if neobundle#tap('gist-vim')
+  call neobundle#config({
+        \   'depends':  'webapi-vim',
+        \   'autoload': {
+        \     'commands': 'Gist'
+        \   }
+        \ })
 
   call neobundle#untap()
 endif
