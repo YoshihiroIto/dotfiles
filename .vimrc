@@ -1691,6 +1691,10 @@ if neobundle#tap('gist-vim')
         \   }
         \ })
 
+  function! neobundle#hooks.on_source(bundle)
+    let g:gist_open_browser_after_post = 1
+  endfunction
+
   call neobundle#untap()
 endif
 " }}}
