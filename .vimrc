@@ -365,28 +365,33 @@ if neobundle#tap('syntastic')
   call neobundle#untap()
 endif
 " }}}
-" movewin.vim {{{
-if neobundle#tap('movewin.vim')
-  call neobundle#config({
-        \   'autoload': {
-        \     'commands': 'MoveWin'
-        \   }
-        \ })
-
-  call neobundle#untap()
-endif
-" }}}
 " vim-resize-win {{{
-if neobundle#tap('vim-resize-win')
-  call neobundle#config({
-        \   'autoload': {
-        \     'commands': 'ResizeWin'
-        \   }
-        \ })
+if s:is_gui_running
+  if neobundle#tap('vim-resize-win')
+    call neobundle#config({
+          \   'autoload': {
+          \     'commands': 'ResizeWin'
+          \   }
+          \ })
 
-  call neobundle#untap()
+    call neobundle#untap()
+  endif
 endif
 " }}}
+" movewin.vim {{{
+if s:is_gui_running
+  if neobundle#tap('movewin.vim')
+    call neobundle#config({
+          \   'autoload': {
+          \     'commands': 'MoveWin'
+          \   }
+          \ })
+
+    call neobundle#untap()
+  endif
+endif
+" }}}
+endif
 " lightline.vim {{{
 let g:lightline#colorscheme#yoi#palette = {
       \   'inactive': {
@@ -997,7 +1002,7 @@ endif
 if neobundle#tap('vim-easymotion')
   call neobundle#config({
         \   'autoload': {
-        \     'mappings': ['<Plug>(easymotion-']
+        \     'mappings': '<Plug>(easymotion-'
         \   }
         \ })
 
@@ -1017,7 +1022,7 @@ endif
 if neobundle#tap('matchit.zip')
   call neobundle#config({
         \   'autoload': {
-        \     'mappings': [['nxo', '%', 'g%']]
+        \     'filetypes': 'all'
         \   }
         \ })
 
