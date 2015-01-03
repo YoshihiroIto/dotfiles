@@ -2355,7 +2355,7 @@ function! s:copy_add_comment() range
   normal! ""gvy
 
   " yankした物をPする
-  normal P
+  normal! P
 
   " 元のコードを選択
   if selected_count == 0
@@ -2760,7 +2760,7 @@ function! s:right_cursor(repeat)
   endwhile
 
   if foldclosed(line('.')) != -1
-    normal zv
+    normal! zv
   endif
 endfunction
 
