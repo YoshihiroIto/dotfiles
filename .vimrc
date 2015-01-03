@@ -1532,9 +1532,7 @@ if neobundle#tap('lingr-vim')
     let g:lingr_vim_say_buffer_height = 15
 
     augroup MyAutoCmd
-      autocmd FileType lingr-rooms    call s:set_lingr()
-      autocmd FileType lingr-members  call s:set_lingr()
-      autocmd FileType lingr-messages call s:set_lingr()
+      autocmd FileType lingr-rooms,lingr-members,lingr-messages call s:set_lingr()
 
       function! s:set_lingr()
         nnoremap <silent><buffer> q  :<C-u>call <SID>toggle_lingr()<CR>
@@ -1592,14 +1590,14 @@ if neobundle#tap('vimfiler.vim')
     augroup MyAutoCmd
       autocmd FileType vimfiler call s:set_vimfiler()
 
-      " http://qiita.com/Linda_pp/items/f1cb09ac94202abfba0e
-      autocmd FileType vimfiler nnoremap <silent><buffer> / :<C-u>Unite file -horizontal<CR>
-
       function! s:set_vimfiler()
         nmap <buffer><expr> <CR>  vimfiler#smart_cursor_map('<Plug>(vimfiler_cd_file)', '<Plug>(vimfiler_edit_file)')
         nmap <buffer><expr> <C-j> vimfiler#smart_cursor_map('<Plug>(vimfiler_exit)',    '<Plug>(vimfiler_exit)')
 
         nmap <silent><buffer> J :<C-u>Unite bookmark<CR>
+
+        " http://qiita.com/Linda_pp/items/f1cb09ac94202abfba0e
+        nnoremap <silent><buffer> / :<C-u>Unite file -horizontal<CR>
 
         " dotfile表示状態に設定
         execute ':normal .'
@@ -1811,18 +1809,17 @@ endif
 if neobundle#tap('open-browser.vim')
   call neobundle#config({
         \   'autoload': {
-        \     'mappings': '<Plug>(openbrowser',
-        \     'commands': 'OpenBrowser'
+        \     'mappings':        '<Plug>(openbrowser',
+        \     'function_prefix': 'openbrowser',
+        \     'commands':        ['OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch']
         \    }
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    let g:netrw_nogx                   = 1
     let g:openbrowser_no_default_menus = 1
   endfunction
 
-  nmap gx <Plug>(openbrowser-smart-search)
-  vmap gx <Plug>(openbrowser-smart-search)
+  let g:netrw_nogx = 1
 
   call neobundle#untap()
 endif
@@ -2571,24 +2568,34 @@ augroup MyAutoCmd
   endfunction
 augroup END
 
-noremap <silent> gf :<C-u>call <SID>smart_gf()<CR>
-function! s:smart_gf()
+nnoremap <silent> gf :<C-u>call <SID>smart_gf('n')<CR>
+vnoremap <silent> gf :<C-u>call <SID>smart_gf('v')<CR>
+
+function! s:smart_gf(mode)
   try
-    let line       = getline('.')
+    let line = getline('.')
+
+    " NeoBundle
     let words      = matchlist(line, '\(NeoBundle\(Lazy\)\?\s\+\)''\(.*\)''')
     let repos_name = len(words) >= 4 ? words[3] : ''
-
     if repos_name !=# ''
       execute 'OpenBrowser' 'https://github.com/' . repos_name
 
+    " URL
+    elseif openbrowser#get_url_on_cursor() !=# ''
+      call openbrowser#_keymapping_smart_search(a:mode)
+
+    " 標準のgf
     else
-      " 標準のgfを実行する
       normal! gf
     endif
   catch
-    echohl ErrorMsg
-    echomsg v:exception
-    echohl None
+    " echohl ErrorMsg
+    " echomsg v:exception
+    " echohl None
+
+    " 検索
+    call openbrowser#_keymapping_search(a:mode)
   endtry
 endfunction
 
