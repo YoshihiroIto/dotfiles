@@ -37,9 +37,19 @@ endif
 " メニューを読み込まない
 let g:did_install_default_menus = 1
 
+" 自動コマンド
 augroup MyAutoCmd
   autocmd!
 augroup END
+
+command! -nargs=* Autocmd   autocmd MyAutoCmd <args>
+command! -nargs=* AutocmdFT autocmd MyAutoCmd FileType <args>
+
+Autocmd BufWinEnter,ColorScheme .vimrc call s:hl_autocmd()
+function! s:hl_autocmd()
+    highlight def link myVimAutocmd vimAutoCmd
+    syntax match vimAutoCmd /\<\(Autocmd\|AutocmdFT\)\>/
+endfunction
 
 " 文字コード自動判断
 if has('guess_encode')
@@ -352,9 +362,7 @@ if neobundle#tap('syntastic')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    augroup MyAutoCmd
-      autocmd BufWritePost *.{go,rb,py} call lightline#update()
-    augroup END
+    Autocmd BufWritePost *.{go,rb,py} call lightline#update()
   endfunction
 
   call neobundle#untap()
@@ -583,9 +591,7 @@ function! s:lightlineFileencoding()
   return winwidth(0) > 70 ? (strlen(&fileencoding) ? &fileencoding : &encoding) : ''
 endfunction
 
-augroup MyAutoCmd
-  autocmd CursorHold,CursorHoldI * call lightline#update()
-augroup END
+Autocmd CursorHold,CursorHoldI * call lightline#update()
 
 function! s:lightlineGitSummary()
   if winwidth(0) <= 70
@@ -635,9 +641,7 @@ if neobundle#tap('indentLine')
     let g:indentLine_color_gui       = '#505050'
     let g:indentLine_noConcealCursor = 1
 
-    augroup MyAutoCmd
-      autocmd BufReadPost * IndentLinesEnable
-    augroup END
+    Autocmd BufReadPost * IndentLinesEnable
   endfunction
 
   call neobundle#untap()
@@ -1068,40 +1072,38 @@ if neobundle#tap('vim-anzu')
   call neobundle#untap()
 endif
 
-augroup MyAutoCmd
-  " 一定時間キー入力がないとき、ウインドウを移動したとき、タブを移動したときに
-  " 検索ヒット数の表示を消去する
-  autocmd CursorHold,CursorHoldI * call s:update_display_anzu()
-  autocmd WinLeave,TabLeave      * call s:clear_display_anzu()
+" 一定時間キー入力がないとき、ウインドウを移動したとき、タブを移動したときに
+" 検索ヒット数の表示を消去する
+Autocmd CursorHold,CursorHoldI * call s:update_display_anzu()
+Autocmd WinLeave,TabLeave      * call s:clear_display_anzu()
 
-  " anzuを表示する時間
-  let s:anzu_display_time = 2000
+" anzuを表示する時間
+let s:anzu_display_time = 2000
 
-  let s:anzu_display_count = 0
-  function! s:begin_display_anzu()
-    let s:anzu_display_count = s:anzu_display_time / &updatetime
-  endfunction
+let s:anzu_display_count = 0
+function! s:begin_display_anzu()
+  let s:anzu_display_count = s:anzu_display_time / &updatetime
+endfunction
 
-  function! s:update_display_anzu()
-    try
-      if s:anzu_display_count >= 0
-        let s:anzu_display_count = s:anzu_display_count - 1
+function! s:update_display_anzu()
+  try
+    if s:anzu_display_count >= 0
+      let s:anzu_display_count = s:anzu_display_count - 1
 
-        call s:continue_cursor_hold()
-      else
-        call s:clear_display_anzu()
-      endif
-    catch
-    endtry
-  endfunction
+      call s:continue_cursor_hold()
+    else
+      call s:clear_display_anzu()
+    endif
+  catch
+  endtry
+endfunction
 
-  function! s:clear_display_anzu()
-    try
-      call anzu#clear_search_status()
-    catch
-    endtry
-  endfunction
-augroup END
+function! s:clear_display_anzu()
+  try
+    call anzu#clear_search_status()
+  catch
+  endtry
+endfunction
 " }}}
 " clever-f.vim {{{
 if neobundle#tap('clever-f.vim')
@@ -1531,16 +1533,9 @@ if neobundle#tap('lingr-vim')
   function! neobundle#hooks.on_source(bundle)
     let g:lingr_vim_say_buffer_height = 15
 
-    augroup MyAutoCmd
-      autocmd FileType lingr-rooms,lingr-members,lingr-messages call s:set_lingr()
-
-      function! s:set_lingr()
-        nnoremap <silent><buffer> q  :<C-u>call <SID>toggle_lingr()<CR>
-        nmap     <silent><buffer> ss <Plug>(lingr-messages-show-say-buffer)
-
-        setlocal nolist
-      endfunction
-    augroup END
+    AutocmdFT lingr-rooms,lingr-members,lingr-messages nnoremap <silent><buffer> q  :<C-u>call <SID>toggle_lingr()<CR>
+    AutocmdFT lingr-rooms,lingr-members,lingr-messages nmap     <silent><buffer> ss <Plug>(lingr-messages-show-say-buffer)
+    AutocmdFT lingr-rooms,lingr-members,lingr-messages setlocal nolist
   endfunction
 
   function! s:toggle_lingr()
@@ -1587,22 +1582,15 @@ if neobundle#tap('vimfiler.vim')
   noremap <silent> [App]f :<C-u>VimFilerBufferDir<CR>
 
   function! neobundle#hooks.on_source(bundle)
-    augroup MyAutoCmd
-      autocmd FileType vimfiler call s:set_vimfiler()
+    AutocmdFT vimfiler nmap <buffer><expr>   <CR>  vimfiler#smart_cursor_map('<Plug>(vimfiler_cd_file)', '<Plug>(vimfiler_edit_file)')
+    AutocmdFT vimfiler nmap <buffer><expr>   <C-j> vimfiler#smart_cursor_map('<Plug>(vimfiler_exit)',    '<Plug>(vimfiler_exit)')
+    AutocmdFT vimfiler nmap <silent><buffer> J     :<C-u>Unite bookmark<CR>
 
-      function! s:set_vimfiler()
-        nmap <buffer><expr> <CR>  vimfiler#smart_cursor_map('<Plug>(vimfiler_cd_file)', '<Plug>(vimfiler_edit_file)')
-        nmap <buffer><expr> <C-j> vimfiler#smart_cursor_map('<Plug>(vimfiler_exit)',    '<Plug>(vimfiler_exit)')
+    " http://qiita.com/Linda_pp/items/f1cb09ac94202abfba0e
+    AutocmdFT vimfiler nnoremap <silent><buffer> / :<C-u>Unite file -horizontal<CR>
 
-        nmap <silent><buffer> J :<C-u>Unite bookmark<CR>
-
-        " http://qiita.com/Linda_pp/items/f1cb09ac94202abfba0e
-        nnoremap <silent><buffer> / :<C-u>Unite file -horizontal<CR>
-
-        " dotfile表示状態に設定
-        execute ':normal .'
-      endfunction
-    augroup END
+    " dotfile表示状態に設定
+    AutocmdFT vimfiler execute ':normal .'
 
     let g:vimfiler_as_default_explorer        = 1
     let g:vimfiler_force_overwrite_statusline = 0
@@ -1631,14 +1619,8 @@ if neobundle#tap('TweetVim')
     let g:tweetvim_tweet_per_page    = 30
     let g:tweetvim_display_icon      = 1
 
-    augroup MyAutoCmd
-      autocmd FileType tweetvim call s:set_tweetvim()
-
-      function! s:set_tweetvim()
-        nmap     <silent><buffer> rr <Plug>(tweetvim_action_reload)
-        nnoremap <silent><buffer> q  :<C-u>call <SID>toggle_tweetvim()<CR>
-      endfunction
-    augroup END
+    AutocmdFT tweetvim nmap     <silent><buffer> rr <Plug>(tweetvim_action_reload)
+    AutocmdFT tweetvim nnoremap <silent><buffer> q  :<C-u>call <SID>toggle_tweetvim()<CR>
   endfunction
 
   function! s:toggle_tweetvim()
@@ -1900,6 +1882,10 @@ if neobundle#tap('unite.vim')
     call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
     call unite#custom_default_action('directory',                 'vimfiler')
     call unite#custom_default_action('neomru/directory',          'vimfiler')
+
+    AutocmdFT unite nmap <silent><buffer> <C-v> <Plug>(unite_toggle_auto_preview)
+    AutocmdFT unite imap <silent><buffer> <C-v> <Plug>(unite_toggle_auto_preview)
+    AutocmdFT unite nmap <silent><buffer> <C-j> <Plug>(unite_exit)
   endfunction
 
   call neobundle#untap()
@@ -1977,9 +1963,7 @@ if neobundle#tap('vim-unite-giti')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    augroup MyAutoCmd
-      autocmd User UniteGitiGitExecuted call s:update_fugitive()
-    augroup END
+    Autocmd User UniteGitiGitExecuted call s:update_fugitive()
   endfunction
 
   call neobundle#untap()
@@ -2159,9 +2143,7 @@ if neobundle#tap('vim-gitgutter')
     " ファイルオープン直後一瞬シンタックスハイライトが無効にになってしまう
     " let g:gitgutter_sign_column_always = 1
 
-    augroup MyAutoCmd
-      autocmd FocusGained,FocusLost * GitGutter
-    augroup END
+    Autocmd FocusGained,FocusLost * GitGutter
   endfunction
 
   call neobundle#untap()
@@ -2193,9 +2175,7 @@ if neobundle#tap('vim-fugitive')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    augroup MyAutoCmd
-      autocmd FocusGained,FocusLost * call s:update_fugitive()
-    augroup END
+    Autocmd FocusGained,FocusLost * call s:update_fugitive()
   endfunction
 
   call neobundle#untap()
@@ -2212,151 +2192,94 @@ endfunction
 " }}}
 " }}}
 " ファイルタイプごとの設定 {{{
-augroup MyAutoCmd
-  autocmd BufEnter,WinEnter,BufWinEnter,BufWritePost *                         call s:update_all()
-  autocmd BufNewFile,BufRead                         *.xaml                    setlocal filetype=xml
-  autocmd BufNewFile,BufRead                         *.json                    setlocal filetype=json
-  autocmd BufNewFile,BufRead                         *.{fx,fxc,fxh,hlsl,hlsli} setlocal filetype=hlsl
-  autocmd BufNewFile,BufRead                         *.{fsh,vsh}               setlocal filetype=glsl
-  autocmd BufNewFile,BufRead                         *.{md,mkd,markdown}       setlocal filetype=markdown
+Autocmd BufEnter,WinEnter,BufWinEnter,BufWritePost *                         call s:update_all()
+Autocmd BufNewFile,BufRead                         *.xaml                    setlocal filetype=xml
+Autocmd BufNewFile,BufRead                         *.json                    setlocal filetype=json
+Autocmd BufNewFile,BufRead                         *.{fx,fxc,fxh,hlsl,hlsli} setlocal filetype=hlsl
+Autocmd BufNewFile,BufRead                         *.{fsh,vsh}               setlocal filetype=glsl
+Autocmd BufNewFile,BufRead                         *.{md,mkd,markdown}       setlocal filetype=markdown
 
-  autocmd FileType *          call s:set_all()
-  autocmd FileType ruby       call s:set_ruby()
-  autocmd FileType vim        call s:set_vim()
-  autocmd FileType help       call s:set_help()
-  autocmd FileType unite      call s:set_unite()
-  autocmd FileType cs         call s:set_cs()
-  autocmd FileType c,cpp      call s:set_cpp()
-  autocmd FileType go         call s:set_go()
-  autocmd FileType godoc      call s:set_godoc()
-  autocmd FileType coffee     call s:set_coffee()
-  autocmd FileType json       call s:set_json()
-  autocmd FileType xml,html   call s:set_xml()
-  autocmd FileType neosnippet call s:set_neosnippet()
-  autocmd FileType markdown   call s:set_markdown()
+AutocmdFT *          setlocal formatoptions-=ro
+AutocmdFT *          setlocal textwidth=0
 
-  function! s:update_all()
-    " 行番号表示幅を設定する
-    " http://d.hatena.ne.jp/osyo-manga/20140303/1393854617
-    let w = len(line('$')) + 2
-    if w < 5
-      let w = 5
-    endif
+AutocmdFT ruby       setlocal foldmethod=syntax
+AutocmdFT ruby       setlocal tabstop=2
+AutocmdFT ruby       setlocal shiftwidth=2
+AutocmdFT ruby       setlocal softtabstop=2
 
-    let &l:numberwidth = w
+AutocmdFT vim        setlocal foldmethod=marker
+AutocmdFT vim        setlocal foldlevel=0
+AutocmdFT vim        setlocal foldcolumn=5
+AutocmdFT vim        setlocal tabstop=2
+AutocmdFT vim        setlocal shiftwidth=2
+AutocmdFT vim        setlocal softtabstop=2
 
-    " ファイルの場所をカレントにする
-    if &filetype !=# '' && &filetype !=# 'vimfiler'
-      silent! execute 'lcd' fnameescape(expand('%:p:h'))
-    endif
+AutocmdFT xml,html   inoremap <buffer> </ </<C-x><C-o>
+AutocmdFT xml,html   let g:xml_syntax_folding = 1
+AutocmdFT xml,html   setlocal foldmethod=syntax
+AutocmdFT xml,html   setlocal foldlevel=99
+AutocmdFT xml,html   setlocal foldcolumn=5
 
-    call s:set_all()
-  endfunction
+AutocmdFT go         setlocal foldmethod=syntax
+AutocmdFT go         setlocal shiftwidth=4
+AutocmdFT go         setlocal noexpandtab
+AutocmdFT go         setlocal tabstop=4
+AutocmdFT go         nmap <silent><buffer> K     :<C-u>Godoc<CR>zz:<C-u>call <SID>refresh_screen()<CR>
+AutocmdFT go         nmap <silent><buffer> <C-]> :<C-u>call GodefUnderCursor()<CR>zz:<C-u>call <SID>refresh_screen()<CR>
 
-  function! s:set_all()
-    setlocal formatoptions-=ro
-    setlocal textwidth=0
-  endfunction
+AutocmdFT c,cpp      setlocal foldmethod=syntax
+AutocmdFT c,cpp      map <silent><buffer> [App]r :<C-u>QuickRun cpp/wandbox<CR>
 
-  function! s:set_ruby()
-    setlocal foldmethod=syntax
-    setlocal tabstop=2
-    setlocal shiftwidth=2
-    setlocal softtabstop=2
-  endfunction
+AutocmdFT cs         setlocal omnifunc=OmniSharp#Complete
+AutocmdFT cs         setlocal foldmethod=syntax
+AutocmdFT cs         nnoremap <silent><buffer> <C-]> :<C-u>call OmniSharp#GotoDefinition()<CR>zz:<C-u>call <SID>refresh_screen()<CR>
 
-  function! s:set_vim()
-    setlocal foldmethod=marker
-    setlocal foldlevel=0
-    setlocal foldcolumn=5
+AutocmdFT godoc      nnoremap <silent><buffer> q :<C-u>close<CR>
+AutocmdFT coffee     setlocal shiftwidth=2
+AutocmdFT json       setlocal shiftwidth=2
+AutocmdFT help       nnoremap <silent><buffer> q :<C-u>close<CR>
+AutocmdFT neosnippet setlocal noexpandtab
+AutocmdFT markdown   nnoremap <silent><buffer> [App]v :<C-u>PrevimOpen<CR>
+AutocmdFT unite      call s:set_unite()
 
-    setlocal tabstop=2
-    setlocal shiftwidth=2
-    setlocal softtabstop=2
-  endfunction
+function! s:update_all()
+  " 行番号表示幅を設定する
+  " http://d.hatena.ne.jp/osyo-manga/20140303/1393854617
+  let w = len(line('$')) + 2
+  if w < 5
+    let w = 5
+  endif
 
-  function! s:set_xml()
-    " XMLの閉じタグを補完
-    inoremap <buffer> </ </<C-x><C-o>
+  let &l:numberwidth = w
 
-    let g:xml_syntax_folding = 1
+  " ファイルの場所をカレントにする
+  if &filetype !=# '' && &filetype !=# 'vimfiler'
+    silent! execute 'lcd' fnameescape(expand('%:p:h'))
+  endif
 
-    setlocal foldmethod=syntax
-    setlocal foldlevel=99
-    setlocal foldcolumn=5
-  endfunction
+  setlocal formatoptions-=ro
+  setlocal textwidth=0
+endfunction
 
-  function! s:set_go()
-    setlocal foldmethod=syntax
-    setlocal shiftwidth=4
-    setlocal noexpandtab
-    setlocal tabstop=4
+function! s:set_unite()
+  let unite = unite#get_current_unite()
+  if unite.buffer_name =~# '^search'
+    nmap <silent><buffer><expr> <C-r> unite#do_action('replace')
+    imap <silent><buffer><expr> <C-r> unite#do_action('replace')
+  endif
+endfunction
 
-    nmap <silent><buffer> K     :<C-u>Godoc<CR>zz:<C-u>call <SID>refresh_screen()<CR>
-    nmap <silent><buffer> <C-]> :<C-u>call GodefUnderCursor()<CR>zz:<C-u>call <SID>refresh_screen()<CR>
-  endfunction
+" 場所ごとに設定を用意する {{{
+" http://vim-jp.org/vim-users-jp/2009/12/27/Hack-112.html
+autocmd BufNewFile,BufReadPost * call s:load_vim_local(expand('<afile>:p:h'))
 
-  function! s:set_godoc()
-    nnoremap <silent><buffer> q :<C-u>close<CR>
-  endfunction
-
-  function! s:set_coffee()
-    setlocal shiftwidth=2
-  endfunction
-
-  function! s:set_json()
-    setlocal shiftwidth=2
-  endfunction
-
-  function! s:set_cpp()
-    setlocal foldmethod=syntax
-
-    map <silent><buffer> [App]r :<C-u>QuickRun cpp/wandbox<CR>
-  endfunction
-
-  function! s:set_cs()
-    setlocal omnifunc=OmniSharp#Complete
-    setlocal foldmethod=syntax
-
-    nnoremap <silent><buffer> <C-]> :<C-u>call OmniSharp#GotoDefinition()<CR>zz:<C-u>call <SID>refresh_screen()<CR>
-  endfunction
-
-  function! s:set_unite()
-    let unite = unite#get_current_unite()
-    if unite.buffer_name =~# '^search'
-      nmap <silent><buffer><expr> <C-r> unite#do_action('replace')
-      imap <silent><buffer><expr> <C-r> unite#do_action('replace')
-    endif
-
-    nmap <silent><buffer> <C-v> <Plug>(unite_toggle_auto_preview)
-    imap <silent><buffer> <C-v> <Plug>(unite_toggle_auto_preview)
-    nmap <silent><buffer> <C-j> <Plug>(unite_exit)
-  endfunction
-
-  function! s:set_help()
-    noremap <silent><buffer> q :<C-u>close<CR>
-  endfunction
-
-  function! s:set_neosnippet()
-    setlocal noexpandtab
-  endfunction
-
-  function! s:set_markdown()
-    nnoremap <silent><buffer> [App]v :<C-u>PrevimOpen<CR>
-  endfunction
-
-  " 場所ごとに設定を用意する {{{
-  " http://vim-jp.org/vim-users-jp/2009/12/27/Hack-112.html
-  autocmd BufNewFile,BufReadPost * call s:load_vim_local(expand('<afile>:p:h'))
-
-  function! s:load_vim_local(loc)
-    let files = findfile('.vimrc.local', escape(a:loc, ' ') . ';', -1)
-    for i in reverse(filter(files, 'filereadable(v:val)'))
-      source `=i`
-    endfor
-  endfunction
-  " }}}
-augroup END
+function! s:load_vim_local(loc)
+  let files = findfile('.vimrc.local', escape(a:loc, ' ') . ';', -1)
+  for i in reverse(filter(files, 'filereadable(v:val)'))
+    source `=i`
+  endfor
+endfunction
+" }}}
 " }}}
 " キー無効 {{{
 " Vimを閉じない
@@ -2457,15 +2380,13 @@ endfunction
 
 " 自動的にディレクトリを作成する
 " http://vim-jp.org/vim-users-jp/2011/02/20/Hack-202.html
-augroup MyAutoCmd
-  autocmd BufWritePre * call s:auto_mkdir(expand('<afile>:p:h'), v:cmdbang)
-  function! s:auto_mkdir(dir, force)
-    if !isdirectory(a:dir) && (a:force ||
-          \    input(printf('"%s" does not exist. Create? [y/N]', a:dir)) =~? '^y\%[es]$')
-      call mkdir(iconv(a:dir, &encoding, &termencoding), 'p')
-    endif
-  endfunction
-augroup END
+Autocmd BufWritePre * call s:auto_mkdir(expand('<afile>:p:h'), v:cmdbang)
+function! s:auto_mkdir(dir, force)
+  if !isdirectory(a:dir) && (a:force ||
+        \    input(printf('"%s" does not exist. Create? [y/N]', a:dir)) =~? '^y\%[es]$')
+    call mkdir(iconv(a:dir, &encoding, &termencoding), 'p')
+  endif
+endfunction
 " }}}
 " インプットメソッド {{{
 " macvim kaoriya gvim で submode が正しく動作しなくなるため
@@ -2558,15 +2479,13 @@ set display=lastline
 set conceallevel=2
 set concealcursor=i
 
-augroup MyAutoCmd
-  autocmd VimEnter * call s:disable_beep()
+Autocmd VimEnter * call s:disable_beep()
 
-  function! s:disable_beep()
-    set t_vb=
-    set visualbell
-    set errorbells
-  endfunction
-augroup END
+function! s:disable_beep()
+  set t_vb=
+  set visualbell
+  set errorbells
+endfunction
 
 nnoremap <silent> gf :<C-u>call <SID>smart_gf('n')<CR>
 vnoremap <silent> gf :<C-u>call <SID>smart_gf('v')<CR>
@@ -2601,44 +2520,40 @@ endfunction
 
 " カーソル下の単語を移動するたびにハイライトする {{{
 " http://d.hatena.ne.jp/osyo-manga/20140121/1390309901
-augroup MyAutoCmd
-  " autocmd CursorMoved  * call s:hl_cword()
-  autocmd CursorHold  * call s:hl_cword()
-  autocmd CursorMoved * call s:hl_clear()
+Autocmd CursorHold  * call s:hl_cword()
+Autocmd CursorMoved * call s:hl_clear()
+Autocmd BufLeave    * call s:hl_clear()
+Autocmd WinLeave    * call s:hl_clear()
+Autocmd InsertEnter * call s:hl_clear()
+Autocmd ColorScheme * highlight CursorWord guifg=Red
 
-  autocmd BufLeave    * call s:hl_clear()
-  autocmd WinLeave    * call s:hl_clear()
-  autocmd InsertEnter * call s:hl_clear()
-  autocmd ColorScheme * highlight CursorWord guifg=Red
+function! s:hl_clear()
+  if exists('b:highlight_cursor_word_id') && exists('b:highlight_cursor_word')
+    silent! call matchdelete(b:highlight_cursor_word_id)
+    unlet b:highlight_cursor_word_id
+    unlet b:highlight_cursor_word
+  endif
+endfunction
 
-  function! s:hl_clear()
-    if exists('b:highlight_cursor_word_id') && exists('b:highlight_cursor_word')
-      silent! call matchdelete(b:highlight_cursor_word_id)
-      unlet b:highlight_cursor_word_id
-      unlet b:highlight_cursor_word
-    endif
-  endfunction
+function! s:hl_cword()
+  let word = expand('<cword>')
+  if word ==# ''
+    return
+  endif
+  if get(b:, 'highlight_cursor_word', '') ==# word
+    return
+  endif
 
-  function! s:hl_cword()
-    let word = expand('<cword>')
-    if word ==# ''
-      return
-    endif
-    if get(b:, 'highlight_cursor_word', '') ==# word
-      return
-    endif
+  call s:hl_clear()
 
-    call s:hl_clear()
+  if !empty(filter(split(word, '\zs'), 'strlen(v:val) > 1'))
+    return
+  endif
 
-    if !empty(filter(split(word, '\zs'), 'strlen(v:val) > 1'))
-      return
-    endif
-
-    let pattern = printf('\<%s\>', expand('<cword>'))
-    silent! let b:highlight_cursor_word_id = matchadd('CursorWord', pattern)
-    let b:highlight_cursor_word = word
-  endfunction
-augroup END
+  let pattern = printf('\<%s\>', expand('<cword>'))
+  silent! let b:highlight_cursor_word_id = matchadd('CursorWord', pattern)
+  let b:highlight_cursor_word = word
+endfunction
 " }}}
 " カラースキーマ {{{
 colorscheme molokai
@@ -2674,16 +2589,12 @@ if s:is_starting
   call s:set_color()
 endif
 
-augroup MyAutoCmd
-  autocmd BufNew,BufRead * call s:set_color()
-augroup END
+Autocmd BufNew,BufRead * call s:set_color()
 " }}}
 " 半透明化 {{{
 if s:is_mac
-  augroup MyAutoCmd
-    autocmd GuiEnter,FocusGained * set transparency=3   " アクティブ時の透過率
-    autocmd FocusLost            * set transparency=48  " 非アクティブ時の透過率
-  augroup END
+  Autocmd GuiEnter,FocusGained * set transparency=3   " アクティブ時の透過率
+  Autocmd FocusLost            * set transparency=48  " 非アクティブ時の透過率
 endif
 " }}}
 " フォント設定 {{{
@@ -2708,51 +2619,49 @@ endif
 " }}}
 " 'cursorline' を必要な時にだけ有効にする {{{
 " http://d.hatena.ne.jp/thinca/20090530/1243615055
-augroup MyAutoCmd
-  autocmd CursorMoved,CursorMovedI * call s:auto_cursorline('CursorMoved')
-  autocmd CursorHold,CursorHoldI   * call s:auto_cursorline('CursorHold')
-  autocmd WinEnter                 * call s:auto_cursorline('WinEnter')
-  autocmd WinLeave                 * call s:auto_cursorline('WinLeave')
+Autocmd CursorMoved,CursorMovedI * call s:auto_cursorline('CursorMoved')
+Autocmd CursorHold,CursorHoldI   * call s:auto_cursorline('CursorHold')
+Autocmd WinEnter                 * call s:auto_cursorline('WinEnter')
+Autocmd WinLeave                 * call s:auto_cursorline('WinLeave')
 
-  let s:cursorline_lock = 0
-  function! s:auto_cursorline(event)
-    if s:is_unite_running()
-      return
-    endif
+let s:cursorline_lock = 0
+function! s:auto_cursorline(event)
+  if s:is_unite_running()
+    return
+  endif
 
-    if a:event ==# 'WinEnter'
-      setlocal cursorline
-      let s:cursorline_lock = 2
+  if a:event ==# 'WinEnter'
+    setlocal cursorline
+    let s:cursorline_lock = 2
 
-    elseif a:event ==# 'WinLeave'
-      setlocal nocursorline
+  elseif a:event ==# 'WinLeave'
+    setlocal nocursorline
 
-    elseif a:event ==# 'CursorMoved'
-      if s:cursorline_lock
-        if 1 < s:cursorline_lock
-          let s:cursorline_lock = 1
+  elseif a:event ==# 'CursorMoved'
+    if s:cursorline_lock
+      if 1 < s:cursorline_lock
+        let s:cursorline_lock = 1
 
-        else
-          setlocal nocursorline
-          let s:cursorline_lock = 0
-        endif
+      else
+        setlocal nocursorline
+        let s:cursorline_lock = 0
       endif
-
-    elseif a:event ==# 'CursorHold'
-      setlocal cursorline
-      let s:cursorline_lock = 1
-    endif
-  endfunction
-
-  function! s:force_show_cursorline()
-    if s:is_unite_running()
-      return
     endif
 
+  elseif a:event ==# 'CursorHold'
     setlocal cursorline
     let s:cursorline_lock = 1
-  endfunction
-augroup END
+  endif
+endfunction
+
+function! s:force_show_cursorline()
+  if s:is_unite_running()
+    return
+  endif
+
+  setlocal cursorline
+  let s:cursorline_lock = 1
+endfunction
 " }}}
 " }}}
 " 折り畳み {{{
@@ -2867,9 +2776,7 @@ function! s:disable_virtual_cursor()
   set virtualedit=block
 endfunction
 
-augroup MyAutoCmd
-  autocmd InsertEnter * call s:disable_virtual_cursor()
-augroup END
+Autocmd InsertEnter * call s:disable_virtual_cursor()
 " }}}
 " ウィンドウ操作 {{{
 set splitbelow                    " 縦分割したら新しいウィンドウは下に
@@ -2939,18 +2846,16 @@ if s:is_gui_running
   " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
   let s:save_window_file = expand('~/.vimwinpos')
 
-  augroup MyAutoCmd
-    autocmd VimLeavePre * call s:save_window()
+  Autocmd VimLeavePre * call s:save_window()
 
-    function! s:save_window()
-      let options = [
-            \ 'set columns=' . &columns,
-            \ 'set lines=' . &lines,
-            \ 'winpos ' . getwinposx() . ' ' . getwinposy(),
-            \ ]
-      call writefile(options, s:save_window_file)
-    endfunction
-  augroup END
+  function! s:save_window()
+    let options = [
+          \ 'set columns=' . &columns,
+          \ 'set lines=' . &lines,
+          \ 'winpos ' . getwinposx() . ' ' . getwinposy(),
+          \ ]
+    call writefile(options, s:save_window_file)
+  endfunction
 
   if filereadable(s:save_window_file)
     exe 'source' s:save_window_file
