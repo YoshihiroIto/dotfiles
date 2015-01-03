@@ -2409,12 +2409,26 @@ command! RemoveEolSpace call s:execute_keep_view('silent! %substitute/ \+$//g | 
 
 " 整形
 command! Format call s:smart_format()
+function! s:smart_format()
+  if &filetype ==# 'cs'
+    OmniSharpCodeFormat
+  elseif &filetype ==# 'cpp'
+    CppFormat
+  elseif &filetype ==# 'c'
+    CppFormat
+  elseif &filetype ==# 'json'
+    call s:filter_current('jq .', 0)
+  elseif &filetype ==# 'go'
+    call s:filter_current('goimports', 0)
+  else
+    echom 'smart_format : Not supported. : ' . &filetype
+  endif
+endfunction
 
 " to html
 let g:loaded_2html_plugin = 'vim7.4_v1'
 command -range=% -bar TOhtml :call tohtml#Convert2HTML(<line1>, <line2>)
 
-" http://lsifrontend.hatenablog.com/entry/2013/10/11/052640
 nmap     <silent> <C-CR> V<C-CR>
 vnoremap <silent> <C-CR> :<C-u>call <SID>copy_add_comment()<CR>
 
@@ -2772,9 +2786,6 @@ noremap  <silent> <C-o> <C-o>zz:<C-u>call <SID>refresh_screen()<CR>
 map      <silent> <C-h> ^:<C-u>set virtualedit=all<CR>
 map      <silent> <C-l> $:<C-u>set virtualedit=all<CR>
 
-nmap     <silent> <Tab> %
-vmap     <silent> <Tab> %
-
 nmap     <silent> <Leader>m `
 
 function! s:up_cursor(repeat)
@@ -2862,7 +2873,6 @@ if s:is_gui_running
     execute 'set lines=9999'
   endfunction
   " }}}
-
   " 縦分割する {{{
   let s:depth_vsp      = 1
   let s:opend_left_vsp = 0
@@ -2898,10 +2908,7 @@ if s:is_gui_running
     end
   endf
 " }}}
-endif
-
-" ウィンドウの位置とサイズを記憶する {{{
-if s:is_gui_running
+  " ウィンドウの位置とサイズを記憶する {{{
   " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
   let s:save_window_file = expand('~/.vimwinpos')
 
@@ -2921,8 +2928,8 @@ if s:is_gui_running
   if filereadable(s:save_window_file)
     exe 'source' s:save_window_file
   endif
+  " }}}
 endif
-" }}}
 " }}}
 " タブ操作 {{{
 nnoremap [Tab]     <Nop>
@@ -3022,23 +3029,6 @@ function! s:execute_keep_view(expr)
   let wininfo = winsaveview()
   execute a:expr
   call winrestview(wininfo)
-endfunction
-" }}}
-" 整形 {{{
-function! s:smart_format()
-  if &filetype ==# 'cs'
-    OmniSharpCodeFormat
-  elseif &filetype ==# 'cpp'
-    CppFormat
-  elseif &filetype ==# 'c'
-    CppFormat
-  elseif &filetype ==# 'json'
-    call s:filter_current('jq .', 0)
-  elseif &filetype ==# 'go'
-    call s:filter_current('goimports', 0)
-  else
-    echom 'smart_format : Not supported. : ' . &filetype
-  endif
 endfunction
 " }}}
 " Unite 実行中か {{{
