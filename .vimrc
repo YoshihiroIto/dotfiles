@@ -208,7 +208,6 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'Shougo/unite-outline'
   NeoBundleLazy 'Shougo/unite.vim'
   NeoBundleLazy 'YoshihiroIto/vim-unite-giti'
-  NeoBundleLazy 'osyo-manga/unite-fold'
   NeoBundleLazy 'osyo-manga/unite-quickfix'
   if s:is_windows
     NeoBundleLazy 'sgur/unite-everything'
@@ -1825,7 +1824,6 @@ if neobundle#tap('unite.vim')
   nnoremap <silent> [Unite]t :<C-u>Unite tab<CR>
   nnoremap <silent> [Unite]l :<C-u>Unite -no-split line<CR>
   nnoremap <silent> [Unite]o :<C-u>Unite outline<CR>
-  nnoremap <silent> [Unite]z :<C-u>Unite fold<CR>
   nnoremap <silent> [Unite]q :<C-u>Unite -no-quit quickfix<CR>
   nnoremap <silent> [Unite]v :<C-u>call <SID>execute_if_on_git_branch('Unite giti')<CR>
   nnoremap <silent> [Unite]b :<C-u>call <SID>execute_if_on_git_branch('Unite giti/branch_all')<CR>
@@ -1868,11 +1866,10 @@ if neobundle#tap('unite.vim')
           \   'start_insert':     1
           \ })
 
-    call unite#custom#profile('source/outline,source/fold,source/giti,source/giti/branch_all', 'context', {
+    call unite#custom#profile('source/outline,source/giti,source/giti/branch_all', 'context', {
           \   'vertical': 1
           \ })
 
-    call unite#custom#source('fold', 'matchers', 'matcher_migemo')
     call unite#custom#source('file', 'matchers', 'matcher_default')
 
     call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
@@ -1905,18 +1902,6 @@ if neobundle#tap('unite-quickfix')
         \   'depends':  'unite.vim',
         \   'autoload': {
         \     'unite_sources': 'quickfix'
-        \   }
-        \ })
-
-  call neobundle#untap()
-endif
-" }}}
-" unite-fold {{{
-if neobundle#tap('unite-fold')
-  call neobundle#config({
-        \   'depends':  'unite.vim',
-        \   'autoload': {
-        \     'unite_sources': 'fold'
         \   }
         \ })
 
