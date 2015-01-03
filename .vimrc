@@ -24,10 +24,10 @@ if s:is_starting
   unlet s:git_dot_vimrc
 endif
 
-let g:mapleader      = ','
-let s:base_columns   = 120
-let s:vimrc_local    = expand('~/.vimrc_local')
-let $DOTVIM          = expand('~/.vim')
+let g:mapleader    = ','
+let s:base_columns = 120
+let s:vimrc_local  = expand('~/.vimrc_local')
+let $DOTVIM        = expand('~/.vim')
 set viminfo+=!
 
 if s:is_mac
@@ -225,11 +225,6 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'cohama/agit.vim'
   NeoBundleLazy 'tpope/vim-fugitive'
 endfunction " }}}
-function! s:browse_plugin()
-  normal yib
-  execute 'OpenBrowser' 'https://github.com/' . @"
-endfunction
-command! BrowsePlugin call <SID>browse_plugin()
 
 if s:is_starting
   let g:neobundle#install_max_processes   = 8
@@ -391,7 +386,6 @@ if s:is_gui_running
   endif
 endif
 " }}}
-endif
 " lightline.vim {{{
 let g:lightline#colorscheme#yoi#palette = {
       \   'inactive': {
@@ -2426,7 +2420,7 @@ function! s:smart_format()
   elseif &filetype ==# 'go'
     call s:filter_current('goimports', 0)
   else
-    echom 'smart_format : Not supported. : ' . &filetype
+    echomsg 'smart_format : Not supported. : ' . &filetype
   endif
 endfunction
 
@@ -2576,6 +2570,27 @@ augroup MyAutoCmd
     set errorbells
   endfunction
 augroup END
+
+noremap <silent> gf :<C-u>call <SID>smart_gf()<CR>
+function! s:smart_gf()
+  try
+    let line       = getline('.')
+    let words      = matchlist(line, '\(NeoBundle\(Lazy\)\?\s\+\)''\(.*\)''')
+    let repos_name = len(words) >= 4 ? words[3] : ''
+
+    if repos_name !=# ''
+      execute 'OpenBrowser' 'https://github.com/' . repos_name
+
+    else
+      " 標準のgfを実行する
+      normal! gf
+    endif
+  catch
+    echohl ErrorMsg
+    echomsg v:exception
+    echohl None
+  endtry
+endfunction
 
 " カーソル下の単語を移動するたびにハイライトする {{{
 " http://d.hatena.ne.jp/osyo-manga/20140121/1390309901
@@ -3053,7 +3068,7 @@ endfunction
 " Gitブランチ上であれば実行 {{{
 function! s:execute_if_on_git_branch(line)
   if !s:is_in_git_branch()
-    echom 'not on git branch : ' . a:line
+    echomsg 'not on git branch : ' . a:line
     return
   endif
 
@@ -3075,7 +3090,7 @@ function! s:filter_current(cmd, is_silent)
       silent keepjumps normal! ggVG"gp
     else
       if !a:is_silent
-        echom 'filter_current : Error'
+        echomsg 'filter_current : Error'
       endif
     endif
   finally
