@@ -2192,7 +2192,6 @@ endif
 if neobundle#tap('vim-fugitive')
   call neobundle#config({
         \   'autoload': {
-        \     'insert':          1,
         \     'function_prefix': 'fugitive'
         \   }
         \ })
@@ -2219,7 +2218,6 @@ endfunction
 " ファイルタイプごとの設定 {{{
 augroup MyAutoCmd
   autocmd BufEnter,WinEnter,BufWinEnter,BufWritePost *                         call s:update_all()
-  autocmd BufReadPost                                *                         call s:clean_empty_buffers()
   autocmd BufNewFile,BufRead                         *.xaml                    setlocal filetype=xml
   autocmd BufNewFile,BufRead                         *.json                    setlocal filetype=json
   autocmd BufNewFile,BufRead                         *.{fx,fxc,fxh,hlsl,hlsli} setlocal filetype=hlsl
@@ -2857,6 +2855,49 @@ if s:is_gui_running
   noremap <silent> [Window]k :<C-u>MoveWin<CR>
   noremap <silent> [Window]l :<C-u>MoveWin<CR>
   noremap <silent> [Window]f :<C-u>call <SID>full_window()<CR>
+
+  " アプリケーションウィンドウを最大高さにする {{{
+  function! s:full_window()
+    execute 'winpos' getwinposx() '0'
+    execute 'set lines=9999'
+  endfunction
+  " }}}
+
+  " 縦分割する {{{
+  let s:depth_vsp      = 1
+  let s:opend_left_vsp = 0
+  let s:opend_top_vsp  = 0
+
+  function! s:toggle_v_split_wide()
+    if s:depth_vsp <= 1
+      call s:open_v_split_wide()
+    else
+      call s:close_v_split_wide()
+    endif
+  endfunction
+
+  function! s:open_v_split_wide()
+    if s:depth_vsp == 1
+      let s:opend_left_vsp = getwinposx()
+      let s:opend_top_vsp  = getwinposy()
+    endif
+
+    let s:depth_vsp += 1
+    let &columns = s:base_columns * s:depth_vsp
+    silent! execute 'botright vertical' s:base_columns 'split'
+  endf
+
+  function! s:close_v_split_wide()
+    let s:depth_vsp -= 1
+    let &columns = s:base_columns * s:depth_vsp
+    " silent! close
+    silent! only
+
+    if s:depth_vsp == 1
+      silent! execute 'winpos' s:opend_left_vsp s:opend_top_vsp
+    end
+  endf
+" }}}
 endif
 
 " ウィンドウの位置とサイズを記憶する {{{
@@ -2892,83 +2933,7 @@ nnoremap <silent> [Tab]x :<C-u>tabclose<CR>
 " }}}
 " バッファ操作 {{{
 nnoremap <silent> <Leader>x :<C-u>call <SID>delete_current_buffer()<CR>
-" }}}
-" Git {{{
-nnoremap [Git]     <Nop>
-nmap     <Leader>g [Git]
 
-nnoremap <silent> [Git]b  :<C-u>call <SID>execute_if_on_git_branch('Gblame w')<CR>
-nnoremap <silent> [Git]a  :<C-u>call <SID>execute_if_on_git_branch('Gwrite')<CR>
-nnoremap <silent> [Git]c  :<C-u>call <SID>execute_if_on_git_branch('Gcommit')<CR>
-nnoremap <silent> [Git]f  :<C-u>call <SID>execute_if_on_git_branch('GitiFetch')<CR>
-nnoremap <silent> [Git]d  :<C-u>call <SID>execute_if_on_git_branch('Gdiff')<CR>
-nnoremap <silent> [Git]s  :<C-u>call <SID>execute_if_on_git_branch('Gstatus')<CR>
-nnoremap <silent> [Git]ps :<C-u>call <SID>execute_if_on_git_branch('Gpush')<CR>
-nnoremap <silent> [Git]pl :<C-u>call <SID>execute_if_on_git_branch('Gpull')<CR>
-nnoremap <silent> [Git]g  :<C-u>call <SID>execute_if_on_git_branch('Agit')<CR>
-nnoremap <silent> [Git]h  :<C-u>call <SID>execute_if_on_git_branch('GitGutterPreviewHunk')<CR>
-" }}}
-" ヘルプ {{{
-set helplang=ja,en
-set keywordprg=
-
-if has('kaoriya')
-  set runtimepath+=$VIM/plugins/vimdoc-ja
-endif
-" }}}
-" 汎用関数 {{{
-" CursorHold を継続させる{{{
-function! s:continue_cursor_hold()
-  " http://d.hatena.ne.jp/osyo-manga/20121102/1351836801
-  call feedkeys(mode() ==# 'i' ? "\<C-g>\<Esc>" : "g\<Esc>", 'n')
-endfunction
-" }}}
-" アプリケーションウィンドウを最大高さにする {{{
-function! s:full_window()
-  execute 'winpos' getwinposx() '0'
-  execute 'set lines=9999'
-endfunction
-" }}}
-" 縦分割する {{{
-let s:depth_vsp      = 1
-let s:opend_left_vsp = 0
-let s:opend_top_vsp  = 0
-
-function! s:toggle_v_split_wide()
-  if s:depth_vsp <= 1
-    call s:open_v_split_wide()
-  else
-    call s:close_v_split_wide()
-  endif
-endfunction
-
-function! s:open_v_split_wide()
-  if s:depth_vsp == 1
-    let s:opend_left_vsp = getwinposx()
-    let s:opend_top_vsp  = getwinposy()
-  endif
-
-  let s:depth_vsp += 1
-  let &columns = s:base_columns * s:depth_vsp
-  silent! execute 'botright vertical' s:base_columns 'split'
-endf
-
-function! s:close_v_split_wide()
-  let s:depth_vsp -= 1
-  let &columns = s:base_columns * s:depth_vsp
-  " silent! close
-  silent! only
-
-  if s:depth_vsp == 1
-    silent! execute 'winpos' s:opend_left_vsp s:opend_top_vsp
-  end
-endf
-" }}}
-" 画面リフレッシュ{{{
-function! s:refresh_screen()
-  call s:force_show_cursorline()
-endfunction
-" }}}
 " ウィンドウをとじないで現在のバッファを削除 {{{
 function! s:delete_current_buffer()
   let confirm_msg             = '未保存です。閉じますか？'
@@ -3008,7 +2973,7 @@ function! s:delete_current_buffer()
       break
     endif
 
-    execute winnr . 'wincmd w'
+   execute winnr . 'wincmd w'
     execute 'buffer ' . next_buf
   endwhile
 
@@ -3016,13 +2981,40 @@ function! s:delete_current_buffer()
   execute current_win . 'wincmd w'
 endfunction
 " }}}
-" 空バッファを削除 {{{
-" http://stackoverflow.com/questions/6552295/deleting-all-empty-buffers-in-vim
-function! s:clean_empty_buffers()
-  let buffers = filter(range(1, bufnr('$')), "buflisted(v:val) && empty(bufname(v:val)) && bufwinnr(v:val)<0 && getbufvar(v:val, '&modified', 0)==0")
-  if !empty(buffers)
-    execute 'bdelete ' join(buffers, ' ')
-  endif
+" }}}
+" Git {{{
+nnoremap [Git]     <Nop>
+nmap     <Leader>g [Git]
+
+nnoremap <silent> [Git]b  :<C-u>call <SID>execute_if_on_git_branch('Gblame w')<CR>
+nnoremap <silent> [Git]a  :<C-u>call <SID>execute_if_on_git_branch('Gwrite')<CR>
+nnoremap <silent> [Git]c  :<C-u>call <SID>execute_if_on_git_branch('Gcommit')<CR>
+nnoremap <silent> [Git]f  :<C-u>call <SID>execute_if_on_git_branch('GitiFetch')<CR>
+nnoremap <silent> [Git]d  :<C-u>call <SID>execute_if_on_git_branch('Gdiff')<CR>
+nnoremap <silent> [Git]s  :<C-u>call <SID>execute_if_on_git_branch('Gstatus')<CR>
+nnoremap <silent> [Git]ps :<C-u>call <SID>execute_if_on_git_branch('Gpush')<CR>
+nnoremap <silent> [Git]pl :<C-u>call <SID>execute_if_on_git_branch('Gpull')<CR>
+nnoremap <silent> [Git]g  :<C-u>call <SID>execute_if_on_git_branch('Agit')<CR>
+nnoremap <silent> [Git]h  :<C-u>call <SID>execute_if_on_git_branch('GitGutterPreviewHunk')<CR>
+" }}}
+" ヘルプ {{{
+set helplang=ja,en
+set keywordprg=
+
+if has('kaoriya')
+  set runtimepath+=$VIM/plugins/vimdoc-ja
+endif
+" }}}
+" 汎用関数 {{{
+" CursorHold を継続させる{{{
+function! s:continue_cursor_hold()
+  " http://d.hatena.ne.jp/osyo-manga/20121102/1351836801
+  call feedkeys(mode() ==# 'i' ? "\<C-g>\<Esc>" : "g\<Esc>", 'n')
+endfunction
+" }}}
+" 画面リフレッシュ{{{
+function! s:refresh_screen()
+  call s:force_show_cursorline()
 endfunction
 " }}}
 " コマンド実行後の表示状態を維持する {{{
@@ -3041,9 +3033,9 @@ function! s:smart_format()
   elseif &filetype ==# 'c'
     CppFormat
   elseif &filetype ==# 'json'
-    call s:json_format(0)
+    call s:filter_current('jq .', 0)
   elseif &filetype ==# 'go'
-    call s:golang_format(0)
+    call s:filter_current('goimports', 0)
   else
     echo 'smart_format : Not supported. : ' . &filetype
   endif
@@ -3071,16 +3063,6 @@ function! s:execute_if_on_git_branch(line)
   endif
 
   execute a:line
-endfunction
-" }}}
-" golang_format {{{
-function! s:golang_format(is_silent)
-  call s:filter_current('goimports', a:is_silent)
-endfunction
-" }}}
-" json_format {{{
-function! s:json_format(is_silent)
-  call s:filter_current('jq .', a:is_silent)
 endfunction
 " }}}
 " フィルタリング処理を行う {{{
