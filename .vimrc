@@ -44,12 +44,8 @@ augroup END
 
 command! -nargs=* Autocmd   autocmd MyAutoCmd <args>
 command! -nargs=* AutocmdFT autocmd MyAutoCmd FileType <args>
-
-Autocmd BufWinEnter,ColorScheme .vimrc call s:hl_autocmd()
-function! s:hl_autocmd()
-    highlight def link myVimAutocmd vimAutoCmd
-    syntax match vimAutoCmd /\<\(Autocmd\|AutocmdFT\)\>/
-endfunction
+Autocmd BufWinEnter,ColorScheme .vimrc highlight def link myVimAutocmd vimAutoCmd
+Autocmd BufWinEnter,ColorScheme .vimrc syntax match vimAutoCmd /\<\(Autocmd\|AutocmdFT\)\>/
 
 " 文字コード自動判断
 if has('guess_encode')
@@ -1213,11 +1209,11 @@ if neobundle#tap('vim-markdown')
 
   function! neobundle#hooks.on_source(bundle)
     let g:markdown_fenced_languages = [
-        \   'c',    'cpp', 'cs', 'go',
-        \   'ruby', 'lua', 'python',
-        \   'vim',
-        \   'xml',  'json'
-        \ ]
+          \   'c',    'cpp', 'cs', 'go',
+          \   'ruby', 'lua', 'python',
+          \   'vim',
+          \   'xml',  'json'
+          \ ]
   endfunction
 
   call neobundle#untap()
@@ -1864,17 +1860,17 @@ if neobundle#tap('unite.vim')
     endif
 
     call unite#custom#profile('default', 'context', {
-        \   'direction':        'rightbelow',
-        \   'prompt_direction': 'top',
-        \   'vertical':         0,
-        \   'ignorecase':       1,
-        \   'smartcase':        1,
-        \   'start_insert':     1
-        \ })
+          \   'direction':        'rightbelow',
+          \   'prompt_direction': 'top',
+          \   'vertical':         0,
+          \   'ignorecase':       1,
+          \   'smartcase':        1,
+          \   'start_insert':     1
+          \ })
 
     call unite#custom#profile('source/outline,source/fold,source/giti,source/giti/branch_all', 'context', {
-        \   'vertical': 1
-        \ })
+          \   'vertical': 1
+          \ })
 
     call unite#custom#source('fold', 'matchers', 'matcher_migemo')
     call unite#custom#source('file', 'matchers', 'matcher_default')
@@ -2494,18 +2490,18 @@ function! s:smart_gf(mode)
   try
     let line = getline('.')
 
-    " NeoBundle
     let words      = matchlist(line, '\(NeoBundle\(Lazy\)\?\s\+\)''\(.*\)''')
     let repos_name = len(words) >= 4 ? words[3] : ''
     if repos_name !=# ''
+      " NeoBundle
       execute 'OpenBrowser' 'https://github.com/' . repos_name
 
-    " URL
     elseif openbrowser#get_url_on_cursor() !=# ''
+      " URL
       call openbrowser#_keymapping_smart_search(a:mode)
 
-    " 標準のgf
     else
+      " 標準のgf
       normal! gf
     endif
   catch
@@ -2841,7 +2837,7 @@ if s:is_gui_running
       silent! execute 'winpos' s:opend_left_vsp s:opend_top_vsp
     end
   endf
-" }}}
+  " }}}
   " ウィンドウの位置とサイズを記憶する {{{
   " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
   let s:save_window_file = expand('~/.vimwinpos')
@@ -2912,7 +2908,7 @@ function! s:delete_current_buffer()
       break
     endif
 
-   execute winnr . 'wincmd w'
+    execute winnr . 'wincmd w'
     execute 'buffer ' . next_buf
   endwhile
 
