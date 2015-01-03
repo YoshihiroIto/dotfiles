@@ -3037,7 +3037,7 @@ function! s:smart_format()
   elseif &filetype ==# 'go'
     call s:filter_current('goimports', 0)
   else
-    echo 'smart_format : Not supported. : ' . &filetype
+    echom 'smart_format : Not supported. : ' . &filetype
   endif
 endfunction
 " }}}
@@ -3058,7 +3058,7 @@ endfunction
 " Gitブランチ上であれば実行 {{{
 function! s:execute_if_on_git_branch(line)
   if !s:is_in_git_branch()
-    echo 'not on git branch : ' . a:line
+    echom 'not on git branch : ' . a:line
     return
   endif
 
@@ -3067,31 +3067,25 @@ endfunction
 " }}}
 " フィルタリング処理を行う {{{
 function! s:filter_current(cmd, is_silent)
-  let pos_save                     = getpos('.')
-  let sel_save                     = &l:selection
-  let &l:selection                 = 'inclusive'
-  let [save_g_reg, save_g_regtype] = [getreg('g'), getregtype('g')]
-
-  let temp = tempname()
-  call writefile(getline(1, '$'), temp)
+  let wininfo  = winsaveview()
+  let tempfile = tempname()
 
   try
-    let formatted = vimproc#system(a:cmd . ' ' . substitute(temp, '\', '/', 'g'))
+    call writefile(getline(1, '$'), tempfile)
+
+    let formatted = vimproc#system(a:cmd . ' ' . substitute(tempfile, '\', '/', 'g'))
 
     if vimproc#get_last_status() == 0
       call setreg('g', formatted, 'v')
       silent keepjumps normal! ggVG"gp
     else
       if !a:is_silent
-        echo 'filter_current : Error'
+        echom 'filter_current : Error'
       endif
     endif
   finally
-    call delete(temp)
-
-    call setreg('g', save_g_reg, save_g_regtype)
-    let &l:selection = sel_save
-    call setpos('.', pos_save)
+    call delete(tempfile)
+    call winrestview(wininfo)
   endtry
 endfunction
 " }}}
