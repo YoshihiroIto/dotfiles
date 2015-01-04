@@ -252,9 +252,9 @@ call neobundle#end()
 
 filetype plugin indent on
 
-map <F2> :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
-map <F3> :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
-map <F4> :<C-u>NeoBundleClearCache<CR>
+nnoremap <F2> :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
+nnoremap <F3> :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
+nnoremap <F4> :<C-u>NeoBundleClearCache<CR>
 " ライブラリ {{{
 " vimproc {{{
 if neobundle#tap('vimproc')
@@ -1574,12 +1574,10 @@ if neobundle#tap('vimfiler.vim')
   noremap <silent> [App]f :<C-u>VimFilerBufferDir<CR>
 
   function! neobundle#hooks.on_source(bundle)
-    AutocmdFT vimfiler nmap <buffer><expr>   <CR>  vimfiler#smart_cursor_map('<Plug>(vimfiler_cd_file)', '<Plug>(vimfiler_edit_file)')
-    AutocmdFT vimfiler nmap <buffer><expr>   <C-j> vimfiler#smart_cursor_map('<Plug>(vimfiler_exit)',    '<Plug>(vimfiler_exit)')
-    AutocmdFT vimfiler nmap <silent><buffer> J     :<C-u>Unite bookmark<CR>
-
-    " http://qiita.com/Linda_pp/items/f1cb09ac94202abfba0e
-    AutocmdFT vimfiler nnoremap <silent><buffer> / :<C-u>Unite file -horizontal<CR>
+    AutocmdFT vimfiler nmap     <buffer><expr>   <CR>  vimfiler#smart_cursor_map('<Plug>(vimfiler_cd_file)', '<Plug>(vimfiler_edit_file)')
+    AutocmdFT vimfiler nmap     <buffer><expr>   <C-j> vimfiler#smart_cursor_map('<Plug>(vimfiler_exit)',    '<Plug>(vimfiler_exit)')
+    AutocmdFT vimfiler nnoremap <silent><buffer> J     :<C-u>Unite bookmark<CR>
+    AutocmdFT vimfiler nnoremap <silent><buffer> /     :<C-u>Unite file -horizontal<CR>
 
     " dotfile表示状態に設定
     AutocmdFT vimfiler execute ':normal .'
@@ -1698,7 +1696,7 @@ if neobundle#tap('vim-quickrun')
         \   }
         \ })
 
-  map <silent> [App]r :<C-u>QuickRun<CR>
+  noremap <silent> [App]r :<C-u>QuickRun<CR>
 
   function! neobundle#hooks.on_source(bundle)
     let g:quickrun_config = {
@@ -2201,11 +2199,11 @@ AutocmdFT go         setlocal foldmethod=syntax
 AutocmdFT go         setlocal shiftwidth=4
 AutocmdFT go         setlocal noexpandtab
 AutocmdFT go         setlocal tabstop=4
-AutocmdFT go         nmap <silent><buffer> K     :<C-u>Godoc<CR>zz:<C-u>call <SID>refresh_screen()<CR>
-AutocmdFT go         nmap <silent><buffer> <C-]> :<C-u>call GodefUnderCursor()<CR>zz:<C-u>call <SID>refresh_screen()<CR>
+AutocmdFT go         nnoremap <silent><buffer> K     :<C-u>Godoc<CR>zz:<C-u>call <SID>refresh_screen()<CR>
+AutocmdFT go         nnoremap <silent><buffer> <C-]> :<C-u>call GodefUnderCursor()<CR>zz:<C-u>call <SID>refresh_screen()<CR>
 
 AutocmdFT c,cpp      setlocal foldmethod=syntax
-AutocmdFT c,cpp      map <silent><buffer> [App]r :<C-u>QuickRun cpp/wandbox<CR>
+AutocmdFT c,cpp      nnoremap <silent><buffer> [App]r :<C-u>QuickRun cpp/wandbox<CR>
 
 AutocmdFT cs         setlocal omnifunc=OmniSharp#Complete
 AutocmdFT cs         setlocal foldmethod=syntax
@@ -2239,11 +2237,8 @@ function! s:update_all()
 endfunction
 
 function! s:set_unite()
-  let unite = unite#get_current_unite()
-  if unite.buffer_name =~# '^search'
-    nmap <silent><buffer><expr> <C-r> unite#do_action('replace')
-    imap <silent><buffer><expr> <C-r> unite#do_action('replace')
-  endif
+  nnoremap <silent><buffer><expr> <C-r> unite#do_action('replace')
+  inoremap <silent><buffer><expr> <C-r> unite#do_action('replace')
 endfunction
 
 " 場所ごとに設定を用意する {{{
@@ -2691,15 +2686,15 @@ nnoremap <silent> <C-e> <C-e>j
 nnoremap <silent> <C-y> <C-y>k
 vnoremap <silent> <C-e> <C-e>j
 vnoremap <silent> <C-y> <C-y>k
-nmap     <silent> gg    ggzvzz:<C-u>call <SID>refresh_screen()<CR>
-nmap     <silent> G     Gzvzz:<C-u>call  <SID>refresh_screen()<CR>
+nnoremap <silent> gg    ggzvzz:<C-u>call <SID>refresh_screen()<CR>
+nnoremap <silent> G     Gzvzz:<C-u>call  <SID>refresh_screen()<CR>
 
-noremap  <silent> <C-i> <C-i>zz:<C-u>call <SID>refresh_screen()<CR>
-noremap  <silent> <C-o> <C-o>zz:<C-u>call <SID>refresh_screen()<CR>
-map      <silent> <C-h> ^:<C-u>set virtualedit=all<CR>
-map      <silent> <C-l> $:<C-u>set virtualedit=all<CR>
+nnoremap <silent> <C-i> <C-i>zz:<C-u>call <SID>refresh_screen()<CR>
+nnoremap <silent> <C-o> <C-o>zz:<C-u>call <SID>refresh_screen()<CR>
+nnoremap <silent> <C-h> ^:<C-u>set virtualedit=all<CR>
+nnoremap <silent> <C-l> $:<C-u>set virtualedit=all<CR>
 
-nmap     <silent> <Leader>m `
+nnoremap <silent> <Leader>m `
 
 function! s:up_cursor(repeat)
   call s:enable_virtual_cursor()
@@ -2767,7 +2762,7 @@ nmap     <Leader>w [Window]
 
 if s:is_gui_running
   noremap <silent> [Window]e :<C-u>call <SID>toggle_v_split_wide()<CR>
-
+  noremap <silent> [Window]f :<C-u>call <SID>full_window()<CR>
   noremap <silent> [Window]H :<C-u>ResizeWin<CR>
   noremap <silent> [Window]J :<C-u>ResizeWin<CR>
   noremap <silent> [Window]K :<C-u>ResizeWin<CR>
@@ -2776,7 +2771,6 @@ if s:is_gui_running
   noremap <silent> [Window]j :<C-u>MoveWin<CR>
   noremap <silent> [Window]k :<C-u>MoveWin<CR>
   noremap <silent> [Window]l :<C-u>MoveWin<CR>
-  noremap <silent> [Window]f :<C-u>call <SID>full_window()<CR>
 
   " アプリケーションウィンドウを最大高さにする {{{
   function! s:full_window()
