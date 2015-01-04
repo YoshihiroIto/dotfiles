@@ -2301,7 +2301,7 @@ set noswapfile
 set nobackup
 
 if exists('+cryptmethod')
-  set cryptmethod=blowfish
+  set cryptmethod=blowfish2
 endif
 
 nnoremap <silent> <F1> :<C-u>edit $MYVIMRC<CR>
