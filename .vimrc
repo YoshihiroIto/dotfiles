@@ -1555,7 +1555,9 @@ if neobundle#tap('vimshell.vim')
   noremap <silent> [App]s :<C-u>VimShellPop<CR>
 
   function! neobundle#hooks.on_source(bundle)
-    let g:vimshell_popup_height = 40
+    let g:vimshell_popup_height   = 40
+    let g:vimshell_prompt_expr    = 'escape(fnamemodify(getcwd(), ":~").">", "\\[]()?! ")." "'
+    let g:vimshell_prompt_pattern = '^\%(\f\|\\.\)\+> '
   endfunction
 
   call neobundle#untap()
