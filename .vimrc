@@ -954,9 +954,6 @@ if neobundle#tap('vim-altr')
         \   }
         \ })
 
-  nmap zj <Plug>(altr-forward)
-  nmap zk <Plug>(altr-back)
-
   function! neobundle#hooks.on_source(bundle)
     call altr#define('%Model.cs',              '%Vm.cs',                  '%.xaml',             '%.xaml.cs')
     call altr#define('Models/%Model.cs',       'ViewModels/%Vm.cs',       'Views/%.xaml',       'Views/%.xaml.cs')
@@ -1786,9 +1783,8 @@ endif
 if neobundle#tap('open-browser.vim')
   call neobundle#config({
         \   'autoload': {
-        \     'mappings':        '<Plug>(openbrowser',
         \     'function_prefix': 'openbrowser',
-        \     'commands':        ['OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch']
+        \     'commands':        'OpenBrowser'
         \    }
         \ })
 
@@ -1808,7 +1804,7 @@ if neobundle#tap('unite.vim')
   call neobundle#config({
         \   'depends':  ['vimfiler.vim', 'tabpagebuffer.vim'],
         \   'autoload': {
-        \     'commands': ['Unite', 'UniteResume', 'UniteWithCursorWord']
+        \     'commands': ['Unite', 'UniteResume']
         \   }
         \ })
 
