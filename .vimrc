@@ -528,12 +528,12 @@ endfunction
 function! s:lightlineFilename()
   try
     return ('' !=# s:lightlineReadonly() ? s:lightlineReadonly() . ' ' : '') .
-          \ (&filetype ==# 'vimfiler'  ? vimfiler#get_status_string() :
-          \  &filetype ==# 'unite'     ? unite#get_status_string() :
-          \  &filetype ==# 'vimshell'  ? vimshell#get_status_string() :
-          \  &filetype =~# 'lingr'     ? lingr#status() :
-          \  &filetype ==# 'tweetvim'  ? '' :
-          \  &filetype ==# 'quickrun'  ? '' :
+          \ (&filetype ==# 'vimfiler' ? vimfiler#get_status_string() :
+          \  &filetype ==# 'unite'    ? unite#get_status_string() :
+          \  &filetype ==# 'vimshell' ? vimshell#get_status_string() :
+          \  &filetype =~# 'lingr'    ? lingr#status() :
+          \  &filetype ==# 'tweetvim' ? '' :
+          \  &filetype ==# 'quickrun' ? '' :
           \  ''  !=# expand('%:t') ? expand('%:t') : '[No Name]') .
           \ ('' !=# s:lightlineModified() ? ' ' . s:lightlineModified() : '')
   catch
@@ -2480,8 +2480,7 @@ function! s:smart_gf(mode)
   try
     let line = getline('.')
 
-    let words      = matchlist(line, '\(NeoBundle\(Lazy\)\?\s\+\)''\(.*\)''')
-    let repos_name = len(words) >= 4 ? words[3] : ''
+    let repos_name = matchstr(line, 'NeoBundle\(Lazy\)\?\s\+''\zs.*\ze''')
     if repos_name !=# ''
       " NeoBundle
       execute 'OpenBrowser' 'https://github.com/' . repos_name
