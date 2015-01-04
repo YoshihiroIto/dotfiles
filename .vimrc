@@ -1591,7 +1591,7 @@ if neobundle#tap('vimfiler.vim')
     let g:vimfiler_readonly_file_icon         = '⭤'
 
     call vimfiler#custom#profile('default', 'context', {
-          \   'auto-cd' : 1
+          \   'auto_cd' : 1
           \ })
 
     if s:is_mac
