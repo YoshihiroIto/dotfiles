@@ -1584,9 +1584,18 @@ if neobundle#tap('vimfiler.vim')
 
     let g:vimfiler_as_default_explorer        = 1
     let g:vimfiler_force_overwrite_statusline = 0
-    let g:vimfiler_tree_leaf_icon             = ' '
-    let g:vimfiler_enable_auto_cd             = 1
     let g:unite_kind_file_use_trashbox        = 1
+    let g:vimfiler_tree_leaf_icon             = ' '
+    let g:vimfiler_readonly_file_icon         = '⭤'
+
+    call vimfiler#custom#profile('default', 'context', {
+          \   'auto-cd' : 1
+          \ })
+
+    if s:is_mac
+      let g:vimfiler_quick_look_command = 'qlmanage -p'
+      AutocmdFT vimfiler nmap <buffer> p <Plug>(vimfiler_quick_look)
+    endif
   endfunction
 
   call neobundle#untap()
@@ -2257,6 +2266,9 @@ endfunction
 " Vimを閉じない
 nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
+
+" Exモード
+nnoremap Q <Nop>
 
 " ミス操作で削除してしまうため
 nnoremap dh <Nop>
