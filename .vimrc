@@ -1568,8 +1568,8 @@ if neobundle#tap('vimfiler.vim')
   call neobundle#config({
         \   'depends':  'tabpagebuffer.vim',
         \   'autoload': {
-        \     'commands' : 'VimFilerBufferDir',
-        \     'mappings' : '<Plug>'
+        \     'commands': 'VimFilerBufferDir',
+        \     'mappings': '<Plug>'
         \   }
         \ })
 
@@ -1916,8 +1916,8 @@ endif
 " neomru.vim {{{
 if neobundle#tap('neomru.vim')
   call neobundle#config({
-        \   'depends':   'unite.vim',
-        \   'autoload':  {
+        \   'depends':  'unite.vim',
+        \   'autoload': {
         \     'filetypes':     'all',
         \     'unite_sources': ['neomru/file', 'neomru/directory']
         \   }
