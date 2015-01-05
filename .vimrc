@@ -352,7 +352,7 @@ endif
 if neobundle#tap('syntastic')
   call neobundle#config({
         \   'autoload': {
-        \     'filetypes': ['go', 'ruby']
+        \     'filetypes': ['go', 'ruby', 'python']
         \   }
         \ })
 
