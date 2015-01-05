@@ -2478,9 +2478,9 @@ vnoremap <silent> gf :<C-u>call <SID>smart_gf('v')<CR>
 
 function! s:smart_gf(mode)
   try
-    let line = getline('.')
-
+    let line       = getline('.')
     let repos_name = matchstr(line, 'NeoBundle\(Lazy\)\?\s\+''\zs.*\ze''')
+
     if repos_name !=# ''
       " NeoBundle
       execute 'OpenBrowser' 'https://github.com/' . repos_name
@@ -2494,10 +2494,6 @@ function! s:smart_gf(mode)
       normal! gf
     endif
   catch
-    " echohl ErrorMsg
-    " echomsg v:exception
-    " echohl None
-
     " 検索
     call openbrowser#_keymapping_search(a:mode)
   endtry
