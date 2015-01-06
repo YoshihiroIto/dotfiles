@@ -1769,7 +1769,7 @@ if s:is_windows && s:is_gui_running
           \ })
 
     function! neobundle#hooks.on_source(bundle)
-      let g:icondrag_auto_start = 1
+      call icondrag#enable()
     endfunction
 
     call neobundle#untap()
