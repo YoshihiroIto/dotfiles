@@ -142,7 +142,6 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'kana/vim-altr'
 
   " 検索
-  NeoBundleLazy 'Lokaltog/vim-easymotion'
   NeoBundleLazy 'haya14busa/incsearch.vim'
   NeoBundleLazy 'haya14busa/vim-asterisk'
   NeoBundleLazy 'osyo-manga/vim-anzu'
@@ -215,7 +214,6 @@ function! s:set_neobundle() " {{{
 
   " C++
   NeoBundleLazy 'Mizuchi/STL-Syntax'
-  NeoBundleLazy 'osyo-manga/vim-marching'
   NeoBundleLazy 'rhysd/vim-clang-format'
   NeoBundleLazy 'vim-jp/cpp-vim'
 
@@ -975,12 +973,6 @@ if neobundle#tap('vim-altr')
     call altr#define('src/*/%.cpp',     'include/*/%.h')
     call altr#define('src/*/*/%.cpp',   'include/*/*/%.h')
     call altr#define('src/*/*/*/%.cpp', 'include/*/*/*/%.h')
-
-    call altr#define('%.c', '%.h')
-    call altr#define('src/%.c',       'include/%.h')
-    call altr#define('src/*/%.c',     'include/*/%.h')
-    call altr#define('src/*/*/%.c',   'include/*/*/%.h')
-    call altr#define('src/*/*/*/%.c', 'include/*/*/*/%.h')
   endfunction
 
   call neobundle#untap()
@@ -988,26 +980,6 @@ endif
 " }}}
 " }}}
 " 検索 {{{
-" vim-easymotion {{{
-if neobundle#tap('vim-easymotion')
-  call neobundle#config({
-        \   'autoload': {
-        \     'mappings': '<Plug>(easymotion-'
-        \   }
-        \ })
-
-  map <C-k> <Plug>(easymotion-s2)
-
-  function! neobundle#hooks.on_source(bundle)
-    let g:EasyMotion_do_mapping  = 0
-    let g:EasyMotion_smartcase   = 1
-    let g:EasyMotion_keys        = 'ghfjtyrubnvmdkeiwoqp47382'
-    let g:EasyMotion_startofline = 1
-  endfunction
-
-  call neobundle#untap()
-endif
-" }}}
 " matchit.zip {{{
 if neobundle#tap('matchit.zip')
   call neobundle#config({
@@ -2029,26 +2001,6 @@ if neobundle#tap('STL-Syntax')
         \ })
 
   call neobundle#untap()
-endif
-" }}}
-" vim-marching {{{
-if neobundle#tap('vim-marching')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': ['c', 'cpp', 'objc', 'objcpp']
-        \   }
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    if s:is_windows
-      let g:marching_clang_command = 'C:/Development/LLVM/bin/clang.exe'
-    else
-      let g:marching_clang_command = 'clang'
-    endif
-
-    let g:marching_enable_neocomplete   = 1
-    let g:marching_clang_command_option = '-std=c++1y'
-  endfunction
 endif
 " }}}
 " }}}
