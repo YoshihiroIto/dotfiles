@@ -232,6 +232,7 @@ endfunction " }}}
 if s:is_starting
   let g:neobundle#install_max_processes   = 8
   let g:neobundle#install_process_timeout = 10*60
+  let g:neobundle#default_options         = {'_' : {'focus' : 1}}
 
   set runtimepath+=$DOTVIM/bundle/neobundle.vim/
 endif
