@@ -182,6 +182,7 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'kana/vim-operator-replace'           " R
   NeoBundleLazy 'rhysd/vim-operator-surround'         " S
   NeoBundleLazy 'tyru/operator-camelize.vim'          " <Leader>_
+  NeoBundleLazy 'osyo-manga/vim-operator-jump_side'
 
   " アプリ
   NeoBundleLazy 'Shougo/vimfiler.vim'
@@ -214,6 +215,8 @@ function! s:set_neobundle() " {{{
 
   " C++
   NeoBundleLazy 'Mizuchi/STL-Syntax'
+  NeoBundleLazy 'osyo-manga/vim-marching'
+  NeoBundleLazy 'osyo-manga/vim-snowdrop'
   NeoBundleLazy 'rhysd/vim-clang-format'
   NeoBundleLazy 'vim-jp/cpp-vim'
 
@@ -1483,6 +1486,23 @@ if neobundle#tap('vim-rengbang')
   call neobundle#untap()
 endif
 " }}}
+" vim-operator-jump_side {{{
+if neobundle#tap('vim-operator-jump_side')
+  call neobundle#config({
+        \   'depends':  'vim-operator-user',
+        \   'autoload': {
+        \     'mappings': [['nx', '<Plug>(operator-jump']]
+        \   }
+        \ })
+
+  nmap <Leader>j <Plug>(operator-jump-toggle)
+  xmap <Leader>j <Plug>(operator-jump-toggle)
+  nmap <C-@> <Plug>(operator-jump-toggle)ai
+  xmap <C-@> <Plug>(operator-jump-toggle)ai
+
+  call neobundle#untap()
+endif
+" }}}
 " }}}
 " アプリ {{{
 " lingr-vim {{{
@@ -2004,6 +2024,43 @@ if neobundle#tap('STL-Syntax')
   call neobundle#untap()
 endif
 " }}}
+" vim-marching {{{
+if neobundle#tap('vim-marching')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': ['c', 'cpp', 'objc', 'objcpp']
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    if s:is_windows
+      let g:marching_clang_command = 'C:/Development/LLVM/bin/clang.exe'
+    else
+      let g:marching_clang_command = 'clang'
+    endif
+
+    let g:marching_enable_neocomplete   = 1
+    let g:marching_clang_command_option = '-std=c++1y'
+  endfunction
+endif
+" }}}
+" vim-snowdrop {{{
+if neobundle#tap('vim-snowdrop')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': ['c', 'cpp', 'objc', 'objcpp']
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    if s:is_mac
+      let g:snowdrop#libclang_directory = '/usr/local/opt/llvm/lib'
+    endif
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
 " }}}
 " Go {{{
 " gocode {{{
@@ -2168,6 +2225,7 @@ AutocmdFT go         nnoremap <silent><buffer> <C-]> :<C-u>call GodefUnderCursor
 
 AutocmdFT c,cpp      setlocal foldmethod=syntax
 AutocmdFT c,cpp      nnoremap <silent><buffer> [App]r :<C-u>QuickRun cpp/wandbox<CR>
+AutocmdFT c,cpp      nnoremap <silent><buffer> <C-]> :<C-u>SnowdropGotoDefinition<CR>zz:<C-u>call <SID>refresh_screen()<CR>
 
 AutocmdFT cs         setlocal omnifunc=OmniSharp#Complete
 AutocmdFT cs         setlocal foldmethod=syntax
@@ -2405,7 +2463,8 @@ set showfulltag
 set wildoptions=tagfile
 set fillchars=vert:\              " 縦分割の境界線
 set synmaxcol=500                 " ハイライトする文字数を制限する
-set updatetime=350
+" set updatetime=350
+set updatetime=100
 set previewheight=24
 set laststatus=0
 set cmdheight=4
