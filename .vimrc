@@ -98,7 +98,22 @@ set guioptions-=L
 set guioptions-=e
 " }}}
 " プラグイン {{{
-function! s:set_neobundle() " {{{
+if s:is_starting
+  let g:neobundle#install_max_processes   = 8
+  let g:neobundle#install_process_timeout = 10*60
+  let g:neobundle#default_options         = {'_' : {'focus' : 1}}
+
+  set runtimepath+=$DOTVIM/bundle/neobundle.vim/
+endif
+
+call neobundle#begin(expand('$DOTVIM/bundle/'))
+
+if neobundle#has_fresh_cache()
+  NeoBundleLoadCache
+else
+  NeoBundleFetch 'Shougo/neobundle.vim'
+
+  " NeoBundle {{{
   " ライブラリ
   NeoBundle     'Shougo/vimproc'
   NeoBundle     'tpope/vim-dispatch'
@@ -229,23 +244,8 @@ function! s:set_neobundle() " {{{
   NeoBundleLazy 'airblade/vim-gitgutter'
   NeoBundleLazy 'cohama/agit.vim'
   NeoBundleLazy 'tpope/vim-fugitive'
-endfunction " }}}
+  " }}}
 
-if s:is_starting
-  let g:neobundle#install_max_processes   = 8
-  let g:neobundle#install_process_timeout = 10*60
-  let g:neobundle#default_options         = {'_' : {'focus' : 1}}
-
-  set runtimepath+=$DOTVIM/bundle/neobundle.vim/
-endif
-
-call neobundle#begin(expand('$DOTVIM/bundle/'))
-
-if neobundle#has_fresh_cache()
-  NeoBundleLoadCache
-else
-  NeoBundleFetch 'Shougo/neobundle.vim'
-  call s:set_neobundle()
   NeoBundleSaveCache
 endif
 
