@@ -1573,14 +1573,12 @@ if neobundle#tap('vimfiler.vim')
     AutocmdFT vimfiler nnoremap <silent><buffer> J     :<C-u>Unite bookmark<CR>
     AutocmdFT vimfiler nnoremap <silent><buffer> /     :<C-u>Unite file -horizontal<CR>
 
-    " dotfile表示状態に設定
-    AutocmdFT vimfiler execute ':normal .'
-
     let g:vimfiler_as_default_explorer        = 1
     let g:vimfiler_force_overwrite_statusline = 0
-    let g:unite_kind_file_use_trashbox        = 1
+    let g:vimfiler_ignore_pattern             = ''
     let g:vimfiler_tree_leaf_icon             = ' '
     let g:vimfiler_readonly_file_icon         = '⭤'
+    let g:unite_kind_file_use_trashbox        = 1
 
     call vimfiler#custom#profile('default', 'context', {
           \   'auto_cd' : 1
@@ -2358,9 +2356,9 @@ function! s:copy_add_comment() range
 
   " 元のコードを選択
   if selected_count == 0
-    normal V
+    normal! V
   else
-    execute 'normal V' . selected_count . 'j'
+    execute 'normal! V' . selected_count . 'j'
   endif
 
   " コメントアウトする
@@ -2370,7 +2368,7 @@ function! s:copy_add_comment() range
   normal! \e\e
 
   " 元の位置に戻る
-  execute 'normal ' . (selected_count + 1) . 'j'
+  execute 'normal! ' . (selected_count + 1) . 'j'
 endfunction
 
 " 自動的にディレクトリを作成する
