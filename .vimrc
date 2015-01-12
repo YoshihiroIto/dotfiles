@@ -8,6 +8,10 @@ let s:is_gui_running     = has('gui_running')
 let s:is_mac_gui_running = s:is_mac && s:is_gui_running
 let s:is_starting        = has('vim_starting')
 
+let g:mapleader = ','
+let $DOTVIM     = expand('~/.vim')
+set viminfo+=!
+
 function! s:get_sid()
   return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeget_sid$')
 endfunction
@@ -16,23 +20,18 @@ delfunction s:get_sid
 
 if s:is_starting
   let s:git_dot_vimrc = expand('~/Dropbox/dotfiles/.vimrc')
-
   if filereadable(s:git_dot_vimrc)
     let $MYVIMRC = s:git_dot_vimrc
   endif
-
   unlet s:git_dot_vimrc
 endif
-
-let g:mapleader    = ','
-let s:base_columns = 120
-let s:vimrc_local  = expand('~/.vimrc_local')
-let $DOTVIM        = expand('~/.vim')
-set viminfo+=!
 
 if s:is_mac
   let $LUA_DLL = simplify($VIM . '/../../Frameworks/libluajit-5.1.2.dylib')
 endif
+
+nnoremap [App] <Nop>
+nmap     ;     [App]
 
 " メニューを読み込まない
 let g:did_install_default_menus = 1
@@ -72,12 +71,12 @@ if filereadable($VIM . '/vimrc') && filereadable($VIM . '/ViMrC')
   set tags=./tags,tags
 endif
 
+" ローカル設定
+let s:vimrc_local = expand('~/.vimrc_local')
 if filereadable(s:vimrc_local)
   execute 'source' s:vimrc_local
 endif
-
-nnoremap [App] <Nop>
-nmap     ;     [App]
+unlet s:vimrc_local
 " }}}
 " guioptions {{{
 " メニューを読み込まない
@@ -2463,8 +2462,8 @@ set showfulltag
 set wildoptions=tagfile
 set fillchars=vert:\              " 縦分割の境界線
 set synmaxcol=500                 " ハイライトする文字数を制限する
-" set updatetime=350
-set updatetime=100
+set updatetime=350
+" set updatetime=100
 set previewheight=24
 set laststatus=0
 set cmdheight=4
@@ -2800,6 +2799,7 @@ if s:is_gui_running
   endfunction
   " }}}
   " 縦分割する {{{
+  let s:base_columns   = 120
   let s:depth_vsp      = 1
   let s:opend_left_vsp = 0
   let s:opend_top_vsp  = 0
