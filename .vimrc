@@ -1526,7 +1526,7 @@ if neobundle#tap('lingr-vim')
     if bufnr('lingr-messages') == -1
       tabnew
       LingrLaunch
-      execute 'wincmd l'
+      wincmd l
     else
       LingrExit
     endif
@@ -1621,7 +1621,7 @@ if neobundle#tap('TweetVim')
       tabnew
       TweetVimHomeTimeline
     else
-      silent! execute 'bwipeout tweetvim'
+      bwipeout tweetvim
     endif
   endfunction
 
@@ -2358,7 +2358,7 @@ function! s:copy_add_comment() range
 
   " 元のコードを選択
   if selected_count == 0
-    execute 'normal V'
+    normal V
   else
     execute 'normal V' . selected_count . 'j'
   endif
@@ -2367,7 +2367,7 @@ function! s:copy_add_comment() range
   normal gc
 
   " ビジュアルモードからエスケープ
-  execute "normal! \e\e"
+  normal! \e\e
 
   " 元の位置に戻る
   execute 'normal ' . (selected_count + 1) . 'j'
@@ -2794,7 +2794,7 @@ if s:is_gui_running
   " アプリケーションウィンドウを最大高さにする {{{
   function! s:full_window()
     execute 'winpos' getwinposx() '0'
-    execute 'set lines=9999'
+    set lines=9999
   endfunction
   " }}}
   " 縦分割する {{{
