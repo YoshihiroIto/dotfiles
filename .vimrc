@@ -2302,7 +2302,6 @@ set whichwrap=b,s,h,l,<,>,[,]     " カーソルを行頭、行末で止まら�
 set mouse=a                       " 全モードでマウスを有効化
 set hidden                        " 変更中のファイルでも、保存しないで他のファイルを表示
 set timeoutlen=2000
-set formatexpr=autofmt#japanese#formatexpr()
 set nrformats-=octal
 set nrformats+=alpha
 set completeopt=longest,menuone
