@@ -809,7 +809,7 @@ if neobundle#tap('neocomplete.vim')
     let g:neocomplete#sources#syntax#min_keyword_length = 3
     let g:neocomplete#min_keyword_length                = 3
     let g:neocomplete#force_overwrite_completefunc      = 1
-    let g:neocomplete#skip_auto_completion_time         = ''
+    let g:neocomplete#skip_auto_completion_time         = '0.2'
 
     let g:neocomplete#sources#dictionary#dictionaries = {
           \   'default':  '',
@@ -857,6 +857,8 @@ if neobundle#tap('neocomplete.vim')
           \   'cpp': ['', 'h', 'hpp', 'hxx'],
           \   'cs':  ['', 'Designer.cs']
           \ }
+
+    call neocomplete#custom#source('file', 'rank', 10)
   endfunction
 
   call neobundle#untap()
@@ -1978,6 +1980,7 @@ if neobundle#tap('vim-clang-format')
   function! neobundle#hooks.on_source(bundle)
     if s:is_windows
       let g:clang_format#command = 'C:/Development/LLVM/bin/clang-format.exe'
+      " let g:clang_format#command = 'C:/Development/llvm35/build/Release/bin/clang-format.exe'
     else
       let g:clang_format#command = 'clang-format-3.4'
     endif
@@ -2032,6 +2035,7 @@ if neobundle#tap('vim-marching')
   function! neobundle#hooks.on_source(bundle)
     if s:is_windows
       let g:marching_clang_command = 'C:/Development/LLVM/bin/clang.exe'
+      " let g:marching_clang_command = 'C:/Development/llvm35/build/Release/clang.exe'
     else
       let g:marching_clang_command = 'clang'
     endif
@@ -2052,6 +2056,7 @@ endif
 "   function! neobundle#hooks.on_source(bundle)
 "     if s:is_windows
 "       let g:snowdrop#libclang_directory = 'C:/Development/LLVM/bin'
+"       " let g:snowdrop#libclang_directory = 'C:/Development/llvm35/build/Release/bin'
 "     else
 "       let g:snowdrop#libclang_directory = '/usr/local/opt/llvm/lib'
 "     endif
@@ -2451,7 +2456,7 @@ set showfulltag
 set wildoptions=tagfile
 set fillchars=vert:\              " 縦分割の境界線
 set synmaxcol=500                 " ハイライトする文字数を制限する
-set updatetime=100
+set updatetime=250
 set previewheight=24
 set laststatus=0
 set cmdheight=4
