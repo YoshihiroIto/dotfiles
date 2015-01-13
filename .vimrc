@@ -230,7 +230,7 @@ else
   " C++
   NeoBundleLazy 'Mizuchi/STL-Syntax'
   NeoBundleLazy 'osyo-manga/vim-marching'
-  NeoBundleLazy 'osyo-manga/vim-snowdrop'
+  " NeoBundleLazy 'osyo-manga/vim-snowdrop'
   NeoBundleLazy 'rhysd/vim-clang-format'
   NeoBundleLazy 'vim-jp/cpp-vim'
 
@@ -1548,7 +1548,7 @@ if neobundle#tap('vimshell.vim')
 
   function! neobundle#hooks.on_source(bundle)
     let g:vimshell_popup_height   = 40
-    let g:vimshell_prompt_expr    = 'escape(fnamemodify(getcwd(), ":~").">", "\\[]()?! ")." "'
+    let g:vimshell_prompt_expr    = 'escape(substitute(fnamemodify(getcwd(), ":~").">", "\\", "/", "g"), "\\[]()?! ")." "'
     let g:vimshell_prompt_pattern = '^\%(\f\|\\.\)\+> '
   endfunction
 
@@ -2041,23 +2041,25 @@ if neobundle#tap('vim-marching')
   endfunction
 endif
 " }}}
-" vim-snowdrop {{{
-if neobundle#tap('vim-snowdrop')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': ['c', 'cpp', 'objc', 'objcpp']
-        \   }
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    if s:is_mac
-      let g:snowdrop#libclang_directory = '/usr/local/opt/llvm/lib'
-    endif
-  endfunction
-
-  call neobundle#untap()
-endif
-" }}}
+" " vim-snowdrop {{{
+" if neobundle#tap('vim-snowdrop')
+"   call neobundle#config({
+"         \   'autoload': {
+"         \     'filetypes': ['c', 'cpp', 'objc', 'objcpp']
+"         \   }
+"         \ })
+"
+"   function! neobundle#hooks.on_source(bundle)
+"     if s:is_windows
+"       let g:snowdrop#libclang_directory = 'C:/Development/LLVM/bin'
+"     else
+"       let g:snowdrop#libclang_directory = '/usr/local/opt/llvm/lib'
+"     endif
+"   endfunction
+"
+"   call neobundle#untap()
+" endif
+" " }}}
 " }}}
 " Go {{{
 " gocode {{{
@@ -2449,8 +2451,7 @@ set showfulltag
 set wildoptions=tagfile
 set fillchars=vert:\              " 縦分割の境界線
 set synmaxcol=500                 " ハイライトする文字数を制限する
-set updatetime=350
-" set updatetime=100
+set updatetime=100
 set previewheight=24
 set laststatus=0
 set cmdheight=4
