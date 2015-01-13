@@ -2370,16 +2370,6 @@ function! s:copy_add_comment() range
   " 元の位置に戻る
   execute 'normal! ' . (selected_count + 1) . 'j'
 endfunction
-
-" 自動的にディレクトリを作成する
-" http://vim-jp.org/vim-users-jp/2011/02/20/Hack-202.html
-Autocmd BufWritePre * call s:auto_mkdir(expand('<afile>:p:h'), v:cmdbang)
-function! s:auto_mkdir(dir, force)
-  if !isdirectory(a:dir) && (a:force ||
-        \    input(printf('"%s" does not exist. Create? [y/N]', a:dir)) =~? '^y\%[es]$')
-    call mkdir(iconv(a:dir, &encoding, &termencoding), 'p')
-  endif
-endfunction
 " }}}
 " インプットメソッド {{{
 " macvim kaoriya gvim で submode が正しく動作しなくなるため
