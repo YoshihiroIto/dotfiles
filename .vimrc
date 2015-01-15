@@ -1812,34 +1812,34 @@ if neobundle#tap('unite.vim')
   nmap     <Space> [Unite]
   xmap     <Space> [Unite]
 
-  nnoremap <silent> [Unite]cg   :<C-u>Unite -no-split -buffer-name=unite-grep grep<CR>
-  nnoremap <silent> [Unite]gg   :<C-u>Unite -no-split -buffer-name=unite-grep grep:.<CR>
-  nnoremap <silent> [Unite]ccg  :<C-u>Unite -no-split -buffer-name=unite-grep grep:..<CR>
-  nnoremap <silent> [Unite]cccg :<C-u>Unite -no-split -buffer-name=unite-grep grep:../..<CR>
-  nnoremap <silent> [Unite]pg   :<C-u>Unite -no-split -buffer-name=unite-grep grep:!<CR>
-  nnoremap <silent> [Unite]f    :<C-u>Unite -buffer-name=unite-buffer buffer<CR>
-  nnoremap <silent> [Unite]j    :<C-u>Unite -buffer-name=unite-bookmark bookmark<CR>
-  nnoremap <silent> [Unite]t    :<C-u>Unite -buffer-name=unite-tab tab<CR>
-  nnoremap <silent> [Unite]l    :<C-u>Unite -no-split -buffer-name=unite-line line<CR>
-  nnoremap <silent> [Unite]o    :<C-u>Unite -buffer-name=unite-outline outline<CR>
-  nnoremap <silent> [Unite]q    :<C-u>Unite -no-quit -buffer-name=unite-quickfix quickfix<CR>
+  nnoremap <silent> [Unite]cg   :<C-u>Unite -no-split -buffer-name=grep grep<CR>
+  nnoremap <silent> [Unite]gg   :<C-u>Unite -no-split -buffer-name=grep grep:.<CR>
+  nnoremap <silent> [Unite]ccg  :<C-u>Unite -no-split -buffer-name=grep grep:..<CR>
+  nnoremap <silent> [Unite]cccg :<C-u>Unite -no-split -buffer-name=grep grep:../..<CR>
+  nnoremap <silent> [Unite]pg   :<C-u>Unite -no-split -buffer-name=grep grep:!<CR>
+  nnoremap <silent> [Unite]f    :<C-u>Unite -buffer-name=buffer buffer<CR>
+  nnoremap <silent> [Unite]j    :<C-u>Unite -buffer-name=bookmark bookmark<CR>
+  nnoremap <silent> [Unite]t    :<C-u>Unite -buffer-name=tab tab<CR>
+  nnoremap <silent> [Unite]l    :<C-u>Unite -no-split -buffer-name=line line<CR>
+  nnoremap <silent> [Unite]o    :<C-u>Unite -buffer-name=outline outline<CR>
+  nnoremap <silent> [Unite]q    :<C-u>Unite -no-quit -buffer-name=quickfix quickfix<CR>
   nnoremap <silent> [Unite]v    :<C-u>call <SID>execute_if_on_git_branch('Unite giti')<CR>
   nnoremap <silent> [Unite]b    :<C-u>call <SID>execute_if_on_git_branch('Unite giti/branch_all')<CR>
-  nnoremap <silent> [Unite]m    :<C-u>Unite -no-split -buffer-name=unite-neomru neomru/file<CR>
+  nnoremap <silent> [Unite]m    :<C-u>Unite -no-split -buffer-name=neomru neomru/file<CR>
 
   nnoremap <silent> [Unite]rr :<C-u>UniteResume<CR>
-  nnoremap <silent> [Unite]rg :<C-u>UniteResume unite-grep<CR>
-  nnoremap <silent> [Unite]rf :<C-u>UniteResume unite-buffer<CR>
-  nnoremap <silent> [Unite]rj :<C-u>UniteResume unite-bookmark<CR>
-  nnoremap <silent> [Unite]rt :<C-u>UniteResume unite-tab<CR>
-  nnoremap <silent> [Unite]rl :<C-u>UniteResume unite-line<CR>
-  nnoremap <silent> [Unite]ro :<C-u>UniteResume unite-outline<CR>
-  nnoremap <silent> [Unite]rq :<C-u>UniteResume unite-quickfix<CR>
-  nnoremap <silent> [Unite]rm :<C-u>UniteResume unite-neomru<CR>
+  nnoremap <silent> [Unite]rg :<C-u>UniteResume grep<CR>
+  nnoremap <silent> [Unite]rf :<C-u>UniteResume buffer<CR>
+  nnoremap <silent> [Unite]rj :<C-u>UniteResume bookmark<CR>
+  nnoremap <silent> [Unite]rt :<C-u>UniteResume tab<CR>
+  nnoremap <silent> [Unite]rl :<C-u>UniteResume line<CR>
+  nnoremap <silent> [Unite]ro :<C-u>UniteResume outline<CR>
+  nnoremap <silent> [Unite]rq :<C-u>UniteResume quickfix<CR>
+  nnoremap <silent> [Unite]rm :<C-u>UniteResume neomru<CR>
 
   if s:is_windows
-    nnoremap <silent> [Unite]e :<C-u>Unite -no-split -buffer-name=unite-everything everything<CR>
-    nnoremap <silent> [Unite]re :<C-u>UniteResume unite-everything<CR>
+    nnoremap <silent> [Unite]e :<C-u>Unite -no-split -buffer-name=everything everything<CR>
+    nnoremap <silent> [Unite]re :<C-u>UniteResume everything<CR>
   endif
 
   function! neobundle#hooks.on_source(bundle)
