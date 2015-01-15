@@ -1812,44 +1812,51 @@ if neobundle#tap('unite.vim')
   nmap     <Space> [Unite]
   xmap     <Space> [Unite]
 
-  nnoremap <silent> [Unite]g :<C-u>Unite -no-split grep<CR>
-  nnoremap <silent> [Unite]p :<C-u>call <SID>unite_grep_project('-no-split')<CR>
-  nnoremap <silent> [Unite]f :<C-u>Unite buffer<CR>
-  nnoremap <silent> [Unite]j :<C-u>Unite bookmark<CR>
-  nnoremap <silent> [Unite]t :<C-u>Unite tab<CR>
-  nnoremap <silent> [Unite]l :<C-u>Unite -no-split line<CR>
-  nnoremap <silent> [Unite]o :<C-u>Unite outline<CR>
-  nnoremap <silent> [Unite]q :<C-u>Unite -no-quit quickfix<CR>
-  nnoremap <silent> [Unite]v :<C-u>call <SID>execute_if_on_git_branch('Unite giti')<CR>
-  nnoremap <silent> [Unite]b :<C-u>call <SID>execute_if_on_git_branch('Unite giti/branch_all')<CR>
-  nnoremap <silent> [Unite]m :<C-u>Unite -no-split neomru/file<CR>
+  nnoremap <silent> [Unite]cg   :<C-u>Unite -no-split -buffer-name=unite-grep grep<CR>
+  nnoremap <silent> [Unite]gg   :<C-u>Unite -no-split -buffer-name=unite-grep grep:.<CR>
+  nnoremap <silent> [Unite]ccg  :<C-u>Unite -no-split -buffer-name=unite-grep grep:..<CR>
+  nnoremap <silent> [Unite]cccg :<C-u>Unite -no-split -buffer-name=unite-grep grep:../..<CR>
+  nnoremap <silent> [Unite]pg   :<C-u>Unite -no-split -buffer-name=unite-grep grep:!<CR>
+  nnoremap <silent> [Unite]f    :<C-u>Unite -buffer-name=unite-buffer buffer<CR>
+  nnoremap <silent> [Unite]j    :<C-u>Unite -buffer-name=unite-bookmark bookmark<CR>
+  nnoremap <silent> [Unite]t    :<C-u>Unite -buffer-name=unite-tab tab<CR>
+  nnoremap <silent> [Unite]l    :<C-u>Unite -no-split -buffer-name=unite-line line<CR>
+  nnoremap <silent> [Unite]o    :<C-u>Unite -buffer-name=unite-outline outline<CR>
+  nnoremap <silent> [Unite]q    :<C-u>Unite -no-quit -buffer-name=unite-quickfix quickfix<CR>
+  nnoremap <silent> [Unite]v    :<C-u>call <SID>execute_if_on_git_branch('Unite giti')<CR>
+  nnoremap <silent> [Unite]b    :<C-u>call <SID>execute_if_on_git_branch('Unite giti/branch_all')<CR>
+  nnoremap <silent> [Unite]m    :<C-u>Unite -no-split -buffer-name=unite-neomru neomru/file<CR>
+
+  nnoremap <silent> [Unite]rr :<C-u>UniteResume<CR>
+  nnoremap <silent> [Unite]rg :<C-u>UniteResume unite-grep<CR>
+  nnoremap <silent> [Unite]rf :<C-u>UniteResume unite-buffer<CR>
+  nnoremap <silent> [Unite]rj :<C-u>UniteResume unite-bookmark<CR>
+  nnoremap <silent> [Unite]rt :<C-u>UniteResume unite-tab<CR>
+  nnoremap <silent> [Unite]rl :<C-u>UniteResume unite-line<CR>
+  nnoremap <silent> [Unite]ro :<C-u>UniteResume unite-outline<CR>
+  nnoremap <silent> [Unite]rq :<C-u>UniteResume unite-quickfix<CR>
+  nnoremap <silent> [Unite]rm :<C-u>UniteResume unite-neomru<CR>
 
   if s:is_windows
-    nnoremap <silent> [Unite]e :<C-u>Unite -no-split everything<CR>
+    nnoremap <silent> [Unite]e :<C-u>Unite -no-split -buffer-name=unite-everything everything<CR>
+    nnoremap <silent> [Unite]re :<C-u>UniteResume unite-everything<CR>
   endif
 
-  nnoremap <silent> [Unite]r :<C-u>UniteResume<CR>
-
-  " http://sanrinsha.lolipop.jp/blog/2013/03/%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E5%86%85%E3%81%AE%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92unite-grep%E3%81%99%E3%82%8B.html
-  function! s:unite_grep_project(...)
-    let opts = (a:0 ? join(a:000, ' ') : '')
-    let dir = unite#util#path2project_directory(expand('%'))
-    execute 'Unite' opts 'grep:' . dir
-  endfunction
-
   function! neobundle#hooks.on_source(bundle)
-    let g:unite_force_overwrite_statusline = 0
+    let g:unite_force_overwrite_statusline   = 0
+    let g:unite_source_line_enable_highlight = 1
 
     let g:unite_source_alias_aliases = {
           \   'memolist' : {'source': 'file'},
           \ }
 
     if executable('pt')
-      let g:unite_source_grep_command       = 'pt'
-      let g:unite_source_grep_default_opts  = '--nogroup --nocolor -S'
-      let g:unite_source_grep_recursive_opt = ''
-      let g:unite_source_grep_encoding      = 'utf-8'
-      let g:unite_source_rec_async_command  = 'pt --nocolor --nogroup -g .'
+      let g:unite_source_grep_command        = 'pt'
+      let g:unite_source_grep_default_opts   = '--nogroup --nocolor -S'
+      let g:unite_source_grep_recursive_opt  = ''
+      let g:unite_source_grep_encoding       = 'utf-8'
+      let g:unite_source_rec_async_command   = 'pt --nocolor --nogroup -g .'
+      let g:unite_source_grep_max_candidates = 1000
     endif
 
     call unite#custom#profile('default', 'context', {
@@ -2238,7 +2245,6 @@ endfunction
 " }}}
 " キー無効 {{{
 " Vimを閉じない
-nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
 
 " Exモード
