@@ -229,8 +229,6 @@ else
 
   " C++
   NeoBundleLazy 'Mizuchi/STL-Syntax'
-  NeoBundleLazy 'osyo-manga/vim-marching'
-  " NeoBundleLazy 'osyo-manga/vim-snowdrop'
   NeoBundleLazy 'rhysd/vim-clang-format'
   NeoBundleLazy 'vim-jp/cpp-vim'
 
@@ -800,7 +798,7 @@ if neobundle#tap('neocomplete.vim')
     let g:neocomplete#enable_ignore_case      = 1
     let g:neocomplete#enable_smart_case       = 1
     let g:neocomplete#enable_auto_delimiter   = 1
-    let g:neocomplete#enable_fuzzy_completion = 1
+    let g:neocomplete#enable_fuzzy_completion = 0
     let g:neocomplete#enable_refresh_always   = 1
     let g:neocomplete#enable_prefetch         = 1
 
@@ -1856,11 +1854,12 @@ if neobundle#tap('unite.vim')
 
     call unite#custom#profile('default', 'context', {
           \   'direction':        'rightbelow',
-          \   'prompt_direction': 'top',
-          \   'vertical':         0,
           \   'ignorecase':       1,
+          \   'prompt':           '>>',
+          \   'prompt_direction': 'top',
           \   'smartcase':        1,
-          \   'start_insert':     1
+          \   'start_insert':     1,
+          \   'vertical':         0
           \ })
 
     call unite#custom#profile('source/outline,source/giti,source/giti/branch_all', 'context', {
@@ -2024,47 +2023,6 @@ if neobundle#tap('STL-Syntax')
   call neobundle#untap()
 endif
 " }}}
-" vim-marching {{{
-if neobundle#tap('vim-marching')
-  call neobundle#config({
-        \   'autoload': {
-        \     'filetypes': ['c', 'cpp', 'objc', 'objcpp']
-        \   }
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    if s:is_windows
-      let g:marching_clang_command = 'C:/Development/LLVM/bin/clang.exe'
-      " let g:marching_clang_command = 'C:/Development/llvm35/build/Release/clang.exe'
-    else
-      let g:marching_clang_command = 'clang'
-    endif
-
-    let g:marching_enable_neocomplete   = 1
-    let g:marching_clang_command_option = '-std=c++1y'
-  endfunction
-endif
-" }}}
-" " vim-snowdrop {{{
-" if neobundle#tap('vim-snowdrop')
-"   call neobundle#config({
-"         \   'autoload': {
-"         \     'filetypes': ['c', 'cpp', 'objc', 'objcpp']
-"         \   }
-"         \ })
-"
-"   function! neobundle#hooks.on_source(bundle)
-"     if s:is_windows
-"       let g:snowdrop#libclang_directory = 'C:/Development/LLVM/bin'
-"       " let g:snowdrop#libclang_directory = 'C:/Development/llvm35/build/Release/bin'
-"     else
-"       let g:snowdrop#libclang_directory = '/usr/local/opt/llvm/lib'
-"     endif
-"   endfunction
-"
-"   call neobundle#untap()
-" endif
-" " }}}
 " }}}
 " Go {{{
 " gocode {{{
@@ -2229,7 +2187,6 @@ AutocmdFT go         nnoremap <silent><buffer> <C-]> :<C-u>call GodefUnderCursor
 
 AutocmdFT c,cpp      setlocal foldmethod=syntax
 AutocmdFT c,cpp      nnoremap <silent><buffer> [App]r :<C-u>QuickRun cpp/wandbox<CR>
-AutocmdFT c,cpp      nnoremap <silent><buffer> <C-]> :<C-u>SnowdropGotoDefinition<CR>zz:<C-u>call <SID>refresh_screen()<CR>
 
 AutocmdFT cs         setlocal omnifunc=OmniSharp#Complete
 AutocmdFT cs         setlocal foldmethod=syntax
@@ -2483,7 +2440,7 @@ vnoremap <silent> gf :<C-u>call <SID>smart_gf('v')<CR>
 function! s:smart_gf(mode)
   try
     let line       = getline('.')
-    let repos_name = matchstr(line, 'NeoBundle\(Lazy\)\?\s\+''\zs.*\ze''')
+    let repos_name = matchstr(line, 'NeoBundle\(\(Lazy\)\|\(Fetch\)\)\?\s\+''\zs.*\ze''')
 
     if repos_name !=# ''
       " NeoBundle
