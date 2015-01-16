@@ -859,6 +859,19 @@ if neobundle#tap('neocomplete.vim')
     call neocomplete#custom#source('file', 'rank', 10)
   endfunction
 
+  augroup InitializeNeocomplete
+    autocmd!
+    autocmd FocusLost,CursorHold,CursorHoldI * call s:initialize_neocomplete()
+  augroup END
+
+  function! s:initialize_neocomplete()
+    call neocomplete#initialize()
+
+    augroup InitializeNeocomplete
+      autocmd!
+    augroup END
+  endfunction
+
   call neobundle#untap()
 endif
 " }}}
@@ -1013,17 +1026,10 @@ if neobundle#tap('incsearch.vim')
     let g:incsearch#emacs_like_keymap = 1
   endfunction
 
-  augroup incsearch-keymap
-    autocmd!
-    autocmd VimEnter * call s:incsearch_keymap()
-  augroup END
-
-  function! s:incsearch_keymap()
-    IncSearchNoreMap <C-j> <Esc>
-    IncSearchNoreMap <C-h> <BS>
-    IncSearchNoreMap <C-i> <Over>(incsearch-scroll-f)
-    IncSearchNoreMap <C-o> <Over>(incsearch-scroll-b)
-  endfunction
+  Autocmd VimEnter * IncSearchNoreMap <C-j> <Esc>
+  Autocmd VimEnter * IncSearchNoreMap <C-h> <BS>
+  Autocmd VimEnter * IncSearchNoreMap <C-i> <Over>(incsearch-scroll-f)
+  Autocmd VimEnter * IncSearchNoreMap <C-o> <Over>(incsearch-scroll-b)
 
   call neobundle#untap()
 endif
@@ -1821,10 +1827,10 @@ if neobundle#tap('unite.vim')
   nnoremap <silent> [Unite]j    :<C-u>Unite -buffer-name=bookmark bookmark<CR>
   nnoremap <silent> [Unite]t    :<C-u>Unite -buffer-name=tab tab<CR>
   nnoremap <silent> [Unite]l    :<C-u>Unite -no-split -buffer-name=line line<CR>
-  nnoremap <silent> [Unite]o    :<C-u>Unite -buffer-name=outline outline<CR>
+  nnoremap <silent> [Unite]o    :<C-u>Unite -vertical -buffer-name=outline outline<CR>
   nnoremap <silent> [Unite]q    :<C-u>Unite -no-quit -buffer-name=quickfix quickfix<CR>
-  nnoremap <silent> [Unite]v    :<C-u>call <SID>execute_if_on_git_branch('Unite giti')<CR>
-  nnoremap <silent> [Unite]b    :<C-u>call <SID>execute_if_on_git_branch('Unite giti/branch_all')<CR>
+  nnoremap <silent> [Unite]v    :<C-u>call <SID>execute_if_on_git_branch('Unite -vertical -buffer-name=giti giti')<CR>
+  nnoremap <silent> [Unite]b    :<C-u>call <SID>execute_if_on_git_branch('Unite -vertical -buffer-name=giti/branch_all giti/branch_all')<CR>
   nnoremap <silent> [Unite]m    :<C-u>Unite -no-split -buffer-name=neomru neomru/file<CR>
 
   nnoremap <silent> [Unite]rr :<C-u>UniteResume<CR>
@@ -1835,6 +1841,8 @@ if neobundle#tap('unite.vim')
   nnoremap <silent> [Unite]rl :<C-u>UniteResume line<CR>
   nnoremap <silent> [Unite]ro :<C-u>UniteResume outline<CR>
   nnoremap <silent> [Unite]rq :<C-u>UniteResume quickfix<CR>
+  nnoremap <silent> [Unite]rv :<C-u>UniteResume giti<CR>
+  nnoremap <silent> [Unite]rb :<C-u>UniteResume giti/branch_all<CR>
   nnoremap <silent> [Unite]rm :<C-u>UniteResume neomru<CR>
 
   if s:is_windows
