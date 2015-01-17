@@ -201,7 +201,6 @@ else
   " アプリ
   NeoBundleLazy 'Shougo/vimfiler.vim'
   NeoBundleLazy 'Shougo/vimshell.vim'
-  NeoBundleLazy 'Shougo/vinarise.vim'
   NeoBundleLazy 'basyura/TweetVim'
   NeoBundleLazy 'glidenote/memolist.vim'
   NeoBundleLazy 'mattn/gist-vim'
@@ -218,9 +217,10 @@ else
   endif
 
   " Unite
-  NeoBundleLazy 'Shougo/neomru.vim'
-  NeoBundleLazy 'Shougo/unite-outline'
   NeoBundleLazy 'Shougo/unite.vim'
+  NeoBundleLazy 'Shougo/neomru.vim'
+  NeoBundleLazy 'Shougo/unite-help'
+  NeoBundleLazy 'Shougo/unite-outline'
   NeoBundleLazy 'YoshihiroIto/vim-unite-giti'
   NeoBundleLazy 'osyo-manga/unite-quickfix'
   if s:is_windows
@@ -716,6 +716,14 @@ if neobundle#tap('vim-smartinput')
   function! neobundle#hooks.on_source(bundle)
     call smartinput#clear_rules()
     call smartinput#define_default_rules()
+
+    " セミコロン自動入力
+    AutocmdFT c,cpp call smartinput#define_rule({
+          \   'at':       '\%(\<struct\>\|\<class\>\|\<enum\>\)\s*\w*.*\n*\%#',
+          \   'char':     '{',
+          \   'input':    '{};<Left><Left>',
+          \   'filetype': ['c', 'cpp'],
+          \   })
   endfunction
 
   call neobundle#untap()
@@ -1731,17 +1739,6 @@ if neobundle#tap('vim-quickrun')
   call neobundle#untap()
 endif
 " }}}
-" vinarise.vim {{{
-if neobundle#tap('vinarise.vim')
-  call neobundle#config({
-        \   'autoload': {
-        \     'commands': 'Vinarise'
-        \   }
-        \ })
-
-  call neobundle#untap()
-endif
-" }}}
 " dictionary.vim {{{
 if s:is_mac
   if neobundle#tap('dictionary.vim')
@@ -1818,20 +1815,21 @@ if neobundle#tap('unite.vim')
   nmap     <Space> [Unite]
   xmap     <Space> [Unite]
 
-  nnoremap <silent> [Unite]cg   :<C-u>Unite -no-split -buffer-name=grep grep<CR>
-  nnoremap <silent> [Unite]gg   :<C-u>Unite -no-split -buffer-name=grep grep:.<CR>
-  nnoremap <silent> [Unite]ccg  :<C-u>Unite -no-split -buffer-name=grep grep:..<CR>
-  nnoremap <silent> [Unite]cccg :<C-u>Unite -no-split -buffer-name=grep grep:../..<CR>
-  nnoremap <silent> [Unite]pg   :<C-u>Unite -no-split -buffer-name=grep grep:!<CR>
-  nnoremap <silent> [Unite]f    :<C-u>Unite -buffer-name=buffer buffer<CR>
-  nnoremap <silent> [Unite]j    :<C-u>Unite -buffer-name=bookmark bookmark<CR>
-  nnoremap <silent> [Unite]t    :<C-u>Unite -buffer-name=tab tab<CR>
-  nnoremap <silent> [Unite]l    :<C-u>Unite -no-split -buffer-name=line line<CR>
-  nnoremap <silent> [Unite]o    :<C-u>Unite -vertical -buffer-name=outline outline<CR>
-  nnoremap <silent> [Unite]q    :<C-u>Unite -no-quit -buffer-name=quickfix quickfix<CR>
+  nnoremap <silent> [Unite]cg   :<C-u>Unite -no-split -buffer-name=grep     grep<CR>
+  nnoremap <silent> [Unite]gg   :<C-u>Unite -no-split -buffer-name=grep     grep:.<CR>
+  nnoremap <silent> [Unite]ccg  :<C-u>Unite -no-split -buffer-name=grep     grep:..<CR>
+  nnoremap <silent> [Unite]cccg :<C-u>Unite -no-split -buffer-name=grep     grep:../..<CR>
+  nnoremap <silent> [Unite]pg   :<C-u>Unite -no-split -buffer-name=grep     grep:!<CR>
+  nnoremap <silent> [Unite]f    :<C-u>Unite           -buffer-name=buffer   buffer<CR>
+  nnoremap <silent> [Unite]j    :<C-u>Unite           -buffer-name=bookmark bookmark<CR>
+  nnoremap <silent> [Unite]t    :<C-u>Unite           -buffer-name=tab      tab<CR>
+  nnoremap <silent> [Unite]l    :<C-u>Unite -no-split -buffer-name=line     line<CR>
+  nnoremap <silent> [Unite]o    :<C-u>Unite -vertical -buffer-name=outline  outline<CR>
+  nnoremap <silent> [Unite]q    :<C-u>Unite -no-quit  -buffer-name=quickfix quickfix<CR>
+  nnoremap <silent> [Unite]m    :<C-u>Unite -no-split -buffer-name=neomru   neomru/file<CR>
+  nnoremap <silent> [Unite]h    :<C-u>Unite           -buffer-name=help     help<CR>
   nnoremap <silent> [Unite]v    :<C-u>call <SID>execute_if_on_git_branch('Unite -vertical -buffer-name=giti giti')<CR>
   nnoremap <silent> [Unite]b    :<C-u>call <SID>execute_if_on_git_branch('Unite -vertical -buffer-name=giti/branch_all giti/branch_all')<CR>
-  nnoremap <silent> [Unite]m    :<C-u>Unite -no-split -buffer-name=neomru neomru/file<CR>
 
   nnoremap <silent> [Unite]rr :<C-u>UniteResume<CR>
   nnoremap <silent> [Unite]rg :<C-u>UniteResume grep<CR>
@@ -1841,9 +1839,10 @@ if neobundle#tap('unite.vim')
   nnoremap <silent> [Unite]rl :<C-u>UniteResume line<CR>
   nnoremap <silent> [Unite]ro :<C-u>UniteResume outline<CR>
   nnoremap <silent> [Unite]rq :<C-u>UniteResume quickfix<CR>
+  nnoremap <silent> [Unite]rm :<C-u>UniteResume neomru<CR>
+  nnoremap <silent> [Unite]rh :<C-u>UniteResume help<CR>
   nnoremap <silent> [Unite]rv :<C-u>UniteResume giti<CR>
   nnoremap <silent> [Unite]rb :<C-u>UniteResume giti/branch_all<CR>
-  nnoremap <silent> [Unite]rm :<C-u>UniteResume neomru<CR>
 
   if s:is_windows
     nnoremap <silent> [Unite]e :<C-u>Unite -no-split -buffer-name=everything everything<CR>
@@ -1863,8 +1862,8 @@ if neobundle#tap('unite.vim')
       let g:unite_source_grep_default_opts   = '--nogroup --nocolor -S'
       let g:unite_source_grep_recursive_opt  = ''
       let g:unite_source_grep_encoding       = 'utf-8'
-      let g:unite_source_rec_async_command   = 'pt --nocolor --nogroup -g .'
       let g:unite_source_grep_max_candidates = 1000
+      let g:unite_source_rec_async_command   = 'pt --nocolor --nogroup -g .'
     endif
 
     call unite#custom#profile('default', 'context', {
@@ -1875,10 +1874,6 @@ if neobundle#tap('unite.vim')
           \   'smartcase':        1,
           \   'start_insert':     1,
           \   'vertical':         0
-          \ })
-
-    call unite#custom#profile('source/outline,source/giti,source/giti/branch_all', 'context', {
-          \   'vertical': 1
           \ })
 
     call unite#custom#source('file', 'matchers', 'matcher_default')
