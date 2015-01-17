@@ -719,7 +719,7 @@ if neobundle#tap('vim-smartinput')
 
     " セミコロン自動入力
     AutocmdFT c,cpp call smartinput#define_rule({
-          \   'at':       '\%(\<struct\>\|\<class\>\|\<enum\>\)\s*\w*.*\n*\%#',
+          \   'at':       '\%(\<struct\>\|\<class\>\|\<enum\>\)\s*\w*.*\n*\s*\%#',
           \   'char':     '{',
           \   'input':    '{};<Left><Left>',
           \   'filetype': ['c', 'cpp'],
@@ -977,26 +977,26 @@ if neobundle#tap('vim-altr')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    call altr#define('%Model.cs',              '%Vm.cs',                  '%.xaml',             '%.xaml.cs')
-    call altr#define('Models/%Model.cs',       'ViewModels/%Vm.cs',       'Views/%.xaml',       'Views/%.xaml.cs')
-    call altr#define('Models/*/%Model.cs',     'ViewModels/*/%Vm.cs',     'Views/*/%.xaml',     'Views/*/%.xaml.cs')
-    call altr#define('Models/*/*/%Model.cs',   'ViewModels/*/*/%Vm.cs',   'Views/*/*/%.xaml',   'Views/*/*/%.xaml.cs')
-    call altr#define('Models/*/*/*/%Model.cs', 'ViewModels/*/*/*/%Vm.cs', 'Views/*/*/*/%.xaml', 'Views/*/*/*/%.xaml.cs')
+    AutocmdFT cs,xml call altr#define('%Model.cs',              '%Vm.cs',                  '%.xaml',             '%.xaml.cs')
+    AutocmdFT cs,xml call altr#define('Models/%Model.cs',       'ViewModels/%Vm.cs',       'Views/%.xaml',       'Views/%.xaml.cs')
+    AutocmdFT cs,xml call altr#define('Models/*/%Model.cs',     'ViewModels/*/%Vm.cs',     'Views/*/%.xaml',     'Views/*/%.xaml.cs')
+    AutocmdFT cs,xml call altr#define('Models/*/*/%Model.cs',   'ViewModels/*/*/%Vm.cs',   'Views/*/*/%.xaml',   'Views/*/*/%.xaml.cs')
+    AutocmdFT cs,xml call altr#define('Models/*/*/*/%Model.cs', 'ViewModels/*/*/*/%Vm.cs', 'Views/*/*/*/%.xaml', 'Views/*/*/*/%.xaml.cs')
 
-    call altr#define('%Model.cs',              '%ViewModel.cs',                  '%.xaml',             '%.xaml.cs')
-    call altr#define('Models/%Model.cs',       'ViewModels/%ViewModel.cs',       'Views/%.xaml',       'Views/%.xaml.cs')
-    call altr#define('Models/*/%Model.cs',     'ViewModels/*/%ViewModel.cs',     'Views/*/%.xaml',     'Views/*/%.xaml.cs')
-    call altr#define('Models/*/*/%Model.cs',   'ViewModels/*/*/%ViewModel.cs',   'Views/*/*/%.xaml',   'Views/*/*/%.xaml.cs')
-    call altr#define('Models/*/*/*/%Model.cs', 'ViewModels/*/*/*/%ViewModel.cs', 'Views/*/*/*/%.xaml', 'Views/*/*/*/%.xaml.cs')
+    AutocmdFT cs,xml call altr#define('%Model.cs',              '%ViewModel.cs',                  '%.xaml',             '%.xaml.cs')
+    AutocmdFT cs,xml call altr#define('Models/%Model.cs',       'ViewModels/%ViewModel.cs',       'Views/%.xaml',       'Views/%.xaml.cs')
+    AutocmdFT cs,xml call altr#define('Models/*/%Model.cs',     'ViewModels/*/%ViewModel.cs',     'Views/*/%.xaml',     'Views/*/%.xaml.cs')
+    AutocmdFT cs,xml call altr#define('Models/*/*/%Model.cs',   'ViewModels/*/*/%ViewModel.cs',   'Views/*/*/%.xaml',   'Views/*/*/%.xaml.cs')
+    AutocmdFT cs,xml call altr#define('Models/*/*/*/%Model.cs', 'ViewModels/*/*/*/%ViewModel.cs', 'Views/*/*/*/%.xaml', 'Views/*/*/*/%.xaml.cs')
 
-    call altr#define('%.xaml', '%.xaml.cs')
-    call altr#define('%.cs',   '%.*.cs')
+    AutocmdFT cs,xml call altr#define('%.xaml', '%.xaml.cs')
+    AutocmdFT cs,xml call altr#define('%.cs',   '%.*.cs')
 
-    call altr#define('%.cpp', '%.*.cpp', '%.h')
-    call altr#define('src/%.cpp',       'include/%.h')
-    call altr#define('src/*/%.cpp',     'include/*/%.h')
-    call altr#define('src/*/*/%.cpp',   'include/*/*/%.h')
-    call altr#define('src/*/*/*/%.cpp', 'include/*/*/*/%.h')
+    AutocmdFT cpp call altr#define('%.cpp', '%.*.cpp', '%.h')
+    AutocmdFT cpp call altr#define('src/%.cpp',       'include/%.h')
+    AutocmdFT cpp call altr#define('src/*/%.cpp',     'include/*/%.h')
+    AutocmdFT cpp call altr#define('src/*/*/%.cpp',   'include/*/*/%.h')
+    AutocmdFT cpp call altr#define('src/*/*/*/%.cpp', 'include/*/*/*/%.h')
   endfunction
 
   call neobundle#untap()
