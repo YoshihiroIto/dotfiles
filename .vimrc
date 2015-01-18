@@ -1814,19 +1814,19 @@ if neobundle#tap('unite.vim')
   nmap     <Space> [Unite]
   xmap     <Space> [Unite]
 
-  nnoremap <silent> [Unite]cg   :<C-u>Unite -no-split -buffer-name=grep     grep<CR>
-  nnoremap <silent> [Unite]gg   :<C-u>Unite -no-split -buffer-name=grep     grep:.<CR>
-  nnoremap <silent> [Unite]ccg  :<C-u>Unite -no-split -buffer-name=grep     grep:..<CR>
-  nnoremap <silent> [Unite]cccg :<C-u>Unite -no-split -buffer-name=grep     grep:../..<CR>
-  nnoremap <silent> [Unite]pg   :<C-u>Unite -no-split -buffer-name=grep     grep:!<CR>
-  nnoremap <silent> [Unite]f    :<C-u>Unite           -buffer-name=buffer   buffer<CR>
-  nnoremap <silent> [Unite]j    :<C-u>Unite           -buffer-name=bookmark bookmark<CR>
-  nnoremap <silent> [Unite]t    :<C-u>Unite           -buffer-name=tab      tab<CR>
-  nnoremap <silent> [Unite]l    :<C-u>Unite -no-split -buffer-name=line     line<CR>
-  nnoremap <silent> [Unite]o    :<C-u>Unite -vertical -buffer-name=outline  outline<CR>
-  nnoremap <silent> [Unite]q    :<C-u>Unite -no-quit  -buffer-name=quickfix quickfix<CR>
-  nnoremap <silent> [Unite]m    :<C-u>Unite -no-split -buffer-name=neomru   neomru/file<CR>
-  nnoremap <silent> [Unite]h    :<C-u>Unite           -buffer-name=help     help<CR>
+  nnoremap <silent> [Unite]cg   :<C-u>Unite -no-split -buffer-name=grep        grep<CR>
+  nnoremap <silent> [Unite]gg   :<C-u>Unite -no-split -buffer-name=grep        grep:.<CR>
+  nnoremap <silent> [Unite]ccg  :<C-u>Unite -no-split -buffer-name=grep        grep:..<CR>
+  nnoremap <silent> [Unite]cccg :<C-u>Unite -no-split -buffer-name=grep        grep:../..<CR>
+  nnoremap <silent> [Unite]pg   :<C-u>Unite -no-split -buffer-name=grep        grep:!<CR>
+  nnoremap <silent> [Unite]f    :<C-u>Unite           -buffer-name=buffer      buffer<CR>
+  nnoremap <silent> [Unite]j    :<C-u>Unite           -buffer-name=bookmark    bookmark<CR>
+  nnoremap <silent> [Unite]t    :<C-u>Unite           -buffer-name=tab         tab<CR>
+  nnoremap <silent> [Unite]l    :<C-u>Unite -no-split -buffer-name=line        line<CR>
+  nnoremap <silent> [Unite]o    :<C-u>Unite -vertical -buffer-name=outline     outline<CR>
+  nnoremap <silent> [Unite]q    :<C-u>Unite -no-quit  -buffer-name=quickfix    quickfix<CR>
+  nnoremap <silent> [Unite]m    :<C-u>Unite -no-split -buffer-name=neomru/file neomru/file<CR>
+  nnoremap <silent> [Unite]h    :<C-u>Unite           -buffer-name=help        help<CR>
   nnoremap <silent> [Unite]v    :<C-u>call <SID>execute_if_on_git_branch('Unite -vertical -buffer-name=giti            giti')<CR>
   nnoremap <silent> [Unite]b    :<C-u>call <SID>execute_if_on_git_branch('Unite -vertical -buffer-name=giti/branch_all giti/branch_all')<CR>
 
@@ -1838,7 +1838,7 @@ if neobundle#tap('unite.vim')
   nnoremap <silent> [Unite]rl :<C-u>UniteResume line<CR>
   nnoremap <silent> [Unite]ro :<C-u>UniteResume outline<CR>
   nnoremap <silent> [Unite]rq :<C-u>UniteResume quickfix<CR>
-  nnoremap <silent> [Unite]rm :<C-u>UniteResume neomru<CR>
+  nnoremap <silent> [Unite]rm :<C-u>UniteResume neomru/file<CR>
   nnoremap <silent> [Unite]rh :<C-u>UniteResume help<CR>
   nnoremap <silent> [Unite]rv :<C-u>UniteResume giti<CR>
   nnoremap <silent> [Unite]rb :<C-u>UniteResume giti/branch_all<CR>
