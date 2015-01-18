@@ -1898,9 +1898,11 @@ if neobundle#tap('unite.vim')
     call unite#custom_default_action('directory',                 'vimfiler')
     call unite#custom_default_action('neomru/directory',          'vimfiler')
 
-    AutocmdFT unite nmap <silent><buffer> <C-v> <Plug>(unite_toggle_auto_preview)
-    AutocmdFT unite imap <silent><buffer> <C-v> <Plug>(unite_toggle_auto_preview)
-    AutocmdFT unite nmap <silent><buffer> <C-j> <Plug>(unite_exit)
+    AutocmdFT unite nnoremap <silent><buffer><expr> <C-r> unite#do_action('replace')
+    AutocmdFT unite inoremap <silent><buffer><expr> <C-r> unite#do_action('replace')
+    AutocmdFT unite nmap     <silent><buffer>       <C-v> <Plug>(unite_toggle_auto_preview)
+    AutocmdFT unite imap     <silent><buffer>       <C-v> <Plug>(unite_toggle_auto_preview)
+    AutocmdFT unite nmap     <silent><buffer>       <C-j> <Plug>(unite_exit)
   endfunction
 
   call neobundle#untap()
@@ -2219,7 +2221,6 @@ AutocmdFT json       setlocal shiftwidth=2
 AutocmdFT help       nnoremap <silent><buffer> q :<C-u>close<CR>
 AutocmdFT neosnippet setlocal noexpandtab
 AutocmdFT markdown   nnoremap <silent><buffer> [App]v :<C-u>PrevimOpen<CR>
-AutocmdFT unite      call s:set_unite()
 
 function! s:update_all()
   " 行番号表示幅を設定する
@@ -2240,14 +2241,9 @@ function! s:update_all()
   setlocal textwidth=0
 endfunction
 
-function! s:set_unite()
-  nnoremap <silent><buffer><expr> <C-r> unite#do_action('replace')
-  inoremap <silent><buffer><expr> <C-r> unite#do_action('replace')
-endfunction
-
 " 場所ごとに設定を用意する {{{
 " http://vim-jp.org/vim-users-jp/2009/12/27/Hack-112.html
-autocmd BufNewFile,BufReadPost * call s:load_vim_local(expand('<afile>:p:h'))
+Autocmd BufNewFile,BufReadPost * call s:load_vim_local(expand('<afile>:p:h'))
 
 function! s:load_vim_local(loc)
   let files = findfile('.vimrc.local', escape(a:loc, ' ') . ';', -1)
@@ -2444,13 +2440,9 @@ set display=lastline
 set conceallevel=2
 set concealcursor=i
 
-Autocmd VimEnter * call s:disable_beep()
-
-function! s:disable_beep()
-  set t_vb=
-  set visualbell
-  set errorbells
-endfunction
+Autocmd VimEnter * set t_vb=
+Autocmd VimEnter * set visualbell
+Autocmd VimEnter * set errorbells
 
 nnoremap <silent> gf :<C-u>call <SID>smart_gf('n')<CR>
 vnoremap <silent> gf :<C-u>call <SID>smart_gf('v')<CR>
@@ -2518,18 +2510,14 @@ endfunction
 " カラースキーマ {{{
 colorscheme molokai
 
-function! s:set_highlight()
-  syntax match InvisibleJISX0208Space '　' display containedin=ALL
-  syntax match InvisibleTab           '\t' display containedin=ALL
+" ^M を非表示
+Autocmd BufWinEnter,ColorScheme * syntax match HideCtrlM containedin=ALL /\r$/ conceal
 
-  highlight InvisibleJISX0208Space guibg=#112233
-  highlight InvisibleTab           guibg=#121212
-
-  " ^M を非表示
-  syntax match HideCtrlM containedin=ALL /\r$/ conceal
-endf
-
-Autocmd BufNew,BufRead * call s:set_highlight()
+" 全角スペースとタブ文字の可視化
+Autocmd BufWinEnter,ColorScheme * syntax match InvisibleJISX0208Space '　' display containedin=ALL
+Autocmd BufWinEnter,ColorScheme * syntax match InvisibleTab           '\t' display containedin=ALL
+Autocmd BufWinEnter,ColorScheme * highlight InvisibleJISX0208Space guibg=#112233
+Autocmd BufWinEnter,ColorScheme * highlight InvisibleTab           guibg=#121212
 " }}}
 " 半透明化 {{{
 if s:is_gui_running
