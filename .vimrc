@@ -126,7 +126,7 @@ else
   NeoBundleLazy 'osyo-manga/shabadou.vim'
 
   " 表示
-  NeoBundle     'tomasr/molokai'
+  NeoBundle     'YoshihiroIto/molokai'
   NeoBundle     'itchyny/lightline.vim'
   NeoBundleLazy 'LeafCage/foldCC.vim'
   NeoBundleLazy 'Yggdroot/indentLine'
@@ -2518,23 +2518,7 @@ endfunction
 " カラースキーマ {{{
 colorscheme molokai
 
-highlight Comment          guifg=#AEDEDE
-highlight DiffText                       guibg=#4C4745 gui=bold
-highlight Macro            guifg=#C4BE89               gui=none
-highlight Special          guifg=#66D9EF guibg=bg      gui=none
-highlight StorageClass     guifg=#FD971F               gui=none
-highlight Tag              guifg=#F92672               gui=none
-highlight FoldColumn       guifg=#465457 guibg=#242526
-highlight Folded           guifg=#465457 guibg=#242526
-highlight VertSplit        guifg=#202020 guibg=#202020 gui=bold    " 見えなくする
-
-" タブ表示など
-highlight SpecialKey       guifg=#303030 guibg=#121212 gui=none
-
-" 日本語入力中のカーソルの色
-highlight CursorIM         guifg=NONE    guibg=Red
-
-function! s:set_color()
+function! s:set_highlight()
   syntax match InvisibleJISX0208Space '　' display containedin=ALL
   syntax match InvisibleTab           '\t' display containedin=ALL
 
@@ -2545,11 +2529,7 @@ function! s:set_color()
   syntax match HideCtrlM containedin=ALL /\r$/ conceal
 endf
 
-if s:is_starting
-  call s:set_color()
-endif
-
-Autocmd BufWinEnter,ColorScheme * call s:set_color()
+Autocmd BufNew,BufRead * call s:set_highlight()
 " }}}
 " 半透明化 {{{
 if s:is_gui_running
