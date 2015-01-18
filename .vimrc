@@ -2549,12 +2549,14 @@ if s:is_starting
   call s:set_color()
 endif
 
-Autocmd BufNew,BufRead * call s:set_color()
+Autocmd BufWinEnter,ColorScheme * call s:set_color()
 " }}}
 " 半透明化 {{{
-if s:is_mac
-  Autocmd GuiEnter,FocusGained * set transparency=3   " アクティブ時の透過率
-  Autocmd FocusLost            * set transparency=48  " 非アクティブ時の透過率
+if s:is_gui_running
+  if s:is_mac
+    Autocmd GuiEnter,FocusGained * set transparency=3   " アクティブ時の透過率
+    Autocmd FocusLost            * set transparency=48  " 非アクティブ時の透過率
+  endif
 endif
 " }}}
 " フォント設定 {{{
