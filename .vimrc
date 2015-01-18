@@ -1982,16 +1982,13 @@ endif
 if neobundle#tap('vim-clang-format')
   call neobundle#config({
         \   'autoload': {
-        \     'filetypes': ['c', 'cpp', 'objc', 'objcpp']
+        \     'commands': 'ClangFormat'
         \   }
         \ })
 
   function! neobundle#hooks.on_source(bundle)
     if s:is_windows
       let g:clang_format#command = 'C:/Development/LLVM/bin/clang-format.exe'
-      " let g:clang_format#command = 'C:/Development/llvm35/build/Release/bin/clang-format.exe'
-    else
-      let g:clang_format#command = 'clang-format-3.4'
     endif
 
     let g:clang_format#style_options = {
@@ -2004,8 +2001,6 @@ if neobundle#tap('vim-clang-format')
           \   'IndentWidth':                         4,
           \   'UseTab':                              'Never'
           \ }
-
-    command! -range=% -nargs=0 CppFormat call clang_format#replace(<line1>, <line2>)
   endfunction
 
   call neobundle#untap()
@@ -2298,9 +2293,9 @@ function! s:smart_format()
   if &filetype ==# 'cs'
     OmniSharpCodeFormat
   elseif &filetype ==# 'cpp'
-    CppFormat
+    ClangFormat
   elseif &filetype ==# 'c'
-    CppFormat
+    ClangFormat
   elseif &filetype ==# 'json'
     call s:filter_current('jq .', 0)
   elseif &filetype ==# 'go'
