@@ -2216,11 +2216,11 @@ AutocmdFT cs         setlocal foldmethod=syntax
 AutocmdFT cs         nnoremap <silent><buffer> <C-]> :<C-u>call OmniSharp#GotoDefinition()<CR>zz:<C-u>call <SID>refresh_screen()<CR>
 
 AutocmdFT godoc      nnoremap <silent><buffer> q :<C-u>close<CR>
+AutocmdFT help       nnoremap <silent><buffer> q :<C-u>close<CR>
 AutocmdFT coffee     setlocal shiftwidth=2
 AutocmdFT json       setlocal shiftwidth=2
-AutocmdFT help       nnoremap <silent><buffer> q :<C-u>close<CR>
-AutocmdFT neosnippet setlocal noexpandtab
 AutocmdFT markdown   nnoremap <silent><buffer> [App]v :<C-u>PrevimOpen<CR>
+AutocmdFT neosnippet setlocal noexpandtab
 
 function! s:update_all()
   " 行番号表示幅を設定する
@@ -2429,7 +2429,6 @@ set fillchars=vert:\              " 縦分割の境界線
 set synmaxcol=500                 " ハイライトする文字数を制限する
 set updatetime=250
 set previewheight=24
-set laststatus=0
 set cmdheight=4
 set laststatus=2
 set showtabline=2
