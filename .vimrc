@@ -137,13 +137,14 @@ else
   endif
 
   " 編集
-  NeoBundleLazy 'tomtom/tcomment_vim'
   NeoBundleLazy 'LeafCage/yankround.vim'
   NeoBundleLazy 'junegunn/vim-easy-align'
   NeoBundleLazy 'kana/vim-smartinput'
+  NeoBundleLazy 'kana/vim-smartword'
   NeoBundleLazy 'nishigori/increment-activator'
   NeoBundleLazy 'osyo-manga/vim-over'
   NeoBundleLazy 'thinca/vim-qfreplace'
+  NeoBundleLazy 'tomtom/tcomment_vim'
 
   " 補完
   NeoBundleLazy 'OmniSharp/omnisharp-vim'
@@ -725,6 +726,22 @@ if neobundle#tap('vim-smartinput')
           \   'filetype': ['c', 'cpp'],
           \   })
   endfunction
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-smartword {{{
+if neobundle#tap('vim-smartword')
+  call neobundle#config({
+        \   'autoload': {
+        \     'mappings': '<Plug>'
+        \   }
+        \ })
+
+  map w  <Plug>(smartword-w)
+  map b  <Plug>(smartword-b)
+  map e  <Plug>(smartword-e)
+  map ge <Plug>(smartword-ge)
 
   call neobundle#untap()
 endif
