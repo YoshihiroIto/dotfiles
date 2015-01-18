@@ -2931,7 +2931,6 @@ endfunction
 " }}}
 " フィルタリング処理を行う {{{
 function! s:filter_current(cmd, is_silent)
-  let wininfo  = winsaveview()
   let tempfile = tempname()
 
   try
@@ -2949,7 +2948,6 @@ function! s:filter_current(cmd, is_silent)
     endif
   finally
     call delete(tempfile)
-    call winrestview(wininfo)
   endtry
 endfunction
 " }}}
