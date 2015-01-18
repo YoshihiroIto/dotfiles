@@ -1453,12 +1453,11 @@ if neobundle#tap('vim-operator-surround')
         \ })
 
   map  <silent> S  <Plug>(operator-surround-append)
-  nmap <silent> sd <Plug>(operator-surround-delete)ab
-  nmap <silent> sr <Plug>(operator-surround-replace)ab
+  nmap <silent> Sd <Plug>(operator-surround-delete)ab
+  nmap <silent> Sr <Plug>(operator-surround-replace)ab
 
   function! neobundle#hooks.on_source(bundle)
-    let g:operator#surround#blocks =
-          \ {
+    let g:operator#surround#blocks = {
           \   '-' : [
           \       {'block' : ["{\<CR>", "\<CR>}"], 'motionwise' : ['line'], 'keys' : ['{', '}']}
           \   ]
@@ -1828,7 +1827,7 @@ if neobundle#tap('unite.vim')
   nnoremap <silent> [Unite]q    :<C-u>Unite -no-quit  -buffer-name=quickfix quickfix<CR>
   nnoremap <silent> [Unite]m    :<C-u>Unite -no-split -buffer-name=neomru   neomru/file<CR>
   nnoremap <silent> [Unite]h    :<C-u>Unite           -buffer-name=help     help<CR>
-  nnoremap <silent> [Unite]v    :<C-u>call <SID>execute_if_on_git_branch('Unite -vertical -buffer-name=giti giti')<CR>
+  nnoremap <silent> [Unite]v    :<C-u>call <SID>execute_if_on_git_branch('Unite -vertical -buffer-name=giti            giti')<CR>
   nnoremap <silent> [Unite]b    :<C-u>call <SID>execute_if_on_git_branch('Unite -vertical -buffer-name=giti/branch_all giti/branch_all')<CR>
 
   nnoremap <silent> [Unite]rr :<C-u>UniteResume<CR>
@@ -2288,13 +2287,11 @@ command! RemoveCr call s:execute_keep_view('silent! %substitute/\r$//g | nohlsea
 command! RemoveEolSpace call s:execute_keep_view('silent! %substitute/ \+$//g | nohlsearch')
 
 " 整形
-command! Format call s:smart_format()
+command! Format call s:execute_keep_view('call s:smart_format()')
 function! s:smart_format()
   if &filetype ==# 'cs'
     OmniSharpCodeFormat
-  elseif &filetype ==# 'cpp'
-    ClangFormat
-  elseif &filetype ==# 'c'
+  elseif &filetype =~# 'c\|cpp'
     ClangFormat
   elseif &filetype ==# 'json'
     call s:filter_current('jq .', 0)
