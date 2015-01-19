@@ -648,8 +648,9 @@ endif
 if neobundle#tap('tcomment_vim')
   call neobundle#config({
         \   'autoload': {
-        \     'mappings': 'gc',
-        \     'commands': 'TComment'
+        \     'function_prefix': 'tcomment',
+        \     'mappings':        'gc',
+        \     'commands':        'TComment'
         \   }
         \ })
 
@@ -711,8 +712,8 @@ if neobundle#tap('vim-smartinput-endwise')
   call neobundle#config({
         \   'depends':  'vim-smartinput',
         \   'autoload': {
-        \     'filetypes': ['vim', 'ruby'],
-        \     'insert': 1
+        \     'insert':    1,
+        \     'filetypes': ['vim', 'ruby']
         \   }
         \ })
 
@@ -2345,29 +2346,17 @@ vnoremap <silent> <C-CR> :<C-u>call <SID>copy_add_comment()<CR>
 
 " http://qiita.com/akira-hamada/items/2417d0bcb563475deddb をもとに調整
 function! s:copy_add_comment() range
-  let selected_count = line("'>") - line("'<")
-
-  " 選択中の行をyank
+  " 選択中の行をヤンクする
   normal! ""gvy
 
-  " yankした物をPする
-  normal! P
-
-  " 元のコードを選択
-  if selected_count == 0
-    normal! V
-  else
-    execute 'normal! V' . selected_count . 'j'
-  endif
-
   " コメントアウトする
-  normal gc
-
-  " ビジュアルモードからエスケープ
-  normal! \e\e
+  call tcomment#Comment(line("'<"), line("'>"), 'i', '<bang>', '')
 
   " 元の位置に戻る
-  execute 'normal! ' . (selected_count + 1) . 'j'
+  execute 'normal! ' . (line("'>") - line("'<") + 1) . 'j'
+
+  " ヤンクした物をペーストする
+  normal! P
 endfunction
 " }}}
 " インプットメソッド {{{
