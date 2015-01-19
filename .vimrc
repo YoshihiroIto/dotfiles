@@ -138,6 +138,7 @@ else
 
   " 編集
   NeoBundleLazy 'LeafCage/yankround.vim'
+  NeoBundleLazy 'cohama/vim-smartinput-endwise'
   NeoBundleLazy 'junegunn/vim-easy-align'
   NeoBundleLazy 'kana/vim-smartinput'
   NeoBundleLazy 'kana/vim-smartword'
@@ -149,7 +150,6 @@ else
   " 補完
   NeoBundleLazy 'OmniSharp/omnisharp-vim'
   NeoBundleLazy 'Shougo/neocomplete.vim'
-  NeoBundleLazy 'Shougo/neosnippet-snippets'
   NeoBundleLazy 'Shougo/neosnippet.vim'
 
   " ファイル
@@ -534,7 +534,7 @@ function! s:lightlineFilename()
           \  &filetype =~# 'lingr'    ? lingr#status() :
           \  &filetype ==# 'tweetvim' ? '' :
           \  &filetype ==# 'quickrun' ? '' :
-          \  ''  !=# expand('%:t') ? expand('%:t') : '[No Name]') .
+          \  '' !=# expand('%:t') ? expand('%:t') : '[No Name]') .
           \ ('' !=# s:lightlineModified() ? ' ' . s:lightlineModified() : '')
   catch
     return ''
@@ -706,6 +706,23 @@ if neobundle#tap('yankround.vim')
   call neobundle#untap()
 endif
 " }}}
+" vim-smartinput-endwise {{{
+if neobundle#tap('vim-smartinput-endwise')
+  call neobundle#config({
+        \   'depends':  'vim-smartinput',
+        \   'autoload': {
+        \     'filetypes': ['vim', 'ruby'],
+        \     'insert': 1
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    call smartinput_endwise#define_default_rules()
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
 " vim-smartinput {{{
 if neobundle#tap('vim-smartinput')
   call neobundle#config({
@@ -717,14 +734,16 @@ if neobundle#tap('vim-smartinput')
   function! neobundle#hooks.on_source(bundle)
     call smartinput#clear_rules()
     call smartinput#define_default_rules()
+  endfunction
 
+  function! neobundle#hooks.on_post_source(bundle)
     " セミコロン自動入力
     AutocmdFT c,cpp call smartinput#define_rule({
           \   'at':       '\%(\<struct\>\|\<class\>\|\<enum\>\)\s*\w*.*\n*\s*\%#',
           \   'char':     '{',
           \   'input':    '{};<Left><Left>',
           \   'filetype': ['c', 'cpp'],
-          \   })
+          \ })
   endfunction
 
   call neobundle#untap()
@@ -903,7 +922,7 @@ endif
 " neosnippet.vim {{{
 if neobundle#tap('neosnippet.vim')
   call neobundle#config({
-        \   'depends':  ['neosnippet-snippets', 'neocomplete.vim'],
+        \   'depends':  'neocomplete.vim',
         \   'autoload': {
         \     'insert': 1,
         \     'filetypes': 'neosnippet',
@@ -937,6 +956,7 @@ if neobundle#tap('neosnippet.vim')
   function! neobundle#hooks.on_source(bundle)
     let g:neosnippet#enable_snipmate_compatibility = 1
     let g:neosnippet#snippets_directory            = '$DOTVIM/snippets'
+    let g:neosnippet#disable_runtime_snippets      = { '_' : 1 }
 
     if isdirectory(expand('$DOTVIM/snippets.local'))
       let g:neosnippet#snippets_directory = '$DOTVIM/snippets.local,' . g:neosnippet#snippets_directory
@@ -1884,6 +1904,7 @@ if neobundle#tap('unite.vim')
 
     call unite#custom#profile('default', 'context', {
           \   'direction':        'rightbelow',
+          \   'hide_icon':        0,
           \   'ignorecase':       1,
           \   'prompt':           '>>',
           \   'prompt_direction': 'top',
@@ -2121,8 +2142,8 @@ if neobundle#tap('vim-gitgutter')
     " let g:gitgutter_diff_args          = '-w'
     let g:gitgutter_diff_args          = ''
 
-    " ファイルオープン直後一瞬シンタックスハイライトが無効にになってしまう
-    " let g:gitgutter_sign_column_always = 1
+    " todo:ファイルオープン直後一瞬シンタックスハイライトが無効にになってしまうことがある
+    let g:gitgutter_sign_column_always = 1
 
     Autocmd FocusGained,FocusLost * GitGutter
   endfunction
@@ -2909,7 +2930,7 @@ endfunction
 " Gitブランチ上であれば実行 {{{
 function! s:execute_if_on_git_branch(line)
   if !s:is_in_git_branch()
-    echomsg 'not on git branch : ' . a:line
+    " echomsg 'not on git branch : ' . a:line
     return
   endif
 
