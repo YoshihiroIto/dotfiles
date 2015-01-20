@@ -101,7 +101,6 @@ set guioptions-=e
 if s:is_starting
   let g:neobundle#install_max_processes   = 8
   let g:neobundle#install_process_timeout = 10*60
-  let g:neobundle#default_options         = {'_' : {'focus' : 1}}
 
   set runtimepath+=$DOTVIM/bundle/neobundle.vim/
 endif
@@ -1887,9 +1886,7 @@ if neobundle#tap('unite.vim')
   endif
 
   function! neobundle#hooks.on_source(bundle)
-    let g:unite_force_overwrite_statusline   = 0
-    let g:unite_source_line_enable_highlight = 1
-
+    let g:unite_force_overwrite_statusline = 0
     let g:unite_source_alias_aliases = {
           \   'memolist' : {'source': 'file'},
           \ }
