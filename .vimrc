@@ -123,6 +123,7 @@ else
   NeoBundleLazy 'kana/vim-submode'
   NeoBundleLazy 'mattn/webapi-vim'
   NeoBundleLazy 'osyo-manga/shabadou.vim'
+  " NeoBundle 'thinca/vim-prettyprint'
 
   " 表示
   NeoBundle     'YoshihiroIto/molokai'
@@ -140,7 +141,6 @@ else
   NeoBundleLazy 'cohama/vim-smartinput-endwise'
   NeoBundleLazy 'junegunn/vim-easy-align'
   NeoBundleLazy 'kana/vim-smartinput'
-  NeoBundleLazy 'kana/vim-smartword'
   NeoBundleLazy 'nishigori/increment-activator'
   NeoBundleLazy 'osyo-manga/vim-over'
   NeoBundleLazy 'thinca/vim-qfreplace'
@@ -156,6 +156,7 @@ else
   NeoBundleLazy 'kana/vim-altr'
 
   " 検索
+  NeoBundleLazy 'YoshihiroIto/vim-jumpbrace'
   NeoBundleLazy 'haya14busa/incsearch.vim'
   NeoBundleLazy 'haya14busa/vim-asterisk'
   NeoBundleLazy 'osyo-manga/vim-anzu'
@@ -749,22 +750,6 @@ if neobundle#tap('vim-smartinput')
   call neobundle#untap()
 endif
 " }}}
-" vim-smartword {{{
-if neobundle#tap('vim-smartword')
-  call neobundle#config({
-        \   'autoload': {
-        \     'mappings': '<Plug>'
-        \   }
-        \ })
-
-  map w  <Plug>(smartword-w)
-  map b  <Plug>(smartword-b)
-  map e  <Plug>(smartword-e)
-  map ge <Plug>(smartword-ge)
-
-  call neobundle#untap()
-endif
-" }}}
 " increment-activator {{{
 if neobundle#tap('increment-activator')
   call neobundle#config({
@@ -1052,6 +1037,17 @@ if neobundle#tap('matchit.zip')
   function! neobundle#hooks.on_post_source(bundle)
     silent! execute 'doautocmd Filetype' &filetype
   endfunction
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-jumpbrace {{{
+if neobundle#tap('vim-jumpbrace')
+  call neobundle#config({
+        \   'autoload': {
+        \     'commands': 'JumpBrace'
+        \   }
+        \ })
 
   call neobundle#untap()
 endif
@@ -1546,8 +1542,8 @@ if neobundle#tap('vim-operator-jump_side')
 
   nmap <Leader>j <Plug>(operator-jump-toggle)
   xmap <Leader>j <Plug>(operator-jump-toggle)
-  nmap <C-@> <Plug>(operator-jump-toggle)ai
-  xmap <C-@> <Plug>(operator-jump-toggle)ai
+  nmap <C-k> <Plug>(operator-jump-toggle)ai
+  xmap <C-k> <Plug>(operator-jump-toggle)ai
 
   call neobundle#untap()
 endif
@@ -1864,8 +1860,8 @@ if neobundle#tap('unite.vim')
   nnoremap <silent> [Unite]q    :<C-u>Unite -no-quit  -buffer-name=quickfix    quickfix<CR>
   nnoremap <silent> [Unite]m    :<C-u>Unite -no-split -buffer-name=neomru/file neomru/file<CR>
   nnoremap <silent> [Unite]h    :<C-u>Unite           -buffer-name=help        help<CR>
-  nnoremap <silent> [Unite]v    :<C-u>call <SID>execute_if_on_git_branch('Unite -vertical -buffer-name=giti            giti')<CR>
-  nnoremap <silent> [Unite]b    :<C-u>call <SID>execute_if_on_git_branch('Unite -vertical -buffer-name=giti/branch_all giti/branch_all')<CR>
+  nnoremap <silent> [Unite]v    :<C-u>call <SID>execute_if_on_git_branch('Unite -no-split -buffer-name=giti            giti')<CR>
+  nnoremap <silent> [Unite]b    :<C-u>call <SID>execute_if_on_git_branch('Unite -no-split -buffer-name=giti/branch_all giti/branch_all')<CR>
 
   nnoremap <silent> [Unite]rr :<C-u>UniteResume<CR>
   nnoremap <silent> [Unite]rg :<C-u>UniteResume grep<CR>
@@ -1908,7 +1904,8 @@ if neobundle#tap('unite.vim')
           \   'prompt_direction': 'top',
           \   'smartcase':        1,
           \   'start_insert':     1,
-          \   'vertical':         0
+          \   'vertical':         0,
+          \   'winwidth':         60
           \ })
 
     call unite#custom#source('file', 'matchers', 'matcher_default')
@@ -2657,6 +2654,7 @@ nnoremap <silent> <C-i> <C-i>zz:<C-u>call <SID>refresh_screen()<CR>
 nnoremap <silent> <C-o> <C-o>zz:<C-u>call <SID>refresh_screen()<CR>
 nnoremap <silent> <C-h> ^:<C-u>set virtualedit=all<CR>
 nnoremap <silent> <C-l> $:<C-u>set virtualedit=all<CR>
+nnoremap <silent> <Tab> :<C-u>JumpBrace<CR>
 
 nnoremap <silent> <Leader>m `
 
@@ -2916,7 +2914,7 @@ endfunction
 " Gitブランチ上であれば実行 {{{
 function! s:execute_if_on_git_branch(line)
   if !s:is_in_git_branch()
-    " echomsg 'not on git branch : ' . a:line
+    echomsg 'not on git branch : ' . a:line
     return
   endif
 
