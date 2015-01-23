@@ -1045,7 +1045,7 @@ endif
 if neobundle#tap('vim-jumpbrace')
   call neobundle#config({
         \   'autoload': {
-        \     'commands': 'JumpBrace'
+        \     'mappings': '<Plug>'
         \   }
         \ })
 
@@ -2654,7 +2654,7 @@ nnoremap <silent> <C-i> <C-i>zz:<C-u>call <SID>refresh_screen()<CR>
 nnoremap <silent> <C-o> <C-o>zz:<C-u>call <SID>refresh_screen()<CR>
 nnoremap <silent> <C-h> ^:<C-u>set virtualedit=all<CR>
 nnoremap <silent> <C-l> $:<C-u>set virtualedit=all<CR>
-nnoremap <silent> <Tab> :<C-u>JumpBrace<CR>
+nmap     <silent> <Tab> <Plug>(jumpbrace)
 
 nnoremap <silent> <Leader>m `
 
