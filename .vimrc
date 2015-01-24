@@ -758,7 +758,7 @@ if neobundle#tap('vim-smartinput')
     " セミコロン自動入力
     AutocmdFT c,cpp call smartinput#define_rule({
           \   'at':       '\%(\<struct\>\|\<class\>\|\<enum\>\)\s*\w*.*\n*\s*\%#',
-          \   'char':     '{',
+          \   'char':     '{',                    " }
           \   'input':    '{};<Left><Left>',
           \   'filetype': ['c', 'cpp'],
           \ })
@@ -2531,14 +2531,20 @@ endfunction
 " カラースキーマ {{{
 colorscheme molokai
 
-" ^M を非表示
-Autocmd BufWinEnter,ColorScheme * syntax match HideCtrlM containedin=ALL /\r$/ conceal
+Autocmd BufWinEnter,ColorScheme * call s:set_color()
 
-" 全角スペースとタブ文字の可視化
-Autocmd BufWinEnter,ColorScheme * syntax match InvisibleJISX0208Space '　' display containedin=ALL
-Autocmd BufWinEnter,ColorScheme * syntax match InvisibleTab           '\t' display containedin=ALL
-Autocmd BufWinEnter,ColorScheme * highlight InvisibleJISX0208Space guibg=#112233
-Autocmd BufWinEnter,ColorScheme * highlight InvisibleTab           guibg=#121212
+function! s:set_color()
+  " ^M を非表示
+  syntax match HideCtrlM containedin=ALL /\r$/ conceal
+
+  if !&readonly
+    " 全角スペースとタブ文字の可視化
+    syntax match InvisibleJISX0208Space '　' display containedin=ALL
+    syntax match InvisibleTab           '\t' display containedin=ALL
+    highlight InvisibleJISX0208Space guibg=#112233
+    highlight InvisibleTab           guibg=#121212
+  endif
+endfunction
 " }}}
 " 半透明化 {{{
 if s:is_gui_running
