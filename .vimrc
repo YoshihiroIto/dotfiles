@@ -153,7 +153,6 @@ else
   NeoBundleLazy 'tomtom/tcomment_vim'
 
   " 補完
-  NeoBundleLazy 'OmniSharp/omnisharp-vim'
   NeoBundleLazy 'Shougo/neocomplete.vim'
   NeoBundleLazy 'Shougo/neosnippet.vim'
 
@@ -233,6 +232,9 @@ else
   if s:is_windows
     NeoBundleLazy 'sgur/unite-everything'
   endif
+
+  " C#
+  NeoBundleLazy 'OmniSharp/omnisharp-vim'
 
   " C++
   NeoBundleLazy 'Mizuchi/STL-Syntax'
@@ -961,30 +963,6 @@ if neobundle#tap('neosnippet.vim')
     endif
 
     call neocomplete#custom#source('neosnippet', 'rank', 1000)
-  endfunction
-
-  call neobundle#untap()
-endif
-" }}}
-" omnisharp-vim {{{
-if neobundle#tap('omnisharp-vim')
-  call neobundle#config({
-        \   'depends':  'neocomplete.vim',
-        \   'autoload': {
-        \     'filetypes': 'cs'
-        \   },
-        \   'build': {
-        \     'windows': 'C:/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe server/OmniSharp.sln /p:Platform="Any CPU"',
-        \     'mac':     'xbuild server/OmniSharp.sln',
-        \     'unix':    'xbuild server/OmniSharp.sln'
-        \   }
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    let g:omnicomplete_fetch_full_documentation = 1
-
-    let g:Omnisharp_stop_server         = 0
-    let g:OmniSharp_typeLookupInPreview = 0
   endfunction
 
   call neobundle#untap()
@@ -2019,6 +1997,32 @@ if s:is_windows
 
     call neobundle#untap()
   endif
+endif
+" }}}
+" }}}
+" C# {{{
+" omnisharp-vim {{{
+if neobundle#tap('omnisharp-vim')
+  call neobundle#config({
+        \   'depends':  'neocomplete.vim',
+        \   'autoload': {
+        \     'filetypes': 'cs'
+        \   },
+        \   'build': {
+        \     'windows': 'C:/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe server/OmniSharp.sln /p:Platform="Any CPU"',
+        \     'mac':     'xbuild server/OmniSharp.sln',
+        \     'unix':    'xbuild server/OmniSharp.sln'
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    let g:omnicomplete_fetch_full_documentation = 1
+
+    let g:Omnisharp_stop_server         = 0
+    let g:OmniSharp_typeLookupInPreview = 0
+  endfunction
+
+  call neobundle#untap()
 endif
 " }}}
 " }}}
