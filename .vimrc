@@ -11,8 +11,6 @@ let g:mapleader    = ','
 let s:base_columns = 120
 let $DOTVIM        = expand('~/.vim')
 
-set viminfo+=!
-
 function! s:get_sid()
   return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeget_sid$')
 endfunction
