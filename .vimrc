@@ -1555,8 +1555,6 @@ if neobundle#tap('vim-operator-jump_side')
 
   nmap <Leader>j <Plug>(operator-jump-toggle)
   xmap <Leader>j <Plug>(operator-jump-toggle)
-  nmap <C-k> <Plug>(operator-jump-toggle)ai
-  xmap <C-k> <Plug>(operator-jump-toggle)ai
 
   call neobundle#untap()
 endif
@@ -2668,7 +2666,11 @@ nnoremap <silent> <C-i> <C-i>zz:<C-u>call <SID>refresh_screen()<CR>
 nnoremap <silent> <C-o> <C-o>zz:<C-u>call <SID>refresh_screen()<CR>
 nnoremap <silent> <C-h> ^:<C-u>set virtualedit=all<CR>
 nnoremap <silent> <C-l> $:<C-u>set virtualedit=all<CR>
-nmap     <silent> <Tab> <Plug>(jumpbrace)
+
+nmap     <silent> <C-k> <Plug>(jumpbrace)
+xmap     <silent> <C-k> <Plug>(jumpbrace)
+nmap     <silent> <C-@> <Plug>(operator-jump-toggle)ai
+xmap     <silent> <C-@> <Plug>(operator-jump-toggle)ai
 
 nnoremap <silent> <Leader>m `
 
