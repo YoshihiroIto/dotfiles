@@ -2269,9 +2269,6 @@ function! s:update_all()
   if &filetype !=# '' && &filetype !=# 'vimfiler'
     silent! execute 'lcd' fnameescape(expand('%:p:h'))
   endif
-
-  setlocal formatoptions-=ro
-  setlocal textwidth=0
 endfunction
 
 " 場所ごとに設定を用意する {{{
@@ -2319,6 +2316,7 @@ set completeopt=longest,menuone
 set backspace=indent,eol,start
 set noswapfile
 set nobackup
+set formatoptions+=j
 
 if exists('+cryptmethod')
   set cryptmethod=blowfish2
