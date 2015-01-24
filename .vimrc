@@ -1,15 +1,16 @@
 set encoding=utf-8
 scriptencoding utf-8
 " 基本 {{{
-let s:is_windows         = has('win32') || has('win64')
-let s:is_mac             = has('mac') || has('macunix')
-let s:is_linux           = has('unix') && !s:is_windows && !s:is_mac
-let s:is_gui_running     = has('gui_running')
-let s:is_mac_gui_running = s:is_mac && s:is_gui_running
-let s:is_starting        = has('vim_starting')
+let s:is_windows     = has('win32') || has('win64')
+let s:is_mac         = has('mac') || has('macunix')
+let s:is_linux       = has('unix') && !s:is_windows && !s:is_mac
+let s:is_gui_running = has('gui_running')
+let s:is_starting    = has('vim_starting')
 
-let g:mapleader = ','
-let $DOTVIM     = expand('~/.vim')
+let g:mapleader    = ','
+let s:base_columns = 120
+let $DOTVIM        = expand('~/.vim')
+
 set viminfo+=!
 
 function! s:get_sid()
@@ -77,6 +78,11 @@ if filereadable(s:vimrc_local)
   execute 'source' s:vimrc_local
 endif
 unlet s:vimrc_local
+
+nnoremap <silent> <F1> :<C-u>edit $MYVIMRC<CR>
+nnoremap <silent> <F2> :<C-u>source $MYVIMRC<CR>:IndentLinesEnable<CR>
+nnoremap          <F3> :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
+nnoremap          <F4> :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
 " }}}
 " guioptions {{{
 " メニューを読み込まない
@@ -123,7 +129,7 @@ else
   NeoBundleLazy 'kana/vim-submode'
   NeoBundleLazy 'mattn/webapi-vim'
   NeoBundleLazy 'osyo-manga/shabadou.vim'
-  " NeoBundle 'thinca/vim-prettyprint'
+  NeoBundleLazy 'thinca/vim-prettyprint'
 
   " 表示
   NeoBundle     'YoshihiroIto/molokai'
@@ -251,10 +257,6 @@ endif
 call neobundle#end()
 
 filetype plugin indent on
-
-nnoremap <F2> :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
-nnoremap <F3> :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
-nnoremap <F4> :<C-u>NeoBundleClearCache<CR>
 " ライブラリ {{{
 " vimproc {{{
 if neobundle#tap('vimproc')
@@ -285,6 +287,17 @@ if neobundle#tap('webapi-vim')
   function! neobundle#hooks.on_source(bundle)
     let g:webapi#system_function = 'vimproc#system'
   endfunction
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-prettyprint {{{
+if neobundle#tap('vim-prettyprint')
+  call neobundle#config({
+        \   'autoload': {
+        \     'commands': ['PP', 'PrettyPrint']
+        \   }
+        \ })
 
   call neobundle#untap()
 endif
@@ -2307,8 +2320,6 @@ if exists('+cryptmethod')
   set cryptmethod=blowfish2
 endif
 
-nnoremap <silent> <F1> :<C-u>edit $MYVIMRC<CR>
-
 " ^Mを取り除く
 command! RemoveCr call s:execute_keep_view('silent! %substitute/\r$//g | nohlsearch')
 
@@ -2331,9 +2342,11 @@ function! s:smart_format()
   endif
 endfunction
 
+nnoremap Y y$
+
 " to html
 let g:loaded_2html_plugin = 'vim7.4_v1'
-command -range=% -bar TOhtml :call tohtml#Convert2HTML(<line1>, <line2>)
+command! -range=% -bar TOhtml :call tohtml#Convert2HTML(<line1>, <line2>)
 
 nmap     <silent> <C-CR> V<C-CR>
 vnoremap <silent> <C-CR> :<C-u>call <SID>copy_add_comment()<CR>
@@ -2355,7 +2368,7 @@ endfunction
 " }}}
 " インプットメソッド {{{
 " macvim kaoriya gvim で submode が正しく動作しなくなるため
-if !s:is_mac_gui_running
+if !(s:is_mac && s:is_gui_running)
   set noimdisable
 endif
 
@@ -2442,6 +2455,8 @@ set cursorline
 set display=lastline
 set conceallevel=2
 set concealcursor=i
+set lines=9999
+execute 'set columns=' . s:base_columns
 
 Autocmd VimEnter * set t_vb=
 Autocmd VimEnter * set visualbell
@@ -2472,7 +2487,6 @@ function! s:smart_gf(mode)
     call openbrowser#_keymapping_search(a:mode)
   endtry
 endfunction
-
 " カーソル下の単語を移動するたびにハイライトする {{{
 " http://d.hatena.ne.jp/osyo-manga/20140121/1390309901
 Autocmd CursorHold  * call s:hl_cword()
@@ -2611,7 +2625,7 @@ nnoremap <expr> zl foldclosed(line('.')) != -1 ? 'zo' : '<C-l>'
 nnoremap <expr> zO foldclosed(line('.')) != -1 ? 'zO' : ''
 " }}}
 " モード移行 {{{
-if !s:is_mac_gui_running
+if !(s:is_mac && s:is_gui_running)
   inoremap <C-j> <Esc>
   nnoremap <C-j> <Esc>
   vnoremap <C-j> <Esc>
@@ -2741,7 +2755,6 @@ if s:is_gui_running
   endfunction
   " }}}
   " 縦分割する {{{
-  let s:base_columns   = 120
   let s:depth_vsp      = 1
   let s:opend_left_vsp = 0
   let s:opend_top_vsp  = 0
@@ -2775,25 +2788,6 @@ if s:is_gui_running
       silent! execute 'winpos' s:opend_left_vsp s:opend_top_vsp
     end
   endf
-  " }}}
-  " ウィンドウの位置とサイズを記憶する {{{
-  " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
-  let s:save_window_file = expand('~/.vimwinpos')
-
-  Autocmd VimLeavePre * call s:save_window()
-
-  function! s:save_window()
-    let options = [
-          \ 'set columns=' . &columns,
-          \ 'set lines=' . &lines,
-          \ 'winpos ' . getwinposx() . ' ' . getwinposy(),
-          \ ]
-    call writefile(options, s:save_window_file)
-  endfunction
-
-  if filereadable(s:save_window_file)
-    exe 'source' s:save_window_file
-  endif
   " }}}
 endif
 " }}}
