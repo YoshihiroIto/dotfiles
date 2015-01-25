@@ -10,6 +10,9 @@ let s:is_starting    = has('vim_starting')
 let g:mapleader    = ','
 let s:base_columns = 120
 let $DOTVIM        = expand('~/.vim')
+if s:is_mac
+  let $LUA_DLL = simplify($VIM . '/../../Frameworks/libluajit-5.1.2.dylib')
+endif
 
 function! s:get_sid()
   return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeget_sid$')
@@ -24,13 +27,6 @@ if s:is_starting
   endif
   unlet s:git_dot_vimrc
 endif
-
-if s:is_mac
-  let $LUA_DLL = simplify($VIM . '/../../Frameworks/libluajit-5.1.2.dylib')
-endif
-
-nnoremap [App] <Nop>
-nmap     ;     [App]
 
 " メニューを読み込まない
 let g:did_install_default_menus = 1
@@ -77,10 +73,13 @@ if filereadable(s:vimrc_local)
 endif
 unlet s:vimrc_local
 
+" キー
 nnoremap <silent> <F1> :<C-u>edit $MYVIMRC<CR>
 nnoremap <silent> <F2> :<C-u>source $MYVIMRC<CR>:IndentLinesEnable<CR>
 nnoremap          <F3> :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
 nnoremap          <F4> :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
+nnoremap [App] <Nop>
+nmap     ;     [App]
 " }}}
 " guioptions {{{
 " メニューを読み込まない
@@ -1440,7 +1439,7 @@ endif
 " vim-operator-tcomment {{{
 if neobundle#tap('vim-operator-tcomment')
   call neobundle#config({
-        \   'depends':  'vim-operator-user',
+        \   'depends':  ['vim-operator-user', 'tcomment_vim'],
         \   'autoload': {
         \     'mappings': [['nx', '<Plug>']]
         \   }
@@ -2226,11 +2225,11 @@ AutocmdFT vim        setlocal tabstop=2
 AutocmdFT vim        setlocal shiftwidth=2
 AutocmdFT vim        setlocal softtabstop=2
 
-AutocmdFT xml,html   inoremap <buffer> </ </<C-x><C-o>
-AutocmdFT xml,html   let g:xml_syntax_folding = 1
 AutocmdFT xml,html   setlocal foldmethod=syntax
 AutocmdFT xml,html   setlocal foldlevel=99
 AutocmdFT xml,html   setlocal foldcolumn=5
+AutocmdFT xml,html   inoremap <buffer> </ </<C-x><C-o>
+AutocmdFT xml,html   let g:xml_syntax_folding = 1
 
 AutocmdFT go         setlocal foldmethod=syntax
 AutocmdFT go         setlocal shiftwidth=4
@@ -2246,12 +2245,12 @@ AutocmdFT cs         setlocal omnifunc=OmniSharp#Complete
 AutocmdFT cs         setlocal foldmethod=syntax
 AutocmdFT cs         nnoremap <silent><buffer> <C-]> :<C-u>call OmniSharp#GotoDefinition()<CR>zz:<C-u>call <SID>refresh_screen()<CR>
 
-AutocmdFT godoc      nnoremap <silent><buffer> q :<C-u>close<CR>
-AutocmdFT help       nnoremap <silent><buffer> q :<C-u>close<CR>
 AutocmdFT coffee     setlocal shiftwidth=2
 AutocmdFT json       setlocal shiftwidth=2
-AutocmdFT markdown   nnoremap <silent><buffer> [App]v :<C-u>PrevimOpen<CR>
 AutocmdFT neosnippet setlocal noexpandtab
+AutocmdFT godoc      nnoremap <silent><buffer> q :<C-u>close<CR>
+AutocmdFT help       nnoremap <silent><buffer> q :<C-u>close<CR>
+AutocmdFT markdown   nnoremap <silent><buffer> [App]v :<C-u>PrevimOpen<CR>
 
 function! s:update_all()
   " 行番号表示幅を設定する
@@ -2477,7 +2476,6 @@ function! s:smart_gf(mode)
     elseif openbrowser#get_url_on_cursor() !=# ''
       " URL
       call openbrowser#_keymapping_smart_search(a:mode)
-
     else
       " 標準のgf
       normal! gf
@@ -2594,7 +2592,6 @@ function! s:auto_cursorline(event)
     if s:cursorline_lock
       if 1 < s:cursorline_lock
         let s:cursorline_lock = 1
-
       else
         setlocal nocursorline
         let s:cursorline_lock = 0
@@ -2764,6 +2761,7 @@ if s:is_gui_running
     set lines=9999
   endfunction
   " }}}
+
   " 縦分割する {{{
   let s:depth_vsp      = 1
   let s:opend_left_vsp = 0
@@ -2791,7 +2789,6 @@ if s:is_gui_running
   function! s:close_v_split_wide()
     let s:depth_vsp -= 1
     let &columns = s:base_columns * s:depth_vsp
-    " silent! close
     silent! only
 
     if s:depth_vsp == 1
