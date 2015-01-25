@@ -371,7 +371,7 @@ if neobundle#tap('syntastic')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    Autocmd BufWritePost *.{go,rb,py} call lightline#update()
+    Autocmd BufWritePost *.{go,rb,py} call s:update_lightline()
   endfunction
 
   call neobundle#untap()
@@ -600,7 +600,14 @@ function! s:lightlineFileencoding()
   return winwidth(0) > 70 ? (strlen(&fileencoding) ? &fileencoding : &encoding) : ''
 endfunction
 
-Autocmd CursorHold,CursorHoldI * call lightline#update()
+Autocmd CursorHold,CursorHoldI * call s:update_lightline()
+
+function! s:update_lightline()
+  try
+    call lightline#update()
+  catch
+  endtry
+endfunction
 
 function! s:lightlineGitSummary()
   if winwidth(0) <= 70
@@ -757,7 +764,7 @@ if neobundle#tap('vim-smartinput')
     " セミコロン自動入力
     AutocmdFT c,cpp call smartinput#define_rule({
           \   'at':       '\%(\<struct\>\|\<class\>\|\<enum\>\)\s*\w*.*\n*\s*\%#',
-          \   'char':     '{',                    " }
+          \   'char':     '{',
           \   'input':    '{};<Left><Left>',
           \   'filetype': ['c', 'cpp'],
           \ })
@@ -1092,16 +1099,12 @@ function! s:begin_display_anzu()
 endfunction
 
 function! s:update_display_anzu()
-  try
-    if s:anzu_display_count >= 0
-      let s:anzu_display_count = s:anzu_display_count - 1
-
-      call s:continue_cursor_hold()
-    else
-      call s:clear_display_anzu()
-    endif
-  catch
-  endtry
+  if s:anzu_display_count >= 0
+    let s:anzu_display_count = s:anzu_display_count - 1
+    call s:continue_cursor_hold()
+  else
+    call s:clear_display_anzu()
+  endif
 endfunction
 
 function! s:clear_display_anzu()
