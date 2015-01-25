@@ -2215,9 +2215,6 @@ Autocmd BufNewFile,BufRead                         *.{fx,fxc,fxh,hlsl,hlsli} set
 Autocmd BufNewFile,BufRead                         *.{fsh,vsh}               setlocal filetype=glsl
 Autocmd BufNewFile,BufRead                         *.{md,mkd,markdown}       setlocal filetype=markdown
 
-AutocmdFT *          setlocal formatoptions-=ro
-AutocmdFT *          setlocal textwidth=0
-
 AutocmdFT ruby       setlocal foldmethod=syntax
 AutocmdFT ruby       setlocal tabstop=2
 AutocmdFT ruby       setlocal shiftwidth=2
@@ -2258,6 +2255,10 @@ AutocmdFT help       nnoremap <silent><buffer> q :<C-u>close<CR>
 AutocmdFT markdown   nnoremap <silent><buffer> [App]v :<C-u>PrevimOpen<CR>
 
 function! s:update_all()
+  setlocal formatoptions-=r
+  setlocal formatoptions-=o
+  setlocal textwidth=0
+
   " 行番号表示幅を設定する
   " http://d.hatena.ne.jp/osyo-manga/20140303/1393854617
   let w = len(line('$')) + 2
@@ -2459,8 +2460,11 @@ set cursorline
 set display=lastline
 set conceallevel=2
 set concealcursor=i
-set lines=9999
-execute 'set columns=' . s:base_columns
+
+if s:is_gui_running
+  set lines=9999
+  execute 'set columns=' . s:base_columns
+endif
 
 Autocmd VimEnter * set t_vb=
 Autocmd VimEnter * set visualbell
