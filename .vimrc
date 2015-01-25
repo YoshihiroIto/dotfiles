@@ -11,7 +11,7 @@ let g:mapleader    = ','
 let s:base_columns = 120
 let $DOTVIM        = expand('~/.vim')
 if s:is_mac
-  let $LUA_DLL = simplify($VIM . '/../../Frameworks/libluajit-5.1.2.dylib')
+  let $LUA_DLL       = simplify($VIM . '/../../Frameworks/libluajit-5.1.2.dylib')
 endif
 
 function! s:get_sid()
@@ -687,10 +687,12 @@ if neobundle#tap('vim-easy-align')
   nmap <silent> <Leader>a:       vii<Leader>0easyalign:
   nmap <silent> <Leader>a,       vii<Leader>0easyalign*,
   nmap <silent> <Leader>a<Space> vii<Leader>0easyalign*<Space>
+  nmap <silent> <Leader>a\|      vii<Leader>0easyalign*\|
   xmap <silent> <Leader>a=       <Leader>0easyalign=
   xmap <silent> <Leader>a:       <Leader>0easyalign:
   xmap <silent> <Leader>a,       <Leader>0easyalign*,
   xmap <silent> <Leader>a<Space> <Leader>0easyalign*<Space>
+  xmap <silent> <Leader>a\|      <Leader>0easyalign*\|
 
   call neobundle#untap()
 endif
@@ -2314,7 +2316,6 @@ set backspace=indent,eol,start
 set noswapfile
 set nobackup
 set formatoptions+=j
-
 if exists('+cryptmethod')
   set cryptmethod=blowfish2
 endif
@@ -2387,6 +2388,7 @@ set expandtab                     " Insertモードで <Tab> を挿入すると�
 set list
 set listchars=tab:\⭟\ ,eol:↲,extends:»,precedes:«,nbsp:%
 set breakindent
+set showbreak=↪
 
 vnoremap < <gv
 vnoremap > >gv
