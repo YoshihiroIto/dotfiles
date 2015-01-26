@@ -2562,7 +2562,8 @@ endif
 if s:is_gui_running
   if s:is_windows
     set guifont=Ricty\ Regular\ for\ Powerline:h12
-    set renderoptions=type:directx,geom=1,renmode:6,taamode:0
+    " todo:MacTypeのほうが綺麗
+    " set renderoptions=type:directx,gamma:1.2,contrast:1.42,geom:0,renmode:5,taamode:1
   elseif s:is_mac
     set guifont=Ricty\ Regular\ for\ Powerline:h12
     set antialias
