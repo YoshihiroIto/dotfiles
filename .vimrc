@@ -2158,7 +2158,7 @@ if neobundle#tap('vim-gitgutter')
     let g:gitgutter_diff_args          = ''
 
     " todo:ファイルオープン直後一瞬シンタックスハイライトが無効にになってしまうことがある
-    let g:gitgutter_sign_column_always = 1
+    " let g:gitgutter_sign_column_always = 1
 
     Autocmd FocusGained,FocusLost * GitGutter
   endfunction
@@ -2393,7 +2393,6 @@ set expandtab                     " Insertモードで <Tab> を挿入すると�
 set list
 set listchars=tab:\⭟\ ,eol:↲,extends:»,precedes:«,nbsp:%
 set breakindent
-set showbreak=↪
 
 vnoremap < <gv
 vnoremap > >gv
