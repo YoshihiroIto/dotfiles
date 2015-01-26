@@ -2338,6 +2338,8 @@ function! s:smart_format()
     OmniSharpCodeFormat
   elseif &filetype =~# 'c\|cpp'
     ClangFormat
+  elseif &filetype ==# 'xml'
+    call s:execute_keep_view('%substitute/></>\r</g | normal! gg=G')
   elseif &filetype ==# 'json'
     call s:filter_current('jq .', 0)
   elseif &filetype ==# 'go'
