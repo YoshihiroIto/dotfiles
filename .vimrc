@@ -2691,22 +2691,22 @@ nnoremap <silent> <Leader>m `
 
 function! s:up_cursor(repeat)
   call s:enable_virtual_cursor()
-  execute 'normal! ' . string(a:repeat) . 'gk'
+  execute 'normal! ' . a:repeat . 'gk'
 endfunction
 
 function! s:down_cursor(repeat)
   call s:enable_virtual_cursor()
-  execute 'normal! ' . string(a:repeat) . 'gj'
+  execute 'normal! ' . a:repeat . 'gj'
 endfunction
 
 function! s:left_cursor(repeat)
   call s:disable_virtual_cursor()
-  execute 'normal! ' . string(a:repeat) . 'h'
+  execute 'normal! ' . a:repeat . 'h'
 endfunction
 
 function! s:right_cursor(repeat)
   call s:disable_virtual_cursor()
-  execute 'normal! ' . string(a:repeat) . 'l'
+  execute 'normal! ' . a:repeat . 'l'
 
   if foldclosed(line('.')) != -1
     normal! zv
