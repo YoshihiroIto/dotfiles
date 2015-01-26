@@ -1559,6 +1559,7 @@ if neobundle#tap('lingr-vim')
     AutocmdFT lingr-rooms,lingr-members,lingr-messages nnoremap <silent><buffer> q  :<C-u>call <SID>toggle_lingr()<CR>
     AutocmdFT lingr-rooms,lingr-members,lingr-messages nmap     <silent><buffer> ss <Plug>(lingr-messages-show-say-buffer)
     AutocmdFT lingr-rooms,lingr-members,lingr-messages setlocal nolist
+    AutocmdFT lingr-rooms,lingr-members                setlocal nonumber
   endfunction
 
   function! s:toggle_lingr()
@@ -2690,42 +2691,22 @@ nnoremap <silent> <Leader>m `
 
 function! s:up_cursor(repeat)
   call s:enable_virtual_cursor()
-
-  let c = a:repeat
-  while c > 0
-    normal! gk
-    let c -= 1
-  endwhile
+  execute 'normal! ' . string(a:repeat) . 'gk'
 endfunction
 
 function! s:down_cursor(repeat)
   call s:enable_virtual_cursor()
-
-  let c = a:repeat
-  while c > 0
-    normal! gj
-    let c -= 1
-  endwhile
+  execute 'normal! ' . string(a:repeat) . 'gj'
 endfunction
 
 function! s:left_cursor(repeat)
   call s:disable_virtual_cursor()
-
-  let c = a:repeat
-  while c > 0
-    normal! h
-    let c -= 1
-  endwhile
+  execute 'normal! ' . string(a:repeat) . 'h'
 endfunction
 
 function! s:right_cursor(repeat)
   call s:disable_virtual_cursor()
-
-  let c = a:repeat
-  while c > 0
-    normal! l
-    let c -= 1
-  endwhile
+  execute 'normal! ' . string(a:repeat) . 'l'
 
   if foldclosed(line('.')) != -1
     normal! zv
