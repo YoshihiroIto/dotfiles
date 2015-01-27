@@ -134,6 +134,7 @@ else
   NeoBundleLazy 'LeafCage/foldCC.vim'
   NeoBundleLazy 'Yggdroot/indentLine'
   NeoBundleLazy 'YoshihiroIto/syntastic'
+  NeoBundleLazy 'itchyny/vim-autoft'
   if s:is_gui_running
     NeoBundleLazy 'YoshihiroIto/vim-resize-win'
     NeoBundleLazy 'vim-scripts/movewin.vim'
@@ -658,6 +659,25 @@ if neobundle#tap('indentLine')
     let g:indentLine_noConcealCursor = 1
 
     Autocmd BufReadPost * IndentLinesEnable
+  endfunction
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-autoft {{{
+if neobundle#tap('vim-autoft')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': 'all'
+        \   }
+        \ })
+
+  function! neobundle#hooks.on_source(bundle)
+    let g:autoft_config = [
+          \ { 'filetype': 'cs',  'pattern': '^\s*using' },
+          \ { 'filetype': 'cpp', 'pattern': '^\s*#\s*\%(include\|define\)\>' },
+          \ { 'filetype': 'xml', 'pattern': '<[0-9a-zA-Z]\+' }
+          \ ]
   endfunction
 
   call neobundle#untap()
