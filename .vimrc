@@ -2362,7 +2362,7 @@ function! s:smart_format()
     call s:filter_current('goimports', 0)
   elseif &filetype ==# 'xml'
     let $XMLLINT_INDENT = '    '
-    call s:filter_current('xmllint --format --encode utf-8', 0)
+    call s:filter_current('xmllint --format --encode ' . &encoding, 0)
   elseif &filetype ==# 'json'
     call s:filter_current('jq .', 0)
   else
@@ -2937,6 +2937,8 @@ endfunction
 " }}}
 " フィルタリング処理を行う {{{
 function! s:filter_current(cmd, is_silent)
+
+  echomsg a:cmd
   let tempfile = tempname()
 
   try
