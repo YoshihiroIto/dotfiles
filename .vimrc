@@ -2361,7 +2361,8 @@ function! s:smart_format()
   elseif &filetype ==# 'go'
     call s:filter_current('goimports', 0)
   elseif &filetype ==# 'xml'
-    execute '%substitute/></>\r</g | normal! gg=G'
+    let $XMLLINT_INDENT = '    '
+    call s:filter_current('xmllint --format --encode utf-8', 0)
   elseif &filetype ==# 'json'
     call s:filter_current('jq .', 0)
   else
