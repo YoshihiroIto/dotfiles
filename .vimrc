@@ -2388,7 +2388,7 @@ function! s:copy_add_comment() range
   call tcomment#Comment(line("'<"), line("'>"), 'i', '<bang>', '')
 
   " 元の位置に戻る
-  execute 'normal! ' . (line("'>") - line("'<") + 1) . 'j'
+  execute 'normal!' (line("'>") - line("'<") + 1) . 'j'
 
   " ヤンクした物をペーストする
   normal! P
@@ -2714,22 +2714,22 @@ nnoremap <silent> <Leader>m `
 
 function! s:up_cursor(repeat)
   call s:enable_virtual_cursor()
-  execute 'normal! ' . a:repeat . 'gk'
+  execute 'normal!' a:repeat . 'gk'
 endfunction
 
 function! s:down_cursor(repeat)
   call s:enable_virtual_cursor()
-  execute 'normal! ' . a:repeat . 'gj'
+  execute 'normal!' a:repeat . 'gj'
 endfunction
 
 function! s:left_cursor(repeat)
   call s:disable_virtual_cursor()
-  execute 'normal! ' . a:repeat . 'h'
+  execute 'normal!' a:repeat . 'h'
 endfunction
 
 function! s:right_cursor(repeat)
   call s:disable_virtual_cursor()
-  execute 'normal! ' . a:repeat . 'l'
+  execute 'normal!' a:repeat . 'l'
 
   if foldclosed(line('.')) != -1
     normal! zv
@@ -2796,16 +2796,16 @@ if s:is_gui_running
 
     let s:depth_vsp += 1
     let &columns = s:base_columns * s:depth_vsp
-    silent! execute 'botright vertical' s:base_columns 'split'
+    execute 'botright vertical' s:base_columns 'split'
   endf
 
   function! s:close_v_split_wide()
     let s:depth_vsp -= 1
     let &columns = s:base_columns * s:depth_vsp
-    silent! only
+    only
 
     if s:depth_vsp == 1
-      silent! execute 'winpos' s:opend_left_vsp s:opend_top_vsp
+      execute 'winpos' s:opend_left_vsp s:opend_top_vsp
     end
   endf
   " }}}
@@ -2861,10 +2861,10 @@ function! s:delete_current_buffer()
     endif
 
     execute winnr . 'wincmd w'
-    execute 'buffer ' . next_buf
+    execute 'buffer' next_buf
   endwhile
 
-  execute 'bdelete' . current_buf
+  execute 'bdelete' current_buf
   execute current_win . 'wincmd w'
 endfunction
 " }}}
