@@ -2937,8 +2937,6 @@ endfunction
 " }}}
 " フィルタリング処理を行う {{{
 function! s:filter_current(cmd, is_silent)
-
-  echomsg a:cmd
   let tempfile = tempname()
 
   try
