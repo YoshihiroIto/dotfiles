@@ -527,30 +527,38 @@ function! s:lightline_mode()
         \ &filetype ==# 'quickrun' ? 'Quickrun' :
         \ &filetype =~# 'lingr'    ? 'Lingr'    :
         \ &filetype ==# 'agit'     ? 'Agit'     :
-        \ winwidth(0) > 60 ? lightline#mode() : ''
+        \ winwidth(0) > 50 ? lightline#mode() : ''
 endfunction
 
 let s:lighline_no_disp_ft = 'vimfiler\|unite\|vimshell\|tweetvim\|quickrun\|lingr\|agit'
 
 function! s:lightline_modified()
-  return &filetype =~# s:lighline_no_disp_ft ? '' : &modified ? '+' : &modifiable ? '' : '-'
+  if &filetype =~# s:lighline_no_disp_ft
+    return ''
+  endif
+
+  return &modified ? '+' : &modifiable ? '' : '-'
 endfunction
 
 function! s:lightline_readonly()
-  return &filetype !~# s:lighline_no_disp_ft && &readonly ? '⭤' : ''
+  if &filetype =~# s:lighline_no_disp_ft
+    return ''
+  endif
+
+  return &readonly ? '⭤' : ''
 endfunction
 
 function! s:lightline_filename()
   try
-    return ('' !=# s:lightline_readonly() ? s:lightline_readonly() . ' ' : '') .
+    return (strlen(s:lightline_readonly()) ? s:lightline_readonly() . ' ' : '') .
           \ (&filetype ==# 'vimfiler' ? vimfiler#get_status_string() :
           \  &filetype ==# 'unite'    ? unite#get_status_string() :
           \  &filetype ==# 'vimshell' ? vimshell#get_status_string() :
           \  &filetype =~# 'lingr'    ? lingr#status() :
           \  &filetype ==# 'tweetvim' ? '' :
           \  &filetype ==# 'quickrun' ? '' :
-          \  '' !=# expand('%:t') ? expand('%:t') : '[No Name]') .
-          \ ('' !=# s:lightline_modified() ? ' ' . s:lightline_modified() : '')
+          \  strlen(expand('%:t')) ? expand('%:t') : '[No Name]') .
+          \ (strlen(s:lightline_modified()) ? ' ' . s:lightline_modified() : '')
   catch
     return ''
   endtry
@@ -567,8 +575,8 @@ function! s:lightline_current_branch()
 
   if &filetype !=# 'vimfiler'
     try
-      let _ = fugitive#head()
-      return strlen(_) ? '⭠ ' . _ : ''
+      let branch = fugitive#head()
+      return strlen(branch) ? '⭠ ' . branch : ''
     catch
       return ''
     endtry
@@ -578,37 +586,31 @@ function! s:lightline_current_branch()
 endfunction
 
 function! s:lightline_fileformat()
-  if &filetype =~? s:lighline_no_disp_ft
+  if s:is_lightline_no_disp_gruop()
     return ''
   endif
 
-  return winwidth(0) > 70 ? &fileformat : ''
+  return &fileformat
 endfunction
 
 function! s:lightline_filetype()
-  if &filetype =~? s:lighline_no_disp_ft
+  if s:is_lightline_no_disp_gruop()
     return ''
   endif
 
-  return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype : 'no filetype') : ''
+  return strlen(&filetype) ? &filetype : 'no filetype'
 endfunction
 
 function! s:lightline_fileencoding()
-  if &filetype =~? s:lighline_no_disp_ft
+  if s:is_lightline_no_disp_gruop()
     return ''
   endif
 
-  return winwidth(0) > 70 ? (strlen(&fileencoding) ? &fileencoding : &encoding) : ''
+  return strlen(&fileencoding) ? &fileencoding : &encoding
 endfunction
 
-Autocmd CursorHold,CursorHoldI * call s:update_lightline()
-
 function! s:lightline_git_summary()
-  if winwidth(0) <= 70
-    return ''
-  endif
-
-  if &filetype =~? s:lighline_no_disp_ft
+  if s:is_lightline_no_disp_gruop()
     return ''
   endif
 
@@ -627,6 +629,19 @@ function! s:lightline_git_summary()
   endtry
 endfunction
 
+function! s:is_lightline_no_disp_gruop()
+  if winwidth(0) <= 50
+    return 1
+  endif
+
+  if &filetype =~# s:lighline_no_disp_ft
+    return 1
+  endif
+
+  return 0
+endfunction
+
+Autocmd CursorHold,CursorHoldI * call s:update_lightline()
 function! s:update_lightline()
   try
     call lightline#update()
@@ -2290,7 +2305,7 @@ function! s:update_all()
   let &l:numberwidth = w
 
   " ファイルの場所をカレントにする
-  if &filetype !=# '' && &filetype !=# 'vimfiler'
+  if strlen(&filetype) && &filetype !=# 'vimfiler'
     silent! execute 'lcd' fnameescape(expand('%:p:h'))
   endif
 endfunction
@@ -2501,11 +2516,11 @@ function! s:smart_gf(mode)
     let line       = getline('.')
     let repos_name = matchstr(line, 'NeoBundle\(\(Lazy\)\|\(Fetch\)\)\?\s\+''\zs.*\ze''')
 
-    if repos_name !=# ''
+    if strlen(repos_name)
       " NeoBundle
       execute 'OpenBrowser' 'https://github.com/' . repos_name
 
-    elseif openbrowser#get_url_on_cursor() !=# ''
+    elseif strlen(openbrowser#get_url_on_cursor())
       " URL
       call openbrowser#_keymapping_smart_search(a:mode)
     else
@@ -2916,7 +2931,7 @@ endfunction
 " Gitブランチ上にいるか {{{
 function! s:is_in_git_branch()
   try
-    return fugitive#head() !=# ''
+    return strlen(fugitive#head())
   catch
     return 0
   endtry
