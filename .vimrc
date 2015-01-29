@@ -2519,12 +2519,9 @@ function! s:smart_gf(mode)
 endfunction
 " カーソル下の単語を移動するたびにハイライトする {{{
 " http://d.hatena.ne.jp/osyo-manga/20140121/1390309901
-Autocmd CursorHold  * call s:hl_cword()
-Autocmd CursorMoved * call s:hl_clear()
-Autocmd BufLeave    * call s:hl_clear()
-Autocmd WinLeave    * call s:hl_clear()
-Autocmd InsertEnter * call s:hl_clear()
-Autocmd ColorScheme * highlight CursorWord guifg=Red
+Autocmd CursorHold                                * call      s:hl_cword()
+Autocmd CursorMoved,BufLeave,WinLeave,InsertEnter * call      s:hl_clear()
+Autocmd ColorScheme                               * highlight CursorWord guifg=Red
 
 function! s:hl_clear()
   if exists('b:highlight_cursor_word_id') && exists('b:highlight_cursor_word')
