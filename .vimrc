@@ -456,8 +456,7 @@ let g:lightline = {
       \     ]
       \   },
       \   'component': {
-      \     'percent':  '⭡%3p%%',
-      \     'lineinfo': '%4l/%L : %-3v'
+      \     'percent':      '⭡%3p%%'
       \   },
       \   'component_function': {
       \     'fileformat':   s:sid . 'lightline_fileformat',
@@ -467,6 +466,7 @@ let g:lightline = {
       \     'readonly':     s:sid . 'lightline_readonly',
       \     'filename':     s:sid . 'lightline_filename',
       \     'mode':         s:sid . 'lightline_mode',
+      \     'lineinfo':     s:sid . 'lightline_lineinfo',
       \     'anzu':         'anzu#search_status',
       \     'submode':      'submode#current'
       \   },
@@ -551,12 +551,13 @@ endfunction
 function! s:lightline_filename()
   try
     return (strlen(s:lightline_readonly()) ? s:lightline_readonly() . ' ' : '') .
-          \ (&filetype ==# 'vimfiler' ? vimfiler#get_status_string() :
-          \  &filetype ==# 'unite'    ? unite#get_status_string() :
-          \  &filetype ==# 'vimshell' ? vimshell#get_status_string() :
-          \  &filetype =~# 'lingr'    ? lingr#status() :
-          \  &filetype ==# 'tweetvim' ? '' :
-          \  &filetype ==# 'quickrun' ? '' :
+          \ (&filetype ==# 'vimfiler'       ? vimfiler#get_status_string() :
+          \  &filetype ==# 'unite'          ? unite#get_status_string()    :
+          \  &filetype ==# 'vimshell'       ? vimshell#get_status_string() :
+          \  &filetype ==# 'lingr-messages' ? lingr#status()               :
+          \  &filetype =~# 'lingr'          ? ''                           :
+          \  &filetype ==# 'tweetvim'       ? ''                           :
+          \  &filetype ==# 'quickrun'       ? ''                           :
           \  strlen(expand('%:t')) ? expand('%:t') : '[No Name]') .
           \ (strlen(s:lightline_modified()) ? ' ' . s:lightline_modified() : '')
   catch
@@ -586,7 +587,7 @@ function! s:lightline_current_branch()
 endfunction
 
 function! s:lightline_fileformat()
-  if s:is_lightline_no_disp_gruop()
+  if s:is_lightline_no_disp_group()
     return ''
   endif
 
@@ -594,7 +595,7 @@ function! s:lightline_fileformat()
 endfunction
 
 function! s:lightline_filetype()
-  if s:is_lightline_no_disp_gruop()
+  if s:is_lightline_no_disp_group()
     return ''
   endif
 
@@ -602,7 +603,7 @@ function! s:lightline_filetype()
 endfunction
 
 function! s:lightline_fileencoding()
-  if s:is_lightline_no_disp_gruop()
+  if s:is_lightline_no_disp_group()
     return ''
   endif
 
@@ -610,7 +611,7 @@ function! s:lightline_fileencoding()
 endfunction
 
 function! s:lightline_git_summary()
-  if s:is_lightline_no_disp_gruop()
+  if s:is_lightline_no_disp_group()
     return ''
   endif
 
@@ -629,7 +630,15 @@ function! s:lightline_git_summary()
   endtry
 endfunction
 
-function! s:is_lightline_no_disp_gruop()
+function! s:lightline_lineinfo()
+  if winwidth(0) <= 50
+    return ''
+  endif
+
+  return printf('%4d/%d : %-3d', line('.'), line('$'), col('.'))
+endfunction
+
+function! s:is_lightline_no_disp_group()
   if winwidth(0) <= 50
     return 1
   endif
