@@ -460,20 +460,20 @@ let g:lightline = {
       \     'lineinfo': '%4l/%L : %-3v'
       \   },
       \   'component_function': {
-      \     'fileformat':   s:sid . 'lightlineFileformat',
-      \     'filetype':     s:sid . 'lightlineFiletype',
-      \     'fileencoding': s:sid . 'lightlineFileencoding',
-      \     'modified':     s:sid . 'lightlineModified',
-      \     'readonly':     s:sid . 'lightlineReadonly',
-      \     'filename':     s:sid . 'lightlineFilename',
-      \     'mode':         s:sid . 'lightlineMode',
+      \     'fileformat':   s:sid . 'lightline_fileformat',
+      \     'filetype':     s:sid . 'lightline_filetype',
+      \     'fileencoding': s:sid . 'lightline_fileencoding',
+      \     'modified':     s:sid . 'lightline_modified',
+      \     'readonly':     s:sid . 'lightline_readonly',
+      \     'filename':     s:sid . 'lightline_filename',
+      \     'mode':         s:sid . 'lightline_mode',
       \     'anzu':         'anzu#search_status',
       \     'submode':      'submode#current'
       \   },
       \   'component_expand': {
       \     'syntastic':    'SyntasticStatuslineFlag',
-      \     'branch':       s:sid . 'lightlineCurrentBranch',
-      \     'gitgutter':    s:sid . 'lightlineGitSummary'
+      \     'branch':       s:sid . 'lightline_current_branch',
+      \     'gitgutter':    s:sid . 'lightline_git_summary'
       \   },
       \   'component_type': {
       \     'syntastic':    'error',
@@ -519,7 +519,7 @@ let g:lightline = {
       \   }
       \ }
 
-function! s:lightlineMode()
+function! s:lightline_mode()
   return  &filetype ==# 'unite'    ? 'Unite'    :
         \ &filetype ==# 'vimfiler' ? 'VimFiler' :
         \ &filetype ==# 'vimshell' ? 'VimShell' :
@@ -532,17 +532,17 @@ endfunction
 
 let s:lighline_no_disp_ft = 'vimfiler\|unite\|vimshell\|tweetvim\|quickrun\|lingr\|agit'
 
-function! s:lightlineModified()
+function! s:lightline_modified()
   return &filetype =~# s:lighline_no_disp_ft ? '' : &modified ? '+' : &modifiable ? '' : '-'
 endfunction
 
-function! s:lightlineReadonly()
+function! s:lightline_readonly()
   return &filetype !~# s:lighline_no_disp_ft && &readonly ? '⭤' : ''
 endfunction
 
-function! s:lightlineFilename()
+function! s:lightline_filename()
   try
-    return ('' !=# s:lightlineReadonly() ? s:lightlineReadonly() . ' ' : '') .
+    return ('' !=# s:lightline_readonly() ? s:lightline_readonly() . ' ' : '') .
           \ (&filetype ==# 'vimfiler' ? vimfiler#get_status_string() :
           \  &filetype ==# 'unite'    ? unite#get_status_string() :
           \  &filetype ==# 'vimshell' ? vimshell#get_status_string() :
@@ -550,13 +550,13 @@ function! s:lightlineFilename()
           \  &filetype ==# 'tweetvim' ? '' :
           \  &filetype ==# 'quickrun' ? '' :
           \  '' !=# expand('%:t') ? expand('%:t') : '[No Name]') .
-          \ ('' !=# s:lightlineModified() ? ' ' . s:lightlineModified() : '')
+          \ ('' !=# s:lightline_modified() ? ' ' . s:lightline_modified() : '')
   catch
     return ''
   endtry
 endfunction
 
-function! s:lightlineCurrentBranch()
+function! s:lightline_current_branch()
   if &filetype =~# s:lighline_no_disp_ft
     return ''
   endif
@@ -577,7 +577,7 @@ function! s:lightlineCurrentBranch()
   return ''
 endfunction
 
-function! s:lightlineFileformat()
+function! s:lightline_fileformat()
   if &filetype =~? s:lighline_no_disp_ft
     return ''
   endif
@@ -585,7 +585,7 @@ function! s:lightlineFileformat()
   return winwidth(0) > 70 ? &fileformat : ''
 endfunction
 
-function! s:lightlineFiletype()
+function! s:lightline_filetype()
   if &filetype =~? s:lighline_no_disp_ft
     return ''
   endif
@@ -593,7 +593,7 @@ function! s:lightlineFiletype()
   return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype : 'no filetype') : ''
 endfunction
 
-function! s:lightlineFileencoding()
+function! s:lightline_fileencoding()
   if &filetype =~? s:lighline_no_disp_ft
     return ''
   endif
@@ -603,14 +603,7 @@ endfunction
 
 Autocmd CursorHold,CursorHoldI * call s:update_lightline()
 
-function! s:update_lightline()
-  try
-    call lightline#update()
-  catch
-  endtry
-endfunction
-
-function! s:lightlineGitSummary()
+function! s:lightline_git_summary()
   if winwidth(0) <= 70
     return ''
   endif
@@ -631,6 +624,13 @@ function! s:lightlineGitSummary()
           \ g:gitgutter_sign_removed,  summary[2])
   catch
     return ''
+  endtry
+endfunction
+
+function! s:update_lightline()
+  try
+    call lightline#update()
+  catch
   endtry
 endfunction
 " }}}
