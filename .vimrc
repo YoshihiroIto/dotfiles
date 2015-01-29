@@ -1135,7 +1135,7 @@ endfunction
 
 function! s:update_display_anzu()
   if s:anzu_display_count >= 0
-    let s:anzu_display_count = s:anzu_display_count - 1
+    let s:anzu_display_count -= 1
     call s:continue_cursor_hold()
   else
     call s:clear_display_anzu()
