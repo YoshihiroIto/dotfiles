@@ -227,6 +227,7 @@ else
   NeoBundleLazy 'Shougo/unite-outline'
   NeoBundleLazy 'YoshihiroIto/vim-unite-giti'
   NeoBundleLazy 'osyo-manga/unite-quickfix'
+  NeoBundleLazy 'tsukkee/unite-tag'
   if s:is_windows
     NeoBundleLazy 'sgur/unite-everything'
   endif
@@ -1890,9 +1891,9 @@ if neobundle#tap('unite.vim')
   nnoremap <silent> [Unite]ccg  :<C-u>Unite -no-split -buffer-name=grep        grep:..<CR>
   nnoremap <silent> [Unite]cccg :<C-u>Unite -no-split -buffer-name=grep        grep:../..<CR>
   nnoremap <silent> [Unite]pg   :<C-u>Unite -no-split -buffer-name=grep        grep:!<CR>
+  nnoremap <silent> [Unite]t    :<C-u>Unite -no-split -buffer-name=tag         tag<CR>
   nnoremap <silent> [Unite]f    :<C-u>Unite           -buffer-name=buffer      buffer<CR>
   nnoremap <silent> [Unite]j    :<C-u>Unite           -buffer-name=bookmark    bookmark<CR>
-  nnoremap <silent> [Unite]t    :<C-u>Unite           -buffer-name=tab         tab<CR>
   nnoremap <silent> [Unite]l    :<C-u>Unite -no-split -buffer-name=line        line<CR>
   nnoremap <silent> [Unite]o    :<C-u>Unite -vertical -buffer-name=outline     outline<CR>
   nnoremap <silent> [Unite]q    :<C-u>Unite -no-quit  -buffer-name=quickfix    quickfix<CR>
@@ -1903,9 +1904,9 @@ if neobundle#tap('unite.vim')
 
   nnoremap <silent> [Unite]rr :<C-u>UniteResume<CR>
   nnoremap <silent> [Unite]rg :<C-u>UniteResume grep<CR>
+  nnoremap <silent> [Unite]rt :<C-u>UniteResume tag<CR>
   nnoremap <silent> [Unite]rf :<C-u>UniteResume buffer<CR>
   nnoremap <silent> [Unite]rj :<C-u>UniteResume bookmark<CR>
-  nnoremap <silent> [Unite]rt :<C-u>UniteResume tab<CR>
   nnoremap <silent> [Unite]rl :<C-u>UniteResume line<CR>
   nnoremap <silent> [Unite]ro :<C-u>UniteResume outline<CR>
   nnoremap <silent> [Unite]rq :<C-u>UniteResume quickfix<CR>
@@ -1980,6 +1981,18 @@ if neobundle#tap('unite-quickfix')
         \   'depends':  'unite.vim',
         \   'autoload': {
         \     'unite_sources': 'quickfix'
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" unite-tag {{{
+if neobundle#tap('unite-tag')
+  call neobundle#config({
+        \   'depends':  'unite.vim',
+        \   'autoload': {
+        \     'unite_sources': 'tag'
         \   }
         \ })
 
@@ -2287,6 +2300,7 @@ AutocmdFT go         nnoremap <silent><buffer> <C-]> :<C-u>call GodefUnderCursor
 
 AutocmdFT c,cpp      setlocal foldmethod=syntax
 AutocmdFT c,cpp      nnoremap <silent><buffer> [App]r :<C-u>QuickRun cpp/wandbox<CR>
+AutocmdFT c,cpp      nnoremap <silent><buffer> <C-]> :<C-u>UniteWithCursorWord -immediately -buffer-name=tag tag<CR>
 
 AutocmdFT cs         setlocal omnifunc=OmniSharp#Complete
 AutocmdFT cs         setlocal foldmethod=syntax
