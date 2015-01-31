@@ -1,26 +1,25 @@
 set encoding=utf-8
 scriptencoding utf-8
 " 基本 {{{
-let s:is_windows     = has('win32') || has('win64')
-let s:is_mac         = has('mac') || has('macunix')
-let s:is_linux       = has('unix') && !s:is_windows && !s:is_mac
-let s:is_gui_running = has('gui_running')
-let s:is_starting    = has('vim_starting')
-
-let g:mapleader    = ','
+let s:is_windows   = has('win32') || has('win64')
+let s:is_mac       = has('mac') || has('macunix')
+let s:is_linux     = has('unix') && !s:is_windows && !s:is_mac
 let s:base_columns = 120
+let g:mapleader    = ','
 let $DOTVIM        = expand('~/.vim')
 if s:is_mac
   let $LUA_DLL       = simplify($VIM . '/../../Frameworks/libluajit-5.1.2.dylib')
 endif
 
+" SID
 function! s:get_sid()
   return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeget_sid$')
 endfunction
 let s:sid = s:get_sid()
 delfunction s:get_sid
 
-if s:is_starting
+" $MYVIMRC調整
+if has('vim_starting')
   let s:git_dot_vimrc = expand('~/Dropbox/dotfiles/.vimrc')
   if filereadable(s:git_dot_vimrc)
     let $MYVIMRC = s:git_dot_vimrc
@@ -35,7 +34,6 @@ let g:did_install_default_menus = 1
 augroup MyAutoCmd
   autocmd!
 augroup END
-
 command! -nargs=* Autocmd   autocmd MyAutoCmd <args>
 command! -nargs=* AutocmdFT autocmd MyAutoCmd FileType <args>
 Autocmd BufWinEnter,ColorScheme .vimrc highlight def link myVimAutocmd vimAutoCmd
@@ -48,14 +46,10 @@ else
   set fileencodings=iso-2022-jp,cp932,euc-jp,ucs-bom
 endif
 
-" WinではPATHに$VIMが含まれていないときにexeを見つけ出せないので修正
+" 実行ファイル位置を$PATHに含める
 if s:is_windows && $PATH !~? '\(^\|;\)' . escape($VIM, '\\') . '\(;\|$\)'
   let $PATH = $VIM . ';' . $PATH
-endif
-
-" Macではデフォルトの'iskeyword'がcp932に対応しきれていないので修正
-if s:is_mac
-  set iskeyword=@,48-57,_,128-167,224-235
+elseif s:is_mac
   let $PATH = simplify($VIM . '/../../MacOS') . ':' . $PATH
 endif
 
@@ -94,7 +88,7 @@ set guioptions-=L
 set guioptions-=e
 " }}}
 " プラグイン {{{
-if s:is_starting
+if has('vim_starting')
   let g:neobundle#install_max_processes   = 8
   let g:neobundle#install_process_timeout = 10*60
 
@@ -128,7 +122,7 @@ else
   NeoBundleLazy 'Yggdroot/indentLine'
   NeoBundleLazy 'YoshihiroIto/syntastic'
   NeoBundleLazy 'itchyny/vim-autoft'
-  if s:is_gui_running
+  if has('gui_running')
     NeoBundleLazy 'YoshihiroIto/vim-resize-win'
     NeoBundleLazy 'vim-scripts/movewin.vim'
   endif
@@ -209,7 +203,7 @@ else
   if s:is_mac
     NeoBundleLazy 'itchyny/dictionary.vim'
   endif
-  if s:is_windows && s:is_gui_running
+  if s:is_windows && has('gui_running')
     NeoBundleLazy 'YoshihiroIto/vim-icondrag'
   endif
 
@@ -373,7 +367,7 @@ if neobundle#tap('syntastic')
 endif
 " }}}
 " vim-resize-win {{{
-if s:is_gui_running
+if has('gui_running')
   if neobundle#tap('vim-resize-win')
     call neobundle#config({
           \   'autoload': {
@@ -386,7 +380,7 @@ if s:is_gui_running
 endif
 " }}}
 " movewin.vim {{{
-if s:is_gui_running
+if has('gui_running')
   if neobundle#tap('movewin.vim')
     call neobundle#config({
           \   'autoload': {
@@ -1817,7 +1811,7 @@ if s:is_mac
 endif
 " }}}
 " vim-icondrag {{{
-if s:is_windows && s:is_gui_running
+if s:is_windows && has('gui_running')
   if neobundle#tap('vim-icondrag')
     call neobundle#config({
           \   'autoload': {
@@ -2372,6 +2366,7 @@ set backspace=indent,eol,start
 set noswapfile
 set nobackup
 set formatoptions+=j
+set iskeyword=@,48-57,_,128-167,224-235
 if exists('+cryptmethod')
   set cryptmethod=blowfish2
 endif
@@ -2427,7 +2422,7 @@ endfunction
 " }}}
 " インプットメソッド {{{
 " macvim kaoriya gvim で submode が正しく動作しなくなるため
-if !(s:is_mac && s:is_gui_running)
+if !(s:is_mac && has('gui_running'))
   set noimdisable
 endif
 
@@ -2440,10 +2435,10 @@ endif
 " タブ・インデント {{{
 set autoindent
 set cindent
-set tabstop=4                     " ファイル内の <Tab> が対応する空白の数。
-set softtabstop=4                 " <Tab> の挿入や <BS> の使用等の編集操作をするときに、<Tab> が対応する空白の数。
-set shiftwidth=4                  " インデントの各段階に使われる空白の数。
-set expandtab                     " Insertモードで <Tab> を挿入するとき、代わりに適切な数の空白を使う。
+set tabstop=4       " ファイル内の <Tab> が対応する空白の数。
+set softtabstop=4   " <Tab> の挿入や <BS> の使用等の編集操作をするときに、<Tab> が対応する空白の数。
+set shiftwidth=4    " インデントの各段階に使われる空白の数。
+set expandtab       " Insertモードで <Tab> を挿入するとき、代わりに適切な数の空白を使う。
 set list
 set listchars=tab:\⭟\ ,eol:↲,extends:»,precedes:«,nbsp:%
 set breakindent
@@ -2488,21 +2483,21 @@ map  <silent> #  <Plug>(incsearch-nohl0)<Plug>(asterisk-z#)
 map  <silent> g# <Plug>(incsearch-nohl0)<Plug>(asterisk-gz#)
 " }}}
 " 表示 {{{
-syntax enable                     " 構文ごとに色分けをする
+syntax enable               " 構文ごとに色分けをする
 set number
-set textwidth=0                   " 一行に長い文章を書いていても自動折り返しをしない
-set showcmd                       " コマンドをステータス行に表示
-set noshowmatch                   " 括弧の対応をハイライト
+set textwidth=0             " 一行に長い文章を書いていても自動折り返しをしない
+set showcmd                 " コマンドをステータス行に表示
+set noshowmatch             " 括弧の対応をハイライト
 set wrap
 set noshowmode
-set shortmess+=I                  " 起動時のメッセージを表示しない
+set shortmess+=I            " 起動時のメッセージを表示しない
 set lazyredraw
 set wildmenu
 set wildmode=list:full
 set showfulltag
 set wildoptions=tagfile
-set fillchars=vert:\              " 縦分割の境界線
-set synmaxcol=500                 " ハイライトする文字数を制限する
+set fillchars=vert:\        " 縦分割の境界線
+set synmaxcol=500           " ハイライトする文字数を制限する
 set updatetime=250
 set previewheight=24
 set cmdheight=4
@@ -2515,7 +2510,7 @@ set display=lastline
 set conceallevel=2
 set concealcursor=i
 
-if s:is_gui_running
+if has('gui_running')
   set lines=9999
   execute 'set columns=' . s:base_columns
 endif
@@ -2601,15 +2596,15 @@ function! s:set_color()
 endfunction
 " }}}
 " 半透明化 {{{
-if s:is_gui_running
+if has('gui_running')
   if s:is_mac
     Autocmd GuiEnter,FocusGained * set transparency=3   " アクティブ時の透過率
     Autocmd FocusLost            * set transparency=48  " 非アクティブ時の透過率
   endif
 endif
 " }}}
-" フォント設定 {{{
-if s:is_gui_running
+" フォント {{{
+if has('gui_running')
   if s:is_windows
     set guifont=Ricty\ Regular\ for\ Powerline:h12
     " todo:MacTypeのほうが綺麗
@@ -2689,7 +2684,7 @@ nnoremap <expr> zl foldclosed(line('.')) != -1 ? 'zo' : '<C-l>'
 nnoremap <expr> zO foldclosed(line('.')) != -1 ? 'zO' : ''
 " }}}
 " モード移行 {{{
-if !(s:is_mac && s:is_gui_running)
+if !(s:is_mac && has('gui_running'))
   inoremap <C-j> <Esc>
   nnoremap <C-j> <Esc>
   vnoremap <C-j> <Esc>
@@ -2784,7 +2779,7 @@ nnoremap <silent> <Leader>c :<C-u>close<CR>
 nnoremap [Window]  <Nop>
 nmap     <Leader>w [Window]
 
-if s:is_gui_running
+if has('gui_running')
   noremap <silent> [Window]e :<C-u>call <SID>toggle_v_split_wide()<CR>
   noremap <silent> [Window]f :<C-u>call <SID>full_window()<CR>
   noremap <silent> [Window]H :<C-u>ResizeWin<CR>
