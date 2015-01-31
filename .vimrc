@@ -59,13 +59,6 @@ if s:is_mac
   let $PATH = simplify($VIM . '/../../MacOS') . ':' . $PATH
 endif
 
-" ファイル名に大文字小文字の区別がないシステム用の設定:
-"   (例: DOS/Windows/MacOS)
-if filereadable($VIM . '/vimrc') && filereadable($VIM . '/ViMrC')
-  " tagsファイルの重複防止
-  set tags=./tags,tags
-endif
-
 " ローカル設定
 let s:vimrc_local = expand('~/.vimrc_local')
 if filereadable(s:vimrc_local)
