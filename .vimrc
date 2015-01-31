@@ -11,12 +11,12 @@ if s:is_mac
   let $LUA_DLL       = simplify($VIM . '/../../Frameworks/libluajit-5.1.2.dylib')
 endif
 
-" SID
-function! s:get_sid()
-  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeget_sid$')
-endfunction
-let s:sid = s:get_sid()
-delfunction s:get_sid
+" 実行ファイル位置を$PATHに含める
+if s:is_windows && $PATH !~? '\(^\|;\)' . escape($VIM, '\\') . '\(;\|$\)'
+  let $PATH = $VIM . ';' . $PATH
+elseif s:is_mac
+  let $PATH = simplify($VIM . '/../../MacOS') . ':' . $PATH
+endif
 
 " $MYVIMRC調整
 if has('vim_starting')
@@ -27,8 +27,22 @@ if has('vim_starting')
   unlet s:git_dot_vimrc
 endif
 
+" SID
+function! s:get_sid()
+  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeget_sid$')
+endfunction
+let s:sid = s:get_sid()
+delfunction s:get_sid
+
 " メニューを読み込まない
 let g:did_install_default_menus = 1
+
+" ローカル設定
+let s:vimrc_local = expand('~/.vimrc_local')
+if filereadable(s:vimrc_local)
+  execute 'source' s:vimrc_local
+endif
+unlet s:vimrc_local
 
 " 自動コマンド
 augroup MyAutoCmd
@@ -38,27 +52,6 @@ command! -nargs=* Autocmd   autocmd MyAutoCmd <args>
 command! -nargs=* AutocmdFT autocmd MyAutoCmd FileType <args>
 Autocmd BufWinEnter,ColorScheme .vimrc highlight def link myVimAutocmd vimAutoCmd
 Autocmd BufWinEnter,ColorScheme .vimrc syntax match vimAutoCmd /\<\(Autocmd\|AutocmdFT\)\>/
-
-" 文字コード自動判断
-if has('guess_encode')
-  set fileencodings=guess,iso-2022-jp,cp932,euc-jp,ucs-bom
-else
-  set fileencodings=iso-2022-jp,cp932,euc-jp,ucs-bom
-endif
-
-" 実行ファイル位置を$PATHに含める
-if s:is_windows && $PATH !~? '\(^\|;\)' . escape($VIM, '\\') . '\(;\|$\)'
-  let $PATH = $VIM . ';' . $PATH
-elseif s:is_mac
-  let $PATH = simplify($VIM . '/../../MacOS') . ':' . $PATH
-endif
-
-" ローカル設定
-let s:vimrc_local = expand('~/.vimrc_local')
-if filereadable(s:vimrc_local)
-  execute 'source' s:vimrc_local
-endif
-unlet s:vimrc_local
 
 " キー
 nnoremap <silent> <F1> :<C-u>edit $MYVIMRC<CR>
@@ -2367,6 +2360,14 @@ set noswapfile
 set nobackup
 set formatoptions+=j
 set iskeyword=@,48-57,_,128-167,224-235
+
+" 文字コード自動判断
+if has('guess_encode')
+  set fileencodings=guess,iso-2022-jp,cp932,euc-jp,ucs-bom
+else
+  set fileencodings=iso-2022-jp,cp932,euc-jp,ucs-bom
+endif
+
 if exists('+cryptmethod')
   set cryptmethod=blowfish2
 endif
@@ -2797,7 +2798,6 @@ if has('gui_running')
     set lines=9999
   endfunction
   " }}}
-
   " 縦分割する {{{
   let s:depth_vsp      = 1
   let s:opend_left_vsp = 0
