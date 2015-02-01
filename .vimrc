@@ -656,12 +656,14 @@ if neobundle#tap('indentLine')
           \   'xml',  'json', 'markdown'
           \ ]
 
-    let g:indentLine_faster          = 1
-    let g:indentLine_color_term      = 0
-    let g:indentLine_indentLevel     = 20
-    let g:indentLine_char            = '⭟'
-    let g:indentLine_color_gui       = '#505050'
-    let g:indentLine_noConcealCursor = 1
+    let g:indentLine_faster               = 1
+    let g:indentLine_color_term           = 0
+    let g:indentLine_indentLevel          = 20
+    let g:indentLine_char                 = '⭟'
+    let g:indentLine_color_gui            = '#505050'
+    let g:indentLine_noConcealCursor      = 1
+    let g:indentLine_showFirstIndentLevel = 1
+    let g:indentLine_first_char           = g:indentLine_char
 
     Autocmd BufReadPost * IndentLinesEnable
   endfunction
@@ -2546,8 +2548,8 @@ function! s:smart_gf(mode)
 endfunction
 " カーソル下の単語を移動するたびにハイライトする {{{
 " http://d.hatena.ne.jp/osyo-manga/20140121/1390309901
-Autocmd CursorHold                                * call      s:hl_cword()
-Autocmd CursorMoved,BufLeave,WinLeave,InsertEnter * call      s:hl_clear()
+Autocmd CursorHold                                * call s:hl_cword()
+Autocmd CursorMoved,BufLeave,WinLeave,InsertEnter * call s:hl_clear()
 Autocmd ColorScheme                               * highlight CursorWord guifg=Red
 
 function! s:hl_clear()
