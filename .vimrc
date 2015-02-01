@@ -2317,14 +2317,10 @@ endfunction
 
 " 場所ごとに設定を用意する {{{
 " http://vim-jp.org/vim-users-jp/2009/12/27/Hack-112.html
-Autocmd BufNewFile,BufReadPost * call s:load_vim_local(expand('<afile>:p:h'))
-
-function! s:load_vim_local(loc)
-  let files = findfile('.vimrc.local', escape(a:loc, ' ') . ';', -1)
-  for i in reverse(filter(files, 'filereadable(v:val)'))
-    source `=i`
-  endfor
-endfunction
+Autocmd BufNewFile,BufReadPost * let s:files = findfile('.vimrc.local', escape(expand('<afile>:p:h'), ' ') . ';', -1)
+      \|  for s:i in reverse(filter(s:files, 'filereadable(v:val)'))
+      \|    source `=s:i`
+      \|  endfor
 " }}}
 " }}}
 " キー無効 {{{
