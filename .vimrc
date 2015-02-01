@@ -12,7 +12,7 @@ if s:is_mac
 endif
 
 " 実行ファイル位置を$PATHに含める
-if s:is_windows && $PATH !~? '\(^\|;\)' . escape($VIM, '\\') . '\(;\|$\)'
+if s:is_windows
   let $PATH = $VIM . ';' . $PATH
 elseif s:is_mac
   let $PATH = simplify($VIM . '/../../MacOS') . ':' . $PATH
@@ -34,15 +34,15 @@ endfunction
 let s:sid = s:get_sid()
 delfunction s:get_sid
 
-" メニューを読み込まない
-let g:did_install_default_menus = 1
-
 " ローカル設定
 let s:vimrc_local = expand('~/.vimrc_local')
 if filereadable(s:vimrc_local)
   execute 'source' s:vimrc_local
 endif
 unlet s:vimrc_local
+
+" メニューを読み込まない
+let g:did_install_default_menus = 1
 
 " 自動コマンド
 augroup MyAutoCmd
@@ -2455,20 +2455,10 @@ set ignorecase
 set smartcase
 set hlsearch
 
-if executable('pt')
-  set grepprg=pt\ --nogroup\ --nocolor\ -S
-  set grepformat=%f:%l:%m
-endif
-
 " 日本語インクリメンタルサーチ
 if has('migemo')
   set migemo
-
-  if s:is_windows
-    set migemodict=$VIM/dict/utf-8/migemo-dict
-  elseif s:is_mac
-    set migemodict=$VIMRUNTIME/dict/migemo-dict
-  endif
+  set migemodict=$VIMRUNTIME/dict/migemo-dict
 endif
 
 " http://haya14busa.com/enrich-your-search-experience-with-incsearch-vim/
@@ -2773,8 +2763,8 @@ endfunction
 Autocmd InsertEnter * call s:disable_virtual_cursor()
 " }}}
 " ウィンドウ操作 {{{
-set splitbelow                    " 縦分割したら新しいウィンドウは下に
-set splitright                    " 横分割したら新しいウィンドウは右に
+set splitbelow    " 縦分割したら新しいウィンドウは下に
+set splitright    " 横分割したら新しいウィンドウは右に
 
 nnoremap <silent> <Leader>c :<C-u>close<CR>
 " }}}
