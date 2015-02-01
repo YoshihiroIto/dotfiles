@@ -531,7 +531,7 @@ endfunction
 
 function! s:lightline_filename()
   try
-    return (strlen(s:lightline_readonly()) ? s:lightline_readonly() . ' ' : '') .
+    return (empty(s:lightline_readonly()) ? '' : s:lightline_readonly() . ' ') .
           \ (&filetype ==# 'vimfiler'       ? vimfiler#get_status_string() :
           \  &filetype ==# 'unite'          ? unite#get_status_string()    :
           \  &filetype ==# 'vimshell'       ? vimshell#get_status_string() :
@@ -539,8 +539,8 @@ function! s:lightline_filename()
           \  &filetype =~# 'lingr'          ? ''                           :
           \  &filetype ==# 'tweetvim'       ? ''                           :
           \  &filetype ==# 'quickrun'       ? ''                           :
-          \  strlen(expand('%:t')) ? expand('%:t') : '[No Name]') .
-          \ (strlen(s:lightline_modified()) ? ' ' . s:lightline_modified() : '')
+          \  empty(expand('%:t')) ? '[No Name]' : expand('%:t')) .
+          \ (empty(s:lightline_modified()) ? '' : ' ' . s:lightline_modified())
   catch
     return ''
   endtry
@@ -558,7 +558,7 @@ function! s:lightline_current_branch()
   if &filetype !=# 'vimfiler'
     try
       let branch = fugitive#head()
-      return strlen(branch) ? '⭠ ' . branch : ''
+      return empty(branch) ? '' : '⭠ ' . branch
     catch
       return ''
     endtry
@@ -580,7 +580,7 @@ function! s:lightline_filetype()
     return ''
   endif
 
-  return strlen(&filetype) ? &filetype : 'no filetype'
+  return empty(&filetype) ? 'no filetype' : &filetype
 endfunction
 
 function! s:lightline_fileencoding()
@@ -588,7 +588,7 @@ function! s:lightline_fileencoding()
     return ''
   endif
 
-  return strlen(&fileencoding) ? &fileencoding : &encoding
+  return empty(&fileencoding) ? &encoding : &fileencoding
 endfunction
 
 function! s:lightline_git_summary()
@@ -2310,7 +2310,7 @@ function! s:update_all()
   let &l:numberwidth = w
 
   " ファイルの場所をカレントにする
-  if strlen(&filetype) && &filetype !=# 'vimfiler'
+  if &filetype !=# 'vimfiler'
     silent! execute 'lcd' fnameescape(expand('%:p:h'))
   endif
 endfunction
@@ -2520,11 +2520,11 @@ function! s:smart_gf(mode)
     let line       = getline('.')
     let repos_name = matchstr(line, 'NeoBundle\(\(Lazy\)\|\(Fetch\)\)\?\s\+''\zs.*\ze''')
 
-    if strlen(repos_name)
+    if !empty(repos_name)
       " NeoBundle
       execute 'OpenBrowser' 'https://github.com/' . repos_name
 
-    elseif strlen(openbrowser#get_url_on_cursor())
+    elseif !empty(openbrowser#get_url_on_cursor())
       " URL
       call openbrowser#_keymapping_smart_search(a:mode)
     else
@@ -2552,7 +2552,7 @@ endfunction
 
 function! s:hl_cword()
   let word = expand('<cword>')
-  if word ==# ''
+  if empty(word)
     return
   endif
   if get(b:, 'highlight_cursor_word', '') ==# word
@@ -2934,7 +2934,7 @@ endfunction
 " Gitブランチ上にいるか {{{
 function! s:is_in_git_branch()
   try
-    return strlen(fugitive#head())
+    return !empty(fugitive#head())
   catch
     return 0
   endtry
