@@ -60,6 +60,14 @@ nnoremap          <F3> :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBund
 nnoremap          <F4> :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
 nnoremap [App] <Nop>
 nmap     ;     [App]
+
+" スタートアップ時間表示
+if has('vim_starting') && has('reltime')
+  let s:startuptime = reltime()
+  autocmd VimEnter * let s:startuptime = reltime(s:startuptime)
+        \| echomsg 'startuptime:' reltimestr(s:startuptime)
+        \| unlet s:startuptime
+endif
 " }}}
 " guioptions {{{
 " メニューを読み込まない
@@ -112,7 +120,6 @@ else
   NeoBundleLazy  'kana/vim-submode'
   NeoBundleLazy  'mattn/webapi-vim'
   NeoBundleLazy  'osyo-manga/shabadou.vim'
-  NeoBundleLazy  'thinca/vim-prettyprint'
 
   " 表示
   NeoBundle      'YoshihiroIto/molokai'
@@ -229,6 +236,9 @@ else
   NeoBundleLazy  'cohama/agit.vim'
   NeoBundleLazy  'tpope/vim-fugitive'
 
+  " NeoBundle 'thinca/vim-prettyprint'
+  " NeoBundle 'mattn/benchvimrc-vim'
+
   delcommand NeoBundleLazyC
   " }}}
 
@@ -268,17 +278,6 @@ if neobundle#tap('webapi-vim')
   function! neobundle#hooks.on_source(bundle)
     let g:webapi#system_function = 'vimproc#system'
   endfunction
-
-  call neobundle#untap()
-endif
-" }}}
-" vim-prettyprint {{{
-if neobundle#tap('vim-prettyprint')
-  call neobundle#config({
-        \   'autoload': {
-        \     'commands': ['PP', 'PrettyPrint']
-        \   }
-        \ })
 
   call neobundle#untap()
 endif
@@ -2377,8 +2376,8 @@ command! RemoveCr call s:execute_keep_view('silent! %substitute/\r$//g | nohlsea
 command! RemoveEolSpace call s:execute_keep_view('silent! %substitute/ \+$//g | nohlsearch')
 
 " 整形
-command! Format call s:execute_keep_view('call s:smart_format()')
-function! s:smart_format()
+command! Format call s:execute_keep_view('call s:format()')
+function! s:format()
   if &filetype ==# 'cs'
     OmniSharpCodeFormat
   elseif &filetype =~# 'c\|cpp'
@@ -2391,7 +2390,7 @@ function! s:smart_format()
   elseif &filetype ==# 'json'
     call s:filter_current('jq .', 0)
   else
-    echomsg 'smart_format : Not supported. : ' . &filetype
+    echomsg 'Format : Not supported. : ' . &filetype
   endif
 endfunction
 
