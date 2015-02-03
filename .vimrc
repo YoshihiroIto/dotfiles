@@ -66,7 +66,6 @@ if has('vim_starting') && has('reltime')
   let s:startuptime = reltime()
   autocmd VimEnter * let s:startuptime = reltime(s:startuptime)
         \| echomsg 'startuptime:' reltimestr(s:startuptime)
-        \| unlet s:startuptime
 endif
 " }}}
 " guioptions {{{
@@ -108,7 +107,6 @@ else
         \|  if eval(s:args[1])
         \|    execute 'NeoBundleLazy' s:args[0]
         \|  endif
-        \|  unlet s:args
 
   " ライブラリ
   NeoBundle      'Shougo/vimproc'
