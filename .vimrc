@@ -62,7 +62,7 @@ nnoremap [App] <Nop>
 nmap     ;     [App]
 
 " スタートアップ時間表示
-if has('vim_starting') && has('reltime')
+if has('vim_starting')
   let s:startuptime = reltime()
   autocmd VimEnter * let s:startuptime = reltime(s:startuptime)
         \| echomsg 'startuptime:' reltimestr(s:startuptime)
@@ -89,10 +89,9 @@ set guioptions-=e
 " }}}
 " プラグイン {{{
 if has('vim_starting')
+  set runtimepath+=$DOTVIM/bundle/neobundle.vim/
   let g:neobundle#install_max_processes   = 8
   let g:neobundle#install_process_timeout = 10*60
-
-  set runtimepath+=$DOTVIM/bundle/neobundle.vim/
 endif
 
 call neobundle#begin(expand('$DOTVIM/bundle/'))
@@ -118,6 +117,7 @@ else
   NeoBundleLazy  'kana/vim-submode'
   NeoBundleLazy  'mattn/webapi-vim'
   NeoBundleLazy  'osyo-manga/shabadou.vim'
+  NeoBundleLazy  'thinca/vim-prettyprint'
 
   " 表示
   NeoBundle      'YoshihiroIto/molokai'
@@ -234,8 +234,6 @@ else
   NeoBundleLazy  'cohama/agit.vim'
   NeoBundleLazy  'tpope/vim-fugitive'
 
-  " NeoBundle 'thinca/vim-prettyprint'
-  " NeoBundle 'mattn/benchvimrc-vim'
 
   delcommand NeoBundleLazyC
   " }}}
@@ -276,6 +274,17 @@ if neobundle#tap('webapi-vim')
   function! neobundle#hooks.on_source(bundle)
     let g:webapi#system_function = 'vimproc#system'
   endfunction
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-prettyprint {{{
+if neobundle#tap('vim-prettyprint')
+  call neobundle#config({
+        \   'autoload': {
+        \     'commands': ['PP', 'PrettyPrint']
+        \   }
+        \ })
 
   call neobundle#untap()
 endif
@@ -2962,4 +2971,4 @@ function! s:filter_current(cmd, is_silent)
 endfunction
 " }}}
 " }}}
-" vim: set ts=2 sw=2 sts=2 et :
+" vim: set ts=2 sw=2 sts=2 et:
