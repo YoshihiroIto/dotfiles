@@ -2394,10 +2394,6 @@ endfunction
 
 nnoremap Y y$
 
-" to html
-let g:loaded_2html_plugin = 'vim7.4_v1'
-command! -range=% -bar TOhtml :call tohtml#Convert2HTML(<line1>, <line2>)
-
 nmap     <silent> <C-CR> V<C-CR>
 vnoremap <silent> <C-CR> :<C-u>call <SID>copy_add_comment()<CR>
 
