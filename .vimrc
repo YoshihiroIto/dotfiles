@@ -234,7 +234,6 @@ else
   NeoBundleLazy  'cohama/agit.vim'
   NeoBundleLazy  'tpope/vim-fugitive'
 
-
   delcommand NeoBundleLazyC
   " }}}
 
@@ -1031,26 +1030,23 @@ if neobundle#tap('vim-altr')
         \ })
 
   function! neobundle#hooks.on_source(bundle)
-    AutocmdFT cs,xml call altr#define('%Model.cs',              '%Vm.cs',                  '%.xaml',             '%.xaml.cs')
-    AutocmdFT cs,xml call altr#define('Models/%Model.cs',       'ViewModels/%Vm.cs',       'Views/%.xaml',       'Views/%.xaml.cs')
-    AutocmdFT cs,xml call altr#define('Models/*/%Model.cs',     'ViewModels/*/%Vm.cs',     'Views/*/%.xaml',     'Views/*/%.xaml.cs')
-    AutocmdFT cs,xml call altr#define('Models/*/*/%Model.cs',   'ViewModels/*/*/%Vm.cs',   'Views/*/*/%.xaml',   'Views/*/*/%.xaml.cs')
-    AutocmdFT cs,xml call altr#define('Models/*/*/*/%Model.cs', 'ViewModels/*/*/*/%Vm.cs', 'Views/*/*/*/%.xaml', 'Views/*/*/*/%.xaml.cs')
+    function! s:altr_define(...)
+      for parent in ['', '/*', '/*/*', '/*/*/*']
+        call altr#define(map(copy(a:000), 'printf(v:val, "' . parent . '")'))
+      endfor
+    endfunction
 
-    AutocmdFT cs,xml call altr#define('%Model.cs',              '%ViewModel.cs',                  '%.xaml',             '%.xaml.cs')
-    AutocmdFT cs,xml call altr#define('Models/%Model.cs',       'ViewModels/%ViewModel.cs',       'Views/%.xaml',       'Views/%.xaml.cs')
-    AutocmdFT cs,xml call altr#define('Models/*/%Model.cs',     'ViewModels/*/%ViewModel.cs',     'Views/*/%.xaml',     'Views/*/%.xaml.cs')
-    AutocmdFT cs,xml call altr#define('Models/*/*/%Model.cs',   'ViewModels/*/*/%ViewModel.cs',   'Views/*/*/%.xaml',   'Views/*/*/%.xaml.cs')
-    AutocmdFT cs,xml call altr#define('Models/*/*/*/%Model.cs', 'ViewModels/*/*/*/%ViewModel.cs', 'Views/*/*/*/%.xaml', 'Views/*/*/*/%.xaml.cs')
+    AutocmdFT cs,xml call altr#define(  '%Model.cs',           '%Vm.cs',               '%.xaml',          '%.xaml.cs')
+    AutocmdFT cs,xml call s:altr_define('Models%s/%%Model.cs', 'ViewModels%s/%%Vm.cs', 'Views%s/%%.xaml', 'Views%s/%%.xaml.cs')
+
+    AutocmdFT cs,xml call altr#define(  '%Model.cs',           '%ViewModel.cs',               '%.xaml',          '%.xaml.cs')
+    AutocmdFT cs,xml call s:altr_define('Models%s/%%Model.cs', 'ViewModels%s/%%ViewModel.cs', 'Views%s/%%.xaml', 'Views%s/%%.xaml.cs')
 
     AutocmdFT cs,xml call altr#define('%.xaml', '%.xaml.cs')
     AutocmdFT cs,xml call altr#define('%.cs',   '%.*.cs')
 
-    AutocmdFT cpp call altr#define('%.cpp', '%.*.cpp', '%.h')
-    AutocmdFT cpp call altr#define('src/%.cpp',       'include/%.h')
-    AutocmdFT cpp call altr#define('src/*/%.cpp',     'include/*/%.h')
-    AutocmdFT cpp call altr#define('src/*/*/%.cpp',   'include/*/*/%.h')
-    AutocmdFT cpp call altr#define('src/*/*/*/%.cpp', 'include/*/*/*/%.h')
+    AutocmdFT cpp call altr#define(  '%.cpp', '%.*.cpp', '%.h')
+    AutocmdFT cpp call s:altr_define('src%s/%%.cpp', 'include%s/%%.h')
   endfunction
 
   call neobundle#untap()
