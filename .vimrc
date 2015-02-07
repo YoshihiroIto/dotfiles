@@ -248,7 +248,7 @@ filetype plugin indent on
 if neobundle#tap('vimproc')
   call neobundle#config({
         \   'autoload': {
-        \     'function_prefix': 'vimproc',
+        \     'function_prefix': 'vimproc'
         \   },
         \   'build': {
         \     'mac':  'make -f make_mac.mak',
@@ -393,27 +393,39 @@ endif
 " lightline.vim {{{
 let g:lightline#colorscheme#yoi#palette = {
       \   'inactive': {
-      \     'left':    [['#585858', '#262626', 240, 235], ['#585858', '#121212', 240, 233]],
-      \     'right':   [['#262626', '#606060', 235, 241], ['#585858', '#262626', 240, 235], ['#585858', '#121212', 240, 233]]
+      \     'left':    [['#585858', '#262626', 240, 235],
+      \                 ['#585858', '#121212', 240, 233]],
+      \     'right':   [['#262626', '#606060', 235, 241],
+      \                 ['#585858', '#262626', 240, 235],
+      \                 ['#585858', '#121212', 240, 233]]
       \   },
       \   'insert':    {
       \     'branch':  [['#FFFFFF', '#0087AF', 231,  31]],
-      \     'left':    [['#005F5F', '#FFFFFF',  23, 231], ['#87DFFF', '#005F87', 117,  24]],
+      \     'left':    [['#005F5F', '#FFFFFF',  23, 231],
+      \                 ['#87DFFF', '#005F87', 117,  24]],
       \     'middle':  [['#87DFFF', '#005F87', 117,  24]],
-      \     'right':   [['#005F5F', '#87DFFF',  23, 117], ['#87DFFF', '#0087AF', 117,  31], ['#87DFFF', '#005F87', 117,  24]]
+      \     'right':   [['#005F5F', '#87DFFF',  23, 117],
+      \                 ['#87DFFF', '#0087AF', 117,  31],
+      \                 ['#87DFFF', '#005F87', 117,  24]]
       \   },
       \   'normal':    {
       \     'branch':  [['#FFFFFF', '#585858', 231, 240]],
       \     'error':   [['#BCBCBC', '#FF0000', 250, 196]],
-      \     'left':    [['#195E00', '#07AF00',  22,  34], ['#8A8A8A', '#303030', 245, 236]],
+      \     'left':    [['#195E00', '#07AF00',  22,  34],
+      \                 ['#8A8A8A', '#303030', 245, 236]],
       \     'middle':  [['#8A8A8A', '#303030', 245, 236]],
-      \     'right':   [['#606060', '#D0D0D0', 241, 252], ['#BCBCBC', '#585858', 250, 240], ['#9E9E9E', '#303030', 247, 236]],
+      \     'right':   [['#606060', '#D0D0D0', 241, 252],
+      \                 ['#BCBCBC', '#585858', 250, 240],
+      \                 ['#9E9E9E', '#303030', 247, 236]],
       \     'warning': [['#262626', '#B58900', 235, 136]]
       \   },
       \   'replace':   {
-      \     'left':    [['#FFFFFF', '#DF0000', 231, 160], ['#FFFFFF', '#585858', 231, 240]],
+      \     'left':    [['#FFFFFF', '#DF0000', 231, 160],
+      \                 ['#FFFFFF', '#585858', 231, 240]],
       \     'middle':  [['#8A8A8A', '#303030', 245, 236]],
-      \     'right':   [['#606060', '#D0D0D0', 241, 252], ['#BCBCBC', '#585858', 250, 240], ['#9E9E9E', '#303030', 247, 236]]
+      \     'right':   [['#606060', '#D0D0D0', 241, 252],
+      \                 ['#BCBCBC', '#585858', 250, 240],
+      \                 ['#9E9E9E', '#303030', 247, 236]]
       \   },
       \   'tabline':   {
       \     'left':    [['#BCBCBC', '#585858', 250, 240]],
@@ -423,9 +435,12 @@ let g:lightline#colorscheme#yoi#palette = {
       \   },
       \   'visual':    {
       \     'branch':  [['#FFFFFF', '#AF0053', 231, 125]],
-      \     'left':    [['#AB2362', '#FFFFFF', 125, 231], ['#FF84BA', '#870036', 211,  89]],
+      \     'left':    [['#AB2362', '#FFFFFF', 125, 231],
+      \                 ['#FF84BA', '#870036', 211,  89]],
       \     'middle':  [['#FF84BA', '#870036', 211,  89]],
-      \     'right':   [['#75003D', '#FF87BB',  89, 211], ['#FE86BB', '#AF0053', 211, 125], ['#FF84BA', '#870036', 211,  89]]
+      \     'right':   [['#75003D', '#FF87BB',  89, 211],
+      \                 ['#FE86BB', '#AF0053', 211, 125],
+      \                 ['#FF84BA', '#870036', 211,  89]]
       \   }
       \ }
 
@@ -441,9 +456,7 @@ let g:lightline = {
       \       ['percent']
       \     ]
       \   },
-      \   'component': {
-      \     'percent':      '⭡%3p%%'
-      \   },
+      \   'component': { 'percent': '⭡%3p%%'},
       \   'component_function': {
       \     'fileformat':   s:sid . 'lightline_fileformat',
       \     'filetype':     s:sid . 'lightline_filetype',
@@ -466,30 +479,14 @@ let g:lightline = {
       \     'branch':       'branch',
       \     'gitgutter':    'branch'
       \   },
-      \   'separator': {
-      \     'left':  '⮀',
-      \     'right': '⮂'
-      \   },
-      \   'subseparator': {
-      \     'left':  '⮁',
-      \     'right': '⮃'
-      \   },
+      \   'separator': {    'left': '⮀', 'right': '⮂'},
+      \   'subseparator': { 'left': '⮁', 'right': '⮃'},
       \   'tabline': {
-      \     'left':  [
-      \       ['tabs']
-      \     ],
-      \     'right': [
-      \       ['filetype', 'fileformat', 'fileencoding']
-      \     ]
+      \     'left':  [['tabs']],
+      \     'right': [['filetype', 'fileformat', 'fileencoding']]
       \   },
-      \   'tabline_separator': {
-      \     'left':  '⮀',
-      \     'right': '⮂'
-      \   },
-      \   'tabline_subseparator': {
-      \     'left':  '⮁',
-      \     'right': '⮃'
-      \   },
+      \   'tabline_separator': {    'left': '⮀', 'right': '⮂'},
+      \   'tabline_subseparator': { 'left': '⮁', 'right': '⮃'},
       \   'mode_map': {
       \     'n':      'N',
       \     'i':      'I',
@@ -1036,17 +1033,36 @@ if neobundle#tap('vim-altr')
       endfor
     endfunction
 
-    AutocmdFT cs,xml call altr#define(  '%Model.cs',           '%Vm.cs',               '%.xaml',          '%.xaml.cs')
-    AutocmdFT cs,xml call s:altr_define('Models%s/%%Model.cs', 'ViewModels%s/%%Vm.cs', 'Views%s/%%.xaml', 'Views%s/%%.xaml.cs')
+    " MVVM
+    AutocmdFT cs,xml call altr#define(  '%Model.cs',
+          \                             '%Vm.cs', 
+          \                             '%.xaml',  
+          \                             '%.xaml.cs')
+    AutocmdFT cs,xml call s:altr_define('Models%s/%%Model.cs',
+          \                             'ViewModels%s/%%Vm.cs',
+          \                             'Views%s/%%.xaml',
+          \                             'Views%s/%%.xaml.cs')
+    AutocmdFT cs,xml call altr#define(  '%Model.cs',
+          \                             '%ViewModel.cs',
+          \                             '%.xaml',
+          \                             '%.xaml.cs')
+    AutocmdFT cs,xml call s:altr_define('Models%s/%%Model.cs',
+          \                             'ViewModels%s/%%ViewModel.cs',
+          \                             'Views%s/%%.xaml',
+          \                             'Views%s/%%.xaml.cs')
 
-    AutocmdFT cs,xml call altr#define(  '%Model.cs',           '%ViewModel.cs',               '%.xaml',          '%.xaml.cs')
-    AutocmdFT cs,xml call s:altr_define('Models%s/%%Model.cs', 'ViewModels%s/%%ViewModel.cs', 'Views%s/%%.xaml', 'Views%s/%%.xaml.cs')
+    " xaml
+    AutocmdFT cs,xml call altr#define(  '%.xaml',
+          \                             '%.xaml.cs')
+    AutocmdFT cs,xml call altr#define(  '%.cs',
+          \                             '%.*.cs')
 
-    AutocmdFT cs,xml call altr#define('%.xaml', '%.xaml.cs')
-    AutocmdFT cs,xml call altr#define('%.cs',   '%.*.cs')
-
-    AutocmdFT cpp call altr#define(  '%.cpp', '%.*.cpp', '%.h')
-    AutocmdFT cpp call s:altr_define('src%s/%%.cpp', 'include%s/%%.h')
+    " C++
+    AutocmdFT cpp call altr#define(     '%.cpp',
+          \                             '%.*.cpp',
+          \                             '%.h')
+    AutocmdFT cpp call s:altr_define(   'src%s/%%.cpp',
+          \                             'include%s/%%.h')
   endfunction
 
   call neobundle#untap()
@@ -1125,6 +1141,7 @@ let s:anzu_display_time = 2000
 let s:anzu_display_count = 0
 function! s:begin_display_anzu()
   let s:anzu_display_count = s:anzu_display_time / &updatetime
+  call s:refresh_screen()
 endfunction
 
 function! s:update_display_anzu()
@@ -1167,7 +1184,8 @@ if neobundle#tap('clever-f.vim')
     let g:clever_f_chars_match_any_signs            = ';'
     let g:clever_f_mark_char_color                  = 'Clever_f_mark_char'
 
-    highlight default Clever_f_mark_char ctermfg=Green ctermbg=NONE cterm=underline guifg=Green guibg=NONE gui=underline
+    highlight default Clever_f_mark_char ctermfg=Green ctermbg=NONE cterm=underline
+          \                              guifg=Green   guibg=NONE   gui=underline
   endfunction
 
   call neobundle#untap()
@@ -1585,8 +1603,10 @@ if neobundle#tap('lingr-vim')
   function! neobundle#hooks.on_source(bundle)
     let g:lingr_vim_say_buffer_height = 15
 
-    AutocmdFT lingr-rooms,lingr-members,lingr-messages nnoremap <silent><buffer> q  :<C-u>call <SID>toggle_lingr()<CR>
-    AutocmdFT lingr-rooms,lingr-members,lingr-messages nmap     <silent><buffer> ss <Plug>(lingr-messages-show-say-buffer)
+    AutocmdFT lingr-rooms,lingr-members,lingr-messages
+          \ nnoremap <silent><buffer> q  :<C-u>call <SID>toggle_lingr()<CR>
+    AutocmdFT lingr-rooms,lingr-members,lingr-messages
+          \ nmap     <silent><buffer> ss <Plug>(lingr-messages-show-say-buffer)
     AutocmdFT lingr-rooms,lingr-members,lingr-messages setlocal nolist
     AutocmdFT lingr-rooms,lingr-members                setlocal nonumber
   endfunction
@@ -1617,8 +1637,9 @@ if neobundle#tap('vimshell.vim')
 
   function! neobundle#hooks.on_source(bundle)
     let g:vimshell_popup_height   = 40
-    let g:vimshell_prompt_expr    = 'escape(substitute(fnamemodify(getcwd(), ":~").">", "\\", "/", "g"), "\\[]()?! ")." "'
     let g:vimshell_prompt_pattern = '^\%(\f\|\\.\)\+> '
+    let g:vimshell_prompt_expr    =
+          \ 'escape(substitute(fnamemodify(getcwd(), ":~").">", "\\", "/", "g"), "\\[]()?! ")." "'
   endfunction
 
   call neobundle#untap()
@@ -1637,8 +1658,10 @@ if neobundle#tap('vimfiler.vim')
   noremap <silent> [App]f :<C-u>VimFilerBufferDir<CR>
 
   function! neobundle#hooks.on_source(bundle)
-    AutocmdFT vimfiler nmap     <buffer><expr>   <CR>  vimfiler#smart_cursor_map('<Plug>(vimfiler_cd_file)', '<Plug>(vimfiler_edit_file)')
-    AutocmdFT vimfiler nmap     <buffer><expr>   <C-j> vimfiler#smart_cursor_map('<Plug>(vimfiler_exit)',    '<Plug>(vimfiler_exit)')
+    AutocmdFT vimfiler nmap     <buffer><expr>   <CR>  vimfiler#smart_cursor_map('<Plug>(vimfiler_cd_file)',
+          \                                                                      '<Plug>(vimfiler_edit_file)')
+    AutocmdFT vimfiler nmap     <buffer><expr>   <C-j> vimfiler#smart_cursor_map('<Plug>(vimfiler_exit)',
+          \                                                                      '<Plug>(vimfiler_exit)')
     AutocmdFT vimfiler nnoremap <silent><buffer> J     :<C-u>Unite bookmark<CR>
     AutocmdFT vimfiler nnoremap <silent><buffer> /     :<C-u>Unite file -horizontal<CR>
 
@@ -1883,8 +1906,10 @@ if neobundle#tap('unite.vim')
   nnoremap <silent> [Unite]q    :<C-u>Unite -no-quit  -buffer-name=quickfix    quickfix<CR>
   nnoremap <silent> [Unite]m    :<C-u>Unite -no-split -buffer-name=neomru/file neomru/file<CR>
   nnoremap <silent> [Unite]h    :<C-u>Unite           -buffer-name=help        help<CR>
-  nnoremap <silent> [Unite]v    :<C-u>call <SID>execute_if_on_git_branch('Unite -no-split -buffer-name=giti            giti')<CR>
-  nnoremap <silent> [Unite]b    :<C-u>call <SID>execute_if_on_git_branch('Unite -no-split -buffer-name=giti/branch_all giti/branch_all')<CR>
+  nnoremap <silent> [Unite]v    :<C-u>call <SID>execute_if_on_git_branch(
+        \                         'Unite -no-split -buffer-name=giti            giti')<CR>
+  nnoremap <silent> [Unite]b    :<C-u>call <SID>execute_if_on_git_branch(
+        \                         'Unite -no-split -buffer-name=giti/branch_all giti/branch_all')<CR>
 
   nnoremap <silent> [Unite]rr :<C-u>UniteResume<CR>
   nnoremap <silent> [Unite]rg :<C-u>UniteResume grep<CR>
@@ -2063,7 +2088,6 @@ if neobundle#tap('omnisharp-vim')
 
   function! neobundle#hooks.on_source(bundle)
     let g:omnicomplete_fetch_full_documentation = 1
-
     let g:Omnisharp_stop_server         = 0
     let g:OmniSharp_typeLookupInPreview = 0
   endfunction
@@ -2279,22 +2303,27 @@ AutocmdFT go         setlocal foldmethod=syntax
 AutocmdFT go         setlocal shiftwidth=4
 AutocmdFT go         setlocal noexpandtab
 AutocmdFT go         setlocal tabstop=4
-AutocmdFT go         nnoremap <silent><buffer> K     :<C-u>Godoc<CR>zz:<C-u>call <SID>refresh_screen()<CR>
-AutocmdFT go         nnoremap <silent><buffer> <C-]> :<C-u>call GodefUnderCursor()<CR>zz:<C-u>call <SID>refresh_screen()<CR>
-
+AutocmdFT go         nnoremap <silent><buffer> K      :<C-u>Godoc<CR>
+      \                                               zz
+      \                                               :call <SID>refresh_screen()<CR>
+AutocmdFT go         nnoremap <silent><buffer> <C-]>  :<C-u>call GodefUnderCursor()<CR>
+      \                                               zz
+      \                                               :call <SID>refresh_screen()<CR>
 AutocmdFT c,cpp      setlocal foldmethod=syntax
 AutocmdFT c,cpp      nnoremap <silent><buffer> [App]r :<C-u>QuickRun cpp/wandbox<CR>
-AutocmdFT c,cpp      nnoremap <silent><buffer> <C-]> :<C-u>UniteWithCursorWord -immediately -buffer-name=tag tag<CR>
+AutocmdFT c,cpp      nnoremap <silent><buffer> <C-]>  :<C-u>UniteWithCursorWord -immediately -buffer-name=tag tag<CR>
 
 AutocmdFT cs         setlocal omnifunc=OmniSharp#Complete
 AutocmdFT cs         setlocal foldmethod=syntax
-AutocmdFT cs         nnoremap <silent><buffer> <C-]> :<C-u>call OmniSharp#GotoDefinition()<CR>zz:<C-u>call <SID>refresh_screen()<CR>
+AutocmdFT cs         nnoremap <silent><buffer> <C-]>  :<C-u>call OmniSharp#GotoDefinition()<CR>
+      \                                               zz
+      \                                               :call <SID>refresh_screen()<CR>
 
 AutocmdFT coffee     setlocal shiftwidth=2
 AutocmdFT json       setlocal shiftwidth=2
 AutocmdFT neosnippet setlocal noexpandtab
-AutocmdFT godoc      nnoremap <silent><buffer> q :<C-u>close<CR>
-AutocmdFT help       nnoremap <silent><buffer> q :<C-u>close<CR>
+AutocmdFT godoc      nnoremap <silent><buffer> q      :<C-u>close<CR>
+AutocmdFT help       nnoremap <silent><buffer> q      :<C-u>close<CR>
 AutocmdFT markdown   nnoremap <silent><buffer> [App]v :<C-u>PrevimOpen<CR>
 
 function! s:update_all()
@@ -2461,8 +2490,13 @@ map ? <Plug>(incsearch-backward)
 
 map  <silent> n  <Plug>(incsearch-nohl-n)
 map  <silent> N  <Plug>(incsearch-nohl-N)
-nmap <silent> n  <Plug>(incsearch-nohl)<Plug>(anzu-n)zvzz:<C-u>call <SID>begin_display_anzu()<CR>:<C-u>call <SID>refresh_screen()<CR>
-nmap <silent> N  <Plug>(incsearch-nohl)<Plug>(anzu-N)zvzz:<C-u>call <SID>begin_display_anzu()<CR>:<C-u>call <SID>refresh_screen()<CR>
+nmap <silent> n  <Plug>(incsearch-nohl)
+      \          <Plug>(anzu-n)zvzz
+      \          :call <SID>begin_display_anzu()<CR>
+nmap <silent> N  <Plug>(incsearch-nohl)
+      \          <Plug>(anzu-N)
+      \          zvzz
+      \          :call <SID>begin_display_anzu()<CR>
 
 map  <silent> *  <Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
 map  <silent> g* <Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
