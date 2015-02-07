@@ -109,7 +109,6 @@ else
 
   " ライブラリ
   NeoBundle      'Shougo/vimproc'
-  NeoBundle      'tpope/vim-dispatch'
   NeoBundle      'xolox/vim-misc'
   NeoBundle      'xolox/vim-shell'
   NeoBundleLazy  'Shougo/tabpagebuffer.vim'
@@ -216,7 +215,7 @@ else
   NeoBundleLazyC 'sgur/unite-everything', s:is_windows
 
   " C#
-  NeoBundleLazy  'OmniSharp/omnisharp-vim'
+  NeoBundleLazy  'YoshihiroIto/omnisharp-vim'
 
   " C++
   NeoBundleLazy  'Mizuchi/STL-Syntax'
@@ -2094,8 +2093,8 @@ if neobundle#tap('omnisharp-vim')
 
   function! neobundle#hooks.on_source(bundle)
     let g:omnicomplete_fetch_full_documentation = 1
-    let g:Omnisharp_stop_server         = 0
-    let g:OmniSharp_typeLookupInPreview = 0
+    let g:Omnisharp_stop_server                 = 0
+    let g:OmniSharp_typeLookupInPreview         = 0
   endfunction
 
   call neobundle#untap()
