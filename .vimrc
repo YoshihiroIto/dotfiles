@@ -64,7 +64,7 @@ nmap     ;     [App]
 " スタートアップ時間表示
 if has('vim_starting')
   let s:startuptime = reltime()
-  autocmd VimEnter * let s:startuptime = reltime(s:startuptime)
+  Autocmd VimEnter * let s:startuptime = reltime(s:startuptime)
         \| echomsg 'startuptime:' reltimestr(s:startuptime)
 endif
 " }}}
