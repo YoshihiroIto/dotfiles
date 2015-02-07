@@ -55,7 +55,7 @@ Autocmd BufWinEnter,ColorScheme .vimrc syntax match vimAutoCmd /\<\(Autocmd\|Aut
 
 " キー
 nnoremap <silent> <F1> :<C-u>edit $MYVIMRC<CR>
-nnoremap <silent> <F2> :<C-u>source $MYVIMRC<CR>:IndentLinesEnable<CR>
+nnoremap <silent> <F2> :<C-u>source $MYVIMRC<CR>:IndentLinesReset<CR>
 nnoremap          <F3> :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
 nnoremap          <F4> :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
 nnoremap [App] <Nop>
