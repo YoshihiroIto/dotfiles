@@ -2080,14 +2080,16 @@ if neobundle#tap('omnisharp-vim')
         \     'filetypes': 'cs'
         \   },
         \   'build': {
-        \     'windows': 'MSBuild.exe server/OmniSharp.sln /p:Platform="Any CPU"',
+        \     'windows': 'MSBuild server/OmniSharp.sln /p:Platform="Any CPU"',
         \     'mac':     'xbuild server/OmniSharp.sln',
         \     'unix':    'xbuild server/OmniSharp.sln'
         \   }
         \ })
 
   if s:is_windows
-    let $PATH .= ';C:/Windowsa/Microsoft.NET/Framework/v4.0.30319'
+    if !executable('MSBuild')
+      let $PATH .= ';C:/Windowsa/Microsoft.NET/Framework/v4.0.30319'
+    endif
   endif
 
   function! neobundle#hooks.on_source(bundle)
