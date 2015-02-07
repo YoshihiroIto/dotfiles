@@ -2060,7 +2060,7 @@ if neobundle#tap('omnisharp-vim')
         \ })
 
   if s:is_windows
-    let $PATH = $PATH . ';' . 'C:/Windows/Microsoft.NET/Framework/v4.0.30319'
+    let $PATH = $PATH . ';C:/Windowsa/Microsoft.NET/Framework/v4.0.30319'
   endif
 
   function! neobundle#hooks.on_source(bundle)
