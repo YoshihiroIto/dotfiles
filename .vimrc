@@ -2716,10 +2716,10 @@ if !(s:is_mac && has('gui_running'))
   vnoremap <C-j> <Esc>
   cnoremap <C-j> <Esc>
 else
-  inoremap <silent> <C-j> <Esc>:<C-u>set noimdisable<CR>:<C-u>set imdisable<CR>
-  nnoremap <silent> <C-j> <Esc>:<C-u>set noimdisable<CR>:<C-u>set imdisable<CR>
-  vnoremap <silent> <C-j> <Esc>:<C-u>set noimdisable<CR>:<C-u>set imdisable<CR>
-  cnoremap <silent> <C-j> <Esc>:<C-u>set noimdisable<CR>:<C-u>set imdisable<CR>
+  inoremap <silent> <C-j> <Esc>:<C-u>set noimdisable<CR>:set imdisable<CR>
+  nnoremap <silent> <C-j> <Esc>:<C-u>set noimdisable<CR>:set imdisable<CR>
+  vnoremap <silent> <C-j> <Esc>:<C-u>set noimdisable<CR>:set imdisable<CR>
+  cnoremap <silent> <C-j> <Esc>:<C-u>set noimdisable<CR>:set imdisable<CR>
 endif
 " }}}
 " コマンドラインモード {{{
@@ -2740,8 +2740,8 @@ vnoremap <silent> k     gk
 vnoremap <silent> j     gj
 nnoremap <silent> 0     g0
 nnoremap <silent> g0    0
-nnoremap <silent> $     :<C-u>set virtualedit=block<CR>g$:<C-u>set virtualedit=all<CR>
-nnoremap <silent> g$    :<C-u>set virtualedit=block<CR>$:<C-u>set virtualedit=all<CR>
+nnoremap <silent> $     :<C-u>set virtualedit=block<CR>g$:set virtualedit=all<CR>
+nnoremap <silent> g$    :<C-u>set virtualedit=block<CR>$:set virtualedit=all<CR>
 nnoremap <silent> <C-e> <C-e>j
 nnoremap <silent> <C-y> <C-y>k
 vnoremap <silent> <C-e> <C-e>j
