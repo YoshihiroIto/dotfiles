@@ -102,15 +102,18 @@ else
   NeoBundleFetch 'Shougo/neobundle.vim'
 
   " NeoBundle {{{
-  command! -nargs=+ NeoBundleLazyC let s:args = split(<q-args>, ',\s*')
-        \|  if eval(s:args[1])
-        \|    execute 'NeoBundleLazy' s:args[0]
-        \|  endif
+  command! -nargs=+ NeoBundleC     call s:neobundle('NeoBundle',     split(<q-args>, ',\s*'))
+  command! -nargs=+ NeoBundleLazyC call s:neobundle('NeoBundleLazy', split(<q-args>, ',\s*'))
+  function s:neobundle(cmd, args)
+    if eval(a:args[1])
+      execute a:cmd . a:args[0]
+    endif
+  endfunction
 
   " ライブラリ
   NeoBundle      'Shougo/vimproc'
-  NeoBundle      'xolox/vim-misc'
-  NeoBundle      'xolox/vim-shell'
+  NeoBundleC     'xolox/vim-misc',    s:is_windows
+  NeoBundleC     'xolox/vim-shell',   s:is_windows
   NeoBundleLazy  'Shougo/tabpagebuffer.vim'
   NeoBundleLazy  'basyura/twibill.vim'
   NeoBundleLazy  'kana/vim-submode'
@@ -665,8 +668,6 @@ if neobundle#tap('indentLine')
     let g:indentLine_noConcealCursor      = 1
     let g:indentLine_showFirstIndentLevel = 1
     let g:indentLine_first_char           = g:indentLine_char
-
-    Autocmd BufReadPost * IndentLinesEnable
   endfunction
 
   call neobundle#untap()
@@ -682,9 +683,9 @@ if neobundle#tap('vim-autoft')
 
   function! neobundle#hooks.on_source(bundle)
     let g:autoft_config = [
-          \ { 'filetype': 'cs',  'pattern': '^\s*using' },
-          \ { 'filetype': 'cpp', 'pattern': '^\s*#\s*\%(include\|define\)\>' },
-          \ { 'filetype': 'xml', 'pattern': '<[0-9a-zA-Z]\+' }
+          \   {'filetype': 'cs',  'pattern': '^\s*using'                     },
+          \   {'filetype': 'cpp', 'pattern': '^\s*#\s*\%(include\|define\)\>'},
+          \   {'filetype': 'xml', 'pattern': '<[0-9a-zA-Z]\+'                }
           \ ]
   endfunction
 
@@ -1532,8 +1533,12 @@ if neobundle#tap('vim-operator-surround')
 
   function! neobundle#hooks.on_source(bundle)
     let g:operator#surround#blocks = {
-          \   '-' : [
-          \       {'block' : ["{\<CR>", "\<CR>}"], 'motionwise' : ['line'], 'keys' : ['{', '}']}
+          \   '-': [
+          \     {
+          \       'block':      ["{\<CR>", "\<CR>}" ],
+          \       'motionwise': ['line'             ],
+          \       'keys':       ['{', '}'           ]
+          \     }
           \   ]
           \ }
   endfunction
@@ -1672,7 +1677,7 @@ if neobundle#tap('vimfiler.vim')
     let g:unite_kind_file_use_trashbox        = 1
 
     call vimfiler#custom#profile('default', 'context', {
-          \   'auto_cd' : 1
+          \   'auto_cd': 1
           \ })
 
     if s:is_mac
@@ -2756,6 +2761,8 @@ nnoremap <silent> <C-i> <C-i>zz:<C-u>call <SID>refresh_screen()<CR>
 nnoremap <silent> <C-o> <C-o>zz:<C-u>call <SID>refresh_screen()<CR>
 nnoremap <silent> <C-h> ^:<C-u>set virtualedit=all<CR>
 nnoremap <silent> <C-l> $:<C-u>set virtualedit=all<CR>
+vnoremap <silent> <C-h> ^
+vnoremap <silent> <C-l> $
 
 nmap     <silent> <C-k> <Plug>(jumpbrace)
 xmap     <silent> <C-k> <Plug>(jumpbrace)
