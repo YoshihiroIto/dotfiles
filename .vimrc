@@ -65,7 +65,7 @@ nmap     ;     [App]
 if has('vim_starting')
   let s:startuptime = reltime()
   Autocmd VimEnter * let s:startuptime = reltime(s:startuptime)
-        \| echomsg 'startuptime:' reltimestr(s:startuptime)
+        \|  echomsg 'startuptime:' reltimestr(s:startuptime)
 endif
 " }}}
 " guioptions {{{
@@ -2423,7 +2423,9 @@ function! s:format()
     call s:filter_current('goimports', 0)
   elseif &filetype ==# 'xml'
     let $XMLLINT_INDENT = '    '
-    call s:filter_current('xmllint --format --encode ' . &encoding, 0)
+    if !s:filter_current('xmllint --format --encode ' . &encoding, 1)
+      execute 'silent! %substitute/>\s*</>\r</g | normal! gg=G'
+    endif
   elseif &filetype ==# 'json'
     call s:filter_current('jq .', 0)
   else
@@ -2985,14 +2987,16 @@ endfunction
 " }}}
 " フィルタリング処理を行う {{{
 function! s:filter_current(cmd, is_silent)
-  let tempfile = tempname()
+  let retval = 255
 
   try
+    let tempfile = tempname()
     call writefile(getline(1, '$'), tempfile)
 
     let formatted = vimproc#system(a:cmd . ' ' . substitute(tempfile, '\', '/', 'g'))
+    let retval    = vimproc#get_last_status()
 
-    if vimproc#get_last_status() == 0
+    if retval == 0
       call setreg('g', formatted, 'v')
       silent keepjumps normal! ggVG"gp
     else
@@ -3003,6 +3007,8 @@ function! s:filter_current(cmd, is_silent)
   finally
     call delete(tempfile)
   endtry
+
+  return retval == 0
 endfunction
 " }}}
 " }}}
