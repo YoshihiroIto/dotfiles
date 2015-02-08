@@ -2394,6 +2394,7 @@ set noswapfile
 set nobackup
 set formatoptions+=j
 set iskeyword=@,48-57,_,128-167,224-235
+set tags=tags,./tags,../tags,../../tags,../../../tags,../../../../tags,../../../../../tags
 
 " 文字コード自動判断
 if has('guess_encode')
