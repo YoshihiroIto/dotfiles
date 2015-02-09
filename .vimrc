@@ -459,7 +459,7 @@ let g:lightline = {
       \       ['percent']
       \     ]
       \   },
-      \   'component': { 'percent': '⭡%3p%%'},
+      \   'component': {'percent': '⭡%3p%%'},
       \   'component_function': {
       \     'fileformat':   s:sid . 'lightline_fileformat',
       \     'filetype':     s:sid . 'lightline_filetype',
@@ -482,14 +482,14 @@ let g:lightline = {
       \     'branch':       'branch',
       \     'gitgutter':    'branch'
       \   },
-      \   'separator': {    'left': '⮀', 'right': '⮂'},
-      \   'subseparator': { 'left': '⮁', 'right': '⮃'},
+      \   'separator': {   'left': '⮀', 'right': '⮂'},
+      \   'subseparator': {'left': '⮁', 'right': '⮃'},
       \   'tabline': {
       \     'left':  [['tabs']],
       \     'right': [['filetype', 'fileformat', 'fileencoding']]
       \   },
-      \   'tabline_separator': {    'left': '⮀', 'right': '⮂'},
-      \   'tabline_subseparator': { 'left': '⮁', 'right': '⮃'},
+      \   'tabline_separator': {   'left': '⮀', 'right': '⮂'},
+      \   'tabline_subseparator': {'left': '⮁', 'right': '⮃'},
       \   'mode_map': {
       \     'n':      'N',
       \     'i':      'I',
@@ -742,16 +742,17 @@ if neobundle#tap('yankround.vim')
         \   }
         \ })
 
-  " http://vim-jp.org/vim-users-jp/2011/01/16/Hack-195.html
-  nmap <silent><expr> p  (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR>' . v:count1 . '<Plug>(yankround-p)'
-  xmap <silent><expr> p  (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR>' . v:count1 . '<Plug>(yankround-p)'
-  nmap <silent><expr> P  (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR>' . v:count1 . '<Plug>(yankround-P)'
-  nmap <silent><expr> gp (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR>' . v:count1 . '<Plug>(yankround-gp)'
-  xmap <silent><expr> gp (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR>' . v:count1 . '<Plug>(yankround-gp)'
-  nmap <silent><expr> gP (col('.') >= col('$') ? '$' : '') . ':<C-u>set virtualedit=block<CR>' . v:count1 . '<Plug>(yankround-gP)'
-
-  nmap <C-p> <Plug>(yankround-prev)
-  nmap <C-n> <Plug>(yankround-next)
+  function! s:yankround_pre(count1)
+    return (col('.') >= col('$') ? '$' : '') . ":\<C-u>set virtualedit=block\<CR>" . a:count1
+  endfunction
+  nmap <silent><expr> p     <SID>yankround_pre(v:count1) . '<Plug>(yankround-p)'
+  xmap <silent><expr> p     <SID>yankround_pre(v:count1) . '<Plug>(yankround-p)'
+  nmap <silent><expr> P     <SID>yankround_pre(v:count1) . '<Plug>(yankround-P)'
+  nmap <silent><expr> gp    <SID>yankround_pre(v:count1) . '<Plug>(yankround-gp)'
+  xmap <silent><expr> gp    <SID>yankround_pre(v:count1) . '<Plug>(yankround-gp)'
+  nmap <silent><expr> gP    <SID>yankround_pre(v:count1) . '<Plug>(yankround-gP)'
+  nmap <silent>       <C-p> <Plug>(yankround-prev)
+  nmap <silent>       <C-n> <Plug>(yankround-next)
 
   function! neobundle#hooks.on_source(bundle)
     let g:yankround_use_region_hl = 1
@@ -988,8 +989,10 @@ if neobundle#tap('neosnippet.vim')
         \   }
         \ })
 
-  imap <expr> <Tab> neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : '<Tab>'
-  smap <expr> <Tab> neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : '<Tab>'
+  imap <expr> <Tab> neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)'
+        \                                               : '<Tab>'
+  smap <expr> <Tab> neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)'
+        \                                               : '<Tab>'
 
   function! neobundle#hooks.on_source(bundle)
     let g:neosnippet#enable_snipmate_compatibility = 1
@@ -997,7 +1000,8 @@ if neobundle#tap('neosnippet.vim')
     let g:neosnippet#disable_runtime_snippets      = { '_': 1 }
 
     if isdirectory(expand('$DOTVIM/snippets.local'))
-      let g:neosnippet#snippets_directory = '$DOTVIM/snippets.local,' . g:neosnippet#snippets_directory
+      let g:neosnippet#snippets_directory =
+            \ '$DOTVIM/snippets.local,' . g:neosnippet#snippets_directory
     endif
 
     call neocomplete#custom#source('neosnippet', 'rank', 1000)
@@ -1108,8 +1112,8 @@ if neobundle#tap('incsearch.vim')
 
   function! neobundle#hooks.on_source(bundle)
     let g:incsearch#auto_nohlsearch   = 1
-    let g:incsearch#magic             = '\v'
     let g:incsearch#emacs_like_keymap = 1
+    let g:incsearch#magic             = '\v'
   endfunction
 
   Autocmd VimEnter * IncSearchNoreMap <C-j> <Esc>
@@ -1663,12 +1667,14 @@ if neobundle#tap('vimfiler.vim')
   noremap <silent> [App]f :<C-u>VimFilerBufferDir<CR>
 
   function! neobundle#hooks.on_source(bundle)
-    AutocmdFT vimfiler nmap     <buffer><expr>   <CR>  vimfiler#smart_cursor_map('<Plug>(vimfiler_cd_file)',
-          \                                                                      '<Plug>(vimfiler_edit_file)')
-    AutocmdFT vimfiler nmap     <buffer><expr>   <C-j> vimfiler#smart_cursor_map('<Plug>(vimfiler_exit)',
-          \                                                                      '<Plug>(vimfiler_exit)')
-    AutocmdFT vimfiler nnoremap <silent><buffer> J     :<C-u>Unite bookmark<CR>
-    AutocmdFT vimfiler nnoremap <silent><buffer> /     :<C-u>Unite file -horizontal<CR>
+    AutocmdFT vimfiler nmap     <buffer><expr>   <CR>
+          \                         vimfiler#smart_cursor_map('<Plug>(vimfiler_cd_file)',
+          \                                                   '<Plug>(vimfiler_edit_file)')
+    AutocmdFT vimfiler nmap     <buffer><expr>   <C-j>
+          \                         vimfiler#smart_cursor_map('<Plug>(vimfiler_exit)',
+          \                                                   '<Plug>(vimfiler_exit)')
+    AutocmdFT vimfiler nnoremap <silent><buffer> J :<C-u>Unite bookmark<CR>
+    AutocmdFT vimfiler nnoremap <silent><buffer> / :<C-u>Unite file -horizontal<CR>
 
     let g:vimfiler_as_default_explorer        = 1
     let g:vimfiler_force_overwrite_statusline = 0
@@ -1680,11 +1686,6 @@ if neobundle#tap('vimfiler.vim')
     call vimfiler#custom#profile('default', 'context', {
           \   'auto_cd': 1
           \ })
-
-    if s:is_mac
-      let g:vimfiler_quick_look_command = 'qlmanage -p'
-      AutocmdFT vimfiler nmap <buffer> p <Plug>(vimfiler_quick_look)
-    endif
   endfunction
 
   call neobundle#untap()
@@ -1770,9 +1771,7 @@ if neobundle#tap('wandbox-vim')
   function! neobundle#hooks.on_source(bundle)
     " wandbox.vim で quickfix を開かないようにする
     let g:wandbox#open_quickfix_window = 0
-    let g:wandbox#default_compiler     = {
-          \   'cpp': 'clang-head',
-          \ }
+    let g:wandbox#default_compiler     = {'cpp': 'clang-head'}
   endfunction
 
   call neobundle#untap()
@@ -1805,12 +1804,12 @@ if neobundle#tap('vim-quickrun')
           \     'hook/close_buffer/enable_empty_data':          1,
           \     'outputter':                                    'multi:buffer:quickfix',
           \     'runner':                                       'vimproc',
-          \     'runner/vimproc/updatetime':                    40,
+          \     'runner/vimproc/updatetime':                    40
           \   },
           \   'cpp/wandbox': {
           \     'runner':                                       'wandbox',
           \     'runner/wandbox/compiler':                      'clang-head',
-          \     'runner/wandbox/options':                       'warning,c++1y,boost-1.55',
+          \     'runner/wandbox/options':                       'warning,c++1y,boost-1.55'
           \   },
           \   'lua': {
           \     'type':                                         'lua/vim'
@@ -1909,25 +1908,25 @@ if neobundle#tap('unite.vim')
   nnoremap <silent> [Unite]m    :<C-u>Unite -no-split -buffer-name=neomru/file neomru/file<CR>
   nnoremap <silent> [Unite]h    :<C-u>Unite           -buffer-name=help        help<CR>
   nnoremap <silent> [Unite]v    :<C-u>call <SID>execute_if_on_git_branch(
-        \                         'Unite -no-split -buffer-name=giti            giti')<CR>
+        \                     'Unite -no-split -buffer-name=giti            giti')<CR>
   nnoremap <silent> [Unite]b    :<C-u>call <SID>execute_if_on_git_branch(
-        \                         'Unite -no-split -buffer-name=giti/branch_all giti/branch_all')<CR>
+        \                     'Unite -no-split -buffer-name=giti/branch_all giti/branch_all')<CR>
 
-  nnoremap <silent> [Unite]rr :<C-u>UniteResume<CR>
-  nnoremap <silent> [Unite]rg :<C-u>UniteResume grep<CR>
-  nnoremap <silent> [Unite]rt :<C-u>UniteResume tag<CR>
-  nnoremap <silent> [Unite]rf :<C-u>UniteResume buffer<CR>
-  nnoremap <silent> [Unite]rj :<C-u>UniteResume bookmark<CR>
-  nnoremap <silent> [Unite]rl :<C-u>UniteResume line<CR>
-  nnoremap <silent> [Unite]ro :<C-u>UniteResume outline<CR>
-  nnoremap <silent> [Unite]rq :<C-u>UniteResume quickfix<CR>
-  nnoremap <silent> [Unite]rm :<C-u>UniteResume neomru/file<CR>
-  nnoremap <silent> [Unite]rh :<C-u>UniteResume help<CR>
-  nnoremap <silent> [Unite]rv :<C-u>UniteResume giti<CR>
-  nnoremap <silent> [Unite]rb :<C-u>UniteResume giti/branch_all<CR>
+  nnoremap <silent> [Unite]rr   :<C-u>UniteResume<CR>
+  nnoremap <silent> [Unite]rg   :<C-u>UniteResume grep<CR>
+  nnoremap <silent> [Unite]rt   :<C-u>UniteResume tag<CR>
+  nnoremap <silent> [Unite]rf   :<C-u>UniteResume buffer<CR>
+  nnoremap <silent> [Unite]rj   :<C-u>UniteResume bookmark<CR>
+  nnoremap <silent> [Unite]rl   :<C-u>UniteResume line<CR>
+  nnoremap <silent> [Unite]ro   :<C-u>UniteResume outline<CR>
+  nnoremap <silent> [Unite]rq   :<C-u>UniteResume quickfix<CR>
+  nnoremap <silent> [Unite]rm   :<C-u>UniteResume neomru/file<CR>
+  nnoremap <silent> [Unite]rh   :<C-u>UniteResume help<CR>
+  nnoremap <silent> [Unite]rv   :<C-u>UniteResume giti<CR>
+  nnoremap <silent> [Unite]rb   :<C-u>UniteResume giti/branch_all<CR>
 
   if s:is_windows
-    nnoremap <silent> [Unite]e :<C-u>Unite -no-split -buffer-name=everything everything<CR>
+    nnoremap <silent> [Unite]e  :<C-u>Unite -no-split -buffer-name=everything everything<CR>
     nnoremap <silent> [Unite]re :<C-u>UniteResume everything<CR>
   endif
 
@@ -2088,10 +2087,8 @@ if neobundle#tap('omnisharp-vim')
         \   }
         \ })
 
-  if s:is_windows
-    if !executable('MSBuild')
-      let $PATH .= ';C:/Windows/Microsoft.NET/Framework/v4.0.30319'
-    endif
+  if s:is_windows && !executable('MSBuild')
+    let $PATH .= ';C:/Windows/Microsoft.NET/Framework/v4.0.30319'
   endif
 
   function! neobundle#hooks.on_source(bundle)
@@ -2284,12 +2281,13 @@ endfunction
 " }}}
 " }}}
 " ファイルタイプごとの設定 {{{
-Autocmd BufEnter,WinEnter,BufWinEnter,BufWritePost *                         call s:update_all()
-Autocmd BufNewFile,BufRead                         *.xaml                    setlocal filetype=xml
-Autocmd BufNewFile,BufRead                         *.json                    setlocal filetype=json
-Autocmd BufNewFile,BufRead                         *.{fx,fxc,fxh,hlsl,hlsli} setlocal filetype=hlsl
-Autocmd BufNewFile,BufRead                         *.{fsh,vsh}               setlocal filetype=glsl
-Autocmd BufNewFile,BufRead                         *.{md,mkd,markdown}       setlocal filetype=markdown
+Autocmd BufEnter,WinEnter,BufWinEnter *                         call s:update_all()
+Autocmd BufWritePost                  *                         call s:update_numberwidth()
+Autocmd BufNewFile,BufRead            *.xaml                    setlocal filetype=xml
+Autocmd BufNewFile,BufRead            *.json                    setlocal filetype=json
+Autocmd BufNewFile,BufRead            *.{fx,fxc,fxh,hlsl,hlsli} setlocal filetype=hlsl
+Autocmd BufNewFile,BufRead            *.{fsh,vsh}               setlocal filetype=glsl
+Autocmd BufNewFile,BufRead            *.{md,mkd,markdown}       setlocal filetype=markdown
 
 AutocmdFT ruby       setlocal foldmethod=syntax
 AutocmdFT ruby       setlocal tabstop=2
@@ -2321,7 +2319,8 @@ AutocmdFT go         nnoremap <silent><buffer> <C-]>  :<C-u>call GodefUnderCurso
       \                                               :call <SID>refresh_screen()<CR>
 AutocmdFT c,cpp      setlocal foldmethod=syntax
 AutocmdFT c,cpp      nnoremap <silent><buffer> [App]r :<C-u>QuickRun cpp/wandbox<CR>
-AutocmdFT c,cpp      nnoremap <silent><buffer> <C-]>  :<C-u>UniteWithCursorWord -immediately -buffer-name=tag tag<CR>
+AutocmdFT c,cpp      nnoremap <silent><buffer> <C-]>  :<C-u>UniteWithCursorWord
+      \                                                     -immediately -buffer-name=tag tag<CR>
 
 AutocmdFT cs         setlocal omnifunc=OmniSharp#Complete
 AutocmdFT cs         setlocal foldmethod=syntax
@@ -2341,6 +2340,15 @@ function! s:update_all()
   setlocal formatoptions-=o
   setlocal textwidth=0
 
+  call s:update_numberwidth()
+
+  " ファイルの場所をカレントにする
+  if &filetype !=# 'vimfiler'
+    silent! execute 'lcd' fnameescape(expand('%:p:h'))
+  endif
+endfunction
+
+function! s:update_numberwidth()
   " 行番号表示幅を設定する
   " http://d.hatena.ne.jp/osyo-manga/20140303/1393854617
   let w = len(line('$')) + 2
@@ -2349,16 +2357,12 @@ function! s:update_all()
   endif
 
   let &l:numberwidth = w
-
-  " ファイルの場所をカレントにする
-  if &filetype !=# 'vimfiler'
-    silent! execute 'lcd' fnameescape(expand('%:p:h'))
-  endif
 endfunction
 
 " 場所ごとに設定を用意する {{{
 " http://vim-jp.org/vim-users-jp/2009/12/27/Hack-112.html
-Autocmd BufNewFile,BufReadPost * let s:files = findfile('.vimrc.local', escape(expand('<afile>:p:h'), ' ') . ';', -1)
+Autocmd BufNewFile,BufReadPost * let s:files =
+      \   findfile('.vimrc.local', escape(expand('<afile>:p:h'), ' ') . ';', -1)
       \|  for s:i in reverse(filter(s:files, 'filereadable(v:val)'))
       \|    source `=s:i`
       \|  endfor
@@ -2474,10 +2478,10 @@ endif
 " タブ・インデント {{{
 set autoindent
 set cindent
-set tabstop=4       " ファイル内の <Tab> が対応する空白の数。
-set softtabstop=4   " <Tab> の挿入や <BS> の使用等の編集操作をするときに、<Tab> が対応する空白の数。
-set shiftwidth=4    " インデントの各段階に使われる空白の数。
-set expandtab       " Insertモードで <Tab> を挿入するとき、代わりに適切な数の空白を使う。
+set tabstop=4       " ファイル内の <Tab> が対応する空白の数
+set softtabstop=4   " <Tab> の挿入や <BS> の使用等の編集操作をするときに <Tab> が対応する空白の数
+set shiftwidth=4    " インデントの各段階に使われる空白の数
+set expandtab       " Insertモードで <Tab> を挿入するとき、代わりに適切な数の空白を使う
 set list
 set listchars=tab:\⭟\ ,eol:↲,extends:»,precedes:«,nbsp:%
 set breakindent
@@ -3021,4 +3025,4 @@ function! s:filter_current(cmd, is_silent)
 endfunction
 " }}}
 " }}}
-" vim: set ts=2 sw=2 sts=2 et:
+" vim: tabstop=2 shiftwidth=2 softtabstop=2 expandtab
