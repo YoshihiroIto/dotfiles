@@ -13,9 +13,9 @@ endif
 
 " 実行ファイル位置を$PATHに含める
 if s:is_windows
-  let $PATH = $VIM . ';' . $PATH
+  let $PATH .= ';' . $VIM
 elseif s:is_mac
-  let $PATH = simplify($VIM . '/../../MacOS') . ':' . $PATH
+  let $PATH .= ':' . simplify($VIM . '/../../MacOS')
 endif
 
 " $MYVIMRC調整
@@ -106,7 +106,7 @@ else
   command! -nargs=+ NeoBundleLazyC call s:neobundle('NeoBundleLazy', split(<q-args>, ',\s*'))
   function s:neobundle(cmd, args)
     if eval(a:args[1])
-      execute a:cmd . a:args[0]
+      execute a:cmd a:args[0]
     endif
   endfunction
 
@@ -343,7 +343,8 @@ if neobundle#tap('foldCC.vim')
 
   function! neobundle#hooks.on_source(bundle)
     let g:foldCCtext_enable_autofdc_adjuster = 1
-    let g:foldCCtext_tail = 'printf("[ %4d lines  Lv%-2d]", v:foldend - v:foldstart + 1, v:foldlevel)'
+    let g:foldCCtext_tail                    =
+          \ 'printf("[ %4d lines  Lv%-2d]", v:foldend - v:foldstart + 1, v:foldlevel)'
 
     set foldtext=FoldCCtext()
   endfunction
@@ -993,7 +994,7 @@ if neobundle#tap('neosnippet.vim')
   function! neobundle#hooks.on_source(bundle)
     let g:neosnippet#enable_snipmate_compatibility = 1
     let g:neosnippet#snippets_directory            = '$DOTVIM/snippets'
-    let g:neosnippet#disable_runtime_snippets      = { '_' : 1 }
+    let g:neosnippet#disable_runtime_snippets      = { '_': 1 }
 
     if isdirectory(expand('$DOTVIM/snippets.local'))
       let g:neosnippet#snippets_directory = '$DOTVIM/snippets.local,' . g:neosnippet#snippets_directory
@@ -1769,8 +1770,7 @@ if neobundle#tap('wandbox-vim')
   function! neobundle#hooks.on_source(bundle)
     " wandbox.vim で quickfix を開かないようにする
     let g:wandbox#open_quickfix_window = 0
-
-    let g:wandbox#default_compiler = {
+    let g:wandbox#default_compiler     = {
           \   'cpp': 'clang-head',
           \ }
   endfunction
@@ -1876,8 +1876,6 @@ if neobundle#tap('open-browser.vim')
     let g:openbrowser_no_default_menus = 1
   endfunction
 
-  let g:netrw_nogx = 1
-
   call neobundle#untap()
 endif
 " }}}
@@ -1935,8 +1933,8 @@ if neobundle#tap('unite.vim')
 
   function! neobundle#hooks.on_source(bundle)
     let g:unite_force_overwrite_statusline = 0
-    let g:unite_source_alias_aliases = {
-          \   'memolist' : {'source': 'file'},
+    let g:unite_source_alias_aliases       = {
+          \   'memolist': {'source': 'file'}
           \ }
 
     if executable('pt')
@@ -2092,7 +2090,7 @@ if neobundle#tap('omnisharp-vim')
 
   if s:is_windows
     if !executable('MSBuild')
-      let $PATH .= ';C:/Windowsa/Microsoft.NET/Framework/v4.0.30319'
+      let $PATH .= ';C:/Windows/Microsoft.NET/Framework/v4.0.30319'
     endif
   endif
 
@@ -2435,7 +2433,7 @@ function! s:format()
   elseif &filetype ==# 'json'
     call s:filter_current('jq .', 0)
   else
-    echomsg 'Format : Not supported. : ' . &filetype
+    echomsg 'Format: Not supported:' &filetype
   endif
 endfunction
 
@@ -2504,7 +2502,8 @@ map ? <Plug>(incsearch-backward)
 map  <silent> n  <Plug>(incsearch-nohl-n)
 map  <silent> N  <Plug>(incsearch-nohl-N)
 nmap <silent> n  <Plug>(incsearch-nohl)
-      \          <Plug>(anzu-n)zvzz
+      \          <Plug>(anzu-n)
+      \          zvzz
       \          :call <SID>begin_display_anzu()<CR>
 nmap <silent> N  <Plug>(incsearch-nohl)
       \          <Plug>(anzu-N)
@@ -2563,8 +2562,7 @@ function! s:smart_gf(mode)
 
     if !empty(repos_name)
       " NeoBundle
-      execute 'OpenBrowser' 'https://github.com/' . repos_name
-
+      execute 'OpenBrowser https://github.com/' . repos_name
     elseif !empty(openbrowser#get_url_on_cursor())
       " URL
       call openbrowser#_keymapping_smart_search(a:mode)
@@ -2986,7 +2984,7 @@ endfunction
 " Gitブランチ上であれば実行 {{{
 function! s:execute_if_on_git_branch(line)
   if !s:is_in_git_branch()
-    echomsg 'not on git branch : ' . a:line
+    echomsg 'not on git branch:' a:line
     return
   endif
 
@@ -3009,7 +3007,7 @@ function! s:filter_current(cmd, is_silent)
       silent keepjumps normal! ggVG"gp
     else
       if !a:is_silent
-        echomsg 'filter_current : Error'
+        echomsg 'filter_current: Error'
       endif
     endif
   finally
