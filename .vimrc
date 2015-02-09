@@ -2119,14 +2119,16 @@ if neobundle#tap('vim-clang-format')
     endif
 
     let g:clang_format#style_options = {
-          \   'AccessModifierOffset':                -4,
-          \   'AllowShortIfStatementsOnASingleLine': 'false',
-          \   'AlwaysBreakBeforeMultilineStrings':   'false',
-          \   'BreakBeforeBraces':                   'Allman',
-          \   'ColumnLimit':                         0,
-          \   'IndentCaseLabels':                    'false',
-          \   'IndentWidth':                         4,
-          \   'UseTab':                              'Never'
+          \   'AccessModifierOffset':                           -4,
+          \   'AllowShortIfStatementsOnASingleLine':            'false',
+          \   'AlwaysBreakBeforeMultilineStrings':              'false',
+          \   'BreakBeforeBraces':                              'Allman',
+          \   'BreakConstructorInitializersBeforeComma':        'true',
+          \   'ColumnLimit':                                    0,
+          \   'ConstructorInitializerAllOnOneLineOrOnePerLine': 'false',
+          \   'IndentCaseLabels':                               'true',
+          \   'IndentWidth':                                    4,
+          \   'UseTab':                                         'Never'
           \ }
   endfunction
 
@@ -2542,6 +2544,7 @@ set cursorline
 set display=lastline
 set conceallevel=2
 set concealcursor=i
+set colorcolumn=100
 
 if has('gui_running')
   set lines=9999
