@@ -537,8 +537,8 @@ endfunction
 function! s:lightline_filename()
   try
     return (empty(s:lightline_readonly()) ? '' : s:lightline_readonly() . ' ') .
-          \ (&filetype ==# 'vimfiler'       ? vimfiler#get_status_string() :
-          \  &filetype ==# 'unite'          ? unite#get_status_string()    :
+          \ (&filetype ==# 'unite'          ? unite#get_status_string()    :
+          \  &filetype ==# 'vimfiler'       ? vimfiler#get_status_string() :
           \  &filetype ==# 'vimshell'       ? vimshell#get_status_string() :
           \  &filetype ==# 'lingr-messages' ? lingr#status()               :
           \  &filetype =~# 'lingr'          ? ''                           :
@@ -834,9 +834,7 @@ if neobundle#tap('vim-over')
   noremap <silent> <Leader>s :OverCommandLine<CR>
 
   function! neobundle#hooks.on_source(bundle)
-    let g:over_command_line_key_mappings = {
-          \   "\<C-j>" : "\<Esc>"
-          \ }
+    let g:over_command_line_key_mappings = {"\<C-j>": "\<Esc>"}
   endfunction
 
   augroup InitializeOver
@@ -997,7 +995,7 @@ if neobundle#tap('neosnippet.vim')
   function! neobundle#hooks.on_source(bundle)
     let g:neosnippet#enable_snipmate_compatibility = 1
     let g:neosnippet#snippets_directory            = '$DOTVIM/snippets'
-    let g:neosnippet#disable_runtime_snippets      = { '_': 1 }
+    let g:neosnippet#disable_runtime_snippets      = {'_': 1}
 
     if isdirectory(expand('$DOTVIM/snippets.local'))
       let g:neosnippet#snippets_directory =
@@ -1613,9 +1611,9 @@ if neobundle#tap('lingr-vim')
     let g:lingr_vim_say_buffer_height = 15
 
     AutocmdFT lingr-rooms,lingr-members,lingr-messages
-          \ nnoremap <silent><buffer> q  :<C-u>call <SID>toggle_lingr()<CR>
+          \                   nnoremap <silent><buffer> q  :<C-u>call <SID>toggle_lingr()<CR>
     AutocmdFT lingr-rooms,lingr-members,lingr-messages
-          \ nmap     <silent><buffer> ss <Plug>(lingr-messages-show-say-buffer)
+          \                   nmap     <silent><buffer> ss <Plug>(lingr-messages-show-say-buffer)
     AutocmdFT lingr-rooms,lingr-members,lingr-messages setlocal nolist
     AutocmdFT lingr-rooms,lingr-members                setlocal nonumber
   endfunction
@@ -1683,9 +1681,7 @@ if neobundle#tap('vimfiler.vim')
     let g:vimfiler_readonly_file_icon         = '⭤'
     let g:unite_kind_file_use_trashbox        = 1
 
-    call vimfiler#custom#profile('default', 'context', {
-          \   'auto_cd': 1
-          \ })
+    call vimfiler#custom#profile('default', 'context', {'auto_cd': 1})
   endfunction
 
   call neobundle#untap()
@@ -2373,7 +2369,7 @@ Autocmd BufNewFile,BufReadPost * let s:files =
 nnoremap ZQ <Nop>
 
 " Exモード
-nnoremap Q <Nop>
+nnoremap Q  <Nop>
 
 " ミス操作で削除してしまうため
 nnoremap dh <Nop>
