@@ -831,7 +831,9 @@ if neobundle#tap('vim-over')
         \   }
         \ })
 
-  noremap <silent> <Leader>s :OverCommandLine<CR>
+  noremap  <silent> <Leader>s  :OverCommandLine<CR>
+  nnoremap <silent> <leader>gs :<C-u>OverCommandLine<CR>%s///g<Left><Left>
+  vnoremap <silent> <leader>gs :OverCommandLine<CR>s///g<Left><Left>
 
   function! neobundle#hooks.on_source(bundle)
     let g:over_command_line_key_mappings = {"\<C-j>": "\<Esc>"}
