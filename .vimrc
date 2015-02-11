@@ -791,16 +791,6 @@ if neobundle#tap('vim-smartinput')
     call smartinput#define_default_rules()
   endfunction
 
-  function! neobundle#hooks.on_post_source(bundle)
-    " セミコロン自動入力
-    AutocmdFT c,cpp call smartinput#define_rule({
-          \   'at':       '\%(\<struct\>\|\<class\>\|\<enum\>\)\s*\w*.*\n*\s*\%#',
-          \   'char':     '{',
-          \   'input':    '{};<Left><Left>',
-          \   'filetype': ['c', 'cpp'],
-          \ })
-  endfunction
-
   call neobundle#untap()
 endif
 " }}}
@@ -1883,7 +1873,7 @@ if neobundle#tap('unite.vim')
   call neobundle#config({
         \   'depends':  ['vimfiler.vim', 'tabpagebuffer.vim'],
         \   'autoload': {
-        \     'commands': ['Unite', 'UniteResume']
+        \     'commands': ['Unite', 'UniteResume', 'UniteWithCursorWord']
         \   }
         \ })
 
