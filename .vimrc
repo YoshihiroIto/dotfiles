@@ -2009,7 +2009,6 @@ if neobundle#tap('neomru.vim')
 
   function! neobundle#hooks.on_source(bundle)
     let g:neomru#update_interval         = 1
-    let g:neomru#file_mru_limit          = 150
     let g:neomru#file_mru_ignore_pattern = 'fugitiveblame'
   endfunction
 
