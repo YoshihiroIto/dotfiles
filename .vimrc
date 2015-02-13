@@ -170,28 +170,28 @@ else
 
   " テキストオブジェクト
   NeoBundleLazy  'kana/vim-textobj-user'
-  NeoBundleLazy  'anyakichi/vim-textobj-ifdef'         " #
-  NeoBundleLazy  'glts/vim-textobj-comment'            " c
-  NeoBundleLazy  'rhysd/textobj-wiw'                   " .
-  NeoBundleLazy  'kana/vim-textobj-entire'             " e
-  NeoBundleLazy  'kana/vim-textobj-indent'             " i I
-  NeoBundleLazy  'kana/vim-textobj-line'               " l
-  NeoBundleLazy  'mattn/vim-textobj-url'               " u
-  NeoBundleLazy  'rhysd/vim-textobj-anyblock'          " b
-  NeoBundleLazy  'rhysd/vim-textobj-word-column'       " v V
-  NeoBundleLazy  'sgur/vim-textobj-parameter'          " a
-  NeoBundleLazy  'thinca/vim-textobj-between'          " f{char}
-  NeoBundleLazy  'whatyouhide/vim-textobj-xmlattr'     " x
+  NeoBundleLazy  'anyakichi/vim-textobj-ifdef'          " #
+  NeoBundleLazy  'glts/vim-textobj-comment'             " c
+  NeoBundleLazy  'rhysd/textobj-wiw'                    " .
+  NeoBundleLazy  'kana/vim-textobj-entire'              " e
+  NeoBundleLazy  'kana/vim-textobj-indent'              " i I
+  NeoBundleLazy  'kana/vim-textobj-line'                " l
+  NeoBundleLazy  'mattn/vim-textobj-url'                " u
+  NeoBundleLazy  'rhysd/vim-textobj-anyblock'           " b
+  NeoBundleLazy  'rhysd/vim-textobj-word-column'        " v V
+  NeoBundleLazy  'sgur/vim-textobj-parameter'           " a
+  NeoBundleLazy  'thinca/vim-textobj-between'           " f{char}
+  NeoBundleLazy  'whatyouhide/vim-textobj-xmlattr'      " x
 
   " オペレータ
   NeoBundleLazy  'kana/vim-operator-user'
-  NeoBundleLazy  'YoshihiroIto/vim-operator-tcomment'  " t
-  NeoBundleLazy  'deris/vim-rengbang'                  " <Leader>r
-  NeoBundleLazy  'emonkak/vim-operator-sort'           " <Leader>o
-  NeoBundleLazy  'kana/vim-operator-replace'           " R
-  NeoBundleLazy  'rhysd/vim-operator-surround'         " S
-  NeoBundleLazy  'tyru/operator-camelize.vim'          " <Leader>_
-  NeoBundleLazy  'osyo-manga/vim-operator-jump_side'
+  NeoBundleLazy  'YoshihiroIto/vim-operator-tcomment'   " t
+  NeoBundleLazy  'deris/vim-rengbang'                   " <Leader>r
+  NeoBundleLazy  'emonkak/vim-operator-sort'            " <Leader>o
+  NeoBundleLazy  'kana/vim-operator-replace'            " R
+  NeoBundleLazy  'rhysd/vim-operator-surround'          " S
+  NeoBundleLazy  'tyru/operator-camelize.vim'           " <Leader>_
+  NeoBundleLazy  'osyo-manga/vim-operator-jump_side'    " <Leader>j
 
   " アプリ
   NeoBundleLazy  'Shougo/vimfiler.vim'
