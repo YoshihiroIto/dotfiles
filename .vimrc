@@ -163,6 +163,7 @@ else
   NeoBundleLazy  'kchmck/vim-coffee-script'
   NeoBundleLazy  'leafo/moonscript-vim'
   NeoBundleLazy  'pangloss/vim-javascript'
+  NeoBundleLazy  'stephpy/vim-yaml'
   NeoBundleLazy  'tikhomirov/vim-glsl'
   NeoBundleLazy  'tpope/vim-markdown'
   NeoBundleLazy  'vim-ruby/vim-ruby'
@@ -1279,6 +1280,17 @@ if neobundle#tap('vim-javascript.vim')
   call neobundle#config({
         \   'autoload': {
         \     'filetypes': 'javascript'
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-yaml {{{
+if neobundle#tap('vim-yaml')
+  call neobundle#config({
+        \   'autoload': {
+        \     'filetypes': 'yaml'
         \   }
         \ })
 
