@@ -2179,6 +2179,9 @@ function! s:format()
   endif
 endfunction
 
+" 現在のファイルパスをクリップボードへコピーする
+command! CopyCurrentFilepath call setreg('*', expand('%:p'), 'v')
+
 nnoremap Y y$
 
 nmap     <silent> <C-CR> V<C-CR>
@@ -2390,8 +2393,7 @@ if has('gui_running')
   endif
 endif
 
-if s:is_windows
-  " 一部のUCS文字の幅を自動計測して決める
+if s:is_windows && has('kaoriya')
   set ambiwidth=auto
 else
   set ambiwidth=double
