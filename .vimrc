@@ -484,10 +484,8 @@ function! s:lightline_mode()
         \ winwidth(0) > 50 ? lightline#mode() : ''
 endfunction
 
-let s:lighline_no_disp_ft = 'vimfiler\|unite\|vimshell\|tweetvim\|quickrun\|lingr\|agit'
-
 function! s:lightline_modified()
-  if &filetype =~# s:lighline_no_disp_ft
+  if s:is_lightline_no_disp_group()
     return ''
   endif
 
@@ -495,7 +493,7 @@ function! s:lightline_modified()
 endfunction
 
 function! s:lightline_readonly()
-  if &filetype =~# s:lighline_no_disp_ft
+  if s:is_lightline_no_disp_filetype()
     return ''
   endif
 
@@ -520,7 +518,7 @@ function! s:lightline_filename()
 endfunction
 
 function! s:lightline_current_branch()
-  if &filetype =~# s:lighline_no_disp_ft
+  if s:is_lightline_no_disp_filetype()
     return ''
   endif
 
@@ -592,12 +590,16 @@ function! s:lightline_lineinfo()
   return printf('%4d/%d : %-3d', line('.'), line('$'), col('.'))
 endfunction
 
+function! s:is_lightline_no_disp_filetype()
+  return &filetype =~# 'vimfiler\|unite\|vimshell\|tweetvim\|quickrun\|lingr\|agit'
+endfunction
+
 function! s:is_lightline_no_disp_group()
   if winwidth(0) <= 50
     return 1
   endif
 
-  if &filetype =~# s:lighline_no_disp_ft
+  if s:is_lightline_no_disp_filetype()
     return 1
   endif
 
@@ -913,12 +915,11 @@ if neobundle#tap('neosnippet.vim')
 
   function! neobundle#hooks.on_source(bundle)
     let g:neosnippet#enable_snipmate_compatibility = 1
-    let g:neosnippet#snippets_directory            = '$DOTVIM/snippets'
     let g:neosnippet#disable_runtime_snippets      = {'_': 1}
+    let g:neosnippet#snippets_directory            = '$DOTVIM/snippets'
 
     if isdirectory(expand('$DOTVIM/snippets.local'))
-      let g:neosnippet#snippets_directory =
-            \ '$DOTVIM/snippets.local,' . g:neosnippet#snippets_directory
+      let g:neosnippet#snippets_directory            .= ',$DOTVIM/snippets.local'
     endif
 
     call neocomplete#custom#source('neosnippet', 'rank', 1000)
@@ -1112,31 +1113,9 @@ if neobundle#tap('vim-ruby')
   call neobundle#untap()
 endif
 " }}}
-" JSON.vim {{{
-if neobundle#tap('JSON.vim')
-  call neobundle#config({'autoload': {'filetypes': ['json', 'markdown']}})
-  call neobundle#untap()
-endif
-" }}}
 " moonscript-vim {{{
 if neobundle#tap('moonscript-vim')
   call neobundle#config({'autoload': {'filetypes': 'moon'}})
-  call neobundle#untap()
-endif
-" }}}
-" vim-markdown {{{
-if neobundle#tap('vim-markdown')
-  call neobundle#config({'autoload': {'filetypes': 'markdown'}})
-
-  function! neobundle#hooks.on_source(bundle)
-    let g:markdown_fenced_languages = [
-          \   'c',    'cpp', 'cs', 'go',
-          \   'ruby', 'lua', 'python',
-          \   'vim',
-          \   'xml',  'json'
-          \ ]
-  endfunction
-
   call neobundle#untap()
 endif
 " }}}
@@ -1161,6 +1140,28 @@ endif
 " vim-toml {{{
 if neobundle#tap('vim-toml')
   call neobundle#config({'autoload': {'filetypes': 'toml'}})
+  call neobundle#untap()
+endif
+" }}}
+" JSON.vim {{{
+if neobundle#tap('JSON.vim')
+  call neobundle#config({'autoload': {'filetypes': ['json', 'markdown']}})
+  call neobundle#untap()
+endif
+" }}}
+" vim-markdown {{{
+if neobundle#tap('vim-markdown')
+  call neobundle#config({'autoload': {'filetypes': 'markdown'}})
+
+  function! neobundle#hooks.on_source(bundle)
+    let g:markdown_fenced_languages = [
+          \   'c',    'cpp', 'cs', 'go',
+          \   'ruby', 'lua', 'python',
+          \   'vim',
+          \   'xml',  'json'
+          \ ]
+  endfunction
+
   call neobundle#untap()
 endif
 " }}}
@@ -1656,7 +1657,7 @@ if neobundle#tap('open-browser.vim')
         \   'autoload': {
         \     'function_prefix': 'openbrowser',
         \     'commands':        'OpenBrowser'
-        \    }
+        \   }
         \ })
 
   function! neobundle#hooks.on_source(bundle)
@@ -2381,8 +2382,6 @@ endif
 if has('gui_running')
   if s:is_windows
     set guifont=Ricty\ Regular\ for\ Powerline:h12
-    " todo:MacTypeのほうが綺麗
-    " set renderoptions=type:directx,gamma:1.2,contrast:1.42,geom:0,renmode:5,taamode:1
   elseif s:is_mac
     set guifont=Ricty\ Regular\ for\ Powerline:h12
     set antialias
