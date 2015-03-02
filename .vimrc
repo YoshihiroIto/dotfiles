@@ -2706,6 +2706,7 @@ function! s:execute_keep_view(expr)
   let wininfo = winsaveview()
   execute a:expr
   call winrestview(wininfo)
+  IndentLinesReset
 endfunction
 " }}}
 " Unite 実行中か {{{
