@@ -224,7 +224,7 @@ else
   " C++
   NeoBundleLazy  'Mizuchi/STL-Syntax'
   NeoBundleLazy  'rhysd/vim-clang-format'
-  NeoBundleLazy  'vim-jp/cpp-vim'
+  NeoBundleLazy  'vim-jp/vim-cpp'
 
   " Go
   NeoBundleLazy  'nsf/gocode'
@@ -1721,9 +1721,7 @@ if neobundle#tap('unite.vim')
 
   function! neobundle#hooks.on_source(bundle)
     let g:unite_force_overwrite_statusline = 0
-    let g:unite_source_alias_aliases       = {
-          \   'memolist': {'source': 'file'}
-          \ }
+    let g:unite_source_alias_aliases       = {'memolist': {'source': 'file'}}
 
     if executable('pt')
       let g:unite_source_grep_command        = 'pt'
@@ -1908,8 +1906,8 @@ if neobundle#tap('vim-clang-format')
   call neobundle#untap()
 endif
 " }}}
-" cpp-vim {{{
-if neobundle#tap('cpp-vim')
+" vim-cpp {{{
+if neobundle#tap('vim-cpp')
   call neobundle#config({'autoload': {'filetypes': 'cpp'}})
   call neobundle#untap()
 endif
