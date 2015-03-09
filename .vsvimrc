@@ -24,9 +24,3 @@ nnoremap <C-i>     :vsc View.NavigateForward<CR>
 nnoremap <C-]>     :vsc Edit.GoToDefinition<CR>
 nnoremap <Space>gg :vsc Edit.Find<CR>
 nnoremap ;r        :vsc Debug.Start<CR>
-
-inoremap <C-h> <BS>
-cnoremap <C-h> <BS>
-vnoremap <C-j> <Esc>
-inoremap <C-j> <Esc>
-cnoremap <C-j> <Esc>
