@@ -2362,6 +2362,9 @@ function! s:set_color()
   " ^M を非表示
   syntax match HideCtrlM containedin=ALL /\r$/ conceal
 
+  " 日本語入力時カーソル色を変更する
+  highlight CursorIM guifg=NONE guibg=Red
+
   if !&readonly
     " 全角スペースとタブ文字の可視化
     syntax match InvisibleJISX0208Space '　' display containedin=ALL
