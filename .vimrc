@@ -137,7 +137,7 @@ else
   NeoBundleLazy  'junegunn/vim-easy-align'
   NeoBundleLazy  'kana/vim-smartinput'
   NeoBundleLazy  'nishigori/increment-activator'
-  NeoBundleLazy  'osyo-manga/vim-over'
+  NeoBundleLazy  'osyo-manga/vim-over', '1e64e0947087e7e28be0cc6e93214af055c6701b'
   NeoBundleLazy  'thinca/vim-qfreplace'
   NeoBundleLazy  'tomtom/tcomment_vim'
 
@@ -836,14 +836,14 @@ if neobundle#tap('neocomplete.vim')
 
     let g:neocomplete#sources#omni#input_patterns = {
           \   'c':    '\%(\.\|->\)\h\w*',
-          \   'cpp':  '\h\w*\%(\.\|->\)\h\w*\|\h\w*::',
+          \   'disable_cpp':  '\h\w*\%(\.\|->\)\h\w*\|\h\w*::',
           \   'cs':   '[a-zA-Z0-9.]\{2\}',
           \   'ruby': '[^. *\t]\.\w*\|\h\w*::'
           \ }
 
     let g:neocomplete#force_omni_input_patterns = {
           \   'c':      '[^.[:digit:] *\t]\%(\.\|->\)\w*',
-          \   'cpp':    '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*',
+          \   'disable_cpp':    '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*',
           \   'objc':   '[^.[:digit:] *\t]\%(\.\|->\)\w*',
           \   'objcpp': '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*',
           \   'cs':     '[^.[:digit:] *\t]\%(\.\)\w*\|\h\w*::\w*'
@@ -851,7 +851,7 @@ if neobundle#tap('neocomplete.vim')
 
     let g:neocomplete#delimiter_patterns = {
           \   'c':   ['.', '->'],
-          \   'cpp': [' ::', '.'],
+          \   'disable_cpp': [' ::', '.'],
           \   'cs':  ['.'],
           \   'vim': ['#', '.']
           \ }
