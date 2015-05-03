@@ -96,9 +96,7 @@ endif
 
 call neobundle#begin(expand('$DOTVIM/bundle/'))
 
-if neobundle#has_fresh_cache()
-  NeoBundleLoadCache
-else
+if neobundle#load_cache()
   NeoBundleFetch 'Shougo/neobundle.vim'
 
   " NeoBundle {{{
@@ -237,15 +235,13 @@ else
   NeoBundleLazy  'cohama/agit.vim'
   NeoBundleLazy  'tpope/vim-fugitive'
 
+  delfunction s:neobundle
+  delcommand NeoBundleC
   delcommand NeoBundleLazyC
   " }}}
 
   NeoBundleSaveCache
 endif
-
-call neobundle#end()
-
-filetype plugin indent on
 " ライブラリ {{{
 " vimproc {{{
 if neobundle#tap('vimproc')
@@ -2013,6 +2009,8 @@ function! s:update_fugitive()
 endfunction
 " }}}
 " }}}
+call neobundle#end()
+filetype plugin indent on
 " }}}
 " ファイルタイプごとの設定 {{{
 Autocmd BufEnter,WinEnter,BufWinEnter *                         call s:update_all()
@@ -2116,8 +2114,9 @@ nnoremap dk <Nop>
 nnoremap dl <Nop>
 
 " よくミスるため
-vnoremap u  <Nop>
-onoremap u  <Nop>
+vnoremap u     <Nop>
+onoremap u     <Nop>
+inoremap <C-k> <Nop>
 " }}}
 " 編集 {{{
 set browsedir=buffer              " バッファで開いているファイルのディレクトリ
