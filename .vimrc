@@ -137,6 +137,7 @@ if neobundle#load_cache()
   NeoBundleLazy  'osyo-manga/vim-over'
   NeoBundleLazy  'thinca/vim-qfreplace'
   NeoBundleLazy  'tomtom/tcomment_vim'
+  NeoBundleLazy  'tpope/vim-endwise'
 
   " 補完
   NeoBundleLazy  'Shougo/neocomplete.vim'
@@ -662,6 +663,19 @@ if neobundle#tap('tcomment_vim')
         \     'commands':        'TComment'
         \   }
         \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" vim-endwise {{{
+if neobundle#tap('vim-endwise')
+  call neobundle#config({'autoload': {'filetypes': ['vim', 'ruby', 'lua']}})
+
+  function! neobundle#hooks.on_source(bundle)
+    " http://cohama.hateblo.jp/entry/20121017/1350482411
+    let g:endwise_no_mappings = 1
+    AutocmdFT lua,ruby,vim imap <buffer> <CR> <CR><Plug>DiscretionaryEnd
+  endfunction
 
   call neobundle#untap()
 endif
