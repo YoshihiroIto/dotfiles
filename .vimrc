@@ -137,7 +137,6 @@ if neobundle#load_cache()
   NeoBundleLazy  'osyo-manga/vim-over'
   NeoBundleLazy  'thinca/vim-qfreplace'
   NeoBundleLazy  'tomtom/tcomment_vim'
-  NeoBundleLazy  'tpope/vim-endwise'
 
   " 補完
   NeoBundleLazy  'Shougo/neocomplete.vim'
@@ -664,12 +663,6 @@ if neobundle#tap('tcomment_vim')
         \   }
         \ })
 
-  call neobundle#untap()
-endif
-" }}}
-" vim-endwise {{{
-if neobundle#tap('vim-endwise')
-  call neobundle#config({'autoload': {'insert': 1}})
   call neobundle#untap()
 endif
 " }}}
