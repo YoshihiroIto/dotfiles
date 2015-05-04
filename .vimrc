@@ -131,11 +131,10 @@ if neobundle#load_cache()
 
   " 編集
   NeoBundleLazy  'LeafCage/yankround.vim'
-  NeoBundleLazy  'cohama/vim-smartinput-endwise'
   NeoBundleLazy  'junegunn/vim-easy-align'
   NeoBundleLazy  'kana/vim-smartinput'
   NeoBundleLazy  'nishigori/increment-activator'
-  NeoBundleLazy  'osyo-manga/vim-over', '1e64e0947087e7e28be0cc6e93214af055c6701b'
+  NeoBundleLazy  'osyo-manga/vim-over'
   NeoBundleLazy  'thinca/vim-qfreplace'
   NeoBundleLazy  'tomtom/tcomment_vim'
 
@@ -201,7 +200,8 @@ if neobundle#load_cache()
   NeoBundleLazy  'rhysd/wandbox-vim'
   NeoBundleLazy  'thinca/vim-quickrun'
   NeoBundleLazy  'tsukkee/lingr-vim'
-  NeoBundleLazy  'tukiyo/previm'
+  " NeoBundleLazy  'tukiyo/previm'
+  NeoBundleLazy  'beckorz/previm'
   NeoBundleLazy  'tyru/open-browser.vim'
   NeoBundleLazyC 'itchyny/dictionary.vim',    s:is_mac
   NeoBundleLazyC 'YoshihiroIto/vim-icondrag', s:is_windows && has('gui_running')
@@ -706,23 +706,6 @@ if neobundle#tap('yankround.vim')
 
   function! neobundle#hooks.on_source(bundle)
     let g:yankround_use_region_hl = 1
-  endfunction
-
-  call neobundle#untap()
-endif
-" }}}
-" vim-smartinput-endwise {{{
-if neobundle#tap('vim-smartinput-endwise')
-  call neobundle#config({
-        \   'depends':  'vim-smartinput',
-        \   'autoload': {
-        \     'insert':    1,
-        \     'filetypes': ['vim', 'ruby']
-        \   }
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    call smartinput_endwise#define_default_rules()
   endfunction
 
   call neobundle#untap()
