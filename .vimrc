@@ -154,6 +154,7 @@ if neobundle#load_cache()
   NeoBundleLazy  'osyo-manga/vim-anzu'
   NeoBundleLazy  'rhysd/clever-f.vim'
   NeoBundleLazy  'vim-scripts/matchit.zip'
+  NeoBundleLazy  'osyo-manga/vim-vigemo'
 
   " ファイルタイプ
   NeoBundleLazy  'beyondmarc/hlsl.vim'
@@ -1079,6 +1080,15 @@ if neobundle#tap('clever-f.vim')
   call neobundle#untap()
 endif
 " }}}
+" vim-vigemo {{{
+if neobundle#tap('vim-vigemo')
+  call neobundle#config({
+        \   'depends':  'unite.vim',
+        \   'autoload': {'unite_sources': ['file', 'line', 'outline']}
+        \ })
+  call neobundle#untap()
+endif
+" }}}
 " vim-asterisk {{{
 if neobundle#tap('vim-asterisk')
   call neobundle#config({'autoload': {'mappings': '<Plug>'}})
@@ -1736,7 +1746,9 @@ if neobundle#tap('unite.vim')
           \   'winwidth':         60
           \ })
 
-    call unite#custom#source('file', 'matchers', 'matcher_default')
+    call unite#custom#source('file',    'matchers', 'matcher_vigemo')
+    call unite#custom#source('line',    'matchers', 'matcher_vigemo')
+    call unite#custom#source('outline', 'matchers', 'matcher_vigemo')
 
     call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
     call unite#custom_default_action('directory',                 'vimfiler')
