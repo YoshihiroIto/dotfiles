@@ -110,8 +110,8 @@ if neobundle#load_cache()
 
   " ライブラリ
   NeoBundle      'Shougo/vimproc'
-  NeoBundleC     'xolox/vim-misc',    s:is_windows
-  NeoBundleC     'xolox/vim-shell',   s:is_windows
+  NeoBundleC     'xolox/vim-misc',  s:is_windows
+  NeoBundleC     'xolox/vim-shell', s:is_windows
   NeoBundleLazy  'Shougo/tabpagebuffer.vim'
   NeoBundleLazy  'basyura/twibill.vim'
   NeoBundleLazy  'kana/vim-submode'
@@ -201,7 +201,6 @@ if neobundle#load_cache()
   NeoBundleLazy  'rhysd/wandbox-vim'
   NeoBundleLazy  'thinca/vim-quickrun'
   NeoBundleLazy  'tsukkee/lingr-vim'
-  " NeoBundleLazy  'tukiyo/previm'
   NeoBundleLazy  'beckorz/previm'
   NeoBundleLazy  'tyru/open-browser.vim'
   NeoBundleLazyC 'itchyny/dictionary.vim',    s:is_mac
@@ -757,8 +756,8 @@ if neobundle#tap('vim-over')
   call neobundle#config({'autoload': {'commands': 'OverCommandLine'}})
 
   noremap  <silent> <Leader>s  :OverCommandLine<CR>
-  nnoremap <silent> <leader>gs :<C-u>OverCommandLine<CR>%s///g<Left><Left>
-  vnoremap <silent> <leader>gs :OverCommandLine<CR>s///g<Left><Left>
+  nnoremap <silent> <Leader>gs :<C-u>OverCommandLine<CR>%s///g<Left><Left>
+  vnoremap <silent> <Leader>gs :OverCommandLine<CR>s///g<Left><Left>
 
   function! neobundle#hooks.on_source(bundle)
     let g:over_command_line_key_mappings = {"\<C-j>": "\<Esc>"}
