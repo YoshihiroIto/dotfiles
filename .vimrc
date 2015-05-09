@@ -769,7 +769,13 @@ if neobundle#tap('vim-over')
     autocmd FocusLost,CursorHold,CursorHoldI * call s:initialize_over()
   augroup END
 
+  let s:initialize_over_delay = 2*1
   function! s:initialize_over()
+    let s:initialize_over_delay -= 1
+    if s:initialize_over_delay > 0
+      return
+    endif
+
     call over#load()
 
     augroup InitializeOver
@@ -863,7 +869,13 @@ if neobundle#tap('neocomplete.vim')
     autocmd FocusLost,CursorHold,CursorHoldI * call s:initialize_neocomplete()
   augroup END
 
+  let s:initialize_neocomplete_delay = 2*2
   function! s:initialize_neocomplete()
+    let s:initialize_neocomplete_delay -= 1
+    if s:initialize_neocomplete_delay > 0
+      return
+    endif
+
     call neocomplete#initialize()
 
     augroup InitializeNeocomplete
@@ -1086,6 +1098,26 @@ if neobundle#tap('vim-vigemo')
         \   'depends':  'unite.vim',
         \   'autoload': {'unite_sources': ['file', 'line', 'outline']}
         \ })
+
+  augroup InitializeVigemo
+    autocmd!
+    autocmd FocusLost,CursorHold,CursorHoldI * call s:initialize_vigemo()
+  augroup END
+
+  let s:initialize_vigemo_delay = 2*3
+  function! s:initialize_vigemo()
+    let s:initialize_vigemo_delay -= 1
+    if s:initialize_vigemo_delay > 0
+      return
+    endif
+
+    call vigemo#load()
+
+    augroup InitializeVigemo
+      autocmd!
+    augroup END
+  endfunction
+
   call neobundle#untap()
 endif
 " }}}
