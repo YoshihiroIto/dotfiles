@@ -204,6 +204,7 @@ if neobundle#load_cache()
   NeoBundleLazy  'tsukkee/lingr-vim'
   NeoBundleLazy  'beckorz/previm'
   NeoBundleLazy  'tyru/open-browser.vim'
+  NeoBundleLazy  'osyo-manga/codic-vim'
   NeoBundleLazyC 'itchyny/dictionary.vim',    s:is_mac
   NeoBundleLazyC 'YoshihiroIto/vim-icondrag', s:is_windows && has('gui_running')
 
@@ -215,6 +216,7 @@ if neobundle#load_cache()
   NeoBundleLazy  'YoshihiroIto/vim-unite-giti'
   NeoBundleLazy  'osyo-manga/unite-quickfix'
   NeoBundleLazy  'tsukkee/unite-tag'
+  NeoBundleLazy  'rhysd/unite-codic.vim'
   NeoBundleLazyC 'sgur/unite-everything', s:is_windows
 
   " C#
@@ -1701,6 +1703,18 @@ if neobundle#tap('open-browser.vim')
   call neobundle#untap()
 endif
 " }}}
+" codic-vim {{{
+if neobundle#tap('codic-vim')
+  call neobundle#config({
+        \   'autoload': {
+        \     'commands':        'Codic',
+        \     'function_prefix': 'codic'
+        \   }
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
 " }}}
 " Unite {{{
 " unite.vim {{{
@@ -1730,6 +1744,7 @@ if neobundle#tap('unite.vim')
   nnoremap <silent> [Unite]q    :<C-u>Unite -no-quit  -buffer-name=quickfix    quickfix<CR>
   nnoremap <silent> [Unite]m    :<C-u>Unite -no-split -buffer-name=neomru/file neomru/file<CR>
   nnoremap <silent> [Unite]h    :<C-u>Unite           -buffer-name=help        help<CR>
+  nnoremap <silent> [Unite]co   :<C-u>Unite           -buffer-name=codic       codic<CR>
   nnoremap <silent> [Unite]v    :<C-u>call <SID>execute_if_on_git_branch(
         \                     'Unite -no-split -buffer-name=giti            giti')<CR>
   nnoremap <silent> [Unite]b    :<C-u>call <SID>execute_if_on_git_branch(
@@ -1745,6 +1760,7 @@ if neobundle#tap('unite.vim')
   nnoremap <silent> [Unite]rq   :<C-u>UniteResume quickfix<CR>
   nnoremap <silent> [Unite]rm   :<C-u>UniteResume neomru/file<CR>
   nnoremap <silent> [Unite]rh   :<C-u>UniteResume help<CR>
+  nnoremap <silent> [Unite]rco  :<C-u>UniteResume codic<CR>
   nnoremap <silent> [Unite]rv   :<C-u>UniteResume giti<CR>
   nnoremap <silent> [Unite]rb   :<C-u>UniteResume giti/branch_all<CR>
 
@@ -1821,6 +1837,16 @@ if neobundle#tap('unite-tag')
   call neobundle#config({
         \   'depends':  'unite.vim',
         \   'autoload': {'unite_sources': 'tag'}
+        \ })
+
+  call neobundle#untap()
+endif
+" }}}
+" unite-codic.vim {{{
+if neobundle#tap('unite-codic.vim')
+  call neobundle#config({
+        \   'depends':  'unite.vim',
+        \   'autoload': {'unite_sources': 'codic'}
         \ })
 
   call neobundle#untap()
