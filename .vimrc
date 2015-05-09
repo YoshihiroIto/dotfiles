@@ -97,9 +97,6 @@ endif
 call neobundle#begin(expand('$DOTVIM/bundle/'))
 
 if neobundle#load_cache()
-  NeoBundleFetch 'Shougo/neobundle.vim'
-
-  " NeoBundle {{{
   command! -nargs=+ NeoBundleC     call s:neobundle('NeoBundle',     split(<q-args>, ',\s*'))
   command! -nargs=+ NeoBundleLazyC call s:neobundle('NeoBundleLazy', split(<q-args>, ',\s*'))
   function s:neobundle(cmd, args)
@@ -107,6 +104,8 @@ if neobundle#load_cache()
       execute a:cmd a:args[0]
     endif
   endfunction
+
+  NeoBundleFetch 'Shougo/neobundle.vim'
 
   " ライブラリ
   NeoBundle      'Shougo/vimproc'
@@ -237,12 +236,11 @@ if neobundle#load_cache()
   NeoBundleLazy  'cohama/agit.vim'
   NeoBundleLazy  'tpope/vim-fugitive'
 
+  NeoBundleSaveCache
+
   delfunction s:neobundle
   delcommand NeoBundleC
   delcommand NeoBundleLazyC
-  " }}}
-
-  NeoBundleSaveCache
 endif
 " ライブラリ {{{
 " vimproc {{{
