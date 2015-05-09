@@ -2331,7 +2331,8 @@ vnoremap <silent> gf :<C-u>call <SID>smart_gf('v')<CR>
 function! s:smart_gf(mode)
   try
     let line       = getline('.')
-    let repos_name = matchstr(line, 'NeoBundle\(\(Lazy\)\|\(Fetch\)\)\?\s\+''\zs.*\ze''')
+    let repos_name = matchstr(line,
+          \ 'NeoBundle\(\(Lazy\)\|\(C\)\|\(LazyC\)\|\(Fetch\)\)\?\s\+''\zs.\{-}\ze''')
 
     if !empty(repos_name)
       " NeoBundle
