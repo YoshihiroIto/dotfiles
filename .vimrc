@@ -154,7 +154,6 @@ if neobundle#load_cache()
   NeoBundleLazy  'osyo-manga/vim-anzu'
   NeoBundleLazy  'rhysd/clever-f.vim'
   NeoBundleLazy  'vim-scripts/matchit.zip'
-  NeoBundleLazy  'osyo-manga/vim-vigemo'
 
   " ファイルタイプ
   NeoBundleLazy  'beyondmarc/hlsl.vim'
@@ -1094,35 +1093,6 @@ if neobundle#tap('clever-f.vim')
   call neobundle#untap()
 endif
 " }}}
-" vim-vigemo {{{
-if neobundle#tap('vim-vigemo')
-  call neobundle#config({
-        \   'depends':  'unite.vim',
-        \   'autoload': {'unite_sources': ['file', 'line', 'outline']}
-        \ })
-
-  augroup InitializeVigemo
-    autocmd!
-    autocmd FocusLost,CursorHold,CursorHoldI * call s:initialize_vigemo()
-  augroup END
-
-  let s:initialize_vigemo_delay = 2*3
-  function! s:initialize_vigemo()
-    let s:initialize_vigemo_delay -= 1
-    if s:initialize_vigemo_delay > 0
-      return
-    endif
-
-    call vigemo#load()
-
-    augroup InitializeVigemo
-      autocmd!
-    augroup END
-  endfunction
-
-  call neobundle#untap()
-endif
-" }}}
 " vim-asterisk {{{
 if neobundle#tap('vim-asterisk')
   call neobundle#config({'autoload': {'mappings': '<Plug>'}})
@@ -1793,10 +1763,6 @@ if neobundle#tap('unite.vim')
           \   'vertical':         0,
           \   'winwidth':         60
           \ })
-
-    call unite#custom#source('file',    'matchers', 'matcher_vigemo')
-    call unite#custom#source('line',    'matchers', 'matcher_vigemo')
-    call unite#custom#source('outline', 'matchers', 'matcher_vigemo')
 
     call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
     call unite#custom_default_action('directory',                 'vimfiler')
