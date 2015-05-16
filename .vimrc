@@ -278,24 +278,16 @@ endif
 " }}}
 " vim-submode {{{
 if neobundle#tap('vim-submode')
-  call neobundle#config({'autoload': {'mappings': ['gt', 'gb', 'ga', 'gh', 'gw']}})
+  call neobundle#config({'autoload': {'mappings': ['gb', 'gh', 'gw']}})
 
   function! neobundle#hooks.on_source(bundle)
     let g:submode_timeout          = 0
     let g:submode_keep_leaving_key = 1
 
-    call submode#enter_with('tab',      'n', 's', 'gtj', 'gt')
-    call submode#enter_with('tab',      'n', 's', 'gtk', 'gT')
-    call submode#map(       'tab',      'n', 's', 'j',   'gt')
-    call submode#map(       'tab',      'n', 's', 'k',   'gT')
     call submode#enter_with('buffer',   'n', 's', 'gbj', ':<C-u>bn<CR>')
     call submode#enter_with('buffer',   'n', 's', 'gbk', ':<C-u>bp<CR>')
     call submode#map(       'buffer',   'n', 's', 'j',   ':<C-u>bn<CR>')
     call submode#map(       'buffer',   'n', 's', 'k',   ':<C-u>bp<CR>')
-    call submode#enter_with('altr',     'n', 's', 'gaj', ':<C-u>call altr#forward()<CR>')
-    call submode#enter_with('altr',     'n', 's', 'gak', ':<C-u>call altr#back()<CR>')
-    call submode#map(       'altr',     'n', 's', 'j',   ':<C-u>call altr#forward()<CR>')
-    call submode#map(       'altr',     'n', 's', 'k',   ':<C-u>call altr#back()<CR>')
     call submode#enter_with('git_hunk', 'n', 's', 'ghj', ':<C-u>GitGutterNextHunk<CR>zvzz')
     call submode#enter_with('git_hunk', 'n', 's', 'ghk', ':<C-u>GitGutterPrevHunk<CR>zvzz')
     call submode#map(       'git_hunk', 'n', 's', 'j',   ':<C-u>GitGutterNextHunk<CR>zvzz')
@@ -943,6 +935,9 @@ endif
 " vim-altr {{{
 if neobundle#tap('vim-altr')
   call neobundle#config({'autoload': {'mappings': '<Plug>'}})
+
+  nmap ga <Plug>(altr-forward)
+  nmap gA <Plug>(altr-back)
 
   function! neobundle#hooks.on_source(bundle)
     function! s:altr_define(...)
