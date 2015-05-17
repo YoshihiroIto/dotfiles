@@ -115,7 +115,6 @@ if neobundle#load_cache()
   NeoBundleLazy  'kana/vim-submode'
   NeoBundleLazy  'mattn/webapi-vim'
   NeoBundleLazy  'osyo-manga/shabadou.vim'
-  NeoBundleLazy  'thinca/vim-prettyprint'
 
   " 表示
   NeoBundle      'YoshihiroIto/molokai'
@@ -265,12 +264,6 @@ if neobundle#tap('webapi-vim')
     let g:webapi#system_function = 'vimproc#system'
   endfunction
 
-  call neobundle#untap()
-endif
-" }}}
-" vim-prettyprint {{{
-if neobundle#tap('vim-prettyprint')
-  call neobundle#config({'autoload': {'commands': ['PP', 'PrettyPrint']}})
   call neobundle#untap()
 endif
 " }}}
