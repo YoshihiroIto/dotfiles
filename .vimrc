@@ -1650,16 +1650,6 @@ if neobundle#tap('unite-quickfix')
   call neobundle#untap()
 endif
 " }}}
-" unite-tag {{{
-if neobundle#tap('unite-tag')
-  call neobundle#config({
-        \   'depends':  'unite.vim',
-        \   'autoload': {'unite_sources': 'tag'}
-        \ })
-
-  call neobundle#untap()
-endif
-" }}}
 " neomru.vim {{{
 if neobundle#tap('neomru.vim')
   call neobundle#config({
@@ -2161,7 +2151,7 @@ set concealcursor=i
 set colorcolumn=100
 
 if has('gui_running')
-  set lines=9999
+  set lines=100
   execute 'set columns=' . s:base_columns
 endif
 
