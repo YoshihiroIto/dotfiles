@@ -180,7 +180,6 @@ if neobundle#load_cache()
   NeoBundleLazy  'kana/vim-operator-user'
   NeoBundleLazy  'YoshihiroIto/vim-operator-tcomment'   " t
   NeoBundleLazy  'deris/vim-rengbang'                   " <Leader>r
-  NeoBundleLazy  'emonkak/vim-operator-sort'            " <Leader>o
   NeoBundleLazy  'kana/vim-operator-replace'            " R
   NeoBundleLazy  'rhysd/vim-operator-surround'          " S
   NeoBundleLazy  'tyru/operator-camelize.vim'           " <Leader>_
@@ -1317,19 +1316,6 @@ if neobundle#tap('vim-operator-surround')
           \   ]
           \ }
   endfunction
-
-  call neobundle#untap()
-endif
-" }}}
-" vim-operator-sort {{{
-if neobundle#tap('vim-operator-sort')
-  call neobundle#config({
-        \   'depends':  'vim-operator-user',
-        \   'autoload': {'mappings': [['nx', '<Plug>']]}
-        \ })
-
-  nmap <Leader>o <Plug>(operator-sort)
-  xmap <Leader>o <Plug>(operator-sort)
 
   call neobundle#untap()
 endif
