@@ -61,6 +61,28 @@ nnoremap          <F4> :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBun
 nnoremap [App] <Nop>
 nmap     ;     [App]
 
+" 遅延初期化
+augroup LazyInitialize
+  autocmd!
+  autocmd FocusLost,CursorHold,CursorHoldI * call s:lazy_initialize()
+augroup END
+
+let s:lazy_initialize = 2*3
+function! s:lazy_initialize()
+  let s:lazy_initialize -= 1
+  if s:lazy_initialize > 0
+    return
+  endif
+
+  if exists('+cryptmethod')
+    set cryptmethod=blowfish2
+  endif
+
+  augroup LazyInitialize
+    autocmd!
+  augroup END
+endfunction
+
 " スタートアップ時間表示
 if has('vim_starting')
   let s:startuptime = reltime()
@@ -2007,10 +2029,6 @@ if has('guess_encode')
   set fileencodings=guess,iso-2022-jp,cp932,euc-jp,ucs-bom
 else
   set fileencodings=iso-2022-jp,cp932,euc-jp,ucs-bom
-endif
-
-if exists('+cryptmethod')
-  set cryptmethod=blowfish2
 endif
 
 " ^Mを取り除く
