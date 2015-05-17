@@ -153,7 +153,6 @@ if neobundle#load_cache()
 
   " ファイルタイプ
   NeoBundleLazy  'beyondmarc/hlsl.vim'
-  NeoBundleLazy  'cespare/vim-toml'
   NeoBundleLazy  'kchmck/vim-coffee-script'
   NeoBundleLazy  'leafo/moonscript-vim'
   NeoBundleLazy  'pangloss/vim-javascript'
@@ -1106,12 +1105,6 @@ endif
 " vim-coffee-script {{{
 if neobundle#tap('vim-coffee-script')
   call neobundle#config({'autoload': {'filetypes': 'coffee'}})
-  call neobundle#untap()
-endif
-" }}}
-" vim-toml {{{
-if neobundle#tap('vim-toml')
-  call neobundle#config({'autoload': {'filetypes': 'toml'}})
   call neobundle#untap()
 endif
 " }}}
