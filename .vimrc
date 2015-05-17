@@ -189,7 +189,6 @@ if neobundle#load_cache()
   NeoBundleLazy  'Shougo/vimfiler.vim'
   NeoBundleLazy  'Shougo/vimshell.vim'
   NeoBundleLazy  'glidenote/memolist.vim'
-  NeoBundleLazy  'mattn/gist-vim'
   NeoBundleLazy  'rhysd/wandbox-vim'
   NeoBundleLazy  'thinca/vim-quickrun'
   NeoBundleLazy  'tsukkee/lingr-vim'
@@ -1456,20 +1455,6 @@ if neobundle#tap('memolist.vim')
     let g:memolist_path         = expand('~/Dropbox/memo')
 
     call unite#custom#source('memolist', 'sorters', ['sorter_ftime', 'sorter_reverse'])
-  endfunction
-
-  call neobundle#untap()
-endif
-" }}}
-" gist-vim {{{
-if neobundle#tap('gist-vim')
-  call neobundle#config({
-        \   'depends':  'webapi-vim',
-        \   'autoload': {'commands': 'Gist'}
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    let g:gist_open_browser_after_post = 1
   endfunction
 
   call neobundle#untap()
