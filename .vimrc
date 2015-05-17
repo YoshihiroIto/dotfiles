@@ -112,7 +112,6 @@ if neobundle#load_cache()
   NeoBundleC     'xolox/vim-misc',  s:is_windows
   NeoBundleC     'xolox/vim-shell', s:is_windows
   NeoBundleLazy  'Shougo/tabpagebuffer.vim'
-  NeoBundleLazy  'basyura/twibill.vim'
   NeoBundleLazy  'kana/vim-submode'
   NeoBundleLazy  'mattn/webapi-vim'
   NeoBundleLazy  'osyo-manga/shabadou.vim'
@@ -194,7 +193,6 @@ if neobundle#load_cache()
   " アプリ
   NeoBundleLazy  'Shougo/vimfiler.vim'
   NeoBundleLazy  'Shougo/vimshell.vim'
-  NeoBundleLazy  'basyura/TweetVim'
   NeoBundleLazy  'glidenote/memolist.vim'
   NeoBundleLazy  'mattn/gist-vim'
   NeoBundleLazy  'rhysd/wandbox-vim'
@@ -465,7 +463,6 @@ function! s:lightline_mode()
   return  &filetype ==# 'unite'    ? 'Unite'    :
         \ &filetype ==# 'vimfiler' ? 'VimFiler' :
         \ &filetype ==# 'vimshell' ? 'VimShell' :
-        \ &filetype ==# 'tweetvim' ? 'TweetVim' :
         \ &filetype ==# 'quickrun' ? 'Quickrun' :
         \ &filetype =~# 'lingr'    ? 'Lingr'    :
         \ &filetype ==# 'agit'     ? 'Agit'     :
@@ -496,7 +493,6 @@ function! s:lightline_filename()
           \  &filetype ==# 'vimshell'       ? vimshell#get_status_string() :
           \  &filetype ==# 'lingr-messages' ? lingr#status()               :
           \  &filetype =~# 'lingr'          ? ''                           :
-          \  &filetype ==# 'tweetvim'       ? ''                           :
           \  &filetype ==# 'quickrun'       ? ''                           :
           \  empty(expand('%:t')) ? '[No Name]' : expand('%:t')) .
           \ (empty(s:lightline_modified()) ? '' : ' ' . s:lightline_modified())
@@ -579,7 +575,7 @@ function! s:lightline_lineinfo()
 endfunction
 
 function! s:is_lightline_no_disp_filetype()
-  return &filetype =~# 'vimfiler\|unite\|vimshell\|tweetvim\|quickrun\|lingr\|agit'
+  return &filetype =~# 'vimfiler\|unite\|vimshell\|quickrun\|lingr\|agit'
 endfunction
 
 function! s:is_lightline_no_disp_group()
@@ -1489,37 +1485,6 @@ if neobundle#tap('vimfiler.vim')
     let g:unite_kind_file_use_trashbox        = 1
 
     call vimfiler#custom#profile('default', 'context', {'auto_cd': 1})
-  endfunction
-
-  call neobundle#untap()
-endif
-" }}}
-" Tweetvim {{{
-if neobundle#tap('TweetVim')
-  call neobundle#config({
-        \   'depends':  ['twibill.vim', 'open-browser.vim', 'webapi-vim'],
-        \   'autoload': {'commands': 'TweetVimHomeTimeline'}
-        \ })
-
-  noremap <silent> [App]2 :<C-u>call <SID>toggle_tweetvim()<CR>
-
-  function! neobundle#hooks.on_source(bundle)
-    let g:tweetvim_include_rts       = 1
-    let g:tweetvim_display_separator = 0
-    let g:tweetvim_tweet_per_page    = 30
-    let g:tweetvim_display_icon      = 1
-
-    AutocmdFT tweetvim nmap     <silent><buffer> rr <Plug>(tweetvim_action_reload)
-    AutocmdFT tweetvim nnoremap <silent><buffer> q  :<C-u>call <SID>toggle_tweetvim()<CR>
-  endfunction
-
-  function! s:toggle_tweetvim()
-    if bufnr('tweetvim') == -1
-      tabnew
-      TweetVimHomeTimeline
-    else
-      bwipeout tweetvim
-    endif
   endfunction
 
   call neobundle#untap()
