@@ -154,7 +154,6 @@ if neobundle#load_cache()
   " ファイルタイプ
   NeoBundleLazy  'beyondmarc/hlsl.vim'
   NeoBundleLazy  'kchmck/vim-coffee-script'
-  NeoBundleLazy  'leafo/moonscript-vim'
   NeoBundleLazy  'pangloss/vim-javascript'
   NeoBundleLazy  'stephpy/vim-yaml'
   NeoBundleLazy  'tikhomirov/vim-glsl'
@@ -245,7 +244,9 @@ if neobundle#tap('vimproc')
 endif
 " }}}
 " vim-shell {{{
-let g:shell_mappings_enabled = 0
+if s:is_windows
+  let g:shell_mappings_enabled = 0
+endif
 " }}}
 " webapi-vim {{{
 if neobundle#tap('webapi-vim')
@@ -1074,12 +1075,6 @@ endif
 " vim-ruby {{{
 if neobundle#tap('vim-ruby')
   call neobundle#config({'autoload': {'filetypes': 'ruby'}})
-  call neobundle#untap()
-endif
-" }}}
-" moonscript-vim {{{
-if neobundle#tap('moonscript-vim')
-  call neobundle#config({'autoload': {'filetypes': 'moon'}})
   call neobundle#untap()
 endif
 " }}}
