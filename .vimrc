@@ -175,7 +175,6 @@ if neobundle#load_cache()
 
   " ファイルタイプ
   NeoBundleLazy  'beyondmarc/hlsl.vim'
-  NeoBundleLazy  'kchmck/vim-coffee-script'
   NeoBundleLazy  'pangloss/vim-javascript'
   NeoBundleLazy  'stephpy/vim-yaml'
   NeoBundleLazy  'tikhomirov/vim-glsl'
@@ -1111,12 +1110,6 @@ if neobundle#tap('vim-yaml')
   call neobundle#untap()
 endif
 " }}}
-" vim-coffee-script {{{
-if neobundle#tap('vim-coffee-script')
-  call neobundle#config({'autoload': {'filetypes': 'coffee'}})
-  call neobundle#untap()
-endif
-" }}}
 " JSON.vim {{{
 if neobundle#tap('JSON.vim')
   call neobundle#config({'autoload': {'filetypes': ['json', 'markdown']}})
@@ -1946,7 +1939,6 @@ AutocmdFT cs         nnoremap <silent><buffer> <C-]>  :<C-u>call OmniSharp#GotoD
       \                                               zz
       \                                               :call <SID>refresh_screen()<CR>
 
-AutocmdFT coffee     setlocal shiftwidth=2
 AutocmdFT json       setlocal shiftwidth=2
 AutocmdFT neosnippet setlocal noexpandtab
 AutocmdFT godoc      nnoremap <silent><buffer> q      :<C-u>close<CR>
