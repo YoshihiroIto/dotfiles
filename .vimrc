@@ -193,7 +193,6 @@ if neobundle#load_cache()
   NeoBundleLazy  'tsukkee/lingr-vim'
   NeoBundleLazy  'beckorz/previm'
   NeoBundleLazy  'tyru/open-browser.vim'
-  NeoBundleLazyC 'itchyny/dictionary.vim',    s:is_mac
   NeoBundleLazyC 'YoshihiroIto/vim-icondrag', s:is_windows && has('gui_running')
 
   " Unite
@@ -1503,14 +1502,6 @@ if neobundle#tap('vim-quickrun')
   endfunction
 
   call neobundle#untap()
-endif
-" }}}
-" dictionary.vim {{{
-if s:is_mac
-  if neobundle#tap('dictionary.vim')
-    call neobundle#config({'autoload': {'commands': 'Dictionary'}})
-    call neobundle#untap()
-  endif
 endif
 " }}}
 " vim-icondrag {{{
