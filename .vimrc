@@ -203,7 +203,6 @@ if neobundle#load_cache()
   NeoBundleLazy  'Shougo/unite-outline'
   NeoBundleLazy  'YoshihiroIto/vim-unite-giti'
   NeoBundleLazy  'osyo-manga/unite-quickfix'
-  NeoBundleLazy  'tsukkee/unite-tag'
   NeoBundleLazyC 'sgur/unite-everything', s:is_windows
 
   " C#
@@ -1579,7 +1578,6 @@ if neobundle#tap('unite.vim')
   nnoremap <silent> [Unite]ccg  :<C-u>Unite -no-split -buffer-name=grep        grep:..<CR>
   nnoremap <silent> [Unite]cccg :<C-u>Unite -no-split -buffer-name=grep        grep:../..<CR>
   nnoremap <silent> [Unite]pg   :<C-u>Unite -no-split -buffer-name=grep        grep:!<CR>
-  nnoremap <silent> [Unite]t    :<C-u>Unite -no-split -buffer-name=tag         tag<CR>
   nnoremap <silent> [Unite]f    :<C-u>Unite           -buffer-name=buffer      buffer<CR>
   nnoremap <silent> [Unite]j    :<C-u>Unite           -buffer-name=bookmark    bookmark<CR>
   nnoremap <silent> [Unite]l    :<C-u>Unite -no-split -buffer-name=line        line<CR>
@@ -1593,7 +1591,6 @@ if neobundle#tap('unite.vim')
 
   nnoremap <silent> [Unite]rr   :<C-u>UniteResume<CR>
   nnoremap <silent> [Unite]rg   :<C-u>UniteResume grep<CR>
-  nnoremap <silent> [Unite]rt   :<C-u>UniteResume tag<CR>
   nnoremap <silent> [Unite]rf   :<C-u>UniteResume buffer<CR>
   nnoremap <silent> [Unite]rj   :<C-u>UniteResume bookmark<CR>
   nnoremap <silent> [Unite]rl   :<C-u>UniteResume line<CR>
