@@ -1,14 +1,17 @@
 set encoding=utf-8
 scriptencoding utf-8
 " 基本 {{{
-let s:is_windows   = has('win32') || has('win64')
-let s:is_mac       = has('mac') || has('macunix')
-let s:is_linux     = has('unix') && !s:is_windows && !s:is_mac
+let s:is_windows       = has('win32') || has('win64')
+let s:is_mac           = has('mac') || has('macunix')
+let s:has_vim_starting = has('vim_starting')
+let s:has_gui_running  = has('gui_running')
+let s:has_kaoriya      = has('kaoriya')
+
 let s:base_columns = 120
 let g:mapleader    = ','
 let $DOTVIM        = expand('~/.vim')
 if s:is_mac
-  let $LUA_DLL       = simplify($VIM . '/../../Frameworks/libluajit-5.1.2.dylib')
+  let $LUA_DLL = simplify($VIM . '/../../Frameworks/libluajit-5.1.2.dylib')
 endif
 
 " 実行ファイル位置を$PATHに含める
@@ -19,7 +22,7 @@ elseif s:is_mac
 endif
 
 " $MYVIMRC調整
-if has('vim_starting')
+if s:has_vim_starting
   let s:git_dot_vimrc = expand('~/Dropbox/dotfiles/.vimrc')
   if filereadable(s:git_dot_vimrc)
     let $MYVIMRC = s:git_dot_vimrc
@@ -33,13 +36,6 @@ function! s:get_sid()
 endfunction
 let s:sid = s:get_sid()
 delfunction s:get_sid
-
-" ローカル設定
-let s:vimrc_local = expand('~/.vimrc_local')
-if filereadable(s:vimrc_local)
-  execute 'source' s:vimrc_local
-endif
-unlet s:vimrc_local
 
 " メニューを読み込まない
 let g:did_install_default_menus = 1
@@ -67,7 +63,7 @@ augroup LazyInitialize
   autocmd FocusLost,CursorHold,CursorHoldI * call s:lazy_initialize()
 augroup END
 
-let s:lazy_initialize = 2*3
+let s:lazy_initialize = 2*1
 function! s:lazy_initialize()
   let s:lazy_initialize -= 1
   if s:lazy_initialize > 0
@@ -78,13 +74,24 @@ function! s:lazy_initialize()
     set cryptmethod=blowfish2
   endif
 
+  if s:is_windows && !executable('MSBuild')
+    let $PATH .= ';C:/Windows/Microsoft.NET/Framework/v4.0.30319'
+  endif
+
+  " ローカル設定
+  let s:vimrc_local = expand('~/.vimrc_local')
+  if filereadable(s:vimrc_local)
+    execute 'source' s:vimrc_local
+  endif
+  unlet s:vimrc_local
+
   augroup LazyInitialize
     autocmd!
   augroup END
 endfunction
 
 " スタートアップ時間表示
-if has('vim_starting')
+if s:has_vim_starting
   let s:startuptime = reltime()
   Autocmd VimEnter * let s:startuptime = reltime(s:startuptime)
         \|  echomsg 'startuptime:' reltimestr(s:startuptime)
@@ -110,7 +117,7 @@ set guioptions-=L
 set guioptions-=e
 " }}}
 " プラグイン {{{
-if has('vim_starting')
+if s:has_vim_starting
   set runtimepath+=$DOTVIM/bundle/neobundle.vim/
   let g:neobundle#install_max_processes   = 8
   let g:neobundle#install_process_timeout = 10*60
@@ -144,8 +151,8 @@ if neobundle#load_cache()
   NeoBundleLazy  'LeafCage/foldCC.vim'
   NeoBundleLazy  'Yggdroot/indentLine'
   NeoBundleLazy  'YoshihiroIto/syntastic'
-  NeoBundleLazyC 'YoshihiroIto/vim-resize-win', has('gui_running')
-  NeoBundleLazyC 'vim-scripts/movewin.vim',     has('gui_running')
+  NeoBundleLazyC 'YoshihiroIto/vim-resize-win', s:has_gui_running
+  NeoBundleLazyC 'vim-scripts/movewin.vim',     s:has_gui_running
 
   " 編集
   NeoBundleLazy  'LeafCage/yankround.vim'
@@ -214,7 +221,7 @@ if neobundle#load_cache()
   NeoBundleLazy  'tsukkee/lingr-vim'
   NeoBundleLazy  'beckorz/previm'
   NeoBundleLazy  'tyru/open-browser.vim'
-  NeoBundleLazyC 'YoshihiroIto/vim-icondrag', s:is_windows && has('gui_running')
+  NeoBundleLazyC 'YoshihiroIto/vim-icondrag', s:is_windows && s:has_gui_running
 
   " Unite
   NeoBundleLazy  'Shougo/unite.vim'
@@ -254,10 +261,7 @@ endif
 if neobundle#tap('vimproc')
   call neobundle#config({
         \   'autoload': {'function_prefix': 'vimproc'},
-        \   'build': {
-        \     'mac':  'make -f make_mac.mak',
-        \     'unix': 'make -f make_unix.mak'
-        \   }
+        \   'build':    {'mac':  'make -f make_mac.mak'}
         \ })
 
   call neobundle#untap()
@@ -337,7 +341,7 @@ if neobundle#tap('syntastic')
 endif
 " }}}
 " vim-resize-win {{{
-if has('gui_running')
+if s:has_gui_running
   if neobundle#tap('vim-resize-win')
     call neobundle#config({'autoload': {'commands': 'ResizeWin'}})
     call neobundle#untap()
@@ -345,7 +349,7 @@ if has('gui_running')
 endif
 " }}}
 " movewin.vim {{{
-if has('gui_running')
+if s:has_gui_running
   if neobundle#tap('movewin.vim')
     call neobundle#config({'autoload': {'commands': 'MoveWin'}})
     call neobundle#untap()
@@ -867,27 +871,7 @@ endif
 if neobundle#tap('neosnippet.vim')
   call neobundle#config({
         \   'depends':  'neocomplete.vim',
-        \   'autoload': {
-        \     'insert': 1,
-        \     'filetypes': 'neosnippet',
-        \     'commands': [
-        \       'NeoSnippetClearMarkers',
-        \       {
-        \         'name':     'NeoSnippetSource',
-        \         'complete': 'file'
-        \       },
-        \       {
-        \         'name':     'NeoSnippetMakeCache',
-        \         'complete': 'customlist,neosnippet#commands#_filetype_complete'
-        \       },
-        \       {
-        \         'name':     'NeoSnippetEdit',
-        \         'complete': 'customlist,neosnippet#commands#_edit_complete'
-        \       }
-        \     ],
-        \     'mappings':      [['sxi', '<Plug>']],
-        \     'unite_sources': ['neosnippet', 'neosnippet_file', 'neosnippet_target']
-        \   }
+        \   'autoload': {'insert': 1}
         \ })
 
   imap <expr> <Tab> neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)'
@@ -1520,7 +1504,7 @@ if neobundle#tap('vim-quickrun')
 endif
 " }}}
 " vim-icondrag {{{
-if s:is_windows && has('gui_running')
+if s:is_windows && s:has_gui_running
   if neobundle#tap('vim-icondrag')
     call neobundle#config({'autoload': {'filetypes': 'all'}})
 
@@ -1688,14 +1672,8 @@ if neobundle#tap('vim-unite-giti')
   call neobundle#config({
         \   'depends':  'unite.vim',
         \   'autoload': {
-        \     'function_prefix': 'giti',
-        \     'unite_sources':   'giti',
-        \     'commands':        [
-        \       'Giti',                        'GitiWithConfirm',   'GitiFetch', 'GitiPush',
-        \       'GitiPushWithSettingUpstream', 'GitiPushExpressly', 'GitiPull',  'GitiPullSquash',
-        \       'GitiPullRebase',              'GitiPullExpressly', 'GitiDiff',  'GitiDiffCached',
-        \       'GitiLog',                     'GitiLogLine'
-        \     ]
+        \     'unite_sources': 'giti',
+        \     'commands':      'GitiFetch'
         \   }
         \ })
 
@@ -1730,19 +1708,12 @@ endif
 if neobundle#tap('omnisharp-vim')
   call neobundle#config({
         \   'depends':  'neocomplete.vim',
-        \   'autoload': {
-        \     'filetypes': 'cs'
-        \   },
+        \   'autoload': {'filetypes': 'cs'},
         \   'build': {
         \     'windows': 'MSBuild server/OmniSharp.sln /p:Platform="Any CPU"',
-        \     'mac':     'xbuild server/OmniSharp.sln',
-        \     'unix':    'xbuild server/OmniSharp.sln'
+        \     'mac':     'xbuild server/OmniSharp.sln'
         \   }
         \ })
-
-  if s:is_windows && !executable('MSBuild')
-    let $PATH .= ';C:/Windows/Microsoft.NET/Framework/v4.0.30319'
-  endif
 
   function! neobundle#hooks.on_source(bundle)
     let g:omnicomplete_fetch_full_documentation = 1
@@ -2075,7 +2046,7 @@ endfunction
 " }}}
 " インプットメソッド {{{
 " macvim kaoriya gvim で submode が正しく動作しなくなるため
-if !(s:is_mac && has('gui_running'))
+if !(s:is_mac && s:has_gui_running)
   set noimdisable
 endif
 
@@ -2106,7 +2077,7 @@ set smartcase
 set hlsearch
 
 " 日本語インクリメンタルサーチ
-if has('migemo')
+if s:has_kaoriya
   set migemo
   set migemodict=$VIMRUNTIME/dict/migemo-dict
 endif
@@ -2160,7 +2131,7 @@ set conceallevel=2
 set concealcursor=i
 set colorcolumn=100
 
-if has('gui_running')
+if s:has_gui_running
   set lines=100
   execute 'set columns=' . s:base_columns
 endif
@@ -2249,7 +2220,7 @@ function! s:set_color()
 endfunction
 " }}}
 " 半透明化 {{{
-if has('gui_running')
+if s:has_gui_running
   if s:is_mac
     Autocmd GuiEnter,FocusGained * set transparency=3   " アクティブ時の透過率
     Autocmd FocusLost            * set transparency=48  " 非アクティブ時の透過率
@@ -2257,18 +2228,16 @@ if has('gui_running')
 endif
 " }}}
 " フォント {{{
-if has('gui_running')
+if s:has_gui_running
   if s:is_windows
     set guifont=Ricty\ Regular\ for\ Powerline:h12
   elseif s:is_mac
     set guifont=Ricty\ Regular\ for\ Powerline:h12
     set antialias
-  elseif s:is_linux
-    set guifont=Ricty\ for\ Powerline\ 10
   endif
 endif
 
-if s:is_windows && has('kaoriya')
+if s:is_windows && s:has_kaoriya
   set ambiwidth=auto
 else
   set ambiwidth=double
@@ -2334,7 +2303,7 @@ nnoremap <expr> zl foldclosed(line('.')) != -1 ? 'zo' : '<C-l>'
 nnoremap <expr> zO foldclosed(line('.')) != -1 ? 'zO' : ''
 " }}}
 " モード移行 {{{
-if !(s:is_mac && has('gui_running'))
+if !(s:is_mac && s:has_gui_running)
   inoremap <C-j> <Esc>
   nnoremap <C-j> <Esc>
   vnoremap <C-j> <Esc>
@@ -2431,7 +2400,7 @@ nnoremap <silent> <Leader>c :<C-u>close<CR>
 nnoremap [Window]  <Nop>
 nmap     <Leader>w [Window]
 
-if has('gui_running')
+if s:has_gui_running
   noremap <silent> [Window]e :<C-u>call <SID>toggle_v_split_wide()<CR>
   noremap <silent> [Window]f :<C-u>call <SID>full_window()<CR>
   noremap <silent> [Window]H :<C-u>ResizeWin<CR>
@@ -2562,7 +2531,7 @@ nnoremap <silent> [Git]h  :<C-u>call <SID>execute_if_on_git_branch('GitGutterPre
 set helplang=ja,en
 set keywordprg=
 
-if has('kaoriya')
+if s:has_kaoriya
   set runtimepath+=$VIM/plugins/vimdoc-ja
 endif
 " }}}
