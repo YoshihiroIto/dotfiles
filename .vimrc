@@ -263,8 +263,6 @@ if neobundle#tap('vimproc')
         \   'autoload': {'function_prefix': 'vimproc'},
         \   'build':    {'mac':  'make -f make_mac.mak'}
         \ })
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-shell {{{
@@ -279,8 +277,6 @@ if neobundle#tap('webapi-vim')
   function! neobundle#hooks.on_source(bundle)
     let g:webapi#system_function = 'vimproc#system'
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-submode {{{
@@ -308,8 +304,6 @@ if neobundle#tap('vim-submode')
     call submode#map(       'winsize',  'n', 's', 'j',   '4<C-w>-')
     call submode#map(       'winsize',  'n', 's', 'k',   '4<C-w>+')
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " }}}
@@ -325,8 +319,6 @@ if neobundle#tap('foldCC.vim')
 
     set foldtext=FoldCCtext()
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " syntastic {{{
@@ -336,15 +328,12 @@ if neobundle#tap('syntastic')
   function! neobundle#hooks.on_source(bundle)
     Autocmd BufWritePost *.{go,rb,py} call s:update_lightline()
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-resize-win {{{
 if s:has_gui_running
   if neobundle#tap('vim-resize-win')
     call neobundle#config({'autoload': {'commands': 'ResizeWin'}})
-    call neobundle#untap()
   endif
 endif
 " }}}
@@ -352,7 +341,6 @@ endif
 if s:has_gui_running
   if neobundle#tap('movewin.vim')
     call neobundle#config({'autoload': {'commands': 'MoveWin'}})
-    call neobundle#untap()
   endif
 endif
 " }}}
@@ -629,8 +617,6 @@ if neobundle#tap('indentLine')
     let g:indentLine_showFirstIndentLevel = 1
     let g:indentLine_first_char           = g:indentLine_char
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " }}}
@@ -644,8 +630,6 @@ if neobundle#tap('tcomment_vim')
         \     'commands':        'TComment'
         \   }
         \ })
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-endwise {{{
@@ -657,8 +641,6 @@ if neobundle#tap('vim-endwise')
     let g:endwise_no_mappings = 1
     AutocmdFT lua,ruby,vim imap <buffer> <CR> <CR><Plug>DiscretionaryEnd
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-easy-align {{{
@@ -679,8 +661,6 @@ if neobundle#tap('vim-easy-align')
   xmap <silent> <Leader>a,       <Leader>0easyalign*,
   xmap <silent> <Leader>a<Space> <Leader>0easyalign*<Space>
   xmap <silent> <Leader>a\|      <Leader>0easyalign*\|
-
-  call neobundle#untap()
 endif
 " }}}
 " yankround.vim {{{
@@ -702,8 +682,6 @@ if neobundle#tap('yankround.vim')
   function! neobundle#hooks.on_source(bundle)
     let g:yankround_use_region_hl = 1
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-smartinput {{{
@@ -714,8 +692,6 @@ if neobundle#tap('vim-smartinput')
     call smartinput#clear_rules()
     call smartinput#define_default_rules()
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " increment-activator {{{
@@ -729,8 +705,6 @@ if neobundle#tap('increment-activator')
           \   'cpp': [['private', 'protected', 'public']]
           \ }
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-over {{{
@@ -763,14 +737,11 @@ if neobundle#tap('vim-over')
       autocmd!
     augroup END
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-qfreplace {{{
 if neobundle#tap('vim-qfreplace')
   call neobundle#config({'autoload': {'filetypes': ['unite', 'quickfix']}})
-  call neobundle#untap()
 endif
 " }}}
 " }}}
@@ -863,8 +834,6 @@ if neobundle#tap('neocomplete.vim')
       autocmd!
     augroup END
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " neosnippet.vim {{{
@@ -890,8 +859,6 @@ if neobundle#tap('neosnippet.vim')
 
     call neocomplete#custom#source('neosnippet', 'rank', 1000)
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " }}}
@@ -899,7 +866,6 @@ endif
 " vim-auto-mirroring {{{
 if neobundle#tap('vim-auto-mirroring')
   call neobundle#config({'autoload': {'filetypes': 'all'}})
-  call neobundle#untap()
 endif
 " }}}
 " vim-altr {{{
@@ -947,8 +913,6 @@ if neobundle#tap('vim-altr')
     AutocmdFT cpp call s:altr_define(   'src%s/%%.cpp',
           \                             'include%s/%%.h')
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " }}}
@@ -960,14 +924,11 @@ if neobundle#tap('matchit.zip')
   function! neobundle#hooks.on_post_source(bundle)
     silent! execute 'doautocmd Filetype' &filetype
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-jumpbrace {{{
 if neobundle#tap('vim-jumpbrace')
   call neobundle#config({'autoload': {'mappings': '<Plug>'}})
-  call neobundle#untap()
 endif
 " }}}
 " incsearch.vim {{{
@@ -989,14 +950,11 @@ if neobundle#tap('incsearch.vim')
   Autocmd VimEnter * IncSearchNoreMap <C-h> <BS>
   Autocmd VimEnter * IncSearchNoreMap <C-i> <Over>(incsearch-scroll-f)
   Autocmd VimEnter * IncSearchNoreMap <C-o> <Over>(incsearch-scroll-b)
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-anzu {{{
 if neobundle#tap('vim-anzu')
   call neobundle#config({'autoload': {'mappings': '<Plug>'}})
-  call neobundle#untap()
 endif
 
 " 一定時間キー入力がないとき、ウインドウを移動したとき、タブを移動したときに
@@ -1052,14 +1010,11 @@ if neobundle#tap('clever-f.vim')
     highlight default Clever_f_mark_char ctermfg=Green ctermbg=NONE cterm=underline
           \                              guifg=Green   guibg=NONE   gui=underline
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-asterisk {{{
 if neobundle#tap('vim-asterisk')
   call neobundle#config({'autoload': {'mappings': '<Plug>'}})
-  call neobundle#untap()
 endif
 " }}}
 " }}}
@@ -1067,37 +1022,31 @@ endif
 " hlsl.vim {{{
 if neobundle#tap('hlsl.vim')
   call neobundle#config({'autoload': {'filetypes': 'hlsl'}})
-  call neobundle#untap()
 endif
 " }}}
 " vim-glsl {{{
 if neobundle#tap('vim-glsl')
   call neobundle#config({'autoload': {'filetypes': 'glsl'}})
-  call neobundle#untap()
 endif
 " }}}
 " vim-ruby {{{
 if neobundle#tap('vim-ruby')
   call neobundle#config({'autoload': {'filetypes': 'ruby'}})
-  call neobundle#untap()
 endif
 " }}}
 " vim-javascript {{{
 if neobundle#tap('vim-javascript.vim')
   call neobundle#config({'autoload': {'filetypes': 'javascript'}})
-  call neobundle#untap()
 endif
 " }}}
 " vim-yaml {{{
 if neobundle#tap('vim-yaml')
   call neobundle#config({'autoload': {'filetypes': 'yaml'}})
-  call neobundle#untap()
 endif
 " }}}
 " JSON.vim {{{
 if neobundle#tap('JSON.vim')
   call neobundle#config({'autoload': {'filetypes': ['json', 'markdown']}})
-  call neobundle#untap()
 endif
 " }}}
 " vim-markdown {{{
@@ -1112,8 +1061,6 @@ if neobundle#tap('vim-markdown')
           \   'xml',  'json'
           \ ]
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " }}}
@@ -1126,8 +1073,6 @@ if neobundle#tap('vim-textobj-entire')
         \   'depends':  'vim-textobj-user',
         \   'autoload': {'mappings': [['xo', 'ae'], ['xo', 'ie']]}
         \ })
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-textobj-indent {{{
@@ -1136,8 +1081,6 @@ if neobundle#tap('vim-textobj-indent')
         \   'depends':  'vim-textobj-user',
         \   'autoload': {'mappings': [['xo', 'ai'], ['xo', 'aI'], ['xo', 'ii'], ['xo', 'iI']]}
         \ })
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-textobj-line {{{
@@ -1146,8 +1089,6 @@ if neobundle#tap('vim-textobj-line')
         \   'depends':  'vim-textobj-user',
         \   'autoload': {'mappings': [['xo', 'al'], ['xo', 'il']]}
         \ })
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-textobj-word-column {{{
@@ -1156,8 +1097,6 @@ if neobundle#tap('vim-textobj-word-column')
         \   'depends':  'vim-textobj-user',
         \   'autoload': {'mappings': [['xo', 'av'], ['xo', 'aV'], ['xo', 'iv'], ['xo', 'iV']]}
         \ })
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-textobj-comment {{{
@@ -1166,8 +1105,6 @@ if neobundle#tap('vim-textobj-comment')
         \   'depends':  'vim-textobj-user',
         \   'autoload': {'mappings': [['xo', 'ac'], ['xo', 'ic']]}
         \ })
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-textobj-parameter {{{
@@ -1181,8 +1118,6 @@ if neobundle#tap('vim-textobj-parameter')
   xmap ia <Plug>(textobj-parameter-i)
   omap aa <Plug>(textobj-parameter-a)
   omap ia <Plug>(textobj-parameter-i)
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-textobj-between {{{
@@ -1191,8 +1126,6 @@ if neobundle#tap('vim-textobj-between')
         \   'depends':  'vim-textobj-user',
         \   'autoload': {'mappings': [['xo', 'af'], ['xo', 'if']]}
         \ })
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-textobj-anyblock {{{
@@ -1201,8 +1134,6 @@ if neobundle#tap('vim-textobj-anyblock')
         \   'depends':  'vim-textobj-user',
         \   'autoload': {'mappings': [['xo', 'ab'], ['xo', 'ib']]}
         \ })
-
-  call neobundle#untap()
 endif
 " }}}
 " textobj-wiw {{{
@@ -1216,8 +1147,6 @@ if neobundle#tap('textobj-wiw')
   xmap i. <Plug>(textobj-wiw-i)
   omap a. <Plug>(textobj-wiw-a)
   omap i. <Plug>(textobj-wiw-i)
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-textobj-xmlattr {{{
@@ -1226,8 +1155,6 @@ if neobundle#tap('vim-textobj-xmlattr')
         \   'depends':  'vim-textobj-user',
         \   'autoload': {'mappings': [['xo', 'ax'], ['xo', 'ix']]}
         \ })
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-textobj-ifdef {{{
@@ -1236,8 +1163,6 @@ if neobundle#tap('vim-textobj-ifdef')
         \   'depends':  'vim-textobj-user',
         \   'autoload': {'mappings': [['xo', 'a#'], ['xo', 'i#']]}
         \ })
-
-  call neobundle#untap()
 endif
 " }}}
 " }}}
@@ -1252,8 +1177,6 @@ if neobundle#tap('vim-operator-replace')
 
   nmap R <Plug>(operator-replace)
   xmap R <Plug>(operator-replace)
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-operator-tcomment {{{
@@ -1265,8 +1188,6 @@ if neobundle#tap('vim-operator-tcomment')
 
   nmap t <Plug>(operator-tcomment)
   xmap t <Plug>(operator-tcomment)
-
-  call neobundle#untap()
 endif
 " }}}
 " operator-camelize.vim {{{
@@ -1278,8 +1199,6 @@ if neobundle#tap('operator-camelize.vim')
 
   nmap <Leader>_ <Plug>(operator-camelize-toggle)
   xmap <Leader>_ <Plug>(operator-camelize-toggle)
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-operator-surround {{{
@@ -1304,8 +1223,6 @@ if neobundle#tap('vim-operator-surround')
           \   ]
           \ }
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-rengbang {{{
@@ -1320,8 +1237,6 @@ if neobundle#tap('vim-rengbang')
 
   nmap <Leader>r <Plug>(operator-rengbang)
   xmap <Leader>r <Plug>(operator-rengbang)
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-operator-jump_side {{{
@@ -1333,8 +1248,6 @@ if neobundle#tap('vim-operator-jump_side')
 
   nmap <Leader>j <Plug>(operator-jump-toggle)
   xmap <Leader>j <Plug>(operator-jump-toggle)
-
-  call neobundle#untap()
 endif
 " }}}
 " }}}
@@ -1365,8 +1278,6 @@ if neobundle#tap('lingr-vim')
       LingrExit
     endif
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " vimshell.vim {{{
@@ -1384,8 +1295,6 @@ if neobundle#tap('vimshell.vim')
     let g:vimshell_prompt_expr    =
           \ 'escape(substitute(fnamemodify(getcwd(), ":~").">", "\\", "/", "g"), "\\[]()?! ")." "'
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " vimfiler.vim {{{
@@ -1419,8 +1328,6 @@ if neobundle#tap('vimfiler.vim')
 
     call vimfiler#custom#profile('default', 'context', {'auto_cd': 1})
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " memolist.vim {{{
@@ -1445,8 +1352,6 @@ if neobundle#tap('memolist.vim')
 
     call unite#custom#source('memolist', 'sorters', ['sorter_ftime', 'sorter_reverse'])
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " wandbox-vim {{{
@@ -1456,8 +1361,6 @@ if neobundle#tap('wandbox-vim')
     let g:wandbox#open_quickfix_window = 0
     let g:wandbox#default_compiler     = {'cpp': 'clang-head'}
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-quickrun {{{
@@ -1499,8 +1402,6 @@ if neobundle#tap('vim-quickrun')
           \   }
           \ }
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-icondrag {{{
@@ -1511,8 +1412,6 @@ if s:is_windows && s:has_gui_running
     function! neobundle#hooks.on_source(bundle)
       call icondrag#enable()
     endfunction
-
-    call neobundle#untap()
   endif
 endif
 " }}}
@@ -1522,8 +1421,6 @@ if neobundle#tap('previm')
         \   'depends':  'open-browser.vim',
         \   'autoload': {'filetypes': 'markdown'}
         \ })
-
-  call neobundle#untap()
 endif
 " }}}
 " open-browser.vim {{{
@@ -1538,8 +1435,6 @@ if neobundle#tap('open-browser.vim')
   function! neobundle#hooks.on_source(bundle)
     let g:openbrowser_no_default_menus = 1
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " }}}
@@ -1625,8 +1520,6 @@ if neobundle#tap('unite.vim')
     AutocmdFT unite imap     <silent><buffer>       <C-v> <Plug>(unite_toggle_auto_preview)
     AutocmdFT unite nmap     <silent><buffer>       <C-j> <Plug>(unite_exit)
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " unite-outline {{{
@@ -1635,8 +1528,6 @@ if neobundle#tap('unite-outline')
         \   'depends':  'unite.vim',
         \   'autoload': {'unite_sources': 'outline'}
         \ })
-
-  call neobundle#untap()
 endif
 " }}}
 " unite-quickfix {{{
@@ -1645,8 +1536,6 @@ if neobundle#tap('unite-quickfix')
         \   'depends':  'unite.vim',
         \   'autoload': {'unite_sources': 'quickfix'}
         \ })
-
-  call neobundle#untap()
 endif
 " }}}
 " neomru.vim {{{
@@ -1663,8 +1552,6 @@ if neobundle#tap('neomru.vim')
     let g:neomru#update_interval         = 1
     let g:neomru#file_mru_ignore_pattern = 'fugitiveblame'
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-unite-giti {{{
@@ -1680,8 +1567,6 @@ if neobundle#tap('vim-unite-giti')
   function! neobundle#hooks.on_source(bundle)
     Autocmd User UniteGitiGitExecuted call s:update_fugitive()
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " unite-everything {{{
@@ -1697,8 +1582,6 @@ if s:is_windows
 
       call unite#custom#source('everything', 'max_candidates', 500)
     endfunction
-
-    call neobundle#untap()
   endif
 endif
 " }}}
@@ -1720,8 +1603,6 @@ if neobundle#tap('omnisharp-vim')
     let g:Omnisharp_stop_server                 = 0
     let g:OmniSharp_typeLookupInPreview         = 0
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " }}}
@@ -1748,20 +1629,16 @@ if neobundle#tap('vim-clang-format')
           \   'UseTab':                                         'Never'
           \ }
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-cpp {{{
 if neobundle#tap('vim-cpp')
   call neobundle#config({'autoload': {'filetypes': 'cpp'}})
-  call neobundle#untap()
 endif
 " }}}
 " STL-Syntax {{{
 if neobundle#tap('STL-Syntax')
   call neobundle#config({'autoload': {'filetypes': 'cpp'}})
-  call neobundle#untap()
 endif
 " }}}
 " }}}
@@ -1776,14 +1653,11 @@ if neobundle#tap('gocode')
       let g:gocomplete#system_function = 'vimproc#system'
     endif
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-ft-go {{{
 if neobundle#tap('vim-ft-go')
   call neobundle#config({'autoload': {'filetypes': 'go'}})
-  call neobundle#untap()
 endif
 " }}}
 " vim-godef {{{
@@ -1795,14 +1669,11 @@ if neobundle#tap('vim-godef')
     let g:godef_same_file_in_same_window = 1
     let g:godef_system_function          = 'vimproc#system'
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-go-extra {{{
 if neobundle#tap('vim-go-extra')
   call neobundle#config({'autoload': {'filetypes': 'go'}})
-  call neobundle#untap()
 endif
 " }}}
 " }}}
@@ -1822,8 +1693,6 @@ if neobundle#tap('vim-gitgutter')
 
     Autocmd FocusGained,FocusLost * GitGutter
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " agit.vim {{{
@@ -1835,8 +1704,6 @@ if neobundle#tap('agit.vim')
       let g:agit_enable_auto_show_commit = 0
     endif
   endfunction
-
-  call neobundle#untap()
 endif
 " }}}
 " vim-fugitive {{{
@@ -1846,8 +1713,6 @@ if neobundle#tap('vim-fugitive')
   function! neobundle#hooks.on_source(bundle)
     Autocmd FocusGained,FocusLost * call s:update_fugitive()
   endfunction
-
-  call neobundle#untap()
 endif
 
 function! s:update_fugitive()
