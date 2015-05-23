@@ -246,7 +246,8 @@ if neobundle#load_cache()
   NeoBundleLazy  'vim-jp/vim-go-extra'
 
   " Git
-  NeoBundleLazy  'airblade/vim-gitgutter'
+  " NeoBundleLazy  'airblade/vim-gitgutter'
+  NeoBundle      'airblade/vim-gitgutter'
   NeoBundleLazy  'cohama/agit.vim'
   NeoBundleLazy  'tpope/vim-fugitive'
 
@@ -1690,7 +1691,7 @@ if neobundle#tap('vim-gitgutter')
     let g:gitgutter_diff_args          = ''
 
     " todo:ファイルオープン直後一瞬シンタックスハイライトが無効にになってしまうことがある
-    " let g:gitgutter_sign_column_always = 1
+    let g:gitgutter_sign_column_always = 1
 
     Autocmd FocusGained,FocusLost * GitGutter
   endfunction
