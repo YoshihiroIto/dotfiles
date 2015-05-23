@@ -711,7 +711,8 @@ endif
 if neobundle#tap('vim-over')
   call neobundle#config({'autoload': {'commands': 'OverCommandLine'}})
 
-  noremap  <silent> <Leader>s  :OverCommandLine<CR>
+  nnoremap <silent> <Leader>s  :OverCommandLine<CR>%s/
+  vnoremap <silent> <Leader>s  :OverCommandLine<CR>s/
   nnoremap <silent> <Leader>gs :<C-u>OverCommandLine<CR>%s///g<Left><Left>
   vnoremap <silent> <Leader>gs :OverCommandLine<CR>s///g<Left><Left>
 
