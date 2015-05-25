@@ -1,12 +1,16 @@
+############################################################
 # アプリ
+############################################################
 [[plugins]]
 repository = 'YoshihiroIto/vim-icondrag'
 filetypes  = 'all'
 gui        = 1
 
+
+############################################################
 # Unite
+############################################################
 [[plugins]]
 repository    = 'sgur/unite-everything'
 depends       = 'unite.vim'
 unite_sources = ['everything', 'everything/async']
-

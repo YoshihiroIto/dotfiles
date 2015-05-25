@@ -11,6 +11,7 @@ repository = 'osyo-manga/shabadou.vim'
 repository = 'kana/vim-submode'
 mappings   = ['gb', 'gh', 'gw']
 
+
 ############################################################
 # 表示
 ############################################################
@@ -35,6 +36,7 @@ filetypes  = 'all'
 [[plugins]]
 repository = 'YoshihiroIto/syntastic'
 filetypes  = ['go', 'ruby', 'python']
+
 
 ############################################################
 # 検索
@@ -63,6 +65,7 @@ mappings   = '<Plug>'
 [[plugins]]
 repository = 'rhysd/clever-f.vim'
 mappings   = '<Plug>'
+
 
 ############################################################
 # 補完
@@ -114,6 +117,7 @@ filetypes  =  ['vim', 'ruby', 'lua']
 repository = 'kana/vim-smartinput'
 insert     = 1
 
+
 ############################################################
 # ファイル
 ############################################################
@@ -124,6 +128,7 @@ mappings   = '<Plug>'
 [[plugins]]
 repository = 'YoshihiroIto/vim-auto-mirroring'
 filetypes  = 'all'
+
 
 ############################################################
 # アプリ
@@ -169,6 +174,7 @@ mappings   = [['sxn', '<Plug>']]
 name       = 'QuickRun'
 complete   = 'customlist,quickrun#complete'
 
+
 ############################################################
 # Unite
 ############################################################
@@ -198,7 +204,7 @@ repository    = 'YoshihiroIto/vim-unite-giti'
 depends       = 'unite.vim'
 unite_sources = 'giti'
 commands      = 'GitiFetch'
-[plugins.build]
+
 
 ############################################################
 # C#
@@ -209,6 +215,7 @@ filetypes  = 'cs'
 [plugins.build]
 windows    = 'MSBuild server/OmniSharp.sln /p:Platform="Any CPU"'
 mac        = 'xbuild server/OmniSharp.sln'
+
 
 ############################################################
 # C++
@@ -224,6 +231,7 @@ filetypes  = 'cpp'
 [[plugins]]
 repository = 'rhysd/vim-clang-format'
 commands   = 'ClangFormat'
+
 
 ############################################################
 # Go
@@ -244,6 +252,7 @@ filetypes  = 'go'
 repository = 'dgryski/vim-godef'
 filetypes  = 'go'
 
+
 ############################################################
 # Git
 ############################################################
@@ -258,6 +267,7 @@ commands   = ['Agit', 'AgitFile']
 [[plugins]]
 repository      = 'tpope/vim-fugitive'
 function_prefix = 'fugitive'
+
 
 ############################################################
 # ファイルタイプ
@@ -293,6 +303,7 @@ filetypes  = 'ruby'
 [[plugins]]
 repository = 'vim-scripts/JSON.vim'
 filetypes  = ['json', 'markdown']
+
 
 ############################################################
 # テキストオブジェクト
@@ -368,9 +379,11 @@ repository = 'whatyouhide/vim-textobj-xmlattr'
 depends    = 'vim-textobj-user'
 mappings   = [['xo', 'ax'], ['xo', 'ix']]
 
+
 ############################################################
 # オペレータ
 ############################################################
+# http://qiita.com/rbtnn/items/a47ed6684f1f0bc52906
 [[plugins]]
 repository = 'kana/vim-operator-user'
 
@@ -410,5 +423,3 @@ mappings   = [['nx', '<Plug>']]
 repository = 'osyo-manga/vim-operator-jump_side'
 depends    = 'vim-operator-user'
 mappings   = [['nx', '<Plug>(operator-jump']]
-
-

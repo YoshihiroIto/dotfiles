@@ -1,14 +1,18 @@
+############################################################
 # ライブラリ
+############################################################
 [[plugins]]
 repository      = 'Shougo/vimproc'
 function_prefix = 'vimproc'
 [plugins.build]
 mac             = 'make -f make_mac.mak'
 
+
+############################################################
 # 表示
+############################################################
 [[plugins]]
 repository = 'YoshihiroIto/molokai'
 
 [[plugins]]
 repository = 'itchyny/lightline.vim'
-
