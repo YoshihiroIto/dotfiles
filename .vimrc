@@ -126,164 +126,24 @@ endif
 call neobundle#begin(expand('$DOTVIM/bundle/'))
 
 if neobundle#load_cache()
-  command! -nargs=+ NeoBundleC     call s:neobundle('NeoBundle',     split(<q-args>, ',\s*'))
-  command! -nargs=+ NeoBundleLazyC call s:neobundle('NeoBundleLazy', split(<q-args>, ',\s*'))
-  function s:neobundle(cmd, args)
-    if eval(a:args[1])
-      execute a:cmd a:args[0]
-    endif
-  endfunction
-
   NeoBundleFetch 'Shougo/neobundle.vim'
 
-  " ライブラリ
-  NeoBundle      'Shougo/vimproc'
-  NeoBundleC     'xolox/vim-misc',  s:is_windows
-  NeoBundleC     'xolox/vim-shell', s:is_windows
-  NeoBundleLazy  'Shougo/tabpagebuffer.vim'
-  NeoBundleLazy  'kana/vim-submode'
-  NeoBundleLazy  'mattn/webapi-vim'
-  NeoBundleLazy  'osyo-manga/shabadou.vim'
+  call neobundle#load_toml('$DOTVIM/plugins/plugins.toml')
+  call neobundle#load_toml('$DOTVIM/plugins/plugins.lazy.toml', {'lazy' : 1})
 
-  " 表示
-  NeoBundle      'YoshihiroIto/molokai'
-  NeoBundle      'itchyny/lightline.vim'
-  NeoBundleLazy  'LeafCage/foldCC.vim'
-  NeoBundleLazy  'Yggdroot/indentLine'
-  NeoBundleLazy  'YoshihiroIto/syntastic'
-  NeoBundleLazyC 'YoshihiroIto/vim-resize-win', s:has_gui_running
-  NeoBundleLazyC 'vim-scripts/movewin.vim',     s:has_gui_running
-
-  " 編集
-  NeoBundleLazy  'LeafCage/yankround.vim'
-  NeoBundleLazy  'junegunn/vim-easy-align'
-  NeoBundleLazy  'kana/vim-smartinput'
-  NeoBundleLazy  'nishigori/increment-activator'
-  NeoBundleLazy  'osyo-manga/vim-over'
-  NeoBundleLazy  'thinca/vim-qfreplace'
-  NeoBundleLazy  'tomtom/tcomment_vim'
-  NeoBundleLazy  'tpope/vim-endwise'
-
-  " 補完
-  NeoBundleLazy  'Shougo/neocomplete.vim'
-  NeoBundleLazy  'Shougo/neosnippet.vim'
-
-  " ファイル
-  NeoBundleLazy  'YoshihiroIto/vim-auto-mirroring'
-  NeoBundleLazy  'kana/vim-altr'
-
-  " 検索
-  NeoBundleLazy  'YoshihiroIto/vim-jumpbrace'
-  NeoBundleLazy  'haya14busa/incsearch.vim'
-  NeoBundleLazy  'haya14busa/vim-asterisk'
-  NeoBundleLazy  'osyo-manga/vim-anzu'
-  NeoBundleLazy  'rhysd/clever-f.vim'
-  NeoBundleLazy  'vim-scripts/matchit.zip'
-
-  " ファイルタイプ
-  NeoBundleLazy  'beyondmarc/hlsl.vim'
-  NeoBundleLazy  'pangloss/vim-javascript'
-  NeoBundleLazy  'stephpy/vim-yaml'
-  NeoBundleLazy  'tikhomirov/vim-glsl'
-  NeoBundleLazy  'tpope/vim-markdown'
-  NeoBundleLazy  'vim-ruby/vim-ruby'
-  NeoBundleLazy  'vim-scripts/JSON.vim'
-
-  " テキストオブジェクト
-  NeoBundleLazy  'kana/vim-textobj-user'
-  NeoBundleLazy  'anyakichi/vim-textobj-ifdef'          " #
-  NeoBundleLazy  'glts/vim-textobj-comment'             " c
-  NeoBundleLazy  'rhysd/textobj-wiw'                    " .
-  NeoBundleLazy  'kana/vim-textobj-entire'              " e
-  NeoBundleLazy  'kana/vim-textobj-indent'              " i I
-  NeoBundleLazy  'kana/vim-textobj-line'                " l
-  NeoBundleLazy  'rhysd/vim-textobj-anyblock'           " b
-  NeoBundleLazy  'rhysd/vim-textobj-word-column'        " v V
-  NeoBundleLazy  'sgur/vim-textobj-parameter'           " a
-  NeoBundleLazy  'thinca/vim-textobj-between'           " f{char}
-  NeoBundleLazy  'whatyouhide/vim-textobj-xmlattr'      " x
-
-  " オペレータ
-  NeoBundleLazy  'kana/vim-operator-user'
-  NeoBundleLazy  'YoshihiroIto/vim-operator-tcomment'   " t
-  NeoBundleLazy  'deris/vim-rengbang'                   " <Leader>r
-  NeoBundleLazy  'kana/vim-operator-replace'            " R
-  NeoBundleLazy  'rhysd/vim-operator-surround'          " S
-  NeoBundleLazy  'tyru/operator-camelize.vim'           " <Leader>_
-  NeoBundleLazy  'osyo-manga/vim-operator-jump_side'    " <Leader>j
-
-  " アプリ
-  NeoBundleLazy  'Shougo/vimfiler.vim'
-  NeoBundleLazy  'Shougo/vimshell.vim'
-  NeoBundleLazy  'glidenote/memolist.vim'
-  NeoBundleLazy  'rhysd/wandbox-vim'
-  NeoBundleLazy  'thinca/vim-quickrun'
-  NeoBundleLazy  'tsukkee/lingr-vim'
-  NeoBundleLazy  'beckorz/previm'
-  NeoBundleLazy  'tyru/open-browser.vim'
-  NeoBundleLazyC 'YoshihiroIto/vim-icondrag', s:is_windows && s:has_gui_running
-
-  " Unite
-  NeoBundleLazy  'Shougo/unite.vim'
-  NeoBundleLazy  'Shougo/neomru.vim'
-  NeoBundleLazy  'Shougo/unite-outline'
-  NeoBundleLazy  'YoshihiroIto/vim-unite-giti'
-  NeoBundleLazy  'osyo-manga/unite-quickfix'
-  NeoBundleLazyC 'sgur/unite-everything', s:is_windows
-
-  " C#
-  NeoBundleLazy  'YoshihiroIto/omnisharp-vim'
-
-  " C++
-  NeoBundleLazy  'Mizuchi/STL-Syntax'
-  NeoBundleLazy  'rhysd/vim-clang-format'
-  NeoBundleLazy  'vim-jp/vim-cpp'
-
-  " Go
-  NeoBundleLazy  'nsf/gocode'
-  NeoBundleLazy  'google/vim-ft-go'
-  NeoBundleLazy  'dgryski/vim-godef'
-  NeoBundleLazy  'vim-jp/vim-go-extra'
-
-  " Git
-  " NeoBundleLazy  'airblade/vim-gitgutter'
-  NeoBundle      'airblade/vim-gitgutter'
-  NeoBundleLazy  'cohama/agit.vim'
-  NeoBundleLazy  'tpope/vim-fugitive'
+  if s:is_windows
+    call neobundle#load_toml('$DOTVIM/plugins/plugins.win.toml')
+    call neobundle#load_toml('$DOTVIM/plugins/plugins.lazy.win.toml', {'lazy' : 1})
+  endif
 
   NeoBundleSaveCache
-
-  delfunction s:neobundle
-  delcommand NeoBundleC
-  delcommand NeoBundleLazyC
 endif
 " ライブラリ {{{
-" vimproc {{{
-if neobundle#tap('vimproc')
-  call neobundle#config({
-        \   'autoload': {'function_prefix': 'vimproc'},
-        \   'build':    {'mac':  'make -f make_mac.mak'}
-        \ })
-endif
-" }}}
-" vim-shell {{{
-if s:is_windows
-  let g:shell_mappings_enabled = 0
-endif
-" }}}
-" webapi-vim {{{
-if neobundle#tap('webapi-vim')
-  call neobundle#config({'autoload': {'function_prefix': 'webapi'}})
+" vim-shell
+let g:shell_mappings_enabled = 0
 
-  function! neobundle#hooks.on_source(bundle)
-    let g:webapi#system_function = 'vimproc#system'
-  endfunction
-endif
-" }}}
-" vim-submode {{{
+" vim-submode
 if neobundle#tap('vim-submode')
-  call neobundle#config({'autoload': {'mappings': ['gb', 'gh', 'gw']}})
-
   function! neobundle#hooks.on_source(bundle)
     let g:submode_timeout          = 0
     let g:submode_keep_leaving_key = 1
@@ -307,45 +167,22 @@ if neobundle#tap('vim-submode')
   endfunction
 endif
 " }}}
-" }}}
 " 表示 {{{
-" foldCC.vim {{{
-if neobundle#tap('foldCC.vim')
-  call neobundle#config({'autoload': {'filetypes': ['vim', 'xml']}})
+" foldCC.vim
+let g:foldCCtext_enable_autofdc_adjuster = 1
+let g:foldCCtext_tail                    =
+      \ 'printf("[ %4d lines  Lv%-2d]", v:foldend - v:foldstart + 1, v:foldlevel)'
 
-  function! neobundle#hooks.on_source(bundle)
-    let g:foldCCtext_enable_autofdc_adjuster = 1
-    let g:foldCCtext_tail                    =
-          \ 'printf("[ %4d lines  Lv%-2d]", v:foldend - v:foldstart + 1, v:foldlevel)'
+set foldtext=FoldCCtext()
 
-    set foldtext=FoldCCtext()
-  endfunction
-endif
-" }}}
-" syntastic {{{
+" syntastic
 if neobundle#tap('syntastic')
-  call neobundle#config({'autoload': {'filetypes': ['go', 'ruby', 'python']}})
-
   function! neobundle#hooks.on_source(bundle)
     Autocmd BufWritePost *.{go,rb,py} call s:update_lightline()
   endfunction
 endif
-" }}}
-" vim-resize-win {{{
-if s:has_gui_running
-  if neobundle#tap('vim-resize-win')
-    call neobundle#config({'autoload': {'commands': 'ResizeWin'}})
-  endif
-endif
-" }}}
-" movewin.vim {{{
-if s:has_gui_running
-  if neobundle#tap('movewin.vim')
-    call neobundle#config({'autoload': {'commands': 'MoveWin'}})
-  endif
-endif
-" }}}
-" lightline.vim {{{
+
+" lightline.vim
 let g:lightline#colorscheme#yoi#palette = {
       \   'inactive': {
       \     'left':     [['#585858', '#262626', 240, 235],
@@ -595,163 +432,107 @@ function! s:update_lightline()
   catch
   endtry
 endfunction
-" }}}
-" indentLine {{{
-if neobundle#tap('indentLine')
-  call neobundle#config({'autoload': {'filetypes': 'all'}})
 
-  function! neobundle#hooks.on_source(bundle)
-    let g:indentLine_fileType = [
-          \   'c',    'cpp',  'cs',     'go',
-          \   'ruby', 'lua',  'python',
-          \   'vim',
-          \   'glsl', 'hlsl',
-          \   'xml',  'json', 'markdown'
-          \ ]
+" indentLine
+let g:indentLine_fileType = [
+      \   'c',    'cpp',  'cs',     'go',
+      \   'ruby', 'lua',  'python',
+      \   'vim',
+      \   'glsl', 'hlsl',
+      \   'xml',  'json', 'markdown'
+      \ ]
 
-    let g:indentLine_faster               = 1
-    let g:indentLine_color_term           = 0
-    let g:indentLine_indentLevel          = 20
-    let g:indentLine_char                 = '⭟'
-    let g:indentLine_color_gui            = '#505050'
-    let g:indentLine_noConcealCursor      = 1
-    let g:indentLine_showFirstIndentLevel = 1
-    let g:indentLine_first_char           = g:indentLine_char
-  endfunction
-endif
-" }}}
+let g:indentLine_faster               = 1
+let g:indentLine_color_term           = 0
+let g:indentLine_indentLevel          = 20
+let g:indentLine_char                 = '⭟'
+let g:indentLine_color_gui            = '#505050'
+let g:indentLine_noConcealCursor      = 1
+let g:indentLine_showFirstIndentLevel = 1
+let g:indentLine_first_char           = g:indentLine_char
 " }}}
 " 編集 {{{
-" tcomment_vim {{{
-if neobundle#tap('tcomment_vim')
-  call neobundle#config({
-        \   'autoload': {
-        \     'function_prefix': 'tcomment',
-        \     'mappings':        'gc',
-        \     'commands':        'TComment'
-        \   }
-        \ })
-endif
-" }}}
-" vim-endwise {{{
-if neobundle#tap('vim-endwise')
-  call neobundle#config({'autoload': {'filetypes': ['vim', 'ruby', 'lua']}})
+" vim-endwise
+" http://cohama.hateblo.jp/entry/20121017/1350482411
+let g:endwise_no_mappings = 1
+AutocmdFT lua,ruby,vim imap <buffer> <CR> <CR><Plug>DiscretionaryEnd
 
-  function! neobundle#hooks.on_source(bundle)
-    " http://cohama.hateblo.jp/entry/20121017/1350482411
-    let g:endwise_no_mappings = 1
-    AutocmdFT lua,ruby,vim imap <buffer> <CR> <CR><Plug>DiscretionaryEnd
-  endfunction
-endif
-" }}}
-" vim-easy-align {{{
-if neobundle#tap('vim-easy-align')
-  call neobundle#config({'autoload': {'mappings': '<Plug>(EasyAlign)'}})
+" vim-easy-align
+" todo:直接埋め込むと正しく動作しないことがある
+nmap <Leader>0easyalign <Plug>(EasyAlign)
+vmap <Leader>0easyalign <Plug>(EasyAlign)
 
-  " todo:直接埋め込むと正しく動作しないことがある
-  nmap <Leader>0easyalign <Plug>(EasyAlign)
-  vmap <Leader>0easyalign <Plug>(EasyAlign)
+nmap <silent> <Leader>a=       vii<Leader>0easyalign=
+nmap <silent> <Leader>a:       vii<Leader>0easyalign:
+nmap <silent> <Leader>a,       vii<Leader>0easyalign*,
+nmap <silent> <Leader>a<Space> vii<Leader>0easyalign*<Space>
+nmap <silent> <Leader>a\|      vii<Leader>0easyalign*\|
+xmap <silent> <Leader>a=       <Leader>0easyalign=
+xmap <silent> <Leader>a:       <Leader>0easyalign:
+xmap <silent> <Leader>a,       <Leader>0easyalign*,
+xmap <silent> <Leader>a<Space> <Leader>0easyalign*<Space>
+xmap <silent> <Leader>a\|      <Leader>0easyalign*\|
 
-  nmap <silent> <Leader>a=       vii<Leader>0easyalign=
-  nmap <silent> <Leader>a:       vii<Leader>0easyalign:
-  nmap <silent> <Leader>a,       vii<Leader>0easyalign*,
-  nmap <silent> <Leader>a<Space> vii<Leader>0easyalign*<Space>
-  nmap <silent> <Leader>a\|      vii<Leader>0easyalign*\|
-  xmap <silent> <Leader>a=       <Leader>0easyalign=
-  xmap <silent> <Leader>a:       <Leader>0easyalign:
-  xmap <silent> <Leader>a,       <Leader>0easyalign*,
-  xmap <silent> <Leader>a<Space> <Leader>0easyalign*<Space>
-  xmap <silent> <Leader>a\|      <Leader>0easyalign*\|
-endif
-" }}}
-" yankround.vim {{{
-if neobundle#tap('yankround.vim')
-  call neobundle#config({'autoload': {'mappings': '<Plug>'}})
+" yankround.vim
+let g:yankround_use_region_hl = 1
 
-  function! s:yankround_pre(count1)
-    return (col('.') >= col('$') ? '$' : '') . ":\<C-u>set virtualedit=block\<CR>" . a:count1
-  endfunction
-  nmap <silent><expr> p     <SID>yankround_pre(v:count1) . '<Plug>(yankround-p)'
-  xmap <silent><expr> p     <SID>yankround_pre(v:count1) . '<Plug>(yankround-p)'
-  nmap <silent><expr> P     <SID>yankround_pre(v:count1) . '<Plug>(yankround-P)'
-  nmap <silent><expr> gp    <SID>yankround_pre(v:count1) . '<Plug>(yankround-gp)'
-  xmap <silent><expr> gp    <SID>yankround_pre(v:count1) . '<Plug>(yankround-gp)'
-  nmap <silent><expr> gP    <SID>yankround_pre(v:count1) . '<Plug>(yankround-gP)'
-  nmap <silent>       <C-p> <Plug>(yankround-prev)
-  nmap <silent>       <C-n> <Plug>(yankround-next)
+function! s:yankround_pre(count1)
+  return (col('.') >= col('$') ? '$' : '') . ":\<C-u>set virtualedit=block\<CR>" . a:count1
+endfunction
+nmap <silent><expr> p     <SID>yankround_pre(v:count1) . '<Plug>(yankround-p)'
+xmap <silent><expr> p     <SID>yankround_pre(v:count1) . '<Plug>(yankround-p)'
+nmap <silent><expr> P     <SID>yankround_pre(v:count1) . '<Plug>(yankround-P)'
+nmap <silent><expr> gp    <SID>yankround_pre(v:count1) . '<Plug>(yankround-gp)'
+xmap <silent><expr> gp    <SID>yankround_pre(v:count1) . '<Plug>(yankround-gp)'
+nmap <silent><expr> gP    <SID>yankround_pre(v:count1) . '<Plug>(yankround-gP)'
+nmap <silent>       <C-p> <Plug>(yankround-prev)
+nmap <silent>       <C-n> <Plug>(yankround-next)
 
-  function! neobundle#hooks.on_source(bundle)
-    let g:yankround_use_region_hl = 1
-  endfunction
-endif
-" }}}
-" vim-smartinput {{{
+" vim-smartinput
 if neobundle#tap('vim-smartinput')
-  call neobundle#config({'autoload': {'insert': 1}})
-
   function! neobundle#hooks.on_source(bundle)
     call smartinput#clear_rules()
     call smartinput#define_default_rules()
   endfunction
 endif
-" }}}
-" increment-activator {{{
-if neobundle#tap('increment-activator')
-  call neobundle#config({'autoload': {'mappings': ['<C-x>', '<C-a>']}})
 
-  function! neobundle#hooks.on_source(bundle)
-    let g:increment_activator_filetype_candidates = {
-          \   '_':   [['width', 'height']],
-          \   'cs':  [['private', 'protected', 'public', 'internal']],
-          \   'cpp': [['private', 'protected', 'public']]
-          \ }
-  endfunction
-endif
-" }}}
-" vim-over {{{
-if neobundle#tap('vim-over')
-  call neobundle#config({'autoload': {'commands': 'OverCommandLine'}})
+" increment-activator
+let g:increment_activator_filetype_candidates = {
+      \   '_':   [['width', 'height']],
+      \   'cs':  [['private', 'protected', 'public', 'internal']],
+      \   'cpp': [['private', 'protected', 'public']]
+      \ }
 
-  nnoremap <silent> <Leader>s  :OverCommandLine<CR>%s/
-  vnoremap <silent> <Leader>s  :OverCommandLine<CR>s/
-  nnoremap <silent> <Leader>gs :<C-u>OverCommandLine<CR>%s///g<Left><Left>
-  vnoremap <silent> <Leader>gs :OverCommandLine<CR>s///g<Left><Left>
+" vim-over
+let g:over_command_line_key_mappings = {"\<C-j>": "\<Esc>"}
 
-  function! neobundle#hooks.on_source(bundle)
-    let g:over_command_line_key_mappings = {"\<C-j>": "\<Esc>"}
-  endfunction
+nnoremap <silent> <Leader>s  :OverCommandLine<CR>%s/
+vnoremap <silent> <Leader>s  :OverCommandLine<CR>s/
+nnoremap <silent> <Leader>gs :<C-u>OverCommandLine<CR>%s///g<Left><Left>
+vnoremap <silent> <Leader>gs :OverCommandLine<CR>s///g<Left><Left>
+
+augroup InitializeOver
+  autocmd!
+  autocmd FocusLost,CursorHold,CursorHoldI * call s:initialize_over()
+augroup END
+
+let s:initialize_over_delay = 2*1
+function! s:initialize_over()
+  let s:initialize_over_delay -= 1
+  if s:initialize_over_delay > 0
+    return
+  endif
+
+  call over#load()
 
   augroup InitializeOver
     autocmd!
-    autocmd FocusLost,CursorHold,CursorHoldI * call s:initialize_over()
   augroup END
-
-  let s:initialize_over_delay = 2*1
-  function! s:initialize_over()
-    let s:initialize_over_delay -= 1
-    if s:initialize_over_delay > 0
-      return
-    endif
-
-    call over#load()
-
-    augroup InitializeOver
-      autocmd!
-    augroup END
-  endfunction
-endif
-" }}}
-" vim-qfreplace {{{
-if neobundle#tap('vim-qfreplace')
-  call neobundle#config({'autoload': {'filetypes': ['unite', 'quickfix']}})
-endif
-" }}}
+endfunction
 " }}}
 " 補完 {{{
-" neocomplete.vim {{{
+" neocomplete.vim
 if neobundle#tap('neocomplete.vim')
-  call neobundle#config({'autoload': {'insert': 1}})
-
   function! neobundle#hooks.on_source(bundle)
     let g:neocomplete#enable_at_startup       = 1
     let g:neocomplete#enable_ignore_case      = 1
@@ -837,14 +618,9 @@ if neobundle#tap('neocomplete.vim')
     augroup END
   endfunction
 endif
-" }}}
-" neosnippet.vim {{{
-if neobundle#tap('neosnippet.vim')
-  call neobundle#config({
-        \   'depends':  'neocomplete.vim',
-        \   'autoload': {'insert': 1}
-        \ })
 
+" neosnippet.vim
+if neobundle#tap('neosnippet.vim')
   imap <expr> <Tab> neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)'
         \                                               : '<Tab>'
   smap <expr> <Tab> neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)'
@@ -863,17 +639,9 @@ if neobundle#tap('neosnippet.vim')
   endfunction
 endif
 " }}}
-" }}}
 " ファイル {{{
-" vim-auto-mirroring {{{
-if neobundle#tap('vim-auto-mirroring')
-  call neobundle#config({'autoload': {'filetypes': 'all'}})
-endif
-" }}}
-" vim-altr {{{
+" vim-altr
 if neobundle#tap('vim-altr')
-  call neobundle#config({'autoload': {'mappings': '<Plug>'}})
-
   nmap ga <Plug>(altr-forward)
   nmap gA <Plug>(altr-back)
 
@@ -917,31 +685,16 @@ if neobundle#tap('vim-altr')
   endfunction
 endif
 " }}}
-" }}}
 " 検索 {{{
-" matchit.zip {{{
+" matchit.zip
 if neobundle#tap('matchit.zip')
-  call neobundle#config({'autoload': {'filetypes': 'all'}})
-
   function! neobundle#hooks.on_post_source(bundle)
     silent! execute 'doautocmd Filetype' &filetype
   endfunction
 endif
-" }}}
-" vim-jumpbrace {{{
-if neobundle#tap('vim-jumpbrace')
-  call neobundle#config({'autoload': {'mappings': '<Plug>'}})
-endif
-" }}}
-" incsearch.vim {{{
-if neobundle#tap('incsearch.vim')
-  call neobundle#config({
-        \   'autoload': {
-        \     'commands': 'IncSearchNoreMap',
-        \     'mappings': '<Plug>'
-        \   }
-        \ })
 
+" incsearch.vim
+if neobundle#tap('incsearch.vim')
   function! neobundle#hooks.on_source(bundle)
     let g:incsearch#auto_nohlsearch   = 1
     let g:incsearch#emacs_like_keymap = 1
@@ -953,12 +706,8 @@ if neobundle#tap('incsearch.vim')
   Autocmd VimEnter * IncSearchNoreMap <C-i> <Over>(incsearch-scroll-f)
   Autocmd VimEnter * IncSearchNoreMap <C-o> <Over>(incsearch-scroll-b)
 endif
-" }}}
-" vim-anzu {{{
-if neobundle#tap('vim-anzu')
-  call neobundle#config({'autoload': {'mappings': '<Plug>'}})
-endif
 
+" vim-anzu
 " 一定時間キー入力がないとき、ウインドウを移動したとき、タブを移動したときに
 " 検索ヒット数の表示を消去する
 Autocmd CursorHold,CursorHoldI * call s:update_display_anzu()
@@ -988,11 +737,9 @@ function! s:clear_display_anzu()
   catch
   endtry
 endfunction
-" }}}
-" clever-f.vim {{{
-if neobundle#tap('clever-f.vim')
-  call neobundle#config({'autoload': {'mappings': '<Plug>'}})
 
+" clever-f.vim
+if neobundle#tap('clever-f.vim')
   nmap f <Plug>(clever-f-f)
   xmap f <Plug>(clever-f-f)
   omap f <Plug>(clever-f-f)
@@ -1014,301 +761,90 @@ if neobundle#tap('clever-f.vim')
   endfunction
 endif
 " }}}
-" vim-asterisk {{{
-if neobundle#tap('vim-asterisk')
-  call neobundle#config({'autoload': {'mappings': '<Plug>'}})
-endif
-" }}}
-" }}}
 " ファイルタイプ {{{
-" hlsl.vim {{{
-if neobundle#tap('hlsl.vim')
-  call neobundle#config({'autoload': {'filetypes': 'hlsl'}})
-endif
-" }}}
-" vim-glsl {{{
-if neobundle#tap('vim-glsl')
-  call neobundle#config({'autoload': {'filetypes': 'glsl'}})
-endif
-" }}}
-" vim-ruby {{{
-if neobundle#tap('vim-ruby')
-  call neobundle#config({'autoload': {'filetypes': 'ruby'}})
-endif
-" }}}
-" vim-javascript {{{
-if neobundle#tap('vim-javascript.vim')
-  call neobundle#config({'autoload': {'filetypes': 'javascript'}})
-endif
-" }}}
-" vim-yaml {{{
-if neobundle#tap('vim-yaml')
-  call neobundle#config({'autoload': {'filetypes': 'yaml'}})
-endif
-" }}}
-" JSON.vim {{{
-if neobundle#tap('JSON.vim')
-  call neobundle#config({'autoload': {'filetypes': ['json', 'markdown']}})
-endif
-" }}}
-" vim-markdown {{{
-if neobundle#tap('vim-markdown')
-  call neobundle#config({'autoload': {'filetypes': 'markdown'}})
-
-  function! neobundle#hooks.on_source(bundle)
-    let g:markdown_fenced_languages = [
-          \   'c',    'cpp', 'cs', 'go',
-          \   'ruby', 'lua', 'python',
-          \   'vim',
-          \   'xml',  'json'
-          \ ]
-  endfunction
-endif
-" }}}
+" vim-markdown
+let g:markdown_fenced_languages = [
+      \   'c',    'cpp', 'cs', 'go',
+      \   'ruby', 'lua', 'python',
+      \   'vim',
+      \   'xml',  'json'
+      \ ]
 " }}}
 " テキストオブジェクト {{{
-" https://github.com/kana/vim-textobj-user/wiki
-" http://d.hatena.ne.jp/osyo-manga/20130717/1374069987
-" vim-textobj-entire {{{
-if neobundle#tap('vim-textobj-entire')
-  call neobundle#config({
-        \   'depends':  'vim-textobj-user',
-        \   'autoload': {'mappings': [['xo', 'ae'], ['xo', 'ie']]}
-        \ })
-endif
-" }}}
-" vim-textobj-indent {{{
-if neobundle#tap('vim-textobj-indent')
-  call neobundle#config({
-        \   'depends':  'vim-textobj-user',
-        \   'autoload': {'mappings': [['xo', 'ai'], ['xo', 'aI'], ['xo', 'ii'], ['xo', 'iI']]}
-        \ })
-endif
-" }}}
-" vim-textobj-line {{{
-if neobundle#tap('vim-textobj-line')
-  call neobundle#config({
-        \   'depends':  'vim-textobj-user',
-        \   'autoload': {'mappings': [['xo', 'al'], ['xo', 'il']]}
-        \ })
-endif
-" }}}
-" vim-textobj-word-column {{{
-if neobundle#tap('vim-textobj-word-column')
-  call neobundle#config({
-        \   'depends':  'vim-textobj-user',
-        \   'autoload': {'mappings': [['xo', 'av'], ['xo', 'aV'], ['xo', 'iv'], ['xo', 'iV']]}
-        \ })
-endif
-" }}}
-" vim-textobj-comment {{{
-if neobundle#tap('vim-textobj-comment')
-  call neobundle#config({
-        \   'depends':  'vim-textobj-user',
-        \   'autoload': {'mappings': [['xo', 'ac'], ['xo', 'ic']]}
-        \ })
-endif
-" }}}
-" vim-textobj-parameter {{{
-if neobundle#tap('vim-textobj-parameter')
-  call neobundle#config({
-        \   'depends':  'vim-textobj-user',
-        \   'autoload': {'mappings': [['xo', '<Plug>']]}
-        \ })
+xmap aa        <Plug>(textobj-parameter-a)
+xmap ia        <Plug>(textobj-parameter-i)
+omap aa        <Plug>(textobj-parameter-a)
+omap ia        <Plug>(textobj-parameter-i)
 
-  xmap aa <Plug>(textobj-parameter-a)
-  xmap ia <Plug>(textobj-parameter-i)
-  omap aa <Plug>(textobj-parameter-a)
-  omap ia <Plug>(textobj-parameter-i)
-endif
-" }}}
-" vim-textobj-between {{{
-if neobundle#tap('vim-textobj-between')
-  call neobundle#config({
-        \   'depends':  'vim-textobj-user',
-        \   'autoload': {'mappings': [['xo', 'af'], ['xo', 'if']]}
-        \ })
-endif
-" }}}
-" vim-textobj-anyblock {{{
-if neobundle#tap('vim-textobj-anyblock')
-  call neobundle#config({
-        \   'depends':  'vim-textobj-user',
-        \   'autoload': {'mappings': [['xo', 'ab'], ['xo', 'ib']]}
-        \ })
-endif
-" }}}
-" textobj-wiw {{{
-if neobundle#tap('textobj-wiw')
-  call neobundle#config({
-        \   'depends':  'vim-textobj-user',
-        \   'autoload': {'mappings': [['xo', '<Plug>']]}
-        \ })
-
-  xmap a. <Plug>(textobj-wiw-a)
-  xmap i. <Plug>(textobj-wiw-i)
-  omap a. <Plug>(textobj-wiw-a)
-  omap i. <Plug>(textobj-wiw-i)
-endif
-" }}}
-" vim-textobj-xmlattr {{{
-if neobundle#tap('vim-textobj-xmlattr')
-  call neobundle#config({
-        \   'depends':  'vim-textobj-user',
-        \   'autoload': {'mappings': [['xo', 'ax'], ['xo', 'ix']]}
-        \ })
-endif
-" }}}
-" vim-textobj-ifdef {{{
-if neobundle#tap('vim-textobj-ifdef')
-  call neobundle#config({
-        \   'depends':  'vim-textobj-user',
-        \   'autoload': {'mappings': [['xo', 'a#'], ['xo', 'i#']]}
-        \ })
-endif
-" }}}
+xmap a.        <Plug>(textobj-wiw-a)
+xmap i.        <Plug>(textobj-wiw-i)
+omap a.        <Plug>(textobj-wiw-a)
+omap i.        <Plug>(textobj-wiw-i)
 " }}}
 " オペレータ {{{
-" http://qiita.com/rbtnn/items/a47ed6684f1f0bc52906
-" vim-operator-replace {{{
-if neobundle#tap('vim-operator-replace')
-  call neobundle#config({
-        \   'depends':  'vim-operator-user',
-        \   'autoload': {'mappings': [['nx', '<Plug>']]}
-        \ })
+nmap R         <Plug>(operator-replace)
+xmap R         <Plug>(operator-replace)
 
-  nmap R <Plug>(operator-replace)
-  xmap R <Plug>(operator-replace)
-endif
-" }}}
-" vim-operator-tcomment {{{
-if neobundle#tap('vim-operator-tcomment')
-  call neobundle#config({
-        \   'depends':  ['vim-operator-user', 'tcomment_vim'],
-        \   'autoload': {'mappings': [['nx', '<Plug>']]}
-        \ })
+nmap t         <Plug>(operator-tcomment)
+xmap t         <Plug>(operator-tcomment)
 
-  nmap t <Plug>(operator-tcomment)
-  xmap t <Plug>(operator-tcomment)
-endif
-" }}}
-" operator-camelize.vim {{{
-if neobundle#tap('operator-camelize.vim')
-  call neobundle#config({
-        \   'depends':  'vim-operator-user',
-        \   'autoload': {'mappings': [['nx', '<Plug>']]}
-        \ })
+nmap <Leader>_ <Plug>(operator-camelize-toggle)
+xmap <Leader>_ <Plug>(operator-camelize-toggle)
 
-  nmap <Leader>_ <Plug>(operator-camelize-toggle)
-  xmap <Leader>_ <Plug>(operator-camelize-toggle)
-endif
-" }}}
-" vim-operator-surround {{{
-if neobundle#tap('vim-operator-surround')
-  call neobundle#config({
-        \   'depends':  'vim-operator-user',
-        \   'autoload': {'mappings': [['nx', '<Plug>']]}
-        \ })
+map  S         <Plug>(operator-surround-append)
+nmap Sd        <Plug>(operator-surround-delete)ab
+nmap Sr        <Plug>(operator-surround-replace)ab
 
-  map  <silent> S  <Plug>(operator-surround-append)
-  nmap <silent> Sd <Plug>(operator-surround-delete)ab
-  nmap <silent> Sr <Plug>(operator-surround-replace)ab
+nmap <Leader>r <Plug>(operator-rengbang)
+xmap <Leader>r <Plug>(operator-rengbang)
 
-  function! neobundle#hooks.on_source(bundle)
-    let g:operator#surround#blocks = {
-          \   '-': [
-          \     {
-          \       'block':      ["{\<CR>", "\<CR>}" ],
-          \       'motionwise': ['line'             ],
-          \       'keys':       ['{', '}'           ]
-          \     }
-          \   ]
-          \ }
-  endfunction
-endif
-" }}}
-" vim-rengbang {{{
-if neobundle#tap('vim-rengbang')
-  call neobundle#config({
-        \   'depends':  'vim-operator-user',
-        \   'autoload': {
-        \     'commands': 'RengBang',
-        \     'mappings': [['nx', '<Plug>(operator-rengbang']]
-        \   }
-        \ })
+nmap <Leader>j <Plug>(operator-jump-toggle)
+xmap <Leader>j <Plug>(operator-jump-toggle)
 
-  nmap <Leader>r <Plug>(operator-rengbang)
-  xmap <Leader>r <Plug>(operator-rengbang)
-endif
-" }}}
-" vim-operator-jump_side {{{
-if neobundle#tap('vim-operator-jump_side')
-  call neobundle#config({
-        \   'depends':  'vim-operator-user',
-        \   'autoload': {'mappings': [['nx', '<Plug>(operator-jump']]}
-        \ })
-
-  nmap <Leader>j <Plug>(operator-jump-toggle)
-  xmap <Leader>j <Plug>(operator-jump-toggle)
-endif
-" }}}
+" vim-operator-surround
+let g:operator#surround#blocks = {
+      \   '-': [
+      \     {
+      \       'block':      ["{\<CR>", "\<CR>}" ],
+      \       'motionwise': ['line'             ],
+      \       'keys':       ['{', '}'           ]
+      \     }
+      \   ]
+      \ }
 " }}}
 " アプリ {{{
-" lingr-vim {{{
-if neobundle#tap('lingr-vim')
-  call neobundle#config({'autoload': {'commands': 'LingrLaunch'}})
+" lingr-vim
+noremap <silent> [App]1 :<C-u>call <SID>toggle_lingr()<CR>
 
-  noremap <silent> [App]1 :<C-u>call <SID>toggle_lingr()<CR>
+let g:lingr_vim_say_buffer_height = 15
 
-  function! neobundle#hooks.on_source(bundle)
-    let g:lingr_vim_say_buffer_height = 15
+AutocmdFT lingr-rooms,lingr-members,lingr-messages
+      \                   nnoremap <silent><buffer> q  :<C-u>call <SID>toggle_lingr()<CR>
+AutocmdFT lingr-rooms,lingr-members,lingr-messages
+      \                   nmap     <silent><buffer> ss <Plug>(lingr-messages-show-say-buffer)
+AutocmdFT lingr-rooms,lingr-members,lingr-messages setlocal nolist
+AutocmdFT lingr-rooms,lingr-members                setlocal nonumber
 
-    AutocmdFT lingr-rooms,lingr-members,lingr-messages
-          \                   nnoremap <silent><buffer> q  :<C-u>call <SID>toggle_lingr()<CR>
-    AutocmdFT lingr-rooms,lingr-members,lingr-messages
-          \                   nmap     <silent><buffer> ss <Plug>(lingr-messages-show-say-buffer)
-    AutocmdFT lingr-rooms,lingr-members,lingr-messages setlocal nolist
-    AutocmdFT lingr-rooms,lingr-members                setlocal nonumber
-  endfunction
+function! s:toggle_lingr()
+  if bufnr('lingr-messages') == -1
+    tabnew
+    LingrLaunch
+    wincmd l
+  else
+    LingrExit
+  endif
+endfunction
 
-  function! s:toggle_lingr()
-    if bufnr('lingr-messages') == -1
-      tabnew
-      LingrLaunch
-      wincmd l
-    else
-      LingrExit
-    endif
-  endfunction
-endif
-" }}}
-" vimshell.vim {{{
-if neobundle#tap('vimshell.vim')
-  call neobundle#config({
-        \   'depends':  'tabpagebuffer.vim',
-        \   'autoload': {'commands': 'VimShellPop'}
-        \ })
+" vimshell.vim
+noremap <silent> [App]s :<C-u>VimShellPop<CR>
 
-  noremap <silent> [App]s :<C-u>VimShellPop<CR>
+let g:vimshell_popup_height   = 40
+let g:vimshell_prompt_pattern = '^\%(\f\|\\.\)\+> '
+let g:vimshell_prompt_expr    =
+      \ 'escape(substitute(fnamemodify(getcwd(), ":~").">", "\\", "/", "g"), "\\[]()?! ")." "'
 
-  function! neobundle#hooks.on_source(bundle)
-    let g:vimshell_popup_height   = 40
-    let g:vimshell_prompt_pattern = '^\%(\f\|\\.\)\+> '
-    let g:vimshell_prompt_expr    =
-          \ 'escape(substitute(fnamemodify(getcwd(), ":~").">", "\\", "/", "g"), "\\[]()?! ")." "'
-  endfunction
-endif
-" }}}
-" vimfiler.vim {{{
+" vimfiler.vim
 if neobundle#tap('vimfiler.vim')
-  call neobundle#config({
-        \   'depends':  'tabpagebuffer.vim',
-        \   'autoload': {
-        \     'commands': 'VimFilerBufferDir',
-        \     'mappings': '<Plug>'
-        \   }
-        \ })
-
   noremap <silent> [App]f :<C-u>VimFilerBufferDir<CR>
 
   function! neobundle#hooks.on_source(bundle)
@@ -1331,32 +867,18 @@ if neobundle#tap('vimfiler.vim')
     call vimfiler#custom#profile('default', 'context', {'auto_cd': 1})
   endfunction
 endif
-" }}}
-" memolist.vim {{{
-if neobundle#tap('memolist.vim')
-  call neobundle#config({
-        \   'depends':  'unite.vim',
-        \   'autoload': {
-        \     'unite_sources': 'memolist',
-        \     'commands':      ['MemoNew', 'MemoList', 'MemoGrep']
-        \   }
-        \ })
 
-  noremap <silent> [App]mn :<C-u>MemoNew<CR>
-  noremap <silent> [App]ml :<C-u>MemoList<CR>
-  noremap <silent> [App]mg :<C-u>MemoGrep<CR>
+" memolist.vim
+noremap <silent> [App]mn :<C-u>MemoNew<CR>
+noremap <silent> [App]ml :<C-u>MemoList<CR>
+noremap <silent> [App]mg :<C-u>MemoGrep<CR>
 
-  function! neobundle#hooks.on_source(bundle)
-    let g:memolist_unite        = 1
-    let g:memolist_memo_suffix  = 'md'
-    let g:memolist_unite_source = 'memolist'
-    let g:memolist_path         = expand('~/Dropbox/memo')
+let g:memolist_unite        = 1
+let g:memolist_memo_suffix  = 'md'
+let g:memolist_unite_source = 'memolist'
+let g:memolist_path         = expand('~/Dropbox/memo')
 
-    call unite#custom#source('memolist', 'sorters', ['sorter_ftime', 'sorter_reverse'])
-  endfunction
-endif
-" }}}
-" wandbox-vim {{{
+" wandbox-vim
 if neobundle#tap('wandbox-vim')
   function! neobundle#hooks.on_source(bundle)
     " wandbox.vim で quickfix を開かないようにする
@@ -1364,92 +886,46 @@ if neobundle#tap('wandbox-vim')
     let g:wandbox#default_compiler     = {'cpp': 'clang-head'}
   endfunction
 endif
-" }}}
-" vim-quickrun {{{
-if neobundle#tap('vim-quickrun')
-  call neobundle#config({
-        \   'depends':  ['shabadou.vim', 'wandbox-vim'],
-        \   'autoload': {
-        \     'mappings': [['sxn', '<Plug>']],
-        \     'commands': [
-        \       {
-        \         'complete': 'customlist,quickrun#complete',
-        \         'name':     'QuickRun'
-        \       }
-        \     ]
-        \   }
-        \ })
 
-  noremap <silent> [App]r :<C-u>QuickRun<CR>
+" vim-quickrun
+noremap <silent> [App]r :<C-u>QuickRun<CR>
 
-  function! neobundle#hooks.on_source(bundle)
-    let g:quickrun_config = {
-          \   '_': {
-          \     'hook/close_unite_quickfix/enable_hook_loaded': 1,
-          \     'hook/unite_quickfix/enable_failure':           1,
-          \     'hook/close_quickfix/enable_exit':              1,
-          \     'hook/close_buffer/enable_failure':             1,
-          \     'hook/close_buffer/enable_empty_data':          1,
-          \     'outputter':                                    'multi:buffer:quickfix',
-          \     'runner':                                       'vimproc',
-          \     'runner/vimproc/updatetime':                    40
-          \   },
-          \   'cpp/wandbox': {
-          \     'runner':                                       'wandbox',
-          \     'runner/wandbox/compiler':                      'clang-head',
-          \     'runner/wandbox/options':                       'warning,c++1y,boost-1.55'
-          \   },
-          \   'lua': {
-          \     'type':                                         'lua/vim'
-          \   }
-          \ }
-  endfunction
-endif
-" }}}
-" vim-icondrag {{{
-if s:is_windows && s:has_gui_running
+let g:quickrun_config = {
+      \   '_': {
+      \     'hook/close_unite_quickfix/enable_hook_loaded': 1,
+      \     'hook/unite_quickfix/enable_failure':           1,
+      \     'hook/close_quickfix/enable_exit':              1,
+      \     'hook/close_buffer/enable_failure':             1,
+      \     'hook/close_buffer/enable_empty_data':          1,
+      \     'outputter':                                    'multi:buffer:quickfix',
+      \     'runner':                                       'vimproc',
+      \     'runner/vimproc/updatetime':                    40
+      \   },
+      \   'cpp/wandbox': {
+      \     'runner':                                       'wandbox',
+      \     'runner/wandbox/compiler':                      'clang-head',
+      \     'runner/wandbox/options':                       'warning,c++1y,boost-1.55'
+      \   },
+      \   'lua': {
+      \     'type':                                         'lua/vim'
+      \   }
+      \ }
+
+" vim-icondrag
+if s:is_windows
   if neobundle#tap('vim-icondrag')
-    call neobundle#config({'autoload': {'filetypes': 'all'}})
-
     function! neobundle#hooks.on_source(bundle)
       call icondrag#enable()
     endfunction
   endif
 endif
-" }}}
-" previm {{{
-if neobundle#tap('previm')
-  call neobundle#config({
-        \   'depends':  'open-browser.vim',
-        \   'autoload': {'filetypes': 'markdown'}
-        \ })
-endif
-" }}}
-" open-browser.vim {{{
-if neobundle#tap('open-browser.vim')
-  call neobundle#config({
-        \   'autoload': {
-        \     'function_prefix': 'openbrowser',
-        \     'commands':        'OpenBrowser'
-        \   }
-        \ })
 
-  function! neobundle#hooks.on_source(bundle)
-    let g:openbrowser_no_default_menus = 1
-  endfunction
-endif
-" }}}
+" open-browser.vim
+let g:openbrowser_no_default_menus = 1
 " }}}
 " Unite {{{
-" unite.vim {{{
+" unite.vim
 if neobundle#tap('unite.vim')
-  call neobundle#config({
-        \   'depends':  ['vimfiler.vim', 'tabpagebuffer.vim'],
-        \   'autoload': {
-        \     'commands': ['Unite', 'UniteResume', 'UniteWithCursorWord']
-        \   }
-        \ })
-
   nnoremap [Unite] <Nop>
   xnoremap [Unite] <Nop>
   nmap     <Space> [Unite]
@@ -1516,6 +992,9 @@ if neobundle#tap('unite.vim')
     call unite#custom_default_action('directory',                 'vimfiler')
     call unite#custom_default_action('neomru/directory',          'vimfiler')
 
+    call unite#custom#source('memolist',   'sorters',        ['sorter_ftime', 'sorter_reverse'])
+    call unite#custom#source('everything', 'max_candidates', 500)
+
     AutocmdFT unite nnoremap <silent><buffer><expr> <C-r> unite#do_action('replace')
     AutocmdFT unite inoremap <silent><buffer><expr> <C-r> unite#do_action('replace')
     AutocmdFT unite nmap     <silent><buffer>       <C-v> <Plug>(unite_toggle_auto_preview)
@@ -1523,199 +1002,83 @@ if neobundle#tap('unite.vim')
     AutocmdFT unite nmap     <silent><buffer>       <C-j> <Plug>(unite_exit)
   endfunction
 endif
-" }}}
-" unite-outline {{{
-if neobundle#tap('unite-outline')
-  call neobundle#config({
-        \   'depends':  'unite.vim',
-        \   'autoload': {'unite_sources': 'outline'}
-        \ })
-endif
-" }}}
-" unite-quickfix {{{
-if neobundle#tap('unite-quickfix')
-  call neobundle#config({
-        \   'depends':  'unite.vim',
-        \   'autoload': {'unite_sources': 'quickfix'}
-        \ })
-endif
-" }}}
-" neomru.vim {{{
-if neobundle#tap('neomru.vim')
-  call neobundle#config({
-        \   'depends':  'unite.vim',
-        \   'autoload': {
-        \     'filetypes':     'all',
-        \     'unite_sources': ['neomru/file', 'neomru/directory']
-        \   }
-        \ })
 
+" neomru.vim
+if neobundle#tap('neomru.vim')
   function! neobundle#hooks.on_source(bundle)
     let g:neomru#update_interval         = 1
     let g:neomru#file_mru_ignore_pattern = 'fugitiveblame'
   endfunction
 endif
-" }}}
-" vim-unite-giti {{{
-if neobundle#tap('vim-unite-giti')
-  call neobundle#config({
-        \   'depends':  'unite.vim',
-        \   'autoload': {
-        \     'unite_sources': 'giti',
-        \     'commands':      'GitiFetch'
-        \   }
-        \ })
 
-  function! neobundle#hooks.on_source(bundle)
-    Autocmd User UniteGitiGitExecuted call s:update_fugitive()
-  endfunction
-endif
-" }}}
-" unite-everything {{{
+" vim-unite-giti
+Autocmd User UniteGitiGitExecuted call s:update_fugitive()
+
+" unite-everything
 if s:is_windows
   if neobundle#tap('unite-everything')
-    call neobundle#config({
-          \   'depends':  'unite.vim',
-          \   'autoload': {'unite_sources': ['everything', 'everything/async']}
-          \ })
-
     function! neobundle#hooks.on_source(bundle)
       let g:unite_source_everything_full_path_search = 1
-
-      call unite#custom#source('everything', 'max_candidates', 500)
     endfunction
   endif
 endif
 " }}}
-" }}}
 " C# {{{
-" omnisharp-vim {{{
-if neobundle#tap('omnisharp-vim')
-  call neobundle#config({
-        \   'depends':  'neocomplete.vim',
-        \   'autoload': {'filetypes': 'cs'},
-        \   'build': {
-        \     'windows': 'MSBuild server/OmniSharp.sln /p:Platform="Any CPU"',
-        \     'mac':     'xbuild server/OmniSharp.sln'
-        \   }
-        \ })
-
-  function! neobundle#hooks.on_source(bundle)
-    let g:omnicomplete_fetch_full_documentation = 1
-    let g:Omnisharp_stop_server                 = 0
-    let g:OmniSharp_typeLookupInPreview         = 0
-  endfunction
-endif
-" }}}
+" omnisharp-vim
+let g:omnicomplete_fetch_full_documentation = 1
+let g:Omnisharp_stop_server                 = 0
+let g:OmniSharp_typeLookupInPreview         = 0
 " }}}
 " C++ {{{
-" vim-clang-format {{{
-if neobundle#tap('vim-clang-format')
-  call neobundle#config({'autoload': {'commands': 'ClangFormat'}})
+" vim-clang-format
+if s:is_windows
+  let g:clang_format#command = 'C:/Development/LLVM/bin/clang-format.exe'
+endif
 
-  function! neobundle#hooks.on_source(bundle)
-    if s:is_windows
-      let g:clang_format#command = 'C:/Development/LLVM/bin/clang-format.exe'
-    endif
-
-    let g:clang_format#style_options = {
-          \   'AccessModifierOffset':                           -4,
-          \   'AllowShortIfStatementsOnASingleLine':            'false',
-          \   'AlwaysBreakBeforeMultilineStrings':              'false',
-          \   'BreakBeforeBraces':                              'Allman',
-          \   'BreakConstructorInitializersBeforeComma':        'true',
-          \   'ColumnLimit':                                    0,
-          \   'ConstructorInitializerAllOnOneLineOrOnePerLine': 'false',
-          \   'IndentCaseLabels':                               'true',
-          \   'IndentWidth':                                    4,
-          \   'UseTab':                                         'Never'
-          \ }
-  endfunction
-endif
-" }}}
-" vim-cpp {{{
-if neobundle#tap('vim-cpp')
-  call neobundle#config({'autoload': {'filetypes': 'cpp'}})
-endif
-" }}}
-" STL-Syntax {{{
-if neobundle#tap('STL-Syntax')
-  call neobundle#config({'autoload': {'filetypes': 'cpp'}})
-endif
-" }}}
+let g:clang_format#style_options = {
+      \   'AccessModifierOffset':                           -4,
+      \   'AllowShortIfStatementsOnASingleLine':            'false',
+      \   'AlwaysBreakBeforeMultilineStrings':              'false',
+      \   'BreakBeforeBraces':                              'Allman',
+      \   'BreakConstructorInitializersBeforeComma':        'true',
+      \   'ColumnLimit':                                    0,
+      \   'ConstructorInitializerAllOnOneLineOrOnePerLine': 'false',
+      \   'IndentCaseLabels':                               'true',
+      \   'IndentWidth':                                    4,
+      \   'UseTab':                                         'Never'
+      \ }
 " }}}
 " Go {{{
-" gocode {{{
-if neobundle#tap('gocode')
-  call neobundle#config({'autoload': {'filetypes': 'go'}})
+" gocode
+if s:is_windows
+  " todo: macだと補完候補が出てこなくなる
+  let g:gocomplete#system_function = 'vimproc#system'
+endif
 
-  function! neobundle#hooks.on_source(bundle)
-    if s:is_windows
-      " todo: macだと補完候補が出てこなくなる
-      let g:gocomplete#system_function = 'vimproc#system'
-    endif
-  endfunction
-endif
-" }}}
-" vim-ft-go {{{
-if neobundle#tap('vim-ft-go')
-  call neobundle#config({'autoload': {'filetypes': 'go'}})
-endif
-" }}}
-" vim-godef {{{
-if neobundle#tap('vim-godef')
-  call neobundle#config({'autoload': {'filetypes': 'go'}})
-
-  function! neobundle#hooks.on_source(bundle)
-    let g:godef_split                    = 0
-    let g:godef_same_file_in_same_window = 1
-    let g:godef_system_function          = 'vimproc#system'
-  endfunction
-endif
-" }}}
-" vim-go-extra {{{
-if neobundle#tap('vim-go-extra')
-  call neobundle#config({'autoload': {'filetypes': 'go'}})
-endif
-" }}}
+" vim-godef
+let g:godef_split                    = 0
+let g:godef_same_file_in_same_window = 1
+let g:godef_system_function          = 'vimproc#system'
 " }}}
 " Git {{{
-" vim-gitgutter {{{
-if neobundle#tap('vim-gitgutter')
-  call neobundle#config({'autoload': {'function_prefix': 'gitgutter'}})
+" vim-gitgutter
+let g:gitgutter_map_keys           = 0
+let g:gitgutter_eager              = 0
+" let g:gitgutter_diff_args          = '-w'
+let g:gitgutter_diff_args          = ''
 
-  function! neobundle#hooks.on_source(bundle)
-    let g:gitgutter_map_keys           = 0
-    let g:gitgutter_eager              = 0
-    " let g:gitgutter_diff_args          = '-w'
-    let g:gitgutter_diff_args          = ''
+" todo:ファイルオープン直後一瞬シンタックスハイライトが無効にになってしまうことがある
+" let g:gitgutter_sign_column_always = 1
 
-    " todo:ファイルオープン直後一瞬シンタックスハイライトが無効にになってしまうことがある
-    let g:gitgutter_sign_column_always = 1
+Autocmd FocusGained,FocusLost * GitGutter
 
-    Autocmd FocusGained,FocusLost * GitGutter
-  endfunction
+" agit.vim
+if s:is_windows
+  let g:agit_enable_auto_show_commit = 0
 endif
-" }}}
-" agit.vim {{{
-if neobundle#tap('agit.vim')
-  call neobundle#config({'autoload': {'commands': ['Agit', 'AgitFile']}})
 
-  function! neobundle#hooks.on_source(bundle)
-    if s:is_windows
-      let g:agit_enable_auto_show_commit = 0
-    endif
-  endfunction
-endif
-" }}}
-" vim-fugitive {{{
-if neobundle#tap('vim-fugitive')
-  call neobundle#config({'autoload': {'function_prefix': 'fugitive'}})
-
-  function! neobundle#hooks.on_source(bundle)
-    Autocmd FocusGained,FocusLost * call s:update_fugitive()
-  endfunction
-endif
+" vim-fugitive
+Autocmd FocusGained,FocusLost * call s:update_fugitive()
 
 function! s:update_fugitive()
   try
@@ -1724,7 +1087,6 @@ function! s:update_fugitive()
   catch
   endtry
 endfunction
-" }}}
 " }}}
 call neobundle#end()
 filetype plugin indent on
