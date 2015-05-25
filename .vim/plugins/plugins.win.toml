@@ -1,0 +1,6 @@
+# ライブラリ
+[[plugins]]
+repository = 'xolox/vim-misc'
+
+[[plugins]]
+repository = 'xolox/vim-shell'

@@ -1,0 +1,414 @@
+############################################################
+# ライブラリ
+############################################################
+[[plugins]]
+repository = 'Shougo/tabpagebuffer.vim'
+
+[[plugins]]
+repository = 'osyo-manga/shabadou.vim'
+
+[[plugins]]
+repository = 'kana/vim-submode'
+mappings   = ['gb', 'gh', 'gw']
+
+############################################################
+# 表示
+############################################################
+[[plugins]]
+repository = 'YoshihiroIto/vim-resize-win'
+commands   = 'ResizeWin'
+gui        = 1
+
+[[plugins]]
+repository = 'vim-scripts/movewin.vim'
+commands   = 'MoveWin'
+gui        = 1
+
+[[plugins]]
+repository = 'LeafCage/foldCC.vim'
+filetypes  = ['vim', 'xml']
+
+[[plugins]]
+repository = 'Yggdroot/indentLine'
+filetypes  = 'all'
+
+[[plugins]]
+repository = 'YoshihiroIto/syntastic'
+filetypes  = ['go', 'ruby', 'python']
+
+############################################################
+# 検索
+############################################################
+[[plugins]]
+repository = 'YoshihiroIto/vim-jumpbrace'
+mappings   = '<Plug>'
+
+[[plugins]]
+repository = 'osyo-manga/vim-anzu'
+mappings   = '<Plug>'
+
+[[plugins]]
+repository = 'haya14busa/vim-asterisk'
+mappings   = '<Plug>'
+
+[[plugins]]
+repository = 'vim-scripts/matchit.zip'
+filetypes  = 'all'
+
+[[plugins]]
+repository = 'haya14busa/incsearch.vim'
+commands   = 'IncSearchNoreMap'
+mappings   = '<Plug>'
+
+[[plugins]]
+repository = 'rhysd/clever-f.vim'
+mappings   = '<Plug>'
+
+############################################################
+# 補完
+############################################################
+[[plugins]]
+repository = 'Shougo/neocomplete.vim'
+insert     = 1
+
+[[plugins]]
+repository = 'Shougo/neosnippet.vim'
+depends    = 'neocomplete.vim'
+insert     = 1
+
+
+############################################################
+# 編集
+############################################################
+[[plugins]]
+repository      = 'tomtom/tcomment_vim'
+function_prefix = 'tcomment'
+mappings        = 'gc'
+commands        = 'TComment'
+
+[[plugins]]
+repository = 'osyo-manga/vim-over'
+commands   = 'OverCommandLine'
+
+[[plugins]]
+repository = 'LeafCage/yankround.vim'
+mappings   = '<Plug>'
+
+[[plugins]]
+repository = 'nishigori/increment-activator'
+mappings   = ['<C-x>', '<C-a>']
+
+[[plugins]]
+repository = 'junegunn/vim-easy-align'
+mappings   = '<Plug>(EasyAlign)'
+
+[[plugins]]
+repository = 'thinca/vim-qfreplace'
+filetypes  = ['unite', 'quickfix']
+
+[[plugins]]
+repository = 'tpope/vim-endwise'
+filetypes  =  ['vim', 'ruby', 'lua']
+
+[[plugins]]
+repository = 'kana/vim-smartinput'
+insert     = 1
+
+############################################################
+# ファイル
+############################################################
+[[plugins]]
+repository = 'kana/vim-altr'
+mappings   = '<Plug>'
+
+[[plugins]]
+repository = 'YoshihiroIto/vim-auto-mirroring'
+filetypes  = 'all'
+
+############################################################
+# アプリ
+############################################################
+[[plugins]]
+repository = 'beckorz/previm'
+depends    = 'open-browser.vim'
+filetypes  = 'markdown'
+
+[[plugins]]
+repository      = 'tyru/open-browser.vim'
+function_prefix = 'openbrowser'
+commands        = 'OpenBrowser'
+
+[[plugins]]
+repository = 'tsukkee/lingr-vim'
+commands   = 'LingrLaunch'
+
+[[plugins]]
+repository = 'Shougo/vimfiler.vim'
+mappings   = '<Plug>'
+commands   = 'VimFilerBufferDir'
+
+[[plugins]]
+repository = 'rhysd/wandbox-vim'
+
+[[plugins]]
+repository = 'Shougo/vimshell.vim'
+depends    = 'tabpagebuffer.vim'
+commands   = 'VimShellPop'
+
+[[plugins]]
+repository    = 'glidenote/memolist.vim'
+depends       = 'unite.vim'
+unite_sources = 'memolist'
+commands      = ['MemoNew', 'MemoList', 'MemoGrep']
+
+[[plugins]]
+repository = 'thinca/vim-quickrun'
+depends    = ['shabadou.vim', 'wandbox-vim']
+mappings   = [['sxn', '<Plug>']]
+[plugins.commands]
+name       = 'QuickRun'
+complete   = 'customlist,quickrun#complete'
+
+############################################################
+# Unite
+############################################################
+[[plugins]]
+repository    = 'Shougo/unite.vim'
+depends       = ['vimfiler.vim', 'tabpagebuffer.vim']
+commands      = ['Unite', 'UniteResume', 'UniteWithCursorWord']
+
+[[plugins]]
+repository    = 'Shougo/neomru.vim'
+depends       = 'unite.vim'
+filetypes     = 'all'
+unite_sources =  ['neomru/file', 'neomru/directory']
+
+[[plugins]]
+repository    = 'Shougo/unite-outline'
+depends       = 'unite.vim'
+unite_sources = 'outline'
+
+[[plugins]]
+repository    = 'osyo-manga/unite-quickfix'
+depends       = 'unite.vim'
+unite_sources = 'quickfix'
+
+[[plugins]]
+repository    = 'YoshihiroIto/vim-unite-giti'
+depends       = 'unite.vim'
+unite_sources = 'giti'
+commands      = 'GitiFetch'
+[plugins.build]
+
+############################################################
+# C#
+############################################################
+[[plugins]]
+repository = 'YoshihiroIto/omnisharp-vim'
+filetypes  = 'cs'
+[plugins.build]
+windows    = 'MSBuild server/OmniSharp.sln /p:Platform="Any CPU"'
+mac        = 'xbuild server/OmniSharp.sln'
+
+############################################################
+# C++
+############################################################
+[[plugins]]
+repository = 'Mizuchi/STL-Syntax'
+filetypes  = 'cpp'
+
+[[plugins]]
+repository = 'vim-jp/vim-cpp'
+filetypes  = 'cpp'
+
+[[plugins]]
+repository = 'rhysd/vim-clang-format'
+commands   = 'ClangFormat'
+
+############################################################
+# Go
+############################################################
+[[plugins]]
+repository = 'google/vim-ft-go'
+filetypes  = 'go'
+
+[[plugins]]
+repository = 'vim-jp/vim-go-extra'
+filetypes  = 'go'
+
+[[plugins]]
+repository = 'nsf/gocode'
+filetypes  = 'go'
+
+[[plugins]]
+repository = 'dgryski/vim-godef'
+filetypes  = 'go'
+
+############################################################
+# Git
+############################################################
+[[plugins]]
+repository      = 'airblade/vim-gitgutter'
+function_prefix = 'gitgutter'
+
+[[plugins]]
+repository = 'cohama/agit.vim'
+commands   = ['Agit', 'AgitFile']
+
+[[plugins]]
+repository      = 'tpope/vim-fugitive'
+function_prefix = 'fugitive'
+
+############################################################
+# ファイルタイプ
+############################################################
+[[plugins]]
+repository = 'beyondmarc/hlsl.vim'
+filetypes  = 'hlsl'
+
+[[plugins]]
+repository = 'cespare/vim-toml'
+filetypes  = 'toml'
+
+[[plugins]]
+repository = 'pangloss/vim-javascript'
+filetypes  = 'javascript'
+
+[[plugins]]
+repository = 'stephpy/vim-yaml'
+filetypes  = 'yaml'
+
+[[plugins]]
+repository = 'tikhomirov/vim-glsl'
+filetypes  = 'glsl'
+
+[[plugins]]
+repository = 'tpope/vim-markdown'
+filetypes  = 'markdown'
+
+[[plugins]]
+repository = 'vim-ruby/vim-ruby'
+filetypes  = 'ruby'
+
+[[plugins]]
+repository = 'vim-scripts/JSON.vim'
+filetypes  = ['json', 'markdown']
+
+############################################################
+# テキストオブジェクト
+############################################################
+# https://github.com/kana/vim-textobj-user/wiki
+# http://d.hatena.ne.jp/osyo-manga/20130717/1374069987
+[[plugins]]
+repository = 'kana/vim-textobj-user'
+
+# #
+[[plugins]]
+repository = 'anyakichi/vim-textobj-ifdef'
+depends    = 'vim-textobj-user'
+mappings   = [['xo', 'a#'], ['xo', 'i#']]
+
+# c
+[[plugins]]
+repository = 'glts/vim-textobj-comment'
+depends    = 'vim-textobj-user'
+mappings   = [['xo', 'ac'], ['xo', 'ic']]
+
+# .
+[[plugins]]
+repository = 'rhysd/textobj-wiw'
+depends    = 'vim-textobj-user'
+mappings   = [['xo', '<Plug>']]
+
+# e
+[[plugins]]
+repository = 'kana/vim-textobj-entire'
+depends    = 'vim-textobj-user'
+mappings   = [['xo', 'ae'], ['xo', 'ie']]
+
+# i I
+[[plugins]]
+repository = 'kana/vim-textobj-indent'
+depends    = 'vim-textobj-user'
+mappings   = [['xo', 'ai'], ['xo', 'aI'], ['xo', 'ii'], ['xo', 'iI']]
+
+# l
+[[plugins]]
+repository = 'kana/vim-textobj-line'
+depends    = 'vim-textobj-user'
+mappings   = [['xo', 'al'], ['xo', 'il']]
+
+# b
+[[plugins]]
+repository = 'rhysd/vim-textobj-anyblock'
+depends    = 'vim-textobj-user'
+mappings   = [['xo', 'ab'], ['xo', 'ib']]
+
+# v V
+[[plugins]]
+repository = 'rhysd/vim-textobj-word-column'
+depends    = 'vim-textobj-user'
+mappings   = [['xo', 'av'], ['xo', 'aV'], ['xo', 'iv'], ['xo', 'iV']]
+
+# a
+[[plugins]]
+repository = 'sgur/vim-textobj-parameter'
+depends    = 'vim-textobj-user'
+mappings   = [['xo', '<Plug>']]
+
+# f{char}
+[[plugins]]
+repository = 'thinca/vim-textobj-between'
+depends    = 'vim-textobj-user'
+mappings   = [['xo', '<Plug>']]
+
+# x
+[[plugins]]
+repository = 'whatyouhide/vim-textobj-xmlattr'
+depends    = 'vim-textobj-user'
+mappings   = [['xo', 'ax'], ['xo', 'ix']]
+
+############################################################
+# オペレータ
+############################################################
+[[plugins]]
+repository = 'kana/vim-operator-user'
+
+# t
+[[plugins]]
+repository = 'YoshihiroIto/vim-operator-tcomment'
+depends    = ['vim-operator-user', 'tcomment_vim']
+mappings   = [['nx', '<Plug>']]
+
+# <Leader>r
+[[plugins]]
+repository = 'deris/vim-rengbang'
+depends    = 'vim-operator-user'
+mappings   = [['nx', '<Plug>(operator-rengbang']]
+commands   = 'RengBang'
+
+# R
+[[plugins]]
+repository = 'kana/vim-operator-replace'
+depends    = 'vim-operator-user'
+mappings   = [['nx', '<Plug>']]
+
+# S
+[[plugins]]
+repository = 'rhysd/vim-operator-surround'
+depends    = 'vim-operator-user'
+mappings   = [['nx', '<Plug>']]
+
+# <Leader>_
+[[plugins]]
+repository = 'tyru/operator-camelize.vim'
+depends    = 'vim-operator-user'
+mappings   = [['nx', '<Plug>']]
+
+# <Leader>j
+[[plugins]]
+repository = 'osyo-manga/vim-operator-jump_side'
+depends    = 'vim-operator-user'
+mappings   = [['nx', '<Plug>(operator-jump']]
+
+
