@@ -60,7 +60,7 @@ nmap     ;     [App]
 " 遅延初期化
 augroup LazyInitialize
   autocmd!
-  autocmd FocusLost,CursorHold,CursorHoldI * call s:lazy_initialize()
+  autocmd VimEnter,FocusLost,CursorHold,CursorHoldI * call s:lazy_initialize()
 augroup END
 
 let s:lazy_initialize = 2*1
@@ -513,7 +513,7 @@ vnoremap <silent> <Leader>gs :OverCommandLine<CR>s///g<Left><Left>
 
 augroup InitializeOver
   autocmd!
-  autocmd FocusLost,CursorHold,CursorHoldI * call s:initialize_over()
+  autocmd VimEnter,FocusLost,CursorHold,CursorHoldI * call s:initialize_over()
 augroup END
 
 let s:initialize_over_delay = 2*1
@@ -601,7 +601,7 @@ if neobundle#tap('neocomplete.vim')
 
   augroup InitializeNeocomplete
     autocmd!
-    autocmd FocusLost,CursorHold,CursorHoldI * call s:initialize_neocomplete()
+    autocmd VimEnter,FocusLost,CursorHold,CursorHoldI * call s:initialize_neocomplete()
   augroup END
 
   let s:initialize_neocomplete_delay = 2*2
