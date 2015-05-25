@@ -176,11 +176,7 @@ let g:foldCCtext_tail                    =
 set foldtext=FoldCCtext()
 
 " syntastic
-if neobundle#tap('syntastic')
-  function! neobundle#hooks.on_source(bundle)
-    Autocmd BufWritePost *.{go,rb,py} call s:update_lightline()
-  endfunction
-endif
+Autocmd BufWritePost *.{go,rb,py} call s:update_lightline()
 
 " lightline.vim
 let g:lightline#colorscheme#yoi#palette = {
@@ -1016,11 +1012,7 @@ Autocmd User UniteGitiGitExecuted call s:update_fugitive()
 
 " unite-everything
 if s:is_windows
-  if neobundle#tap('unite-everything')
-    function! neobundle#hooks.on_source(bundle)
-      let g:unite_source_everything_full_path_search = 1
-    endfunction
-  endif
+  let g:unite_source_everything_full_path_search = 1
 endif
 " }}}
 " C# {{{
