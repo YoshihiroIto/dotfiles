@@ -205,6 +205,11 @@ depends       = 'unite.vim'
 unite_sources = 'giti'
 commands      = 'GitiFetch'
 
+[[plugins]]
+repository    = 'tsukkee/unite-tag'
+depends       = 'unite.vim'
+unite_sources = 'tag'
+
 
 ############################################################
 # C#
