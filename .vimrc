@@ -9,7 +9,12 @@ let s:has_kaoriya      = has('kaoriya')
 
 let s:base_columns = 120
 let g:mapleader    = ','
-let $DOTVIM        = expand('~/.vim')
+
+let s:home_dir     = $HOME
+let s:dotvim_dir   = s:home_dir . '/.vim'
+
+let $DOTVIM        = s:dotvim_dir
+
 if s:is_mac
   let $LUA_DLL = simplify($VIM . '/../../Frameworks/libluajit-5.1.2.dylib')
 endif
@@ -23,7 +28,7 @@ endif
 
 " $MYVIMRC調整
 if s:has_vim_starting
-  let s:git_dot_vimrc = expand('~/Dropbox/dotfiles/.vimrc')
+  let s:git_dot_vimrc = s:home_dir . '/Dropbox/dotfiles/.vimrc'
   if filereadable(s:git_dot_vimrc)
     let $MYVIMRC = s:git_dot_vimrc
   endif
@@ -79,7 +84,7 @@ function! s:lazy_initialize()
   endif
 
   " ローカル設定
-  let s:vimrc_local = expand('~/.vimrc_local')
+  let s:vimrc_local = s:home_dir . '/.vimrc_local'
   if filereadable(s:vimrc_local)
     execute 'source' s:vimrc_local
   endif
@@ -123,17 +128,17 @@ if s:has_vim_starting
   let g:neobundle#install_process_timeout = 10*60
 endif
 
-call neobundle#begin(expand('$DOTVIM/bundle/'))
+call neobundle#begin(s:dotvim_dir . '/bundle/')
 
 if neobundle#load_cache()
   NeoBundleFetch 'Shougo/neobundle.vim'
 
-  call neobundle#load_toml('$DOTVIM/plugins/plugins.toml')
-  call neobundle#load_toml('$DOTVIM/plugins/plugins.lazy.toml', {'lazy' : 1})
+  call neobundle#load_toml(s:dotvim_dir . '/plugins/plugins.toml')
+  call neobundle#load_toml(s:dotvim_dir . '/plugins/plugins.lazy.toml', {'lazy' : 1})
 
   if s:is_windows
-    call neobundle#load_toml('$DOTVIM/plugins/plugins.win.toml')
-    call neobundle#load_toml('$DOTVIM/plugins/plugins.lazy.win.toml', {'lazy' : 1})
+    call neobundle#load_toml(s:dotvim_dir . '/plugins/plugins.win.toml')
+    call neobundle#load_toml(s:dotvim_dir . '/plugins/plugins.lazy.win.toml', {'lazy' : 1})
   endif
 
   NeoBundleSaveCache
@@ -547,7 +552,7 @@ if neobundle#tap('neocomplete.vim')
 
     let g:neocomplete#sources#dictionary#dictionaries = {
           \   'default':  '',
-          \   'vimshell': $HOME . '/.vimshell_hist'
+          \   'vimshell': s:home_dir . '/.vimshell_hist'
           \ }
 
     let g:neocomplete#sources#vim#complete_functions = {
@@ -627,7 +632,7 @@ if neobundle#tap('neosnippet.vim')
     let g:neosnippet#disable_runtime_snippets      = {'_': 1}
     let g:neosnippet#snippets_directory            = '$DOTVIM/snippets'
 
-    if isdirectory(expand('$DOTVIM/snippets.local'))
+    if isdirectory(s:dotvim_dir . '/snippets.local')
       let g:neosnippet#snippets_directory            .= ',$DOTVIM/snippets.local'
     endif
 
@@ -872,7 +877,7 @@ noremap <silent> [App]mg :<C-u>MemoGrep<CR>
 let g:memolist_unite        = 1
 let g:memolist_memo_suffix  = 'md'
 let g:memolist_unite_source = 'memolist'
-let g:memolist_path         = expand('~/Dropbox/memo')
+let g:memolist_path         = s:home_dir . '/Dropbox/memo'
 
 " wandbox-vim
 if neobundle#tap('wandbox-vim')
