@@ -13,8 +13,6 @@ let g:mapleader    = ','
 let s:home_dir     = $HOME
 let s:dotvim_dir   = s:home_dir . '/.vim'
 
-let $DOTVIM        = s:dotvim_dir
-
 if s:is_mac
   let $LUA_DLL = simplify($VIM . '/../../Frameworks/libluajit-5.1.2.dylib')
 endif
@@ -123,7 +121,7 @@ set guioptions-=e
 " }}}
 " プラグイン {{{
 if s:has_vim_starting
-  set runtimepath+=$DOTVIM/bundle/neobundle.vim/
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
   let g:neobundle#install_max_processes   = 8
   let g:neobundle#install_process_timeout = 10*60
 endif
@@ -630,10 +628,10 @@ if neobundle#tap('neosnippet.vim')
   function! neobundle#hooks.on_source(bundle)
     let g:neosnippet#enable_snipmate_compatibility = 1
     let g:neosnippet#disable_runtime_snippets      = {'_': 1}
-    let g:neosnippet#snippets_directory            = '$DOTVIM/snippets'
+    let g:neosnippet#snippets_directory            = '~/.vim/snippets'
 
     if isdirectory(s:dotvim_dir . '/snippets.local')
-      let g:neosnippet#snippets_directory            .= ',$DOTVIM/snippets.local'
+      let g:neosnippet#snippets_directory            .= ',~/.vim/snippets.local'
     endif
 
     call neocomplete#custom#source('neosnippet', 'rank', 1000)
