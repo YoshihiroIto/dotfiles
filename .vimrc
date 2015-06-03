@@ -9,9 +9,7 @@ let s:has_kaoriya      = has('kaoriya')
 
 let s:base_columns = 120
 let g:mapleader    = ','
-
-let s:home_dir     = $HOME
-let s:dotvim_dir   = s:home_dir . '/.vim'
+let s:dotvim_dir   = $HOME . '/.vim'
 
 if s:is_mac
   let $LUA_DLL = simplify($VIM . '/../../Frameworks/libluajit-5.1.2.dylib')
@@ -46,7 +44,7 @@ Autocmd BufWinEnter,ColorScheme .vimrc syntax match vimAutoCmd /\<\(Autocmd\|Aut
 " キー
 " $MYVIMRC調整
 function! s:setup_myvimrc()
-  let dropbox_vimrc = s:home_dir . '/Dropbox/dotfiles/.vimrc'
+  let dropbox_vimrc = $HOME . '/Dropbox/dotfiles/.vimrc'
   if filereadable(dropbox_vimrc)
     let $MYVIMRC = dropbox_vimrc
   endif
@@ -81,7 +79,7 @@ function! s:lazy_initialize()
   endif
 
   " ローカル設定
-  let s:vimrc_local = s:home_dir . '/.vimrc_local'
+  let s:vimrc_local = $HOME . '/.vimrc_local'
   if filereadable(s:vimrc_local)
     execute 'source' s:vimrc_local
   endif
@@ -549,7 +547,7 @@ if neobundle#tap('neocomplete.vim')
 
     let g:neocomplete#sources#dictionary#dictionaries = {
           \   'default':  '',
-          \   'vimshell': s:home_dir . '/.vimshell_hist'
+          \   'vimshell': $HOME . '/.vimshell_hist'
           \ }
 
     let g:neocomplete#sources#vim#complete_functions = {
@@ -874,7 +872,7 @@ noremap <silent> [App]mg :<C-u>MemoGrep<CR>
 let g:memolist_unite        = 1
 let g:memolist_memo_suffix  = 'md'
 let g:memolist_unite_source = 'memolist'
-let g:memolist_path         = s:home_dir . '/Dropbox/memo'
+let g:memolist_path         = $HOME . '/Dropbox/memo'
 
 " wandbox-vim
 if neobundle#tap('wandbox-vim')
