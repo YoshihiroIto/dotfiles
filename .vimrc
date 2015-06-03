@@ -24,15 +24,6 @@ elseif s:is_mac
   let $PATH .= ':' . simplify($VIM . '/../../MacOS')
 endif
 
-" $MYVIMRC調整
-if s:has_vim_starting
-  let s:git_dot_vimrc = s:home_dir . '/Dropbox/dotfiles/.vimrc'
-  if filereadable(s:git_dot_vimrc)
-    let $MYVIMRC = s:git_dot_vimrc
-  endif
-  unlet s:git_dot_vimrc
-endif
-
 " SID
 function! s:get_sid()
   return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeget_sid$')
@@ -53,8 +44,16 @@ Autocmd BufWinEnter,ColorScheme .vimrc highlight def link myVimAutocmd vimAutoCm
 Autocmd BufWinEnter,ColorScheme .vimrc syntax match vimAutoCmd /\<\(Autocmd\|AutocmdFT\)\>/
 
 " キー
-nnoremap <silent> <F1> :<C-u>edit $MYVIMRC<CR>
-nnoremap <silent> <F2> :<C-u>source $MYVIMRC<CR>:IndentLinesReset<CR>
+" $MYVIMRC調整
+function! s:setup_myvimrc()
+  let dropbox_vimrc = s:home_dir . '/Dropbox/dotfiles/.vimrc'
+  if filereadable(dropbox_vimrc)
+    let $MYVIMRC = dropbox_vimrc
+  endif
+endfunction
+
+nnoremap <silent> <F1> :<C-u>call <SID>setup_myvimrc()<CR>:edit $MYVIMRC<CR>
+nnoremap <silent> <F2> :<C-u>call <SID>setup_myvimrc()<CR>:source $MYVIMRC<CR>:IndentLinesReset<CR>
 nnoremap          <F3> :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
 nnoremap          <F4> :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
 nnoremap [App] <Nop>
