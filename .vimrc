@@ -6,20 +6,18 @@ let s:is_mac           = has('mac') || has('macunix')
 let s:has_vim_starting = has('vim_starting')
 let s:has_gui_running  = has('gui_running')
 let s:has_kaoriya      = has('kaoriya')
-
-let s:base_columns = 120
-let g:mapleader    = ','
-let s:dotvim_dir   = $HOME . '/.vim'
+let s:base_columns     = 120
+let g:mapleader        = ','
 
 if s:is_mac
-  let $LUA_DLL = simplify($VIM . '/../../Frameworks/libluajit-5.1.2.dylib')
+  let $LUA_DLL = $VIM . '/../../Frameworks/libluajit-5.1.2.dylib'
 endif
 
 " 実行ファイル位置を$PATHに含める
 if s:is_windows
   let $PATH .= ';' . $VIM
 elseif s:is_mac
-  let $PATH .= ':' . simplify($VIM . '/../../MacOS')
+  let $PATH .= ':' . $VIM . '/../../MacOS'
 endif
 
 " SID
@@ -44,7 +42,7 @@ Autocmd BufWinEnter,ColorScheme .vimrc syntax match vimAutoCmd /\<\(Autocmd\|Aut
 " キー
 " $MYVIMRC調整
 function! s:setup_myvimrc()
-  let dropbox_vimrc = $HOME . '/Dropbox/dotfiles/.vimrc'
+  let dropbox_vimrc = expand('~/Dropbox/dotfiles/.vimrc')
   if filereadable(dropbox_vimrc)
     let $MYVIMRC = dropbox_vimrc
   endif
@@ -74,16 +72,17 @@ function! s:lazy_initialize()
     set cryptmethod=blowfish2
   endif
 
+  set iskeyword=@,48-57,_,128-167,224-235
+
   if s:is_windows && !executable('MSBuild')
     let $PATH .= ';C:/Windows/Microsoft.NET/Framework/v4.0.30319'
   endif
 
   " ローカル設定
-  let s:vimrc_local = $HOME . '/.vimrc_local'
+  let s:vimrc_local = expand('~/.vimrc_local')
   if filereadable(s:vimrc_local)
     execute 'source' s:vimrc_local
   endif
-  unlet s:vimrc_local
 
   augroup LazyInitialize
     autocmd!
@@ -123,17 +122,17 @@ if s:has_vim_starting
   let g:neobundle#install_process_timeout = 10*60
 endif
 
-call neobundle#begin(s:dotvim_dir . '/bundle/')
+call neobundle#begin('~/.vim/bundle/')
 
 if neobundle#load_cache()
   NeoBundleFetch 'Shougo/neobundle.vim'
 
-  call neobundle#load_toml(s:dotvim_dir . '/plugins/plugins.toml')
-  call neobundle#load_toml(s:dotvim_dir . '/plugins/plugins.lazy.toml', {'lazy' : 1})
+  call neobundle#load_toml('~/.vim/plugins/plugins.toml')
+  call neobundle#load_toml('~/.vim/plugins/plugins.lazy.toml', {'lazy' : 1})
 
   if s:is_windows
-    call neobundle#load_toml(s:dotvim_dir . '/plugins/plugins.win.toml')
-    call neobundle#load_toml(s:dotvim_dir . '/plugins/plugins.lazy.win.toml', {'lazy' : 1})
+    call neobundle#load_toml('~/.vim/plugins/plugins.win.toml')
+    call neobundle#load_toml('~/.vim/plugins/plugins.lazy.win.toml', {'lazy' : 1})
   endif
 
   NeoBundleSaveCache
@@ -547,7 +546,7 @@ if neobundle#tap('neocomplete.vim')
 
     let g:neocomplete#sources#dictionary#dictionaries = {
           \   'default':  '',
-          \   'vimshell': $HOME . '/.vimshell_hist'
+          \   'vimshell': '~/.vimshell_hist'
           \ }
 
     let g:neocomplete#sources#vim#complete_functions = {
@@ -627,8 +626,9 @@ if neobundle#tap('neosnippet.vim')
     let g:neosnippet#disable_runtime_snippets      = {'_': 1}
     let g:neosnippet#snippets_directory            = '~/.vim/snippets'
 
-    if isdirectory(s:dotvim_dir . '/snippets.local')
-      let g:neosnippet#snippets_directory            .= ',~/.vim/snippets.local'
+    let snippets_local = expand('~/.vim/snippets.local')
+    if isdirectory(snippets_local)
+      let g:neosnippet#snippets_directory            .= ',' . snippets_local
     endif
 
     call neocomplete#custom#source('neosnippet', 'rank', 1000)
@@ -709,12 +709,9 @@ endif
 Autocmd CursorHold,CursorHoldI * call s:update_display_anzu()
 Autocmd WinLeave,TabLeave      * call s:clear_display_anzu()
 
-" anzuを表示する時間
-let s:anzu_display_time = 2000
-
 let s:anzu_display_count = 0
 function! s:begin_display_anzu()
-  let s:anzu_display_count = s:anzu_display_time / &updatetime
+  let s:anzu_display_count = 2000 / &updatetime
   call s:refresh_screen()
 endfunction
 
@@ -801,9 +798,9 @@ xmap <Leader>j <Plug>(operator-jump-toggle)
 let g:operator#surround#blocks = {
       \   '-': [
       \     {
-      \       'block':      ["{\<CR>", "\<CR>}" ],
-      \       'motionwise': ['line'             ],
-      \       'keys':       ['{', '}'           ]
+      \       'block':      ["{\<CR>", "\<CR>}"],
+      \       'motionwise': ['line'            ],
+      \       'keys':       ['{', '}'          ]
       \     }
       \   ]
       \ }
@@ -872,7 +869,7 @@ noremap <silent> [App]mg :<C-u>MemoGrep<CR>
 let g:memolist_unite        = 1
 let g:memolist_memo_suffix  = 'md'
 let g:memolist_unite_source = 'memolist'
-let g:memolist_path         = $HOME . '/Dropbox/memo'
+let g:memolist_path         = '~/Dropbox/memo'
 
 " wandbox-vim
 if neobundle#tap('wandbox-vim')
@@ -1205,7 +1202,6 @@ set backspace=indent,eol,start
 set noswapfile
 set nobackup
 set formatoptions+=j
-set iskeyword=@,48-57,_,128-167,224-235
 set tags=tags,./tags,../tags,../../tags,../../../tags,../../../../tags,../../../../../tags
 
 " 文字コード自動判断
@@ -1449,12 +1445,7 @@ endif
 " }}}
 " フォント {{{
 if s:has_gui_running
-  if s:is_windows
-    set guifont=Ricty\ Regular\ for\ Powerline:h12
-  elseif s:is_mac
-    set guifont=Ricty\ Regular\ for\ Powerline:h12
-    set antialias
-  endif
+  set guifont=Ricty\ Regular\ for\ Powerline:h12
 endif
 
 if s:is_windows && s:has_kaoriya
