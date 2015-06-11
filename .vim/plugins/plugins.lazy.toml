@@ -376,7 +376,7 @@ mappings   = [['xo', '<Plug>']]
 [[plugins]]
 repository = 'thinca/vim-textobj-between'
 depends    = 'vim-textobj-user'
-mappings   = [['xo', '<Plug>']]
+mappings   = [['xo', 'af'], ['xo', 'if']]
 
 # x
 [[plugins]]
