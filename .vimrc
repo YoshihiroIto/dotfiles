@@ -9,17 +9,6 @@ let s:has_kaoriya      = has('kaoriya')
 let s:base_columns     = 120
 let g:mapleader        = ','
 
-if s:is_mac
-  let $LUA_DLL = $VIM . '/../../Frameworks/libluajit-5.1.2.dylib'
-endif
-
-" 実行ファイル位置を$PATHに含める
-if s:is_windows
-  let $PATH .= ';' . $VIM
-elseif s:is_mac
-  let $PATH .= ':' . $VIM . '/../../MacOS'
-endif
-
 " SID
 function! s:get_sid()
   return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeget_sid$')
@@ -66,6 +55,17 @@ function! s:lazy_initialize()
   let s:lazy_initialize -= 1
   if s:lazy_initialize > 0
     return
+  endif
+
+  if s:is_mac
+    let $LUA_DLL = $VIM . '/../../Frameworks/libluajit-5.1.2.dylib'
+  endif
+
+  " 実行ファイル位置を$PATHに含める
+  if s:is_windows
+    let $PATH .= ';' . $VIM
+  elseif s:is_mac
+    let $PATH .= ':' . $VIM . '/../../MacOS'
   endif
 
   if exists('+cryptmethod')
