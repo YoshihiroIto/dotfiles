@@ -13,4 +13,4 @@ gui        = 1
 [[plugins]]
 repository    = 'sgur/unite-everything'
 depends       = 'unite.vim'
-unite_sources = ['everything', 'everything/async']
+unite_sources = 'everything'
