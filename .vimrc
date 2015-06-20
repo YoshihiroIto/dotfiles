@@ -9,6 +9,20 @@ let s:has_kaoriya      = has('kaoriya')
 let s:base_columns     = 120
 let g:mapleader        = ','
 
+" 自動コマンド
+augroup MyAutoCmd
+  autocmd!
+augroup END
+command! -nargs=* Autocmd   autocmd MyAutoCmd <args>
+command! -nargs=* AutocmdFT autocmd MyAutoCmd FileType <args>
+
+" スタートアップ時間表示
+if s:has_vim_starting
+  let s:startuptime = reltime()
+  Autocmd VimEnter * let s:startuptime = reltime(s:startuptime)
+        \|  echomsg 'startuptime:' reltimestr(s:startuptime)
+endif
+
 " SID
 function! s:get_sid()
   return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeget_sid$')
@@ -18,13 +32,6 @@ delfunction s:get_sid
 
 " メニューを読み込まない
 let g:did_install_default_menus = 1
-
-" 自動コマンド
-augroup MyAutoCmd
-  autocmd!
-augroup END
-command! -nargs=* Autocmd   autocmd MyAutoCmd <args>
-command! -nargs=* AutocmdFT autocmd MyAutoCmd FileType <args>
 
 " キー
 " $MYVIMRC調整
@@ -90,13 +97,6 @@ function! s:lazy_initialize()
     autocmd!
   augroup END
 endfunction
-
-" スタートアップ時間表示
-if s:has_vim_starting
-  let s:startuptime = reltime()
-  Autocmd VimEnter * let s:startuptime = reltime(s:startuptime)
-        \|  echomsg 'startuptime:' reltimestr(s:startuptime)
-endif
 " }}}
 " guioptions {{{
 " メニューを読み込まない
