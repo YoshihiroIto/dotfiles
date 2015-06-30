@@ -98,10 +98,6 @@ repository = 'LeafCage/yankround.vim'
 mappings   = '<Plug>'
 
 [[plugins]]
-repository = 'nishigori/increment-activator'
-mappings   = ['<C-x>', '<C-a>']
-
-[[plugins]]
 repository = 'junegunn/vim-easy-align'
 mappings   = '<Plug>(EasyAlign)'
 

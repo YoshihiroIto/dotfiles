@@ -493,13 +493,6 @@ if neobundle#tap('vim-smartinput')
   endfunction
 endif
 
-" increment-activator
-let g:increment_activator_filetype_candidates = {
-      \   '_':   [['width', 'height']],
-      \   'cs':  [['private', 'protected', 'public', 'internal']],
-      \   'cpp': [['private', 'protected', 'public']]
-      \ }
-
 " vim-over
 let g:over_command_line_key_mappings = {"\<C-j>": "\<Esc>"}
 
@@ -1244,6 +1237,9 @@ endfunction
 command! CopyCurrentFilepath call setreg('*', expand('%:p'), 'v')
 
 nnoremap Y y$
+
+vnoremap <c-a> <c-a>gv
+vnoremap <c-x> <c-x>gv
 
 nmap     <silent> <C-CR> V<C-CR>
 vnoremap <silent> <C-CR> :<C-u>call <SID>copy_add_comment()<CR>
