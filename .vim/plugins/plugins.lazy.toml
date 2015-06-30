@@ -279,7 +279,7 @@ filetypes  = 'hlsl'
 
 [[plugins]]
 repository = 'cespare/vim-toml'
-filetypes  = 'toml'
+filetypes  = ['toml', 'markdown']
 
 [[plugins]]
 repository = 'pangloss/vim-javascript'

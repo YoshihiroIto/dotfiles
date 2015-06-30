@@ -755,6 +755,7 @@ let g:markdown_fenced_languages = [
       \   'c',    'cpp', 'cs', 'go',
       \   'ruby', 'lua', 'python',
       \   'vim',
+      \   'toml',
       \   'xml',  'json'
       \ ]
 " }}}
