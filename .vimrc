@@ -493,6 +493,13 @@ if neobundle#tap('vim-smartinput')
   endfunction
 endif
 
+" increment-activator
+let g:increment_activator_filetype_candidates = {
+      \   '_':   [['width', 'height']],
+      \   'cs':  [['private', 'protected', 'public', 'internal']],
+      \   'cpp': [['private', 'protected', 'public']]
+      \ }
+
 " vim-over
 let g:over_command_line_key_mappings = {"\<C-j>": "\<Esc>"}
 
