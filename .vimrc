@@ -765,6 +765,12 @@ let g:markdown_fenced_languages = [
       \   'toml',
       \   'xml',  'json'
       \ ]
+" vim-autoft
+let g:autoft_config = [
+      \   {'filetype': 'cs',  'pattern': '^\s*using'                     },
+      \   {'filetype': 'cpp', 'pattern': '^\s*#\s*\%(include\|define\)\>'},
+      \   {'filetype': 'xml', 'pattern': '<[0-9a-zA-Z]\+'                }
+      \ ]
 " }}}
 " テキストオブジェクト {{{
 xmap aa        <Plug>(textobj-parameter-a)
@@ -1059,7 +1065,7 @@ let g:gitgutter_eager              = 0
 " let g:gitgutter_diff_args          = '-w'
 let g:gitgutter_diff_args          = ''
 
-" todo:ファイルオープン直後一瞬シンタックスハイライトが無効にになってしまうことがある
+" todo:シンタックスハイライトが無効にになってしまうことがある
 " let g:gitgutter_sign_column_always = 1
 
 Autocmd FocusGained,FocusLost * GitGutter
@@ -1306,8 +1312,10 @@ if s:has_kaoriya
 endif
 
 " http://haya14busa.com/enrich-your-search-experience-with-incsearch-vim/
-map / <Plug>(incsearch-forward)
-map ? <Plug>(incsearch-backward)
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+map f/ <Plug>(incsearch-fuzzyspell-/)
+map f? <Plug>(incsearch-fuzzyspell-?)
 
 map  <silent> n  <Plug>(incsearch-nohl-n)
 map  <silent> N  <Plug>(incsearch-nohl-N)

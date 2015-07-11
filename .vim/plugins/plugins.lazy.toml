@@ -63,6 +63,11 @@ commands   = 'IncSearchNoreMap'
 mappings   = '<Plug>'
 
 [[plugins]]
+repository = 'haya14busa/incsearch-fuzzy.vim'
+commands   = 'IncSearchNoreMap'
+mappings   = '<Plug>'
+
+[[plugins]]
 repository = 'rhysd/clever-f.vim'
 mappings   = '<Plug>'
 
@@ -308,6 +313,10 @@ filetypes  = 'ruby'
 [[plugins]]
 repository = 'vim-scripts/JSON.vim'
 filetypes  = ['json', 'markdown']
+
+[[plugins]]
+repository = 'itchyny/vim-autoft'
+filetypes  = 'all'
 
 
 ############################################################
