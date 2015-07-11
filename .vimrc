@@ -1314,8 +1314,6 @@ endif
 " http://haya14busa.com/enrich-your-search-experience-with-incsearch-vim/
 map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)
-map f/ <Plug>(incsearch-fuzzyspell-/)
-map f? <Plug>(incsearch-fuzzyspell-?)
 
 map  <silent> n  <Plug>(incsearch-nohl-n)
 map  <silent> N  <Plug>(incsearch-nohl-N)

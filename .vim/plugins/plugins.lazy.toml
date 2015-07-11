@@ -63,11 +63,6 @@ commands   = 'IncSearchNoreMap'
 mappings   = '<Plug>'
 
 [[plugins]]
-repository = 'haya14busa/incsearch-fuzzy.vim'
-commands   = 'IncSearchNoreMap'
-mappings   = '<Plug>'
-
-[[plugins]]
 repository = 'rhysd/clever-f.vim'
 mappings   = '<Plug>'
 
