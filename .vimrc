@@ -34,14 +34,6 @@ delfunction s:get_sid
 let g:did_install_default_menus = 1
 
 " キー
-" $MYVIMRC調整
-function! s:setup_myvimrc()
-  let dropbox_vimrc = expand('~/Dropbox/dotfiles/.vimrc')
-  if filereadable(dropbox_vimrc)
-    let $MYVIMRC = dropbox_vimrc
-  endif
-endfunction
-
 nnoremap [App] <Nop>
 nmap     ;     [App]
 
@@ -87,6 +79,14 @@ function! s:lazy_initialize()
 
   Autocmd BufWinEnter,ColorScheme .vimrc highlight def link myVimAutocmd vimAutoCmd
   Autocmd BufWinEnter,ColorScheme .vimrc syntax match vimAutoCmd /\<\(Autocmd\|AutocmdFT\)\>/
+
+  " $MYVIMRC調整
+  function! s:setup_myvimrc()
+    let dropbox_vimrc = expand('~/Dropbox/dotfiles/.vimrc')
+    if filereadable(dropbox_vimrc)
+      let $MYVIMRC = dropbox_vimrc
+    endif
+  endfunction
 
   nnoremap <silent> <F1> :<C-u>call <SID>setup_myvimrc()<CR>:edit $MYVIMRC<CR>
   nnoremap <silent> <F2> :<C-u>call <SID>setup_myvimrc()<CR>:source $MYVIMRC<CR>:IndentLinesReset<CR>
