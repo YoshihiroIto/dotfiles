@@ -37,6 +37,19 @@ let g:did_install_default_menus = 1
 nnoremap [App] <Nop>
 nmap     ;     [App]
 
+" $MYVIMRC調整
+function! s:setup_myvimrc()
+  let dropbox_vimrc = expand('~/Dropbox/dotfiles/.vimrc')
+  if filereadable(dropbox_vimrc)
+    let $MYVIMRC = dropbox_vimrc
+  endif
+endfunction
+
+nnoremap <silent> <F1> :<C-u>call <SID>setup_myvimrc()<CR>:edit $MYVIMRC<CR>
+nnoremap <silent> <F2> :<C-u>call <SID>setup_myvimrc()<CR>:source $MYVIMRC<CR>:IndentLinesReset<CR>
+nnoremap          <F3> :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
+nnoremap          <F4> :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
+
 " 遅延初期化
 augroup LazyInitialize
   autocmd!
@@ -79,19 +92,6 @@ function! s:lazy_initialize()
 
   Autocmd BufWinEnter,ColorScheme .vimrc highlight def link myVimAutocmd vimAutoCmd
   Autocmd BufWinEnter,ColorScheme .vimrc syntax match vimAutoCmd /\<\(Autocmd\|AutocmdFT\)\>/
-
-  " $MYVIMRC調整
-  function! s:setup_myvimrc()
-    let dropbox_vimrc = expand('~/Dropbox/dotfiles/.vimrc')
-    if filereadable(dropbox_vimrc)
-      let $MYVIMRC = dropbox_vimrc
-    endif
-  endfunction
-
-  nnoremap <silent> <F1> :<C-u>call <SID>setup_myvimrc()<CR>:edit $MYVIMRC<CR>
-  nnoremap <silent> <F2> :<C-u>call <SID>setup_myvimrc()<CR>:source $MYVIMRC<CR>:IndentLinesReset<CR>
-  nnoremap          <F3> :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
-  nnoremap          <F4> :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
 
   augroup LazyInitialize
     autocmd!
