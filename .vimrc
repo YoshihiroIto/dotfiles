@@ -1231,17 +1231,21 @@ command! Format call s:execute_keep_view('call s:format()')
 function! s:format()
   if &filetype ==# 'cs'
     OmniSharpCodeFormat
-  elseif &filetype =~# 'c\|cpp'
+  elseif &filetype ==# 'c'
+    ClangFormat
+  elseif &filetype ==# 'cpp'
     ClangFormat
   elseif &filetype ==# 'go'
-    call s:filter_current('goimports', 0)
+    call s:filter_current('goimports %s', 0)
+  elseif &filetype ==# 'javascript' && executable('js-beautify')
+    call s:filter_current('js-beautify %s', 0)
   elseif &filetype ==# 'xml'
     let $XMLLINT_INDENT = '    '
-    if !s:filter_current('xmllint --format --encode ' . &encoding, 1)
+    if !s:filter_current('xmllint --format --encode ' . &encoding . ' %s', 1)
       execute 'silent! %substitute/>\s*</>\r</g | normal! gg=G'
     endif
   elseif &filetype ==# 'json'
-    call s:filter_current('jq .', 0)
+    call s:filter_current('jq . %s', 0)
   else
     echomsg 'Format: Not supported:' &filetype
   endif
@@ -1810,7 +1814,8 @@ function! s:filter_current(cmd, is_silent)
     let tempfile = tempname()
     call writefile(getline(1, '$'), tempfile)
 
-    let formatted = vimproc#system(a:cmd . ' ' . substitute(tempfile, '\', '/', 'g'))
+    " let formatted = vimproc#system(a:cmd . ' ' . substitute(tempfile, '\', '/', 'g'))
+    let formatted = vimproc#system(printf(a:cmd, substitute(tempfile, '\', '/', 'g')))
     let retval    = vimproc#get_last_status()
 
     if retval == 0
