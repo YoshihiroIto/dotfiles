@@ -1814,7 +1814,6 @@ function! s:filter_current(cmd, is_silent)
     let tempfile = tempname()
     call writefile(getline(1, '$'), tempfile)
 
-    " let formatted = vimproc#system(a:cmd . ' ' . substitute(tempfile, '\', '/', 'g'))
     let formatted = vimproc#system(printf(a:cmd, substitute(tempfile, '\', '/', 'g')))
     let retval    = vimproc#get_last_status()
 
