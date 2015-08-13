@@ -566,10 +566,11 @@ if neobundle#tap('neocomplete.vim')
           \ }
 
     let g:neocomplete#sources#omni#input_patterns = {
-          \   'c':    '\%(\.\|->\)\h\w*',
-          \   'disable_cpp':  '\h\w*\%(\.\|->\)\h\w*\|\h\w*::',
-          \   'cs':   '[a-zA-Z0-9.]\{2\}',
-          \   'ruby': '[^. *\t]\.\w*\|\h\w*::'
+          \   'c':           '\%(\.\|->\)\h\w*',
+          \   'disable_cpp': '\h\w*\%(\.\|->\)\h\w*\|\h\w*::',
+          \   'cs':          '[a-zA-Z0-9.]\{2\}',
+          \   'typescript':  '\h\w*\|[^. \t]\.\w*',
+          \   'ruby':        '[^. *\t]\.\w*\|\h\w*::'
           \ }
 
     let g:neocomplete#force_omni_input_patterns = {
@@ -861,7 +862,7 @@ if neobundle#tap('vimfiler.vim')
 
     let g:vimfiler_as_default_explorer        = 1
     let g:vimfiler_force_overwrite_statusline = 0
-    let g:vimfiler_ignore_pattern             = ''
+    let g:vimfiler_ignore_pattern             = []
     let g:vimfiler_tree_leaf_icon             = ' '
     let g:vimfiler_readonly_file_icon         = '⭤'
     let g:unite_kind_file_use_trashbox        = 1
@@ -1136,6 +1137,8 @@ AutocmdFT cs         setlocal foldmethod=syntax
 AutocmdFT cs         nnoremap <silent><buffer> <C-]>  :<C-u>call OmniSharp#GotoDefinition()<CR>
       \                                               zz
       \                                               :call <SID>refresh_screen()<CR>
+
+AutocmdFT typescript setlocal omnifunc=TSScompleteFunc
 
 AutocmdFT json       setlocal shiftwidth=2
 AutocmdFT neosnippet setlocal noexpandtab

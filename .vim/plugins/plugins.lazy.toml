@@ -264,6 +264,14 @@ filetypes  = 'go'
 
 
 ############################################################
+# TypeScript
+############################################################
+[[plugins]]
+repository = 'clausreinke/typescript-tools.vim'
+filetypes  = 'typescript'
+
+
+############################################################
 # Git
 ############################################################
 [[plugins]]
@@ -313,6 +321,10 @@ filetypes  = 'ruby'
 [[plugins]]
 repository = 'vim-scripts/JSON.vim'
 filetypes  = ['json', 'markdown']
+
+[[plugins]]
+repository = 'leafgarland/typescript-vim'
+filetypes  = 'typescript'
 
 [[plugins]]
 repository = 'itchyny/vim-autoft'
