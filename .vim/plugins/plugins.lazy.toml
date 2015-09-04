@@ -30,10 +30,6 @@ repository = 'LeafCage/foldCC.vim'
 filetypes  = ['vim', 'xml']
 
 [[plugins]]
-repository = 'Yggdroot/indentLine'
-filetypes  = 'all'
-
-[[plugins]]
 repository = 'YoshihiroIto/syntastic'
 filetypes  = ['go', 'ruby', 'python']
 
@@ -282,9 +278,9 @@ function_prefix = 'gitgutter'
 repository = 'cohama/agit.vim'
 commands   = ['Agit', 'AgitFile']
 
-[[plugins]]
-repository      = 'tpope/vim-fugitive'
-function_prefix = 'fugitive'
+# [[plugins]]
+# repository      = 'tpope/vim-fugitive'
+# function_prefix = 'fugitive'
 
 
 ############################################################

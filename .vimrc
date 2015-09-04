@@ -429,24 +429,6 @@ function! s:update_lightline()
   catch
   endtry
 endfunction
-
-" indentLine
-let g:indentLine_fileType = [
-      \   'c',    'cpp',  'cs',     'go',
-      \   'ruby', 'lua',  'python',
-      \   'vim',
-      \   'glsl', 'hlsl',
-      \   'xml',  'json', 'markdown'
-      \ ]
-
-let g:indentLine_faster               = 1
-let g:indentLine_color_term           = 0
-let g:indentLine_indentLevel          = 20
-let g:indentLine_char                 = '⭟'
-let g:indentLine_color_gui            = '#505050'
-let g:indentLine_noConcealCursor      = 1
-let g:indentLine_showFirstIndentLevel = 1
-let g:indentLine_first_char           = g:indentLine_char
 " }}}
 " 編集 {{{
 " vim-endwise
@@ -1066,8 +1048,9 @@ let g:gitgutter_eager              = 0
 " let g:gitgutter_diff_args          = '-w'
 let g:gitgutter_diff_args          = ''
 
-" todo:シンタックスハイライトが無効にになってしまうことがある
-" let g:gitgutter_sign_column_always = 1
+" todo:シンタックスハイライトが無効にになってしまうことがある。
+"      無効でもなってしまうことがある
+let g:gitgutter_sign_column_always = 1
 
 Autocmd FocusGained,FocusLost * GitGutter
 
@@ -1214,6 +1197,7 @@ set backspace=indent,eol,start
 set noswapfile
 set nobackup
 set formatoptions+=j
+
 set tags=tags,./tags,../tags,../../tags,../../../tags,../../../../tags,../../../../../tags
 
 " 文字コード自動判断
@@ -1782,7 +1766,6 @@ function! s:execute_keep_view(expr)
   let wininfo = winsaveview()
   execute a:expr
   call winrestview(wininfo)
-  IndentLinesReset
 endfunction
 " }}}
 " Unite 実行中か {{{

@@ -16,3 +16,12 @@ repository = 'YoshihiroIto/molokai'
 
 [[plugins]]
 repository = 'itchyny/lightline.vim'
+
+
+############################################################
+# Git
+############################################################
+[[plugins]]
+repository      = 'tpope/vim-fugitive'
+function_prefix = 'fugitive'
+
