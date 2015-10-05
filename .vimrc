@@ -441,20 +441,16 @@ let g:endwise_no_mappings = 1
 AutocmdFT lua,ruby,vim imap <buffer> <CR> <CR><Plug>DiscretionaryEnd
 
 " vim-easy-align
-" todo:直接埋め込むと正しく動作しないことがある
-nmap <Leader>0easyalign <Plug>(EasyAlign)
-vmap <Leader>0easyalign <Plug>(EasyAlign)
-
-nmap <silent> <Leader>a=       vii<Leader>0easyalign=
-nmap <silent> <Leader>a:       vii<Leader>0easyalign:
-nmap <silent> <Leader>a,       vii<Leader>0easyalign*,
-nmap <silent> <Leader>a<Space> vii<Leader>0easyalign*<Space>
-nmap <silent> <Leader>a\|      vii<Leader>0easyalign*\|
-xmap <silent> <Leader>a=       <Leader>0easyalign=
-xmap <silent> <Leader>a:       <Leader>0easyalign:
-xmap <silent> <Leader>a,       <Leader>0easyalign*,
-xmap <silent> <Leader>a<Space> <Leader>0easyalign*<Space>
-xmap <silent> <Leader>a\|      <Leader>0easyalign*\|
+nmap <silent> <Leader>a=       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)=
+nmap <silent> <Leader>a:       v<Plug>(textobj-indent-i)<Plug>(EasyAlign):
+nmap <silent> <Leader>a,       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*,
+nmap <silent> <Leader>a<Space> v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*<Space>
+nmap <silent> <Leader>a\|      v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*\|
+xmap <silent> <Leader>a=       <Plug>(EasyAlign)=
+xmap <silent> <Leader>a:       <Plug>(EasyAlign):
+xmap <silent> <Leader>a,       <Plug>(EasyAlign)*,
+xmap <silent> <Leader>a<Space> <Plug>(EasyAlign)*<Space>
+xmap <silent> <Leader>a\|      <Plug>(EasyAlign)*\|
 
 " yankround.vim
 let g:yankround_use_region_hl = 1
@@ -1232,7 +1228,7 @@ function! s:format()
     call s:filter_current('jq . %s', 0)
   elseif &filetype ==# 'javascript' && executable('js-beautify')
     call s:filter_current('js-beautify %s', 0)
-  elseif &filetype ==# 'xml'
+  elseif &filetype ==# 'xml' && executable('xmllint')
     let $XMLLINT_INDENT = '    '
     if !s:filter_current('xmllint --format --encode ' . &encoding . ' %s', 1)
       execute 'silent! %substitute/>\s*</>\r</g | normal! gg=G'
