@@ -51,8 +51,8 @@ nnoremap          <F3> :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBund
 nnoremap          <F4> :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
 
 " 複数Vimでレジスタを同期
-Autocmd CursorHold,CursorHoldI * wviminfo
-Autocmd FocusGained            * rviminfo!
+Autocmd CursorHold,CursorHoldI * silent! wviminfo
+Autocmd FocusGained            * silent! rviminfo!
 
 " 遅延初期化
 augroup LazyInitialize
