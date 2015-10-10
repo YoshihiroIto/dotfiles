@@ -153,22 +153,10 @@ if neobundle#tap('vim-submode')
     let g:submode_timeout          = 0
     let g:submode_keep_leaving_key = 1
 
-    call submode#enter_with('buffer',   'n', 's', 'gbj', ':<C-u>bn<CR>')
-    call submode#enter_with('buffer',   'n', 's', 'gbk', ':<C-u>bp<CR>')
-    call submode#map(       'buffer',   'n', 's', 'j',   ':<C-u>bn<CR>')
-    call submode#map(       'buffer',   'n', 's', 'k',   ':<C-u>bp<CR>')
     call submode#enter_with('git_hunk', 'n', 's', 'ghj', ':<C-u>GitGutterNextHunk<CR>zvzz')
     call submode#enter_with('git_hunk', 'n', 's', 'ghk', ':<C-u>GitGutterPrevHunk<CR>zvzz')
     call submode#map(       'git_hunk', 'n', 's', 'j',   ':<C-u>GitGutterNextHunk<CR>zvzz')
     call submode#map(       'git_hunk', 'n', 's', 'k',   ':<C-u>GitGutterPrevHunk<CR>zvzz')
-    call submode#enter_with('winsize',  'n', 's', 'gwh', '8<C-w>>')
-    call submode#enter_with('winsize',  'n', 's', 'gwl', '8<C-w><')
-    call submode#enter_with('winsize',  'n', 's', 'gwj', '4<C-w>-')
-    call submode#enter_with('winsize',  'n', 's', 'gwk', '4<C-w>+')
-    call submode#map(       'winsize',  'n', 's', 'h',   '8<C-w>>')
-    call submode#map(       'winsize',  'n', 's', 'l',   '8<C-w><')
-    call submode#map(       'winsize',  'n', 's', 'j',   '4<C-w>-')
-    call submode#map(       'winsize',  'n', 's', 'k',   '4<C-w>+')
   endfunction
 endif
 " }}}
@@ -684,8 +672,6 @@ if neobundle#tap('incsearch.vim')
 
   Autocmd VimEnter * IncSearchNoreMap <C-j> <Esc>
   Autocmd VimEnter * IncSearchNoreMap <C-h> <BS>
-  Autocmd VimEnter * IncSearchNoreMap <C-i> <Over>(incsearch-scroll-f)
-  Autocmd VimEnter * IncSearchNoreMap <C-o> <Over>(incsearch-scroll-b)
 endif
 
 " vim-anzu
@@ -748,6 +734,7 @@ let g:markdown_fenced_languages = [
       \   'toml',
       \   'xml',  'json'
       \ ]
+
 " vim-autoft
 let g:autoft_config = [
       \   {'filetype': 'cs',  'pattern': '^\s*using'                     },
@@ -773,18 +760,12 @@ xmap R         <Plug>(operator-replace)
 nmap t         <Plug>(operator-tcomment)
 xmap t         <Plug>(operator-tcomment)
 
-nmap <Leader>_ <Plug>(operator-camelize-toggle)
-xmap <Leader>_ <Plug>(operator-camelize-toggle)
+nmap _         <Plug>(operator-camelize-toggle)
+xmap _         <Plug>(operator-camelize-toggle)
 
 map  S         <Plug>(operator-surround-append)
 nmap Sd        <Plug>(operator-surround-delete)ab
 nmap Sr        <Plug>(operator-surround-replace)ab
-
-nmap <Leader>r <Plug>(operator-rengbang)
-xmap <Leader>r <Plug>(operator-rengbang)
-
-nmap <Leader>j <Plug>(operator-jump-toggle)
-xmap <Leader>j <Plug>(operator-jump-toggle)
 
 " vim-operator-surround
 let g:operator#surround#blocks = {
@@ -1243,8 +1224,8 @@ command! CopyCurrentFilepath call setreg('*', expand('%:p'), 'v')
 
 nnoremap Y y$
 
-vnoremap <c-a> <c-a>gv
-vnoremap <c-x> <c-x>gv
+vnoremap <C-a> <C-a>gv
+vnoremap <C-x> <C-x>gv
 
 nmap     <silent> <C-CR> V<C-CR>
 vnoremap <silent> <C-CR> :<C-u>call <SID>copy_add_comment()<CR>
