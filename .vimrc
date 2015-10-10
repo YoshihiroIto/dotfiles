@@ -1548,8 +1548,6 @@ nnoremap <silent> <C-l> $:<C-u>set virtualedit=all<CR>
 vnoremap <silent> <C-h> ^
 vnoremap <silent> <C-l> $
 
-nmap     <silent> <C-k> <Plug>(jumpbrace)
-xmap     <silent> <C-k> <Plug>(jumpbrace)
 nmap     <silent> <C-@> <Plug>(operator-jump-toggle)ai
 xmap     <silent> <C-@> <Plug>(operator-jump-toggle)ai
 
@@ -1661,7 +1659,8 @@ nnoremap <silent> [Tab]c :<C-u>tabnew<CR>
 nnoremap <silent> [Tab]x :<C-u>tabclose<CR>
 " }}}
 " バッファ操作 {{{
-nnoremap <silent> <Leader>x :<C-u>call <SID>delete_current_buffer()<CR>
+nnoremap <silent> <C-p> :<C-u>bp<CR>
+nnoremap <silent> <C-n> :<C-u>bn<CR>
 
 " ウィンドウをとじないで現在のバッファを削除 {{{
 function! s:delete_current_buffer()
