@@ -430,7 +430,7 @@ repository = 'rhysd/vim-operator-surround'
 depends    = 'vim-operator-user'
 mappings   = [['nx', '<Plug>']]
 
-# <Leader>_
+# _
 [[plugins]]
 repository = 'tyru/operator-camelize.vim'
 depends    = 'vim-operator-user'
