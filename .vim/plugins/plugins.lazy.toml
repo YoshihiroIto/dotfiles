@@ -359,7 +359,7 @@ mappings   = [['xo', 'ae'], ['xo', 'ie']]
 [[plugins]]
 repository = 'kana/vim-textobj-indent'
 depends    = 'vim-textobj-user'
-mappings   = [['xo', 'ai'], ['xo', 'aI'], ['xo', 'ii'], ['xo', 'iI']]
+mappings   = [['xo', 'ai'], ['xo', 'aI'], ['xo', 'ii'], ['xo', 'iI'], ['xo', '<Plug>(textobj-indent']]
 
 # l
 [[plugins]]
