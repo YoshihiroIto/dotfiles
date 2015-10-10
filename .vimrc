@@ -1449,6 +1449,10 @@ endif
 " フォント {{{
 if s:has_gui_running
   set guifont=Ricty\ Regular\ for\ Powerline:h12
+
+  if s:is_windows
+    set renderoptions=type:directx,gamma:1.2,contrast:1.42,geom:0,renmode:5,taamode:1
+  endif
 endif
 
 if s:is_windows && s:has_kaoriya
