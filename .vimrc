@@ -1026,11 +1026,7 @@ let g:godef_system_function          = 'vimproc#system'
 " vim-gitgutter
 let g:gitgutter_map_keys           = 0
 let g:gitgutter_eager              = 0
-" let g:gitgutter_diff_args          = '-w'
 let g:gitgutter_diff_args          = ''
-
-" todo:シンタックスハイライトが無効にになってしまうことがある。
-"      無効でもなってしまうことがある
 let g:gitgutter_sign_column_always = 1
 
 Autocmd FocusGained,FocusLost * GitGutter
