@@ -216,7 +216,7 @@ unite_sources = 'tag'
 # C#
 ############################################################
 [[plugins]]
-repository = 'YoshihiroIto/omnisharp-vim'
+repository = 'OmniSharp/omnisharp-vim'
 filetypes  = 'cs'
 [plugins.build]
 windows    = 'MSBuild server/OmniSharp.sln /p:Platform="Any CPU"'
