@@ -1208,7 +1208,7 @@ function! s:format()
   elseif &filetype ==# 'xml'
     if expand('%:e') == 'xaml'
       let xamlStylerCuiExe =
-            \ s:is_windows ? 'XamlStylerCui.exe' : 'mono ~/XamlStylerCui/XamlStylerCui.exe'
+            \ s:is_windows ? 'XamlStylerCui.exe' : 'mono ~/XamlStylerCui.exe'
       call s:filter_current(xamlStylerCuiExe . ' --input=%s', 0)
     elseif
       if executable('xmllint')
