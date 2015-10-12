@@ -1205,10 +1205,18 @@ function! s:format()
     call s:filter_current('jq . %s', 0)
   elseif &filetype ==# 'javascript' && executable('js-beautify')
     call s:filter_current('js-beautify %s', 0)
-  elseif &filetype ==# 'xml' && executable('xmllint')
-    let $XMLLINT_INDENT = '    '
-    if !s:filter_current('xmllint --format --encode ' . &encoding . ' %s', 1)
-      execute 'silent! %substitute/>\s*</>\r</g | normal! gg=G'
+  elseif &filetype ==# 'xml'
+    if expand('%:e') == 'xaml'
+      let xamlStylerCuiExe =
+            \ s:is_windows ? 'XamlStylerCui.exe' : 'mono ~/XamlStylerCui/XamlStylerCui.exe'
+      call s:filter_current(xamlStylerCuiExe . ' --input=%s', 0)
+    elseif
+      if executable('xmllint')
+        let $XMLLINT_INDENT = '    '
+        if !s:filter_current('xmllint --format --encode ' . &encoding . ' %s', 1)
+          execute 'silent! %substitute/>\s*</>\r</g | normal! gg=G'
+        endif
+      endif
     endif
   else
     echomsg 'Format: Not supported:' &filetype
