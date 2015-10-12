@@ -71,7 +71,7 @@ function! s:lazy_initialize()
     let $LUA_DLL = $VIM . '/../../Frameworks/libluajit-5.1.2.dylib'
   endif
 
-  " 実行ファイル位置を$PATHに再優先で含める
+  " 実行ファイル位置を$PATHに最優先で含める
   if s:is_windows
     let $PATH = $VIM . ';' . $PATH
   elseif s:is_mac
