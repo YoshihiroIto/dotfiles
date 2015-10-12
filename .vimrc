@@ -71,11 +71,11 @@ function! s:lazy_initialize()
     let $LUA_DLL = $VIM . '/../../Frameworks/libluajit-5.1.2.dylib'
   endif
 
-  " 実行ファイル位置を$PATHに含める
+  " 実行ファイル位置を$PATHに再優先で含める
   if s:is_windows
-    let $PATH .= ';' . $VIM
+    let $PATH = $VIM . ';' . $PATH
   elseif s:is_mac
-    let $PATH .= ':' . $VIM . '/../../MacOS'
+    let $PATH = $VIM . '/../../MacOS:' . $PATH
   endif
 
   if exists('+cryptmethod')
