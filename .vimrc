@@ -1200,20 +1200,20 @@ function! s:format()
   elseif &filetype ==# 'cpp'
     ClangFormat
   elseif &filetype ==# 'go'
-    call s:filter_current('goimports %s', 0)
+    call s:filter_current('goimports %s', 0, 0)
   elseif &filetype ==# 'json' && executable('jq')
-    call s:filter_current('jq . %s', 0)
+    call s:filter_current('jq . %s', 0, 0)
   elseif &filetype ==# 'javascript' && executable('js-beautify')
-    call s:filter_current('js-beautify %s', 0)
+    call s:filter_current('js-beautify %s', 0, 0)
   elseif &filetype ==# 'xml'
     if expand('%:e') == 'xaml'
       let xamlStylerCuiExe =
             \ s:is_windows ? 'XamlStylerCui.exe' : 'mono ~/XamlStylerCui.exe'
-      call s:filter_current(xamlStylerCuiExe . ' --input=%s', 0)
+      call s:filter_current(xamlStylerCuiExe . ' --input=%s', 0, 1)
     else
       if executable('xmllint')
         let $XMLLINT_INDENT = '    '
-        if !s:filter_current('xmllint --format --encode ' . &encoding . ' %s', 1)
+        if !s:filter_current('xmllint --format --encode ' . &encoding . ' %s', 1, 0)
           execute 'silent! %substitute/>\s*</>\r</g | normal! gg=G'
         endif
       endif
@@ -1777,14 +1777,18 @@ function! s:execute_if_on_git_branch(line)
 endfunction
 " }}}
 " フィルタリング処理を行う {{{
-function! s:filter_current(cmd, is_silent)
+function! s:filter_current(cmd, is_silent, is_auto_encoding)
   let retval = 255
 
   try
     let tempfile = tempname()
     call writefile(getline(1, '$'), tempfile)
 
-    let formatted = vimproc#system2(printf(a:cmd, substitute(tempfile, '\', '/', 'g')))
+    if a:is_auto_encoding
+      let formatted = vimproc#system2(printf(a:cmd, substitute(tempfile, '\', '/', 'g')))
+    else
+      let formatted = vimproc#system(printf(a:cmd, substitute(tempfile, '\', '/', 'g')))
+    endif
     let retval    = vimproc#get_last_status()
 
     if retval == 0
