@@ -1174,6 +1174,7 @@ set backspace=indent,eol,start
 set noswapfile
 set nobackup
 set formatoptions+=j
+set nofixeol
 
 set tags=tags,./tags,../tags,../../tags,../../../tags,../../../../tags,../../../../../tags
 
