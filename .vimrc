@@ -1836,7 +1836,7 @@ function! s:filter_current_by_tempfile(cmd, is_silent, is_auto_encoding)
       silent keepjumps normal! ggVG"gp
     else
       if !a:is_silent
-        echomsg 'filter_current_by_stdout: Error'
+        echomsg 'filter_current_by_tempfile: Error'
       endif
     endif
   finally
