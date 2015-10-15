@@ -202,6 +202,7 @@ unite_sources = 'quickfix'
 
 [[plugins]]
 repository    = 'YoshihiroIto/vim-unite-giti'
+rev           = '4053344fde972d70899a3c2c5647aae6dde6c388'
 depends       = 'unite.vim'
 unite_sources = 'giti'
 commands      = 'GitiFetch'
@@ -215,12 +216,12 @@ unite_sources = 'tag'
 ############################################################
 # C#
 ############################################################
-[[plugins]]
-repository = 'OmniSharp/omnisharp-vim'
-filetypes  = 'cs'
-[plugins.build]
-windows    = 'MSBuild server/OmniSharp.sln /p:Platform="Any CPU"'
-mac        = 'xbuild server/OmniSharp.sln'
+# [[plugins]]
+# repository = 'OmniSharp/omnisharp-vim'
+# filetypes  = 'cs'
+# [plugins.build]
+# windows    = 'MSBuild server/OmniSharp.sln /p:Platform="Any CPU"'
+# mac        = 'xbuild server/OmniSharp.sln'
 
 
 ############################################################

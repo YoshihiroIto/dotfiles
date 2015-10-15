@@ -1092,11 +1092,11 @@ AutocmdFT c,cpp      nnoremap <silent><buffer> [App]r :<C-u>QuickRun cpp/wandbox
 AutocmdFT c,cpp      nnoremap <silent><buffer> <C-]>  :<C-u>UniteWithCursorWord
       \                                                     -immediately -buffer-name=tag tag<CR>
 
-AutocmdFT cs         setlocal omnifunc=OmniSharp#Complete
 AutocmdFT cs         setlocal foldmethod=syntax
-AutocmdFT cs         nnoremap <silent><buffer> <C-]>  :<C-u>call OmniSharp#GotoDefinition()<CR>
-      \                                               zz
-      \                                               :call <SID>refresh_screen()<CR>
+" AutocmdFT cs         setlocal omnifunc=OmniSharp#Complete
+" AutocmdFT cs         nnoremap <silent><buffer> <C-]>  :<C-u>call OmniSharp#GotoDefinition()<CR>
+"       \                                               zz
+"       \                                               :call <SID>refresh_screen()<CR>
 
 AutocmdFT typescript setlocal omnifunc=TSScompleteFunc
 
