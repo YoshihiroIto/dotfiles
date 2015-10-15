@@ -1200,20 +1200,20 @@ function! s:format()
   elseif &filetype ==# 'cpp'
     ClangFormat
   elseif &filetype ==# 'go'
-    call s:filter_current('goimports %s', 0, 0)
+    call s:filter_current_by_stdout('goimports %s', 0, 0)
   elseif &filetype ==# 'json' && executable('jq')
-    call s:filter_current('jq . %s', 0, 0)
+    call s:filter_current_by_stdout('jq . %s', 0, 0)
   elseif &filetype ==# 'javascript' && executable('js-beautify')
-    call s:filter_current('js-beautify %s', 0, 0)
+    call s:filter_current_by_stdout('js-beautify %s', 0, 0)
   elseif &filetype ==# 'xml'
     if expand('%:e') == 'xaml'
       let xamlStylerCuiExe =
             \ s:is_windows ? 'XamlStylerCui.exe' : 'mono ~/XamlStylerCui.exe'
-      call s:filter_current(xamlStylerCuiExe . ' --input=%s', 0, 1)
+      call s:filter_current_by_tempfile(xamlStylerCuiExe . ' --input=%s --output=%s', 0, 1)
     else
       if executable('xmllint')
         let $XMLLINT_INDENT = '    '
-        if !s:filter_current('xmllint --format --encode ' . &encoding . ' %s', 1, 0)
+        if !s:filter_current_by_stdout('xmllint --format --encode ' . &encoding . ' %s', 1, 0)
           execute 'silent! %substitute/>\s*</>\r</g | normal! gg=G'
         endif
       endif
@@ -1776,31 +1776,71 @@ function! s:execute_if_on_git_branch(line)
   execute a:line
 endfunction
 " }}}
-" フィルタリング処理を行う {{{
-function! s:filter_current(cmd, is_silent, is_auto_encoding)
+" 標準出力経由でフィルタリング処理を行う {{{
+function! s:filter_current_by_stdout(cmd, is_silent, is_auto_encoding)
   let retval = 255
 
   try
-    let tempfile = tempname()
-    call writefile(getline(1, '$'), tempfile)
+    let current_tempfile = tempname()
+    call writefile(getline(1, '$'), current_tempfile)
+
+    let normalized_current_tempfile = substitute(current_tempfile, '\', '/', 'g')
 
     if a:is_auto_encoding
-      let formatted = vimproc#system2(printf(a:cmd, substitute(tempfile, '\', '/', 'g')))
+      let formatted = vimproc#system2(printf(a:cmd, normalized_current_tempfile))
     else
-      let formatted = vimproc#system(printf(a:cmd, substitute(tempfile, '\', '/', 'g')))
+      let formatted = vimproc#system(printf(a:cmd, normalized_current_tempfile))
     endif
-    let retval    = vimproc#get_last_status()
+
+    let retval = vimproc#get_last_status()
 
     if retval == 0
       call setreg('g', formatted, 'v')
       silent keepjumps normal! ggVG"gp
     else
       if !a:is_silent
-        echomsg 'filter_current: Error'
+        echomsg 'filter_current_by_stdout: Error'
       endif
     endif
   finally
-    call delete(tempfile)
+    call delete(current_tempfile)
+  endtry
+
+  return retval == 0
+endfunction
+" }}}
+" テンポラリファイル経由でフィルタリング処理を行う {{{
+function! s:filter_current_by_tempfile(cmd, is_silent, is_auto_encoding)
+  let retval = 255
+
+  try
+    let current_tempfile = tempname()
+    call writefile(getline(1, '$'), current_tempfile)
+
+    let output_tempfile = tempname()
+
+    let normalized_current_tempfile = substitute(current_tempfile, '\', '/', 'g')
+    let normalized_output_tempfile  = substitute(output_tempfile,  '\', '/', 'g')
+
+    if a:is_auto_encoding
+      call vimproc#system2(printf(a:cmd, normalized_current_tempfile, normalized_output_tempfile))
+    else
+      call vimproc#system(printf(a:cmd, normalized_current_tempfile, normalized_output_tempfile))
+    endif
+
+    let retval = vimproc#get_last_status()
+
+    if retval == 0
+      call setreg('g', readfile(output_tempfile), 'v')
+      silent keepjumps normal! ggVG"gp
+    else
+      if !a:is_silent
+        echomsg 'filter_current_by_stdout: Error'
+      endif
+    endif
+  finally
+    call delete(current_tempfile)
+    call delete(output_tempfile)
   endtry
 
   return retval == 0
