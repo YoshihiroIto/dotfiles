@@ -743,29 +743,29 @@ let g:autoft_config = [
       \ ]
 " }}}
 " テキストオブジェクト {{{
-xmap aa        <Plug>(textobj-parameter-a)
-xmap ia        <Plug>(textobj-parameter-i)
-omap aa        <Plug>(textobj-parameter-a)
-omap ia        <Plug>(textobj-parameter-i)
+xmap aa <Plug>(textobj-parameter-a)
+xmap ia <Plug>(textobj-parameter-i)
+omap aa <Plug>(textobj-parameter-a)
+omap ia <Plug>(textobj-parameter-i)
 
-xmap a.        <Plug>(textobj-wiw-a)
-xmap i.        <Plug>(textobj-wiw-i)
-omap a.        <Plug>(textobj-wiw-a)
-omap i.        <Plug>(textobj-wiw-i)
+xmap a. <Plug>(textobj-wiw-a)
+xmap i. <Plug>(textobj-wiw-i)
+omap a. <Plug>(textobj-wiw-a)
+omap i. <Plug>(textobj-wiw-i)
 " }}}
 " オペレータ {{{
-nmap R         <Plug>(operator-replace)
-xmap R         <Plug>(operator-replace)
+nmap R  <Plug>(operator-replace)
+xmap R  <Plug>(operator-replace)
 
-nmap t         <Plug>(operator-tcomment)
-xmap t         <Plug>(operator-tcomment)
+nmap t  <Plug>(operator-tcomment)
+xmap t  <Plug>(operator-tcomment)
 
-nmap _         <Plug>(operator-camelize-toggle)
-xmap _         <Plug>(operator-camelize-toggle)
+nmap _  <Plug>(operator-camelize-toggle)
+xmap _  <Plug>(operator-camelize-toggle)
 
-map  S         <Plug>(operator-surround-append)
-nmap Sd        <Plug>(operator-surround-delete)ab
-nmap Sr        <Plug>(operator-surround-replace)ab
+map  S  <Plug>(operator-surround-append)
+nmap Sd <Plug>(operator-surround-delete)ab
+nmap Sr <Plug>(operator-surround-replace)ab
 
 " vim-operator-surround
 let g:operator#surround#blocks = {
