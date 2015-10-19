@@ -977,9 +977,6 @@ if neobundle#tap('neomru.vim')
   endfunction
 endif
 
-" vim-unite-giti
-Autocmd User UniteGitiGitExecuted call s:update_fugitive()
-
 " unite-everything
 if s:is_windows
   let g:unite_source_everything_full_path_search = 1

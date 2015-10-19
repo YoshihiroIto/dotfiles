@@ -202,7 +202,6 @@ unite_sources = 'quickfix'
 
 [[plugins]]
 repository    = 'YoshihiroIto/vim-unite-giti'
-rev           = '4053344fde972d70899a3c2c5647aae6dde6c388'
 depends       = 'unite.vim'
 unite_sources = 'giti'
 commands      = 'GitiFetch'
