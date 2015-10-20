@@ -215,12 +215,12 @@ unite_sources = 'tag'
 ############################################################
 # C#
 ############################################################
-# [[plugins]]
-# repository = 'OmniSharp/omnisharp-vim'
-# filetypes  = 'cs'
-# [plugins.build]
-# windows    = 'MSBuild server/OmniSharp.sln /p:Platform="Any CPU"'
-# mac        = 'xbuild server/OmniSharp.sln'
+[[plugins]]
+repository = 'OmniSharp/omnisharp-vim'
+filetypes  = 'cs'
+[plugins.build]
+windows    = 'MSBuild server/OmniSharp.sln /p:Platform="Any CPU"'
+mac        = 'xbuild server/OmniSharp.sln'
 
 
 ############################################################

@@ -933,13 +933,18 @@ if neobundle#tap('unite.vim')
     let g:unite_force_overwrite_statusline = 0
     let g:unite_source_alias_aliases       = {'memolist': {'source': 'file'}}
 
-    if executable('pt')
-      let g:unite_source_grep_command        = 'pt'
-      let g:unite_source_grep_default_opts   = '--nogroup --nocolor -S'
-      let g:unite_source_grep_recursive_opt  = ''
-      let g:unite_source_grep_encoding       = 'utf-8'
-      let g:unite_source_grep_max_candidates = 1000
-      let g:unite_source_rec_async_command   = 'pt --nocolor --nogroup -g .'
+    if executable('jvgrep')
+      let g:unite_source_grep_command       = 'jvgrep'
+      let g:unite_source_grep_default_opts  =
+            \ '-8 -r -i -I ' .
+            \ '--exclude ''\.(git|svn|vs|o|a|exe|dll|pdb|nupkg)$|(\bobj\b|\bbin\b)'''
+      let g:unite_source_grep_recursive_opt = '-R'
+      let g:unite_source_grep_encoding      = 'utf-8'
+    elseif executable('pt')
+      let g:unite_source_grep_command       = 'pt'
+      let g:unite_source_grep_default_opts  = '--nogroup --nocolor -S'
+      let g:unite_source_grep_recursive_opt = ''
+      let g:unite_source_grep_encoding      = 'utf-8'
     endif
 
     call unite#custom#profile('default', 'context', {
@@ -960,6 +965,7 @@ if neobundle#tap('unite.vim')
 
     call unite#custom#source('memolist',   'sorters',        ['sorter_ftime', 'sorter_reverse'])
     call unite#custom#source('everything', 'max_candidates', 500)
+    call unite#custom#source('grep',       'max_candidates', 0)
 
     AutocmdFT unite nnoremap <silent><buffer><expr> <C-r> unite#do_action('replace')
     AutocmdFT unite inoremap <silent><buffer><expr> <C-r> unite#do_action('replace')
@@ -1090,10 +1096,10 @@ AutocmdFT c,cpp      nnoremap <silent><buffer> <C-]>  :<C-u>UniteWithCursorWord
       \                                                     -immediately -buffer-name=tag tag<CR>
 
 AutocmdFT cs         setlocal foldmethod=syntax
-" AutocmdFT cs         setlocal omnifunc=OmniSharp#Complete
-" AutocmdFT cs         nnoremap <silent><buffer> <C-]>  :<C-u>call OmniSharp#GotoDefinition()<CR>
-"       \                                               zz
-"       \                                               :call <SID>refresh_screen()<CR>
+AutocmdFT cs         setlocal omnifunc=OmniSharp#Complete
+AutocmdFT cs         nnoremap <silent><buffer> <C-]>  :<C-u>call OmniSharp#GotoDefinition()<CR>
+      \                                               zz
+      \                                               :call <SID>refresh_screen()<CR>
 
 AutocmdFT typescript setlocal omnifunc=TSScompleteFunc
 
