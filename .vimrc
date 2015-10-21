@@ -475,8 +475,8 @@ let g:over_command_line_key_mappings = {"\<C-j>": "\<Esc>"}
 
 nnoremap <silent> <Leader>s  :OverCommandLine<CR>%s/
 vnoremap <silent> <Leader>s  :OverCommandLine<CR>s/
-nnoremap <silent> <Leader>gs :<C-u>OverCommandLine<CR>%s///g<Left><Left>
-vnoremap <silent> <Leader>gs :OverCommandLine<CR>s///g<Left><Left>
+nnoremap <silent> <Leader>rs :<C-u>OverCommandLine<CR>%s///g<Left><Left>
+vnoremap <silent> <Leader>rs :OverCommandLine<CR>s///g<Left><Left>
 
 augroup InitializeOver
   autocmd!
