@@ -1285,6 +1285,10 @@ set ignorecase
 set smartcase
 set hlsearch
 
+if executable('jvgrep')
+  set grepprg=jvgrep
+endif
+
 " 日本語インクリメンタルサーチ
 if s:has_kaoriya
   set migemo
