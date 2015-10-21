@@ -940,11 +940,6 @@ if neobundle#tap('unite.vim')
             \ '--exclude ''\.(git|svn|vs|o|a|exe|dll|pdb|nupkg)$|(\bobj\b|\bbin\b)'''
       let g:unite_source_grep_recursive_opt = '-R'
       let g:unite_source_grep_encoding      = 'utf-8'
-    elseif executable('pt')
-      let g:unite_source_grep_command       = 'pt'
-      let g:unite_source_grep_default_opts  = '--nogroup --nocolor -S'
-      let g:unite_source_grep_recursive_opt = ''
-      let g:unite_source_grep_encoding      = 'utf-8'
     endif
 
     call unite#custom#profile('default', 'context', {
