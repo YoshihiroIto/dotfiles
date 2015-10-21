@@ -22,6 +22,6 @@ repository = 'itchyny/lightline.vim'
 # Git
 ############################################################
 [[plugins]]
-repository      = 'YoshihiroIto/vim-fugitive'
+repository      = 'tpope/vim-fugitive'
 function_prefix = 'fugitive'
 
