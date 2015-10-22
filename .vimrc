@@ -595,7 +595,6 @@ if neobundle#tap('neosnippet.vim')
         \                                               : '<Tab>'
 
   function! neobundle#hooks.on_source(bundle)
-    let g:neosnippet#enable_snipmate_compatibility = 1
     let g:neosnippet#disable_runtime_snippets      = {'_': 1}
     let g:neosnippet#snippets_directory            = '~/.vim/snippets'
 
