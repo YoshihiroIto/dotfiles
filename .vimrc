@@ -1802,7 +1802,7 @@ function! s:filter_current_by_stdout(cmd, is_silent, is_auto_encoding)
       silent keepjumps normal! ggVG"gp
     else
       if !a:is_silent
-        echomsg 'filter_current_by_stdout: Error'
+        echo out
       endif
     endif
   finally
@@ -1826,9 +1826,9 @@ function! s:filter_current_by_tempfile(cmd, is_silent, is_auto_encoding)
     let normalized_output_tempfile  = substitute(output_tempfile,  '\', '/', 'g')
 
     if a:is_auto_encoding
-      call vimproc#system2(printf(a:cmd, normalized_current_tempfile, normalized_output_tempfile))
+      let out = vimproc#system2(printf(a:cmd, normalized_current_tempfile, normalized_output_tempfile))
     else
-      call vimproc#system(printf(a:cmd, normalized_current_tempfile, normalized_output_tempfile))
+      let out = vimproc#system(printf(a:cmd, normalized_current_tempfile, normalized_output_tempfile))
     endif
 
     let retval = vimproc#get_last_status()
@@ -1838,7 +1838,7 @@ function! s:filter_current_by_tempfile(cmd, is_silent, is_auto_encoding)
       silent keepjumps normal! ggVG"gp
     else
       if !a:is_silent
-        echomsg 'filter_current_by_tempfile: Error'
+        echo out
       endif
     endif
   finally
