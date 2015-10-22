@@ -1802,7 +1802,7 @@ function! s:filter_current_by_stdout(cmd, is_silent, is_auto_encoding)
       silent keepjumps normal! ggVG"gp
     else
       if !a:is_silent
-        echo out
+        echo formatted
       endif
     endif
   finally
