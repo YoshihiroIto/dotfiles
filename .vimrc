@@ -168,6 +168,15 @@ let g:foldCCtext_tail                    =
 
 set foldtext=FoldCCtext()
 
+" vim-indent-guides
+let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_exclude_filetypes     = ['help']
+let g:indent_guides_default_mapping       = 0
+let g:indent_guides_auto_colors           = 0
+
+Autocmd VimEnter,ColorScheme * :highlight IndentGuidesOdd  guibg=#1B1E1E ctermbg=3
+Autocmd VimEnter,ColorScheme * :highlight IndentGuidesEven guibg=#1E2121 ctermbg=4
+
 " syntastic
 Autocmd BufWritePost *.{go,rb,py} call s:update_lightline()
 

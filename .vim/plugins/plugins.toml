@@ -17,6 +17,8 @@ repository = 'YoshihiroIto/molokai'
 [[plugins]]
 repository = 'itchyny/lightline.vim'
 
+[[plugins]]
+repository = 'nathanaelkane/vim-indent-guides'
 
 ############################################################
 # Git
