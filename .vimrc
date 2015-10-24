@@ -680,9 +680,6 @@ if neobundle#tap('incsearch.vim')
     let g:incsearch#emacs_like_keymap = 1
     let g:incsearch#magic             = '\v'
   endfunction
-
-  Autocmd VimEnter * IncSearchNoreMap <C-j> <Esc>
-  Autocmd VimEnter * IncSearchNoreMap <C-h> <BS>
 endif
 
 " vim-anzu
