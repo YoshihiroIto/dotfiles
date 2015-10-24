@@ -1670,9 +1670,6 @@ nnoremap <silent> [Tab]c :<C-u>tabnew<CR>
 nnoremap <silent> [Tab]x :<C-u>tabclose<CR>
 " }}}
 " バッファ操作 {{{
-" nnoremap <silent> <C-p> :<C-u>bp<CR>
-" nnoremap <silent> <C-n> :<C-u>bn<CR>
-
 " ウィンドウをとじないで現在のバッファを削除 {{{
 function! s:delete_current_buffer()
   let confirm_msg             = '未保存です。閉じますか？'
