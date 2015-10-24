@@ -19,6 +19,7 @@ repository = 'itchyny/lightline.vim'
 
 [[plugins]]
 repository = 'nathanaelkane/vim-indent-guides'
+gui        = 1
 
 ############################################################
 # Git
