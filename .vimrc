@@ -50,11 +50,6 @@ nnoremap <silent> <F2> :<C-u>call <SID>setup_myvimrc()<CR>:source $MYVIMRC<CR>
 nnoremap          <F3> :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
 nnoremap          <F4> :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
 
-" todo:<C-O>,<C-I>が正しく動作しなくなるので一旦コメントアウト
-" 複数Vimでレジスタを同期
-" Autocmd CursorHold,CursorHoldI * silent! wviminfo
-" Autocmd FocusGained            * silent! rviminfo!
-
 " 遅延初期化
 augroup LazyInitialize
   autocmd!
@@ -1202,6 +1197,8 @@ command! Format call s:execute_keep_view('call s:format()')
 function! s:format()
   if &filetype ==# 'cs'
     OmniSharpCodeFormat
+    " let csStylerCuiExe = 'mono ~/CsStyler/CsStyler.exe'
+    " call s:filter_current_by_tempfile(csStylerCuiExe . ' --input=%s --output=%s', 0, 1)
   elseif &filetype ==# 'c'
     ClangFormat
   elseif &filetype ==# 'cpp'
