@@ -441,3 +441,4 @@ mappings   = [['nx', '<Plug>']]
 repository = 'osyo-manga/vim-operator-jump_side'
 depends    = 'vim-operator-user'
 mappings   = [['nx', '<Plug>(operator-jump']]
+
