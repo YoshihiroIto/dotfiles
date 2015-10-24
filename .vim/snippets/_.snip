@@ -1,9 +1,21 @@
-snippet		filename
-options		word
+snippet filename
+options word
 	`expand("%")`
 
-snippet		fullfilename
-options		word
+snippet filename_full
+options word
 	`substitute(expand("%:p"), '\', '/', "g")`
+
+snippet date_full
+options word
+	`strftime("%Y-%m-%d %H:%M:%S")`
+
+snippet date_day
+options word
+	`strftime("%Y-%m-%d")`
+
+snippet date_time
+options word
+	`strftime("%H:%M:%S")`
 
 # vim:set noexpandtab :

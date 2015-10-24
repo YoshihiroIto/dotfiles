@@ -1,7 +1,84 @@
-snippet		beh
-abbr		i:Interaction.Behaviors
-	<i:Interaction.Behaviors>
-		${0}
-	</i:Interaction.Behaviors>
+snippet Interaction.Behaviors
+options word
+	Interaction.Behaviors
+
+snippet ResourceDictionary
+options word
+	ResourceDictionary
+
+snippet ResourceDictionary.MergedDictionaries
+options word
+	ResourceDictionary.MergedDictionaries
+
+snippet MergedDictionaries
+options word
+	MergedDictionaries
+
+snippet Resources
+options word
+	Resources
+
+snippet Template
+options word
+	Template
+
+snippet ItemsPanel
+options word
+	ItemsPanel
+
+snippet ItemContainerStyle
+options word
+	ItemContainerStyle
+
+snippet ItemTemplate
+options word
+	ItemTemplate
+
+snippet ControlTemplate
+options word
+	ControlTemplate
+
+snippet ContentPresenter
+options word
+	ContentPresenter
+
+snippet SolidColorBrush
+options word
+	SolidColorBrush
+
+snippet HorizontalContentAlignment
+options word
+	HorizontalContentAlignment
+
+snippet VerticalContentAlignment
+options word
+	VerticalContentAlignment
+
+snippet HorizontalAlignment
+options word
+	HorizontalAlignment
+
+snippet VerticalAlignment
+options word
+	VerticalAlignment
+
+snippet BindingSelf
+options word
+	"{Binding ${1:property_name},
+				RelativeSource={RelativeSource Self}}"
+	${0}
+
+snippet BindingParent
+options word
+	"{Binding ${1:property_name},
+				RelativeSource={RelativeSource FindAncestor,
+												AncestorType={x:Type ${2:parent_type}}}}"
+	${0}
+
+snippet BindingElement
+options word
+	"{Binding ElementName=${1:element_name},
+				Path=${2:path}}"
+	${0}
 
 # vim:set noexpandtab :

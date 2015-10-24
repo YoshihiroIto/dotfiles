@@ -1,5 +1,6 @@
-snippet		DependencyProperty
-abbr		DependencyProperty
+snippet DependencyProperty
+abbr    DependencyProperty
+options head
 	#region ${1:property_name}
 	public ${2:property_type} $1
 	{
@@ -37,8 +38,9 @@ abbr		DependencyProperty
 	#endregion
 	${0}
 
-snippet		props
-abbr		Property (SetProperty)
+snippet props
+abbr    Property (SetProperty)
+options head
 	#region ${1:property_name}
 	private ${2:property_type} _$1;
 	public $2 $1
@@ -49,8 +51,9 @@ abbr		Property (SetProperty)
 	#endregion
 	${0}
 
-snippet		propr
-abbr		Property (RaisePropertyChanged)
+snippet propr
+abbr    Property (RaisePropertyChanged)
+options head
 	#region ${1:property_name}
 	private ${2:property_type} _$1;
 	public $2 $1
@@ -68,12 +71,14 @@ abbr		Property (RaisePropertyChanged)
 	#endregion
 	${0}
 
-snippet		propa
-abbr		Auto Property
+snippet propa
+abbr    Auto Property
+options head
 	public ${1:TValue} ${2:name} { get; set; }
 
-snippet		comv
-abbr		ViewModelCommand
+snippet comv
+abbr    ViewModelCommand
+options head
 	#region ${1:command_name}Command
 	private ViewModelCommand _$1Command;
 	public ViewModelCommand $1Command
@@ -92,8 +97,9 @@ abbr		ViewModelCommand
 	#endregion
 	${0}
 
-snippet		coml
-abbr		ListenerCommand
+snippet coml
+abbr    ListenerCommand
+options head
 	#region ${1:command_name}Command
 	private ListenerCommand<${2:message_type}> _$1Command;
 	public ListenerCommand<$2> $1Command
@@ -112,8 +118,9 @@ abbr		ListenerCommand
 	#endregion
 	${0}
 
-snippet		Singleton
-abbr		Singleton
+snippet Singleton
+abbr    Singleton
+options head
 	private ${1:class_name}(){}
 	private static readonly $1 _Instance = new $1();
 	public static $1 Instance
@@ -122,29 +129,33 @@ abbr		Singleton
 	}
 	${0}
 
-snippet		///
-abbr		summary
+snippet ///
+abbr    summary
+options head
 	/// <summary>
 	/// ${1}
 	/// </summary>
 	${0}
 
-snippet		using
-abbr		using block
+snippet using
+abbr    using block
+options head
 	using (var ${1:value} = new ${2:TValue}())
 	{
 		${0}
 	}
 
-snippet		AnonymousDisposable
-abbr		AnonymousDisposable block
+snippet AnonymousDisposable
+abbr    AnonymousDisposable block
+options head
 	using (new AnonymousDisposable(() => ${1}))
 	{
 		${0}
 	}
 
-snippet		Dispose
-abbr		protected override void Dispose(bool disposing)
+snippet Dispose
+abbr    protected override void Dispose(bool disposing)
+options head
 	protected override void Dispose(bool disposing)
 	{
 		if (disposing)
@@ -155,126 +166,134 @@ abbr		protected override void Dispose(bool disposing)
 		base.Dispose(disposing);
 	}
 
-snippet		Parallel ForEach
-abbr		Parallel.ForEach
+snippet Parallel ForEach
+abbr    Parallel.ForEach
+options head
 	Parallel.ForEach(${1:items}, ${2:item} =>
 	{
 		${0}
 	});
 
-snippet		Parallel For
-abbr		Parallel.For
+snippet Parallel For
+abbr    Parallel.For
+options head
 	Parallel.For(0, ${1:max}, ${2:i} =>
 	{
 		${0}
 	});
 
-snippet		TryGetValue
-abbr		Dictionary.TryGetValue
+snippet TryGetValue
+abbr    Dictionary.TryGetValue
+options head
 	var value = default(${1:TValue});
 	if (${2:dict}.TryGetValue(${3:key}, out value))
 	{
 		${0}
 	}
 
-snippet		GetOrAdd
-abbr		ConcurrentDictionary.GetOrAdd
+snippet GetOrAdd
+abbr    ConcurrentDictionary.GetOrAdd
+options head
 	var value = ${1:dict}.GetOrAdd(${2:key}, key =>
 	{
 		${0}
 	});
 
-snippet		Task Run WaitAll
-abbr		Task.Run
+snippet Task Run WaitAll
+abbr    Task.Run
+options head
 	var task = Task.Run(() => ${0});
 	Task.WaitAll(new []{task});
 
-snippet		IDisposable
+snippet IDisposable
 	IDisposable
 
-snippet		Serializable
+snippet Serializable
 	Serializable
 
-snippet		readonly
+snippet readonly
 	readonly
 
-snippet		Enumerable
-abbr		Enumerable
+snippet Enumerable
+abbr    Enumerable
 	Enumerable
 
-snippet		IEnumerable
-abbr		IEnumerable
+snippet IEnumerable
+abbr    IEnumerable
 	IEnumerable<${1:T}> ${0}
 
-snippet		Dictionary
-abbr		Dictionary
+snippet Dictionary
+abbr    Dictionary
 	Dictionary<${1:TKey}, ${2:TValue}> ${0}
 
-snippet		ObservableCollection
-abbr		ObservableCollection
+snippet ObservableCollection
+abbr    ObservableCollection
 	ObservableCollection<${1:T}> ${0}
 
-snippet		new List
-abbr		new List
-alias		List
+snippet new List
+abbr    new List
+alias   List
+options head
 	var ${1:value} = new List<${2:T}>();
 	${0}
 
-snippet		new HashSet
-abbr		new HashSet
-alias		HashSet
+snippet new HashSet
+abbr    new HashSet
+alias   HashSet
+options head
 	var ${1:value} = new HashSet<${2:T}>();
 	${0}
 
-snippet		new Dictionary
-abbr		new Dictionary
-alias		Dictionary
+snippet new Dictionary
+abbr    new Dictionary
+alias   Dictionary
+options head
 	var ${1:value} = new Dictionary<${2:TKey}, ${3:TValue}>();
 	${0}
 
-snippet		new ReadOnlyDictionary
-abbr		new ReadOnlyDictionary
-alias		ReadOnlyDictionary
+snippet new ReadOnlyDictionary
+abbr    new ReadOnlyDictionary
+alias   ReadOnlyDictionary
+options head
 	public static readonly ReadOnlyDictionary<${1:TKey}, ${2:TValue}> ${3:value} = new ReadOnlyDictionary<$1, $2>(
 		new Dictionary<$1, $2>
 		{
 			{${0}},
 		});
 
-snippet		new ObservableCollection
-abbr		new ObservableCollection
-alias		ObservableCollection
+snippet new ObservableCollection
+abbr    new ObservableCollection
+alias   ObservableCollection
 	new ObservableCollection<${1:T}>();
 
-snippet		new PropertyChangedEventListener
-abbr		new PropertyChangedEventListener
-alias		PropertyChangedEventListener
-	new PropertyChangedEventListener(${0})
-
-snippet		string IsNullOrEmpty
-abbr		if string.IsNullOrEmpty
-alias		IsNullOrEmpty
+snippet string IsNullOrEmpty
+abbr    if string.IsNullOrEmpty
+alias   IsNullOrEmpty
+options head
 	if (string.IsNullOrEmpty(${1:value}))
 	{
 		${0}
 	}
 
-snippet		throw NotImplementedException
+snippet throw NotImplementedException
+options head
 	throw new NotImplementedException(${0});
 
-snippet		throw NotSupportedException
+snippet throw NotSupportedException
+options head
 	throw new NotSupportedException(${0});
 
-snippet		throw InvalidOperationException
+snippet throw InvalidOperationException
+options head
 	throw new InvalidOperationException(${0});
 
-snippet		NotImplementedException
+snippet NotImplementedException
 	NotImplementedException
 
-snippet		NotSupportedException
+snippet NotSupportedException
 	NotSupportedException
 
-snippet		InvalidOperationException
+snippet InvalidOperationException
 	InvalidOperationException
 
 # vim:set noexpandtab :
