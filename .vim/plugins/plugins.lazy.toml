@@ -30,10 +30,6 @@ repository = 'LeafCage/foldCC.vim'
 filetypes  = ['vim', 'xml']
 
 [[plugins]]
-repository = 'vim-IDE/MatchTagAlways'
-filetypes  = ['vim', 'xml']
-
-[[plugins]]
 repository = 'YoshihiroIto/syntastic'
 filetypes  = ['go', 'ruby', 'python']
 
