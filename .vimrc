@@ -1317,6 +1317,25 @@ map  <silent> *  <Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
 map  <silent> g* <Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
 map  <silent> #  <Plug>(incsearch-nohl0)<Plug>(asterisk-z#)
 map  <silent> g# <Plug>(incsearch-nohl0)<Plug>(asterisk-gz#)
+
+" 複数Vimで検索を同期する {{{
+if s:has_gui_running
+  function! s:save_reg(reg, filename)
+    call writefile([getreg(a:reg)], a:filename)
+  endfunction
+
+  function! s:load_reg(reg, filename)
+    if filereadable(a:filename)
+      call setreg(a:reg, readfile(a:filename), 'v')
+    endif
+  endfunction
+
+  let vimreg_search = expand('~/vimreg_search.txt')
+
+  Autocmd CursorHold,CursorHoldI,FocusLost * call s:save_reg('/', vimreg_search)
+  Autocmd FocusGained                      * call s:load_reg('/', vimreg_search)
+endif
+" }}}
 " }}}
 " 表示 {{{
 syntax enable               " 構文ごとに色分けをする
