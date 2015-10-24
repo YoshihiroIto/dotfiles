@@ -50,9 +50,10 @@ nnoremap <silent> <F2> :<C-u>call <SID>setup_myvimrc()<CR>:source $MYVIMRC<CR>
 nnoremap          <F3> :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
 nnoremap          <F4> :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
 
+" todo:<C-O>,<C-I>が正しく動作しなくなるので一旦コメントアウト
 " 複数Vimでレジスタを同期
-Autocmd CursorHold,CursorHoldI * silent! wviminfo
-Autocmd FocusGained            * silent! rviminfo!
+" Autocmd CursorHold,CursorHoldI * silent! wviminfo
+" Autocmd FocusGained            * silent! rviminfo!
 
 " 遅延初期化
 augroup LazyInitialize
@@ -1672,8 +1673,8 @@ nnoremap <silent> [Tab]c :<C-u>tabnew<CR>
 nnoremap <silent> [Tab]x :<C-u>tabclose<CR>
 " }}}
 " バッファ操作 {{{
-nnoremap <silent> <C-p> :<C-u>bp<CR>
-nnoremap <silent> <C-n> :<C-u>bn<CR>
+" nnoremap <silent> <C-p> :<C-u>bp<CR>
+" nnoremap <silent> <C-n> :<C-u>bn<CR>
 
 " ウィンドウをとじないで現在のバッファを削除 {{{
 function! s:delete_current_buffer()
