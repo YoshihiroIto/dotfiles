@@ -602,12 +602,12 @@ if neobundle#tap('neosnippet.vim')
         \                                               : '<Tab>'
 
   function! neobundle#hooks.on_source(bundle)
-    let g:neosnippet#disable_runtime_snippets      = {'_': 1}
-    let g:neosnippet#snippets_directory            = '~/.vim/snippets'
+    let g:neosnippet#disable_runtime_snippets = {'_': 1}
+    let g:neosnippet#snippets_directory       = '~/.vim/snippets'
 
     let snippets_local = expand('~/.vim/snippets.local')
     if isdirectory(snippets_local)
-      let g:neosnippet#snippets_directory            .= ',' . snippets_local
+      let g:neosnippet#snippets_directory .= ',' . snippets_local
     endif
 
     call neocomplete#custom#source('neosnippet', 'rank', 1000)
