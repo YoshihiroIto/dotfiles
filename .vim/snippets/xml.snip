@@ -62,6 +62,19 @@ snippet VerticalAlignment
 options word
 	VerticalAlignment
 
+snippet <ColumnDefinition>
+options word
+	<ColumnDefinition Width="${1}" />
+	${0}
+
+snippet <RowDefinition>
+options word
+	<RowDefinition Height="${1}" />
+	${0}
+
+snippet Grid.Row
+	Grid.Row="${1}" Grid.Column="${2}" ${0}
+
 snippet BindingSelf
 options word
 	"{Binding ${1:property_name},
