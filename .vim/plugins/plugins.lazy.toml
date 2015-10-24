@@ -9,7 +9,7 @@ repository = 'osyo-manga/shabadou.vim'
 
 [[plugins]]
 repository = 'kana/vim-submode'
-mappings   = ['gb', 'gh', 'gw']
+mappings   = ['gh']
 
 
 ############################################################
@@ -27,6 +27,10 @@ gui        = 1
 
 [[plugins]]
 repository = 'LeafCage/foldCC.vim'
+filetypes  = ['vim', 'xml']
+
+[[plugins]]
+repository = 'vim-IDE/MatchTagAlways'
 filetypes  = ['vim', 'xml']
 
 [[plugins]]
@@ -150,6 +154,7 @@ commands   = 'LingrLaunch'
 
 [[plugins]]
 repository = 'Shougo/vimfiler.vim'
+depends    = 'unite.vim'
 mappings   = '<Plug>'
 commands   = 'VimFilerBufferDir'
 
@@ -257,6 +262,15 @@ filetypes  = 'go'
 [[plugins]]
 repository = 'dgryski/vim-godef'
 filetypes  = 'go'
+
+
+############################################################
+# Xml
+############################################################
+[[plugins]]
+repository = 'YoshihiroIto/vim-closetag'
+# filetypes  = 'xml'
+function_prefix = 'closetag'
 
 
 ############################################################

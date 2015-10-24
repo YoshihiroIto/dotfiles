@@ -435,6 +435,9 @@ endfunction
 let g:endwise_no_mappings = 1
 AutocmdFT lua,ruby,vim imap <buffer> <CR> <CR><Plug>DiscretionaryEnd
 
+" vim-closetag
+let g:closetag_filenames = "*.{html,xhtml,xml,xaml}"
+
 " vim-easy-align
 nmap <silent> <Leader>a=       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)=
 nmap <silent> <Leader>a:       v<Plug>(textobj-indent-i)<Plug>(EasyAlign):
@@ -1075,7 +1078,8 @@ AutocmdFT vim        setlocal softtabstop=2
 AutocmdFT xml,html   setlocal foldmethod=syntax
 AutocmdFT xml,html   setlocal foldlevel=99
 AutocmdFT xml,html   setlocal foldcolumn=5
-AutocmdFT xml,html   inoremap <buffer> </ </<C-x><C-o>
+AutocmdFT xml,html   inoremap <silent> <buffer> </ </<C-x><C-o>
+AutocmdFT xml,html   inoremap <silent> <buffer> > ><Esc>:call closetag#CloseTagFun()<Cr>
 AutocmdFT xml,html   let g:xml_syntax_folding = 1
 
 AutocmdFT go         setlocal foldmethod=syntax
