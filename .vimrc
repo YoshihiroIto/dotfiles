@@ -1092,7 +1092,6 @@ AutocmdFT vim        setlocal softtabstop=2
 AutocmdFT xml,html   setlocal foldmethod=syntax
 AutocmdFT xml,html   setlocal foldlevel=99
 AutocmdFT xml,html   setlocal foldcolumn=5
-AutocmdFT xml,html   inoremap <silent> <buffer> </ </<C-x><C-o>
 AutocmdFT xml,html   inoremap <silent> <buffer> >  ><Esc>:call closetag#CloseTagFun()<CR>
 AutocmdFT xml,html   let g:xml_syntax_folding = 1
 
