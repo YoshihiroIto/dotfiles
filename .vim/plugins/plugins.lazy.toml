@@ -118,6 +118,10 @@ filetypes  =  ['vim', 'ruby', 'lua']
 repository = 'kana/vim-smartinput'
 insert     = 1
 
+[[plugins]]
+repository = 'osyo-manga/vim-jplus'
+mappings   = '<Plug>'
+
 
 ############################################################
 # ファイル

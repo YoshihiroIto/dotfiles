@@ -514,6 +514,12 @@ function! s:initialize_over()
     autocmd!
   augroup END
 endfunction
+
+" vim-jplus
+nmap J         <Plug>(jplus)
+vmap J         <Plug>(jplus)
+nmap <Leader>J <Plug>(jplus-getchar-with-space)
+vmap <Leader>J <Plug>(jplus-getchar-with-space)
 " }}}
 " 補完 {{{
 " neocomplete.vim
