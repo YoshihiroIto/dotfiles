@@ -9,7 +9,7 @@ repository = 'osyo-manga/shabadou.vim'
 
 [[plugins]]
 repository = 'kana/vim-submode'
-mappings   = ['gh']
+mappings   = ['gh', 'gw']
 
 
 ############################################################
