@@ -153,6 +153,14 @@ if neobundle#tap('vim-submode')
     call submode#enter_with('git_hunk', 'n', 's', 'ghk', ':<C-u>GitGutterPrevHunk<CR>zvzz')
     call submode#map(       'git_hunk', 'n', 's', 'j',   ':<C-u>GitGutterNextHunk<CR>zvzz')
     call submode#map(       'git_hunk', 'n', 's', 'k',   ':<C-u>GitGutterPrevHunk<CR>zvzz')
+    call submode#enter_with('winsize',  'n', 's', 'gwh', '8<C-w>>')
+    call submode#enter_with('winsize',  'n', 's', 'gwl', '8<C-w><')
+    call submode#enter_with('winsize',  'n', 's', 'gwj', '4<C-w>-')
+    call submode#enter_with('winsize',  'n', 's', 'gwk', '4<C-w>+')
+    call submode#map(       'winsize',  'n', 's', 'h',   '8<C-w>>')
+    call submode#map(       'winsize',  'n', 's', 'l',   '8<C-w><')
+    call submode#map(       'winsize',  'n', 's', 'j',   '4<C-w>-')
+    call submode#map(       'winsize',  'n', 's', 'k',   '4<C-w>+')
   endfunction
 endif
 " }}}
