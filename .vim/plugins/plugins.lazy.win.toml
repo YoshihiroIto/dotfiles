@@ -14,3 +14,4 @@ gui        = 1
 repository    = 'sgur/unite-everything'
 depends       = 'unite.vim'
 unite_sources = 'everything'
+
