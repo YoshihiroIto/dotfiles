@@ -663,6 +663,9 @@ if neobundle#tap('vim-altr')
   endfunction
 endif
 " }}}
+" auto_mirroring.vim {{{
+let g:auto_mirroring_dir =  expand('~/mirror')
+" }}}
 " 検索 {{{
 " matchit.zip
 if neobundle#tap('matchit.zip')
@@ -938,6 +941,7 @@ if neobundle#tap('unite.vim')
   function! neobundle#hooks.on_source(bundle)
     let g:unite_force_overwrite_statusline = 0
     let g:unite_source_alias_aliases       = {'memolist': {'source': 'file'}}
+    let g:unite_source_bookmark_directory  = expand('~/.vim/unite/bookmark')
 
     if executable('jvgrep')
       let g:unite_source_grep_command       = 'jvgrep'
@@ -981,6 +985,8 @@ if neobundle#tap('neomru.vim')
   function! neobundle#hooks.on_source(bundle)
     let g:neomru#update_interval         = 1
     let g:neomru#file_mru_ignore_pattern = 'fugitiveblame'
+    let g:neomru#file_mru_path           = expand('~/.vim/unite/neomru/file')
+    let g:neomru#directory_mru_path      = expand('~/.vim/unite/neomru/directory')
   endfunction
 endif
 
