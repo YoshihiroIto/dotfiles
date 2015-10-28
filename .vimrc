@@ -484,7 +484,8 @@ endif
 " increment-activator
 let g:increment_activator_filetype_candidates = {
       \   '_':   [['width', 'height']],
-      \   'cs':  [['private', 'protected', 'public', 'internal']],
+      \   'cs':  [['private', 'protected', 'public', 'internal'],
+      \           ['abstract', 'virtual', 'override']],
       \   'cpp': [['private', 'protected', 'public']]
       \ }
 
