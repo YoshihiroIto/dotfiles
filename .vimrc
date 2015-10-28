@@ -130,11 +130,11 @@ if neobundle#load_cache()
   NeoBundleFetch 'Shougo/neobundle.vim'
 
   call neobundle#load_toml('~/.vim/plugins/plugins.toml')
-  call neobundle#load_toml('~/.vim/plugins/plugins.lazy.toml', {'lazy' : 1})
+  call neobundle#load_toml('~/.vim/plugins/plugins.lazy.toml', {'lazy': 1})
 
   if s:is_windows
     call neobundle#load_toml('~/.vim/plugins/plugins.win.toml')
-    call neobundle#load_toml('~/.vim/plugins/plugins.lazy.win.toml', {'lazy' : 1})
+    call neobundle#load_toml('~/.vim/plugins/plugins.lazy.win.toml', {'lazy': 1})
   endif
 
   NeoBundleSaveCache
