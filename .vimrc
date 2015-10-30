@@ -854,7 +854,7 @@ if neobundle#tap('vimfiler.vim')
     let g:vimfiler_readonly_file_icon         = '⭤'
     let g:unite_kind_file_use_trashbox        = 1
 
-    call vimfiler#custom#profile('default', 'context', {'auto_cd': 1})
+    " call vimfiler#custom#profile('default', 'context', {'auto_cd': 1})
   endfunction
 endif
 
@@ -1353,8 +1353,8 @@ if s:has_gui_running
 
   let vimreg_search = expand('~/vimreg_search.txt')
 
-  Autocmd CursorHold,CursorHoldI,FocusLost * call s:save_reg('/', vimreg_search)
-  Autocmd FocusGained                      * call s:load_reg('/', vimreg_search)
+  Autocmd CursorHold,CursorHoldI,FocusLost * silent! call s:save_reg('/', vimreg_search)
+  Autocmd FocusGained                      * silent! call s:load_reg('/', vimreg_search)
 endif
 " }}}
 " }}}
