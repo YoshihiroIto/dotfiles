@@ -846,6 +846,10 @@ if neobundle#tap('vimfiler.vim')
           \                                                   '<Plug>(vimfiler_exit)')
     AutocmdFT vimfiler nnoremap <silent><buffer> J :<C-u>Unite bookmark<CR>
     AutocmdFT vimfiler nnoremap <silent><buffer> / :<C-u>Unite file -horizontal<CR>
+    AutocmdFT vimfiler nnoremap <silent><buffer> gr
+          \                         :<C-u>Unite -no-split -buffer-name=grep grep:.<CR>
+
+    call vimfiler#custom#profile('default', 'context', {'auto_cd': 1})
 
     let g:vimfiler_as_default_explorer        = 1
     let g:vimfiler_force_overwrite_statusline = 0
@@ -853,8 +857,6 @@ if neobundle#tap('vimfiler.vim')
     let g:vimfiler_tree_leaf_icon             = ' '
     let g:vimfiler_readonly_file_icon         = '⭤'
     let g:unite_kind_file_use_trashbox        = 1
-
-    " call vimfiler#custom#profile('default', 'context', {'auto_cd': 1})
   endfunction
 endif
 
