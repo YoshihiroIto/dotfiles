@@ -996,6 +996,17 @@ if neobundle#tap('unite.vim')
     AutocmdFT unite nmap     <silent><buffer>       <C-v> <Plug>(unite_toggle_auto_preview)
     AutocmdFT unite imap     <silent><buffer>       <C-v> <Plug>(unite_toggle_auto_preview)
     AutocmdFT unite nmap     <silent><buffer>       <C-j> <Plug>(unite_exit)
+
+    let g:unite_source_alias_aliases = {
+          \   'var': {
+          \       'source': 'output',
+          \       'args':   'let'
+          \   },
+          \   'message': {
+          \       'source': 'output',
+          \       'args':   'message'
+          \   }
+          \ }
   endfunction
 endif
 
