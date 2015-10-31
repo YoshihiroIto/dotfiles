@@ -444,7 +444,7 @@ let g:endwise_no_mappings = 1
 AutocmdFT lua,ruby,vim imap <buffer> <CR> <CR><Plug>DiscretionaryEnd
 
 " vim-closetag
-let g:closetag_filenames = "*.{html,xhtml,xml,xaml}"
+let g:closetag_filenames = '*.{html,xhtml,xml,xaml}'
 
 " vim-easy-align
 nmap <silent> <Leader>a=       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)=
@@ -1254,7 +1254,7 @@ function! s:format()
   elseif &filetype ==# 'javascript' && executable('js-beautify')
     call s:filter_current_by_stdout('js-beautify %s', 0, 0)
   elseif &filetype ==# 'xml'
-    if expand('%:e') == 'xaml'
+    if expand('%:e') ==# 'xaml'
       let xamlStylerCuiExe =
             \ s:is_windows ? 'XamlStylerCui.exe' : 'mono ~/XamlStylerCui.exe'
       call s:filter_current_by_tempfile(xamlStylerCuiExe . ' --input=%s --output=%s', 0, 1)
