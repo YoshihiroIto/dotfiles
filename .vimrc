@@ -849,14 +849,16 @@ if neobundle#tap('vimfiler.vim')
     AutocmdFT vimfiler nnoremap <silent><buffer> gr
           \                         :<C-u>Unite -no-split -buffer-name=grep grep:.<CR>
 
-    call vimfiler#custom#profile('default', 'context', {'auto_cd': 1})
-
     let g:vimfiler_as_default_explorer        = 1
     let g:vimfiler_force_overwrite_statusline = 0
     let g:vimfiler_ignore_pattern             = []
     let g:vimfiler_tree_leaf_icon             = ' '
     let g:vimfiler_readonly_file_icon         = '⭤'
     let g:unite_kind_file_use_trashbox        = 1
+  endfunction
+
+  function! neobundle#hooks.on_post_source(bundle)
+    call vimfiler#custom#profile('default', 'context', {'auto_cd': 1})
   endfunction
 endif
 
@@ -1017,6 +1019,11 @@ endif
 let g:omnicomplete_fetch_full_documentation = 1
 let g:Omnisharp_stop_server                 = 0
 let g:OmniSharp_typeLookupInPreview         = 0
+" }}}
+" 開発 {{{
+if s:is_windows
+  let g:visualstudio_enableerrormarker = 1
+endif
 " }}}
 " C++ {{{
 " vim-clang-format
