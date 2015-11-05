@@ -21,6 +21,6 @@ nnoremap G  Gzvzz
 
 nnoremap <C-o>     :vsc View.NavigateBackward<CR>
 nnoremap <C-i>     :vsc View.NavigateForward<CR>
-nnoremap <C-]>     :vsc ReSharper.ReSharper_GotoImplementation<CR>
+nnoremap <C-]>     :vsc ReSharper.ReSharper_GotoDeclaration<CR>
 nnoremap <Space>gg :vsc Edit.Find<CR>
 nnoremap ;r        :vsc Debug.Start<CR>
