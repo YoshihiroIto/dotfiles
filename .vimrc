@@ -766,6 +766,17 @@ let g:autoft_config = [
       \   {'filetype': 'xml', 'pattern': '<[0-9a-zA-Z]\+'                }
       \ ]
 " }}}
+" カーソル移動 {{{
+nmap W <Plug>CamelCaseMotion_w
+xmap W <Plug>CamelCaseMotion_w
+omap W <Plug>CamelCaseMotion_w
+nmap B <Plug>CamelCaseMotion_b
+xmap B <Plug>CamelCaseMotion_b
+omap B <Plug>CamelCaseMotion_b
+nmap E <Plug>CamelCaseMotion_e
+xmap E <Plug>CamelCaseMotion_e
+omap E <Plug>CamelCaseMotion_e
+" }}}
 " テキストオブジェクト {{{
 xmap aa <Plug>(textobj-parameter-a)
 xmap ia <Plug>(textobj-parameter-i)
