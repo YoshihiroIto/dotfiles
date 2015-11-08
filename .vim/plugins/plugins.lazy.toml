@@ -341,7 +341,7 @@ filetypes  = 'all'
 ############################################################
 [[plugins]]
 repository = 'bkad/CamelCaseMotion'
-mappings   = ['<Plug>CamelCaseMotion_w', '<Plug>CamelCaseMotion_b', '<Plug>CamelCaseMotion_e']
+mappings   = '<Plug>'
 
 
 ############################################################
