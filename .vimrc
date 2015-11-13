@@ -973,7 +973,7 @@ if neobundle#tap('unite.vim')
     let g:unite_source_bookmark_directory  = expand('~/.vim/unite/bookmark')
     let g:unite_source_alias_aliases       = {
           \   'memolist': {
-          \       'source': 'file',
+          \       'source': 'file'
           \   },
           \   'var': {
           \       'source': 'output',
