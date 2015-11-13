@@ -970,8 +970,20 @@ if neobundle#tap('unite.vim')
 
   function! neobundle#hooks.on_source(bundle)
     let g:unite_force_overwrite_statusline = 0
-    let g:unite_source_alias_aliases       = {'memolist': {'source': 'file'}}
     let g:unite_source_bookmark_directory  = expand('~/.vim/unite/bookmark')
+    let g:unite_source_alias_aliases       = {
+          \   'memolist': {
+          \       'source': 'file',
+          \   },
+          \   'var': {
+          \       'source': 'output',
+          \       'args':   'let'
+          \   },
+          \   'message': {
+          \       'source': 'output',
+          \       'args':   'message'
+          \   }
+          \ }
 
     if executable('jvgrep')
       let g:unite_source_grep_command       = 'jvgrep'
@@ -1007,17 +1019,6 @@ if neobundle#tap('unite.vim')
     AutocmdFT unite nmap     <silent><buffer>       <C-v> <Plug>(unite_toggle_auto_preview)
     AutocmdFT unite imap     <silent><buffer>       <C-v> <Plug>(unite_toggle_auto_preview)
     AutocmdFT unite nmap     <silent><buffer>       <C-j> <Plug>(unite_exit)
-
-    let g:unite_source_alias_aliases = {
-          \   'var': {
-          \       'source': 'output',
-          \       'args':   'let'
-          \   },
-          \   'message': {
-          \       'source': 'output',
-          \       'args':   'message'
-          \   }
-          \ }
   endfunction
 endif
 
