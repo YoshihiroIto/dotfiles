@@ -1329,7 +1329,7 @@ set softtabstop=4   " <Tab> の挿入や <BS> の使用等の編集操作をす�
 set shiftwidth=4    " インデントの各段階に使われる空白の数
 set expandtab       " Insertモードで <Tab> を挿入するとき、代わりに適切な数の空白を使う
 set list
-set listchars=tab:\⭟\ ,eol:↲,extends:»,precedes:«,nbsp:%
+set listchars=tab:\»\ ,eol:↲,extends:»,precedes:«,nbsp:%
 set breakindent
 
 vnoremap < <gv
@@ -1502,7 +1502,7 @@ function! s:set_color()
     syntax match InvisibleJISX0208Space '　' display containedin=ALL
     syntax match InvisibleTab           '\t' display containedin=ALL
     highlight InvisibleJISX0208Space guibg=#112233
-    highlight InvisibleTab           guibg=#121212
+    highlight InvisibleTab           guifg=#333333 guibg=#000000
   endif
 endfunction
 " }}}
