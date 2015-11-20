@@ -6,6 +6,10 @@ snippet filename_full
 options word
 	`substitute(expand("%:p"), '\', '/', "g")`
 
+snippet filename_without_ext
+options word
+	`expand("%:r")`
+
 snippet date_full
 options word
 	`strftime("%Y-%m-%d %H:%M:%S")`
