@@ -16,6 +16,14 @@
 SetTitleMatchMode, Regex
 #z::Run www.autohotkey.com
 
+; vk1Dsc07B:: MouseClick, Left,   , , 1
+; vk1Csc079:: MouseClick, Middle, , , 1
+vkF2sc070:: MouseClick, Right,  , , 1
+#UseHook
+vk1Dsc07B::LButton
+vk1Csc079::MButton
+; vkF2sc070::RButton
+
 ;GVimˆÈŠO
 #IfWinNotActive ahk_class Vim
 	^h:: Send,{BackSpace}
