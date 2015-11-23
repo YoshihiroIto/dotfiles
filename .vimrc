@@ -1043,11 +1043,6 @@ let g:omnicomplete_fetch_full_documentation = 1
 let g:Omnisharp_stop_server                 = 0
 let g:OmniSharp_typeLookupInPreview         = 0
 " }}}
-" 開発 {{{
-if s:is_windows
-  let g:visualstudio_enableerrormarker = 1
-endif
-" }}}
 " C++ {{{
 " vim-clang-format
 if s:is_windows
