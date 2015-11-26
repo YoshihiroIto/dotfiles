@@ -994,6 +994,14 @@ if neobundle#tap('unite.vim')
       let g:unite_source_grep_encoding      = 'utf-8'
     endif
 
+    AutocmdFT unite nnoremap <silent><buffer><expr> <C-r> unite#do_action('replace')
+    AutocmdFT unite inoremap <silent><buffer><expr> <C-r> unite#do_action('replace')
+    AutocmdFT unite nmap     <silent><buffer>       <C-v> <Plug>(unite_toggle_auto_preview)
+    AutocmdFT unite imap     <silent><buffer>       <C-v> <Plug>(unite_toggle_auto_preview)
+    AutocmdFT unite nmap     <silent><buffer>       <C-j> <Plug>(unite_exit)
+  endfunction
+
+  function! neobundle#hooks.on_post_source(bundle)
     call unite#custom#profile('default', 'context', {
           \   'direction':        'rightbelow',
           \   'hide_icon':        0,
@@ -1013,12 +1021,6 @@ if neobundle#tap('unite.vim')
     call unite#custom#source('memolist',   'sorters',        ['sorter_ftime', 'sorter_reverse'])
     call unite#custom#source('everything', 'max_candidates', 500)
     call unite#custom#source('grep',       'max_candidates', 0)
-
-    AutocmdFT unite nnoremap <silent><buffer><expr> <C-r> unite#do_action('replace')
-    AutocmdFT unite inoremap <silent><buffer><expr> <C-r> unite#do_action('replace')
-    AutocmdFT unite nmap     <silent><buffer>       <C-v> <Plug>(unite_toggle_auto_preview)
-    AutocmdFT unite imap     <silent><buffer>       <C-v> <Plug>(unite_toggle_auto_preview)
-    AutocmdFT unite nmap     <silent><buffer>       <C-j> <Plug>(unite_exit)
   endfunction
 endif
 
