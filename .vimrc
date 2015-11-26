@@ -1495,9 +1495,7 @@ function! s:set_color()
   if !&readonly
     " 全角スペースとタブ文字の可視化
     syntax match InvisibleJISX0208Space '　' display containedin=ALL
-    syntax match InvisibleTab           '\t' display containedin=ALL
     highlight InvisibleJISX0208Space guibg=#112233
-    highlight InvisibleTab           guifg=#333333 guibg=#000000
   endif
 endfunction
 " }}}
