@@ -750,9 +750,11 @@ let g:markdown_fenced_languages = [
 
 " vim-autoft
 let g:autoft_config = [
-      \   {'filetype': 'cs',  'pattern': '^\s*using'                     },
-      \   {'filetype': 'cpp', 'pattern': '^\s*#\s*\%(include\|define\)\>'},
-      \   {'filetype': 'xml', 'pattern': '<[0-9a-zA-Z]\+'                }
+      \   {'filetype': 'cs',   'pattern': '^\s*using'                                                               },
+      \   {'filetype': 'cpp',  'pattern': '^\s*#\s*\%(include\|define\)\>'                                          },
+      \   {'filetype': 'go',   'pattern': '^import ('                                                               },
+      \   {'filetype': 'xml',  'pattern': '<[0-9a-zA-Z]\+'                                                          },
+      \   {'filetype': 'html', 'pattern': '<\%(!DOCTYPE\|html\|head\|script\|meta\|link|div\|span\)\>\|^html:5\s*$' },
       \ ]
 " }}}
 " カーソル移動 {{{
