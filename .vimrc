@@ -1093,7 +1093,6 @@ Autocmd BufNewFile,BufRead            *.{fx,fxc,fxh,hlsl,hlsli} setlocal filetyp
 Autocmd BufNewFile,BufRead            *.{fsh,vsh}               setlocal filetype=glsl
 Autocmd BufNewFile,BufRead            *.{md,mkd,markdown}       setlocal filetype=markdown
 
-AutocmdFT ruby       setlocal foldmethod=syntax
 AutocmdFT ruby       setlocal tabstop=2
 AutocmdFT ruby       setlocal shiftwidth=2
 AutocmdFT ruby       setlocal softtabstop=2
@@ -1105,13 +1104,11 @@ AutocmdFT vim        setlocal tabstop=2
 AutocmdFT vim        setlocal shiftwidth=2
 AutocmdFT vim        setlocal softtabstop=2
 
-AutocmdFT xml,html   setlocal foldmethod=syntax
 AutocmdFT xml,html   setlocal foldlevel=99
 AutocmdFT xml,html   setlocal foldcolumn=5
 AutocmdFT xml,html   inoremap <silent><buffer> >  ><Esc>:call closetag#CloseTagFun()<CR>
 AutocmdFT xml,html   let g:xml_syntax_folding = 1
 
-AutocmdFT go         setlocal foldmethod=syntax
 AutocmdFT go         setlocal shiftwidth=4
 AutocmdFT go         setlocal noexpandtab
 AutocmdFT go         setlocal tabstop=4
@@ -1121,12 +1118,10 @@ AutocmdFT go         nnoremap <silent><buffer> K      :<C-u>Godoc<CR>
 AutocmdFT go         nnoremap <silent><buffer> <C-]>  :<C-u>call GodefUnderCursor()<CR>
       \                                               zz
       \                                               :call <SID>refresh_screen()<CR>
-AutocmdFT c,cpp      setlocal foldmethod=syntax
 AutocmdFT c,cpp      nnoremap <silent><buffer> [App]r :<C-u>QuickRun cpp/wandbox<CR>
 AutocmdFT c,cpp      nnoremap <silent><buffer> <C-]>  :<C-u>UniteWithCursorWord
       \                                                     -immediately -buffer-name=tag tag<CR>
 
-AutocmdFT cs         setlocal foldmethod=syntax
 AutocmdFT cs         setlocal omnifunc=OmniSharp#Complete
 AutocmdFT cs         nnoremap <silent><buffer> <C-]>  :<C-u>call OmniSharp#GotoDefinition()<CR>
       \                                               zz
