@@ -3,7 +3,6 @@
 ############################################################
 [[plugins]]
 repository = 'Shougo/vimproc'
-pre_func   = 'vimproc'
 [plugins.build]
 mac        = 'make -f make_mac.mak'
 
@@ -23,7 +22,6 @@ repository = 'itchyny/lightline.vim'
 ############################################################
 [[plugins]]
 repository = 'tpope/vim-fugitive'
-pre_func   = 'fugitive'
 
 
 ############################################################
