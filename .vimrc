@@ -126,7 +126,13 @@ endif
 
 call neobundle#begin('~/.vim/bundle/')
 
-if neobundle#load_cache()
+if neobundle#load_cache(
+      \ $MYVIMRC,
+      \ '~/.vim/plugins/plugins.toml',
+      \ '~/.vim/plugins/plugins.lazy.toml',
+      \ '~/.vim/plugins/plugins.win.toml',
+      \ '~/.vim/plugins/plugins.lazy.win.toml')
+
   NeoBundleFetch 'Shougo/neobundle.vim'
 
   call neobundle#load_toml('~/.vim/plugins/plugins.toml')
