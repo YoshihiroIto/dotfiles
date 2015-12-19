@@ -9,22 +9,12 @@ repository = 'osyo-manga/shabadou.vim'
 
 [[plugins]]
 repository = 'kana/vim-submode'
-on_map     = ['gh', 'gw']
+on_map     = ['gh', 'gw', ',w']
 
 
 ############################################################
 # 表示
 ############################################################
-[[plugins]]
-repository = 'YoshihiroIto/vim-resize-win'
-on_cmd     = 'ResizeWin'
-gui        = 1
-
-[[plugins]]
-repository = 'vim-scripts/movewin.vim'
-on_cmd     = 'MoveWin'
-gui        = 1
-
 [[plugins]]
 repository = 'LeafCage/foldCC.vim'
 on_ft      = ['vim', 'xml']
@@ -86,7 +76,7 @@ on_i       = 1
 ############################################################
 [[plugins]]
 repository = 'tomtom/tcomment_vim'
-pre_func   = 'tcomment'
+on_function   = 'tcomment'
 on_map     = 'gc'
 on_cmd     = 'TComment'
 
@@ -104,7 +94,8 @@ on_map     = ['<C-x>', '<C-a>']
 
 [[plugins]]
 repository = 'junegunn/vim-easy-align'
-op_map     = '<Plug>(EasyAlign)'
+# op_map     = '<Plug>(EasyAlign)'
+mappings     = '<Plug>(EasyAlign)'
 
 [[plugins]]
 repository = 'thinca/vim-qfreplace'
@@ -145,7 +136,7 @@ on_ft      = 'markdown'
 
 [[plugins]]
 repository = 'tyru/open-browser.vim'
-pre_func   = 'openbrowser'
+on_function   = 'openbrowser'
 on_cmd     = 'OpenBrowser'
 
 [[plugins]]
@@ -269,7 +260,7 @@ on_ft      = 'go'
 ############################################################
 [[plugins]]
 repository = 'YoshihiroIto/vim-closetag'
-pre_func   = 'closetag'
+on_function   = 'closetag'
 
 
 ############################################################
@@ -285,7 +276,7 @@ on_ft      = 'typescript'
 ############################################################
 [[plugins]]
 repository = 'airblade/vim-gitgutter'
-pre_func   = 'gitgutter'
+on_function   = 'gitgutter'
 
 [[plugins]]
 repository = 'cohama/agit.vim'
