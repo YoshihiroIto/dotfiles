@@ -753,8 +753,8 @@ let g:autoft_config = [
       \   {'filetype': 'cs',   'pattern': '^\s*using'                                                               },
       \   {'filetype': 'cpp',  'pattern': '^\s*#\s*\%(include\|define\)\>'                                          },
       \   {'filetype': 'go',   'pattern': '^import ('                                                               },
-      \   {'filetype': 'xml',  'pattern': '<[0-9a-zA-Z]\+'                                                          },
       \   {'filetype': 'html', 'pattern': '<\%(!DOCTYPE\|html\|head\|script\|meta\|link|div\|span\)\>\|^html:5\s*$' },
+      \   {'filetype': 'xml',  'pattern': '<[0-9a-zA-Z]\+'                                                          },
       \ ]
 " }}}
 " テキストオブジェクト {{{
