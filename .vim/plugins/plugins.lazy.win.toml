@@ -3,7 +3,7 @@
 ############################################################
 [[plugins]]
 repository = 'YoshihiroIto/vim-icondrag'
-filetypes  = 'all'
+on_ft      = 'all'
 gui        = 1
 
 
@@ -11,7 +11,7 @@ gui        = 1
 # Unite
 ############################################################
 [[plugins]]
-repository    = 'sgur/unite-everything'
-depends       = 'unite.vim'
-unite_sources = 'everything'
+repository = 'sgur/unite-everything'
+depends    = 'unite.vim'
+on_unite   = 'everything'
 
