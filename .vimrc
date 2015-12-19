@@ -192,36 +192,45 @@ if neobundle#tap('vim-submode')
     call submode#map(       'appwinpos',  'n', 's', 'j',   call_move_appwin   . '(0, +1)<CR>')
     call submode#map(       'appwinpos',  'n', 's', 'k',   call_move_appwin   . '(0, -1)<CR>')
 
+    function! s:snap(value, scale)
+      return a:value / a:scale * a:scale
+    endfunction
+
     function! s:resize_appwin(x, y)
-      let g:scale = get(g:, 'yoi_resize_appwin_size', 4)
+      let scale = get(g:, 'yoi_resize_appwin_size', 4)
 
       if a:x != 0
-        let x = &columns + a:x * g:scale
-        let x = (x + (g:scale - 1)) / g:scale * g:scale
-        let &columns = x
+        let &columns = s:snap(&columns, scale) + a:x * scale
       endif
 
       if a:y != 0
-        let y = &lines   + a:y * g:scale
-        let y = (y + (g:scale - 1)) / g:scale * g:scale
-        let &lines   = y
+        let &lines   = s:snap(&lines, scale)   + a:y * scale
       endif
     endfunction
 
     function! s:move_appwin(x, y)
-      let g:scale = get(g:, 'yoi_move_appwin_size', 4)
+      let scale = get(g:, 'yoi_move_appwin_size', 4)
+      let win_x = getwinposx()
+      let win_y = getwinposy()
 
-      let x = getwinposx()
-      let y = getwinposy()
+      if a:x == 0
+        let x = win_x
+      else
+        let x = win_x + a:x * scale
 
-      if a:x != 0
-        let x = x + a:x * g:scale
-        let x = (x + (g:scale - 1)) / g:scale * g:scale
+        if win_x != s:snap(win_x, scale)
+          let x = s:snap(x, scale)
+        endif
       endif
 
-      if a:y != 0
-        let y = y + a:y * g:scale
-        let y = (y + (g:scale - 1)) / g:scale * g:scale
+      if a:y == 0
+        let y = win_y
+      else
+        let y = win_y + a:y * scale
+
+        if win_y != s:snap(win_y, scale)
+          let y = s:snap(y, scale)
+        endif
       endif
 
       execute 'winpos ' . x . ' ' . y
