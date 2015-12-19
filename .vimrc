@@ -210,7 +210,7 @@ if neobundle#tap('vim-submode')
       endif
 
       if a:y != 0
-        let &lines   = s:snap(&lines, scale)   + a:y * scale
+        let &lines   = s:snap(&lines,   scale) + a:y * scale
       endif
     endfunction
 
