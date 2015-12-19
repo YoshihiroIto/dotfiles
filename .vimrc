@@ -153,14 +153,79 @@ if neobundle#tap('vim-submode')
     call submode#enter_with('git_hunk', 'n', 's', 'ghk', ':<C-u>GitGutterPrevHunk<CR>zvzz')
     call submode#map(       'git_hunk', 'n', 's', 'j',   ':<C-u>GitGutterNextHunk<CR>zvzz')
     call submode#map(       'git_hunk', 'n', 's', 'k',   ':<C-u>GitGutterPrevHunk<CR>zvzz')
-    call submode#enter_with('winsize',  'n', 's', 'gwh', '8<C-w>>')
-    call submode#enter_with('winsize',  'n', 's', 'gwl', '8<C-w><')
-    call submode#enter_with('winsize',  'n', 's', 'gwj', '4<C-w>-')
-    call submode#enter_with('winsize',  'n', 's', 'gwk', '4<C-w>+')
-    call submode#map(       'winsize',  'n', 's', 'h',   '8<C-w>>')
-    call submode#map(       'winsize',  'n', 's', 'l',   '8<C-w><')
-    call submode#map(       'winsize',  'n', 's', 'j',   '4<C-w>-')
-    call submode#map(       'winsize',  'n', 's', 'k',   '4<C-w>+')
+
+    call submode#enter_with('winsize', 'n', 's', 'gwh', '8<C-w>>')
+    call submode#enter_with('winsize', 'n', 's', 'gwl', '8<C-w><')
+    call submode#enter_with('winsize', 'n', 's', 'gwj', '4<C-w>-')
+    call submode#enter_with('winsize', 'n', 's', 'gwk', '4<C-w>+')
+    call submode#map(       'winsize', 'n', 's', 'h',   '8<C-w>>')
+    call submode#map(       'winsize', 'n', 's', 'l',   '8<C-w><')
+    call submode#map(       'winsize', 'n', 's', 'j',   '4<C-w>-')
+    call submode#map(       'winsize', 'n', 's', 'k',   '4<C-w>+')
+
+    let call_resize_appwin = ':<C-u>call ' . s:sid . 'resize_appwin'
+    let call_move_appwin   = ':<C-u>call ' . s:sid . 'move_appwin'
+
+    call submode#enter_with('appwinsize', 'n', 's', ',wH', call_resize_appwin . '(-1, 0)<CR>')
+    call submode#enter_with('appwinsize', 'n', 's', ',wL', call_resize_appwin . '(+1, 0)<CR>')
+    call submode#enter_with('appwinsize', 'n', 's', ',wJ', call_resize_appwin . '(0, +1)<CR>')
+    call submode#enter_with('appwinsize', 'n', 's', ',wK', call_resize_appwin . '(0, -1)<CR>')
+    call submode#map(       'appwinsize', 'n', 's', 'H',   call_resize_appwin . '(-1, 0)<CR>')
+    call submode#map(       'appwinsize', 'n', 's', 'L',   call_resize_appwin . '(+1, 0)<CR>')
+    call submode#map(       'appwinsize', 'n', 's', 'J',   call_resize_appwin . '(0, +1)<CR>')
+    call submode#map(       'appwinsize', 'n', 's', 'K',   call_resize_appwin . '(0, -1)<CR>')
+    call submode#map(       'appwinsize', 'n', 's', 'h',   call_resize_appwin . '(-1, 0)<CR>')
+    call submode#map(       'appwinsize', 'n', 's', 'l',   call_resize_appwin . '(+1, 0)<CR>')
+    call submode#map(       'appwinsize', 'n', 's', 'j',   call_resize_appwin . '(0, +1)<CR>')
+    call submode#map(       'appwinsize', 'n', 's', 'k',   call_resize_appwin . '(0, -1)<CR>')
+
+    call submode#enter_with('appwinpos',  'n', 's', ',wh', call_move_appwin   . '(-1, 0)<CR>')
+    call submode#enter_with('appwinpos',  'n', 's', ',wl', call_move_appwin   . '(+1, 0)<CR>')
+    call submode#enter_with('appwinpos',  'n', 's', ',wj', call_move_appwin   . '(0, +1)<CR>')
+    call submode#enter_with('appwinpos',  'n', 's', ',wk', call_move_appwin   . '(0, -1)<CR>')
+    call submode#map(       'appwinpos',  'n', 's', 'H',   call_move_appwin   . '(-1, 0)<CR>')
+    call submode#map(       'appwinpos',  'n', 's', 'L',   call_move_appwin   . '(+1, 0)<CR>')
+    call submode#map(       'appwinpos',  'n', 's', 'J',   call_move_appwin   . '(0, +1)<CR>')
+    call submode#map(       'appwinpos',  'n', 's', 'K',   call_move_appwin   . '(0, -1)<CR>')
+    call submode#map(       'appwinpos',  'n', 's', 'h',   call_move_appwin   . '(-1, 0)<CR>')
+    call submode#map(       'appwinpos',  'n', 's', 'l',   call_move_appwin   . '(+1, 0)<CR>')
+    call submode#map(       'appwinpos',  'n', 's', 'j',   call_move_appwin   . '(0, +1)<CR>')
+    call submode#map(       'appwinpos',  'n', 's', 'k',   call_move_appwin   . '(0, -1)<CR>')
+
+    function! s:resize_appwin(x, y)
+      let g:scale = get(g:, 'yoi_resize_appwin_size', 4)
+
+      if a:x != 0
+        let x = &columns + a:x * g:scale
+        let x = (x + (g:scale - 1)) / g:scale * g:scale
+        let &columns = x
+      endif
+
+      if a:y != 0
+        let y = &lines   + a:y * g:scale
+        let y = (y + (g:scale - 1)) / g:scale * g:scale
+        let &lines   = y
+      endif
+    endfunction
+
+    function! s:move_appwin(x, y)
+      let g:scale = get(g:, 'yoi_move_appwin_size', 4)
+
+      let x = getwinposx()
+      let y = getwinposy()
+
+      if a:x != 0
+        let x = x + a:x * g:scale
+        let x = (x + (g:scale - 1)) / g:scale * g:scale
+      endif
+
+      if a:y != 0
+        let y = y + a:y * g:scale
+        let y = (y + (g:scale - 1)) / g:scale * g:scale
+      endif
+
+      execute 'winpos ' . x . ' ' . y
+    endfunction
   endfunction
 endif
 " }}}
@@ -1647,20 +1712,9 @@ set splitright    " 横分割したら新しいウィンドウは右に
 nnoremap <silent> <Leader>c :<C-u>close<CR>
 " }}}
 " アプリウィンドウ操作 {{{
-nnoremap [Window]  <Nop>
-nmap     <Leader>w [Window]
-
 if s:has_gui_running
-  noremap <silent> [Window]e :<C-u>call <SID>toggle_v_split_wide()<CR>
-  noremap <silent> [Window]f :<C-u>call <SID>full_window()<CR>
-  noremap <silent> [Window]H :<C-u>ResizeWin<CR>
-  noremap <silent> [Window]J :<C-u>ResizeWin<CR>
-  noremap <silent> [Window]K :<C-u>ResizeWin<CR>
-  noremap <silent> [Window]L :<C-u>ResizeWin<CR>
-  noremap <silent> [Window]h :<C-u>MoveWin<CR>
-  noremap <silent> [Window]j :<C-u>MoveWin<CR>
-  noremap <silent> [Window]k :<C-u>MoveWin<CR>
-  noremap <silent> [Window]l :<C-u>MoveWin<CR>
+  noremap <silent> ,we :<C-u>call <SID>toggle_v_split_wide()<CR>
+  noremap <silent> ,wf :<C-u>call <SID>full_window()<CR>
 
   " アプリケーションウィンドウを最大高さにする {{{
   function! s:full_window()
