@@ -135,10 +135,6 @@ on_function = 'openbrowser'
 on_cmd      = 'OpenBrowser'
 
 [[plugins]]
-repository = 'tsukkee/lingr-vim'
-on_cmd     = 'LingrLaunch'
-
-[[plugins]]
 repository = 'Shougo/vimfiler.vim'
 depends    = 'unite.vim'
 on_map     = '<Plug>'

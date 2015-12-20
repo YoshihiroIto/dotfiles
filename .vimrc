@@ -372,7 +372,6 @@ function! s:lightline_mode()
         \ &filetype ==# 'vimfiler' ? 'VimFiler' :
         \ &filetype ==# 'vimshell' ? 'VimShell' :
         \ &filetype ==# 'quickrun' ? 'Quickrun' :
-        \ &filetype =~# 'lingr'    ? 'Lingr'    :
         \ &filetype ==# 'agit'     ? 'Agit'     :
         \ winwidth(0) > 50 ? lightline#mode() : ''
 endfunction
@@ -399,8 +398,6 @@ function! s:lightline_filename()
           \ (&filetype ==# 'unite'          ? unite#get_status_string()    :
           \  &filetype ==# 'vimfiler'       ? vimfiler#get_status_string() :
           \  &filetype ==# 'vimshell'       ? vimshell#get_status_string() :
-          \  &filetype ==# 'lingr-messages' ? lingr#status()               :
-          \  &filetype =~# 'lingr'          ? ''                           :
           \  &filetype ==# 'quickrun'       ? ''                           :
           \  empty(expand('%:t')) ? '[No Name]' : expand('%:t')) .
           \ (empty(s:lightline_modified()) ? '' : ' ' . s:lightline_modified())
@@ -483,7 +480,7 @@ function! s:lightline_lineinfo()
 endfunction
 
 function! s:is_lightline_no_disp_filetype()
-  return &filetype =~# 'vimfiler\|unite\|vimshell\|quickrun\|lingr\|agit'
+  return &filetype =~# 'vimfiler\|unite\|vimshell\|quickrun\|agit'
 endfunction
 
 function! s:is_lightline_no_disp_group()
@@ -868,28 +865,6 @@ let g:operator#surround#blocks = {
       \ }
 " }}}
 " アプリ {{{
-" lingr-vim
-noremap <silent> [App]1 :<C-u>call <SID>toggle_lingr()<CR>
-
-let g:lingr_vim_say_buffer_height = 15
-
-AutocmdFT lingr-rooms,lingr-members,lingr-messages
-      \                   nnoremap <silent><buffer> q  :<C-u>call <SID>toggle_lingr()<CR>
-AutocmdFT lingr-rooms,lingr-members,lingr-messages
-      \                   nmap     <silent><buffer> ss <Plug>(lingr-messages-show-say-buffer)
-AutocmdFT lingr-rooms,lingr-members,lingr-messages setlocal nolist
-AutocmdFT lingr-rooms,lingr-members                setlocal nonumber
-
-function! s:toggle_lingr()
-  if bufnr('lingr-messages') == -1
-    tabnew
-    LingrLaunch
-    wincmd l
-  else
-    LingrExit
-  endif
-endfunction
-
 " vimshell.vim
 noremap <silent> [App]s :<C-u>VimShellPop<CR>
 
