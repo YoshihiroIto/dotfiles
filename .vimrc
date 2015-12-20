@@ -239,7 +239,7 @@ if neobundle#tap('vim-submode')
         endif
       endif
 
-      execute 'winpos ' . x . ' ' . y
+      execute 'winpos' x y
     endfunction
   endfunction
 endif
@@ -1753,7 +1753,7 @@ if s:has_gui_running
     let s:depth_vsp += 1
     let &columns = s:base_columns * s:depth_vsp
     execute 'botright vertical' s:base_columns 'split'
-  endf
+  endfunction
 
   function! s:close_v_split_wide()
     let s:depth_vsp -= 1
@@ -1762,8 +1762,8 @@ if s:has_gui_running
 
     if s:depth_vsp == 1
       execute 'winpos' s:opend_left_vsp s:opend_top_vsp
-    end
-  endf
+    endif
+  endfunction
   " }}}
 endif
 " }}}
