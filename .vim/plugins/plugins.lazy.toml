@@ -61,12 +61,12 @@ repository = 'Shougo/neocomplete.vim'
 on_i       = 1
 
 [[plugins]]
-repository = 'Shougo/neosnippet.vim'
+repository = 'Shougo/neoinclude.vim'
 depends    = 'neocomplete.vim'
 on_i       = 1
 
 [[plugins]]
-repository = 'Shougo/neoinclude.vim'
+repository = 'Shougo/neosnippet.vim'
 depends    = 'neocomplete.vim'
 on_i       = 1
 
@@ -107,10 +107,6 @@ on_ft      = ['vim', 'ruby', 'lua']
 [[plugins]]
 repository = 'kana/vim-smartinput'
 on_i       = 1
-
-[[plugins]]
-repository = 'osyo-manga/vim-jplus'
-on_map     = '<Plug>'
 
 
 ############################################################

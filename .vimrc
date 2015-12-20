@@ -584,12 +584,6 @@ function! s:initialize_over()
     autocmd!
   augroup END
 endfunction
-
-" vim-jplus
-nmap J         <Plug>(jplus)
-vmap J         <Plug>(jplus)
-nmap <Leader>J <Plug>(jplus-getchar-with-space)
-vmap <Leader>J <Plug>(jplus-getchar-with-space)
 " }}}
 " 補完 {{{
 " neocomplete.vim
@@ -808,7 +802,7 @@ if neobundle#tap('clever-f.vim')
     let g:clever_f_not_overwrites_standard_mappings = 1
     let g:clever_f_ignore_case                      = 1
     let g:clever_f_smart_case                       = 1
-    let g:clever_f_across_no_line                   = 1
+    let g:clever_f_across_no_line                   = 0
     let g:clever_f_use_migemo                       = 1
     let g:clever_f_chars_match_any_signs            = ';'
     let g:clever_f_mark_char_color                  = 'Clever_f_mark_char'
