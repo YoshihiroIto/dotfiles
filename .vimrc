@@ -1405,11 +1405,11 @@ map  <silent> n  <Plug>(incsearch-nohl-n)
 map  <silent> N  <Plug>(incsearch-nohl-N)
 nmap <silent> n  <Plug>(incsearch-nohl)
       \          <Plug>(anzu-n)
-      \          zvzz
+      \          zv
       \          :call <SID>begin_display_anzu()<CR>
 nmap <silent> N  <Plug>(incsearch-nohl)
       \          <Plug>(anzu-N)
-      \          zvzz
+      \          zv
       \          :call <SID>begin_display_anzu()<CR>
 
 map  <silent> *  <Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
