@@ -1640,8 +1640,8 @@ nnoremap <silent> <C-e> <C-e>j
 nnoremap <silent> <C-y> <C-y>k
 vnoremap <silent> <C-e> <C-e>j
 vnoremap <silent> <C-y> <C-y>k
-nnoremap <silent> gg    ggzvzz:<C-u>call <SID>refresh_screen()<CR>
-nnoremap <silent> G     Gzvzz:<C-u>call  <SID>refresh_screen()<CR>
+nnoremap <silent> gg    ggzv:<C-u>call <SID>refresh_screen()<CR>
+nnoremap <silent> G     Gzv:<C-u>call  <SID>refresh_screen()<CR>
 
 nnoremap <silent> <C-i> <C-i>zz:<C-u>call <SID>refresh_screen()<CR>
 nnoremap <silent> <C-o> <C-o>zz:<C-u>call <SID>refresh_screen()<CR>
