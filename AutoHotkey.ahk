@@ -49,6 +49,12 @@ vk1Csc079::MButton
 	^j:: Send,{Esc}
 #IfWinActive
 
+; Wox
+#IfWinActive ahk_class HwndWrapper[Wox.exe;;[\da-f\-]+]
+	^j:: Send,{Esc}
+#IfWinActive
+
+
 ; Note: From now on whenever you run AutoHotkey directly, this script
 ; will be loaded.  So feel free to customize it to suit your needs.
 
