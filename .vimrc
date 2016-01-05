@@ -203,7 +203,7 @@ if neobundle#tap('vim-submode')
     endfunction
 
     function! s:resize_appwin(x, y)
-      let scale = get(g:, 'yoi_resize_appwin_size', 4)
+      let scale = get(g:, 'yoi_resize_appwin_size', 8)
 
       if a:x != 0
         let &columns = s:snap(&columns, scale) + a:x * scale
@@ -215,7 +215,7 @@ if neobundle#tap('vim-submode')
     endfunction
 
     function! s:move_appwin(x, y)
-      let scale = get(g:, 'yoi_move_appwin_size', 4)
+      let scale = get(g:, 'yoi_move_appwin_size', 64)
       let win_x = getwinposx()
       let win_y = getwinposy()
 
