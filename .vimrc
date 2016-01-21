@@ -1449,29 +1449,10 @@ Autocmd VimEnter * set t_vb=
 Autocmd VimEnter * set visualbell
 Autocmd VimEnter * set errorbells
 
-nnoremap <silent> gf :<C-u>call <SID>smart_gf('n')<CR>
-vnoremap <silent> gf :<C-u>call <SID>smart_gf('v')<CR>
+let g:netrw_nogx = 1
+nmap gx :<C-u>call openbrowser#_keymapping_smart_search('n')<CR>
+vmap gx :<C-u>call openbrowser#_keymapping_smart_search('v')<CR>
 
-function! s:smart_gf(mode)
-  try
-    let line       = getline('.')
-    let repos_name = matchstr(line, 'repository\s\+=\s\+''\zs.\{-}\ze''')
-
-    if !empty(repos_name)
-      " NeoBundle
-      execute 'OpenBrowser https://github.com/' . repos_name
-    elseif !empty(openbrowser#get_url_on_cursor())
-      " URL
-      call openbrowser#_keymapping_smart_search(a:mode)
-    else
-      " 標準のgf
-      normal! gf
-    endif
-  catch
-    " 検索
-    call openbrowser#_keymapping_search(a:mode)
-  endtry
-endfunction
 " カーソル下の単語を移動するたびにハイライトする {{{
 " http://d.hatena.ne.jp/osyo-manga/20140121/1390309901
 Autocmd CursorHold                                * call s:hl_cword()
