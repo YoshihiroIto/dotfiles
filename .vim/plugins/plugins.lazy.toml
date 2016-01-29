@@ -62,12 +62,12 @@ on_i       = 1
 
 [[plugins]]
 repository = 'Shougo/neoinclude.vim'
-depends    = 'neocomplete.vim'
+depends    = 'Shougo/neocomplete.vim'
 on_i       = 1
 
 [[plugins]]
 repository = 'Shougo/neosnippet.vim'
-depends    = 'neocomplete.vim'
+depends    = 'Shougo/neocomplete.vim'
 on_i       = 1
 
 
@@ -126,7 +126,7 @@ on_ft      = 'all'
 ############################################################
 [[plugins]]
 repository = 'beckorz/previm'
-depends    = 'open-browser.vim'
+depends    = 'tyru/open-browser.vim'
 on_ft      = 'markdown'
 
 [[plugins]]
@@ -136,7 +136,7 @@ on_cmd      = 'OpenBrowser'
 
 [[plugins]]
 repository = 'Shougo/vimfiler.vim'
-depends    = 'unite.vim'
+depends    = 'Shougo/unite.vim'
 on_map     = '<Plug>'
 on_cmd     = 'VimFilerBufferDir'
 
@@ -145,18 +145,18 @@ repository = 'rhysd/wandbox-vim'
 
 [[plugins]]
 repository = 'Shougo/vimshell.vim'
-depends    = 'tabpagebuffer.vim'
+depends    = 'Shougo/tabpagebuffer.vim'
 on_cmd     = 'VimShellPop'
 
 [[plugins]]
 repository = 'glidenote/memolist.vim'
-depends    = 'unite.vim'
+depends    = 'Shougo/unite.vim'
 on_unite   = 'memolist'
 on_cmd     = ['MemoNew', 'MemoList', 'MemoGrep']
 
 [[plugins]]
 repository = 'thinca/vim-quickrun'
-depends    = ['shabadou.vim', 'wandbox-vim']
+depends    = ['osyo-manga/shabadou.vim', 'rhysd/wandbox-vim']
 on_map     = [['sxn', '<Plug>']]
 [plugins.on_cmd]
 name       = 'QuickRun'
@@ -168,34 +168,34 @@ complete   = 'customlist,quickrun#complete'
 ############################################################
 [[plugins]]
 repository = 'Shougo/unite.vim'
-depends    = ['vimfiler.vim', 'tabpagebuffer.vim']
+depends    = ['Shougo/vimfiler.vim', 'Shougo/tabpagebuffer.vim']
 on_cmd     = ['Unite', 'UniteResume', 'UniteWithCursorWord']
 
 [[plugins]]
 repository = 'Shougo/neomru.vim'
-depends    = 'unite.vim'
+depends    = 'Shougo/unite.vim'
 on_ft      = 'all'
 on_unite   = ['neomru/file', 'neomru/directory']
 
 [[plugins]]
 repository = 'Shougo/unite-outline'
-depends    = 'unite.vim'
+depends    = 'Shougo/unite.vim'
 on_unite   = 'outline'
 
 [[plugins]]
 repository = 'osyo-manga/unite-quickfix'
-depends    = 'unite.vim'
+depends    = 'Shougo/unite.vim'
 on_unite   = 'quickfix'
 
 [[plugins]]
 repository = 'YoshihiroIto/vim-unite-giti'
-depends    = 'unite.vim'
+depends    = 'Shougo/unite.vim'
 on_unite   = 'giti'
 on_cmd     = 'GitiFetch'
 
 [[plugins]]
 repository = 'tsukkee/unite-tag'
-depends    = 'unite.vim'
+depends    = 'Shougo/unite.vim'
 on_unite   = 'tag'
 
 
@@ -325,67 +325,67 @@ repository = 'kana/vim-textobj-user'
 # #
 [[plugins]]
 repository = 'anyakichi/vim-textobj-ifdef'
-depends    = 'vim-textobj-user'
+depends    = 'kana/vim-textobj-user'
 on_map     = [['xo', 'a#'], ['xo', 'i#']]
 
 # c
 [[plugins]]
 repository = 'glts/vim-textobj-comment'
-depends    = 'vim-textobj-user'
+depends    = 'kana/vim-textobj-user'
 on_map     = [['xo', 'ac'], ['xo', 'ic']]
 
 # .
 [[plugins]]
 repository = 'rhysd/textobj-wiw'
-depends    = 'vim-textobj-user'
+depends    = 'kana/vim-textobj-user'
 on_map     = [['xo', '<Plug>']]
 
 # e
 [[plugins]]
 repository = 'kana/vim-textobj-entire'
-depends    = 'vim-textobj-user'
+depends    = 'kana/vim-textobj-user'
 on_map     = [['xo', 'ae'], ['xo', 'ie']]
 
 # i I
 [[plugins]]
 repository = 'kana/vim-textobj-indent'
-depends    = 'vim-textobj-user'
+depends    = 'kana/vim-textobj-user'
 on_map     = [['xo', 'ai'], ['xo', 'aI'], ['xo', 'ii'], ['xo', 'iI'], ['xo', '<Plug>(textobj-indent']]
 
 # l
 [[plugins]]
 repository = 'kana/vim-textobj-line'
-depends    = 'vim-textobj-user'
+depends    = 'kana/vim-textobj-user'
 on_map     = [['xo', 'al'], ['xo', 'il']]
 
 # b
 [[plugins]]
 repository = 'rhysd/vim-textobj-anyblock'
-depends    = 'vim-textobj-user'
+depends    = 'kana/vim-textobj-user'
 on_map     = [['xo', 'ab'], ['xo', 'ib']]
 
 # v V
 [[plugins]]
 repository = 'rhysd/vim-textobj-word-column'
-depends    = 'vim-textobj-user'
+depends    = 'kana/vim-textobj-user'
 on_map     = [['xo', 'av'], ['xo', 'aV'], ['xo', 'iv'], ['xo', 'iV']]
 
 # a
 [[plugins]]
 repository = 'sgur/vim-textobj-parameter'
-depends    = 'vim-textobj-user'
+depends    = 'kana/vim-textobj-user'
 on_map     = [['xo', '<Plug>']]
 
 # f{char}
 [[plugins]]
 repository = 'thinca/vim-textobj-between'
-depends    = 'vim-textobj-user'
+depends    = 'kana/vim-textobj-user'
 on_map     = [['xo', 'af'], ['xo', 'if']]
 
 # x
 [[plugins]]
 repository = 'whatyouhide/vim-textobj-xmlattr'
-depends    = 'vim-textobj-user'
+depends    = 'kana/vim-textobj-user'
 on_map     = [['xo', 'ax'], ['xo', 'ix']]
 
 
@@ -399,37 +399,37 @@ repository = 'kana/vim-operator-user'
 # t
 [[plugins]]
 repository = 'YoshihiroIto/vim-operator-tcomment'
-depends    = ['vim-operator-user', 'tcomment_vim']
+depends    = ['kana/vim-operator-user', 'tomtom/tcomment_vim']
 on_map     = [['nx', '<Plug>']]
 
 # <Leader>r
 [[plugins]]
 repository = 'deris/vim-rengbang'
-depends    = 'vim-operator-user'
+depends    = 'kana/vim-operator-user'
 on_map     = [['nx', '<Plug>(operator-rengbang']]
 on_cmd     = 'RengBang'
 
 # R
 [[plugins]]
 repository = 'kana/vim-operator-replace'
-depends    = 'vim-operator-user'
+depends    = 'kana/vim-operator-user'
 on_map     = [['nx', '<Plug>']]
 
 # S
 [[plugins]]
 repository = 'rhysd/vim-operator-surround'
-depends    = 'vim-operator-user'
+depends    = 'kana/vim-operator-user'
 on_map     = [['nx', '<Plug>']]
 
 # _
 [[plugins]]
 repository = 'tyru/operator-camelize.vim'
-depends    = 'vim-operator-user'
+depends    = 'kana/vim-operator-user'
 on_map     = [['nx', '<Plug>']]
 
 # <Leader>j
 [[plugins]]
 repository = 'osyo-manga/vim-operator-jump_side'
-depends    = 'vim-operator-user'
+depends    = 'kana/vim-operator-user'
 on_map     = [['nx', '<Plug>(operator-jump']]
 
