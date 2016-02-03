@@ -581,6 +581,12 @@ function! s:initialize_over()
     autocmd!
   augroup END
 endfunction
+
+" previm
+if s:is_windows
+  let g:previm_open_cmd = 'C:\\Program\ Files\ (x86)\\Google\\Chrome\\Application\\chrome.exe'
+endif
+
 " }}}
 " 補完 {{{
 " neocomplete.vim
