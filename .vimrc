@@ -1617,12 +1617,15 @@ nnoremap <silent> 0     g0
 nnoremap <silent> g0    0
 nnoremap <silent> $     :<C-u>set virtualedit=block<CR>g$:set virtualedit=all<CR>
 nnoremap <silent> g$    :<C-u>set virtualedit=block<CR>$:set virtualedit=all<CR>
-nnoremap <silent> <C-e> <C-e>j
-nnoremap <silent> <C-y> <C-y>k
-vnoremap <silent> <C-e> <C-e>j
-vnoremap <silent> <C-y> <C-y>k
 nnoremap <silent> gg    ggzv:<C-u>call <SID>refresh_screen()<CR>
 nnoremap <silent> G     Gzv:<C-u>call  <SID>refresh_screen()<CR>
+
+noremap <expr> <C-b>
+      \ max([winheight(0) - 2, 1]) . "\<C-u>" . (line('.') < 1         + winheight(0) ? 'H' : 'L')
+noremap <expr> <C-f>
+      \ max([winheight(0) - 2, 1]) . "\<C-d>" . (line('.') > line('$') - winheight(0) ? 'L' : 'H')
+noremap <expr> <C-y> (line('w0') <= 1         ? 'k' : "\<C-y>k")
+noremap <expr> <C-e> (line('w$') >= line('$') ? 'j' : "\<C-e>j")
 
 nnoremap <silent> <C-i> <C-i>zz:<C-u>call <SID>refresh_screen()<CR>
 nnoremap <silent> <C-o> <C-o>zz:<C-u>call <SID>refresh_screen()<CR>
