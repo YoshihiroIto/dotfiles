@@ -12,6 +12,6 @@ gui        = 1
 ############################################################
 [[plugins]]
 repository = 'sgur/unite-everything'
-depends    = 'unite.vim'
+depends    = 'Shougo/unite.vim'
 on_unite   = 'everything'
 
