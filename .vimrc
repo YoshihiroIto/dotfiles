@@ -743,8 +743,8 @@ if neobundle#tap('vim-altr')
           \                             'include%s/%%.h')
   endfunction
 endif
-" }}}
-" auto_mirroring.vim {{{
+
+" auto_mirroring.vim
 let g:auto_mirroring_dir =  expand('~/mirror')
 " }}}
 " 検索 {{{
@@ -813,6 +813,20 @@ if neobundle#tap('clever-f.vim')
     highlight default Clever_f_mark_char ctermfg=Green ctermbg=NONE cterm=underline
           \                              guifg=Green   guibg=NONE   gui=underline
   endfunction
+endif
+
+if neobundle#tap('vim-easymotion')
+  nmap ] <Plug>(easymotion-overwin-f2)
+  vmap ] <Plug>(easymotion-bd-f2)
+
+  function! neobundle#hooks.on_source(bundle)
+    let g:EasyMotioN_do_mapping  = 0
+    let g:EasyMotion_smartcase   = 1
+    let g:EasyMotion_keys        = 'ghfjtyrubvmdkeiwoqp47382'
+    let g:EasyMotion_startofline = 1
+  endfunction
+
+  call neobundle#untap()
 endif
 " }}}
 " ファイルタイプ {{{
@@ -1378,9 +1392,8 @@ if s:has_kaoriya
   set migemodict=$VIMRUNTIME/dict/migemo-dict
 endif
 
-" http://haya14busa.com/enrich-your-search-experience-with-incsearch-vim/
-map /  <Plug>(incsearch-forward)
-map ?  <Plug>(incsearch-backward)
+map / <Plug>(incsearch-easymotion-/)
+map ? <Plug>(incsearch-easymotion-?)
 
 map  <silent> n  <Plug>(incsearch-nohl-n)
 map  <silent> N  <Plug>(incsearch-nohl-N)
