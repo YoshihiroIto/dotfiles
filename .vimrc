@@ -1392,8 +1392,8 @@ if s:has_kaoriya
   set migemodict=$VIMRUNTIME/dict/migemo-dict
 endif
 
-map / <Plug>(incsearch-easymotion-/)
-map ? <Plug>(incsearch-easymotion-?)
+map / <Plug>(incsearch-forward)
+map ? <Plug>(incsearch-backward)
 
 map  <silent> n  <Plug>(incsearch-nohl-n)
 map  <silent> N  <Plug>(incsearch-nohl-N)

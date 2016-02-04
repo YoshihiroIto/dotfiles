@@ -49,11 +49,6 @@ on_cmd     = 'IncSearchNoreMap'
 on_map     = '<Plug>'
 
 [[plugins]]
-repository = 'haya14busa/incsearch-easymotion.vim'
-on_map     = '<Plug>(incsearch-easymotion'
-on_map     = '<Plug>'
-
-[[plugins]]
 repository = 'rhysd/clever-f.vim'
 on_map     = '<Plug>'
 
