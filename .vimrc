@@ -586,7 +586,6 @@ endfunction
 if s:is_windows
   let g:previm_open_cmd = 'C:\\Program\ Files\ (x86)\\Google\\Chrome\\Application\\chrome.exe'
 endif
-
 " }}}
 " 補完 {{{
 " neocomplete.vim
@@ -1334,6 +1333,9 @@ vnoremap <C-x> <C-x>gv
 
 nmap     <silent> <C-CR> V<C-CR>
 vnoremap <silent> <C-CR> :<C-u>call <SID>copy_add_comment()<CR>
+
+" 日本語考慮r
+xnoremap <expr> r {'v': "\<C-v>r", 'V': "\<C-v>0o$r", "\<C-v>": 'r'}[mode()]
 
 " http://qiita.com/akira-hamada/items/2417d0bcb563475deddb をもとに調整
 function! s:copy_add_comment() range
