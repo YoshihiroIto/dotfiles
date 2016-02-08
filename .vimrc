@@ -1537,7 +1537,7 @@ endif
 " }}}
 " フォント {{{
 if s:has_gui_running
-  set guifont=Ricty\ Regular\ for\ Powerline:h12
+  set guifont=Ricty\ Regular\ for\ Powerline:h11
 endif
 
 if s:is_windows && s:has_kaoriya
