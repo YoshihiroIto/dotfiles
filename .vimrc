@@ -815,8 +815,8 @@ if neobundle#tap('clever-f.vim')
 endif
 
 if neobundle#tap('vim-easymotion')
-  nmap ] <Plug>(easymotion-overwin-f2)
-  vmap ] <Plug>(easymotion-bd-f2)
+  nmap r <Plug>(easymotion-overwin-f2)
+  vmap r <Plug>(easymotion-bd-f2)
 
   function! neobundle#hooks.on_source(bundle)
     let g:EasyMotioN_do_mapping  = 0
