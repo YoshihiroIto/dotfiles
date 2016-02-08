@@ -155,7 +155,6 @@ on_cmd     = 'VimShellPop'
 [[plugins]]
 repository = 'glidenote/memolist.vim'
 depends    = 'Shougo/unite.vim'
-on_unite   = 'memolist'
 on_cmd     = ['MemoNew', 'MemoList', 'MemoGrep']
 
 [[plugins]]
@@ -177,30 +176,24 @@ on_cmd     = ['Unite', 'UniteResume', 'UniteWithCursorWord']
 
 [[plugins]]
 repository = 'Shougo/neomru.vim'
-depends    = 'Shougo/unite.vim'
-on_ft      = 'all'
-on_unite   = ['neomru/file', 'neomru/directory']
+on_source  = 'unite.vim'
 
 [[plugins]]
 repository = 'Shougo/unite-outline'
-depends    = 'Shougo/unite.vim'
-on_unite   = 'outline'
+on_source  = 'unite.vim'
 
 [[plugins]]
 repository = 'osyo-manga/unite-quickfix'
-depends    = 'Shougo/unite.vim'
-on_unite   = 'quickfix'
+on_source  = 'unite.vim'
 
 [[plugins]]
 repository = 'YoshihiroIto/vim-unite-giti'
-depends    = 'Shougo/unite.vim'
-on_unite   = 'giti'
+on_source  = 'unite.vim'
 on_cmd     = 'GitiFetch'
 
 [[plugins]]
 repository = 'tsukkee/unite-tag'
-depends    = 'Shougo/unite.vim'
-on_unite   = 'tag'
+on_source  = 'unite.vim'
 
 
 ############################################################
