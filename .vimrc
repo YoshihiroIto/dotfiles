@@ -1,7 +1,7 @@
 set encoding=utf-8
 scriptencoding utf-8
 " 基本 {{{
-let s:is_windows       = has('win32') || has('win64')
+let s:is_windows       = has('win32')
 let s:is_mac           = has('mac') || has('macunix')
 let s:has_vim_starting = has('vim_starting')
 let s:has_gui_running  = has('gui_running')
