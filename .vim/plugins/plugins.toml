@@ -2,413 +2,413 @@
 # ライブラリ
 ############################################################
 [[plugins]]
-repository = 'Shougo/vimproc'
-lazy       = 0
+repo      = 'Shougo/vimproc'
+lazy      = 0
 [plugins.build]
-mac        = 'make -f make_mac.mak'
+mac       = 'make -f make_mac.mak'
 
 [[plugins]]
-repository = 'xolox/vim-misc'
-lazy       = 0
+repo      = 'xolox/vim-misc'
+lazy      = 0
 
 [[plugins]]
-repository = 'xolox/vim-shell'
-lazy       = 0
+repo      = 'xolox/vim-shell'
+lazy      = 0
 
 [[plugins]]
-repository = 'Shougo/tabpagebuffer.vim'
-lazy       = 1
+repo      = 'Shougo/tabpagebuffer.vim'
+lazy      = 1
 
 [[plugins]]
-repository = 'osyo-manga/shabadou.vim'
-lazy       = 1
+repo      = 'osyo-manga/shabadou.vim'
+lazy      = 1
 
 [[plugins]]
-repository = 'kana/vim-submode'
-lazy       = 1
-on_map     = ['gh', 'gw', ',w']
+repo      = 'kana/vim-submode'
+lazy      = 1
+on_map    = ['gh', 'gw', ',w']
 
 
 ############################################################
 # 表示
 ############################################################
 [[plugins]]
-repository = 'YoshihiroIto/molokai'
-lazy       = 0
+repo      = 'YoshihiroIto/molokai'
+lazy      = 0
 
 [[plugins]]
-repository = 'itchyny/lightline.vim'
-lazy       = 0
+repo      = 'itchyny/lightline.vim'
+lazy      = 0
 
 [[plugins]]
-repository = 'LeafCage/foldCC.vim'
-lazy       = 1
-on_ft      = ['vim', 'xml']
+repo      = 'LeafCage/foldCC.vim'
+lazy      = 1
+on_ft     = ['vim', 'xml']
 
 [[plugins]]
-repository = 'YoshihiroIto/syntastic'
-lazy       = 1
-on_ft      = ['go', 'ruby', 'python']
+repo      = 'YoshihiroIto/syntastic'
+lazy      = 1
+on_ft     = ['go', 'ruby', 'python']
 
 
 ############################################################
 # 検索
 ############################################################
 [[plugins]]
-repository = 'YoshihiroIto/vim-jumpbrace'
-lazy       = 1
-on_map     = '<Plug>'
+repo      = 'YoshihiroIto/vim-jumpbrace'
+lazy      = 1
+on_map    = '<Plug>'
 
 [[plugins]]
-repository = 'osyo-manga/vim-anzu'
-lazy       = 1
-on_map     = '<Plug>'
+repo      = 'osyo-manga/vim-anzu'
+lazy      = 1
+on_map    = '<Plug>'
 
 [[plugins]]
-repository = 'haya14busa/vim-asterisk'
-lazy       = 1
-on_map     = '<Plug>'
+repo      = 'haya14busa/vim-asterisk'
+lazy      = 1
+on_map    = '<Plug>'
 
 [[plugins]]
-repository = 'vim-scripts/matchit.zip'
-lazy       = 1
-on_ft      = 'all'
+repo      = 'vim-scripts/matchit.zip'
+lazy      = 1
+on_ft     = 'all'
 
 [[plugins]]
-repository = 'haya14busa/incsearch.vim'
-lazy       = 1
-on_cmd     = 'IncSearchNoreMap'
-on_map     = '<Plug>'
+repo      = 'haya14busa/incsearch.vim'
+lazy      = 1
+on_cmd    = 'IncSearchNoreMap'
+on_map    = '<Plug>'
 
 [[plugins]]
-repository = 'rhysd/clever-f.vim'
-lazy       = 1
-on_map     = '<Plug>'
+repo      = 'rhysd/clever-f.vim'
+lazy      = 1
+on_map    = '<Plug>'
 
 [[plugins]]
-repository = 'easymotion/vim-easymotion'
-lazy       = 1
-on_map     = '<Plug>(easymotion'
+repo      = 'easymotion/vim-easymotion'
+lazy      = 1
+on_map    = '<Plug>(easymotion'
 
 
 ############################################################
 # 補完
 ############################################################
 [[plugins]]
-repository = 'Shougo/neocomplete.vim'
-lazy       = 1
-on_i       = 1
+repo      = 'Shougo/neocomplete.vim'
+lazy      = 1
+on_i      = 1
 
 [[plugins]]
-repository = 'Shougo/neoinclude.vim'
-lazy       = 1
-depends    = 'Shougo/neocomplete.vim'
-on_i       = 1
+repo      = 'Shougo/neoinclude.vim'
+lazy      = 1
+depends   = 'neocomplete.vim'
+on_i      = 1
 
 [[plugins]]
-repository = 'Shougo/neosnippet.vim'
-lazy       = 1
-depends    = 'Shougo/neocomplete.vim'
-on_i       = 1
+repo      = 'Shougo/neosnippet.vim'
+lazy      = 1
+depends   = 'neocomplete.vim'
+on_i      = 1
 
 
 ############################################################
 # 編集
 ############################################################
 [[plugins]]
-repository = 'tomtom/tcomment_vim'
-lazy       = 1
-on_func    = 'tcomment'
-on_map     = 'gc'
-on_cmd     = 'TComment'
+repo      = 'tomtom/tcomment_vim'
+lazy      = 1
+on_func   = 'tcomment'
+on_map    = 'gc'
+on_cmd    = 'TComment'
 
 [[plugins]]
-repository = 'osyo-manga/vim-over'
-lazy       = 1
-on_cmd     = 'OverCommandLine'
+repo      = 'osyo-manga/vim-over'
+lazy      = 1
+on_cmd    = 'OverCommandLine'
 
 [[plugins]]
-repository = 'LeafCage/yankround.vim'
-lazy       = 1
-on_map     = '<Plug>'
+repo      = 'LeafCage/yankround.vim'
+lazy      = 1
+on_map    = '<Plug>'
 
 [[plugins]]
-repository = 'nishigori/increment-activator'
-lazy       = 1
-on_map     = ['<C-x>', '<C-a>']
+repo      = 'nishigori/increment-activator'
+lazy      = 1
+on_map    = ['<C-x>', '<C-a>']
 
 [[plugins]]
-repository = 'junegunn/vim-easy-align'
-lazy       = 1
-mappings   = '<Plug>(EasyAlign)'
+repo      = 'junegunn/vim-easy-align'
+lazy      = 1
+on_map    = '<Plug>(EasyAlign)'
 
 [[plugins]]
-repository = 'thinca/vim-qfreplace'
-lazy       = 1
-on_ft      = ['unite', 'quickfix']
+repo      = 'thinca/vim-qfreplace'
+lazy      = 1
+on_ft     = ['unite', 'quickfix']
 
 [[plugins]]
-repository = 'tpope/vim-endwise'
-lazy       = 1
-on_ft      = ['vim', 'ruby', 'lua']
+repo      = 'tpope/vim-endwise'
+lazy      = 1
+on_ft     = ['vim', 'ruby', 'lua']
 
 [[plugins]]
-repository = 'kana/vim-smartinput'
-lazy       = 1
-on_i       = 1
+repo      = 'kana/vim-smartinput'
+lazy      = 1
+on_i      = 1
 
 
 ############################################################
 # ファイル
 ############################################################
 [[plugins]]
-repository = 'kana/vim-altr'
-lazy       = 1
-on_map     = '<Plug>'
+repo      = 'kana/vim-altr'
+lazy      = 1
+on_map    = '<Plug>'
 
 [[plugins]]
-repository = 'YoshihiroIto/vim-auto-mirroring'
-lazy       = 1
-on_ft      = 'all'
+repo      = 'YoshihiroIto/vim-auto-mirroring'
+lazy      = 1
+on_ft     = 'all'
 
 
 ############################################################
 # アプリ
 ############################################################
 [[plugins]]
-repository = 'YoshihiroIto/vim-icondrag'
-lazy       = 1
-on_ft      = 'all'
-gui        = 1
+repo      = 'YoshihiroIto/vim-icondrag'
+lazy      = 1
+on_ft     = 'all'
+gui       = 1
 
 [[plugins]]
-repository = 'beckorz/previm'
-lazy       = 1
-depends    = 'tyru/open-browser.vim'
-on_ft      = 'markdown'
+repo      = 'beckorz/previm'
+lazy      = 1
+depends   = 'open-browser.vim'
+on_ft     = 'markdown'
 
 [[plugins]]
-repository = 'tyru/open-browser.vim'
-lazy       = 1
-on_func    = 'openbrowser'
-on_cmd     = 'OpenBrowser'
+repo      = 'tyru/open-browser.vim'
+lazy      = 1
+on_func   = 'openbrowser'
+on_cmd    = 'OpenBrowser'
 
 [[plugins]]
-repository = 'Shougo/vimfiler.vim'
-lazy       = 1
-depends    = 'Shougo/unite.vim'
-on_map     = '<Plug>'
-on_cmd     = 'VimFilerBufferDir'
+repo      = 'Shougo/vimfiler.vim'
+lazy      = 1
+depends   = 'unite.vim'
+on_map    = '<Plug>'
+on_cmd    = 'VimFilerBufferDir'
 
 [[plugins]]
-repository = 'rhysd/wandbox-vim'
-lazy       = 1
+repo      = 'rhysd/wandbox-vim'
+lazy      = 1
 
 [[plugins]]
-repository = 'Shougo/vimshell.vim'
-lazy       = 1
-depends    = 'Shougo/tabpagebuffer.vim'
-on_cmd     = 'VimShellPop'
+repo      = 'Shougo/vimshell.vim'
+lazy      = 1
+depends   = 'tabpagebuffer.vim'
+on_cmd    = 'VimShellPop'
 
 [[plugins]]
-repository = 'glidenote/memolist.vim'
-lazy       = 1
-depends    = 'Shougo/unite.vim'
-on_cmd     = ['MemoNew', 'MemoList', 'MemoGrep']
+repo      = 'glidenote/memolist.vim'
+lazy      = 1
+depends   = 'unite.vim'
+on_cmd    = ['MemoNew', 'MemoList', 'MemoGrep']
 
 [[plugins]]
-repository = 'thinca/vim-quickrun'
-lazy       = 1
-depends    = ['osyo-manga/shabadou.vim', 'rhysd/wandbox-vim']
-on_map     = [['sxn', '<Plug>']]
+repo      = 'thinca/vim-quickrun'
+lazy      = 1
+depends   = ['shabadou.vim', 'wandbox-vim']
+on_map    = [['sxn', '<Plug>']]
 [plugins.on_cmd]
-name       = 'QuickRun'
-complete   = 'customlist,quickrun#complete'
+name      = 'QuickRun'
+complete  = 'customlist,quickrun#complete'
 
 
 ############################################################
 # Unite
 ############################################################
 [[plugins]]
-repository = 'Shougo/unite.vim'
-lazy       = 1
-depends    = ['Shougo/vimfiler.vim', 'Shougo/tabpagebuffer.vim']
-on_cmd     = ['Unite', 'UniteResume', 'UniteWithCursorWord']
+repo      = 'Shougo/unite.vim'
+lazy      = 1
+depends   = ['vimfiler.vim', 'tabpagebuffer.vim']
+on_cmd    = ['Unite', 'UniteResume', 'UniteWithCursorWord']
 
 [[plugins]]
-repository = 'Shougo/neomru.vim'
-lazy       = 1
-on_source  = 'unite.vim'
+repo      = 'Shougo/neomru.vim'
+lazy      = 1
+on_source = 'unite.vim'
 
 [[plugins]]
-repository = 'Shougo/unite-outline'
-lazy       = 1
-on_source  = 'unite.vim'
+repo      = 'Shougo/unite-outline'
+lazy      = 1
+on_source = 'unite.vim'
 
 [[plugins]]
-repository = 'osyo-manga/unite-quickfix'
-lazy       = 1
-on_source  = 'unite.vim'
+repo      = 'osyo-manga/unite-quickfix'
+lazy      = 1
+on_source = 'unite.vim'
 
 [[plugins]]
-repository = 'YoshihiroIto/vim-unite-giti'
-lazy       = 1
-on_source  = 'unite.vim'
-on_cmd     = 'GitiFetch'
+repo      = 'YoshihiroIto/vim-unite-giti'
+lazy      = 1
+on_source = 'unite.vim'
+on_cmd    = 'GitiFetch'
 
 [[plugins]]
-repository = 'tsukkee/unite-tag'
-lazy       = 1
-on_source  = 'unite.vim'
+repo      = 'tsukkee/unite-tag'
+lazy      = 1
+on_source = 'unite.vim'
 
 [[plugins]]
-repository = 'sgur/unite-everything'
-lazy       = 1
-on_source  = 'unite.vim'
+repo      = 'sgur/unite-everything'
+lazy      = 1
+on_source = 'unite.vim'
 
 
 ############################################################
 # C#
 ############################################################
 [[plugins]]
-repository = 'OmniSharp/omnisharp-vim'
-lazy       = 1
-on_ft      = 'cs'
+repo      = 'OmniSharp/omnisharp-vim'
+lazy      = 1
+on_ft     = 'cs'
 [plugins.build]
-windows    = 'MSBuild server/OmniSharp.sln /p:Platform="Any CPU"'
-mac        = 'xbuild server/OmniSharp.sln'
+windows   = 'MSBuild server/OmniSharp.sln /p:Platform="Any CPU"'
+mac       = 'xbuild server/OmniSharp.sln'
 
 
 ############################################################
 # C++
 ############################################################
 [[plugins]]
-repository = 'Mizuchi/STL-Syntax'
-lazy       = 1
-on_ft      = 'cpp'
+repo      = 'Mizuchi/STL-Syntax'
+lazy      = 1
+on_ft     = 'cpp'
 
 [[plugins]]
-repository = 'vim-jp/vim-cpp'
-lazy       = 1
-on_ft      = 'cpp'
+repo      = 'vim-jp/vim-cpp'
+lazy      = 1
+on_ft     = 'cpp'
 
 [[plugins]]
-repository = 'rhysd/vim-clang-format'
-lazy       = 1
-on_cmd     = 'ClangFormat'
+repo      = 'rhysd/vim-clang-format'
+lazy      = 1
+on_cmd    = 'ClangFormat'
 
 
 ############################################################
 # Go
 ############################################################
 [[plugins]]
-repository = 'google/vim-ft-go'
-lazy       = 1
-on_ft      = 'go'
+repo      = 'google/vim-ft-go'
+lazy      = 1
+on_ft     = 'go'
 
 [[plugins]]
-repository = 'vim-jp/vim-go-extra'
-lazy       = 1
-on_ft      = 'go'
+repo      = 'vim-jp/vim-go-extra'
+lazy      = 1
+on_ft     = 'go'
 
 [[plugins]]
-repository = 'nsf/gocode'
-lazy       = 1
-on_ft      = 'go'
+repo      = 'nsf/gocode'
+lazy      = 1
+on_ft     = 'go'
 
 [[plugins]]
-repository = 'dgryski/vim-godef'
-lazy       = 1
-on_ft      = 'go'
+repo      = 'dgryski/vim-godef'
+lazy      = 1
+on_ft     = 'go'
 
 
 ############################################################
 # Xml
 ############################################################
 [[plugins]]
-repository = 'YoshihiroIto/vim-closetag'
-lazy       = 1
-on_func    = 'closetag'
+repo      = 'YoshihiroIto/vim-closetag'
+lazy      = 1
+on_func   = 'closetag'
 
 
 ############################################################
 # TypeScript
 ############################################################
 [[plugins]]
-repository = 'clausreinke/typescript-tools.vim'
-lazy       = 1
-on_ft      = 'typescript'
+repo      = 'clausreinke/typescript-tools.vim'
+lazy      = 1
+on_ft     = 'typescript'
 
 
 ############################################################
 # Git
 ############################################################
 [[plugins]]
-repository = 'tpope/vim-fugitive'
-lazy       = 0
+repo      = 'tpope/vim-fugitive'
+lazy      = 0
 
 [[plugins]]
-repository = 'airblade/vim-gitgutter'
-lazy       = 1
-on_func    = 'gitgutter'
+repo      = 'airblade/vim-gitgutter'
+lazy      = 1
+on_func   = 'gitgutter'
 
 [[plugins]]
-repository = 'cohama/agit.vim'
-lazy       = 1
-on_cmd     = ['Agit', 'AgitFile']
+repo      = 'cohama/agit.vim'
+lazy      = 1
+on_cmd    = ['Agit', 'AgitFile']
 
 
 ############################################################
 # ファイルタイプ
 ############################################################
 [[plugins]]
-repository = 'itchyny/vim-autoft'
-lazy       = 0
+repo      = 'itchyny/vim-autoft'
+lazy      = 0
 
 [[plugins]]
-repository = 'beyondmarc/hlsl.vim'
-lazy       = 1
-on_ft      = 'hlsl'
+repo      = 'beyondmarc/hlsl.vim'
+lazy      = 1
+on_ft     = 'hlsl'
 
 [[plugins]]
-repository = 'cespare/vim-toml'
-lazy       = 1
-on_ft      = ['toml', 'markdown']
+repo      = 'cespare/vim-toml'
+lazy      = 1
+on_ft     = ['toml', 'markdown']
 
 [[plugins]]
-repository = 'jelera/vim-javascript-syntax'
-lazy       = 1
-on_ft      = 'javascript'
+repo      = 'jelera/vim-javascript-syntax'
+lazy      = 1
+on_ft     = 'javascript'
 
 [[plugins]]
-repository = 'stephpy/vim-yaml'
-lazy       = 1
-on_ft      = 'yaml'
+repo      = 'stephpy/vim-yaml'
+lazy      = 1
+on_ft     = 'yaml'
 
 [[plugins]]
-repository = 'tikhomirov/vim-glsl'
-lazy       = 1
-on_ft      = 'glsl'
+repo      = 'tikhomirov/vim-glsl'
+lazy      = 1
+on_ft     = 'glsl'
 
 [[plugins]]
-repository = 'tpope/vim-markdown'
-lazy       = 1
-on_ft      = 'markdown'
+repo      = 'tpope/vim-markdown'
+lazy      = 1
+on_ft     = 'markdown'
 
 [[plugins]]
-repository = 'vim-ruby/vim-ruby'
-lazy       = 1
-on_ft      = 'ruby'
+repo      = 'vim-ruby/vim-ruby'
+lazy      = 1
+on_ft     = 'ruby'
 
 [[plugins]]
-repository = 'vim-scripts/JSON.vim'
-lazy       = 1
-on_ft      = ['json', 'markdown']
+repo      = 'vim-scripts/JSON.vim'
+lazy      = 1
+on_ft     = ['json', 'markdown']
 
 [[plugins]]
-repository = 'leafgarland/typescript-vim'
-lazy       = 1
-on_ft      = 'typescript'
+repo      = 'leafgarland/typescript-vim'
+lazy      = 1
+on_ft     = 'typescript'
 
 
 ############################################################
@@ -417,85 +417,85 @@ on_ft      = 'typescript'
 # https://github.com/kana/vim-textobj-user/wiki
 # http://d.hatena.ne.jp/osyo-manga/20130717/1374069987
 [[plugins]]
-repository = 'kana/vim-textobj-user'
-lazy       = 1
+repo      = 'kana/vim-textobj-user'
+lazy      = 1
 
 # #
 [[plugins]]
-repository = 'anyakichi/vim-textobj-ifdef'
-lazy       = 1
-depends    = 'kana/vim-textobj-user'
-on_map     = [['xo', 'a#'], ['xo', 'i#']]
+repo      = 'anyakichi/vim-textobj-ifdef'
+lazy      = 1
+depends   = 'vim-textobj-user'
+on_map    = [['xo', 'a#'], ['xo', 'i#']]
 
 # c
 [[plugins]]
-repository = 'glts/vim-textobj-comment'
-lazy       = 1
-depends    = 'kana/vim-textobj-user'
-on_map     = [['xo', 'ac'], ['xo', 'ic']]
+repo      = 'glts/vim-textobj-comment'
+lazy      = 1
+depends   = 'vim-textobj-user'
+on_map    = [['xo', 'ac'], ['xo', 'ic']]
 
 # .
 [[plugins]]
-repository = 'rhysd/textobj-wiw'
-lazy       = 1
-depends    = 'kana/vim-textobj-user'
-on_map     = [['xo', '<Plug>']]
+repo      = 'rhysd/textobj-wiw'
+lazy      = 1
+depends   = 'vim-textobj-user'
+on_map    = [['xo', '<Plug>']]
 
 # e
 [[plugins]]
-repository = 'kana/vim-textobj-entire'
-lazy       = 1
-depends    = 'kana/vim-textobj-user'
-on_map     = [['xo', 'ae'], ['xo', 'ie']]
+repo      = 'kana/vim-textobj-entire'
+lazy      = 1
+depends   = 'vim-textobj-user'
+on_map    = [['xo', 'ae'], ['xo', 'ie']]
 
 # i I
 [[plugins]]
-repository = 'kana/vim-textobj-indent'
-lazy       = 1
-depends    = 'kana/vim-textobj-user'
-on_map     = [['xo', 'ai'], ['xo', 'aI'], ['xo', 'ii'], ['xo', 'iI'], ['xo', '<Plug>(textobj-indent']]
+repo      = 'kana/vim-textobj-indent'
+lazy      = 1
+depends   = 'vim-textobj-user'
+on_map    = [['xo', 'ai'], ['xo', 'aI'], ['xo', 'ii'], ['xo', 'iI'], ['xo', '<Plug>(textobj-indent']]
 
 # l
 [[plugins]]
-repository = 'kana/vim-textobj-line'
-lazy       = 1
-depends    = 'kana/vim-textobj-user'
-on_map     = [['xo', 'al'], ['xo', 'il']]
+repo      = 'kana/vim-textobj-line'
+lazy      = 1
+depends   = 'vim-textobj-user'
+on_map    = [['xo', 'al'], ['xo', 'il']]
 
 # b
 [[plugins]]
-repository = 'rhysd/vim-textobj-anyblock'
-lazy       = 1
-depends    = 'kana/vim-textobj-user'
-on_map     = [['xo', 'ab'], ['xo', 'ib']]
+repo      = 'rhysd/vim-textobj-anyblock'
+lazy      = 1
+depends   = 'vim-textobj-user'
+on_map    = [['xo', 'ab'], ['xo', 'ib']]
 
 # v V
 [[plugins]]
-repository = 'rhysd/vim-textobj-word-column'
-lazy       = 1
-depends    = 'kana/vim-textobj-user'
-on_map     = [['xo', 'av'], ['xo', 'aV'], ['xo', 'iv'], ['xo', 'iV']]
+repo      = 'rhysd/vim-textobj-word-column'
+lazy      = 1
+depends   = 'vim-textobj-user'
+on_map    = [['xo', 'av'], ['xo', 'aV'], ['xo', 'iv'], ['xo', 'iV']]
 
 # a
 [[plugins]]
-repository = 'sgur/vim-textobj-parameter'
-lazy       = 1
-depends    = 'kana/vim-textobj-user'
-on_map     = [['xo', '<Plug>']]
+repo      = 'sgur/vim-textobj-parameter'
+lazy      = 1
+depends   = 'vim-textobj-user'
+on_map    = [['xo', '<Plug>']]
 
 # f{char}
 [[plugins]]
-repository = 'thinca/vim-textobj-between'
-lazy       = 1
-depends    = 'kana/vim-textobj-user'
-on_map     = [['xo', 'af'], ['xo', 'if']]
+repo      = 'thinca/vim-textobj-between'
+lazy      = 1
+depends   = 'vim-textobj-user'
+on_map    = [['xo', 'af'], ['xo', 'if']]
 
 # x
 [[plugins]]
-repository = 'whatyouhide/vim-textobj-xmlattr'
-lazy       = 1
-depends    = 'kana/vim-textobj-user'
-on_map     = [['xo', 'ax'], ['xo', 'ix']]
+repo      = 'whatyouhide/vim-textobj-xmlattr'
+lazy      = 1
+depends   = 'vim-textobj-user'
+on_map    = [['xo', 'ax'], ['xo', 'ix']]
 
 
 ############################################################
@@ -503,49 +503,49 @@ on_map     = [['xo', 'ax'], ['xo', 'ix']]
 ############################################################
 # http://qiita.com/rbtnn/items/a47ed6684f1f0bc52906
 [[plugins]]
-repository = 'kana/vim-operator-user'
-lazy       = 1
+repo      = 'kana/vim-operator-user'
+lazy      = 1
 
 # t
 [[plugins]]
-repository = 'YoshihiroIto/vim-operator-tcomment'
-lazy       = 1
-depends    = ['kana/vim-operator-user', 'tomtom/tcomment_vim']
-on_map     = [['nx', '<Plug>']]
+repo      = 'YoshihiroIto/vim-operator-tcomment'
+lazy      = 1
+depends   = ['vim-operator-user', 'tcomment_vim']
+on_map    = [['nx', '<Plug>']]
 
 # <Leader>r
 [[plugins]]
-repository = 'deris/vim-rengbang'
-lazy       = 1
-depends    = 'kana/vim-operator-user'
-on_map     = [['nx', '<Plug>(operator-rengbang']]
-on_cmd     = 'RengBang'
+repo      = 'deris/vim-rengbang'
+lazy      = 1
+depends   = 'vim-operator-user'
+on_map    = [['nx', '<Plug>(operator-rengbang']]
+on_cmd    = 'RengBang'
 
 # R
 [[plugins]]
-repository = 'kana/vim-operator-replace'
-lazy       = 1
-depends    = 'kana/vim-operator-user'
-on_map     = [['nx', '<Plug>']]
+repo      = 'kana/vim-operator-replace'
+lazy      = 1
+depends   = 'vim-operator-user'
+on_map    = [['nx', '<Plug>']]
 
 # S
 [[plugins]]
-repository = 'rhysd/vim-operator-surround'
-lazy       = 1
-depends    = 'kana/vim-operator-user'
-on_map     = [['nx', '<Plug>']]
+repo      = 'rhysd/vim-operator-surround'
+lazy      = 1
+depends   = 'vim-operator-user'
+on_map    = [['nx', '<Plug>']]
 
 # _
 [[plugins]]
-repository = 'tyru/operator-camelize.vim'
-lazy       = 1
-depends    = 'kana/vim-operator-user'
-on_map     = [['nx', '<Plug>']]
+repo      = 'tyru/operator-camelize.vim'
+lazy      = 1
+depends   = 'vim-operator-user'
+on_map    = [['nx', '<Plug>']]
 
 # <Leader>j
 [[plugins]]
-repository = 'osyo-manga/vim-operator-jump_side'
-lazy       = 1
-depends    = 'kana/vim-operator-user'
-on_map     = [['nx', '<Plug>(operator-jump']]
+repo      = 'osyo-manga/vim-operator-jump_side'
+lazy      = 1
+depends   = 'vim-operator-user'
+on_map    = [['nx', '<Plug>(operator-jump']]
 
