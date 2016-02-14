@@ -47,8 +47,7 @@ endfunction
 
 nnoremap <silent> <F1> :<C-u>call <SID>setup_myvimrc()<CR>:edit $MYVIMRC<CR>
 nnoremap <silent> <F2> :<C-u>call <SID>setup_myvimrc()<CR>:source $MYVIMRC<CR>
-nnoremap          <F3> :<C-u>NeoBundleUpdate<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
-nnoremap          <F4> :<C-u>NeoBundleInstall<CR>:NeoBundleClearCache<CR>:NeoBundleUpdatesLog<CR>
+nnoremap          <F3> :<C-u>call dein#update()<CR>
 
 " 遅延初期化
 augroup LazyInitialize
@@ -119,30 +118,20 @@ set guioptions-=e
 " }}}
 " プラグイン {{{
 if s:has_vim_starting
-  set runtimepath+=~/.vim/bundle/neobundle.vim/
-  let g:neobundle#install_max_processes   = 8
-  let g:neobundle#install_process_timeout = 10*60
+  set runtimepath+=~/.vim/bundle/dein.vim/
+  let g:dein#install_process_timeout = 10*60
 endif
 
-call neobundle#begin('~/.vim/bundle/')
+call dein#begin(expand('~/.vim/bundle/'))
 
-if neobundle#load_cache(
-      \ $MYVIMRC,
-      \ '~/.vim/plugins/plugins.toml')
-
-  NeoBundleFetch 'Shougo/neobundle.vim'
-
-  call neobundle#load_toml('~/.vim/plugins/plugins.toml')
-
-  NeoBundleSaveCache
+if dein#load_cache([$MYVIMRC, expand('~/.vim/plugins/plugins.toml')])
+  call dein#add('Shougo/dein.vim', {'rtp': ''})
+  call dein#load_toml(expand('~/.vim/plugins/plugins.toml'))
+  call dein#save_cache()
 endif
 " ライブラリ {{{
-" vim-shell
-let g:shell_mappings_enabled = 0
-
-" vim-submode
-if neobundle#tap('vim-submode')
-  function! neobundle#hooks.on_source(bundle)
+if dein#tap('vim-submode')
+  function! s:vim_submode_on_source() abort
     let g:submode_timeout          = 0
     let g:submode_keep_leaving_key = 1
 
@@ -233,355 +222,368 @@ if neobundle#tap('vim-submode')
       execute 'winpos' x y
     endfunction
   endfunction
+
+  Autocmd User dein#source#vim-submode call s:vim_submode_on_source()
 endif
 " }}}
 " 表示 {{{
-" foldCC.vim
-let g:foldCCtext_enable_autofdc_adjuster = 1
-let g:foldCCtext_tail                    =
-      \ 'printf("[ %4d lines  Lv%-2d]", v:foldend - v:foldstart + 1, v:foldlevel)'
+if dein#tap('foldCC.vim')
+  let g:foldCCtext_enable_autofdc_adjuster = 1
+  let g:foldCCtext_tail                    =
+        \ 'printf("[ %4d lines  Lv%-2d]", v:foldend - v:foldstart + 1, v:foldlevel)'
 
-set foldtext=FoldCCtext()
+  set foldtext=FoldCCtext()
+endif
 
-" syntastic
-Autocmd BufWritePost *.{go,rb,py} call s:update_lightline()
+if dein#tap('syntastic')
+  Autocmd BufWritePost *.{go,rb,py} call s:update_lightline()
+endif
 
-" lightline.vim
-let g:lightline#colorscheme#yoi#palette = {
-      \   'inactive': {
-      \     'left':     [['#585858', '#262626', 240, 235],
-      \                  ['#585858', '#121212', 240, 233]],
-      \     'right':    [['#262626', '#606060', 235, 241],
-      \                  ['#585858', '#262626', 240, 235],
-      \                  ['#585858', '#121212', 240, 233]]
-      \   },
-      \   'insert':   {
-      \     'branch':   [['#FFFFFF', '#0087AF', 231,  31]],
-      \     'left':     [['#005F5F', '#FFFFFF',  23, 231],
-      \                  ['#87DFFF', '#005F87', 117,  24]],
-      \     'middle':   [['#87DFFF', '#005F87', 117,  24]],
-      \     'right':    [['#005F5F', '#87DFFF',  23, 117],
-      \                  ['#87DFFF', '#0087AF', 117,  31],
-      \                  ['#87DFFF', '#005F87', 117,  24]]
-      \   },
-      \   'normal':   {
-      \     'branch':   [['#FFFFFF', '#585858', 231, 240]],
-      \     'error':    [['#BCBCBC', '#FF0000', 250, 196]],
-      \     'left':     [['#195E00', '#07AF00',  22,  34],
-      \                  ['#8A8A8A', '#303030', 245, 236]],
-      \     'middle':   [['#8A8A8A', '#303030', 245, 236]],
-      \     'right':    [['#606060', '#D0D0D0', 241, 252],
-      \                  ['#BCBCBC', '#585858', 250, 240],
-      \                  ['#9E9E9E', '#303030', 247, 236]],
-      \     'warning':  [['#262626', '#B58900', 235, 136]]
-      \   },
-      \   'replace':  {
-      \     'left':     [['#FFFFFF', '#DF0000', 231, 160],
-      \                  ['#FFFFFF', '#585858', 231, 240]],
-      \     'middle':   [['#8A8A8A', '#303030', 245, 236]],
-      \     'right':    [['#606060', '#D0D0D0', 241, 252],
-      \                  ['#BCBCBC', '#585858', 250, 240],
-      \                  ['#9E9E9E', '#303030', 247, 236]]
-      \   },
-      \   'tabline':  {
-      \     'left':     [['#BCBCBC', '#585858', 250, 240]],
-      \     'middle':   [['#303030', '#9E9E9E', 236, 247]],
-      \     'right':    [['#BCBCBC', '#4E4E4E', 250, 239]],
-      \     'tabsel':   [['#BCBCBC', '#262626', 250, 235]]
-      \   },
-      \   'visual':   {
-      \     'branch':   [['#FFFFFF', '#AF0053', 231, 125]],
-      \     'left':     [['#AB2362', '#FFFFFF', 125, 231],
-      \                  ['#FF84BA', '#870036', 211,  89]],
-      \     'middle':   [['#FF84BA', '#870036', 211,  89]],
-      \     'right':    [['#75003D', '#FF87BB',  89, 211],
-      \                  ['#FE86BB', '#AF0053', 211, 125],
-      \                  ['#FF84BA', '#870036', 211,  89]]
-      \   }
-      \ }
+if dein#tap('lightline.vim')
+  let g:lightline#colorscheme#yoi#palette = {
+        \   'inactive': {
+        \     'left':     [['#585858', '#262626', 240, 235],
+        \                  ['#585858', '#121212', 240, 233]],
+        \     'right':    [['#262626', '#606060', 235, 241],
+        \                  ['#585858', '#262626', 240, 235],
+        \                  ['#585858', '#121212', 240, 233]]
+        \   },
+        \   'insert':   {
+        \     'branch':   [['#FFFFFF', '#0087AF', 231,  31]],
+        \     'left':     [['#005F5F', '#FFFFFF',  23, 231],
+        \                  ['#87DFFF', '#005F87', 117,  24]],
+        \     'middle':   [['#87DFFF', '#005F87', 117,  24]],
+        \     'right':    [['#005F5F', '#87DFFF',  23, 117],
+        \                  ['#87DFFF', '#0087AF', 117,  31],
+        \                  ['#87DFFF', '#005F87', 117,  24]]
+        \   },
+        \   'normal':   {
+        \     'branch':   [['#FFFFFF', '#585858', 231, 240]],
+        \     'error':    [['#BCBCBC', '#FF0000', 250, 196]],
+        \     'left':     [['#195E00', '#07AF00',  22,  34],
+        \                  ['#8A8A8A', '#303030', 245, 236]],
+        \     'middle':   [['#8A8A8A', '#303030', 245, 236]],
+        \     'right':    [['#606060', '#D0D0D0', 241, 252],
+        \                  ['#BCBCBC', '#585858', 250, 240],
+        \                  ['#9E9E9E', '#303030', 247, 236]],
+        \     'warning':  [['#262626', '#B58900', 235, 136]]
+        \   },
+        \   'replace':  {
+        \     'left':     [['#FFFFFF', '#DF0000', 231, 160],
+        \                  ['#FFFFFF', '#585858', 231, 240]],
+        \     'middle':   [['#8A8A8A', '#303030', 245, 236]],
+        \     'right':    [['#606060', '#D0D0D0', 241, 252],
+        \                  ['#BCBCBC', '#585858', 250, 240],
+        \                  ['#9E9E9E', '#303030', 247, 236]]
+        \   },
+        \   'tabline':  {
+        \     'left':     [['#BCBCBC', '#585858', 250, 240]],
+        \     'middle':   [['#303030', '#9E9E9E', 236, 247]],
+        \     'right':    [['#BCBCBC', '#4E4E4E', 250, 239]],
+        \     'tabsel':   [['#BCBCBC', '#262626', 250, 235]]
+        \   },
+        \   'visual':   {
+        \     'branch':   [['#FFFFFF', '#AF0053', 231, 125]],
+        \     'left':     [['#AB2362', '#FFFFFF', 125, 231],
+        \                  ['#FF84BA', '#870036', 211,  89]],
+        \     'middle':   [['#FF84BA', '#870036', 211,  89]],
+        \     'right':    [['#75003D', '#FF87BB',  89, 211],
+        \                  ['#FE86BB', '#AF0053', 211, 125],
+        \                  ['#FF84BA', '#870036', 211,  89]]
+        \   }
+        \ }
 
-let g:lightline = {
-      \   'colorscheme': 'yoi',
-      \   'active': {
-      \     'left': [
-      \       ['mode',   'paste'],
-      \       ['branch', 'gitgutter', 'filename', 'anzu', 'submode']
-      \     ],
-      \     'right': [
-      \       ['syntastic', 'lineinfo'],
-      \       ['percent']
-      \     ]
-      \   },
-      \   'component': {'percent': '⭡%3p%%'},
-      \   'component_function': {
-      \     'fileformat':   s:sid . 'lightline_fileformat',
-      \     'filetype':     s:sid . 'lightline_filetype',
-      \     'fileencoding': s:sid . 'lightline_fileencoding',
-      \     'modified':     s:sid . 'lightline_modified',
-      \     'readonly':     s:sid . 'lightline_readonly',
-      \     'filename':     s:sid . 'lightline_filename',
-      \     'mode':         s:sid . 'lightline_mode',
-      \     'lineinfo':     s:sid . 'lightline_lineinfo',
-      \     'anzu':         'anzu#search_status',
-      \     'submode':      'submode#current'
-      \   },
-      \   'component_expand': {
-      \     'syntastic':    'SyntasticStatuslineFlag',
-      \     'branch':       s:sid . 'lightline_current_branch',
-      \     'gitgutter':    s:sid . 'lightline_git_summary'
-      \   },
-      \   'component_type': {
-      \     'syntastic':    'error',
-      \     'branch':       'branch',
-      \     'gitgutter':    'branch'
-      \   },
-      \   'separator': {   'left': '⮀', 'right': '⮂'},
-      \   'subseparator': {'left': '⮁', 'right': '⮃'},
-      \   'tabline': {
-      \     'left':  [['tabs']],
-      \     'right': [['filetype', 'fileformat', 'fileencoding']]
-      \   },
-      \   'tabline_separator': {   'left': '⮀', 'right': '⮂'},
-      \   'tabline_subseparator': {'left': '⮁', 'right': '⮃'},
-      \   'mode_map': {
-      \     'n':      'N',
-      \     'i':      'I',
-      \     'R':      'R',
-      \     'v':      'V',
-      \     'V':      'VL',
-      \     'c':      'C',
-      \     "\<C-v>": 'VB',
-      \     's':      'S',
-      \     'S':      'SL',
-      \     "\<C-s>": 'SB',
-      \     '?':      ' '
-      \   }
-      \ }
+  let g:lightline = {
+        \   'colorscheme': 'yoi',
+        \   'active': {
+        \     'left': [
+        \       ['mode',   'paste'],
+        \       ['branch', 'gitgutter', 'filename', 'anzu', 'submode']
+        \     ],
+        \     'right': [
+        \       ['syntastic', 'lineinfo'],
+        \       ['percent']
+        \     ]
+        \   },
+        \   'component': {'percent': '⭡%3p%%'},
+        \   'component_function': {
+        \     'fileformat':   s:sid . 'lightline_fileformat',
+        \     'filetype':     s:sid . 'lightline_filetype',
+        \     'fileencoding': s:sid . 'lightline_fileencoding',
+        \     'modified':     s:sid . 'lightline_modified',
+        \     'readonly':     s:sid . 'lightline_readonly',
+        \     'filename':     s:sid . 'lightline_filename',
+        \     'mode':         s:sid . 'lightline_mode',
+        \     'lineinfo':     s:sid . 'lightline_lineinfo',
+        \     'anzu':         'anzu#search_status',
+        \     'submode':      'submode#current'
+        \   },
+        \   'component_expand': {
+        \     'syntastic':    'SyntasticStatuslineFlag',
+        \     'branch':       s:sid . 'lightline_current_branch',
+        \     'gitgutter':    s:sid . 'lightline_git_summary'
+        \   },
+        \   'component_type': {
+        \     'syntastic':    'error',
+        \     'branch':       'branch',
+        \     'gitgutter':    'branch'
+        \   },
+        \   'separator': {   'left': '⮀', 'right': '⮂'},
+        \   'subseparator': {'left': '⮁', 'right': '⮃'},
+        \   'tabline': {
+        \     'left':  [['tabs']],
+        \     'right': [['filetype', 'fileformat', 'fileencoding']]
+        \   },
+        \   'tabline_separator': {   'left': '⮀', 'right': '⮂'},
+        \   'tabline_subseparator': {'left': '⮁', 'right': '⮃'},
+        \   'mode_map': {
+        \     'n':      'N',
+        \     'i':      'I',
+        \     'R':      'R',
+        \     'v':      'V',
+        \     'V':      'VL',
+        \     'c':      'C',
+        \     "\<C-v>": 'VB',
+        \     's':      'S',
+        \     'S':      'SL',
+        \     "\<C-s>": 'SB',
+        \     '?':      ' '
+        \   }
+        \ }
 
-function! s:lightline_mode()
-  return  &filetype ==# 'unite'    ? 'Unite'    :
-        \ &filetype ==# 'vimfiler' ? 'VimFiler' :
-        \ &filetype ==# 'vimshell' ? 'VimShell' :
-        \ &filetype ==# 'quickrun' ? 'Quickrun' :
-        \ &filetype ==# 'agit'     ? 'Agit'     :
-        \ winwidth(0) > 50 ? lightline#mode() : ''
-endfunction
+  function! s:lightline_mode()
+    return  &filetype ==# 'unite'    ? 'Unite'    :
+          \ &filetype ==# 'vimfiler' ? 'VimFiler' :
+          \ &filetype ==# 'vimshell' ? 'VimShell' :
+          \ &filetype ==# 'quickrun' ? 'Quickrun' :
+          \ &filetype ==# 'agit'     ? 'Agit'     :
+          \ winwidth(0) > 50 ? lightline#mode() : ''
+  endfunction
 
-function! s:lightline_modified()
-  if s:is_lightline_no_disp_group()
-    return ''
-  endif
+  function! s:lightline_modified()
+    if s:is_lightline_no_disp_group()
+      return ''
+    endif
 
-  return &modified ? '+' : &modifiable ? '' : '-'
-endfunction
+    return &modified ? '+' : &modifiable ? '' : '-'
+  endfunction
 
-function! s:lightline_readonly()
-  if s:is_lightline_no_disp_filetype()
-    return ''
-  endif
+  function! s:lightline_readonly()
+    if s:is_lightline_no_disp_filetype()
+      return ''
+    endif
 
-  return &readonly ? '⭤' : ''
-endfunction
+    return &readonly ? '⭤' : ''
+  endfunction
 
-function! s:lightline_filename()
-  try
-    return (empty(s:lightline_readonly()) ? '' : s:lightline_readonly() . ' ') .
-          \ (&filetype ==# 'unite'          ? unite#get_status_string()    :
-          \  &filetype ==# 'vimfiler'       ? vimfiler#get_status_string() :
-          \  &filetype ==# 'vimshell'       ? vimshell#get_status_string() :
-          \  &filetype ==# 'quickrun'       ? ''                           :
-          \  empty(expand('%:t')) ? '[No Name]' : expand('%:t')) .
-          \ (empty(s:lightline_modified()) ? '' : ' ' . s:lightline_modified())
-  catch
-    return ''
-  endtry
-endfunction
-
-function! s:lightline_current_branch()
-  if s:is_lightline_no_disp_filetype()
-    return ''
-  endif
-
-  if !s:is_in_git_branch()
-    return ''
-  endif
-
-  if &filetype !=# 'vimfiler'
+  function! s:lightline_filename()
     try
-      let branch = fugitive#head()
-      return empty(branch) ? '' : '⭠ ' . branch
+      return (empty(s:lightline_readonly()) ? '' : s:lightline_readonly() . ' ') .
+            \ (&filetype ==# 'unite'          ? unite#get_status_string()    :
+            \  &filetype ==# 'vimfiler'       ? vimfiler#get_status_string() :
+            \  &filetype ==# 'vimshell'       ? vimshell#get_status_string() :
+            \  &filetype ==# 'quickrun'       ? ''                           :
+            \  empty(expand('%:t')) ? '[No Name]' : expand('%:t')) .
+            \ (empty(s:lightline_modified()) ? '' : ' ' . s:lightline_modified())
     catch
       return ''
     endtry
-  endif
+  endfunction
 
-  return ''
-endfunction
+  function! s:lightline_current_branch()
+    if s:is_lightline_no_disp_filetype()
+      return ''
+    endif
 
-function! s:lightline_fileformat()
-  if s:is_lightline_no_disp_group()
+    if !s:is_in_git_branch()
+      return ''
+    endif
+
+    if &filetype !=# 'vimfiler'
+      try
+        let branch = fugitive#head()
+        return empty(branch) ? '' : '⭠ ' . branch
+      catch
+        return ''
+      endtry
+    endif
+
     return ''
-  endif
+  endfunction
 
-  return &fileformat
-endfunction
+  function! s:lightline_fileformat()
+    if s:is_lightline_no_disp_group()
+      return ''
+    endif
 
-function! s:lightline_filetype()
-  if s:is_lightline_no_disp_group()
-    return ''
-  endif
+    return &fileformat
+  endfunction
 
-  return empty(&filetype) ? 'no filetype' : &filetype
-endfunction
+  function! s:lightline_filetype()
+    if s:is_lightline_no_disp_group()
+      return ''
+    endif
 
-function! s:lightline_fileencoding()
-  if s:is_lightline_no_disp_group()
-    return ''
-  endif
+    return empty(&filetype) ? 'no filetype' : &filetype
+  endfunction
 
-  return empty(&fileencoding) ? &encoding : &fileencoding
-endfunction
+  function! s:lightline_fileencoding()
+    if s:is_lightline_no_disp_group()
+      return ''
+    endif
 
-function! s:lightline_git_summary()
-  if s:is_lightline_no_disp_group()
-    return ''
-  endif
+    return empty(&fileencoding) ? &encoding : &fileencoding
+  endfunction
 
-  if !s:is_in_git_branch()
-    return ''
-  endif
+  function! s:lightline_git_summary()
+    if s:is_lightline_no_disp_group()
+      return ''
+    endif
 
-  try
-    let summary = gitgutter#hunk#summary()
-    return printf('%s%d %s%d %s%d',
-          \ g:gitgutter_sign_added,    summary[0],
-          \ g:gitgutter_sign_modified, summary[1],
-          \ g:gitgutter_sign_removed,  summary[2])
-  catch
-    return ''
-  endtry
-endfunction
+    if !s:is_in_git_branch()
+      return ''
+    endif
 
-function! s:lightline_lineinfo()
-  if winwidth(0) <= 50
-    return ''
-  endif
+    try
+      let summary = gitgutter#hunk#summary()
+      return printf('%s%d %s%d %s%d',
+            \ g:gitgutter_sign_added,    summary[0],
+            \ g:gitgutter_sign_modified, summary[1],
+            \ g:gitgutter_sign_removed,  summary[2])
+    catch
+      return ''
+    endtry
+  endfunction
 
-  return printf('%4d/%d : %-3d', line('.'), line('$'), col('.'))
-endfunction
+  function! s:lightline_lineinfo()
+    if winwidth(0) <= 50
+      return ''
+    endif
 
-function! s:is_lightline_no_disp_filetype()
-  return &filetype =~# 'vimfiler\|unite\|vimshell\|quickrun\|agit'
-endfunction
+    return printf('%4d/%d : %-3d', line('.'), line('$'), col('.'))
+  endfunction
 
-function! s:is_lightline_no_disp_group()
-  if winwidth(0) <= 50
-    return 1
-  endif
+  function! s:is_lightline_no_disp_filetype()
+    return &filetype =~# 'vimfiler\|unite\|vimshell\|quickrun\|agit'
+  endfunction
 
-  if s:is_lightline_no_disp_filetype()
-    return 1
-  endif
+  function! s:is_lightline_no_disp_group()
+    if winwidth(0) <= 50
+      return 1
+    endif
 
-  return 0
-endfunction
+    if s:is_lightline_no_disp_filetype()
+      return 1
+    endif
 
-Autocmd CursorHold,CursorHoldI * call s:update_lightline()
-function! s:update_lightline()
-  try
-    call lightline#update()
-  catch
-  endtry
-endfunction
+    return 0
+  endfunction
+
+  Autocmd CursorHold,CursorHoldI * call s:update_lightline()
+  function! s:update_lightline()
+    try
+      call lightline#update()
+    catch
+    endtry
+  endfunction
+endif
 " }}}
 " 編集 {{{
-" vim-endwise
-" http://cohama.hateblo.jp/entry/20121017/1350482411
-let g:endwise_no_mappings = 1
-AutocmdFT lua,ruby,vim imap <buffer> <CR> <CR><Plug>DiscretionaryEnd
+if dein#tap('lightline.vim')
+  " http://cohama.hateblo.jp/entry/20121017/1350482411
+  let g:endwise_no_mappings = 1
+  AutocmdFT lua,ruby,vim imap <buffer> <CR> <CR><Plug>DiscretionaryEnd
+endif
 
-" vim-closetag
-let g:closetag_filenames = '*.{html,xhtml,xml,xaml}'
+if dein#tap('vim-closetag')
+  let g:closetag_filenames = '*.{html,xhtml,xml,xaml}'
+endif
 
-" vim-easy-align
-nmap <silent> <Leader>a=       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)=
-nmap <silent> <Leader>a:       v<Plug>(textobj-indent-i)<Plug>(EasyAlign):
-nmap <silent> <Leader>a,       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*,
-nmap <silent> <Leader>a<Space> v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*<Space>
-nmap <silent> <Leader>a\|      v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*\|
-xmap <silent> <Leader>a=       <Plug>(EasyAlign)=
-xmap <silent> <Leader>a:       <Plug>(EasyAlign):
-xmap <silent> <Leader>a,       <Plug>(EasyAlign)*,
-xmap <silent> <Leader>a<Space> <Plug>(EasyAlign)*<Space>
-xmap <silent> <Leader>a\|      <Plug>(EasyAlign)*\|
+if dein#tap('vim-easy-align')
+  nmap <silent> <Leader>a=       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)=
+  nmap <silent> <Leader>a:       v<Plug>(textobj-indent-i)<Plug>(EasyAlign):
+  nmap <silent> <Leader>a,       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*,
+  nmap <silent> <Leader>a<Space> v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*<Space>
+  nmap <silent> <Leader>a\|      v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*\|
+  xmap <silent> <Leader>a=       <Plug>(EasyAlign)=
+  xmap <silent> <Leader>a:       <Plug>(EasyAlign):
+  xmap <silent> <Leader>a,       <Plug>(EasyAlign)*,
+  xmap <silent> <Leader>a<Space> <Plug>(EasyAlign)*<Space>
+  xmap <silent> <Leader>a\|      <Plug>(EasyAlign)*\|
+endif
 
-" yankround.vim
-let g:yankround_use_region_hl = 1
+if dein#tap('yankround.vim')
+  let g:yankround_use_region_hl = 1
 
-function! s:yankround_pre(count1)
-  return (col('.') >= col('$') ? '$' : '') . ":\<C-u>set virtualedit=block\<CR>" . a:count1
-endfunction
-nmap <silent><expr> p     <SID>yankround_pre(v:count1) . '<Plug>(yankround-p)'
-xmap <silent><expr> p     <SID>yankround_pre(v:count1) . '<Plug>(yankround-p)'
-nmap <silent><expr> P     <SID>yankround_pre(v:count1) . '<Plug>(yankround-P)'
-nmap <silent><expr> gp    <SID>yankround_pre(v:count1) . '<Plug>(yankround-gp)'
-xmap <silent><expr> gp    <SID>yankround_pre(v:count1) . '<Plug>(yankround-gp)'
-nmap <silent><expr> gP    <SID>yankround_pre(v:count1) . '<Plug>(yankround-gP)'
-nmap <silent>       <C-p> <Plug>(yankround-prev)
-nmap <silent>       <C-n> <Plug>(yankround-next)
+  function! s:yankround_pre(count1)
+    return (col('.') >= col('$') ? '$' : '') . ":\<C-u>set virtualedit=block\<CR>" . a:count1
+  endfunction
+  nmap <silent><expr> p     <SID>yankround_pre(v:count1) . '<Plug>(yankround-p)'
+  xmap <silent><expr> p     <SID>yankround_pre(v:count1) . '<Plug>(yankround-p)'
+  nmap <silent><expr> P     <SID>yankround_pre(v:count1) . '<Plug>(yankround-P)'
+  nmap <silent><expr> gp    <SID>yankround_pre(v:count1) . '<Plug>(yankround-gp)'
+  xmap <silent><expr> gp    <SID>yankround_pre(v:count1) . '<Plug>(yankround-gp)'
+  nmap <silent><expr> gP    <SID>yankround_pre(v:count1) . '<Plug>(yankround-gP)'
+  nmap <silent>       <C-p> <Plug>(yankround-prev)
+  nmap <silent>       <C-n> <Plug>(yankround-next)
+endif
 
-" vim-smartinput
-if neobundle#tap('vim-smartinput')
-  function! neobundle#hooks.on_source(bundle)
+if dein#tap('vim-smartinput')
+  function! s:vim_smartinput_on_source() abort
+
     call smartinput#clear_rules()
     call smartinput#define_default_rules()
   endfunction
+
+  Autocmd User dein#source#vim-smartinput call s:vim_smartinput_on_source()
 endif
 
-" increment-activator
-let g:increment_activator_filetype_candidates = {
-      \   '_':   [['width', 'height']],
-      \   'cs':  [['private', 'protected', 'public', 'internal'],
-      \           ['abstract', 'virtual', 'override']],
-      \   'cpp': [['private', 'protected', 'public']]
-      \ }
+if dein#tap('increment-activator')
+  let g:increment_activator_filetype_candidates = {
+        \   '_':   [['width', 'height']],
+        \   'cs':  [['private', 'protected', 'public', 'internal'],
+        \           ['abstract', 'virtual', 'override']],
+        \   'cpp': [['private', 'protected', 'public']]
+        \ }
+endif
 
-" vim-over
-let g:over_command_line_key_mappings = {"\<C-j>": "\<Esc>"}
+if dein#tap('vim-over')
+  let g:over_command_line_key_mappings = {"\<C-j>": "\<Esc>"}
 
-nnoremap <silent> <Leader>s  :OverCommandLine<CR>%s/
-vnoremap <silent> <Leader>s  :OverCommandLine<CR>s/
-nnoremap <silent> <Leader>rs :<C-u>OverCommandLine<CR>%s///g<Left><Left>
-vnoremap <silent> <Leader>rs :OverCommandLine<CR>s///g<Left><Left>
-
-augroup InitializeOver
-  autocmd!
-  autocmd VimEnter,FocusLost,CursorHold,CursorHoldI * call s:initialize_over()
-augroup END
-
-let s:initialize_over_delay = 2*1
-function! s:initialize_over()
-  let s:initialize_over_delay -= 1
-  if s:initialize_over_delay > 0
-    return
-  endif
-
-  call over#load()
+  nnoremap <silent> <Leader>s  :OverCommandLine<CR>%s/
+  vnoremap <silent> <Leader>s  :OverCommandLine<CR>s/
+  nnoremap <silent> <Leader>rs :<C-u>OverCommandLine<CR>%s///g<Left><Left>
+  vnoremap <silent> <Leader>rs :OverCommandLine<CR>s///g<Left><Left>
 
   augroup InitializeOver
     autocmd!
+    autocmd VimEnter,FocusLost,CursorHold,CursorHoldI * call s:initialize_over()
   augroup END
-endfunction
 
-" previm
-if s:is_windows
-  let g:previm_open_cmd = 'C:\\Program\ Files\ (x86)\\Google\\Chrome\\Application\\chrome.exe'
+  let s:initialize_over_delay = 2*1
+  function! s:initialize_over()
+    let s:initialize_over_delay -= 1
+    if s:initialize_over_delay > 0
+      return
+    endif
+
+    call over#load()
+
+    augroup InitializeOver
+      autocmd!
+    augroup END
+  endfunction
+endif
+
+if dein#tap('previm')
+  if s:is_windows
+    let g:previm_open_cmd = 'C:\\Program\ Files\ (x86)\\Google\\Chrome\\Application\\chrome.exe'
+  endif
 endif
 " }}}
 " 補完 {{{
-" neocomplete.vim
-if neobundle#tap('neocomplete.vim')
-  function! neobundle#hooks.on_source(bundle)
+if dein#tap('neocomplete.vim')
+  function! s:neocomplete_vim_on_source() abort
     let g:neocomplete#enable_at_startup       = 1
     let g:neocomplete#enable_ignore_case      = 1
     let g:neocomplete#enable_smart_case       = 1
@@ -648,6 +650,8 @@ if neobundle#tap('neocomplete.vim')
     call neocomplete#custom#source('file', 'rank', 10)
   endfunction
 
+  Autocmd User dein#source#neocomplete.vim call s:neocomplete_vim_on_source()
+
   augroup InitializeNeocomplete
     autocmd!
     autocmd VimEnter,FocusLost,CursorHold,CursorHoldI * call s:initialize_neocomplete()
@@ -668,14 +672,13 @@ if neobundle#tap('neocomplete.vim')
   endfunction
 endif
 
-" neosnippet.vim
-if neobundle#tap('neosnippet.vim')
+if dein#tap('neosnippet.vim')
   imap <expr> <Tab> neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)'
         \                                               : '<Tab>'
   smap <expr> <Tab> neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)'
         \                                               : '<Tab>'
 
-  function! neobundle#hooks.on_source(bundle)
+  function! s:neosnippet_vim_on_source() abort
     let g:neosnippet#disable_runtime_snippets = {'_': 1}
     let g:neosnippet#snippets_directory       = '~/.vim/snippets'
 
@@ -686,15 +689,16 @@ if neobundle#tap('neosnippet.vim')
 
     call neocomplete#custom#source('neosnippet', 'rank', 1000)
   endfunction
+
+  Autocmd User dein#source#neosnippet.vim call s:neosnippet_vim_on_source()
 endif
 " }}}
 " ファイル {{{
-" vim-altr
-if neobundle#tap('vim-altr')
+if dein#tap('vim-altr')
   nmap ga <Plug>(altr-forward)
   nmap gA <Plug>(altr-back)
 
-  function! neobundle#hooks.on_source(bundle)
+  function! s:vim_altr_on_source() abort
     function! s:altr_define(...)
       for parent in ['', '/*', '/*/*', '/*/*/*']
         call altr#define(map(copy(a:000), 'printf(v:val, "' . parent . '")'))
@@ -732,58 +736,63 @@ if neobundle#tap('vim-altr')
     AutocmdFT cpp call s:altr_define(   'src%s/%%.cpp',
           \                             'include%s/%%.h')
   endfunction
+
+  Autocmd User dein#source#vim-altr call s:vim_altr_on_source_on_source()
 endif
 
-" auto_mirroring.vim
-let g:auto_mirroring_dir =  expand('~/mirror')
+if dein#tap('vim-auto-mirroring')
+  let g:auto_mirroring_dir =  expand('~/mirror')
+endif
 " }}}
 " 検索 {{{
-" matchit.zip
-if neobundle#tap('matchit.zip')
-  function! neobundle#hooks.on_post_source(bundle)
+if dein#tap('matchit.zip')
+  function! s:matchit_zip_on_source() abort
     silent! execute 'doautocmd Filetype' &filetype
   endfunction
+
+  Autocmd User dein#source#matchit.zip call s:matchit_zip_on_source()
 endif
 
-" incsearch.vim
-if neobundle#tap('incsearch.vim')
-  function! neobundle#hooks.on_source(bundle)
+if dein#tap('incsearch.vim')
+  function! s:incsearch_vim_on_source() abort
     let g:incsearch#auto_nohlsearch   = 1
     let g:incsearch#emacs_like_keymap = 1
     let g:incsearch#magic             = '\v'
   endfunction
+
+  Autocmd User dein#source#incsearch.vim call s:incsearch_vim_on_source()
 endif
 
-" vim-anzu
-" 一定時間キー入力がないとき、ウインドウを移動したとき、タブを移動したときに
-" 検索ヒット数の表示を消去する
-Autocmd CursorHold,CursorHoldI * call s:update_display_anzu()
-Autocmd WinLeave,TabLeave      * call s:clear_display_anzu()
+if dein#tap('vim-anzu')
+  " 一定時間キー入力がないとき、ウインドウを移動したとき、タブを移動したときに
+  " 検索ヒット数の表示を消去する
+  Autocmd CursorHold,CursorHoldI * call s:update_display_anzu()
+  Autocmd WinLeave,TabLeave      * call s:clear_display_anzu()
 
-let s:anzu_display_count = 0
-function! s:begin_display_anzu()
-  let s:anzu_display_count = 2000 / &updatetime
-  call s:refresh_screen()
-endfunction
+  let s:anzu_display_count = 0
+  function! s:begin_display_anzu()
+    let s:anzu_display_count = 2000 / &updatetime
+    call s:refresh_screen()
+  endfunction
 
-function! s:update_display_anzu()
-  if s:anzu_display_count >= 0
-    let s:anzu_display_count -= 1
-    call s:continue_cursor_hold()
-  else
-    call s:clear_display_anzu()
-  endif
-endfunction
+  function! s:update_display_anzu()
+    if s:anzu_display_count >= 0
+      let s:anzu_display_count -= 1
+      call s:continue_cursor_hold()
+    else
+      call s:clear_display_anzu()
+    endif
+  endfunction
 
-function! s:clear_display_anzu()
-  try
-    call anzu#clear_search_status()
-  catch
-  endtry
-endfunction
+  function! s:clear_display_anzu()
+    try
+      call anzu#clear_search_status()
+    catch
+    endtry
+  endfunction
+endif
 
-" clever-f.vim
-if neobundle#tap('clever-f.vim')
+if dein#tap('clever-f.vim')
   nmap f <Plug>(clever-f-f)
   xmap f <Plug>(clever-f-f)
   omap f <Plug>(clever-f-f)
@@ -791,7 +800,7 @@ if neobundle#tap('clever-f.vim')
   xmap F <Plug>(clever-f-F)
   omap F <Plug>(clever-f-F)
 
-  function! neobundle#hooks.on_source(bundle)
+  function! s:clever_f_vim_on_source() abort
     let g:clever_f_not_overwrites_standard_mappings = 1
     let g:clever_f_ignore_case                      = 1
     let g:clever_f_smart_case                       = 1
@@ -803,45 +812,46 @@ if neobundle#tap('clever-f.vim')
     highlight default Clever_f_mark_char ctermfg=Green ctermbg=NONE cterm=underline
           \                              guifg=Green   guibg=NONE   gui=underline
   endfunction
+
+  Autocmd User dein#source#clever-f.vim call s:clever_f_vim_on_source()
 endif
 
-if neobundle#tap('vim-easymotion')
+if dein#tap('vim-easymotion')
   nmap r <Plug>(easymotion-overwin-f2)
   vmap r <Plug>(easymotion-bd-f2)
 
-  function! neobundle#hooks.on_source(bundle)
-    let g:EasyMotioN_do_mapping  = 0
-    let g:EasyMotion_smartcase   = 1
-    let g:EasyMotion_keys        = 'ghfjtyrubvmdkeiwoqp47382'
-    let g:EasyMotion_startofline = 1
-  endfunction
-
-  call neobundle#untap()
+  let g:EasyMotioN_do_mapping  = 0
+  let g:EasyMotion_smartcase   = 1
+  let g:EasyMotion_keys        = 'ghfjtyrubvmdkeiwoqp47382'
+  let g:EasyMotion_startofline = 1
 endif
+
 " }}}
 " ファイルタイプ {{{
-" vim-markdown
-let g:markdown_fenced_languages = [
-      \   'c',    'cpp', 'cs', 'go',
-      \   'ruby', 'lua', 'python',
-      \   'vim',
-      \   'toml',
-      \   'xml',  'json'
-      \ ]
+if dein#tap('vim-markdown')
+  let g:markdown_fenced_languages = [
+        \   'c',    'cpp', 'cs', 'go',
+        \   'ruby', 'lua', 'python',
+        \   'vim',
+        \   'toml',
+        \   'xml',  'json'
+        \ ]
+endif
 
-" vim-autoft
-let g:autoft_config = [
-      \   {'filetype': 'cs',
-      \    'pattern': '^\s*using'},
-      \   {'filetype': 'cpp',
-      \    'pattern': '^\s*#\s*\%(include\|define\)\>'},
-      \   {'filetype': 'go',
-      \    'pattern': '^import ('},
-      \   {'filetype': 'html',
-      \    'pattern': '<\%(!DOCTYPE\|html\|head\|script\|meta\|link|div\|span\)\>\|^html:5\s*$'},
-      \   {'filetype': 'xml',
-      \    'pattern': '<[0-9a-zA-Z]\+'},
-      \ ]
+if dein#tap('vim-autoft')
+  let g:autoft_config = [
+        \   {'filetype': 'cs',
+        \    'pattern': '^\s*using'},
+        \   {'filetype': 'cpp',
+        \    'pattern': '^\s*#\s*\%(include\|define\)\>'},
+        \   {'filetype': 'go',
+        \    'pattern': '^import ('},
+        \   {'filetype': 'html',
+        \    'pattern': '<\%(!DOCTYPE\|html\|head\|script\|meta\|link|div\|span\)\>\|^html:5\s*$'},
+        \   {'filetype': 'xml',
+        \    'pattern': '<[0-9a-zA-Z]\+'},
+        \ ]
+endif
 " }}}
 " テキストオブジェクト {{{
 xmap aa <Plug>(textobj-parameter-a)
@@ -868,31 +878,33 @@ map  S  <Plug>(operator-surround-append)
 nmap Sd <Plug>(operator-surround-delete)ab
 nmap Sr <Plug>(operator-surround-replace)ab
 
-" vim-operator-surround
-let g:operator#surround#blocks = {
-      \   '-': [
-      \     {
-      \       'block':      ["{\<CR>", "\<CR>}"],
-      \       'motionwise': ['line'            ],
-      \       'keys':       ['{', '}'          ]
-      \     }
-      \   ]
-      \ }
+if dein#tap('vim-operator-surround')
+  let g:operator#surround#blocks = {
+        \   '-': [
+        \     {
+        \       'block':      ["{\<CR>", "\<CR>}"],
+        \       'motionwise': ['line'            ],
+        \       'keys':       ['{', '}'          ]
+        \     }
+        \   ]
+        \ }
+endif
 " }}}
 " アプリ {{{
-" vimshell.vim
-noremap <silent> [App]s :<C-u>VimShellPop<CR>
+if dein#tap('vimshell.vim')
+  noremap <silent> [App]s :<C-u>VimShellPop<CR>
 
-let g:vimshell_popup_height   = 40
-let g:vimshell_prompt_pattern = '^\%(\f\|\\.\)\+> '
-let g:vimshell_prompt_expr    =
-      \ 'escape(substitute(fnamemodify(getcwd(), ":~").">", "\\", "/", "g"), "\\[]()?! ")." "'
+  let g:shell_mappings_enabled = 0
+  let g:vimshell_popup_height   = 40
+  let g:vimshell_prompt_pattern = '^\%(\f\|\\.\)\+> '
+  let g:vimshell_prompt_expr    =
+        \ 'escape(substitute(fnamemodify(getcwd(), ":~").">", "\\", "/", "g"), "\\[]()?! ")." "'
+endif
 
-" vimfiler.vim
-if neobundle#tap('vimfiler.vim')
+if dein#tap('vimfiler.vim')
   noremap <silent> [App]f :<C-u>VimFilerBufferDir<CR>
 
-  function! neobundle#hooks.on_source(bundle)
+  function! s:vimfiler_vim_on_source() abort
     AutocmdFT vimfiler nmap     <buffer><expr>   <CR>
           \                         vimfiler#smart_cursor_map('<Plug>(vimfiler_cd_file)',
           \                                                   '<Plug>(vimfiler_edit_file)')
@@ -912,69 +924,76 @@ if neobundle#tap('vimfiler.vim')
     let g:unite_kind_file_use_trashbox        = 1
   endfunction
 
-  function! neobundle#hooks.on_post_source(bundle)
+  function! s:vimfiler_vim_on_post_source() abort
     call vimfiler#custom#profile('default', 'context', {'auto_cd': 1})
   endfunction
+
+  Autocmd User dein#source#vimfiler.vim      call s:vimfiler_vim_on_source()
+  Autocmd User dein#post_source#vimfiler.vim call s:vimfiler_vim_on_post_source()
 endif
 
-" memolist.vim
-noremap <silent> [App]mn :<C-u>MemoNew<CR>
-noremap <silent> [App]ml :<C-u>MemoList<CR>
-noremap <silent> [App]mg :<C-u>MemoGrep<CR>
+if dein#tap('memolist.vim')
+  noremap <silent> [App]mn :<C-u>MemoNew<CR>
+  noremap <silent> [App]ml :<C-u>MemoList<CR>
+  noremap <silent> [App]mg :<C-u>MemoGrep<CR>
 
-let g:memolist_unite        = 1
-let g:memolist_memo_suffix  = 'md'
-let g:memolist_unite_source = 'memolist'
-let g:memolist_path         = '~/Dropbox/memo'
+  let g:memolist_unite        = 1
+  let g:memolist_memo_suffix  = 'md'
+  let g:memolist_unite_source = 'memolist'
+  let g:memolist_path         = '~/Dropbox/memo'
+endif
 
-" wandbox-vim
-if neobundle#tap('wandbox-vim')
-  function! neobundle#hooks.on_source(bundle)
+if dein#tap('wandbox-vim')
+  function! s:wandbox_vim_on_source() abort
     " wandbox.vim で quickfix を開かないようにする
     let g:wandbox#open_quickfix_window = 0
     let g:wandbox#default_compiler     = {'cpp': 'clang-head'}
   endfunction
+
+  Autocmd User dein#source#wandbox-vim call s:wandbox_vim_on_source()
 endif
 
-" vim-quickrun
-noremap <silent> [App]r :<C-u>QuickRun<CR>
+if dein#tap('vim-quickrun')
+  noremap <silent> [App]r :<C-u>QuickRun<CR>
 
-let g:quickrun_config = {
-      \   '_': {
-      \     'hook/close_unite_quickfix/enable_hook_loaded': 1,
-      \     'hook/unite_quickfix/enable_failure':           1,
-      \     'hook/close_quickfix/enable_exit':              1,
-      \     'hook/close_buffer/enable_failure':             1,
-      \     'hook/close_buffer/enable_empty_data':          1,
-      \     'outputter':                                    'multi:buffer:quickfix',
-      \     'runner':                                       'vimproc',
-      \     'runner/vimproc/updatetime':                    40
-      \   },
-      \   'cpp/wandbox': {
-      \     'runner':                                       'wandbox',
-      \     'runner/wandbox/compiler':                      'clang-head',
-      \     'runner/wandbox/options':                       'warning,c++1y,boost-1.55'
-      \   },
-      \   'lua': {
-      \     'type':                                         'lua/vim'
-      \   }
-      \ }
+  let g:quickrun_config = {
+        \   '_': {
+        \     'hook/close_unite_quickfix/enable_hook_loaded': 1,
+        \     'hook/unite_quickfix/enable_failure':           1,
+        \     'hook/close_quickfix/enable_exit':              1,
+        \     'hook/close_buffer/enable_failure':             1,
+        \     'hook/close_buffer/enable_empty_data':          1,
+        \     'outputter':                                    'multi:buffer:quickfix',
+        \     'runner':                                       'vimproc',
+        \     'runner/vimproc/updatetime':                    40
+        \   },
+        \   'cpp/wandbox': {
+        \     'runner':                                       'wandbox',
+        \     'runner/wandbox/compiler':                      'clang-head',
+        \     'runner/wandbox/options':                       'warning,c++1y,boost-1.55'
+        \   },
+        \   'lua': {
+        \     'type':                                         'lua/vim'
+        \   }
+        \ }
+endif
 
-" vim-icondrag
 if s:is_windows
-  if neobundle#tap('vim-icondrag')
-    function! neobundle#hooks.on_source(bundle)
+  if dein#tap('vim-icondrag')
+    function! s:vim_icondrag_on_source() abort
       call icondrag#enable()
     endfunction
+
+    Autocmd User dein#source#vim-icondrag call s:vim_icondrag_on_source()
   endif
 endif
 
-" open-browser.vim
-let g:openbrowser_no_default_menus = 1
+if dein#tap('open-browser.vim')
+  let g:openbrowser_no_default_menus = 1
+endif
 " }}}
 " Unite {{{
-" unite.vim
-if neobundle#tap('unite.vim')
+if dein#tap('unite.vim')
   nnoremap [Unite] <Nop>
   xnoremap [Unite] <Nop>
   nmap     <Space> [Unite]
@@ -1012,7 +1031,7 @@ if neobundle#tap('unite.vim')
     nnoremap <silent> [Unite]re :<C-u>UniteResume everything<CR>
   endif
 
-  function! neobundle#hooks.on_source(bundle)
+  function! s:unite_vim_on_source() abort
     let g:unite_force_overwrite_statusline = 0
     let g:unite_source_bookmark_directory  = expand('~/.vim/unite/bookmark')
     let g:unite_source_alias_aliases       = {
@@ -1045,7 +1064,7 @@ if neobundle#tap('unite.vim')
     AutocmdFT unite nmap     <silent><buffer>       <C-j> <Plug>(unite_exit)
   endfunction
 
-  function! neobundle#hooks.on_post_source(bundle)
+  function! s:unite_vim_on_post_source() abort
     call unite#custom#profile('default', 'context', {
           \   'direction':        'rightbelow',
           \   'hide_icon':        0,
@@ -1066,86 +1085,97 @@ if neobundle#tap('unite.vim')
     call unite#custom#source('everything', 'max_candidates', 500)
     call unite#custom#source('grep',       'max_candidates', 0)
   endfunction
+
+  Autocmd User dein#source#unite.vim      call s:unite_vim_on_source()
+  Autocmd User dein#post_source#unite.vim call s:unite_vim_on_post_source()
 endif
 
-" neomru.vim
-if neobundle#tap('neomru.vim')
-  function! neobundle#hooks.on_source(bundle)
+if dein#tap('neomru.vim')
+  function! s:neomru_vim_on_source() abort
     let g:neomru#update_interval         = 1
     let g:neomru#file_mru_ignore_pattern = 'fugitiveblame'
     let g:neomru#file_mru_path           = expand('~/.vim/unite/neomru/file')
     let g:neomru#directory_mru_path      = expand('~/.vim/unite/neomru/directory')
   endfunction
+
+  Autocmd User dein#source#neomru.vim call s:neomru_vim_on_source()
 endif
 
-" unite-everything
 if s:is_windows
-  let g:unite_source_everything_full_path_search = 1
+  if dein#tap('unite-everything')
+    let g:unite_source_everything_full_path_search = 1
+  endif
 endif
 " }}}
 " C# {{{
-" omnisharp-vim
-let g:omnicomplete_fetch_full_documentation = 1
-let g:Omnisharp_stop_server                 = 0
-let g:OmniSharp_typeLookupInPreview         = 0
+if dein#tap('omnisharp-vim')
+  let g:omnicomplete_fetch_full_documentation = 1
+  let g:Omnisharp_stop_server                 = 0
+  let g:OmniSharp_typeLookupInPreview         = 0
+endif
 " }}}
 " C++ {{{
-" vim-clang-format
-if s:is_windows
-  let g:clang_format#command = 'C:/Development/LLVM/bin/clang-format.exe'
-endif
+if dein#tap('vim-clang-format')
+  if s:is_windows
+    let g:clang_format#command = 'C:/Development/LLVM/bin/clang-format.exe'
+  endif
 
-let g:clang_format#style_options = {
-      \   'AccessModifierOffset':                           -4,
-      \   'AllowShortIfStatementsOnASingleLine':            'false',
-      \   'AlwaysBreakBeforeMultilineStrings':              'false',
-      \   'BreakBeforeBraces':                              'Allman',
-      \   'BreakConstructorInitializersBeforeComma':        'true',
-      \   'ColumnLimit':                                    0,
-      \   'ConstructorInitializerAllOnOneLineOrOnePerLine': 'false',
-      \   'IndentCaseLabels':                               'true',
-      \   'IndentWidth':                                    4,
-      \   'UseTab':                                         'Never'
-      \ }
+  let g:clang_format#style_options = {
+        \   'AccessModifierOffset':                           -4,
+        \   'AllowShortIfStatementsOnASingleLine':            'false',
+        \   'AlwaysBreakBeforeMultilineStrings':              'false',
+        \   'BreakBeforeBraces':                              'Allman',
+        \   'BreakConstructorInitializersBeforeComma':        'true',
+        \   'ColumnLimit':                                    0,
+        \   'ConstructorInitializerAllOnOneLineOrOnePerLine': 'false',
+        \   'IndentCaseLabels':                               'true',
+        \   'IndentWidth':                                    4,
+        \   'UseTab':                                         'Never'
+        \ }
+endif
 " }}}
 " Go {{{
-" gocode
 if s:is_windows
-  " todo: macだと補完候補が出てこなくなる
-  let g:gocomplete#system_function = 'vimproc#system'
+  if dein#tap('gocode')
+    " todo: macだと補完候補が出てこなくなる
+    let g:gocomplete#system_function = 'vimproc#system'
+  endif
 endif
 
-" vim-godef
-let g:godef_split                    = 0
-let g:godef_same_file_in_same_window = 1
-let g:godef_system_function          = 'vimproc#system'
+if dein#tap('vim-godef')
+  let g:godef_split                    = 0
+  let g:godef_same_file_in_same_window = 1
+  let g:godef_system_function          = 'vimproc#system'
+endif
 " }}}
 " Git {{{
-" vim-gitgutter
-let g:gitgutter_map_keys           = 0
-let g:gitgutter_eager              = 0
-let g:gitgutter_diff_args          = ''
-let g:gitgutter_sign_column_always = 1
+if dein#tap('vim-gitgutter')
+  let g:gitgutter_map_keys           = 0
+  let g:gitgutter_eager              = 0
+  let g:gitgutter_diff_args          = ''
+  let g:gitgutter_sign_column_always = 1
 
-Autocmd FocusGained,FocusLost * GitGutter
-
-" agit.vim
+  Autocmd FocusGained,FocusLost * GitGutter
+endif
 if s:is_windows
-  let g:agit_enable_auto_show_commit = 0
+  if dein#tap('agit.vim')
+    let g:agit_enable_auto_show_commit = 0
+  endif
 endif
 
-" vim-fugitive
-Autocmd FocusGained,FocusLost * call s:update_fugitive()
+if dein#tap('vim-fugitive')
+  Autocmd FocusGained,FocusLost * call s:update_fugitive()
 
-function! s:update_fugitive()
-  try
-    call fugitive#detect(expand('<amatch>:p'))
-    call lightline#update()
-  catch
-  endtry
-endfunction
+  function! s:update_fugitive()
+    try
+      call fugitive#detect(expand('<amatch>:p'))
+      call lightline#update()
+    catch
+    endtry
+  endfunction
+endif
 " }}}
-call neobundle#end()
+call dein#end()
 filetype plugin indent on
 " }}}
 " ファイルタイプごとの設定 {{{
