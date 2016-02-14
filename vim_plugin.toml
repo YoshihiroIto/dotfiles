@@ -1,6 +1,4 @@
-############################################################
-# ライブラリ
-############################################################
+# ライブラリ {{{
 [[plugins]]
 repo      = 'Shougo/vimproc'
 lazy      = 0
@@ -26,11 +24,8 @@ lazy      = 1
 repo      = 'kana/vim-submode'
 lazy      = 1
 on_map    = ['gh', 'gw', ',w']
-
-
-############################################################
-# 表示
-############################################################
+# }}}
+# 表示 {{{
 [[plugins]]
 repo      = 'YoshihiroIto/molokai'
 lazy      = 0
@@ -48,11 +43,8 @@ on_ft     = ['vim', 'xml']
 repo      = 'YoshihiroIto/syntastic'
 lazy      = 1
 on_ft     = ['go', 'ruby', 'python']
-
-
-############################################################
-# 検索
-############################################################
+# }}}
+# 検索 {{{
 [[plugins]]
 repo      = 'YoshihiroIto/vim-jumpbrace'
 lazy      = 1
@@ -88,11 +80,8 @@ on_map    = '<Plug>'
 repo      = 'easymotion/vim-easymotion'
 lazy      = 1
 on_map    = '<Plug>(easymotion'
-
-
-############################################################
-# 補完
-############################################################
+# }}}
+# 補完 {{{
 [[plugins]]
 repo      = 'Shougo/neocomplete.vim'
 lazy      = 1
@@ -109,11 +98,8 @@ repo      = 'Shougo/neosnippet.vim'
 lazy      = 1
 depends   = 'neocomplete.vim'
 on_i      = 1
-
-
-############################################################
-# 編集
-############################################################
+# }}}
+# 編集 {{{
 [[plugins]]
 repo      = 'tomtom/tcomment_vim'
 lazy      = 1
@@ -155,11 +141,8 @@ on_ft     = ['vim', 'ruby', 'lua']
 repo      = 'kana/vim-smartinput'
 lazy      = 1
 on_i      = 1
-
-
-############################################################
-# ファイル
-############################################################
+# }}}
+# ファイル {{{
 [[plugins]]
 repo      = 'kana/vim-altr'
 lazy      = 1
@@ -169,11 +152,8 @@ on_map    = '<Plug>'
 repo      = 'YoshihiroIto/vim-auto-mirroring'
 lazy      = 1
 on_path   = '.*'
-
-
-############################################################
-# アプリ
-############################################################
+# }}}
+# アプリ {{{
 [[plugins]]
 repo      = 'YoshihiroIto/vim-icondrag'
 lazy      = 1
@@ -218,11 +198,8 @@ repo      = 'thinca/vim-quickrun'
 lazy      = 1
 depends   = ['shabadou.vim', 'wandbox-vim']
 on_map    = '<Plug>'
-
-
-############################################################
-# Unite
-############################################################
+# }}}
+# Unite {{{
 [[plugins]]
 repo      = 'Shougo/unite.vim'
 lazy      = 1
@@ -259,20 +236,14 @@ on_source = 'unite.vim'
 repo      = 'sgur/unite-everything'
 lazy      = 1
 on_source = 'unite.vim'
-
-
-############################################################
-# C#
-############################################################
+# }}}
+# C# {{{
 [[plugins]]
 repo      = 'OmniSharp/omnisharp-vim'
 lazy      = 1
 on_ft     = 'cs'
-
-
-############################################################
-# C++
-############################################################
+# }}}
+# C++ {{{
 [[plugins]]
 repo      = 'Mizuchi/STL-Syntax'
 lazy      = 1
@@ -287,11 +258,8 @@ on_ft     = 'cpp'
 repo      = 'rhysd/vim-clang-format'
 lazy      = 1
 on_cmd    = 'ClangFormat'
-
-
-############################################################
-# Go
-############################################################
+# }}}
+# Go {{{
 [[plugins]]
 repo      = 'google/vim-ft-go'
 lazy      = 1
@@ -311,29 +279,20 @@ on_ft     = 'go'
 repo      = 'dgryski/vim-godef'
 lazy      = 1
 on_ft     = 'go'
-
-
-############################################################
-# Xml
-############################################################
+# }}}
+# Xml {{{
 [[plugins]]
 repo      = 'YoshihiroIto/vim-closetag'
 lazy      = 1
 on_func   = 'closetag'
-
-
-############################################################
-# TypeScript
-############################################################
+# }}}
+# TypeScript {{{
 [[plugins]]
 repo      = 'clausreinke/typescript-tools.vim'
 lazy      = 1
 on_ft     = 'typescript'
-
-
-############################################################
-# Git
-############################################################
+# }}}
+# Git {{{
 [[plugins]]
 repo      = 'tpope/vim-fugitive'
 lazy      = 0
@@ -348,11 +307,8 @@ on_cmd    = ['GitGutter', 'GitGutterNextHunk', 'GitGutterPrevHunk']
 repo      = 'cohama/agit.vim'
 lazy      = 1
 on_cmd    = ['Agit', 'AgitFile']
-
-
-############################################################
-# ファイルタイプ
-############################################################
+# }}}
+# ファイルタイプ {{{
 [[plugins]]
 repo      = 'itchyny/vim-autoft'
 lazy      = 0
@@ -401,11 +357,8 @@ on_ft     = ['json', 'markdown']
 repo      = 'leafgarland/typescript-vim'
 lazy      = 1
 on_ft     = 'typescript'
-
-
-############################################################
-# テキストオブジェクト
-############################################################
+# }}}
+# テキストオブジェクト {{{
 # https://github.com/kana/vim-textobj-user/wiki
 # http://d.hatena.ne.jp/osyo-manga/20130717/1374069987
 [[plugins]]
@@ -488,11 +441,8 @@ repo      = 'whatyouhide/vim-textobj-xmlattr'
 lazy      = 1
 depends   = 'vim-textobj-user'
 on_map    = [['xo', 'ax'], ['xo', 'ix']]
-
-
-############################################################
-# オペレータ
-############################################################
+# }}}
+# オペレータ {{{
 # http://qiita.com/rbtnn/items/a47ed6684f1f0bc52906
 [[plugins]]
 repo      = 'kana/vim-operator-user'
@@ -540,4 +490,4 @@ repo      = 'osyo-manga/vim-operator-jump_side'
 lazy      = 1
 depends   = 'vim-operator-user'
 on_map    = [['nx', '<Plug>(operator-jump']]
-
+# }}}
