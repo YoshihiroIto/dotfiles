@@ -7,12 +7,8 @@ let s:has_vim_starting = has('vim_starting')
 let s:has_gui_running  = has('gui_running')
 let s:has_kaoriya      = has('kaoriya')
 let s:base_columns     = 120
-let s:vim_plugin_toml  = expand('~/Dropbox/dotfiles/vim_plugin.toml')
+let s:vim_plugin_toml  = expand('~/vim_plugin.toml')
 let g:mapleader        = ','
-
-if !filereadable(s:vim_plugin_toml)
-  let s:vim_plugin_toml = expand('~/vim_plugin.toml')
-endif
 
 " 自動コマンド
 augroup MyAutoCmd
@@ -42,19 +38,27 @@ let g:did_install_default_menus = 1
 nnoremap [App] <Nop>
 nmap     ;     [App]
 
-" $MYVIMRC調整
-function! s:setup_myvimrc()
+function! s:edit_vimrc()
   let dropbox_vimrc = expand('~/Dropbox/dotfiles/.vimrc')
+
   if filereadable(dropbox_vimrc)
-    let $MYVIMRC = dropbox_vimrc
+    execute 'edit' dropbox_vimrc
+  else
+    execute 'edit' $MYVIMRC
   endif
 endfunction
 
 function! s:edit_vim_plugin_toml()
-  execute 'edit' s:vim_plugin_toml
+  let dropbox_vim_plugin_toml = expand('~/Dropbox/dotfiles/vim_plugin.toml')
+
+  if filereadable(dropbox_vim_plugin_toml)
+    execute 'edit' dropbox_vim_plugin_toml
+  else
+    execute 'edit' s:vim_plugin_toml
+  endif
 endfunction
 
-nnoremap <silent> <F1> :<C-u>call <SID>setup_myvimrc()<CR>:edit $MYVIMRC<CR>
+nnoremap <silent> <F1> :<C-u>call <SID>edit_vimrc()<CR>
 nnoremap <silent> <F2> :<C-u>call <SID>edit_vim_plugin_toml()<CR>
 nnoremap          <F3> :<C-u>call dein#update()<CR>:call dein#clear_cache()<CR>
 
