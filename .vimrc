@@ -7,8 +7,12 @@ let s:has_vim_starting = has('vim_starting')
 let s:has_gui_running  = has('gui_running')
 let s:has_kaoriya      = has('kaoriya')
 let s:base_columns     = 120
-let s:vim_plugin_toml  = expand('~/vim_plugin.toml')
+let s:vim_plugin_toml  = expand('~/Dropbox/dotfiles/vim_plugin.toml')
 let g:mapleader        = ','
+
+if !filereadable(s:vim_plugin_toml)
+  let s:vim_plugin_toml = expand('~/vim_plugin.toml')
+endif
 
 " 自動コマンド
 augroup MyAutoCmd
@@ -1183,6 +1187,10 @@ AutocmdFT vim        setlocal foldcolumn=5
 AutocmdFT vim        setlocal tabstop=2
 AutocmdFT vim        setlocal shiftwidth=2
 AutocmdFT vim        setlocal softtabstop=2
+
+AutocmdFT toml       setlocal foldmethod=marker
+AutocmdFT toml       setlocal foldlevel=0
+AutocmdFT toml       setlocal foldcolumn=5
 
 AutocmdFT xml,html   setlocal foldlevel=99
 AutocmdFT xml,html   setlocal foldcolumn=5
