@@ -118,15 +118,16 @@ set guioptions-=e
 "}}}
 " プラグイン{{{
 if s:has_vim_starting
-  set runtimepath+=~/.vim/bundle/dein.vim/
+  set runtimepath+=~/.vim/plugin/dein.vim/
   let g:dein#install_process_timeout = 10*60
 endif
 
-call dein#begin(expand('~/.vim/bundle/'))
+call dein#begin(expand('~/.vim/plugin/'))
 
-if dein#load_cache([$MYVIMRC, expand('~/.vim/plugins/plugins.toml')])
+let vim_plugin_toml = expand('~/vim_plugin.toml')
+if dein#load_cache([$MYVIMRC, vim_plugin_toml])
   call dein#add('Shougo/dein.vim', {'rtp': ''})
-  call dein#load_toml(expand('~/.vim/plugins/plugins.toml'))
+  call dein#load_toml(vim_plugin_toml)
   call dein#save_cache()
 endif
 " ライブラリ{{{
