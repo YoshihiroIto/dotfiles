@@ -351,6 +351,7 @@ lazy      = 0
 repo      = 'airblade/vim-gitgutter'
 lazy      = 1
 on_func   = 'gitgutter'
+on_cmd    = ['GitGutter', 'GitGutterNextHunk', 'GitGutterPrevHunk']
 
 [[plugins]]
 repo      = 'cohama/agit.vim'

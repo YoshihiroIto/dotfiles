@@ -703,8 +703,8 @@ if neobundle#tap('vim-altr')
 
     " MVVM
     AutocmdFT cs,xml call altr#define(  '%Model.cs',
-          \                             '%Vm.cs', 
-          \                             '%.xaml',  
+          \                             '%Vm.cs',
+          \                             '%.xaml',
           \                             '%.xaml.cs')
     AutocmdFT cs,xml call s:altr_define('Models%s/%%Model.cs',
           \                             'ViewModels%s/%%Vm.cs',
@@ -831,11 +831,16 @@ let g:markdown_fenced_languages = [
 
 " vim-autoft
 let g:autoft_config = [
-      \   {'filetype': 'cs',   'pattern': '^\s*using'                                                               },
-      \   {'filetype': 'cpp',  'pattern': '^\s*#\s*\%(include\|define\)\>'                                          },
-      \   {'filetype': 'go',   'pattern': '^import ('                                                               },
-      \   {'filetype': 'html', 'pattern': '<\%(!DOCTYPE\|html\|head\|script\|meta\|link|div\|span\)\>\|^html:5\s*$' },
-      \   {'filetype': 'xml',  'pattern': '<[0-9a-zA-Z]\+'                                                          },
+      \   {'filetype': 'cs',
+      \    'pattern': '^\s*using'},
+      \   {'filetype': 'cpp',
+      \    'pattern': '^\s*#\s*\%(include\|define\)\>'},
+      \   {'filetype': 'go',
+      \    'pattern': '^import ('},
+      \   {'filetype': 'html',
+      \    'pattern': '<\%(!DOCTYPE\|html\|head\|script\|meta\|link|div\|span\)\>\|^html:5\s*$'},
+      \   {'filetype': 'xml',
+      \    'pattern': '<[0-9a-zA-Z]\+'},
       \ ]
 " }}}
 " テキストオブジェクト {{{
@@ -1907,9 +1912,11 @@ function! s:filter_current_by_tempfile(cmd, is_silent, is_auto_encoding)
     let normalized_output_tempfile  = substitute(output_tempfile,  '\', '/', 'g')
 
     if a:is_auto_encoding
-      let out = vimproc#system2(printf(a:cmd, normalized_current_tempfile, normalized_output_tempfile))
+      let out = vimproc#system2(
+            \ printf(a:cmd, normalized_current_tempfile, normalized_output_tempfile))
     else
-      let out = vimproc#system(printf(a:cmd, normalized_current_tempfile, normalized_output_tempfile))
+      let out = vimproc#system(
+            \ printf(a:cmd, normalized_current_tempfile, normalized_output_tempfile))
     endif
 
     let retval = vimproc#get_last_status()
