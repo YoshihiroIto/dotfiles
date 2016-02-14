@@ -7,6 +7,7 @@ let s:has_vim_starting = has('vim_starting')
 let s:has_gui_running  = has('gui_running')
 let s:has_kaoriya      = has('kaoriya')
 let s:base_columns     = 120
+let s:vim_plugin_toml  = expand('~/vim_plugin.toml')
 let g:mapleader        = ','
 
 " 自動コマンド
@@ -45,8 +46,12 @@ function! s:setup_myvimrc()
   endif
 endfunction
 
+function! s:edit_vim_plugin_toml()
+  execute 'edit' s:vim_plugin_toml
+endfunction
+
 nnoremap <silent> <F1> :<C-u>call <SID>setup_myvimrc()<CR>:edit $MYVIMRC<CR>
-nnoremap <silent> <F2> :<C-u>call <SID>setup_myvimrc()<CR>:source $MYVIMRC<CR>
+nnoremap <silent> <F2> :<C-u>call <SID>edit_vim_plugin_toml()<CR>
 nnoremap          <F3> :<C-u>call dein#update()<CR>:call dein#clear_cache()<CR>
 
 " 遅延初期化
@@ -124,10 +129,9 @@ endif
 
 call dein#begin(expand('~/.vim/plugin/'))
 
-let vim_plugin_toml = expand('~/vim_plugin.toml')
-if dein#load_cache([$MYVIMRC, vim_plugin_toml])
+if dein#load_cache([$MYVIMRC, s:vim_plugin_toml])
   call dein#add('Shougo/dein.vim', {'rtp': ''})
-  call dein#load_toml(vim_plugin_toml)
+  call dein#load_toml(s:vim_plugin_toml)
   call dein#save_cache()
 endif
 " ライブラリ{{{
