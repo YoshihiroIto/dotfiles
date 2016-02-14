@@ -1,6 +1,6 @@
 set encoding=utf-8
 scriptencoding utf-8
-" 基本{{{
+" 基本 {{{
 let s:is_windows       = has('win32')
 let s:is_mac           = has('mac') || has('macunix')
 let s:has_vim_starting = has('vim_starting')
@@ -105,8 +105,8 @@ function! s:lazy_initialize()
     autocmd!
   augroup END
 endfunction
-"}}}
-" guioptions{{{
+" }}}
+" guioptions {{{
 " メニューを読み込まない
 set guioptions+=M
 
@@ -124,8 +124,8 @@ set guioptions-=L
 
 " テキストベースタブ
 set guioptions-=e
-"}}}
-" プラグイン{{{
+" }}}
+" プラグイン {{{
 if s:has_vim_starting
   set runtimepath+=~/.vim/plugin/dein.vim/
   let g:dein#install_process_timeout = 10*60
@@ -138,8 +138,8 @@ if dein#load_cache([$MYVIMRC, s:vim_plugin_toml])
   call dein#load_toml(s:vim_plugin_toml)
   call dein#save_cache()
 endif
-" ライブラリ{{{
-if dein#tap('vim-submode') "{{{
+" ライブラリ {{{
+if dein#tap('vim-submode') " {{{
   function! s:vim_submode_on_source() abort
     let g:submode_timeout          = 0
     let g:submode_keep_leaving_key = 1
@@ -233,20 +233,20 @@ if dein#tap('vim-submode') "{{{
   endfunction
 
   Autocmd User dein#source#vim-submode call s:vim_submode_on_source()
-endif "}}}
-"}}}
-" 表示{{{
-if dein#tap('foldCC.vim') "{{{
+endif " }}}
+" }}}
+" 表示 {{{
+if dein#tap('foldCC.vim') " {{{
   let g:foldCCtext_enable_autofdc_adjuster = 1
   let g:foldCCtext_tail                    =
         \ 'printf("[ %4d lines  Lv%-2d]", v:foldend - v:foldstart + 1, v:foldlevel)'
 
   set foldtext=FoldCCtext()
-endif "}}}
-if dein#tap('syntastic') "{{{
+endif " }}}
+if dein#tap('syntastic') " {{{
   Autocmd BufWritePost *.{go,rb,py} call s:update_lightline()
-endif "}}}
-if dein#tap('lightline.vim') "{{{
+endif " }}}
+if dein#tap('lightline.vim') " {{{
   let g:lightline#colorscheme#yoi#palette = {
         \   'inactive': {
         \     'left':     [['#585858', '#262626', 240, 235],
@@ -493,18 +493,18 @@ if dein#tap('lightline.vim') "{{{
     catch
     endtry
   endfunction
-endif "}}}
-"}}}
-" 編集{{{
-if dein#tap('lightline.vim') "{{{
+endif " }}}
+" }}}
+" 編集 {{{
+if dein#tap('lightline.vim') " {{{
   " http://cohama.hateblo.jp/entry/20121017/1350482411
   let g:endwise_no_mappings = 1
   AutocmdFT lua,ruby,vim imap <buffer> <CR> <CR><Plug>DiscretionaryEnd
-endif "}}}
-if dein#tap('vim-closetag') "{{{
+endif " }}}
+if dein#tap('vim-closetag') " {{{
   let g:closetag_filenames = '*.{html,xhtml,xml,xaml}'
-endif "}}}
-if dein#tap('vim-easy-align') "{{{
+endif " }}}
+if dein#tap('vim-easy-align') " {{{
   nmap <silent> <Leader>a=       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)=
   nmap <silent> <Leader>a:       v<Plug>(textobj-indent-i)<Plug>(EasyAlign):
   nmap <silent> <Leader>a,       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*,
@@ -515,8 +515,8 @@ if dein#tap('vim-easy-align') "{{{
   xmap <silent> <Leader>a,       <Plug>(EasyAlign)*,
   xmap <silent> <Leader>a<Space> <Plug>(EasyAlign)*<Space>
   xmap <silent> <Leader>a\|      <Plug>(EasyAlign)*\|
-endif "}}}
-if dein#tap('yankround.vim') "{{{
+endif " }}}
+if dein#tap('yankround.vim') " {{{
   let g:yankround_use_region_hl = 1
 
   function! s:yankround_pre(count1)
@@ -530,8 +530,8 @@ if dein#tap('yankround.vim') "{{{
   nmap <silent><expr> gP    <SID>yankround_pre(v:count1) . '<Plug>(yankround-gP)'
   nmap <silent>       <C-p> <Plug>(yankround-prev)
   nmap <silent>       <C-n> <Plug>(yankround-next)
-endif "}}}
-if dein#tap('vim-smartinput') "{{{
+endif " }}}
+if dein#tap('vim-smartinput') " {{{
   function! s:vim_smartinput_on_source() abort
 
     call smartinput#clear_rules()
@@ -539,16 +539,16 @@ if dein#tap('vim-smartinput') "{{{
   endfunction
 
   Autocmd User dein#source#vim-smartinput call s:vim_smartinput_on_source()
-endif "}}}
-if dein#tap('increment-activator') "{{{
+endif " }}}
+if dein#tap('increment-activator') " {{{
   let g:increment_activator_filetype_candidates = {
         \   '_':   [['width', 'height']],
         \   'cs':  [['private', 'protected', 'public', 'internal'],
         \           ['abstract', 'virtual', 'override']],
         \   'cpp': [['private', 'protected', 'public']]
         \ }
-endif "}}}
-if dein#tap('vim-over') "{{{
+endif " }}}
+if dein#tap('vim-over') " {{{
   let g:over_command_line_key_mappings = {"\<C-j>": "\<Esc>"}
 
   nnoremap <silent> <Leader>s  :OverCommandLine<CR>%s/
@@ -574,15 +574,15 @@ if dein#tap('vim-over') "{{{
       autocmd!
     augroup END
   endfunction
-endif "}}}
-if dein#tap('previm') "{{{
+endif " }}}
+if dein#tap('previm') " {{{
   if s:is_windows
     let g:previm_open_cmd = 'C:\\Program\ Files\ (x86)\\Google\\Chrome\\Application\\chrome.exe'
   endif
-endif "}}}
-"}}}
-" 補完{{{
-if dein#tap('neocomplete.vim') "{{{
+endif " }}}
+" }}}
+" 補完 {{{
+if dein#tap('neocomplete.vim') " {{{
   function! s:neocomplete_vim_on_source() abort
     let g:neocomplete#enable_at_startup       = 1
     let g:neocomplete#enable_ignore_case      = 1
@@ -670,8 +670,8 @@ if dein#tap('neocomplete.vim') "{{{
       autocmd!
     augroup END
   endfunction
-endif "}}}
-if dein#tap('neosnippet.vim') "{{{
+endif " }}}
+if dein#tap('neosnippet.vim') " {{{
   imap <expr> <Tab> neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)'
         \                                               : '<Tab>'
   smap <expr> <Tab> neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)'
@@ -690,10 +690,10 @@ if dein#tap('neosnippet.vim') "{{{
   endfunction
 
   Autocmd User dein#source#neosnippet.vim call s:neosnippet_vim_on_source()
-endif "}}}
-"}}}
-" ファイル{{{
-if dein#tap('vim-altr') "{{{
+endif " }}}
+" }}}
+" ファイル {{{
+if dein#tap('vim-altr') " {{{
   nmap ga <Plug>(altr-forward)
   nmap gA <Plug>(altr-back)
 
@@ -737,21 +737,21 @@ if dein#tap('vim-altr') "{{{
   endfunction
 
   Autocmd User dein#source#vim-altr call s:vim_altr_on_source_on_source()
-endif "}}}
-if dein#tap('vim-auto-mirroring') "{{{
+endif " }}}
+if dein#tap('vim-auto-mirroring') " {{{
   let g:auto_mirroring_dir =  expand('~/mirror')
 endif
-"}}}
-"}}}
-" 検索{{{
-if dein#tap('matchit.zip') "{{{
+" }}}
+" }}}
+" 検索 {{{
+if dein#tap('matchit.zip') " {{{
   function! s:matchit_zip_on_source() abort
     silent! execute 'doautocmd Filetype' &filetype
   endfunction
 
   Autocmd User dein#source#matchit.zip call s:matchit_zip_on_source()
-endif "}}}
-if dein#tap('incsearch.vim') "{{{
+endif " }}}
+if dein#tap('incsearch.vim') " {{{
   function! s:incsearch_vim_on_source() abort
     let g:incsearch#auto_nohlsearch   = 1
     let g:incsearch#emacs_like_keymap = 1
@@ -759,8 +759,8 @@ if dein#tap('incsearch.vim') "{{{
   endfunction
 
   Autocmd User dein#source#incsearch.vim call s:incsearch_vim_on_source()
-endif "}}}
-if dein#tap('vim-anzu') "{{{
+endif " }}}
+if dein#tap('vim-anzu') " {{{
   " 一定時間キー入力がないとき、ウインドウを移動したとき、タブを移動したときに
   " 検索ヒット数の表示を消去する
   Autocmd CursorHold,CursorHoldI * call s:update_display_anzu()
@@ -787,8 +787,8 @@ if dein#tap('vim-anzu') "{{{
     catch
     endtry
   endfunction
-endif "}}}
-if dein#tap('clever-f.vim') "{{{
+endif " }}}
+if dein#tap('clever-f.vim') " {{{
   nmap f <Plug>(clever-f-f)
   xmap f <Plug>(clever-f-f)
   omap f <Plug>(clever-f-f)
@@ -810,8 +810,8 @@ if dein#tap('clever-f.vim') "{{{
   endfunction
 
   Autocmd User dein#source#clever-f.vim call s:clever_f_vim_on_source()
-endif "}}}
-if dein#tap('vim-easymotion') "{{{
+endif " }}}
+if dein#tap('vim-easymotion') " {{{
   nmap r <Plug>(easymotion-overwin-f2)
   vmap r <Plug>(easymotion-bd-f2)
 
@@ -819,10 +819,10 @@ if dein#tap('vim-easymotion') "{{{
   let g:EasyMotion_smartcase   = 1
   let g:EasyMotion_keys        = 'ghfjtyrubvmdkeiwoqp47382'
   let g:EasyMotion_startofline = 1
-endif "}}}
-"}}}
-" ファイルタイプ{{{
-if dein#tap('vim-markdown') "{{{
+endif " }}}
+" }}}
+" ファイルタイプ {{{
+if dein#tap('vim-markdown') " {{{
   let g:markdown_fenced_languages = [
         \   'c',    'cpp', 'cs', 'go',
         \   'ruby', 'lua', 'python',
@@ -830,8 +830,8 @@ if dein#tap('vim-markdown') "{{{
         \   'toml',
         \   'xml',  'json'
         \ ]
-endif "}}}
-if dein#tap('vim-autoft') "{{{
+endif " }}}
+if dein#tap('vim-autoft') " {{{
   let g:autoft_config = [
         \   {'filetype': 'cs',
         \    'pattern': '^\s*using'},
@@ -844,37 +844,37 @@ if dein#tap('vim-autoft') "{{{
         \   {'filetype': 'xml',
         \    'pattern': '<[0-9a-zA-Z]\+'},
         \ ]
-endif "}}}
-"}}}
-" テキストオブジェクト{{{
-if dein#tap('vim-textobj-parameter') "{{{
+endif " }}}
+" }}}
+" テキストオブジェクト {{{
+if dein#tap('vim-textobj-parameter') " {{{
   xmap aa <Plug>(textobj-parameter-a)
   xmap ia <Plug>(textobj-parameter-i)
   omap aa <Plug>(textobj-parameter-a)
   omap ia <Plug>(textobj-parameter-i)
-endif "}}}
-if dein#tap('textobj-wiw') "{{{
+endif " }}}
+if dein#tap('textobj-wiw') " {{{
   xmap a. <Plug>(textobj-wiw-a)
   xmap i. <Plug>(textobj-wiw-i)
   omap a. <Plug>(textobj-wiw-a)
   omap i. <Plug>(textobj-wiw-i)
-endif "}}}
-"}}}
-" オペレータ{{{
-if dein#tap('vim-operator-replace') "{{{
+endif " }}}
+" }}}
+" オペレータ {{{
+if dein#tap('vim-operator-replace') " {{{
   nmap R  <Plug>(operator-replace)
   xmap R  <Plug>(operator-replace)
-endif "}}}
-if dein#tap('vim-operator-tcomment') "{{{
+endif " }}}
+if dein#tap('vim-operator-tcomment') " {{{
   nmap t  <Plug>(operator-tcomment)
   xmap t  <Plug>(operator-tcomment)
-endif "}}}
-if dein#tap('vim-operator-surround') "{{{
+endif " }}}
+if dein#tap('vim-operator-surround') " {{{
   map  S  <Plug>(operator-surround-append)
   nmap Sd <Plug>(operator-surround-delete)ab
   nmap Sr <Plug>(operator-surround-replace)ab
-endif "}}}
-if dein#tap('vim-operator-surround') "{{{
+endif " }}}
+if dein#tap('vim-operator-surround') " {{{
   let g:operator#surround#blocks = {
         \   '-': [
         \     {
@@ -884,14 +884,14 @@ if dein#tap('vim-operator-surround') "{{{
         \     }
         \   ]
         \ }
-endif "}}}
-if dein#tap('operator-camelize.vim') "{{{
+endif " }}}
+if dein#tap('operator-camelize.vim') " {{{
   nmap _  <Plug>(operator-camelize-toggle)
   xmap _  <Plug>(operator-camelize-toggle)
-endif "}}}
-"}}}
-" アプリ{{{
-if dein#tap('vimshell.vim') "{{{
+endif " }}}
+" }}}
+" アプリ {{{
+if dein#tap('vimshell.vim') " {{{
   noremap <silent> [App]s :<C-u>VimShellPop<CR>
 
   let g:shell_mappings_enabled = 0
@@ -899,8 +899,8 @@ if dein#tap('vimshell.vim') "{{{
   let g:vimshell_prompt_pattern = '^\%(\f\|\\.\)\+> '
   let g:vimshell_prompt_expr    =
         \ 'escape(substitute(fnamemodify(getcwd(), ":~").">", "\\", "/", "g"), "\\[]()?! ")." "'
-endif "}}}
-if dein#tap('vimfiler.vim') "{{{
+endif " }}}
+if dein#tap('vimfiler.vim') " {{{
   noremap <silent> [App]f :<C-u>VimFilerBufferDir<CR>
 
   function! s:vimfiler_vim_on_source() abort
@@ -929,8 +929,8 @@ if dein#tap('vimfiler.vim') "{{{
 
   Autocmd User dein#source#vimfiler.vim      call s:vimfiler_vim_on_source()
   Autocmd User dein#post_source#vimfiler.vim call s:vimfiler_vim_on_post_source()
-endif "}}}
-if dein#tap('memolist.vim') "{{{
+endif " }}}
+if dein#tap('memolist.vim') " {{{
   noremap <silent> [App]mn :<C-u>MemoNew<CR>
   noremap <silent> [App]ml :<C-u>MemoList<CR>
   noremap <silent> [App]mg :<C-u>MemoGrep<CR>
@@ -939,8 +939,8 @@ if dein#tap('memolist.vim') "{{{
   let g:memolist_memo_suffix  = 'md'
   let g:memolist_unite_source = 'memolist'
   let g:memolist_path         = '~/Dropbox/memo'
-endif "}}}
-if dein#tap('wandbox-vim') "{{{
+endif " }}}
+if dein#tap('wandbox-vim') " {{{
   function! s:wandbox_vim_on_source() abort
     " wandbox.vim で quickfix を開かないようにする
     let g:wandbox#open_quickfix_window = 0
@@ -948,8 +948,8 @@ if dein#tap('wandbox-vim') "{{{
   endfunction
 
   Autocmd User dein#source#wandbox-vim call s:wandbox_vim_on_source()
-endif "}}}
-if dein#tap('vim-quickrun') "{{{
+endif " }}}
+if dein#tap('vim-quickrun') " {{{
   noremap <silent> [App]r :<C-u>QuickRun<CR>
 
   let g:quickrun_config = {
@@ -972,8 +972,8 @@ if dein#tap('vim-quickrun') "{{{
         \     'type':                                         'lua/vim'
         \   }
         \ }
-endif "}}}
-if dein#tap('vim-icondrag') "{{{
+endif " }}}
+if dein#tap('vim-icondrag') " {{{
   if s:is_windows
     function! s:vim_icondrag_on_source() abort
       call icondrag#enable()
@@ -981,13 +981,13 @@ if dein#tap('vim-icondrag') "{{{
 
     Autocmd User dein#source#vim-icondrag call s:vim_icondrag_on_source()
   endif
-endif "}}}
-if dein#tap('open-browser.vim') "{{{
+endif " }}}
+if dein#tap('open-browser.vim') " {{{
   let g:openbrowser_no_default_menus = 1
-endif "}}}
-"}}}
-" Unite{{{
-if dein#tap('unite.vim') "{{{
+endif " }}}
+" }}}
+" Unite {{{
+if dein#tap('unite.vim') " {{{
   nnoremap [Unite] <Nop>
   xnoremap [Unite] <Nop>
   nmap     <Space> [Unite]
@@ -1082,8 +1082,8 @@ if dein#tap('unite.vim') "{{{
 
   Autocmd User dein#source#unite.vim      call s:unite_vim_on_source()
   Autocmd User dein#post_source#unite.vim call s:unite_vim_on_post_source()
-endif "}}}
-if dein#tap('neomru.vim') "{{{
+endif " }}}
+if dein#tap('neomru.vim') " {{{
   function! s:neomru_vim_on_source() abort
     let g:neomru#update_interval         = 1
     let g:neomru#file_mru_ignore_pattern = 'fugitiveblame'
@@ -1092,22 +1092,22 @@ if dein#tap('neomru.vim') "{{{
   endfunction
 
   Autocmd User dein#source#neomru.vim call s:neomru_vim_on_source()
-endif "}}}
-if dein#tap('unite-everything') "{{{
+endif " }}}
+if dein#tap('unite-everything') " {{{
   if s:is_windows
     let g:unite_source_everything_full_path_search = 1
   endif
-endif "}}}
-"}}}
-" C#{{{
-if dein#tap('omnisharp-vim') "{{{
+endif " }}}
+" }}}
+" C# {{{
+if dein#tap('omnisharp-vim') " {{{
   let g:omnicomplete_fetch_full_documentation = 1
   let g:Omnisharp_stop_server                 = 0
   let g:OmniSharp_typeLookupInPreview         = 0
-endif "}}}
-"}}}
-" C++{{{
-if dein#tap('vim-clang-format') "{{{
+endif " }}}
+" }}}
+" C++ {{{
+if dein#tap('vim-clang-format') " {{{
   if s:is_windows
     let g:clang_format#command = 'C:/Development/LLVM/bin/clang-format.exe'
   endif
@@ -1124,31 +1124,31 @@ if dein#tap('vim-clang-format') "{{{
         \   'IndentWidth':                                    4,
         \   'UseTab':                                         'Never'
         \ }
-endif "}}}
-"}}}
-" Go{{{
-if dein#tap('gocode') "{{{
+endif " }}}
+" }}}
+" Go {{{
+if dein#tap('gocode') " {{{
   if s:is_windows
     " todo: macだと補完候補が出てこなくなる
     let g:gocomplete#system_function = 'vimproc#system'
   endif
-endif "}}}
-if dein#tap('vim-godef') "{{{
+endif " }}}
+if dein#tap('vim-godef') " {{{
   let g:godef_split                    = 0
   let g:godef_same_file_in_same_window = 1
   let g:godef_system_function          = 'vimproc#system'
-endif "}}}
-"}}}
-" Git{{{
-if dein#tap('vim-gitgutter') "{{{
+endif " }}}
+" }}}
+" Git {{{
+if dein#tap('vim-gitgutter') " {{{
   let g:gitgutter_map_keys           = 0
   let g:gitgutter_eager              = 0
   let g:gitgutter_diff_args          = ''
   let g:gitgutter_sign_column_always = 1
 
   Autocmd FocusGained,FocusLost * GitGutter
-endif "}}}
-if dein#tap('vim-fugitive') "{{{
+endif " }}}
+if dein#tap('vim-fugitive') " {{{
   Autocmd FocusGained,FocusLost * call s:update_fugitive()
 
   function! s:update_fugitive()
@@ -1158,17 +1158,17 @@ if dein#tap('vim-fugitive') "{{{
     catch
     endtry
   endfunction
-endif "}}}
-if dein#tap('agit.vim') "{{{
+endif " }}}
+if dein#tap('agit.vim') " {{{
   if s:is_windows
     let g:agit_enable_auto_show_commit = 0
   endif
-endif "}}}
-"}}}
+endif " }}}
+" }}}
 call dein#end()
 filetype plugin indent on
-"}}}
-" ファイルタイプごとの設定{{{
+" }}}
+" ファイルタイプごとの設定 {{{
 Autocmd BufEnter,WinEnter,BufWinEnter *                         call s:update_all()
 Autocmd BufWritePost                  *                         call s:update_numberwidth()
 Autocmd BufNewFile,BufRead            *.xaml                    setlocal filetype=xml
@@ -1247,16 +1247,16 @@ function! s:update_numberwidth()
   let &l:numberwidth = w
 endfunction
 
-" 場所ごとに設定を用意する{{{
+" 場所ごとに設定を用意する {{{
 " http://vim-jp.org/vim-users-jp/2009/12/27/Hack-112.html
 Autocmd BufNewFile,BufReadPost * let s:files =
       \   findfile('.vimrc.local', escape(expand('<afile>:p:h'), ' ') . ';', -1)
       \|  for s:i in reverse(filter(s:files, 'filereadable(v:val)'))
       \|    source `=s:i`
       \|  endfor
-"}}}
-"}}}
-" キー無効{{{
+" }}}
+" }}}
+" キー無効 {{{
 " Vimを閉じない
 nnoremap ZQ <Nop>
 
@@ -1273,8 +1273,8 @@ nnoremap dl <Nop>
 vnoremap u     <Nop>
 onoremap u     <Nop>
 inoremap <C-k> <Nop>
-"}}}
-" 編集{{{
+" }}}
+" 編集 {{{
 set browsedir=buffer              " バッファで開いているファイルのディレクトリ
 set clipboard=unnamedplus,unnamed " クリップボードを使う
 set modeline
@@ -1371,8 +1371,8 @@ function! s:copy_add_comment() range
   " ヤンクした物をペーストする
   normal! P
 endfunction
-"}}}
-" インプットメソッド{{{
+" }}}
+" インプットメソッド {{{
 " macvim kaoriya gvim で submode が正しく動作しなくなるため
 if !(s:is_mac && s:has_gui_running)
   set noimdisable
@@ -1383,8 +1383,8 @@ set iminsert=0
 if exists('+imdisableactivate')
   set imdisableactivate
 endif
-"}}}
-" タブ・インデント{{{
+" }}}
+" タブ・インデント {{{
 set autoindent
 set cindent
 set tabstop=4       " ファイル内の <Tab> が対応する空白の数
@@ -1397,8 +1397,8 @@ set breakindent
 
 vnoremap < <gv
 vnoremap > >gv
-"}}}
-" 検索{{{
+" }}}
+" 検索 {{{
 set incsearch
 set ignorecase
 set smartcase
@@ -1433,7 +1433,7 @@ map  <silent> g* <Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
 map  <silent> #  <Plug>(incsearch-nohl0)<Plug>(asterisk-z#)
 map  <silent> g# <Plug>(incsearch-nohl0)<Plug>(asterisk-gz#)
 
-" 複数Vimで検索を同期する{{{
+" 複数Vimで検索を同期する {{{
 if s:has_gui_running
   function! s:save_reg(reg, filename)
     call writefile([getreg(a:reg)], a:filename)
@@ -1450,9 +1450,9 @@ if s:has_gui_running
   Autocmd CursorHold,CursorHoldI,FocusLost * silent! call s:save_reg('/', vimreg_search)
   Autocmd FocusGained                      * silent! call s:load_reg('/', vimreg_search)
 endif
-"}}}
-"}}}
-" 表示{{{
+" }}}
+" }}}
+" 表示 {{{
 syntax enable               " 構文ごとに色分けをする
 set number
 set textwidth=0             " 一行に長い文章を書いていても自動折り返しをしない
@@ -1494,7 +1494,7 @@ let g:netrw_nogx = 1
 nmap gx :<C-u>call openbrowser#_keymapping_smart_search('n')<CR>
 vmap gx :<C-u>call openbrowser#_keymapping_smart_search('v')<CR>
 
-" カーソル下の単語を移動するたびにハイライトする{{{
+" カーソル下の単語を移動するたびにハイライトする {{{
 " http://d.hatena.ne.jp/osyo-manga/20140121/1390309901
 Autocmd CursorHold                                * call s:hl_cword()
 Autocmd CursorMoved,BufLeave,WinLeave,InsertEnter * call s:hl_clear()
@@ -1527,8 +1527,8 @@ function! s:hl_cword()
   silent! let b:highlight_cursor_word_id = matchadd('CursorWord', pattern)
   let b:highlight_cursor_word = word
 endfunction
-"}}}
-" カラースキーマ{{{
+" }}}
+" カラースキーマ {{{
 colorscheme molokai
 
 Autocmd BufWinEnter,ColorScheme * call s:set_color()
@@ -1546,16 +1546,16 @@ function! s:set_color()
     highlight InvisibleJISX0208Space guibg=#112233
   endif
 endfunction
-"}}}
-" 半透明化{{{
+" }}}
+" 半透明化 {{{
 if s:has_gui_running
   if s:is_mac
     Autocmd GuiEnter,FocusGained * set transparency=3   " アクティブ時の透過率
     Autocmd FocusLost            * set transparency=48  " 非アクティブ時の透過率
   endif
 endif
-"}}}
-" フォント{{{
+" }}}
+" フォント {{{
 if s:has_gui_running
   set guifont=Ricty\ Regular\ for\ Powerline:h11
 endif
@@ -1565,8 +1565,8 @@ if s:is_windows && s:has_kaoriya
 else
   set ambiwidth=double
 endif
-"}}}
-" 'cursorline' を必要な時にだけ有効にする{{{
+" }}}
+" 'cursorline' を必要な時にだけ有効にする {{{
 " http://d.hatena.ne.jp/thinca/20090530/1243615055
 Autocmd CursorMoved,CursorMovedI * call s:auto_cursorline('CursorMoved')
 Autocmd CursorHold,CursorHoldI   * call s:auto_cursorline('CursorHold')
@@ -1610,9 +1610,9 @@ function! s:force_show_cursorline()
   setlocal cursorline
   let s:cursorline_lock = 1
 endfunction
-"}}}
-"}}}
-" 折り畳み{{{
+" }}}
+" }}}
+" 折り畳み {{{
 set foldcolumn=0
 set foldlevel=99
 
@@ -1624,8 +1624,8 @@ nnoremap <expr> zl foldclosed(line('.')) != -1 ? 'zo' : '<C-l>'
 
 " 折り畳み外であれば何もしない
 nnoremap <expr> zO foldclosed(line('.')) != -1 ? 'zO' : ''
-"}}}
-" モード移行{{{
+" }}}
+" モード移行 {{{
 if !(s:is_mac && s:has_gui_running)
   inoremap <C-j> <Esc>
   nnoremap <C-j> <Esc>
@@ -1637,16 +1637,16 @@ else
   vnoremap <silent> <C-j> <Esc>:<C-u>set noimdisable<CR>:set imdisable<CR>
   cnoremap <silent> <C-j> <Esc>:<C-u>set noimdisable<CR>:set imdisable<CR>
 endif
-"}}}
-" コマンドラインモード{{{
+" }}}
+" コマンドラインモード {{{
 cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
 cnoremap <C-f> <Right>
 cnoremap <C-b> <Left>
 cnoremap <C-n> <Down>
 cnoremap <C-p> <Up>
-"}}}
-" カーソル移動{{{
+" }}}
+" カーソル移動 {{{
 nnoremap <silent> k     :<C-u>call <SID>up_cursor(v:count1)<CR>
 nnoremap <silent> j     :<C-u>call <SID>down_cursor(v:count1)<CR>
 nnoremap <silent> h     :<C-u>call <SID>left_cursor(v:count1)<CR>
@@ -1713,25 +1713,25 @@ function! s:disable_virtual_cursor()
 endfunction
 
 Autocmd InsertEnter * call s:disable_virtual_cursor()
-"}}}
-" ウィンドウ操作{{{
+" }}}
+" ウィンドウ操作 {{{
 set splitbelow    " 縦分割したら新しいウィンドウは下に
 set splitright    " 横分割したら新しいウィンドウは右に
 
 nnoremap <silent> <Leader>c :<C-u>close<CR>
-"}}}
-" アプリウィンドウ操作{{{
+" }}}
+" アプリウィンドウ操作 {{{
 if s:has_gui_running
   noremap <silent> ,we :<C-u>call <SID>toggle_v_split_wide()<CR>
   noremap <silent> ,wf :<C-u>call <SID>full_window()<CR>
 
-  " アプリケーションウィンドウを最大高さにする{{{
+  " アプリケーションウィンドウを最大高さにする {{{
   function! s:full_window()
     execute 'winpos' getwinposx() '0'
     set lines=9999
   endfunction
-  "}}}
-  " 縦分割する{{{
+  " }}}
+  " 縦分割する {{{
   let s:depth_vsp      = 1
   let s:opend_left_vsp = 0
   let s:opend_top_vsp  = 0
@@ -1764,18 +1764,18 @@ if s:has_gui_running
       execute 'winpos' s:opend_left_vsp s:opend_top_vsp
     endif
   endfunction
-  "}}}
+  " }}}
 endif
-"}}}
-" タブ操作{{{
+" }}}
+" タブ操作 {{{
 nnoremap [Tab]     <Nop>
 nmap     <Leader>t [Tab]
 
 nnoremap <silent> [Tab]c :<C-u>tabnew<CR>
 nnoremap <silent> [Tab]x :<C-u>tabclose<CR>
-"}}}
-" バッファ操作{{{
-" ウィンドウをとじないで現在のバッファを削除{{{
+" }}}
+" バッファ操作 {{{
+" ウィンドウをとじないで現在のバッファを削除 {{{
 function! s:delete_current_buffer()
   let confirm_msg             = '未保存です。閉じますか？'
   let current_win             = winnr()
@@ -1821,9 +1821,9 @@ function! s:delete_current_buffer()
   execute 'bdelete' current_buf
   execute current_win . 'wincmd w'
 endfunction
-"}}}
-"}}}
-" Git{{{
+" }}}
+" }}}
+" Git {{{
 nnoremap [Git]     <Nop>
 nmap     <Leader>g [Git]
 
@@ -1837,40 +1837,40 @@ nnoremap <silent> [Git]ps :<C-u>call <SID>execute_if_on_git_branch('Gpush')<CR>:
 nnoremap <silent> [Git]pl :<C-u>call <SID>execute_if_on_git_branch('Gpull')<CR>:GitGutter<CR>
 nnoremap <silent> [Git]g  :<C-u>call <SID>execute_if_on_git_branch('Agit')<CR>
 nnoremap <silent> [Git]h  :<C-u>call <SID>execute_if_on_git_branch('GitGutterPreviewHunk')<CR>
-"}}}
-" ヘルプ{{{
+" }}}
+" ヘルプ {{{
 set helplang=ja,en
 set keywordprg=
 
 if s:has_kaoriya
   set runtimepath+=$VIM/plugins/vimdoc-ja
 endif
-"}}}
-" 汎用関数{{{
-" CursorHold を継続させる{{{
+" }}}
+" 汎用関数 {{{
+" CursorHold を継続させる {{{
 function! s:continue_cursor_hold()
   " http://d.hatena.ne.jp/osyo-manga/20121102/1351836801
   call feedkeys(mode() ==# 'i' ? "\<C-g>\<Esc>" : "g\<Esc>", 'n')
 endfunction
-"}}}
-" 画面リフレッシュ{{{
+" }}}
+" 画面リフレッシュ {{{
 function! s:refresh_screen()
   call s:force_show_cursorline()
 endfunction
-"}}}
-" コマンド実行後の表示状態を維持する{{{
+" }}}
+" コマンド実行後の表示状態を維持する {{{
 function! s:execute_keep_view(expr)
   let wininfo = winsaveview()
   execute a:expr
   call winrestview(wininfo)
 endfunction
-"}}}
-" Unite 実行中か{{{
+" }}}
+" Unite 実行中か {{{
 function! s:is_unite_running()
   return &filetype ==# 'unite'
 endfunction
-"}}}
-" Gitブランチ上にいるか{{{
+" }}}
+" Gitブランチ上にいるか {{{
 function! s:is_in_git_branch()
   try
     return !empty(fugitive#head())
@@ -1878,8 +1878,8 @@ function! s:is_in_git_branch()
     return 0
   endtry
 endfunction
-"}}}
-" Gitブランチ上であれば実行{{{
+" }}}
+" Gitブランチ上であれば実行 {{{
 function! s:execute_if_on_git_branch(line)
   if !s:is_in_git_branch()
     echomsg 'not on git branch:' a:line
@@ -1888,8 +1888,8 @@ function! s:execute_if_on_git_branch(line)
 
   execute a:line
 endfunction
-"}}}
-" 標準出力経由でフィルタリング処理を行う{{{
+" }}}
+" 標準出力経由でフィルタリング処理を行う {{{
 function! s:filter_current_by_stdout(cmd, is_silent, is_auto_encoding)
   let retval = 255
 
@@ -1921,8 +1921,8 @@ function! s:filter_current_by_stdout(cmd, is_silent, is_auto_encoding)
 
   return retval == 0
 endfunction
-"}}}
-" テンポラリファイル経由でフィルタリング処理を行う{{{
+" }}}
+" テンポラリファイル経由でフィルタリング処理を行う {{{
 function! s:filter_current_by_tempfile(cmd, is_silent, is_auto_encoding)
   let retval = 255
 
@@ -1960,6 +1960,6 @@ function! s:filter_current_by_tempfile(cmd, is_silent, is_auto_encoding)
 
   return retval == 0
 endfunction
-"}}}
-"}}}
+" }}}
+" }}}
 " vim: tabstop=2 shiftwidth=2 softtabstop=2 expandtab
