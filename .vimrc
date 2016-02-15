@@ -500,7 +500,7 @@ if dein#tap('lightline.vim') " {{{
 endif " }}}
 " }}}
 " 編集 {{{
-if dein#tap('lightline.vim') " {{{
+if dein#tap('vim-endwise') " {{{
   " http://cohama.hateblo.jp/entry/20121017/1350482411
   let g:endwise_no_mappings = 1
   AutocmdFT lua,ruby,vim imap <buffer> <CR> <CR><Plug>DiscretionaryEnd
@@ -746,6 +746,15 @@ if dein#tap('vim-auto-mirroring') " {{{
   let g:auto_mirroring_dir =  expand('~/mirror')
 endif
 " }}}
+if dein#tap('vim-icondrag') " {{{
+  if s:is_windows
+    function! s:vim_icondrag_on_source() abort
+      call icondrag#enable()
+    endfunction
+
+    Autocmd User dein#source#vim-icondrag call s:vim_icondrag_on_source()
+  endif
+endif " }}}
 " }}}
 " 検索 {{{
 if dein#tap('matchit.zip') " {{{
@@ -877,8 +886,6 @@ if dein#tap('vim-operator-surround') " {{{
   map  S  <Plug>(operator-surround-append)
   nmap Sd <Plug>(operator-surround-delete)ab
   nmap Sr <Plug>(operator-surround-replace)ab
-endif " }}}
-if dein#tap('vim-operator-surround') " {{{
   let g:operator#surround#blocks = {
         \   '-': [
         \     {
@@ -976,15 +983,6 @@ if dein#tap('vim-quickrun') " {{{
         \     'type':                                         'lua/vim'
         \   }
         \ }
-endif " }}}
-if dein#tap('vim-icondrag') " {{{
-  if s:is_windows
-    function! s:vim_icondrag_on_source() abort
-      call icondrag#enable()
-    endfunction
-
-    Autocmd User dein#source#vim-icondrag call s:vim_icondrag_on_source()
-  endif
 endif " }}}
 if dein#tap('open-browser.vim') " {{{
   let g:openbrowser_no_default_menus = 1
