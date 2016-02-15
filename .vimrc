@@ -131,7 +131,7 @@ set guioptions-=e
 " }}}
 " プラグイン {{{
 if s:has_vim_starting
-  set runtimepath+=~/.vim/plugin/dein.vim/
+  set runtimepath+=~/.vim/plugin/repos/github.com/Shougo/dein.vim/
   let g:dein#install_process_timeout = 10*60
 endif
 
