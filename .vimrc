@@ -740,7 +740,7 @@ if dein#tap('vim-altr') " {{{
           \                             'include%s/%%.h')
   endfunction
 
-  Autocmd User dein#source#vim-altr call s:vim_altr_on_source_on_source()
+  Autocmd User dein#source#vim-altr call s:vim_altr_on_source()
 endif " }}}
 if dein#tap('vim-auto-mirroring') " {{{
   let g:auto_mirroring_dir =  expand('~/mirror')
