@@ -8,6 +8,7 @@ let s:has_gui_running  = has('gui_running')
 let s:has_kaoriya      = has('kaoriya')
 let s:base_columns     = 120
 let s:vim_plugin_toml  = expand('~/vim_plugin.toml')
+let s:cache_dir        = expand('~/.cache')
 let g:mapleader        = ','
 
 " 自動コマンド
@@ -1089,8 +1090,8 @@ if dein#tap('neomru.vim') " {{{
   function! s:neomru_vim_on_source() abort
     let g:neomru#update_interval         = 1
     let g:neomru#file_mru_ignore_pattern = 'fugitiveblame'
-    let g:neomru#file_mru_path           = expand('~/.vim/unite/neomru/file')
-    let g:neomru#directory_mru_path      = expand('~/.vim/unite/neomru/directory')
+    let g:neomru#file_mru_path           = s:cache_dir . '/unite/neomru/file'
+    let g:neomru#directory_mru_path      = s:cache_dir . '/unite/neomru/directory'
   endfunction
 
   Autocmd User dein#source#neomru.vim call s:neomru_vim_on_source()
