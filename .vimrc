@@ -132,11 +132,11 @@ set guioptions-=e
 " }}}
 " プラグイン {{{
 if s:has_vim_starting
-  set runtimepath+=~/.vim/plugin/repos/github.com/Shougo/dein.vim/
+  execute 'set runtimepath+=' . s:cache_dir . '/plugin/repos/github.com/Shougo/dein.vim/'
   let g:dein#install_process_timeout = 10*60
 endif
 
-call dein#begin(expand('~/.vim/plugin/'))
+call dein#begin(s:cache_dir . '/plugin')
 
 if dein#load_cache([$MYVIMRC, s:vim_plugin_toml])
   call dein#add('Shougo/dein.vim', {'rtp': ''})
@@ -1030,7 +1030,7 @@ if dein#tap('unite.vim') " {{{
 
   function! s:unite_vim_on_source() abort
     let g:unite_force_overwrite_statusline = 0
-    let g:unite_source_bookmark_directory  = expand('~/.vim/unite/bookmark')
+    let g:unite_source_bookmark_directory  = s:cache_dir . '/unite/bookmark'
     let g:unite_source_alias_aliases       = {
           \   'memolist': {
           \       'source': 'file'
