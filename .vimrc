@@ -240,6 +240,10 @@ if dein#tap('vim-submode') " {{{
 
   Autocmd User dein#source#vim-submode call s:vim_submode_on_source()
 endif " }}}
+if dein#tap('vim-hardtime') " {{{
+  let g:hardtime_default_on = 1
+endif
+" }}}
 " }}}
 " 表示 {{{
 if dein#tap('foldCC.vim') " {{{
@@ -815,7 +819,6 @@ if dein#tap('clever-f.vim') " {{{
     let g:clever_f_not_overwrites_standard_mappings = 1
     let g:clever_f_ignore_case                      = 1
     let g:clever_f_smart_case                       = 1
-    let g:clever_f_across_no_line                   = 0
     let g:clever_f_across_no_line                   = 1
     let g:clever_f_use_migemo                       = 1
     let g:clever_f_chars_match_any_signs            = ';'
