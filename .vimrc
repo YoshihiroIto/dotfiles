@@ -1030,7 +1030,6 @@ if dein#tap('unite.vim') " {{{
 
   function! s:unite_vim_on_source() abort
     let g:unite_force_overwrite_statusline = 0
-    let g:unite_source_bookmark_directory  = s:cache_dir . '/unite/bookmark'
     let g:unite_source_alias_aliases       = {
           \   'memolist': {
           \       'source': 'file'
@@ -1090,8 +1089,6 @@ if dein#tap('neomru.vim') " {{{
   function! s:neomru_vim_on_source() abort
     let g:neomru#update_interval         = 1
     let g:neomru#file_mru_ignore_pattern = 'fugitiveblame'
-    let g:neomru#file_mru_path           = s:cache_dir . '/unite/neomru/file'
-    let g:neomru#directory_mru_path      = s:cache_dir . '/unite/neomru/directory'
   endfunction
 
   Autocmd User dein#source#neomru.vim call s:neomru_vim_on_source()
