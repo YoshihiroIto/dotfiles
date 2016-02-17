@@ -744,7 +744,7 @@ if dein#tap('vim-altr') " {{{
   Autocmd User dein#source#vim-altr call s:vim_altr_on_source()
 endif " }}}
 if dein#tap('vim-auto-mirroring') " {{{
-  let g:auto_mirroring_dir =  expand('~/mirror')
+  let g:auto_mirroring_dir =  s:cache_dir . '/mirror'
 endif
 " }}}
 if dein#tap('vim-icondrag') " {{{
