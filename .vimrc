@@ -7,9 +7,12 @@ let s:has_vim_starting = has('vim_starting')
 let s:has_gui_running  = has('gui_running')
 let s:has_kaoriya      = has('kaoriya')
 let s:base_columns     = 120
-let s:vim_plugin_toml  = expand('~/vim_plugin.toml')
-let s:cache_dir        = expand('~/.cache')
 let g:mapleader        = ','
+
+let s:vim_plugin_toml = expand('~/vim_plugin.toml')
+let s:cache_dir       = expand('~/.cache')
+let s:dropbox_dir     = expand('~/Dropbox')
+let s:dotvim_dir      = expand('~/.vim')
 
 " 自動コマンド
 augroup MyAutoCmd
@@ -40,7 +43,7 @@ nnoremap [App] <Nop>
 nmap     ;     [App]
 
 function! s:edit_vimrc()
-  let dropbox_vimrc = expand('~/Dropbox/dotfiles/.vimrc')
+  let dropbox_vimrc = s:dropbox_dir . '/dotfiles/.vimrc'
 
   if filereadable(dropbox_vimrc)
     execute 'edit' dropbox_vimrc
@@ -50,8 +53,7 @@ function! s:edit_vimrc()
 endfunction
 
 function! s:edit_vim_plugin_toml()
-  let dropbox_vim_plugin_toml = expand('~/Dropbox/dotfiles/vim_plugin.toml')
-
+  let dropbox_vim_plugin_toml = s:dropbox_dir . '/dotfiles/vim_plugin.toml' 
   if filereadable(dropbox_vim_plugin_toml)
     execute 'edit' dropbox_vim_plugin_toml
   else
@@ -689,9 +691,9 @@ if dein#tap('neosnippet.vim') " {{{
 
   function! s:neosnippet_vim_on_source() abort
     let g:neosnippet#disable_runtime_snippets = {'_': 1}
-    let g:neosnippet#snippets_directory       = '~/.vim/snippets'
+    let g:neosnippet#snippets_directory       = s:dotvim_dir . '/snippets'
 
-    let snippets_local = expand('~/.vim/snippets.local')
+    let snippets_local = expand(s:dotvim_dir . '/snippets.local')
     if isdirectory(snippets_local)
       let g:neosnippet#snippets_directory .= ',' . snippets_local
     endif
@@ -955,7 +957,7 @@ if dein#tap('memolist.vim') " {{{
   let g:memolist_unite        = 1
   let g:memolist_memo_suffix  = 'md'
   let g:memolist_unite_source = 'memolist'
-  let g:memolist_path         = '~/Dropbox/memo'
+  let g:memolist_path         = s:dropbox_dir . '/memo'
 endif " }}}
 if dein#tap('wandbox-vim') " {{{
   function! s:wandbox_vim_on_source() abort
