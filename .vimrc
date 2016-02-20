@@ -845,8 +845,8 @@ if dein#tap('clever-f.vim') " {{{
   Autocmd User dein#source#clever-f.vim call s:clever_f_vim_on_source()
 endif " }}}
 if dein#tap('vim-easymotion') " {{{
-  nmap r <Plug>(easymotion-overwin-f2)
-  vmap r <Plug>(easymotion-bd-f2)
+  nmap r <Plug>(easymotion-sn)
+  xmap r <Plug>(easymotion-sn)
 
   let g:EasyMotioN_do_mapping  = 0
   let g:EasyMotion_smartcase   = 1
