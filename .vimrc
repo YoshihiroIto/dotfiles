@@ -108,6 +108,18 @@ function! s:lazy_initialize()
   Autocmd BufWinEnter,ColorScheme .vimrc highlight def link myVimAutocmd vimAutoCmd
   Autocmd BufWinEnter,ColorScheme .vimrc syntax match vimAutoCmd /\<\(Autocmd\|AutocmdFT\)\>/
 
+  call dein#source('vim-textobj-ifdef')
+  call dein#source('vim-textobj-comment')
+  call dein#source('textobj-wiw')
+  call dein#source('vim-textobj-entire')
+  call dein#source('vim-textobj-indent')
+  call dein#source('vim-textobj-line')
+  call dein#source('vim-textobj-anyblock')
+  call dein#source('vim-textobj-word-column')
+  call dein#source('vim-textobj-parameter')
+  call dein#source('vim-textobj-between')
+  call dein#source('vim-textobj-xmlattr')
+
   augroup LazyInitialize
     autocmd!
   augroup END
