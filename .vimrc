@@ -53,7 +53,7 @@ function! s:edit_vimrc()
 endfunction
 
 function! s:edit_vim_plugin_toml()
-  let dropbox_vim_plugin_toml = s:dropbox_dir . '/dotfiles/vim_plugin.toml' 
+  let dropbox_vim_plugin_toml = s:dropbox_dir . '/dotfiles/vim_plugin.toml'
   if filereadable(dropbox_vim_plugin_toml)
     execute 'edit' dropbox_vim_plugin_toml
   else
