@@ -63,7 +63,7 @@ endfunction
 
 nnoremap <silent> <F1> :<C-u>call <SID>edit_vimrc()<CR>
 nnoremap <silent> <F2> :<C-u>call <SID>edit_vim_plugin_toml()<CR>
-nnoremap          <F3> :<C-u>call dein#update()<CR>:call dein#clear_cache()<CR>
+nnoremap          <F3> :<C-u>call dein#update()<CR>
 
 " 遅延初期化
 augroup LazyInitialize
@@ -154,7 +154,7 @@ endif
 call dein#begin(s:cache_dir . '/plugin')
 
 if dein#load_cache([$MYVIMRC, s:vim_plugin_toml])
-  call dein#add('Shougo/dein.vim', {'rtp': ''})
+  call dein#add('Shougo/dein.vim', {'frozen': 1})
   call dein#load_toml(s:vim_plugin_toml)
   call dein#save_cache()
 endif
@@ -1143,17 +1143,17 @@ if dein#tap('vim-clang-format') " {{{
 endif " }}}
 " }}}
 " Go {{{
-if dein#tap('gocode') " {{{
-  if s:is_windows
-    " todo: macだと補完候補が出てこなくなる
-    let g:gocomplete#system_function = 'vimproc#system'
-  endif
-endif " }}}
-if dein#tap('vim-godef') " {{{
-  let g:godef_split                    = 0
-  let g:godef_same_file_in_same_window = 1
-  let g:godef_system_function          = 'vimproc#system'
-endif " }}}
+" if dein#tap('gocode') " {{{
+"  if s:is_windows
+"    " todo: macだと補完候補が出てこなくなる
+"    let g:gocomplete#system_function = 'vimproc#system'
+"  endif
+" endif " }}}
+" if dein#tap('vim-godef') " {{{
+"  let g:godef_split                    = 0
+"  let g:godef_same_file_in_same_window = 1
+"  let g:godef_system_function          = 'vimproc#system'
+" endif " }}}
 " }}}
 " Git {{{
 if dein#tap('vim-gitgutter') " {{{
