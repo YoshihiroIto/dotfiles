@@ -11,8 +11,8 @@ let g:mapleader        = ','
 
 let s:vim_plugin_toml = expand('~/vim_plugin.toml')
 let s:cache_dir       = expand('~/.cache')
-let s:dropbox_dir     = expand('~/Dropbox')
 let s:dotvim_dir      = expand('~/.vim')
+let s:dropbox_dir     = expand('~/Dropbox')
 
 " 自動コマンド
 augroup MyAutoCmd
