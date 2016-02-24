@@ -66,13 +66,21 @@ nnoremap <silent> <F2> :<C-u>call <SID>edit_vim_plugin_toml()<CR>
 nnoremap          <F3> :<C-u>call dein#update()<CR>
 
 " 遅延初期化
-augroup LazyInitialize
-  autocmd!
+" ※なぜaugroupを使わないか
+" 特定条件で設定がされないことがあるため。
+" 引数で.csファイルを指定してvimを起動した時にOmniSharp で複数slnがあるときに再現。
+" augroup を使わないと問題が起きないため。
+if s:has_vim_starting
+  let s:lazy_initialized = 0
   autocmd VimEnter,FocusLost,CursorHold,CursorHoldI * call s:lazy_initialize()
-augroup END
+endif
 
 let s:lazy_initialize = 2*1
 function! s:lazy_initialize()
+  if s:lazy_initialized
+    return
+  endif
+
   let s:lazy_initialize -= 1
   if s:lazy_initialize > 0
     return
@@ -120,9 +128,7 @@ function! s:lazy_initialize()
   call dein#source('vim-textobj-between')
   call dein#source('vim-textobj-xmlattr')
 
-  augroup LazyInitialize
-    autocmd!
-  augroup END
+  let s:lazy_initialized = 1
 endfunction
 " }}}
 " guioptions {{{
