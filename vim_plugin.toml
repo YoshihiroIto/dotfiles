@@ -1,7 +1,8 @@
 # ライブラリ {{{
 [[plugins]]
 repo      = 'Shougo/vimproc'
-lazy      = 0
+on_func   = 'vimproc'
+lazy      = 1
 
 [[plugins]]
 repo      = 'xolox/vim-misc'
@@ -310,9 +311,7 @@ lazy      = 0
 
 [[plugins]]
 repo      = 'airblade/vim-gitgutter'
-lazy      = 1
-on_func   = 'gitgutter'
-on_cmd    = ['GitGutter', 'GitGutterNextHunk', 'GitGutterPrevHunk']
+lazy      = 0
 
 [[plugins]]
 repo      = 'cohama/agit.vim'

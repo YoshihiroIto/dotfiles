@@ -146,7 +146,7 @@ set guioptions-=e
 " }}}
 " プラグイン {{{
 if s:has_vim_starting
-  execute 'set runtimepath+=' . s:cache_dir . '/plugin/repos/github.com/Shougo/dein.vim/'
+  execute 'set runtimepath^=' . s:cache_dir . '/plugin/repos/github.com/Shougo/dein.vim/'
   let g:dein#install_process_timeout = 10*60
   let g:dein#install_max_processes   = 16
 endif
@@ -154,7 +154,7 @@ endif
 call dein#begin(s:cache_dir . '/plugin')
 
 if dein#load_cache([$MYVIMRC, s:vim_plugin_toml])
-  call dein#add('Shougo/dein.vim', {'frozen': 1})
+  call dein#add('Shougo/dein.vim')
   call dein#load_toml(s:vim_plugin_toml)
   call dein#save_cache()
 endif
