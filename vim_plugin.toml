@@ -45,7 +45,6 @@ lazy      = 1
 on_ft     = ['vim', 'xml']
 
 [[plugins]]
-# repo      = 'YoshihiroIto/syntastic'
 repo      = 'scrooloose/syntastic'
 lazy      = 1
 on_ft     = ['go', 'ruby', 'python']
@@ -270,27 +269,6 @@ on_cmd    = 'ClangFormat'
 repo      = 'fatih/vim-go'
 lazy      = 1
 on_ft     = 'go'
-
-# [[plugins]]
-# repo      = 'google/vim-ft-go'
-# lazy      = 1
-# on_ft     = 'go'
-#
-# [[plugins]]
-# repo      = 'vim-jp/vim-go-extra'
-# lazy      = 1
-# on_ft     = 'go'
-#
-# [[plugins]]
-# repo      = 'nsf/gocode'
-# lazy      = 1
-# on_ft     = 'go'
-#
-# [[plugins]]
-# repo      = 'dgryski/vim-godef'
-# lazy      = 1
-# on_ft     = 'go'
-
 # }}}
 # Xml {{{
 [[plugins]]

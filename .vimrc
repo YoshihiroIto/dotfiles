@@ -1148,19 +1148,6 @@ if dein#tap('vim-clang-format') " {{{
         \ }
 endif " }}}
 " }}}
-" Go {{{
-" if dein#tap('gocode') " {{{
-"  if s:is_windows
-"    " todo: macだと補完候補が出てこなくなる
-"    let g:gocomplete#system_function = 'vimproc#system'
-"  endif
-" endif " }}}
-" if dein#tap('vim-godef') " {{{
-"  let g:godef_split                    = 0
-"  let g:godef_same_file_in_same_window = 1
-"  let g:godef_system_function          = 'vimproc#system'
-" endif " }}}
-" }}}
 " Git {{{
 if dein#tap('vim-gitgutter') " {{{
   let g:gitgutter_map_keys           = 0
