@@ -101,6 +101,10 @@ function! s:lazy_initialize()
     set cryptmethod=blowfish2
   endif
 
+  if executable('jvgrep')
+    set grepprg=jvgrep
+  endif
+
   set iskeyword=@,48-57,_,128-167,224-235
 
   if s:is_windows && !executable('MSBuild')
@@ -1410,10 +1414,6 @@ set incsearch
 set ignorecase
 set smartcase
 set hlsearch
-
-if executable('jvgrep')
-  set grepprg=jvgrep
-endif
 
 " 日本語インクリメンタルサーチ
 if s:has_kaoriya
