@@ -25,7 +25,7 @@ command! -nargs=* AutocmdFT autocmd MyAutoCmd FileType <args>
 if s:has_vim_starting
   let s:startuptime = reltime()
   Autocmd VimEnter * let s:startuptime = reltime(s:startuptime)
-        \|  echomsg 'startuptime:' reltimestr(s:startuptime)
+        \| echomsg 'startuptime:' reltimestr(s:startuptime)
 endif
 
 " SID
