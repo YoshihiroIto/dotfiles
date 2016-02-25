@@ -104,6 +104,11 @@ lazy      = 1
 depends   = 'neocomplete.vim'
 on_i      = 1
 # }}}
+# 移動 {{{
+repo      = 'deris/parajump'
+lazy      = 1
+on_map    = '<Plug>'
+# }}}
 # 編集 {{{
 [[plugins]]
 repo      = 'tomtom/tcomment_vim'
