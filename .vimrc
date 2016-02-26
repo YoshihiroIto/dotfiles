@@ -264,9 +264,6 @@ endfunction
 
 Autocmd User dein#source#vim-submode call s:vim_submode_on_source()
 " }}}
-" vim-hardtime {{{
-let g:hardtime_default_on = 1
-" }}}
 " }}}
 " 表示 {{{
 " foldCC.vim {{{
