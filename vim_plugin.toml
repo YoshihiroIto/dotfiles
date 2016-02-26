@@ -25,10 +25,6 @@ lazy      = 1
 repo      = 'kana/vim-submode'
 lazy      = 1
 on_map    = ['gh', 'gw', ',w']
-
-[[plugins]]
-repo      = 'takac/vim-hardtime'
-lazy      = 0
 # }}}
 # 表示 {{{
 [[plugins]]
@@ -48,6 +44,10 @@ on_ft     = ['vim', 'xml']
 repo      = 'scrooloose/syntastic'
 lazy      = 1
 on_ft     = ['go', 'ruby', 'python']
+
+[[plugins]]
+repo      = 'vim-scripts/matchparenpp'
+lazy      = 0
 # }}}
 # 検索 {{{
 [[plugins]]
