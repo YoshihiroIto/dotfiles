@@ -1122,9 +1122,18 @@ endif
 " }}}
 " C# {{{
 " omnisharp-vim {{{
-let g:omnicomplete_fetch_full_documentation = 1
-let g:Omnisharp_stop_server                 = 0
-let g:OmniSharp_typeLookupInPreview         = 0
+function! s:omnisharp_vim_on_source() abort
+  let g:omnicomplete_fetch_full_documentation = 1
+  let g:Omnisharp_stop_server                 = 0
+  let g:OmniSharp_typeLookupInPreview         = 0
+
+  AutocmdFT cs setlocal omnifunc=OmniSharp#Complete
+  AutocmdFT cs nnoremap <silent><buffer> <C-]> :<C-u>call OmniSharp#GotoDefinition()<CR>
+        \                                      zz
+        \                                      :call <SID>refresh_screen()<CR>
+endfunction
+
+Autocmd User dein#source#omnisharp-vim call s:omnisharp_vim_on_source()
 " }}}
 " }}}
 " C++ {{{
@@ -1217,11 +1226,6 @@ AutocmdFT go         nnoremap <silent><buffer> <C-]>  :<C-u>call GodefUnderCurso
 AutocmdFT c,cpp      nnoremap <silent><buffer> [App]r :<C-u>QuickRun cpp/wandbox<CR>
 AutocmdFT c,cpp      nnoremap <silent><buffer> <C-]>  :<C-u>UniteWithCursorWord
       \                                                     -immediately -buffer-name=tag tag<CR>
-
-AutocmdFT cs         setlocal omnifunc=OmniSharp#Complete
-AutocmdFT cs         nnoremap <silent><buffer> <C-]>  :<C-u>call OmniSharp#GotoDefinition()<CR>
-      \                                               zz
-      \                                               :call <SID>refresh_screen()<CR>
 
 AutocmdFT typescript setlocal omnifunc=TSScompleteFunc
 
