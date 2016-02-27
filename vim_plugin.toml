@@ -51,11 +51,6 @@ lazy      = 0
 # }}}
 # 検索 {{{
 [[plugins]]
-repo      = 'YoshihiroIto/vim-jumpbrace'
-lazy      = 1
-on_map    = '<Plug>'
-
-[[plugins]]
 repo      = 'osyo-manga/vim-anzu'
 lazy      = 1
 on_map    = '<Plug>'
@@ -105,9 +100,15 @@ depends   = 'neocomplete.vim'
 on_i      = 1
 # }}}
 # 移動 {{{
+[[plugins]]
 repo      = 'deris/parajump'
 lazy      = 1
 on_map    = '<Plug>'
+
+# [[plugins]]
+# repo      = 'YoshihiroIto/vim-jumpbrace'
+# lazy      = 1
+# on_map    = '<Plug>'
 # }}}
 # 編集 {{{
 [[plugins]]
