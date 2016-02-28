@@ -47,7 +47,9 @@ on_ft     = ['go', 'ruby', 'python']
 
 [[plugins]]
 repo      = 'vim-scripts/matchparenpp'
-lazy      = 0
+lazy      = 1
+on_path   = '.*'
+on_i      = 1
 # }}}
 # 検索 {{{
 [[plugins]]
