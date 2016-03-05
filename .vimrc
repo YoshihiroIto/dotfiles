@@ -121,6 +121,7 @@ function! s:lazy_initialize()
   Autocmd BufWinEnter,ColorScheme .vimrc syntax match vimAutoCmd /\<\(Autocmd\|AutocmdFT\)\>/
 
   call dein#source([
+        \ 'vimproc',
         \ 'vim-textobj-ifdef',
         \ 'vim-textobj-comment',
         \ 'textobj-wiw',
@@ -170,6 +171,7 @@ if dein#load_cache([$MYVIMRC, s:vim_plugin_toml])
   call dein#save_cache()
 endif
 " ライブラリ {{{
+let g:vimproc#download_windows_dll = 1
 " vim-submode {{{
 function! s:vim_submode_on_source() abort
   let g:submode_timeout          = 0
@@ -564,7 +566,6 @@ nmap <silent>       <C-n> <Plug>(yankround-next)
 " }}}
 " vim-smartinput {{{
 function! s:vim_smartinput_on_source() abort
-
   call smartinput#clear_rules()
   call smartinput#define_default_rules()
 endfunction
@@ -1139,22 +1140,22 @@ Autocmd User dein#source#omnisharp-vim call s:omnisharp_vim_on_source()
 " }}}
 " C++ {{{
 " vim-clang-format {{{
-if s:is_windows
-  let g:clang_format#command = 'C:/Development/LLVM/bin/clang-format.exe'
-endif
+function! s:vim_clang_format_on_source() abort
+  let g:clang_format#style_options = {
+        \   'AccessModifierOffset':                           -4,
+        \   'AllowShortIfStatementsOnASingleLine':            'false',
+        \   'AlwaysBreakBeforeMultilineStrings':              'false',
+        \   'BreakBeforeBraces':                              'Allman',
+        \   'BreakConstructorInitializersBeforeComma':        'true',
+        \   'ColumnLimit':                                    0,
+        \   'ConstructorInitializerAllOnOneLineOrOnePerLine': 'false',
+        \   'IndentCaseLabels':                               'true',
+        \   'IndentWidth':                                    4,
+        \   'UseTab':                                         'Never'
+        \ }
+endfunction
 
-let g:clang_format#style_options = {
-      \   'AccessModifierOffset':                           -4,
-      \   'AllowShortIfStatementsOnASingleLine':            'false',
-      \   'AlwaysBreakBeforeMultilineStrings':              'false',
-      \   'BreakBeforeBraces':                              'Allman',
-      \   'BreakConstructorInitializersBeforeComma':        'true',
-      \   'ColumnLimit':                                    0,
-      \   'ConstructorInitializerAllOnOneLineOrOnePerLine': 'false',
-      \   'IndentCaseLabels':                               'true',
-      \   'IndentWidth':                                    4,
-      \   'UseTab':                                         'Never'
-      \ }
+Autocmd User dein#source#vim-clang-format call s:vim_clang_format_on_source()
 " }}}
 " }}}
 " Git {{{
@@ -1212,6 +1213,7 @@ AutocmdFT toml       setlocal foldcolumn=5
 
 AutocmdFT xml,html   setlocal foldlevel=99
 AutocmdFT xml,html   setlocal foldcolumn=5
+AutocmdFT xml,html   setlocal foldmethod=syntax
 AutocmdFT xml,html   inoremap <silent><buffer> >  ><Esc>:call closetag#CloseTagFun()<CR>
 AutocmdFT xml,html   let g:xml_syntax_folding = 1
 
