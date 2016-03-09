@@ -1,8 +1,7 @@
 # ライブラリ {{{
 [[plugins]]
 repo      = 'Shougo/vimproc'
-on_func   = 'vimproc'
-lazy      = 1
+lazy      = 0
 
 [[plugins]]
 repo      = 'xolox/vim-misc'
