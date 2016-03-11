@@ -63,7 +63,7 @@ endfunction
 
 nnoremap <silent> <F1> :<C-u>call <SID>edit_vimrc()<CR>
 nnoremap <silent> <F2> :<C-u>call <SID>edit_vim_plugin_toml()<CR>
-nnoremap          <F3> :<C-u>call dein#update()<CR>
+nnoremap          <F3> :<C-u>call dein#clear_state()<CR>:call dein#update()<CR>
 
 " 遅延初期化
 " ※なぜaugroupを使わないか
@@ -163,13 +163,16 @@ if s:has_vim_starting
   let g:dein#install_max_processes   = 16
 endif
 
-call dein#begin(s:cache_dir . '/plugin')
+if dein#load_state(s:cache_dir . '/plugin')
+  call dein#begin(s:cache_dir . '/plugin')
 
-if dein#load_cache([$MYVIMRC, s:vim_plugin_toml])
   call dein#add('Shougo/dein.vim')
   call dein#load_toml(s:vim_plugin_toml)
-  call dein#save_cache()
+
+  call dein#end()
+  call dein#save_state()
 endif
+
 " ライブラリ {{{
 let g:vimproc#download_windows_dll = 1
 " vim-submode {{{
@@ -1184,7 +1187,6 @@ if s:is_windows
 endif
 " }}}
 " }}}
-call dein#end()
 filetype plugin indent on
 " }}}
 " ファイルタイプごとの設定 {{{
@@ -1215,7 +1217,6 @@ AutocmdFT xml,html   setlocal foldlevel=99
 AutocmdFT xml,html   setlocal foldcolumn=5
 AutocmdFT xml,html   setlocal foldmethod=syntax
 AutocmdFT xml,html   inoremap <silent><buffer> >  ><Esc>:call closetag#CloseTagFun()<CR>
-AutocmdFT xml,html   let g:xml_syntax_folding = 1
 
 AutocmdFT go         setlocal shiftwidth=4
 AutocmdFT go         setlocal noexpandtab
@@ -1627,14 +1628,11 @@ endfunction
 set foldcolumn=0
 set foldlevel=99
 
-nnoremap <silent> zo zR
-nnoremap <silent> zc zM
+let g:vimsyn_folding     = 'af'
+let g:xml_syntax_folding = 1
 
 nnoremap <expr> zh foldlevel(line('.'))  >  0  ? 'zc' : '<C-h>'
 nnoremap <expr> zl foldclosed(line('.')) != -1 ? 'zo' : '<C-l>'
-
-" 折り畳み外であれば何もしない
-nnoremap <expr> zO foldclosed(line('.')) != -1 ? 'zO' : ''
 " }}}
 " モード移行 {{{
 if !(s:is_mac && s:has_gui_running)
