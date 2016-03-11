@@ -49,6 +49,11 @@ repo      = 'vim-scripts/matchparenpp'
 lazy      = 1
 on_path   = '.*'
 on_i      = 1
+
+[[plugins]]
+repo      = 'Konfekt/FastFold'
+lazy      = 1
+on_path   = '.*'
 # }}}
 # 検索 {{{
 [[plugins]]
