@@ -422,10 +422,10 @@ endfunction
 function! s:lightline_filename()
   try
     return (empty(s:lightline_readonly()) ? '' : s:lightline_readonly() . ' ') .
-          \ (&filetype ==# 'unite'          ? unite#get_status_string()    :
-          \  &filetype ==# 'vimfiler'       ? vimfiler#get_status_string() :
-          \  &filetype ==# 'vimshell'       ? vimshell#get_status_string() :
-          \  &filetype ==# 'quickrun'       ? ''                           :
+          \ (&filetype ==# 'unite'    ? unite#get_status_string()    :
+          \  &filetype ==# 'vimfiler' ? vimfiler#get_status_string() :
+          \  &filetype ==# 'vimshell' ? vimshell#get_status_string() :
+          \  &filetype ==# 'quickrun' ? ''                           :
           \  empty(expand('%:t')) ? '[No Name]' : expand('%:t')) .
           \ (empty(s:lightline_modified()) ? '' : ' ' . s:lightline_modified())
   catch
