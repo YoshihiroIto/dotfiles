@@ -110,11 +110,6 @@ on_i      = 1
 repo      = 'deris/parajump'
 lazy      = 1
 on_map    = '<Plug>'
-
-# [[plugins]]
-# repo      = 'YoshihiroIto/vim-jumpbrace'
-# lazy      = 1
-# on_map    = '<Plug>'
 # }}}
 # 編集 {{{
 [[plugins]]
