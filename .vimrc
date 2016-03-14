@@ -1410,9 +1410,6 @@ set expandtab       " Insertモードで <Tab> を挿入するとき、代わり
 set list
 set listchars=tab:\»\ ,eol:↲,extends:»,precedes:«,nbsp:%
 set breakindent
-
-vnoremap < <gv
-vnoremap > >gv
 " }}}
 " 検索 {{{
 set incsearch
@@ -1647,14 +1644,6 @@ else
   cnoremap <silent> <C-j> <Esc>:<C-u>set noimdisable<CR>:set imdisable<CR>
 endif
 " }}}
-" コマンドラインモード {{{
-cnoremap <C-a> <Home>
-cnoremap <C-e> <End>
-cnoremap <C-f> <Right>
-cnoremap <C-b> <Left>
-cnoremap <C-n> <Down>
-cnoremap <C-p> <Up>
-" }}}
 " カーソル移動 {{{
 nnoremap <silent> k     :<C-u>call <SID>up_cursor(v:count1)<CR>
 nnoremap <silent> j     :<C-u>call <SID>down_cursor(v:count1)<CR>
@@ -1686,8 +1675,6 @@ vnoremap <silent> <C-l> $
 
 nmap     <silent> <C-@> <Plug>(operator-jump-toggle)ai
 xmap     <silent> <C-@> <Plug>(operator-jump-toggle)ai
-
-nnoremap <silent> <Leader>m `
 
 function! s:up_cursor(repeat)
   call s:enable_virtual_cursor()
@@ -1726,8 +1713,6 @@ Autocmd InsertEnter * call s:disable_virtual_cursor()
 " ウィンドウ操作 {{{
 set splitbelow    " 縦分割したら新しいウィンドウは下に
 set splitright    " 横分割したら新しいウィンドウは右に
-
-nnoremap <silent> <Leader>c :<C-u>close<CR>
 " }}}
 " アプリウィンドウ操作 {{{
 if s:has_gui_running
@@ -1775,13 +1760,6 @@ if s:has_gui_running
   endfunction
   " }}}
 endif
-" }}}
-" タブ操作 {{{
-nnoremap [Tab]     <Nop>
-nmap     <Leader>t [Tab]
-
-nnoremap <silent> [Tab]c :<C-u>tabnew<CR>
-nnoremap <silent> [Tab]x :<C-u>tabclose<CR>
 " }}}
 " バッファ操作 {{{
 " ウィンドウをとじないで現在のバッファを削除 {{{
