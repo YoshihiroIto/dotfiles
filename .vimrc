@@ -1272,24 +1272,6 @@ Autocmd BufNewFile,BufReadPost * let s:files =
         \|  endfor
 " }}}
 " }}}
-" キー無効 {{{
-" Vimを閉じない
-nnoremap ZQ <Nop>
-
-" Exモード
-nnoremap Q  <Nop>
-
-" ミス操作で削除してしまうため
-nnoremap dh <Nop>
-nnoremap dj <Nop>
-nnoremap dk <Nop>
-nnoremap dl <Nop>
-
-" よくミスるため
-vnoremap u     <Nop>
-onoremap u     <Nop>
-inoremap <C-k> <Nop>
-" }}}
 " 編集 {{{
 set browsedir=buffer              " バッファで開いているファイルのディレクトリ
 set clipboard=unnamedplus,unnamed " クリップボードを使う
