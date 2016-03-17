@@ -1101,6 +1101,7 @@ function! s:unite_vim_on_source() abort
   call unite#custom#source('memolist',   'sorters',        ['sorter_ftime', 'sorter_reverse'])
   call unite#custom#source('everything', 'max_candidates', 500)
   call unite#custom#source('grep',       'max_candidates', 0)
+  call unite#custom#source('line',       'max_candidates', 0)
 
   AutocmdFT unite nnoremap <silent><buffer><expr> <C-r> unite#do_action('replace')
   AutocmdFT unite inoremap <silent><buffer><expr> <C-r> unite#do_action('replace')
