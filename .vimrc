@@ -13,6 +13,7 @@ let s:vim_plugin_toml = expand('~/vim_plugin.toml')
 let s:cache_dir       = expand('~/.cache')
 let s:dotvim_dir      = expand('~/.vim')
 let s:dropbox_dir     = expand('~/Dropbox')
+let s:plugin_dir      = s:cache_dir . '/plugin'
 
 " 自動コマンド
 augroup MyAutoCmd
@@ -158,13 +159,13 @@ set guioptions-=e
 " }}}
 " プラグイン {{{
 if s:has_vim_starting
-  execute 'set runtimepath^=' . s:cache_dir . '/plugin/repos/github.com/Shougo/dein.vim/'
+  execute 'set runtimepath^=' . s:plugin_dir . '/repos/github.com/Shougo/dein.vim/'
   let g:dein#install_process_timeout = 10*60
   let g:dein#install_max_processes   = 16
 endif
 
-if dein#load_state(s:cache_dir . '/plugin')
-  call dein#begin(s:cache_dir . '/plugin')
+if dein#load_state(s:plugin_dir)
+  call dein#begin(s:plugin_dir)
 
   call dein#add('Shougo/dein.vim')
   call dein#load_toml(s:vim_plugin_toml)
@@ -1098,10 +1099,11 @@ function! s:unite_vim_on_source() abort
   call unite#custom_default_action('directory',                 'vimfiler')
   call unite#custom_default_action('neomru/directory',          'vimfiler')
 
-  call unite#custom#source('memolist',   'sorters',        ['sorter_ftime', 'sorter_reverse'])
-  call unite#custom#source('everything', 'max_candidates', 500)
-  call unite#custom#source('grep',       'max_candidates', 0)
-  call unite#custom#source('line',       'max_candidates', 0)
+  call unite#custom#source('memolist',        'sorters',        ['sorter_ftime', 'sorter_reverse'])
+  call unite#custom#source('everything',      'max_candidates', 500)
+  call unite#custom#source('grep',            'max_candidates', 0)
+  call unite#custom#source('line',            'max_candidates', 0)
+  call unite#custom#source('giti/branch_all', 'max_candidates', 0)
 
   AutocmdFT unite nnoremap <silent><buffer><expr> <C-r> unite#do_action('replace')
   AutocmdFT unite inoremap <silent><buffer><expr> <C-r> unite#do_action('replace')
