@@ -1655,8 +1655,6 @@ nnoremap <silent> <C-i> <C-i>zz:<C-u>call <SID>refresh_screen()<CR>
 nnoremap <silent> <C-o> <C-o>zz:<C-u>call <SID>refresh_screen()<CR>
 nnoremap <silent> <C-h> ^:<C-u>set virtualedit=all<CR>
 nnoremap <silent> <C-l> $:<C-u>set virtualedit=all<CR>
-vnoremap <silent> <C-h> ^
-vnoremap <silent> <C-l> $
 
 nmap     <silent> <C-@> <Plug>(operator-jump-toggle)ai
 xmap     <silent> <C-@> <Plug>(operator-jump-toggle)ai
