@@ -2,6 +2,7 @@ snippet DependencyProperty
 abbr    DependencyProperty
 options head
 	#region ${1:property_name}
+
 	public ${2:property_type} $1
 	{
 		get { return ($2)GetValue($1Property); }
@@ -35,6 +36,7 @@ options head
 
 		return value;
 	}
+
 	#endregion
 	${0}
 
@@ -42,12 +44,15 @@ snippet props
 abbr    Property (SetProperty)
 options head
 	#region ${1:property_name}
+
 	private ${2:property_type} _$1;
+
 	public $2 $1
 	{
 		get { return _$1; }
 		set { SetProperty(ref _$1, value); }
 	}
+
 	#endregion
 	${0}
 
@@ -55,7 +60,9 @@ snippet propr
 abbr    Property (RaisePropertyChanged)
 options head
 	#region ${1:property_name}
+
 	private ${2:property_type} _$1;
+
 	public $2 $1
 	{
 		get { return _$1; }
@@ -68,6 +75,7 @@ options head
 			RaisePropertyChanged(() => $1);
 		}
 	}
+
 	#endregion
 	${0}
 
@@ -80,7 +88,9 @@ snippet comv
 abbr    ViewModelCommand
 options head
 	#region ${1:command_name}Command
+
 	private ViewModelCommand _$1Command;
+
 	public ViewModelCommand $1Command
 	{
 		get { return _$1Command ?? (_$1Command = new ViewModelCommand($1, Can$1)); }
@@ -94,6 +104,7 @@ options head
 	{
 		return true;
 	}
+
 	#endregion
 	${0}
 
@@ -101,7 +112,9 @@ snippet coml
 abbr    ListenerCommand
 options head
 	#region ${1:command_name}Command
+
 	private ListenerCommand<${2:message_type}> _$1Command;
+
 	public ListenerCommand<$2> $1Command
 	{
 		get { return _$1Command ?? (_$1Command = new ListenerCommand<$2>($1, Can$1)); }
@@ -115,18 +128,8 @@ options head
 	{
 		return true;
 	}
-	#endregion
-	${0}
 
-snippet Singleton
-abbr    Singleton
-options head
-	private ${1:class_name}(){}
-	private static readonly $1 _Instance = new $1();
-	public static $1 Instance
-	{
-		get { return _Instance; }
-	}
+	#endregion
 	${0}
 
 snippet ///
