@@ -37,7 +37,7 @@ lazy      = 0
 [[plugins]]
 repo      = 'LeafCage/foldCC.vim'
 lazy      = 1
-on_ft     = ['vim', 'xml']
+on_ft     = ['vim', 'xml', 'toml']
 
 [[plugins]]
 repo      = 'scrooloose/syntastic'
