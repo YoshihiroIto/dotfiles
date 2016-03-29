@@ -166,10 +166,7 @@ endif
 
 if dein#load_state(s:plugin_dir)
   call dein#begin(s:plugin_dir)
-
-  call dein#add('Shougo/dein.vim')
   call dein#load_toml(s:vim_plugin_toml)
-
   call dein#end()
   call dein#save_state()
 endif
@@ -854,15 +851,6 @@ function! s:clever_f_vim_on_source() abort
 endfunction
 
 Autocmd User dein#source#clever-f.vim call s:clever_f_vim_on_source()
-" }}}
-" vim-easymotion {{{
-nmap r <Plug>(easymotion-sn)
-xmap r <Plug>(easymotion-sn)
-
-let g:EasyMotioN_do_mapping  = 0
-let g:EasyMotion_smartcase   = 1
-let g:EasyMotion_keys        = 'ghfjtyrubvmdkeiwoqp47382'
-let g:EasyMotion_startofline = 1
 " }}}
 " }}}
 " ファイルタイプ {{{
