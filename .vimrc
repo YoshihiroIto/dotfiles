@@ -172,7 +172,6 @@ if dein#load_state(s:plugin_dir)
 endif
 
 " ライブラリ {{{
-let g:vimproc#download_windows_dll = 1
 " vim-submode {{{
 function! s:vim_submode_on_source() abort
   let g:submode_timeout          = 0
@@ -270,13 +269,6 @@ Autocmd User dein#source#vim-submode call s:vim_submode_on_source()
 " }}}
 " }}}
 " 表示 {{{
-" foldCC.vim {{{
-let g:foldCCtext_enable_autofdc_adjuster = 1
-let g:foldCCtext_tail                    =
-      \ 'printf("[ %4d lines  Lv%-2d]", v:foldend - v:foldstart + 1, v:foldlevel)'
-
-set foldtext=FoldCCtext()
-" }}}
 " syntastic {{{
 Autocmd BufWritePost *.{go,rb,py} call s:update_lightline()
 " }}}
@@ -530,26 +522,6 @@ endfunction
 " }}}
 " }}}
 " 編集 {{{
-" vim-endwise {{{
-" http://cohama.hateblo.jp/entry/20121017/1350482411
-let g:endwise_no_mappings = 1
-AutocmdFT lua,ruby,vim imap <buffer> <CR> <CR><Plug>DiscretionaryEnd
-" }}}
-" vim-closetag {{{
-let g:closetag_filenames = '*.{html,xhtml,xml,xaml}'
-" }}}
-" vim-easy-align {{{
-nmap <silent> <Leader>a=       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)=
-nmap <silent> <Leader>a:       v<Plug>(textobj-indent-i)<Plug>(EasyAlign):
-nmap <silent> <Leader>a,       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*,
-nmap <silent> <Leader>a<Space> v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*<Space>
-nmap <silent> <Leader>a\|      v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*\|
-xmap <silent> <Leader>a=       <Plug>(EasyAlign)=
-xmap <silent> <Leader>a:       <Plug>(EasyAlign):
-xmap <silent> <Leader>a,       <Plug>(EasyAlign)*,
-xmap <silent> <Leader>a<Space> <Plug>(EasyAlign)*<Space>
-xmap <silent> <Leader>a\|      <Plug>(EasyAlign)*\|
-" }}}
 " yankround.vim {{{
 let g:yankround_use_region_hl = 1
 
@@ -564,22 +536,6 @@ xmap <silent><expr> gp    <SID>yankround_pre(v:count1) . '<Plug>(yankround-gp)'
 nmap <silent><expr> gP    <SID>yankround_pre(v:count1) . '<Plug>(yankround-gP)'
 nmap <silent>       <C-p> <Plug>(yankround-prev)
 nmap <silent>       <C-n> <Plug>(yankround-next)
-" }}}
-" vim-smartinput {{{
-function! s:vim_smartinput_on_source() abort
-  call smartinput#clear_rules()
-  call smartinput#define_default_rules()
-endfunction
-
-Autocmd User dein#source#vim-smartinput call s:vim_smartinput_on_source()
-" }}}
-" increment-activator {{{
-let g:increment_activator_filetype_candidates = {
-      \   '_':   [['width', 'height']],
-      \   'cs':  [['private', 'protected', 'public', 'internal'],
-      \           ['abstract', 'virtual', 'override']],
-      \   'cpp': [['private', 'protected', 'public']]
-      \ }
 " }}}
 " vim-over {{{
 let g:over_command_line_key_mappings = {"\<C-j>": "\<Esc>"}
@@ -607,11 +563,6 @@ function! s:initialize_over()
     autocmd!
   augroup END
 endfunction
-" }}}
-" previm {{{
-if s:is_windows
-  let g:previm_open_cmd = 'C:\\Program\ Files\ (x86)\\Google\\Chrome\\Application\\chrome.exe'
-endif
 " }}}
 " }}}
 " 補完 {{{
@@ -774,33 +725,8 @@ Autocmd User dein#source#vim-altr call s:vim_altr_on_source()
 " vim-auto-mirroring {{{
 let g:auto_mirroring_dir =  s:cache_dir . '/mirror'
 " }}}
-" vim-icondrag {{{
-if s:is_windows
-  function! s:vim_icondrag_on_source() abort
-    call icondrag#enable()
-  endfunction
-
-  Autocmd User dein#source#vim-icondrag call s:vim_icondrag_on_source()
-endif
-" }}}
 " }}}
 " 検索 {{{
-" matchit.zip {{{
-function! s:matchit_zip_on_source() abort
-  silent! execute 'doautocmd Filetype' &filetype
-endfunction
-
-Autocmd User dein#source#matchit.zip call s:matchit_zip_on_source()
-" }}}
-" incsearch.vim {{{
-function! s:incsearch_vim_on_source() abort
-  let g:incsearch#auto_nohlsearch   = 1
-  let g:incsearch#emacs_like_keymap = 1
-  let g:incsearch#magic             = '\v'
-endfunction
-
-Autocmd User dein#source#incsearch.vim call s:incsearch_vim_on_source()
-" }}}
 " vim-anzu {{{
 " 一定時間キー入力がないとき、ウインドウを移動したとき、タブを移動したときに
 " 検索ヒット数の表示を消去する
@@ -829,338 +755,8 @@ function! s:clear_display_anzu()
   endtry
 endfunction
 " }}}
-" clever-f.vim {{{
-nmap f <Plug>(clever-f-f)
-xmap f <Plug>(clever-f-f)
-omap f <Plug>(clever-f-f)
-nmap F <Plug>(clever-f-F)
-xmap F <Plug>(clever-f-F)
-omap F <Plug>(clever-f-F)
-
-function! s:clever_f_vim_on_source() abort
-  let g:clever_f_not_overwrites_standard_mappings = 1
-  let g:clever_f_ignore_case                      = 1
-  let g:clever_f_smart_case                       = 1
-  let g:clever_f_across_no_line                   = 1
-  let g:clever_f_use_migemo                       = 1
-  let g:clever_f_chars_match_any_signs            = ';'
-  let g:clever_f_mark_char_color                  = 'Clever_f_mark_char'
-
-  highlight default Clever_f_mark_char ctermfg=Green ctermbg=NONE cterm=underline
-        \                              guifg=Green   guibg=NONE   gui=underline
-endfunction
-
-Autocmd User dein#source#clever-f.vim call s:clever_f_vim_on_source()
-" }}}
-" }}}
-" ファイルタイプ {{{
-" vim-markdown {{{
-let g:markdown_fenced_languages = [
-      \   'c',    'cpp', 'cs', 'go',
-      \   'ruby', 'lua', 'python',
-      \   'vim',
-      \   'toml',
-      \   'xml',  'json'
-      \ ]
-" }}}
-" vim-autoft {{{
-let g:autoft_config = [
-      \   {'filetype': 'cs',
-      \    'pattern': '^\s*using'},
-      \   {'filetype': 'cpp',
-      \    'pattern': '^\s*#\s*\%(include\|define\)\>'},
-      \   {'filetype': 'go',
-      \    'pattern': '^import ('},
-      \   {'filetype': 'html',
-      \    'pattern': '<\%(!DOCTYPE\|html\|head\|script\|meta\|link|div\|span\)\>\|^html:5\s*$'},
-      \   {'filetype': 'xml',
-      \    'pattern': '<[0-9a-zA-Z]\+'},
-      \ ]
-" }}}
-" }}}
-" テキストオブジェクト {{{
-" vim-textobj-parameter {{{
-xmap aa <Plug>(textobj-parameter-a)
-xmap ia <Plug>(textobj-parameter-i)
-omap aa <Plug>(textobj-parameter-a)
-omap ia <Plug>(textobj-parameter-i)
-" }}}
-" textobj-wiw {{{
-xmap a. <Plug>(textobj-wiw-a)
-xmap i. <Plug>(textobj-wiw-i)
-omap a. <Plug>(textobj-wiw-a)
-omap i. <Plug>(textobj-wiw-i)
-" }}}
-" }}}
-" オペレータ {{{
-" vim-operator-replace {{{
-nmap R  <Plug>(operator-replace)
-xmap R  <Plug>(operator-replace)
-" }}}
-" vim-operator-tcomment {{{
-nmap t  <Plug>(operator-tcomment)
-xmap t  <Plug>(operator-tcomment)
-" }}}
-" vim-operator-surround {{{
-map  S  <Plug>(operator-surround-append)
-nmap Sd <Plug>(operator-surround-delete)ab
-nmap Sr <Plug>(operator-surround-replace)ab
-let g:operator#surround#blocks = {
-      \   '-': [
-      \     {
-      \       'block':      ["{\<CR>", "\<CR>}"],
-      \       'motionwise': ['line'            ],
-      \       'keys':       ['{', '}'          ]
-      \     }
-      \   ]
-      \ }
-" }}}
-" operator-camelize.vim {{{
-nmap _  <Plug>(operator-camelize-toggle)
-xmap _  <Plug>(operator-camelize-toggle)
-" }}}
-" }}}
-" アプリ {{{
-" vimshell.vim {{{
-noremap <silent> [App]s :<C-u>VimShellPop<CR>
-
-let g:shell_mappings_enabled = 0
-let g:vimshell_popup_height   = 40
-let g:vimshell_prompt_pattern = '^\%(\f\|\\.\)\+> '
-let g:vimshell_prompt_expr    =
-      \ 'escape(substitute(fnamemodify(getcwd(), ":~").">", "\\", "/", "g"), "\\[]()?! ")." "'
-" }}}
-" vimfiler.vim {{{
-noremap <silent> [App]f :<C-u>VimFilerBufferDir<CR>
-
-function! s:vimfiler_vim_on_source() abort
-  AutocmdFT vimfiler nmap     <buffer><expr>   <CR>
-        \                         vimfiler#smart_cursor_map('<Plug>(vimfiler_cd_file)',
-        \                                                   '<Plug>(vimfiler_edit_file)')
-  AutocmdFT vimfiler nmap     <buffer><expr>   <C-j>
-        \                         vimfiler#smart_cursor_map('<Plug>(vimfiler_exit)',
-        \                                                   '<Plug>(vimfiler_exit)')
-  AutocmdFT vimfiler nnoremap <silent><buffer> J :<C-u>Unite bookmark<CR>
-  AutocmdFT vimfiler nnoremap <silent><buffer> / :<C-u>Unite file -horizontal<CR>
-  AutocmdFT vimfiler nnoremap <silent><buffer> gr
-        \                         :<C-u>Unite -no-split -buffer-name=grep grep:.<CR>
-
-  let g:vimfiler_as_default_explorer        = 1
-  let g:vimfiler_force_overwrite_statusline = 0
-  let g:vimfiler_ignore_pattern             = []
-  let g:vimfiler_tree_leaf_icon             = ' '
-  let g:vimfiler_readonly_file_icon         = '⭤'
-  let g:unite_kind_file_use_trashbox        = 1
-endfunction
-
-function! s:vimfiler_vim_on_post_source() abort
-  call vimfiler#custom#profile('default', 'context', {'auto_cd': 1})
-endfunction
-
-Autocmd User dein#source#vimfiler.vim      call s:vimfiler_vim_on_source()
-Autocmd User dein#post_source#vimfiler.vim call s:vimfiler_vim_on_post_source()
-" }}}
-" memolist.vim {{{
-noremap <silent> [App]mn :<C-u>MemoNew<CR>
-noremap <silent> [App]ml :<C-u>MemoList<CR>
-noremap <silent> [App]mg :<C-u>MemoGrep<CR>
-
-let g:memolist_unite        = 1
-let g:memolist_memo_suffix  = 'md'
-let g:memolist_unite_source = 'memolist'
-let g:memolist_path         = s:dropbox_dir . '/memo'
-" }}}
-" wandbox-vim {{{
-function! s:wandbox_vim_on_source() abort
-  " wandbox.vim で quickfix を開かないようにする
-  let g:wandbox#open_quickfix_window = 0
-  let g:wandbox#default_compiler     = {'cpp': 'clang-head'}
-endfunction
-
-Autocmd User dein#source#wandbox-vim call s:wandbox_vim_on_source()
-" }}}
-" vim-quickrun {{{
-noremap <silent> [App]r :<C-u>QuickRun<CR>
-
-let g:quickrun_config = {
-      \   '_': {
-      \     'hook/close_unite_quickfix/enable_hook_loaded': 1,
-      \     'hook/unite_quickfix/enable_failure':           1,
-      \     'hook/close_quickfix/enable_exit':              1,
-      \     'hook/close_buffer/enable_failure':             1,
-      \     'hook/close_buffer/enable_empty_data':          1,
-      \     'outputter':                                    'multi:buffer:quickfix',
-      \     'runner':                                       'vimproc',
-      \     'runner/vimproc/updatetime':                    40
-      \   },
-      \   'cpp/wandbox': {
-      \     'runner':                                       'wandbox',
-      \     'runner/wandbox/compiler':                      'clang-head',
-      \     'runner/wandbox/options':                       'warning,c++1y,boost-1.55'
-      \   },
-      \   'lua': {
-      \     'type':                                         'lua/vim'
-      \   }
-      \ }
-" }}}
-" open-browser.vim {{{
-let g:openbrowser_no_default_menus = 1
-" }}}
-" }}}
-" Unite {{{
-" unite.vim {{{
-nnoremap [Unite] <Nop>
-xnoremap [Unite] <Nop>
-nmap     <Space> [Unite]
-xmap     <Space> [Unite]
-
-nnoremap <silent> [Unite]cg   :<C-u>Unite -no-split -buffer-name=grep        grep<CR>
-nnoremap <silent> [Unite]gg   :<C-u>Unite -no-split -buffer-name=grep        grep:.<CR>
-nnoremap <silent> [Unite]ccg  :<C-u>Unite -no-split -buffer-name=grep        grep:..<CR>
-nnoremap <silent> [Unite]cccg :<C-u>Unite -no-split -buffer-name=grep        grep:../..<CR>
-nnoremap <silent> [Unite]pg   :<C-u>Unite -no-split -buffer-name=grep        grep:!<CR>
-nnoremap <silent> [Unite]f    :<C-u>Unite           -buffer-name=buffer      buffer<CR>
-nnoremap <silent> [Unite]j    :<C-u>Unite           -buffer-name=bookmark    bookmark<CR>
-nnoremap <silent> [Unite]l    :<C-u>Unite -no-split -buffer-name=line        line<CR>
-nnoremap <silent> [Unite]o    :<C-u>Unite -vertical -buffer-name=outline     outline<CR>
-nnoremap <silent> [Unite]q    :<C-u>Unite -no-quit  -buffer-name=quickfix    quickfix<CR>
-nnoremap <silent> [Unite]m    :<C-u>Unite -no-split -buffer-name=neomru/file neomru/file<CR>
-nnoremap <silent> [Unite]v    :<C-u>call <SID>execute_if_on_git_branch(
-      \                     'Unite -no-split -buffer-name=giti            giti')<CR>
-nnoremap <silent> [Unite]b    :<C-u>call <SID>execute_if_on_git_branch(
-      \                     'Unite -no-split -buffer-name=giti/branch_all giti/branch_all')<CR>
-
-nnoremap <silent> [Unite]rr   :<C-u>UniteResume<CR>
-nnoremap <silent> [Unite]rg   :<C-u>UniteResume grep<CR>
-nnoremap <silent> [Unite]rf   :<C-u>UniteResume buffer<CR>
-nnoremap <silent> [Unite]rj   :<C-u>UniteResume bookmark<CR>
-nnoremap <silent> [Unite]rl   :<C-u>UniteResume line<CR>
-nnoremap <silent> [Unite]ro   :<C-u>UniteResume outline<CR>
-nnoremap <silent> [Unite]rq   :<C-u>UniteResume quickfix<CR>
-nnoremap <silent> [Unite]rm   :<C-u>UniteResume neomru/file<CR>
-nnoremap <silent> [Unite]rv   :<C-u>UniteResume giti<CR>
-nnoremap <silent> [Unite]rb   :<C-u>UniteResume giti/branch_all<CR>
-
-if s:is_windows
-  nnoremap <silent> [Unite]e  :<C-u>Unite -no-split -buffer-name=everything everything<CR>
-  nnoremap <silent> [Unite]re :<C-u>UniteResume everything<CR>
-endif
-
-function! s:unite_vim_on_source() abort
-  let g:unite_force_overwrite_statusline = 0
-  let g:unite_source_alias_aliases       = {
-        \   'memolist': {
-        \       'source': 'file'
-        \   },
-        \   'var': {
-        \       'source': 'output',
-        \       'args':   'let'
-        \   },
-        \   'message': {
-        \       'source': 'output',
-        \       'args':   'message'
-        \   }
-        \ }
-
-  if executable('jvgrep')
-    let g:unite_source_grep_command       = 'jvgrep'
-    let g:unite_source_grep_default_opts  =
-          \ '-8 -r -i -I ' .
-          \ '--exclude ''\.(git|svn|vs|o|a|exe|dll|pdb|nupkg)$|(\bobj\b|\bbin\b)'''
-    let g:unite_source_grep_recursive_opt = '-R'
-    let g:unite_source_grep_encoding      = 'utf-8'
-  endif
-
-  call unite#custom#profile('default', 'context', {
-        \   'direction':        'rightbelow',
-        \   'hide_icon':        0,
-        \   'ignorecase':       1,
-        \   'prompt':           '>>',
-        \   'prompt_direction': 'top',
-        \   'smartcase':        1,
-        \   'start_insert':     1,
-        \   'vertical':         0,
-        \   'winwidth':         60
-        \ })
-
-  call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
-  call unite#custom_default_action('directory',                 'vimfiler')
-  call unite#custom_default_action('neomru/directory',          'vimfiler')
-
-  call unite#custom#source('memolist',        'sorters',        ['sorter_ftime', 'sorter_reverse'])
-  call unite#custom#source('everything',      'max_candidates', 500)
-  call unite#custom#source('grep',            'max_candidates', 0)
-  call unite#custom#source('line',            'max_candidates', 0)
-  call unite#custom#source('giti/branch_all', 'max_candidates', 0)
-
-  AutocmdFT unite nnoremap <silent><buffer><expr> <C-r> unite#do_action('replace')
-  AutocmdFT unite inoremap <silent><buffer><expr> <C-r> unite#do_action('replace')
-  AutocmdFT unite nmap     <silent><buffer>       <C-v> <Plug>(unite_toggle_auto_preview)
-  AutocmdFT unite imap     <silent><buffer>       <C-v> <Plug>(unite_toggle_auto_preview)
-  AutocmdFT unite nmap     <silent><buffer>       <C-j> <Plug>(unite_exit)
-endfunction
-
-Autocmd User dein#source#unite.vim call s:unite_vim_on_source()
-" }}}
-" neomru.vim {{{
-function! s:neomru_vim_on_source() abort
-  let g:neomru#update_interval         = 1
-  let g:neomru#file_mru_ignore_pattern = 'fugitiveblame'
-endfunction
-
-Autocmd User dein#source#neomru.vim call s:neomru_vim_on_source()
-" }}}
-" unite-everything {{{
-if s:is_windows
-  let g:unite_source_everything_full_path_search = 1
-endif
-" }}}
-" }}}
-" C# {{{
-" omnisharp-vim {{{
-function! s:omnisharp_vim_on_source() abort
-  let g:omnicomplete_fetch_full_documentation = 1
-  let g:Omnisharp_stop_server                 = 0
-  let g:OmniSharp_typeLookupInPreview         = 0
-
-  AutocmdFT cs setlocal omnifunc=OmniSharp#Complete
-  AutocmdFT cs nnoremap <silent><buffer> <C-]> :<C-u>call OmniSharp#GotoDefinition()<CR>
-        \                                      zz
-        \                                      :call <SID>refresh_screen()<CR>
-endfunction
-
-Autocmd User dein#source#omnisharp-vim call s:omnisharp_vim_on_source()
-" }}}
-" }}}
-" C++ {{{
-" vim-clang-format {{{
-function! s:vim_clang_format_on_source() abort
-  let g:clang_format#style_options = {
-        \   'AccessModifierOffset':                           -4,
-        \   'AllowShortIfStatementsOnASingleLine':            'false',
-        \   'AlwaysBreakBeforeMultilineStrings':              'false',
-        \   'BreakBeforeBraces':                              'Allman',
-        \   'BreakConstructorInitializersBeforeComma':        'true',
-        \   'ColumnLimit':                                    0,
-        \   'ConstructorInitializerAllOnOneLineOrOnePerLine': 'false',
-        \   'IndentCaseLabels':                               'true',
-        \   'IndentWidth':                                    4,
-        \   'UseTab':                                         'Never'
-        \ }
-endfunction
-
-Autocmd User dein#source#vim-clang-format call s:vim_clang_format_on_source()
-" }}}
 " }}}
 " Git {{{
-" vim-gitgutter {{{
-let g:gitgutter_map_keys           = 0
-let g:gitgutter_eager              = 0
-let g:gitgutter_diff_args          = ''
-let g:gitgutter_sign_column_always = 1
-
-Autocmd FocusGained,FocusLost * GitGutter
-" }}}
 " vim-fugitive {{{
 Autocmd FocusGained,FocusLost * call s:update_fugitive()
 
@@ -1171,11 +767,6 @@ function! s:update_fugitive()
   catch
   endtry
 endfunction
-" }}}
-" agit.vim {{{
-if s:is_windows
-  let g:agit_enable_auto_show_commit = 0
-endif
 " }}}
 " }}}
 filetype plugin indent on
