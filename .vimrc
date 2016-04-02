@@ -30,13 +30,6 @@ if s:has_vim_starting
         \| echomsg 'startuptime:' reltimestr(s:startuptime)
 endif
 
-" SID
-function! s:get_sid()
-  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeget_sid$')
-endfunction
-let s:sid = s:get_sid()
-delfunction s:get_sid
-
 " メニューを読み込まない
 let g:did_install_default_menus = 1
 
@@ -253,8 +246,8 @@ endfunction
 Autocmd BufNewFile,BufReadPost * let s:files =
       \   findfile('.vimrc.local', escape(expand('<afile>:p:h'), ' ') . ';', -1)
       \|  for s:i in reverse(filter(s:files, 'filereadable(v:val)'))
-        \|    source `=s:i`
-        \|  endfor
+      \|    source `=s:i`
+      \|  endfor
 " }}}
 " }}}
 " 編集 {{{
