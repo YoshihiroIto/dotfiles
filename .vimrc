@@ -33,13 +33,19 @@ endif
 " メニューを読み込まない
 let g:did_install_default_menus = 1
 
+" ヘルプ
+set helplang=ja,en
+set keywordprg=
+if s:has_kaoriya
+  set runtimepath+=$VIM/plugins/vimdoc-ja
+endif
+
 " キー
 nnoremap [App] <Nop>
 nmap     ;     [App]
 
 function! s:edit_vimrc()
   let dropbox_vimrc = g:YOI_dropbox_dir . '/dotfiles/.vimrc'
-
   if filereadable(dropbox_vimrc)
     execute 'edit' dropbox_vimrc
   else
@@ -59,6 +65,14 @@ endfunction
 nnoremap <silent> <F1> :<C-u>call <SID>edit_vimrc()<CR>
 nnoremap <silent> <F2> :<C-u>call <SID>edit_vim_plugin_toml()<CR>
 nnoremap          <F3> :<C-u>call dein#clear_state()<CR>:call dein#update()<CR>
+
+" 場所ごとに設定を用意する
+" http://vim-jp.org/vim-users-jp/2009/12/27/Hack-112.html
+Autocmd BufNewFile,BufReadPost * let s:files =
+      \   findfile('.vimrc.local', escape(expand('<afile>:p:h'), ' ') . ';', -1)
+      \|  for s:i in reverse(filter(s:files, 'filereadable(v:val)'))
+      \|    source `=s:i`
+      \|  endfor
 
 " 遅延初期化
 " ※なぜaugroupを使わないか
@@ -230,9 +244,9 @@ function! s:update_all()
   endif
 endfunction
 
+" 行番号表示幅を設定する
+" http://d.hatena.ne.jp/osyo-manga/20140303/1393854617
 function! s:update_numberwidth()
-  " 行番号表示幅を設定する
-  " http://d.hatena.ne.jp/osyo-manga/20140303/1393854617
   let w = len(line('$')) + 2
   if w < 5
     let w = 5
@@ -240,15 +254,6 @@ function! s:update_numberwidth()
 
   let &l:numberwidth = w
 endfunction
-
-" 場所ごとに設定を用意する {{{
-" http://vim-jp.org/vim-users-jp/2009/12/27/Hack-112.html
-Autocmd BufNewFile,BufReadPost * let s:files =
-      \   findfile('.vimrc.local', escape(expand('<afile>:p:h'), ' ') . ';', -1)
-      \|  for s:i in reverse(filter(s:files, 'filereadable(v:val)'))
-      \|    source `=s:i`
-      \|  endfor
-" }}}
 " }}}
 " 編集 {{{
 set browsedir=buffer              " バッファで開いているファイルのディレクトリ
@@ -268,7 +273,6 @@ set noswapfile
 set nobackup
 set formatoptions+=j
 set nofixeol
-
 set tags=tags,./tags,../tags,../../tags,../../../tags,../../../../tags,../../../../../tags
 
 " 文字コード自動判断
@@ -289,8 +293,6 @@ command! Format call s:execute_keep_view('call s:format()')
 function! s:format()
   if &filetype ==# 'cs'
     OmniSharpCodeFormat
-    " let csStylerCuiExe = 'mono ~/CsStyler/CsStyler.exe'
-    " call s:filter_current_by_tempfile(csStylerCuiExe . ' --input=%s --output=%s', 0, 1)
   elseif &filetype ==# 'c'
     ClangFormat
   elseif &filetype ==# 'cpp'
@@ -320,18 +322,19 @@ function! s:format()
 endfunction
 
 " 現在のファイルパスをクリップボードへコピーする
-command! CopyCurrentFilepath call setreg('*', expand('%:p'), 'v')
+command! CopyFilepath     call setreg('*', expand('%:t'), 'v')
+command! CopyFullFilepath call setreg('*', expand('%:p'), 'v')
 
 nnoremap Y y$
 
 vnoremap <C-a> <C-a>gv
 vnoremap <C-x> <C-x>gv
 
-nmap     <silent> <C-CR> V<C-CR>
-vnoremap <silent> <C-CR> :<C-u>call <SID>copy_add_comment()<CR>
-
 " 日本語考慮r
 xnoremap <expr> r {'v': "\<C-v>r", 'V': "\<C-v>0o$r", "\<C-v>": 'r'}[mode()]
+
+nmap     <silent> <C-CR> V<C-CR>
+vnoremap <silent> <C-CR> :<C-u>call <SID>copy_add_comment()<CR>
 
 " http://qiita.com/akira-hamada/items/2417d0bcb563475deddb をもとに調整
 function! s:copy_add_comment() range
@@ -383,25 +386,6 @@ if s:has_kaoriya
   set migemodict=$VIMRUNTIME/dict/migemo-dict
 endif
 
-map / <Plug>(incsearch-forward)
-map ? <Plug>(incsearch-backward)
-
-map  <silent> n  <Plug>(incsearch-nohl-n)
-map  <silent> N  <Plug>(incsearch-nohl-N)
-nmap <silent> n  <Plug>(incsearch-nohl)
-      \          <Plug>(anzu-n)
-      \          zv
-      \          :call YOI_begin_display_anzu()<CR>
-nmap <silent> N  <Plug>(incsearch-nohl)
-      \          <Plug>(anzu-N)
-      \          zv
-      \          :call YOI_begin_display_anzu()<CR>
-
-map  <silent> *  <Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
-map  <silent> g* <Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
-map  <silent> #  <Plug>(incsearch-nohl0)<Plug>(asterisk-z#)
-map  <silent> g# <Plug>(incsearch-nohl0)<Plug>(asterisk-gz#)
-
 " 複数Vimで検索を同期する {{{
 if s:has_gui_running
   function! s:save_reg(reg, filename)
@@ -414,10 +398,9 @@ if s:has_gui_running
     endif
   endfunction
 
-  let vimreg_search = expand('~/vimreg_search.txt')
-
-  Autocmd CursorHold,CursorHoldI,FocusLost * silent! call s:save_reg('/', vimreg_search)
-  Autocmd FocusGained                      * silent! call s:load_reg('/', vimreg_search)
+  let s:vimreg_search = expand('~/vimreg_search.txt')
+  Autocmd CursorHold,CursorHoldI,FocusLost * silent! call s:save_reg('/', s:vimreg_search)
+  Autocmd FocusGained                      * silent! call s:load_reg('/', s:vimreg_search)
 endif
 " }}}
 " }}}
@@ -436,7 +419,7 @@ set wildmode=list:full
 set showfulltag
 set wildoptions=tagfile
 set fillchars=vert:\        " 縦分割の境界線
-set synmaxcol=200           " ハイライトする文字数を制限する
+set synmaxcol=2000          " ハイライトする文字数を制限する
 set updatetime=250
 set previewheight=24
 set cmdheight=4
@@ -458,10 +441,6 @@ endif
 Autocmd VimEnter * set t_vb=
 Autocmd VimEnter * set visualbell
 Autocmd VimEnter * set errorbells
-
-let g:netrw_nogx = 1
-nmap gx :<C-u>call openbrowser#_keymapping_smart_search('n')<CR>
-vmap gx :<C-u>call openbrowser#_keymapping_smart_search('v')<CR>
 
 " カーソル下の単語を移動するたびにハイライトする {{{
 " http://d.hatena.ne.jp/osyo-manga/20140121/1390309901
@@ -631,9 +610,6 @@ nnoremap <silent> <C-o> <C-o>zz:<C-u>call YOI_refresh_screen()<CR>
 nnoremap <silent> <C-h> ^:<C-u>set virtualedit=all<CR>
 nnoremap <silent> <C-l> $:<C-u>set virtualedit=all<CR>
 
-nmap     <silent> <C-@> <Plug>(operator-jump-toggle)ai
-xmap     <silent> <C-@> <Plug>(operator-jump-toggle)ai
-
 function! s:up_cursor(repeat)
   call s:enable_virtual_cursor()
   execute 'normal!' a:repeat . 'gk'
@@ -719,55 +695,6 @@ if s:has_gui_running
   " }}}
 endif
 " }}}
-" バッファ操作 {{{
-" ウィンドウをとじないで現在のバッファを削除 {{{
-function! s:delete_current_buffer()
-  let confirm_msg             = '未保存です。閉じますか？'
-  let current_win             = winnr()
-  let current_buf             = winbufnr(current_win)
-  let is_current_buf_modified = getbufvar(current_buf, '&modified')
-  let buf_list                = filter(range(1, bufnr('$')), 'buflisted(v:val)')
-
-  if len(buf_list) == 1
-    if !is_current_buf_modified
-      bdelete
-
-    elseif confirm(confirm_msg, "&Yes\n&No", 1, 'Question') == 1
-      bdelete!
-    endif
-
-    return
-  endif
-
-  if is_current_buf_modified
-    if confirm(confirm_msg, "&Yes\n&No", 1, 'Question') != 1
-      return
-    endif
-  endif
-
-  let next_buf_index = match(buf_list, current_buf) + 1
-
-  if next_buf_index == len(buf_list)
-    let next_buf_index = 0
-  endif
-
-  let next_buf = buf_list[next_buf_index]
-
-  while 1
-    let winnr = bufwinnr(current_buf)
-    if winnr == -1
-      break
-    endif
-
-    execute winnr . 'wincmd w'
-    execute 'buffer' next_buf
-  endwhile
-
-  execute 'bdelete' current_buf
-  execute current_win . 'wincmd w'
-endfunction
-" }}}
-" }}}
 " Git {{{
 nnoremap [Git]     <Nop>
 nmap     <Leader>g [Git]
@@ -782,14 +709,6 @@ nnoremap <silent> [Git]ps :<C-u>call <SID>execute_if_on_git_branch('Gpush')<CR>:
 nnoremap <silent> [Git]pl :<C-u>call <SID>execute_if_on_git_branch('Gpull')<CR>:GitGutter<CR>
 nnoremap <silent> [Git]g  :<C-u>call <SID>execute_if_on_git_branch('Agit')<CR>
 nnoremap <silent> [Git]h  :<C-u>call <SID>execute_if_on_git_branch('GitGutterPreviewHunk')<CR>
-" }}}
-" ヘルプ {{{
-set helplang=ja,en
-set keywordprg=
-
-if s:has_kaoriya
-  set runtimepath+=$VIM/plugins/vimdoc-ja
-endif
 " }}}
 " 汎用関数 {{{
 " 画面リフレッシュ {{{
