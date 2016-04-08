@@ -69,10 +69,10 @@ nnoremap          <F3> :<C-u>call dein#clear_state()<CR>:call dein#update()<CR>
 " 場所ごとに設定を用意する
 " http://vim-jp.org/vim-users-jp/2009/12/27/Hack-112.html
 Autocmd BufNewFile,BufReadPost * let s:files =
-      \   findfile('.vimrc.local', escape(expand('<afile>:p:h'), ' ') . ';', -1)
-      \|  for s:i in reverse(filter(s:files, 'filereadable(v:val)'))
-      \|    source `=s:i`
-      \|  endfor
+      \  findfile('.vimrc.local', escape(expand('<afile>:p:h'), ' ') . ';', -1)
+      \| for s:i in reverse(filter(s:files, 'filereadable(v:val)'))
+      \|   source `=s:i`
+      \| endfor
 
 " 遅延初期化
 " ※なぜaugroupを使わないか
@@ -386,7 +386,7 @@ if s:has_kaoriya
   set migemodict=$VIMRUNTIME/dict/migemo-dict
 endif
 
-" 複数Vimで検索を同期する {{{
+" 複数Vimで検索を同期する
 if s:has_gui_running
   function! s:save_reg(reg, filename)
     call writefile([getreg(a:reg)], a:filename)
@@ -402,7 +402,6 @@ if s:has_gui_running
   Autocmd CursorHold,CursorHoldI,FocusLost * silent! call s:save_reg('/', s:vimreg_search)
   Autocmd FocusGained                      * silent! call s:load_reg('/', s:vimreg_search)
 endif
-" }}}
 " }}}
 " 表示 {{{
 syntax enable               " 構文ごとに色分けをする
@@ -699,16 +698,16 @@ endif
 nnoremap [Git]     <Nop>
 nmap     <Leader>g [Git]
 
-nnoremap <silent> [Git]b  :<C-u>call <SID>execute_if_on_git_branch('Gblame w')<CR>
-nnoremap <silent> [Git]a  :<C-u>call <SID>execute_if_on_git_branch('Gwrite')<CR>:GitGutter<CR>
-nnoremap <silent> [Git]c  :<C-u>call <SID>execute_if_on_git_branch('Gcommit')<CR>:GitGutter<CR>
-nnoremap <silent> [Git]f  :<C-u>call <SID>execute_if_on_git_branch('GitiFetch')<CR>:GitGutter<CR>
-nnoremap <silent> [Git]d  :<C-u>call <SID>execute_if_on_git_branch('Gdiff')<CR>
-nnoremap <silent> [Git]s  :<C-u>call <SID>execute_if_on_git_branch('Gstatus')<CR>
-nnoremap <silent> [Git]ps :<C-u>call <SID>execute_if_on_git_branch('Gpush')<CR>:GitGutter<CR>
-nnoremap <silent> [Git]pl :<C-u>call <SID>execute_if_on_git_branch('Gpull')<CR>:GitGutter<CR>
-nnoremap <silent> [Git]g  :<C-u>call <SID>execute_if_on_git_branch('Agit')<CR>
-nnoremap <silent> [Git]h  :<C-u>call <SID>execute_if_on_git_branch('GitGutterPreviewHunk')<CR>
+nnoremap <silent> [Git]b  :<C-u>call YOI_execute_if_on_git_branch('Gblame w')<CR>
+nnoremap <silent> [Git]a  :<C-u>call YOI_execute_if_on_git_branch('Gwrite')<CR>:GitGutter<CR>
+nnoremap <silent> [Git]c  :<C-u>call YOI_execute_if_on_git_branch('Gcommit')<CR>:GitGutter<CR>
+nnoremap <silent> [Git]f  :<C-u>call YOI_execute_if_on_git_branch('GitiFetch')<CR>:GitGutter<CR>
+nnoremap <silent> [Git]d  :<C-u>call YOI_execute_if_on_git_branch('Gdiff')<CR>
+nnoremap <silent> [Git]s  :<C-u>call YOI_execute_if_on_git_branch('Gstatus')<CR>
+nnoremap <silent> [Git]ps :<C-u>call YOI_execute_if_on_git_branch('Gpush')<CR>:GitGutter<CR>
+nnoremap <silent> [Git]pl :<C-u>call YOI_execute_if_on_git_branch('Gpull')<CR>:GitGutter<CR>
+nnoremap <silent> [Git]g  :<C-u>call YOI_execute_if_on_git_branch('Agit')<CR>
+nnoremap <silent> [Git]h  :<C-u>call YOI_execute_if_on_git_branch('GitGutterPreviewHunk')<CR>
 " }}}
 " 汎用関数 {{{
 " 画面リフレッシュ {{{
@@ -729,7 +728,7 @@ function! s:is_unite_running()
 endfunction
 " }}}
 " Gitブランチ上にいるか {{{
-function! s:is_in_git_branch()
+function! YOI_is_in_git_branch()
   try
     return !empty(fugitive#head())
   catch
@@ -738,8 +737,8 @@ function! s:is_in_git_branch()
 endfunction
 " }}}
 " Gitブランチ上であれば実行 {{{
-function! s:execute_if_on_git_branch(line)
-  if !s:is_in_git_branch()
+function! YOI_execute_if_on_git_branch(line)
+  if !YOI_is_in_git_branch()
     echomsg 'not on git branch:' a:line
     return
   endif

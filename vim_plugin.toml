@@ -291,7 +291,7 @@ function! YOI_lightline_current_branch()
     return ''
   endif
 
-  if !s:is_in_git_branch()
+  if !YOI_is_in_git_branch()
     return ''
   endif
 
@@ -336,7 +336,7 @@ function! YOI_lightline_git_summary()
     return ''
   endif
 
-  if !s:is_in_git_branch()
+  if !YOI_is_in_git_branch()
     return ''
   endif
 
@@ -772,20 +772,20 @@ on_map      = '<Plug>'
 hook_add    = '''
 nmap ga <Plug>(altr-forward)
 nmap gA <Plug>(altr-back)
-'''
-hook_source = '''
-function! s:altr_define(...)
+
+function! YOI_altr_define(...)
   for parent in ['', '/*', '/*/*', '/*/*/*']
     call altr#define(map(copy(a:000), 'printf(v:val, "' . parent . '")'))
   endfor
 endfunction
-
+'''
+hook_source = '''
 " MVVM
 AutocmdFT cs,xml call altr#define(  '%Model.cs',
       \                             '%Vm.cs',
       \                             '%.xaml',
       \                             '%.xaml.cs')
-AutocmdFT cs,xml call s:altr_define('Models%s/%%Model.cs',
+AutocmdFT cs,xml call YOI_altr_define('Models%s/%%Model.cs',
       \                             'ViewModels%s/%%Vm.cs',
       \                             'Views%s/%%.xaml',
       \                             'Views%s/%%.xaml.cs')
@@ -793,7 +793,7 @@ AutocmdFT cs,xml call altr#define(  '%Model.cs',
       \                             '%ViewModel.cs',
       \                             '%.xaml',
       \                             '%.xaml.cs')
-AutocmdFT cs,xml call s:altr_define('Models%s/%%Model.cs',
+AutocmdFT cs,xml call YOI_altr_define('Models%s/%%Model.cs',
       \                             'ViewModels%s/%%ViewModel.cs',
       \                             'Views%s/%%.xaml',
       \                             'Views%s/%%.xaml.cs')
@@ -808,7 +808,7 @@ AutocmdFT cs,xml call altr#define(  '%.cs',
 AutocmdFT cpp call altr#define(     '%.cpp',
       \                             '%.*.cpp',
       \                             '%.h')
-AutocmdFT cpp call s:altr_define(   'src%s/%%.cpp',
+AutocmdFT cpp call YOI_altr_define(   'src%s/%%.cpp',
       \                             'include%s/%%.h')
 '''
 
@@ -844,15 +844,12 @@ endif
 [[plugins]]
 repo        = 'tyru/open-browser.vim'
 lazy        = 1
-# on_func     = 'openbrowser'
-# on_cmd      = 'OpenBrowser'
-on_map      = '<Plug>'
+on_map      = '<Plug>(openbrowser'
 hook_add    = '''
 let g:openbrowser_no_default_menus = 1
-
 let g:netrw_nogx = 1
-nmap <silent> gx :<C-u>call openbrowser#_keymapping_smart_search('n')<CR>
-vmap <silent> gx :<C-u>call openbrowser#_keymapping_smart_search('v')<CR>
+nmap gx <Plug>(openbrowser-smart-search)
+vmap gx <Plug>(openbrowser-smart-search)
 '''
 
 [[plugins]]
@@ -980,9 +977,9 @@ nnoremap <silent> [Unite]l    :<C-u>Unite -no-split -buffer-name=line        lin
 nnoremap <silent> [Unite]o    :<C-u>Unite -vertical -buffer-name=outline     outline<CR>
 nnoremap <silent> [Unite]q    :<C-u>Unite -no-quit  -buffer-name=quickfix    quickfix<CR>
 nnoremap <silent> [Unite]m    :<C-u>Unite -no-split -buffer-name=neomru/file neomru/file<CR>
-nnoremap <silent> [Unite]v    :<C-u>call <SID>execute_if_on_git_branch(
+nnoremap <silent> [Unite]v    :<C-u>call YOI_execute_if_on_git_branch(
       \                     'Unite -no-split -buffer-name=giti            giti')<CR>
-nnoremap <silent> [Unite]b    :<C-u>call <SID>execute_if_on_git_branch(
+nnoremap <silent> [Unite]b    :<C-u>call YOI_execute_if_on_git_branch(
       \                     'Unite -no-split -buffer-name=giti/branch_all giti/branch_all')<CR>
 
 nnoremap <silent> [Unite]rr   :<C-u>UniteResume<CR>
