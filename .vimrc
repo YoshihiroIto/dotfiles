@@ -325,6 +325,13 @@ endfunction
 command! CopyFilepath     call setreg('*', expand('%:t'), 'v')
 command! CopyFullFilepath call setreg('*', expand('%:p'), 'v')
 
+command! Guid call <SID>gen_guid()
+
+function! s:gen_guid()
+  call setreg('g', vimproc#system('GuidGen'), 'v')
+  silent keepjumps normal! "gp
+endfunction
+
 nnoremap Y y$
 
 vnoremap <C-a> <C-a>gv
@@ -506,6 +513,8 @@ endif
 if s:has_gui_running
   set guifont=Ricty\ Regular\ for\ Powerline:h11
 endif
+
+set printfont=Ricty\ Regular\ for\ Powerline:h11
 
 if s:is_windows && s:has_kaoriya
   set ambiwidth=auto
