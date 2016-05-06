@@ -357,6 +357,16 @@ function! s:copy_add_comment() range
   " ヤンクした物をペーストする
   normal! P
 endfunction
+
+" マウス中クリックペースト無効
+map  <MiddleMouse>   <Nop>
+imap <MiddleMouse>   <Nop>
+map  <2-MiddleMouse> <Nop>
+imap <2-MiddleMouse> <Nop>
+map  <3-MiddleMouse> <Nop>
+imap <3-MiddleMouse> <Nop>
+map  <4-MiddleMouse> <Nop>
+imap <4-MiddleMouse> <Nop>
 " }}}
 " インプットメソッド {{{
 " macvim kaoriya gvim で submode が正しく動作しなくなるため
