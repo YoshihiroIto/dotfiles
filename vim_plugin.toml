@@ -1407,8 +1407,7 @@ lazy        = 1
 depends     = 'vim-operator-user'
 on_map      = [['nx', '<Plug>']]
 hook_add    = '''
-nmap R  <Plug>(operator-replace)
-xmap R  <Plug>(operator-replace)
+map <expr> R operator#stay_cursor#wrapper("\<Plug>(operator-replace)", { "noremap" : 0 })
 '''
 
 # S
@@ -1452,6 +1451,15 @@ on_map      = [['nx', '<Plug>(operator-jump']]
 hook_add    = '''
 nmap <silent> <C-@> <Plug>(operator-jump-toggle)ai
 xmap <silent> <C-@> <Plug>(operator-jump-toggle)ai
+'''
+
+[[plugins]]
+repo        = 'osyo-manga/vim-operator-stay-cursor'
+lazy        = 1
+depends     = 'vim-operator-user'
+on_map      = [['nx', '<Plug>(operator-stay']]
+hook_add    = '''
+map y <Plug>(operator-stay-cursor-yank)
 '''
 
 # }}}
