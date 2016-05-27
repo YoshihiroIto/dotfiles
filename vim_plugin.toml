@@ -956,7 +956,8 @@ let g:quickrun_config = {
 # }}}
 # Unite {{{
 [[plugins]]
-repo        = 'Shougo/unite.vim'
+# repo        = 'Shougo/unite.vim'
+repo        = 'YoshihiroIto/unite.vim'
 lazy        = 1
 depends     = 'neomru.vim'
 on_cmd      = ['Unite', 'UniteResume', 'UniteWithCursorWord']
@@ -1442,7 +1443,7 @@ nmap <silent> _ <Plug>(operator-camelize-toggle)
 xmap <silent> _ <Plug>(operator-camelize-toggle)
 '''
 
-# <Leader>j
+# <C-@>
 [[plugins]]
 repo        = 'osyo-manga/vim-operator-jump_side'
 lazy        = 1
