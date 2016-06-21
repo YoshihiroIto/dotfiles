@@ -341,7 +341,7 @@ function! YOI_lightline_git_summary()
   endif
 
   try
-    let summary = gitgutter#hunk#summary()
+    let summary = GitGutterGetHunkSummary()
     return printf('%s%d %s%d %s%d',
           \ g:gitgutter_sign_added,    summary[0],
           \ g:gitgutter_sign_modified, summary[1],
@@ -1186,6 +1186,7 @@ let g:gitgutter_map_keys           = 0
 let g:gitgutter_eager              = 0
 let g:gitgutter_diff_args          = ''
 let g:gitgutter_sign_column_always = 1
+let g:gitgutter_async              = 0
 
 Autocmd FocusGained,FocusLost * GitGutter
 '''
