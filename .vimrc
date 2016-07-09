@@ -447,7 +447,7 @@ set cursorline
 set display=lastline
 set conceallevel=2
 set concealcursor=i
-set colorcolumn=100
+execute "set colorcolumn=" . join(range(101, 999), ',')
 
 if s:has_gui_running
   set lines=100
