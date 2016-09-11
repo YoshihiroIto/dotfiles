@@ -156,7 +156,44 @@ options head
 		${0}
 	}
 
-snippet Dispose
+snippet IDispoable
+abbr    IDisposable
+options head
+	public class ${1:class_name} : IDisposable
+	{
+		private bool _isDisposed;
+
+		~$1()
+		{
+			Dispose(false);
+		}
+
+		public void Dispose()
+		{
+			Dispose(true);
+
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (_isDisposed)
+				return;
+
+			if (disposing)
+			{
+				// Disposing of managed resources.
+				${0};
+			}
+
+			// Disposing of unmanaged resources.
+			;
+
+			_isDisposed = true;
+		}
+	}
+
+snippet Dispoable override
 abbr    protected override void Dispose(bool disposing)
 options head
 	protected override void Dispose(bool disposing)
@@ -207,9 +244,6 @@ abbr    Task.Run
 options head
 	var task = Task.Run(() => ${0});
 	Task.WaitAll(new []{task});
-
-snippet IDisposable
-	IDisposable
 
 snippet Serializable
 	Serializable
