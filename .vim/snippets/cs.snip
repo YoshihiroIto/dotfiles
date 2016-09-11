@@ -161,6 +161,7 @@ abbr    IDisposable
 options head
 	public class ${1:class_name} : IDisposable
 	{
+		#region IDisposable
 		private bool _isDisposed;
 
 		~$1()
@@ -191,6 +192,7 @@ options head
 
 			_isDisposed = true;
 		}
+		#endregion
 	}
 
 snippet Dispoable override
