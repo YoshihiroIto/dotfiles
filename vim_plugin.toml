@@ -1,7 +1,7 @@
 # プラグイン {{{
-# [[plugins]]
-# repo        = 'Shougo/dein.vim'
-# lazy        = 0
+[[plugins]]
+repo        = 'Shougo/dein.vim'
+lazy        = 0
 
 # }}}
 # ライブラリ {{{
@@ -871,7 +871,7 @@ hook_source = '''
   AutocmdFT vimfiler nnoremap <silent><buffer> J :<C-u>Unite bookmark<CR>
   AutocmdFT vimfiler nnoremap <silent><buffer> / :<C-u>Unite file -horizontal<CR>
   AutocmdFT vimfiler nnoremap <silent><buffer> gr
-        \                         :<C-u>Unite -no-split -buffer-name=grep grep:.<CR>
+        \                         :<C-u>Unite -no-split -buffer-name=grep grep:./<CR>
 
   let g:vimfiler_as_default_explorer        = 1
   let g:vimfiler_force_overwrite_statusline = 0
@@ -956,8 +956,8 @@ let g:quickrun_config = {
 # }}}
 # Unite {{{
 [[plugins]]
-# repo        = 'Shougo/unite.vim'
-repo        = 'YoshihiroIto/unite.vim'
+repo        = 'Shougo/unite.vim'
+# repo        = 'YoshihiroIto/unite.vim'
 lazy        = 1
 depends     = 'neomru.vim'
 on_cmd      = ['Unite', 'UniteResume', 'UniteWithCursorWord']
@@ -968,9 +968,9 @@ nmap     <Space> [Unite]
 xmap     <Space> [Unite]
 
 nnoremap <silent> [Unite]cg   :<C-u>Unite -no-split -buffer-name=grep        grep<CR>
-nnoremap <silent> [Unite]gg   :<C-u>Unite -no-split -buffer-name=grep        grep:.<CR>
-nnoremap <silent> [Unite]ccg  :<C-u>Unite -no-split -buffer-name=grep        grep:..<CR>
-nnoremap <silent> [Unite]cccg :<C-u>Unite -no-split -buffer-name=grep        grep:../..<CR>
+nnoremap <silent> [Unite]gg   :<C-u>Unite -no-split -buffer-name=grep        grep:./<CR>
+nnoremap <silent> [Unite]ccg  :<C-u>Unite -no-split -buffer-name=grep        grep:../<CR>
+nnoremap <silent> [Unite]cccg :<C-u>Unite -no-split -buffer-name=grep        grep:../../<CR>
 nnoremap <silent> [Unite]pg   :<C-u>Unite -no-split -buffer-name=grep        grep:!<CR>
 nnoremap <silent> [Unite]f    :<C-u>Unite           -buffer-name=buffer      buffer<CR>
 nnoremap <silent> [Unite]j    :<C-u>Unite           -buffer-name=bookmark    bookmark<CR>
@@ -1013,12 +1013,26 @@ hook_source = '''
         \   }
         \ }
 
-  if executable('jvgrep')
-    let g:unite_source_grep_command       = 'jvgrep'
-    let g:unite_source_grep_default_opts  =
-          \ '-8 -r -i -I ' .
-          \ '--exclude ''\.(git|svn|vs|o|a|exe|dll|pdb|nupkg)$|(\bobj\b|\bbin\b)'' '
-    let g:unite_source_grep_recursive_opt = '-R'
+"  if executable('jvgrep')
+"    let g:unite_source_grep_command       = 'jvgrep'
+"    let g:unite_source_grep_default_opts  =
+"          \ '-8 -r -i -I ' .
+"          \ '--exclude ''\.(git|svn|vs|o|a|exe|dll|pdb|nupkg)$|(\bobj\b|\bbin\b)'' '
+"    let g:unite_source_grep_recursive_opt = '-R'
+"    let g:unite_source_grep_encoding      = 'utf-8'
+"  endif
+
+"  if executable('pt')
+"    let g:unite_source_grep_command       = 'pt'
+"    let g:unite_source_grep_default_opts  = '--nogroup --nocolor'
+"    let g:unite_source_grep_recursive_opt = ''
+"    let g:unite_source_grep_encoding      = 'utf-8'
+"  endif
+
+  if executable('ambs')
+    let g:unite_source_grep_command       = 'ambs'
+    let g:unite_source_grep_default_opts  = '--column --no-color'
+    let g:unite_source_grep_recursive_opt = ''
     let g:unite_source_grep_encoding      = 'utf-8'
   endif
 

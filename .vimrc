@@ -32,6 +32,7 @@ endif
 
 " メニューを読み込まない
 let g:did_install_default_menus = 1
+let g:did_menu_trans = 1
 
 " ヘルプ
 set helplang=ja,en
@@ -108,10 +109,6 @@ function! s:lazy_initialize()
 
   if exists('+cryptmethod')
     set cryptmethod=blowfish2
-  endif
-
-  if executable('jvgrep')
-    set grepprg=jvgrep
   endif
 
   set iskeyword=@,48-57,_,128-167,224-235
