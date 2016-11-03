@@ -31,6 +31,7 @@ vk1Csc079::MButton
 	^m:: Send,{Enter}
 	^n:: Send,{Down}
 	^p:: Send,{Up}
+	^j:: Send,{Esc}
 #IfWinNotActive
 
 ; Google Chrome
@@ -39,18 +40,8 @@ vk1Csc079::MButton
 	^j:: Send,{Esc}
 #IfWinActive
 
-; Launchy
-#IfWinActive ahk_class QTool
-	^j:: Send,{Esc}
-#IfWinActive
-
 ; Visual Studio
 #IfWinActive ahk_class HwndWrapper\[DefaultDomain;;[\da-f\-]+]
-	^j:: Send,{Esc}
-#IfWinActive
-
-; Wox
-#IfWinActive ahk_class HwndWrapper[Wox.exe;;[\da-f\-]+]
 	^j:: Send,{Esc}
 #IfWinActive
 
