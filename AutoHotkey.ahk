@@ -14,7 +14,6 @@
 ; try out these hotkeys, run AutoHotkey again, which will load this file.
 
 SetTitleMatchMode, Regex
-#z::Run www.autohotkey.com
 
 ; vk1Dsc07B:: MouseClick, Left,   , , 1
 ; vk1Csc079:: MouseClick, Middle, , , 1
@@ -24,27 +23,24 @@ vk1Dsc07B::LButton
 vk1Csc079::MButton
 ; vkF2sc070::RButton
 
-;GVimˆÈŠO
+; GVim ˆÈŠO
 #IfWinNotActive ahk_class Vim
-	^h:: Send,{BackSpace}
-	^w:: Send,^{BackSpace}
-	^m:: Send,{Enter}
-	^n:: Send,{Down}
-	^p:: Send,{Up}
-	^j:: Send,{Esc}
+    ^j:: Send,{Esc}
 #IfWinNotActive
 
 ; Google Chrome
 #IfWinActive ahk_class Chrome_WidgetWin_1
-	!l:: Send,^l
-	^j:: Send,{Esc}
+    !l:: Send,^l
 #IfWinActive
 
-; Visual Studio
-#IfWinActive ahk_class HwndWrapper\[DefaultDomain;;[\da-f\-]+]
-	^j:: Send,{Esc}
-#IfWinActive
-
+; GVim, ConEmu ˆÈŠO
+#IfWinNotActive ahk_class Vim|VirtualConsoleClass
+    ^h:: Send,{BackSpace}
+    ^w:: Send,^{BackSpace}
+    ^m:: Send,{Enter}
+    ^n:: Send,{Down}
+    ^p:: Send,{Up}
+#IfWinNotActive
 
 ; Note: From now on whenever you run AutoHotkey directly, this script
 ; will be loaded.  So feel free to customize it to suit your needs.
