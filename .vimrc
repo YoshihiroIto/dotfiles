@@ -75,6 +75,10 @@ Autocmd BufNewFile,BufReadPost * let s:files =
       \|   source `=s:i`
       \| endfor
 
+if &l:filetype ==# ''
+  execute 'filetype detect'
+endif
+
 " 遅延初期化
 " ※なぜaugroupを使わないか
 " 特定条件で設定がされないことがあるため。
