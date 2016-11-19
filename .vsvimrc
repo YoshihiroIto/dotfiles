@@ -19,8 +19,19 @@ nnoremap g$ $
 nnoremap gg ggzvzz
 nnoremap G  Gzvzz
 
+nnoremap t         :vsc Edit.CommentSelection<CR>
+vnoremap t         :vsc Edit.CommentSelection<CR>
+
 nnoremap <C-o>     :vsc View.NavigateBackward<CR>
 nnoremap <C-i>     :vsc View.NavigateForward<CR>
 nnoremap <C-]>     :vsc ReSharper.ReSharper_GotoDeclaration<CR>
 nnoremap <Space>gg :vsc Edit.Find<CR>
+
 nnoremap ;r        :vsc Debug.Start<CR>
+nnoremap ;b        :vsc Build.BuildSolution<CR>
+nnoremap ;c        :vsc Build.Cancel<CR>
+
+nnoremap ;e        :vsc ReSharper.ReSharper_Rename<CR>
+nnoremap ;f        :vsc ReSharper.ReSharper_CleanupCode<CR>
+
+
