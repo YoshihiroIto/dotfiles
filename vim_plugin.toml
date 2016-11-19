@@ -1,7 +1,7 @@
 # プラグイン {{{
-# [[plugins]]
-# repo        = 'Shougo/dein.vim'
-# lazy        = 0
+[[plugins]]
+repo        = 'Shougo/dein.vim'
+lazy        = 0
 
 # }}}
 # ライブラリ {{{
