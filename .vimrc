@@ -75,10 +75,6 @@ Autocmd BufNewFile,BufReadPost * let s:files =
       \|   source `=s:i`
       \| endfor
 
-if &l:filetype ==# ''
-  execute 'filetype detect'
-endif
-
 " 遅延初期化
 " ※なぜaugroupを使わないか
 " 特定条件で設定がされないことがあるため。
@@ -458,6 +454,7 @@ endif
 Autocmd VimEnter * set t_vb=
 Autocmd VimEnter * set visualbell
 Autocmd VimEnter * set errorbells
+Autocmd VimEnter * filetype detect
 
 " カーソル下の単語を移動するたびにハイライトする {{{
 " http://d.hatena.ne.jp/osyo-manga/20140121/1390309901
