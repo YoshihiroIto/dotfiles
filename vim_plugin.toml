@@ -870,8 +870,9 @@ hook_source = '''
         \                                                   '<Plug>(vimfiler_exit)')
   AutocmdFT vimfiler nnoremap <silent><buffer> J :<C-u>Unite bookmark<CR>
   AutocmdFT vimfiler nnoremap <silent><buffer> / :<C-u>Unite file -horizontal<CR>
-  AutocmdFT vimfiler nnoremap <silent><buffer> gr
-        \                         :<C-u>Unite -no-split -buffer-name=grep grep:./<CR>
+  " AutocmdFT vimfiler nnoremap <silent><buffer> gr
+  "       \                         :<C-u>Unite -no-split -buffer-name=grep grep:./<CR>
+  AutocmdFT vimfiler nnoremap <silent><buffer> gr :<C-u>GrepCurrent<CR>
 
   let g:vimfiler_as_default_explorer        = 1
   let g:vimfiler_force_overwrite_statusline = 0
@@ -911,11 +912,10 @@ let g:vimshell_prompt_expr    =
 repo        = 'glidenote/memolist.vim'
 lazy        = 1
 depends     = 'unite.vim'
-on_cmd      = ['MemoNew', 'MemoList', 'MemoGrep']
+on_cmd      = ['MemoNew', 'MemoList']
 hook_add    = '''
 noremap <silent> [App]mn :<C-u>MemoNew<CR>
 noremap <silent> [App]ml :<C-u>MemoList<CR>
-noremap <silent> [App]mg :<C-u>MemoGrep<CR>
 
 let g:memolist_unite        = 1
 let g:memolist_memo_suffix  = 'md'
@@ -966,11 +966,10 @@ xnoremap [Unite] <Nop>
 nmap     <Space> [Unite]
 xmap     <Space> [Unite]
 
-nnoremap <silent> [Unite]cg   :<C-u>Unite -no-split -buffer-name=grep        grep<CR>
-nnoremap <silent> [Unite]gg   :<C-u>Unite -no-split -buffer-name=grep        grep:./<CR>
-nnoremap <silent> [Unite]ccg  :<C-u>Unite -no-split -buffer-name=grep        grep:../<CR>
-nnoremap <silent> [Unite]cccg :<C-u>Unite -no-split -buffer-name=grep        grep:../../<CR>
-nnoremap <silent> [Unite]pg   :<C-u>Unite -no-split -buffer-name=grep        grep:!<CR>
+" nnoremap <silent> [Unite]gg   :<C-u>Unite -no-split -buffer-name=grep        grep:./<CR>
+" nnoremap <silent> [Unite]pg   :<C-u>Unite -no-split -buffer-name=grep        grep:!<CR>
+nnoremap <silent> [Unite]gg   :<C-u>GrepCurrent<CR>
+nnoremap <silent> [Unite]pg   :<C-u>GrepProject<CR>
 nnoremap <silent> [Unite]f    :<C-u>Unite           -buffer-name=buffer      buffer<CR>
 nnoremap <silent> [Unite]j    :<C-u>Unite           -buffer-name=bookmark    bookmark<CR>
 nnoremap <silent> [Unite]l    :<C-u>Unite -no-split -buffer-name=line        line<CR>
@@ -1012,29 +1011,32 @@ hook_source = '''
         \   }
         \ }
 
-"  if executable('jvgrep')
-"    let g:unite_source_grep_command       = 'jvgrep'
-"    let g:unite_source_grep_default_opts  =
-"          \ '-8 -r -i -I ' .
-"          \ '--exclude ''\.(git|svn|vs|o|a|exe|dll|pdb|nupkg)$|(\bobj\b|\bbin\b)'' '
-"    let g:unite_source_grep_recursive_opt = '-R'
-"    let g:unite_source_grep_encoding      = 'utf-8'
-"  endif
+"   if executable('jvgrep')
+"     let g:unite_source_grep_command       = 'jvgrep'
+"     let g:unite_source_grep_default_opts  =
+"           \ '-8 -r -i -I ' .
+"           \ '--exclude ''\.(git|svn|vs|o|a|exe|dll|pdb|nupkg)$|(\bobj\b|\bbin\b)'' '
+"     let g:unite_source_grep_recursive_opt = '-R'
+"     let g:unite_source_grep_encoding      = 'utf-8'
+"     let g:unite_source_grep_separator     = ''
+"   endif
 
-"  if executable('pt')
-"    let g:unite_source_grep_command       = 'pt'
-"    let g:unite_source_grep_default_opts  = '--nogroup --nocolor'
-"    let g:unite_source_grep_recursive_opt = ''
-"    let g:unite_source_grep_encoding      = 'utf-8'
-"  endif
-
-  " https://github.com/dalance/amber
-  if executable('ambs')
-    let g:unite_source_grep_command       = 'ambs'
-    let g:unite_source_grep_default_opts  = '--column --no-color'
+  if executable('pt')
+    let g:unite_source_grep_command       = 'pt'
+    let g:unite_source_grep_default_opts  = '--nogroup --nocolor --ignore-case --smart-case'
     let g:unite_source_grep_recursive_opt = ''
     let g:unite_source_grep_encoding      = 'utf-8'
+    let g:unite_source_grep_separator     = '--'
   endif
+
+"  " https://github.com/dalance/amber
+"  if executable('ambs')
+"    let g:unite_source_grep_command       = 'ambs'
+"    let g:unite_source_grep_default_opts  = '--column --no-color'
+"    let g:unite_source_grep_recursive_opt = ''
+"    let g:unite_source_grep_encoding      = 'utf-8'
+"    let g:unite_source_grep_separator     = '--'
+"  endif
 
   call unite#custom#profile('default', 'context', {
         \   'direction':        'rightbelow',
@@ -1063,6 +1065,84 @@ hook_source = '''
   AutocmdFT unite nmap     <silent><buffer>       <C-v> <Plug>(unite_toggle_auto_preview)
   AutocmdFT unite imap     <silent><buffer>       <C-v> <Plug>(unite_toggle_auto_preview)
   AutocmdFT unite nmap     <silent><buffer>       <C-j> <Plug>(unite_exit)
+
+  command! GrepProject call <SID>grep_project()
+  command! GrepCurrent call <SID>grep_current()
+
+  function! s:getfullname(f)
+    let f = a:f
+    let f = f=~"'." ? s:getmarkfile(f[1]) : f
+    let f = len(f) ? f : expand('%')
+    return fnamemodify(f, ':p')
+  endfunction
+
+  function! s:projectroot_get(...)
+    let fullfile = s:getfullname(a:0 ? a:1 : '')
+
+    let rootmarkers = ['.projectroot', '.git', '.hg', '.svn', '.bzr', '_darcs', 'build.xml']
+
+    for marker in rootmarkers
+      let pivot=fullfile
+      while 1
+        let prev=pivot
+        let pivot=fnamemodify(pivot, ':h')
+        if filereadable(pivot.'/'.marker) || isdirectory(pivot.'/'.marker)
+          return pivot
+        endif
+        if pivot==prev
+          break
+        endif
+      endwhile
+    endfor
+    return ''
+  endfunction
+
+  function! s:grep_project()
+""    let g:unite_source_grep_command       = 'ambs'
+""    let g:unite_source_grep_default_opts  = '--column --no-color'
+""    let g:unite_source_grep_recursive_opt = ''
+""    let g:unite_source_grep_encoding      = 'utf-8'
+""    let g:unite_source_grep_separator     = '--'
+
+    let g:unite_source_grep_command       = 'pt'
+    let g:unite_source_grep_default_opts  = '--nogroup --nocolor --ignore-case --smart-case'
+    let g:unite_source_grep_recursive_opt = ''
+    let g:unite_source_grep_encoding      = 'utf-8'
+    let g:unite_source_grep_separator     = '--'
+
+
+
+""    let g:unite_source_grep_command       = 'C:\Users\yoi\Documents\Anni\Anni\bin\Release\Anni.exe'
+""    let g:unite_source_grep_default_opts  = ''
+""    let g:unite_source_grep_recursive_opt = ''
+""    let g:unite_source_grep_encoding      = 'utf-8'
+""    let g:unite_source_grep_separator     = '--'
+
+    execute('lcd ' . s:projectroot_get())
+
+    execute('Unite -no-split -buffer-name=grep grep:./')
+  endfunction
+
+  function! s:grep_current()
+    let g:unite_source_grep_command       = 'pt'
+    let g:unite_source_grep_default_opts  = '--nogroup --nocolor --ignore-case --smart-case'
+    let g:unite_source_grep_recursive_opt = ''
+    let g:unite_source_grep_encoding      = 'utf-8'
+    let g:unite_source_grep_separator     = '--'
+
+
+
+
+""    let g:unite_source_grep_command       = 'C:\Users\yoi\Documents\Anni\Anni\bin\Release\Anni.exe'
+""    let g:unite_source_grep_default_opts  = ''
+""    let g:unite_source_grep_recursive_opt = ''
+""    let g:unite_source_grep_encoding      = 'utf-8'
+""    let g:unite_source_grep_separator     = '--'
+
+
+
+    execute('Unite -no-split -buffer-name=grep grep:./')
+  endfunction
 '''
 
 [[plugins]]
