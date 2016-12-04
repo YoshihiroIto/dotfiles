@@ -1,0 +1,19 @@
+snippet binding_self "BindingSelf"
+"{Binding ${1:property_name},
+			RelativeSource={RelativeSource Self}}"
+${0}
+endsnippet
+
+snippet binding_parent "BindingParent"
+"{Binding ${1:property_name},
+			RelativeSource={RelativeSource FindAncestor,
+											AncestorType={x:Type ${2:parent_type}}}}"
+${0}
+endsnippet
+
+snippet binding_element "BindingElement"
+"{Binding ElementName=${1:element_name},
+			Path=${2:path}}"
+${0}
+endsnippet
+

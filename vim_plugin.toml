@@ -599,7 +599,6 @@ let g:neocomplete#sources#file_include#exts = {
 
 call neocomplete#custom#source('file', 'rank', 10)
 '''
-
 [[plugins]]
 repo        = 'Shougo/neoinclude.vim'
 lazy        = 1
@@ -607,28 +606,17 @@ depends     = 'neocomplete.vim'
 on_i        = 1
 
 [[plugins]]
-repo        = 'Shougo/neosnippet.vim'
+repo        = 'SirVer/ultisnips'
 lazy        = 1
 depends     = 'neocomplete.vim'
+on_ft       = 'snippets'
 on_i        = 1
-hook_add    = '''
-imap <expr> <Tab> neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)'
-      \                                               : '<Tab>'
-smap <expr> <Tab> neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)'
-      \                                               : '<Tab>'
-'''
 hook_source = '''
-let g:neosnippet#disable_runtime_snippets = {'_': 1}
-let g:neosnippet#snippets_directory       = g:YOI_dotvim_dir . '/snippets'
-
-let snippets_local = expand(g:YOI_dotvim_dir . '/snippets.local')
-if isdirectory(snippets_local)
-  let g:neosnippet#snippets_directory .= ',' . snippets_local
-endif
-
-call neocomplete#custom#source('neosnippet', 'rank', 1000)
+let g:UltiSnipsSnippetDirectories  = [g:YOI_dotvim_dir . '/UltiSnips']
+let g:UltiSnipsJumpForwardTrigger  = "<Tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<S-Tab>"
+call neocomplete#custom#source('US', 'rank', 1000)
 '''
-
 # }}}
 # 編集 {{{
 [[plugins]]

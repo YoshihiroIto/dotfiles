@@ -1,0 +1,90 @@
+#####################################################################
+snippet dependency_property "DependencyProperty"
+#region ${1:property_name}
+
+public ${2:property_type} $1
+{
+	get { return ($2)GetValue($1Property); }
+	set { SetValue($1Property, value); }
+}
+
+public static readonly DependencyProperty $1Property =
+	DependencyProperty.Register(
+		nameof ($1),
+		typeof ($2),
+		typeof (${3:owner_class}),
+		new FrameworkPropertyMetadata
+		{
+			PropertyChangedCallback = On$1Changed,
+			CoerceValueCallback     = Coerce$1,
+			DefaultValue            = default($2),
+			BindsTwoWayByDefault    = true
+		}
+	);
+
+private static void On$1Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+{
+	Debug.Assert(d is $3);
+	var self = d as $3;
+}
+
+private static object Coerce$1(DependencyObject d, object value)
+{
+	Debug.Assert(d is $3);
+	var self = d as $3;
+
+	return value;
+}
+
+#endregion
+${0}
+endsnippet
+
+
+#####################################################################
+snippet props "Property (SetProperty)"
+#region ${1:property_name}
+
+private ${2:property_type} _$1;
+
+public $2 $1
+{
+	get { return _$1; }
+	set { SetProperty(ref _$1, value); }
+}
+
+#endregion
+${0}
+endsnippet
+
+
+#####################################################################
+snippet propr "Property (RaisePropertyChanged)"
+#region ${1:property_name}
+
+private ${2:property_type} _$1;
+
+public $2 $1
+{
+	get { return _$1; }
+	set
+	{ 
+		if (_$1 == value)
+			return;
+
+		_$1 = value;
+		RaisePropertyChanged(() => $1);
+	}
+}
+
+#endregion
+${0}
+endsnippet
+
+
+#####################################################################
+snippet propa "Auto Property"
+public ${1:TValue} ${2:name} { get; set; }
+${0}
+endsnippet
+

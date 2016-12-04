@@ -1,0 +1,35 @@
+#####################################################################
+snippet filename
+`!v expand("%")`
+endsnippet
+
+
+#####################################################################
+snippet filename_full
+`!v substitute(expand("%:p"), '\', '/', "g")`
+endsnippet
+
+
+#####################################################################
+snippet filename_without_ext
+`!v expand("%:r")`
+endsnippet
+
+
+#####################################################################
+snippet date_full
+`!v strftime("%Y-%m-%d %H:%M:%S")`
+endsnippet
+
+
+#####################################################################
+snippet date_day
+`!v strftime("%Y-%m-%d")`
+endsnippet
+
+
+#####################################################################
+snippet date_time
+`!v strftime("%H:%M:%S")`
+endsnippet
+

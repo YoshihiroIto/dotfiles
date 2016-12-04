@@ -223,7 +223,6 @@ AutocmdFT c,cpp      nnoremap <silent><buffer> <C-]>  :<C-u>UniteWithCursorWord
 AutocmdFT typescript setlocal omnifunc=TSScompleteFunc
 
 AutocmdFT json       setlocal shiftwidth=2
-AutocmdFT neosnippet setlocal noexpandtab
 AutocmdFT godoc      nnoremap <silent><buffer> q      :<C-u>close<CR>
 AutocmdFT help       nnoremap <silent><buffer> q      :<C-u>close<CR>
 AutocmdFT markdown   nnoremap <silent><buffer> [App]v :<C-u>PrevimOpen<CR>
