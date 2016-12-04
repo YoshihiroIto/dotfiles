@@ -36,7 +36,7 @@ vk1Csc079::MButton
 ; GVim, ConEmu ˆÈŠO
 #IfWinNotActive ahk_class Vim|VirtualConsoleClass
     ^h:: Send,{BackSpace}
-    ^w:: Send,^{BackSpace}
+;    ^w:: Send,^{BackSpace}
     ^m:: Send,{Enter}
     ^n:: Send,{Down}
     ^p:: Send,{Up}
