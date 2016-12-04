@@ -25,10 +25,6 @@ repo        = 'Shougo/tabpagebuffer.vim'
 lazy        = 1
 on_path     = '.*'
 
-# [[plugins]]
-# repo        = 'osyo-manga/shabadou.vim'
-# lazy        = 1
-
 [[plugins]]
 repo        = 'kana/vim-submode'
 lazy        = 1
@@ -390,14 +386,6 @@ let g:foldCCtext_tail                    =
 set foldtext=FoldCCtext()
 '''
 
-# [[plugins]]
-# repo        = 'scrooloose/syntastic'
-# lazy        = 1
-# on_ft       = ['go', 'ruby', 'python']
-# hook_add    = '''
-# Autocmd BufWritePost *.{go,rb,py} call lightline#update()
-# '''
-
 [[plugins]]
 repo        = 'itchyny/vim-parenmatch'
 lazy        = 1
@@ -642,13 +630,6 @@ call neocomplete#custom#source('neosnippet', 'rank', 1000)
 '''
 
 # }}}
-# 移動 {{{
-# [[plugins]]
-# repo        = 'deris/parajump'
-# lazy        = 1
-# on_map      = '<Plug>'
-
-# }}}
 # 編集 {{{
 [[plugins]]
 repo        = 'tomtom/tcomment_vim'
@@ -738,11 +719,6 @@ xmap <silent> <Leader>a,       <Plug>(EasyAlign)*,
 xmap <silent> <Leader>a<Space> <Plug>(EasyAlign)*<Space>
 xmap <silent> <Leader>a\|      <Plug>(EasyAlign)*\|
 '''
-
-# [[plugins]]
-# repo        = 'thinca/vim-qfreplace'
-# lazy        = 1
-# on_ft       = ['unite', 'quickfix']
 
 [[plugins]]
 repo        = 'tpope/vim-endwise'
@@ -885,29 +861,6 @@ hook_post_source = '''
   call vimfiler#custom#profile('default', 'context', {'auto_cd': 1})
 '''
 
-# [[plugins]]
-# repo        = 'rhysd/wandbox-vim'
-# lazy        = 1
-# hook_source = '''
-# " wandbox.vim で quickfix を開かないようにする
-# let g:wandbox#open_quickfix_window = 0
-# let g:wandbox#default_compiler     = {'cpp': 'clang-head'}
-# '''
-
-[[plugins]]
-repo        = 'Shougo/vimshell.vim'
-lazy        = 1
-on_cmd      = 'VimShellPop'
-hook_add    = '''
-noremap <silent> [App]s :<C-u>VimShellPop<CR>
-
-let g:shell_mappings_enabled = 0
-let g:vimshell_popup_height   = 40
-let g:vimshell_prompt_pattern = '^\%(\f\|\\.\)\+> '
-let g:vimshell_prompt_expr    =
-      \ 'escape(substitute(fnamemodify(getcwd(), ":~").">", "\\", "/", "g"), "\\[]()?! ")." "'
-'''
-
 [[plugins]]
 repo        = 'glidenote/memolist.vim'
 lazy        = 1
@@ -923,42 +876,11 @@ let g:memolist_unite_source = 'memolist'
 let g:memolist_path         = g:YOI_dropbox_dir . '/memo'
 '''
 
-# [[plugins]]
-# repo        = 'thinca/vim-quickrun'
-# lazy        = 1
-# depends     = ['shabadou.vim', 'wandbox-vim']
-# on_map      = '<Plug>'
-# hook_add    = '''
-# noremap <silent> [App]r :<C-u>QuickRun<CR>
-#
-# let g:quickrun_config = {
-#       \   '_': {
-#       \     'hook/close_unite_quickfix/enable_hook_loaded': 1,
-#       \     'hook/unite_quickfix/enable_failure':           1,
-#       \     'hook/close_quickfix/enable_exit':              1,
-#       \     'hook/close_buffer/enable_failure':             1,
-#       \     'hook/close_buffer/enable_empty_data':          1,
-#       \     'outputter':                                    'multi:buffer:quickfix',
-#       \     'runner':                                       'vimproc',
-#       \     'runner/vimproc/updatetime':                    40
-#       \   },
-#       \   'cpp/wandbox': {
-#       \     'runner':                                       'wandbox',
-#       \     'runner/wandbox/compiler':                      'clang-head',
-#       \     'runner/wandbox/options':                       'warning,c++1y,boost-1.55'
-#       \   },
-#       \   'lua': {
-#       \     'type':                                         'lua/vim'
-#       \   }
-#       \ }
-# '''
-
 # }}}
 # Unite {{{
 [[plugins]]
 repo        = 'Shougo/unite.vim'
 lazy        = 1
-depends     = 'neomru.vim'
 on_cmd      = ['Unite', 'UniteResume', 'UniteWithCursorWord']
 hook_add    = '''
 nnoremap [Unite] <Nop>
@@ -975,7 +897,7 @@ nnoremap <silent> [Unite]j    :<C-u>Unite           -buffer-name=bookmark    boo
 nnoremap <silent> [Unite]l    :<C-u>Unite -no-split -buffer-name=line        line<CR>
 nnoremap <silent> [Unite]o    :<C-u>Unite -vertical -buffer-name=outline     outline<CR>
 nnoremap <silent> [Unite]q    :<C-u>Unite -no-quit  -buffer-name=quickfix    quickfix<CR>
-nnoremap <silent> [Unite]m    :<C-u>Unite -no-split -buffer-name=neomru/file neomru/file<CR>
+nnoremap <silent> [Unite]m    :<C-u>Unite -no-split -buffer-name=oldfiles    oldfiles<CR>
 nnoremap <silent> [Unite]v    :<C-u>call YOI_execute_if_on_git_branch(
       \                     'Unite -no-split -buffer-name=giti            giti')<CR>
 nnoremap <silent> [Unite]b    :<C-u>call YOI_execute_if_on_git_branch(
@@ -988,7 +910,7 @@ nnoremap <silent> [Unite]rj   :<C-u>UniteResume bookmark<CR>
 nnoremap <silent> [Unite]rl   :<C-u>UniteResume line<CR>
 nnoremap <silent> [Unite]ro   :<C-u>UniteResume outline<CR>
 nnoremap <silent> [Unite]rq   :<C-u>UniteResume quickfix<CR>
-nnoremap <silent> [Unite]rm   :<C-u>UniteResume neomru/file<CR>
+nnoremap <silent> [Unite]rm   :<C-u>UniteResume oldfiles<CR>
 nnoremap <silent> [Unite]rv   :<C-u>UniteResume giti<CR>
 nnoremap <silent> [Unite]rb   :<C-u>UniteResume giti/branch_all<CR>
 
@@ -1052,7 +974,6 @@ hook_source = '''
 
   call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
   call unite#custom_default_action('directory',                 'vimfiler')
-  call unite#custom_default_action('neomru/directory',          'vimfiler')
 
   call unite#custom#source('memolist',        'sorters',        ['sorter_ftime', 'sorter_reverse'])
   call unite#custom#source('everything',      'max_candidates', 500)
@@ -1146,34 +1067,20 @@ hook_source = '''
 '''
 
 [[plugins]]
-repo        = 'Shougo/neomru.vim'
+repo        = 'rhysd/unite-oldfiles.vim'
 lazy        = 1
-on_path     = '.*'
-hook_source = '''
-let g:neomru#update_interval         = 1
-let g:neomru#file_mru_ignore_pattern = 'fugitiveblame'
-'''
+on_source   = 'unite.vim'
 
 [[plugins]]
 repo        = 'Shougo/unite-outline'
 lazy        = 1
 on_source   = 'unite.vim'
 
-# [[plugins]]
-# repo        = 'osyo-manga/unite-quickfix'
-# lazy        = 1
-# on_source   = 'unite.vim'
-
 [[plugins]]
 repo        = 'YoshihiroIto/vim-unite-giti'
 lazy        = 1
 on_source   = 'unite.vim'
 on_cmd      = 'GitiFetch'
-
-# [[plugins]]
-# repo        = 'tsukkee/unite-tag'
-# lazy        = 1
-# on_source   = 'unite.vim'
 
 [[plugins]]
 repo        = 'sgur/unite-everything'
@@ -1182,23 +1089,6 @@ on_source   = 'unite.vim'
 hook_add    = '''
 let g:unite_source_everything_full_path_search = 1
 '''
-
-# }}}
-# C# {{{
-# [[plugins]]
-# repo        = 'OmniSharp/omnisharp-vim'
-# lazy        = 1
-# on_ft       = 'cs'
-# hook_source = '''
-# let g:omnicomplete_fetch_full_documentation = 1
-# let g:Omnisharp_stop_server                 = 0
-# let g:OmniSharp_typeLookupInPreview         = 0
-#
-# AutocmdFT cs setlocal omnifunc=OmniSharp#Complete
-# AutocmdFT cs nnoremap <silent><buffer> <C-]> :<C-u>call OmniSharp#GotoDefinition()<CR>
-#       \                                      zz
-#       \                                      :call YOI_refresh_screen()<CR>
-# '''
 
 # }}}
 # C++ {{{
@@ -1232,13 +1122,6 @@ let g:clang_format#style_options = {
 '''
 
 # }}}
-# Go {{{
-# [[plugins]]
-# repo        = 'fatih/vim-go'
-# lazy        = 1
-# on_ft       = 'go'
-
-# }}}
 # Xml {{{
 [[plugins]]
 repo        = 'YoshihiroIto/vim-closetag'
@@ -1250,11 +1133,10 @@ let g:closetag_filenames = '*.{html,xhtml,xml,xaml}'
 
 # }}}
 # TypeScript {{{
-# [[plugins]]
-# repo        = 'clausreinke/typescript-tools.vim'
-# lazy        = 1
-# on_ft       = 'typescript'
-
+[[plugins]]
+repo        = 'clausreinke/typescript-tools.vim'
+lazy        = 1
+on_ft       = 'typescript'
 # }}}
 # Git {{{
 [[plugins]]
@@ -1284,16 +1166,6 @@ let g:gitgutter_async              = 0
 
 Autocmd FocusGained,FocusLost * GitGutter
 '''
-
-# [[plugins]]
-# repo        = 'cohama/agit.vim'
-# lazy        = 1
-# on_cmd      = ['Agit', 'AgitFile']
-# hook_add    = '''
-# if has('win32')
-#   let g:agit_enable_auto_show_commit = 0
-# endif
-# '''
 
 # }}}
 # ファイルタイプ {{{
@@ -1330,20 +1202,10 @@ repo        = 'cespare/vim-toml'
 lazy        = 1
 on_ft       = ['toml', 'markdown']
 
-# [[plugins]]
-# repo        = 'jelera/vim-javascript-syntax'
-# lazy        = 1
-# on_ft       = 'javascript'
-
 [[plugins]]
 repo        = 'stephpy/vim-yaml'
 lazy        = 1
 on_ft       = 'yaml'
-
-# [[plugins]]
-# repo        = 'tikhomirov/vim-glsl'
-# lazy        = 1
-# on_ft       = 'glsl'
 
 [[plugins]]
 repo        = 'tpope/vim-markdown'
@@ -1359,20 +1221,15 @@ let g:markdown_fenced_languages = [
       \ ]
 '''
 
-# [[plugins]]
-# repo        = 'vim-ruby/vim-ruby'
-# lazy        = 1
-# on_ft       = 'ruby'
-
 [[plugins]]
 repo        = 'vim-scripts/JSON.vim'
 lazy        = 1
 on_ft       = ['json', 'markdown']
 
-# [[plugins]]
-# repo        = 'leafgarland/typescript-vim'
-# lazy        = 1
-# on_ft       = 'typescript'
+[[plugins]]
+repo        = 'leafgarland/typescript-vim'
+lazy        = 1
+on_ft       = 'typescript'
 
 [[plugins]]
 repo        = 'PProvost/vim-ps1'
@@ -1461,13 +1318,6 @@ omap aa <Plug>(textobj-parameter-a)
 omap ia <Plug>(textobj-parameter-i)
 '''
 
-# # f{char}
-# [[plugins]]
-# repo        = 'thinca/vim-textobj-between'
-# lazy        = 1
-# depends     = 'vim-textobj-user'
-# on_map      = [['xo', 'af'], ['xo', 'if']]
-
 # x
 [[plugins]]
 repo        = 'whatyouhide/vim-textobj-xmlattr'
@@ -1542,16 +1392,5 @@ hook_add    = '''
 nmap <silent> _ <Plug>(operator-camelize-toggle)
 xmap <silent> _ <Plug>(operator-camelize-toggle)
 '''
-
-# <C-@>
-# [[plugins]]
-# repo        = 'osyo-manga/vim-operator-jump_side'
-# lazy        = 1
-# depends     = 'vim-operator-user'
-# on_map      = [['nx', '<Plug>(operator-jump']]
-# hook_add    = '''
-# nmap <silent> <C-@> <Plug>(operator-jump-toggle)ai
-# xmap <silent> <C-@> <Plug>(operator-jump-toggle)ai
-# '''
 
 # }}}
