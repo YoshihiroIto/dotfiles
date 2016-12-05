@@ -884,7 +884,6 @@ nnoremap <silent> [Unite]f    :<C-u>Unite           -buffer-name=buffer      buf
 nnoremap <silent> [Unite]j    :<C-u>Unite           -buffer-name=bookmark    bookmark<CR>
 nnoremap <silent> [Unite]l    :<C-u>Unite -no-split -buffer-name=line        line<CR>
 nnoremap <silent> [Unite]o    :<C-u>Unite -vertical -buffer-name=outline     outline<CR>
-nnoremap <silent> [Unite]q    :<C-u>Unite -no-quit  -buffer-name=quickfix    quickfix<CR>
 nnoremap <silent> [Unite]m    :<C-u>Unite -no-split -buffer-name=oldfiles    oldfiles<CR>
 nnoremap <silent> [Unite]v    :<C-u>call YOI_execute_if_on_git_branch(
       \                     'Unite -no-split -buffer-name=giti            giti')<CR>
@@ -897,7 +896,6 @@ nnoremap <silent> [Unite]rf   :<C-u>UniteResume buffer<CR>
 nnoremap <silent> [Unite]rj   :<C-u>UniteResume bookmark<CR>
 nnoremap <silent> [Unite]rl   :<C-u>UniteResume line<CR>
 nnoremap <silent> [Unite]ro   :<C-u>UniteResume outline<CR>
-nnoremap <silent> [Unite]rq   :<C-u>UniteResume quickfix<CR>
 nnoremap <silent> [Unite]rm   :<C-u>UniteResume oldfiles<CR>
 nnoremap <silent> [Unite]rv   :<C-u>UniteResume giti<CR>
 nnoremap <silent> [Unite]rb   :<C-u>UniteResume giti/branch_all<CR>
