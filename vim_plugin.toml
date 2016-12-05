@@ -519,12 +519,12 @@ augroup InitializeNeocomplete
   autocmd VimEnter,FocusLost,CursorHold,CursorHoldI * call s:initialize_neocomplete()
 augroup END
 
-let s:initialize_neocomplete_delay = 2*2
+"let s:initialize_neocomplete_delay = 2*2
 function! s:initialize_neocomplete()
-  let s:initialize_neocomplete_delay -= 1
-  if s:initialize_neocomplete_delay > 0
-    return
-  endif
+  "let s:initialize_neocomplete_delay -= 1
+  "if s:initialize_neocomplete_delay > 0
+  "  return
+  "endif
 
   call neocomplete#initialize()
 
