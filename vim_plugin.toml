@@ -245,7 +245,6 @@ let g:lightline = {
 
 function! YOI_lightline_mode()
   return  &filetype ==# 'unite'    ? 'Unite'    :
-        \ &filetype ==# 'vimshell' ? 'VimShell' :
         \ &filetype ==# 'quickrun' ? 'Quickrun' :
         \ &filetype ==# 'agit'     ? 'Agit'     :
         \ winwidth(0) > 50 ? lightline#mode() : ''
@@ -271,7 +270,6 @@ function! YOI_lightline_filename()
   try
     return (empty(YOI_lightline_readonly()) ? '' : YOI_lightline_readonly() . ' ') .
           \ (&filetype ==# 'unite'    ? unite#get_status_string()    :
-          \  &filetype ==# 'vimshell' ? vimshell#get_status_string() :
           \  &filetype ==# 'quickrun' ? ''                           :
           \  empty(expand('%:t')) ? '[No Name]' : expand('%:t')) .
           \ (empty(YOI_lightline_modified()) ? '' : ' ' . YOI_lightline_modified())
@@ -352,7 +350,7 @@ function! YOI_lightline_lineinfo()
 endfunction
 
 function! s:is_lightline_no_disp_filetype()
-  return &filetype =~# 'unite\|vimshell\|quickrun\|agit'
+  return &filetype =~# 'unite\|quickrun\|agit'
 endfunction
 
 function! s:is_lightline_no_disp_group()
@@ -546,16 +544,11 @@ let g:neocomplete#force_overwrite_completefunc      = 1
 let g:neocomplete#skip_auto_completion_time         = '0.2'
 
 let g:neocomplete#sources#dictionary#dictionaries = {
-      \   'default':  '',
-      \   'vimshell': '~/.vimshell_hist'
+      \   'default': ''
       \ }
 
 let g:neocomplete#sources#vim#complete_functions = {
-      \   'Unite':               'unite#complete_source',
-      \   'VimShellExecute':     'vimshell#vimshell_execute_complete',
-      \   'VimShellInteractive': 'vimshell#vimshell_execute_complete',
-      \   'VimShellTerminal':    'vimshell#vimshell_execute_complete',
-      \   'VimShell':            'vimshell#complete'
+      \   'Unite': 'unite#complete_source'
       \ }
 
 " 日本語は収集しない
