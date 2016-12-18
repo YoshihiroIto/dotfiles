@@ -1,17 +1,10 @@
 # プラグイン {{{
-[[plugins]]
-repo        = 'Shougo/dein.vim'
-lazy        = 0
+# [[plugins]]
+# repo        = 'Shougo/dein.vim'
+# lazy        = 0
 
 # }}}
 # ライブラリ {{{
-[[plugins]]
-repo        = 'Shougo/vimproc'
-lazy        = 0
-hook_add    = '''
-let g:vimproc#download_windows_dll = 1
-'''
-
 [[plugins]]
 repo        = 'xolox/vim-misc'
 lazy        = 0
@@ -19,11 +12,6 @@ lazy        = 0
 [[plugins]]
 repo        = 'xolox/vim-shell'
 lazy        = 0
-
-[[plugins]]
-repo        = 'Shougo/tabpagebuffer.vim'
-lazy        = 1
-on_path     = '.*'
 
 [[plugins]]
 repo        = 'kana/vim-submode'
@@ -588,12 +576,6 @@ let g:neocomplete#sources#file_include#exts = {
 call neocomplete#custom#source('file', 'rank', 10)
 '''
 [[plugins]]
-repo        = 'Shougo/neoinclude.vim'
-lazy        = 1
-depends     = 'neocomplete.vim'
-on_i        = 1
-
-[[plugins]]
 repo        = 'SirVer/ultisnips'
 lazy        = 1
 depends     = 'neocomplete.vim'
@@ -833,7 +815,7 @@ let g:memolist_path         = g:YOI_dropbox_dir . '/memo'
 [[plugins]]
 repo        = 'Shougo/unite.vim'
 lazy        = 1
-on_cmd      = ['Unite', 'UniteResume', 'UniteWithCursorWord']
+on_cmd      = ['Unite', 'UniteResume', 'UniteWithCursorWord', 'GrepCurrent', 'GrepProject']
 hook_add    = '''
 nnoremap [Unite] <Nop>
 xnoremap [Unite] <Nop>
@@ -847,7 +829,6 @@ nnoremap <silent> [Unite]pg   :<C-u>GrepProject<CR>
 nnoremap <silent> [Unite]f    :<C-u>Unite           -buffer-name=buffer      buffer<CR>
 nnoremap <silent> [Unite]j    :<C-u>Unite           -buffer-name=bookmark    bookmark<CR>
 nnoremap <silent> [Unite]l    :<C-u>Unite -no-split -buffer-name=line        line<CR>
-nnoremap <silent> [Unite]o    :<C-u>Unite -vertical -buffer-name=outline     outline<CR>
 nnoremap <silent> [Unite]m    :<C-u>Unite -no-split -buffer-name=oldfiles    oldfiles<CR>
 
 nnoremap <silent> [Unite]rr   :<C-u>UniteResume<CR>
@@ -855,7 +836,6 @@ nnoremap <silent> [Unite]rg   :<C-u>UniteResume grep<CR>
 nnoremap <silent> [Unite]rf   :<C-u>UniteResume buffer<CR>
 nnoremap <silent> [Unite]rj   :<C-u>UniteResume bookmark<CR>
 nnoremap <silent> [Unite]rl   :<C-u>UniteResume line<CR>
-nnoremap <silent> [Unite]ro   :<C-u>UniteResume outline<CR>
 nnoremap <silent> [Unite]rm   :<C-u>UniteResume oldfiles<CR>
 '''
 hook_source = '''
@@ -1003,12 +983,7 @@ hook_source = '''
 '''
 
 [[plugins]]
-repo        = 'rhysd/unite-oldfiles.vim'
-lazy        = 1
-on_source   = 'unite.vim'
-
-[[plugins]]
-repo        = 'Shougo/unite-outline'
+repo        = 'osyo-manga/unite-oldfiles'
 lazy        = 1
 on_source   = 'unite.vim'
 

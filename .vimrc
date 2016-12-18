@@ -127,7 +127,6 @@ function! s:lazy_initialize()
   Autocmd BufWinEnter,ColorScheme .vimrc syntax match vimAutoCmd /\<\(Autocmd\|AutocmdFT\)\>/
 
   call dein#source([
-        \ 'vimproc',
         \ 'vim-textobj-ifdef',
         \ 'vim-textobj-comment',
         \ 'textobj-wiw',
@@ -137,7 +136,6 @@ function! s:lazy_initialize()
         \ 'vim-textobj-anyblock',
         \ 'vim-textobj-word-column',
         \ 'vim-textobj-parameter',
-        \ 'vim-textobj-between',
         \ 'vim-textobj-xmlattr'])
 
   let s:lazy_initialized = 1
@@ -167,6 +165,10 @@ if s:has_vim_starting
   execute 'set runtimepath^=' . s:plugin_dir . '/repos/github.com/Shougo/dein.vim/'
   let g:dein#install_process_timeout = 10*60
   let g:dein#install_max_processes   = 16
+
+  if s:has_kaoriya
+    set runtimepath+=$VIM/plugins/vimproc
+  endif
 endif
 
 if dein#load_state(s:plugin_dir)
@@ -206,19 +208,6 @@ AutocmdFT xml,html   setlocal foldlevel=99
 AutocmdFT xml,html   setlocal foldcolumn=5
 AutocmdFT xml,html   setlocal foldmethod=syntax
 AutocmdFT xml,html   inoremap <silent><buffer> >  ><Esc>:call closetag#CloseTagFun()<CR>
-
-AutocmdFT go         setlocal shiftwidth=4
-AutocmdFT go         setlocal noexpandtab
-AutocmdFT go         setlocal tabstop=4
-AutocmdFT go         nnoremap <silent><buffer> K      :<C-u>Godoc<CR>
-      \                                               zz
-      \                                               :call YOI_refresh_screen()<CR>
-AutocmdFT go         nnoremap <silent><buffer> <C-]>  :<C-u>call GodefUnderCursor()<CR>
-      \                                               zz
-      \                                               :call YOI_refresh_screen()<CR>
-AutocmdFT c,cpp      nnoremap <silent><buffer> [App]r :<C-u>QuickRun cpp/wandbox<CR>
-AutocmdFT c,cpp      nnoremap <silent><buffer> <C-]>  :<C-u>UniteWithCursorWord
-      \                                                     -immediately -buffer-name=tag tag<CR>
 
 AutocmdFT typescript setlocal omnifunc=TSScompleteFunc
 
