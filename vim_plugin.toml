@@ -787,12 +787,13 @@ vmap gx <Plug>(openbrowser-smart-search)
 '''
 
 [[plugins]]
-repo        = 'justinmk/vim-dirvish'
+repo        = 'cocopon/vaffle.vim'
 lazy        = 1
 on_map      = '<Plug>'
 on_path     = '.*'
 hook_add    = '''
-noremap <silent> [App]f :<C-u>Dirvish<CR>
+let g:vaffle_show_hidden_files = 1
+noremap <silent> [App]f :<C-u>Vaffle<CR>
 '''
 
 [[plugins]]
@@ -822,19 +823,17 @@ xnoremap [Unite] <Nop>
 nmap     <Space> [Unite]
 xmap     <Space> [Unite]
 
-" nnoremap <silent> [Unite]gg   :<C-u>Unite -no-split -buffer-name=grep        grep:./<CR>
-" nnoremap <silent> [Unite]pg   :<C-u>Unite -no-split -buffer-name=grep        grep:!<CR>
 nnoremap <silent> [Unite]gg   :<C-u>GrepCurrent<CR>
 nnoremap <silent> [Unite]pg   :<C-u>GrepProject<CR>
 nnoremap <silent> [Unite]f    :<C-u>Unite           -buffer-name=buffer      buffer<CR>
-nnoremap <silent> [Unite]j    :<C-u>Unite           -buffer-name=bookmark    bookmark<CR>
+"nnoremap <silent> [Unite]j    :<C-u>Unite           -buffer-name=bookmark    bookmark<CR>
 nnoremap <silent> [Unite]l    :<C-u>Unite -no-split -buffer-name=line        line<CR>
 nnoremap <silent> [Unite]m    :<C-u>Unite -no-split -buffer-name=oldfiles    oldfiles<CR>
 
 nnoremap <silent> [Unite]rr   :<C-u>UniteResume<CR>
 nnoremap <silent> [Unite]rg   :<C-u>UniteResume grep<CR>
 nnoremap <silent> [Unite]rf   :<C-u>UniteResume buffer<CR>
-nnoremap <silent> [Unite]rj   :<C-u>UniteResume bookmark<CR>
+"nnoremap <silent> [Unite]rj   :<C-u>UniteResume bookmark<CR>
 nnoremap <silent> [Unite]rl   :<C-u>UniteResume line<CR>
 nnoremap <silent> [Unite]rm   :<C-u>UniteResume oldfiles<CR>
 '''
@@ -854,16 +853,6 @@ hook_source = '''
         \   }
         \ }
 
-"   if executable('jvgrep')
-"     let g:unite_source_grep_command       = 'jvgrep'
-"     let g:unite_source_grep_default_opts  =
-"           \ '-8 -r -i -I ' .
-"           \ '--exclude ''\.(git|svn|vs|o|a|exe|dll|pdb|nupkg)$|(\bobj\b|\bbin\b)'' '
-"     let g:unite_source_grep_recursive_opt = '-R'
-"     let g:unite_source_grep_encoding      = 'utf-8'
-"     let g:unite_source_grep_separator     = ''
-"   endif
-
   if executable('pt')
     let g:unite_source_grep_command       = 'pt'
     let g:unite_source_grep_default_opts  = '--nogroup --nocolor --ignore-case --smart-case'
@@ -871,15 +860,6 @@ hook_source = '''
     let g:unite_source_grep_encoding      = 'utf-8'
     let g:unite_source_grep_separator     = '--'
   endif
-
-"  " https://github.com/dalance/amber
-"  if executable('ambs')
-"    let g:unite_source_grep_command       = 'ambs'
-"    let g:unite_source_grep_default_opts  = '--column --no-color'
-"    let g:unite_source_grep_recursive_opt = ''
-"    let g:unite_source_grep_encoding      = 'utf-8'
-"    let g:unite_source_grep_separator     = '--'
-"  endif
 
   call unite#custom#profile('default', 'context', {
         \   'direction':        'rightbelow',
@@ -935,25 +915,11 @@ hook_source = '''
   endfunction
 
   function! s:grep_project()
-""    let g:unite_source_grep_command       = 'ambs'
-""    let g:unite_source_grep_default_opts  = '--column --no-color'
-""    let g:unite_source_grep_recursive_opt = ''
-""    let g:unite_source_grep_encoding      = 'utf-8'
-""    let g:unite_source_grep_separator     = '--'
-
     let g:unite_source_grep_command       = 'pt'
     let g:unite_source_grep_default_opts  = '--nogroup --nocolor --ignore-case --smart-case'
     let g:unite_source_grep_recursive_opt = ''
     let g:unite_source_grep_encoding      = 'utf-8'
     let g:unite_source_grep_separator     = '--'
-
-
-
-""    let g:unite_source_grep_command       = 'C:\Users\yoi\Documents\Anni\Anni\bin\Release\Anni.exe'
-""    let g:unite_source_grep_default_opts  = ''
-""    let g:unite_source_grep_recursive_opt = ''
-""    let g:unite_source_grep_encoding      = 'utf-8'
-""    let g:unite_source_grep_separator     = '--'
 
     execute('lcd ' . s:projectroot_get())
 
@@ -966,17 +932,6 @@ hook_source = '''
     let g:unite_source_grep_recursive_opt = ''
     let g:unite_source_grep_encoding      = 'utf-8'
     let g:unite_source_grep_separator     = '--'
-
-
-
-
-""    let g:unite_source_grep_command       = 'C:\Users\yoi\Documents\Anni\Anni\bin\Release\Anni.exe'
-""    let g:unite_source_grep_default_opts  = ''
-""    let g:unite_source_grep_recursive_opt = ''
-""    let g:unite_source_grep_encoding      = 'utf-8'
-""    let g:unite_source_grep_separator     = '--'
-
-
 
     execute('Unite -no-split -buffer-name=grep grep:./')
   endfunction
