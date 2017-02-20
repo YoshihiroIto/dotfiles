@@ -41,6 +41,9 @@ if s:has_kaoriya
   set runtimepath+=$VIM/plugins/vimdoc-ja
 endif
 
+" Grep
+set grepprg=jvgrep
+
 " キー
 nnoremap [App] <Nop>
 nmap     ;     [App]
@@ -527,10 +530,6 @@ Autocmd WinLeave                 * call s:auto_cursorline('WinLeave')
 
 let s:cursorline_lock = 0
 function! s:auto_cursorline(event)
-  if s:is_unite_running()
-    return
-  endif
-
   if a:event ==# 'WinEnter'
     setlocal cursorline
     let s:cursorline_lock = 2
@@ -555,10 +554,6 @@ function! s:auto_cursorline(event)
 endfunction
 
 function! s:force_show_cursorline()
-  if s:is_unite_running()
-    return
-  endif
-
   setlocal cursorline
   let s:cursorline_lock = 1
 endfunction
@@ -725,11 +720,6 @@ function! s:execute_keep_view(expr)
   let wininfo = winsaveview()
   execute a:expr
   call winrestview(wininfo)
-endfunction
-" }}}
-" Unite 実行中か {{{
-function! s:is_unite_running()
-  return &filetype ==# 'unite'
 endfunction
 " }}}
 " Gitブランチ上にいるか {{{

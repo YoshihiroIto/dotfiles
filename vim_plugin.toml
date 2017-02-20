@@ -232,8 +232,7 @@ let g:lightline = {
       \ }
 
 function! YOI_lightline_mode()
-  return  &filetype ==# 'unite'    ? 'Unite'    :
-        \ &filetype ==# 'quickrun' ? 'Quickrun' :
+  return  &filetype ==# 'quickrun' ? 'Quickrun' :
         \ &filetype ==# 'agit'     ? 'Agit'     :
         \ winwidth(0) > 50 ? lightline#mode() : ''
 endfunction
@@ -257,8 +256,7 @@ endfunction
 function! YOI_lightline_filename()
   try
     return (empty(YOI_lightline_readonly()) ? '' : YOI_lightline_readonly() . ' ') .
-          \ (&filetype ==# 'unite'    ? unite#get_status_string()    :
-          \  &filetype ==# 'quickrun' ? ''                           :
+          \ (&filetype ==# 'quickrun' ? ''      :
           \  empty(expand('%:t')) ? '[No Name]' : expand('%:t')) .
           \ (empty(YOI_lightline_modified()) ? '' : ' ' . YOI_lightline_modified())
   catch
@@ -338,7 +336,7 @@ function! YOI_lightline_lineinfo()
 endfunction
 
 function! s:is_lightline_no_disp_filetype()
-  return &filetype =~# 'unite\|quickrun\|agit'
+  return &filetype =~# 'quickrun\|agit'
 endfunction
 
 function! s:is_lightline_no_disp_group()
@@ -384,6 +382,75 @@ on_path     = '.*'
 
 # }}}
 # 検索 {{{
+[[plugins]]
+repo        = 'ctrlpvim/ctrlp.vim'
+lazy        = 0
+on_cmd      = ['CtrlPMRUFiles']
+hook_add    = '''
+nnoremap [CtrlP] <Nop>
+xnoremap [CtrlP] <Nop>
+nmap     <Space> [CtrlP]
+xmap     <Space> [CtrlP]
+
+nnoremap <silent> [CtrlP]m   :<C-u>CtrlPMRUFiles<CR>
+nnoremap <silent> [CtrlP]l   :<C-u>CtrlPLine<CR>
+
+let g:ctrlp_match_window = 'bottom,order:ttb,min:32,max:32'
+let g:ctrlp_regexp = 1
+
+let g:ctrlp_prompt_mappings = {
+  \ 'PrtBS()':              ['<bs>', '<c-]>', '<c-h>'],
+  \ 'PrtDelete()':          ['<del>'],
+  \ 'PrtDeleteWord()':      ['<c-w>'],
+  \ 'PrtClear()':           ['<c-u>'],
+  \ 'PrtSelectMove("j")':   ['<c-n>'],
+  \ 'PrtSelectMove("k")':   ['<c-p>'],
+  \ 'PrtSelectMove("t")':   ['<Home>', '<kHome>'],
+  \ 'PrtSelectMove("b")':   ['<End>', '<kEnd>'],
+  \ 'PrtSelectMove("u")':   ['<PageUp>', '<kPageUp>'],
+  \ 'PrtSelectMove("d")':   ['<PageDown>', '<kPageDown>'],
+  \ 'PrtHistory(-1)':       ['<down>'],
+  \ 'PrtHistory(1)':        ['<up>'],
+  \ 'AcceptSelection("e")': ['<cr>', '<2-LeftMouse>'],
+  \ 'AcceptSelection("h")': ['<c-x>', '<c-cr>', '<c-s>'],
+  \ 'AcceptSelection("t")': ['<c-t>'],
+  \ 'AcceptSelection("v")': ['<c-v>', '<RightMouse>'],
+  \ 'ToggleFocus()':        ['<s-tab>'],
+  \ 'ToggleRegex()':        ['<c-r>'],
+  \ 'ToggleByFname()':      ['<c-d>'],
+  \ 'ToggleType(1)':        ['<c-f>', '<c-up>'],
+  \ 'ToggleType(-1)':       ['<c-b>', '<c-down>'],
+  \ 'PrtExpandDir()':       ['<tab>'],
+  \ 'PrtInsert("c")':       ['<MiddleMouse>', '<insert>'],
+  \ 'PrtInsert()':          ['<c-\>'],
+  \ 'PrtCurStart()':        ['<c-a>'],
+  \ 'PrtCurEnd()':          ['<c-e>'],
+  \ 'PrtCurLeft()':         ['<left>', '<c-^>'],
+  \ 'PrtCurRight()':        ['<c-l>', '<right>'],
+  \ 'PrtClearCache()':      ['<F5>'],
+  \ 'PrtDeleteEnt()':       ['<F7>'],
+  \ 'CreateNewFile()':      ['<c-y>'],
+  \ 'MarkToOpen()':         ['<c-z>'],
+  \ 'OpenMulti()':          ['<c-o>'],
+  \ 'PrtExit()':            ['<esc>', '<c-c>', '<c-g>', '<c-j>'],
+  \ }
+
+let g:ctrlp_status_func = {
+  \ 'main': 'Function_Name_1',
+  \ 'prog': 'Function_Name_2',
+  \ }
+function! Function_Name_1(focus, byfname, regex, prev, item, next, marked)
+  let g:lightline.ctrlp_prev = a:prev
+  let g:lightline.ctrlp_item = a:item
+  let g:lightline.ctrlp_next = a:next
+  let g:lightline.ctrlp_marked = a:marked
+  return lightline#statusline(0)
+endfunction
+function! Function_Name_2(str)
+  return lightline#statusline(0)
+endfunction
+'''
+
 [[plugins]]
 repo        = 'osyo-manga/vim-anzu'
 lazy        = 1
@@ -533,10 +600,6 @@ let g:neocomplete#skip_auto_completion_time         = '0.2'
 
 let g:neocomplete#sources#dictionary#dictionaries = {
       \   'default': ''
-      \ }
-
-let g:neocomplete#sources#vim#complete_functions = {
-      \   'Unite': 'unite#complete_source'
       \ }
 
 " 日本語は収集しない
@@ -799,148 +862,14 @@ noremap <silent> [App]f :<C-u>Vaffle<CR>
 [[plugins]]
 repo        = 'glidenote/memolist.vim'
 lazy        = 1
-depends     = 'unite.vim'
 on_cmd      = ['MemoNew', 'MemoList']
 hook_add    = '''
 noremap <silent> [App]mn :<C-u>MemoNew<CR>
-noremap <silent> [App]ml :<C-u>MemoList<CR>
+noremap <silent> [App]ml :execute "CtrlP" g:memolist_path<cr>
 
-let g:memolist_unite        = 1
 let g:memolist_memo_suffix  = 'md'
-let g:memolist_unite_source = 'memolist'
 let g:memolist_path         = g:YOI_dropbox_dir . '/memo'
 '''
-
-# }}}
-# Unite {{{
-[[plugins]]
-repo        = 'Shougo/unite.vim'
-lazy        = 1
-on_cmd      = ['Unite', 'UniteResume', 'UniteWithCursorWord', 'GrepCurrent', 'GrepProject']
-hook_add    = '''
-nnoremap [Unite] <Nop>
-xnoremap [Unite] <Nop>
-nmap     <Space> [Unite]
-xmap     <Space> [Unite]
-
-nnoremap <silent> [Unite]gg   :<C-u>GrepCurrent<CR>
-nnoremap <silent> [Unite]pg   :<C-u>GrepProject<CR>
-nnoremap <silent> [Unite]f    :<C-u>Unite           -buffer-name=buffer      buffer<CR>
-"nnoremap <silent> [Unite]j    :<C-u>Unite           -buffer-name=bookmark    bookmark<CR>
-nnoremap <silent> [Unite]l    :<C-u>Unite -no-split -buffer-name=line        line<CR>
-nnoremap <silent> [Unite]m    :<C-u>Unite -no-split -buffer-name=oldfiles    oldfiles<CR>
-
-nnoremap <silent> [Unite]rr   :<C-u>UniteResume<CR>
-nnoremap <silent> [Unite]rg   :<C-u>UniteResume grep<CR>
-nnoremap <silent> [Unite]rf   :<C-u>UniteResume buffer<CR>
-"nnoremap <silent> [Unite]rj   :<C-u>UniteResume bookmark<CR>
-nnoremap <silent> [Unite]rl   :<C-u>UniteResume line<CR>
-nnoremap <silent> [Unite]rm   :<C-u>UniteResume oldfiles<CR>
-'''
-hook_source = '''
-  let g:unite_force_overwrite_statusline = 0
-  let g:unite_source_alias_aliases       = {
-        \   'memolist': {
-        \       'source': 'file'
-        \   },
-        \   'var': {
-        \       'source': 'output',
-        \       'args':   'let'
-        \   },
-        \   'message': {
-        \       'source': 'output',
-        \       'args':   'message'
-        \   }
-        \ }
-
-  if executable('pt')
-    let g:unite_source_grep_command       = 'pt'
-    let g:unite_source_grep_default_opts  = '--nogroup --nocolor --ignore-case --smart-case'
-    let g:unite_source_grep_recursive_opt = ''
-    let g:unite_source_grep_encoding      = 'utf-8'
-    let g:unite_source_grep_separator     = '--'
-  endif
-
-  call unite#custom#profile('default', 'context', {
-        \   'direction':        'rightbelow',
-        \   'hide_icon':        0,
-        \   'ignorecase':       1,
-        \   'prompt':           '>>',
-        \   'prompt_direction': 'top',
-        \   'smartcase':        1,
-        \   'start_insert':     1,
-        \   'vertical':         0,
-        \   'winwidth':         60
-        \ })
-
-  call unite#custom#source('memolist',        'sorters',        ['sorter_ftime', 'sorter_reverse'])
-  call unite#custom#source('grep',            'max_candidates', 0)
-  call unite#custom#source('line',            'max_candidates', 0)
-
-  AutocmdFT unite nnoremap <silent><buffer><expr> <C-r> unite#do_action('replace')
-  AutocmdFT unite inoremap <silent><buffer><expr> <C-r> unite#do_action('replace')
-  AutocmdFT unite nmap     <silent><buffer>       <C-v> <Plug>(unite_toggle_auto_preview)
-  AutocmdFT unite imap     <silent><buffer>       <C-v> <Plug>(unite_toggle_auto_preview)
-  AutocmdFT unite nmap     <silent><buffer>       <C-j> <Plug>(unite_exit)
-
-  command! GrepProject call <SID>grep_project()
-  command! GrepCurrent call <SID>grep_current()
-
-  function! s:getfullname(f)
-    let f = a:f
-    let f = f=~"'." ? s:getmarkfile(f[1]) : f
-    let f = len(f) ? f : expand('%')
-    return fnamemodify(f, ':p')
-  endfunction
-
-  function! s:projectroot_get(...)
-    let fullfile = s:getfullname(a:0 ? a:1 : '')
-
-    let rootmarkers = ['.projectroot', '.git', '.hg', '.svn', '.bzr', '_darcs', 'build.xml']
-
-    for marker in rootmarkers
-      let pivot=fullfile
-      while 1
-        let prev=pivot
-        let pivot=fnamemodify(pivot, ':h')
-        if filereadable(pivot.'/'.marker) || isdirectory(pivot.'/'.marker)
-          return pivot
-        endif
-        if pivot==prev
-          break
-        endif
-      endwhile
-    endfor
-    return ''
-  endfunction
-
-  function! s:grep_project()
-    let g:unite_source_grep_command       = 'pt'
-    let g:unite_source_grep_default_opts  = '--nogroup --nocolor --ignore-case --smart-case'
-    let g:unite_source_grep_recursive_opt = ''
-    let g:unite_source_grep_encoding      = 'utf-8'
-    let g:unite_source_grep_separator     = '--'
-
-    execute('lcd ' . s:projectroot_get())
-
-    execute('Unite -no-split -buffer-name=grep grep:./')
-  endfunction
-
-  function! s:grep_current()
-    let g:unite_source_grep_command       = 'pt'
-    let g:unite_source_grep_default_opts  = '--nogroup --nocolor --ignore-case --smart-case'
-    let g:unite_source_grep_recursive_opt = ''
-    let g:unite_source_grep_encoding      = 'utf-8'
-    let g:unite_source_grep_separator     = '--'
-
-    execute('Unite -no-split -buffer-name=grep grep:./')
-  endfunction
-'''
-
-[[plugins]]
-repo        = 'osyo-manga/unite-oldfiles'
-lazy        = 1
-on_source   = 'unite.vim'
 
 # }}}
 # C++ {{{
