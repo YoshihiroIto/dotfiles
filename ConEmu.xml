@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <key name="Software">
 	<key name="ConEmu">
-		<key name=".Vanilla" modified="2016-11-19 13:06:42" build="161022">
+		<key name=".Vanilla" modified="2016-12-30 20:46:52" build="161203">
 			<value name="StartType" type="hex" data="02"/>
 			<value name="CmdLine" type="string" data=""/>
 			<value name="StartTasksFile" type="string" data=""/>
@@ -245,11 +245,11 @@
 				<value name="WndDragKey" type="dword" data="00121101"/>
 			</key>
 			<value name="CmdLineHistory" type="multi">
+				<line data="{Shells::cmd (Admin)}"/>
 				<line data="{zsh}"/>
 				<line data="{Shells::cmd}"/>
 				<line data="{Shells::cmd-32}"/>
 				<line data="{Bash::Git bash}"/>
-				<line data="{Shells::cmd (Admin)}"/>
 				<line data="C:\msys64\usr\bin\zsh --login -i"/>
 				<line data="{Group13}"/>
 				<line data="C:\msys64\usr\bin\zsh.exe"/>
@@ -353,11 +353,11 @@
 			<value name="Cascaded" type="hex" data="01"/>
 			<value name="IntegralSize" type="hex" data="00"/>
 			<value name="WindowMode" type="dword" data="0000051f"/>
-			<value name="ConWnd X" type="long" data="1382"/>
-			<value name="ConWnd Y" type="long" data="213"/>
+			<value name="ConWnd X" type="long" data="1354"/>
+			<value name="ConWnd Y" type="long" data="0"/>
 			<value name="LastMonitor" type="string" data="0,0,3200,1730"/>
-			<value name="ConWnd Width" type="dword" data="0000006c"/>
-			<value name="ConWnd Height" type="dword" data="0000002f"/>
+			<value name="ConWnd Width" type="dword" data="00000080"/>
+			<value name="ConWnd Height" type="dword" data="00000037"/>
 			<value name="16bit Height" type="ulong" data="0"/>
 			<value name="Restore2ActiveMon" type="hex" data="00"/>
 			<value name="QuakeAnimation" type="ulong" data="300"/>

@@ -1,7 +1,7 @@
-# プラグイン {{{
-# [[plugins]]
-# repo        = 'Shougo/dein.vim'
-# lazy        = 0
+﻿# プラグイン {{{
+[[plugins]]
+repo        = 'Shougo/dein.vim'
+lazy        = 0
 
 # }}}
 # ライブラリ {{{
@@ -683,6 +683,10 @@ function! s:initialize_over()
     return
   endif
 
+  if bufname('%') == 'ControlP'
+    return
+  endif
+
   call over#load()
 
   augroup InitializeOver
@@ -998,7 +1002,7 @@ let g:markdown_fenced_languages = [
       \   'ruby', 'lua', 'python',
       \   'vim',
       \   'toml',
-      \   'xml',  'json'
+      \   'xml',  'json', 'css'
       \ ]
 '''
 

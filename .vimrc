@@ -314,6 +314,7 @@ command! CopyFilepath     call setreg('*', expand('%:t'), 'v')
 command! CopyFullFilepath call setreg('*', expand('%:p'), 'v')
 
 command! Guid call <SID>gen_guid()
+command! Reload execute 'edit!'
 
 function! s:gen_guid()
   call setreg('g', vimproc#system('GuidGen'), 'v')
@@ -514,6 +515,8 @@ if s:has_gui_running
 endif
 
 set printfont=Ricty\ Regular\ for\ Powerline:h11
+
+" set renderoptions=type:directx,gamma:1.2,contrast:1.42,geom:0,renmode:5,taamode:1
 
 if s:is_windows && s:has_kaoriya
   set ambiwidth=auto

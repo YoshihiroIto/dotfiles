@@ -32,8 +32,7 @@ nnoremap <Space>gg :vsc Edit.Find<CR>
 
 nnoremap ;r        :vsc Debug.Start<CR>
 nnoremap ;R        :vsc Debug.StartWithoutDebugging<CR>
-nnoremap ;b        :vsc Build.BuildSolution<CR>
-nnoremap ;c        :vsc Build.Cancel<CR>:vsc Debug.StopDebugging<CR>
+nnoremap ;b        :vsc Debug.ToggleBreakpoint<CR>
 
 nnoremap ;e        :vsc ReSharper.ReSharper_Rename<CR>
 nnoremap ;f        :vsc ReSharper.ReSharper_CleanupCode<CR>
