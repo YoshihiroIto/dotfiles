@@ -263,6 +263,12 @@ set formatoptions+=j
 set nofixeol
 set tags=tags,./tags,../tags,../../tags,../../../tags,../../../../tags,../../../../../tags
 
+augroup vimrc-incsearch-highlight
+  autocmd!
+  autocmd CmdlineEnter [/\?] :set hlsearch
+  autocmd CmdlineLeave [/\?] :set nohlsearch
+augroup END
+
 " 文字コード自動判断
 if has('guess_encode')
   set fileencodings=guess,iso-2022-jp,cp932,euc-jp,ucs-bom
@@ -279,9 +285,7 @@ command! RemoveEolSpace call s:execute_keep_view('silent! %substitute/ \+$//g | 
 " 整形
 command! Format call s:execute_keep_view('call s:format()')
 function! s:format()
-  if &filetype ==# 'cs'
-    OmniSharpCodeFormat
-  elseif &filetype ==# 'c'
+  if &filetype ==# 'c'
     ClangFormat
   elseif &filetype ==# 'cpp'
     ClangFormat
@@ -436,6 +440,7 @@ set cursorline
 set display=lastline
 set conceallevel=2
 set concealcursor=i
+set signcolumn=yes
 execute "set colorcolumn=" . join(range(101, 999), ',')
 
 if s:has_gui_running
@@ -516,7 +521,7 @@ endif
 
 set printfont=Ricty\ Regular\ for\ Powerline:h11
 
-" set renderoptions=type:directx,gamma:1.2,contrast:1.42,geom:0,renmode:5,taamode:1
+" set renderoptions=type:directx,gamma:1.2,contrast:1.42,geom:0,renmode:5,taamode:1,scrlines:1
 
 if s:is_windows && s:has_kaoriya
   set ambiwidth=auto
@@ -586,10 +591,10 @@ else
 endif
 " }}}
 " カーソル移動 {{{
-nnoremap <silent> k     :<C-u>call <SID>up_cursor(v:count1)<CR>
-nnoremap <silent> j     :<C-u>call <SID>down_cursor(v:count1)<CR>
-nnoremap <silent> h     :<C-u>call <SID>left_cursor(v:count1)<CR>
-nnoremap <silent> l     :<C-u>call <SID>right_cursor(v:count1)<CR>
+" nnoremap <silent> k     :<C-u>call <SID>up_cursor(v:count1)<CR>
+" nnoremap <silent> j     :<C-u>call <SID>down_cursor(v:count1)<CR>
+" nnoremap <silent> h     :<C-u>call <SID>left_cursor(v:count1)<CR>
+" nnoremap <silent> l     :<C-u>call <SID>right_cursor(v:count1)<CR>
 
 vnoremap <silent> k     gk
 vnoremap <silent> j     gj
@@ -612,39 +617,39 @@ nnoremap <silent> <C-o> <C-o>zz:<C-u>call YOI_refresh_screen()<CR>
 nnoremap <silent> <C-h> ^:<C-u>set virtualedit=all<CR>
 nnoremap <silent> <C-l> $:<C-u>set virtualedit=all<CR>
 
-function! s:up_cursor(repeat)
-  call s:enable_virtual_cursor()
-  execute 'normal!' a:repeat . 'gk'
-endfunction
-
-function! s:down_cursor(repeat)
-  call s:enable_virtual_cursor()
-  execute 'normal!' a:repeat . 'gj'
-endfunction
-
-function! s:left_cursor(repeat)
-  call s:disable_virtual_cursor()
-  execute 'normal!' a:repeat . 'h'
-endfunction
-
-function! s:right_cursor(repeat)
-  call s:disable_virtual_cursor()
-  execute 'normal!' a:repeat . 'l'
-
-  if foldclosed(line('.')) != -1
-    normal! zv
-  endif
-endfunction
-
-function! s:enable_virtual_cursor()
-  set virtualedit=all
-endfunction
-
-function! s:disable_virtual_cursor()
-  set virtualedit=block
-endfunction
-
-Autocmd InsertEnter * call s:disable_virtual_cursor()
+" function! s:up_cursor(repeat)
+"   call s:enable_virtual_cursor()
+"   execute 'normal!' a:repeat . 'gk'
+" endfunction
+"
+" function! s:down_cursor(repeat)
+"   call s:enable_virtual_cursor()
+"   execute 'normal!' a:repeat . 'gj'
+" endfunction
+"
+" function! s:left_cursor(repeat)
+"   call s:disable_virtual_cursor()
+"   execute 'normal!' a:repeat . 'h'
+" endfunction
+"
+" function! s:right_cursor(repeat)
+"   call s:disable_virtual_cursor()
+"   execute 'normal!' a:repeat . 'l'
+"
+"   if foldclosed(line('.')) != -1
+"     normal! zv
+"   endif
+" endfunction
+"
+" function! s:enable_virtual_cursor()
+"   set virtualedit=all
+" endfunction
+"
+" function! s:disable_virtual_cursor()
+"   set virtualedit=block
+" endfunction
+"
+" Autocmd InsertEnter * call s:disable_virtual_cursor()
 " }}}
 " ウィンドウ操作 {{{
 set splitbelow    " 縦分割したら新しいウィンドウは下に

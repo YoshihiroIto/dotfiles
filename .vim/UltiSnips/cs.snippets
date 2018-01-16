@@ -49,32 +49,8 @@ private ${2:property_type} _$1;
 
 public $2 $1
 {
-	get { return _$1; }
-	set { SetProperty(ref _$1, value); }
-}
-
-#endregion
-${0}
-endsnippet
-
-
-#####################################################################
-snippet propr "Property (RaisePropertyChanged)"
-#region ${1:property_name}
-
-private ${2:property_type} _$1;
-
-public $2 $1
-{
-	get { return _$1; }
-	set
-	{ 
-		if (_$1 == value)
-			return;
-
-		_$1 = value;
-		RaisePropertyChanged(() => $1);
-	}
+	get => _$1;
+	set => SetProperty(ref _$1, value);
 }
 
 #endregion
