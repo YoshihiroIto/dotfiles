@@ -5,13 +5,6 @@ lazy        = 0
 
 # }}}
 # ライブラリ {{{
-[[plugins]]
-repo        = 'xolox/vim-misc'
-lazy        = 0
-
-[[plugins]]
-repo        = 'xolox/vim-shell'
-lazy        = 0
 
 [[plugins]]
 repo        = 'kana/vim-submode'
@@ -355,18 +348,6 @@ Autocmd CursorHold,CursorHoldI * call lightline#update()
 '''
 
 [[plugins]]
-repo        = 'LeafCage/foldCC.vim'
-lazy        = 1
-on_ft       = ['vim', 'xml', 'toml']
-hook_add    = '''
-let g:foldCCtext_enable_autofdc_adjuster = 1
-let g:foldCCtext_tail                    =
-      \ 'printf("[ %4d lines  Lv%-2d]", v:foldend - v:foldstart + 1, v:foldlevel)'
-
-set foldtext=FoldCCtext()
-'''
-
-[[plugins]]
 repo        = 'itchyny/vim-parenmatch'
 lazy        = 1
 on_path     = '.*'
@@ -629,39 +610,6 @@ vnoremap <silent> <Leader>rs :OverCommandLine<CR>s///g<Left><Left>
 '''
 
 [[plugins]]
-repo        = 'LeafCage/yankround.vim'
-lazy        = 1
-on_map      = '<Plug>'
-hook_add    = '''
-let g:yankround_use_region_hl = 1
-
-function! s:yankround_pre(count1)
-  return (col('.') >= col('$') ? '$' : '') . ":\<C-u>set virtualedit=block\<CR>" . a:count1
-endfunction
-nmap <silent><expr> p     <SID>yankround_pre(v:count1) . '<Plug>(yankround-p)'
-xmap <silent><expr> p     <SID>yankround_pre(v:count1) . '<Plug>(yankround-p)'
-nmap <silent><expr> P     <SID>yankround_pre(v:count1) . '<Plug>(yankround-P)'
-nmap <silent><expr> gp    <SID>yankround_pre(v:count1) . '<Plug>(yankround-gp)'
-xmap <silent><expr> gp    <SID>yankround_pre(v:count1) . '<Plug>(yankround-gp)'
-nmap <silent><expr> gP    <SID>yankround_pre(v:count1) . '<Plug>(yankround-gP)'
-nmap <silent>       <C-p> <Plug>(yankround-prev)
-nmap <silent>       <C-n> <Plug>(yankround-next)
-'''
-
-[[plugins]]
-repo        = 'nishigori/increment-activator'
-lazy        = 1
-on_map      = ['<C-x>', '<C-a>']
-hook_add    = '''
-let g:increment_activator_filetype_candidates = {
-      \   '_':   [['width', 'height']],
-      \   'cs':  [['private', 'protected', 'public', 'internal'],
-      \           ['abstract', 'virtual', 'override']],
-      \   'cpp': [['private', 'protected', 'public']]
-      \ }
-'''
-
-[[plugins]]
 repo        = 'junegunn/vim-easy-align'
 lazy        = 1
 on_map      = '<Plug>(EasyAlign)'
@@ -715,35 +663,35 @@ endfunction
 '''
 hook_source = '''
 " MVVM
-AutocmdFT cs,xml call altr#define(  '%Model.cs',
-      \                             '%Vm.cs',
-      \                             '%.xaml',
-      \                             '%.xaml.cs')
+AutocmdFT cs,xml call altr#define(    '%Model.cs',
+      \                               '%Vm.cs',
+      \                               '%.xaml',
+      \                               '%.xaml.cs')
 AutocmdFT cs,xml call YOI_altr_define('Models%s/%%Model.cs',
-      \                             'ViewModels%s/%%Vm.cs',
-      \                             'Views%s/%%.xaml',
-      \                             'Views%s/%%.xaml.cs')
-AutocmdFT cs,xml call altr#define(  '%Model.cs',
-      \                             '%ViewModel.cs',
-      \                             '%.xaml',
-      \                             '%.xaml.cs')
+      \                               'ViewModels%s/%%Vm.cs',
+      \                               'Views%s/%%.xaml',
+      \                               'Views%s/%%.xaml.cs')
+AutocmdFT cs,xml call altr#define(    '%Model.cs',
+      \                               '%ViewModel.cs',
+      \                               '%.xaml',
+      \                               '%.xaml.cs')
 AutocmdFT cs,xml call YOI_altr_define('Models%s/%%Model.cs',
-      \                             'ViewModels%s/%%ViewModel.cs',
-      \                             'Views%s/%%.xaml',
-      \                             'Views%s/%%.xaml.cs')
+      \                               'ViewModels%s/%%ViewModel.cs',
+      \                               'Views%s/%%.xaml',
+      \                               'Views%s/%%.xaml.cs')
 
 " xaml
-AutocmdFT cs,xml call altr#define(  '%.xaml',
-      \                             '%.xaml.cs')
-AutocmdFT cs,xml call altr#define(  '%.cs',
-      \                             '%.*.cs')
+AutocmdFT cs,xml call altr#define( '%.xaml',
+      \                            '%.xaml.cs')
+AutocmdFT cs,xml call altr#define( '%.cs',
+      \                            '%.*.cs')
 
 " C++
-AutocmdFT cpp call altr#define(     '%.cpp',
-      \                             '%.*.cpp',
-      \                             '%.h')
-AutocmdFT cpp call YOI_altr_define(   'src%s/%%.cpp',
-      \                             'include%s/%%.h')
+AutocmdFT cpp call altr#define(    '%.cpp',
+      \                            '%.*.cpp',
+      \                            '%.h')
+AutocmdFT cpp call YOI_altr_define('src%s/%%.cpp',
+      \                            'include%s/%%.h')
 '''
 
 [[plugins]]
@@ -874,14 +822,10 @@ Autocmd FocusGained,FocusLost * call YOI_update_fugitive()
 
 [[plugins]]
 repo        = 'airblade/vim-gitgutter'
-lazy        = 1
+lazy        = 0
 hook_add    = '''
-let g:gitgutter_map_keys           = 0
-let g:gitgutter_eager              = 0
-let g:gitgutter_diff_args          = ''
-let g:gitgutter_async              = 0
-
-Autocmd FocusGained,FocusLost * GitGutter
+let g:gitgutter_map_keys = 0
+let g:gitgutter_grep     = ''
 '''
 
 # }}}

@@ -591,17 +591,12 @@ else
 endif
 " }}}
 " カーソル移動 {{{
-" nnoremap <silent> k     :<C-u>call <SID>up_cursor(v:count1)<CR>
-" nnoremap <silent> j     :<C-u>call <SID>down_cursor(v:count1)<CR>
-" nnoremap <silent> h     :<C-u>call <SID>left_cursor(v:count1)<CR>
-" nnoremap <silent> l     :<C-u>call <SID>right_cursor(v:count1)<CR>
-
 vnoremap <silent> k     gk
 vnoremap <silent> j     gj
 nnoremap <silent> 0     g0
 nnoremap <silent> g0    0
-nnoremap <silent> $     :<C-u>set virtualedit=block<CR>g$:set virtualedit=all<CR>
-nnoremap <silent> g$    :<C-u>set virtualedit=block<CR>$:set virtualedit=all<CR>
+nnoremap <silent> $     g$
+nnoremap <silent> g$    $
 nnoremap <silent> gg    ggzv:<C-u>call YOI_refresh_screen()<CR>
 nnoremap <silent> G     Gzv:<C-u>call  YOI_refresh_screen()<CR>
 
@@ -614,42 +609,6 @@ nmap <expr> <C-e> (line('w$') >= line('$') ? 'j' : "\<C-e>j")
 
 nnoremap <silent> <C-i> <C-i>zz:<C-u>call YOI_refresh_screen()<CR>
 nnoremap <silent> <C-o> <C-o>zz:<C-u>call YOI_refresh_screen()<CR>
-nnoremap <silent> <C-h> ^:<C-u>set virtualedit=all<CR>
-nnoremap <silent> <C-l> $:<C-u>set virtualedit=all<CR>
-
-" function! s:up_cursor(repeat)
-"   call s:enable_virtual_cursor()
-"   execute 'normal!' a:repeat . 'gk'
-" endfunction
-"
-" function! s:down_cursor(repeat)
-"   call s:enable_virtual_cursor()
-"   execute 'normal!' a:repeat . 'gj'
-" endfunction
-"
-" function! s:left_cursor(repeat)
-"   call s:disable_virtual_cursor()
-"   execute 'normal!' a:repeat . 'h'
-" endfunction
-"
-" function! s:right_cursor(repeat)
-"   call s:disable_virtual_cursor()
-"   execute 'normal!' a:repeat . 'l'
-"
-"   if foldclosed(line('.')) != -1
-"     normal! zv
-"   endif
-" endfunction
-"
-" function! s:enable_virtual_cursor()
-"   set virtualedit=all
-" endfunction
-"
-" function! s:disable_virtual_cursor()
-"   set virtualedit=block
-" endfunction
-"
-" Autocmd InsertEnter * call s:disable_virtual_cursor()
 " }}}
 " ウィンドウ操作 {{{
 set splitbelow    " 縦分割したら新しいウィンドウは下に
