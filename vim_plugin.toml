@@ -584,29 +584,6 @@ nnoremap <silent> <Leader>s  :OverCommandLine<CR>%s/
 vnoremap <silent> <Leader>s  :OverCommandLine<CR>s/
 nnoremap <silent> <Leader>rs :<C-u>OverCommandLine<CR>%s///g<Left><Left>
 vnoremap <silent> <Leader>rs :OverCommandLine<CR>s///g<Left><Left>
-
-"augroup InitializeOver
-"  autocmd!
-"  autocmd VimEnter,FocusLost,CursorHold,CursorHoldI * call s:initialize_over()
-"augroup END
-"
-"let s:initialize_over_delay = 2*1
-"function! s:initialize_over()
-"  let s:initialize_over_delay -= 1
-"  if s:initialize_over_delay > 0
-"    return
-"  endif
-"
-"  if bufname('%') == 'ControlP'
-"    return
-"  endif
-"
-"  call over#load()
-"
-"  augroup InitializeOver
-"    autocmd!
-"  augroup END
-"endfunction
 '''
 
 [[plugins]]

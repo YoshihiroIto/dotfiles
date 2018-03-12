@@ -522,6 +522,7 @@ endif
 set printfont=Ricty\ Regular\ for\ Powerline:h11
 
 " set renderoptions=type:directx,gamma:1.2,contrast:1.42,geom:0,renmode:5,taamode:1,scrlines:1
+set renderoptions=type:directx
 
 if s:is_windows && s:has_kaoriya
   set ambiwidth=auto
