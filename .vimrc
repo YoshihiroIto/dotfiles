@@ -592,8 +592,14 @@ else
 endif
 " }}}
 " カーソル移動 {{{
+nnoremap <silent> j     gj
+nnoremap <silent> k     gk
+nnoremap <silent> gj    j
+nnoremap <silent> gk    k
 vnoremap <silent> k     gk
 vnoremap <silent> j     gj
+vnoremap <silent> gj    j
+vnoremap <silent> gk    k
 nnoremap <silent> 0     g0
 nnoremap <silent> g0    0
 nnoremap <silent> $     g$
