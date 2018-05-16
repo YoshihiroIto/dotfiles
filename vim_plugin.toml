@@ -623,6 +623,11 @@ call smartinput#clear_rules()
 call smartinput#define_default_rules()
 '''
 
+[[plugins]]
+repo        = 'deris/vim-rengbang'
+lazy        = 1
+on_cmd      = 'RengBang'
+
 # }}}
 # ファイル {{{
 [[plugins]]
@@ -981,14 +986,6 @@ hook_add    = '''
 nmap t  <Plug>(operator-tcomment)
 xmap t  <Plug>(operator-tcomment)
 '''
-
-# <Leader>r
-[[plugins]]
-repo        = 'deris/vim-rengbang'
-lazy        = 1
-depends     = 'vim-operator-user'
-on_map      = [['nx', '<Plug>(operator-rengbang']]
-on_cmd      = 'RengBang'
 
 # R
 [[plugins]]
