@@ -4,8 +4,8 @@ snippet dependency_property "DependencyProperty"
 
 public ${2:property_type} $1
 {
-	get { return ($2)GetValue($1Property); }
-	set { SetValue($1Property, value); }
+	get => ($2)GetValue($1Property);
+	set => SetValue($1Property, value);
 }
 
 public static readonly DependencyProperty $1Property =
