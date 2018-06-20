@@ -621,6 +621,11 @@ nnoremap <silent> <C-o> <C-o>zz:<C-u>call YOI_refresh_screen()<CR>
 set splitbelow    " 縦分割したら新しいウィンドウは下に
 set splitright    " 横分割したら新しいウィンドウは右に
 " }}}
+" ターミナル {{{
+command! Terminal terminal ++curwin
+tnoremap <Esc> <C-w>N
+tnoremap <C-j> <C-w>N
+"}}}
 " アプリウィンドウ操作 {{{
 if s:has_gui_running
   noremap <silent> ,we :<C-u>call <SID>toggle_v_split_wide()<CR>

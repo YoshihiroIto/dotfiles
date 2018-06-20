@@ -456,8 +456,8 @@ repo        = 'haya14busa/is.vim'
 lazy        = 1
 on_map      = '<Plug>'
 hook_add    = '''
-map n <Plug>(is-nohl)<Plug>(anzu-n-with-echo)
-map N <Plug>(is-nohl)<Plug>(anzu-N-with-echo)
+nmap n <Plug>(is-nohl)<Plug>(anzu-n-with-echo)
+nmap N <Plug>(is-nohl)<Plug>(anzu-N-with-echo)
 
 map *  <Plug>(asterisk-z*)<Plug>(is-nohl-1)
 map g* <Plug>(asterisk-gz*)<Plug>(is-nohl-1)
@@ -831,10 +831,10 @@ let g:autoft_config = [
       \ ]
 '''
 
-[[plugins]]
-repo        = 'YoshihiroIto/vim-cs'
-lazy        = 1
-on_ft       = 'cs'
+# [[plugins]]
+# repo        = 'YoshihiroIto/vim-cs'
+# lazy        = 1
+# on_ft       = 'cs'
 
 [[plugins]]
 repo        = 'beyondmarc/hlsl.vim'
