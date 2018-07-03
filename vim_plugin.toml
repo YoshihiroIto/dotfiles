@@ -605,23 +605,9 @@ xmap <silent> <Leader>a\|      <Plug>(EasyAlign)*\|
 '''
 
 [[plugins]]
-repo        = 'tpope/vim-endwise'
-lazy        = 1
-on_ft       = ['vim', 'ruby', 'lua']
-hook_add    = '''
-" http://cohama.hateblo.jp/entry/20121017/1350482411
-let g:endwise_no_mappings = 1
-AutocmdFT lua,ruby,vim imap <buffer> <CR> <CR><Plug>DiscretionaryEnd
-'''
-
-[[plugins]]
-repo        = 'kana/vim-smartinput'
+repo        = 'cohama/lexima.vim'
 lazy        = 1
 on_i        = 1
-hook_source = '''
-call smartinput#clear_rules()
-call smartinput#define_default_rules()
-'''
 
 [[plugins]]
 repo        = 'deris/vim-rengbang'
@@ -630,53 +616,6 @@ on_cmd      = 'RengBang'
 
 # }}}
 # ファイル {{{
-[[plugins]]
-repo        = 'kana/vim-altr'
-lazy        = 1
-on_map      = '<Plug>'
-hook_add    = '''
-nmap ga <Plug>(altr-forward)
-nmap gA <Plug>(altr-back)
-
-function! YOI_altr_define(...)
-  for parent in ['', '/*', '/*/*', '/*/*/*']
-    call altr#define(map(copy(a:000), 'printf(v:val, "' . parent . '")'))
-  endfor
-endfunction
-'''
-hook_source = '''
-" MVVM
-AutocmdFT cs,xml call altr#define(    '%Model.cs',
-      \                               '%Vm.cs',
-      \                               '%.xaml',
-      \                               '%.xaml.cs')
-AutocmdFT cs,xml call YOI_altr_define('Models%s/%%Model.cs',
-      \                               'ViewModels%s/%%Vm.cs',
-      \                               'Views%s/%%.xaml',
-      \                               'Views%s/%%.xaml.cs')
-AutocmdFT cs,xml call altr#define(    '%Model.cs',
-      \                               '%ViewModel.cs',
-      \                               '%.xaml',
-      \                               '%.xaml.cs')
-AutocmdFT cs,xml call YOI_altr_define('Models%s/%%Model.cs',
-      \                               'ViewModels%s/%%ViewModel.cs',
-      \                               'Views%s/%%.xaml',
-      \                               'Views%s/%%.xaml.cs')
-
-" xaml
-AutocmdFT cs,xml call altr#define( '%.xaml',
-      \                            '%.xaml.cs')
-AutocmdFT cs,xml call altr#define( '%.cs',
-      \                            '%.*.cs')
-
-" C++
-AutocmdFT cpp call altr#define(    '%.cpp',
-      \                            '%.*.cpp',
-      \                            '%.h')
-AutocmdFT cpp call YOI_altr_define('src%s/%%.cpp',
-      \                            'include%s/%%.h')
-'''
-
 [[plugins]]
 repo        = 'YoshihiroIto/vim-auto-mirroring'
 lazy        = 1
@@ -781,12 +720,6 @@ let g:closetag_filenames = '*.{html,xhtml,xml,xaml}'
 '''
 
 # }}}
-# TypeScript {{{
-[[plugins]]
-repo        = 'clausreinke/typescript-tools.vim'
-lazy        = 1
-on_ft       = 'typescript'
-# }}}
 # Git {{{
 [[plugins]]
 repo        = 'tpope/vim-fugitive'
@@ -831,11 +764,6 @@ let g:autoft_config = [
       \ ]
 '''
 
-# [[plugins]]
-# repo        = 'YoshihiroIto/vim-cs'
-# lazy        = 1
-# on_ft       = 'cs'
-
 [[plugins]]
 repo        = 'beyondmarc/hlsl.vim'
 lazy        = 1
@@ -869,11 +797,6 @@ let g:markdown_fenced_languages = [
 repo        = 'vim-scripts/JSON.vim'
 lazy        = 1
 on_ft       = ['json', 'markdown']
-
-[[plugins]]
-repo        = 'leafgarland/typescript-vim'
-lazy        = 1
-on_ft       = 'typescript'
 
 [[plugins]]
 repo        = 'PProvost/vim-ps1'
@@ -1030,3 +953,4 @@ xmap <silent> _ <Plug>(operator-camelize-toggle)
 '''
 
 # }}}
+

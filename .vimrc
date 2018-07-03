@@ -506,22 +506,12 @@ function! s:set_color()
   endif
 endfunction
 " }}}
-" 半透明化 {{{
-if s:has_gui_running
-  if s:is_mac
-    Autocmd GuiEnter,FocusGained * set transparency=3   " アクティブ時の透過率
-    Autocmd FocusLost            * set transparency=48  " 非アクティブ時の透過率
-  endif
-endif
-" }}}
 " フォント {{{
 if s:has_gui_running
   set guifont=Ricty\ Regular\ for\ Powerline:h11
 endif
 
 set printfont=Ricty\ Regular\ for\ Powerline:h11
-
-" set renderoptions=type:directx,gamma:1.2,contrast:1.42,geom:0,renmode:5,taamode:1,scrlines:1
 set renderoptions=type:directx
 
 if s:is_windows && s:has_kaoriya
