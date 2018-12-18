@@ -4,37 +4,25 @@ snippet dependency_property "DependencyProperty"
 
 public ${2:property_type} $1
 {
-	get => ($2)GetValue($1Property);
-	set => SetValue($1Property, value);
+	get => _$1;
+	set
+	{
+		if (value != _$1)
+			SetValue($1Property, value);
+	}
 }
+
+private $2 _$1 = default($2);
 
 public static readonly DependencyProperty $1Property =
-	DependencyProperty.Register(
-		nameof ($1),
-		typeof ($2),
-		typeof (${3:owner_class}),
-		new FrameworkPropertyMetadata
-		{
-			PropertyChangedCallback = On$1Changed,
-			CoerceValueCallback     = Coerce$1,
-			DefaultValue            = default($2),
-			BindsTwoWayByDefault    = true
-		}
-	);
-
-private static void On$1Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
-{
-	Debug.Assert(d is $3);
-	var self = d as $3;
-}
-
-private static object Coerce$1(DependencyObject d, object value)
-{
-	Debug.Assert(d is $3);
-	var self = d as $3;
-
-	return value;
-}
+	DependencyProperty.Register(nameof($1), typeof($2), typeof(${3:owner_class}),
+		new PropertyMetadata(
+			default($2),
+			(s, e) =>
+			{
+				var self = ($3) s;
+				self._$1 = ($2)e.NewValue;
+			}));
 
 #endregion
 ${0}
@@ -42,7 +30,7 @@ endsnippet
 
 
 #####################################################################
-snippet props "Property (SetProperty)"
+snippet prop "Property"
 #region ${1:property_name}
 
 private ${2:property_type} _$1;
@@ -59,8 +47,36 @@ endsnippet
 
 
 #####################################################################
-snippet propa "Auto Property"
-public ${1:TValue} ${2:name} { get; set; }
+snippet propf "Property (Flag)"
+public bool $1
+{
+	get => (_flags & Flag_$1) != 0;
+	set => SetFlagProperty(ref _flags, Flag_$1, value);
+}
+private uint _flags;
+private const uint Flag_$1 = 1 << ***;
+${0}
+endsnippet
+
+
+#####################################################################
+snippet propd "Property (IDisposable)"
+#region ${1:property_name}
+
+private ${2:property_type} _$1;
+
+public $2 $1
+{
+	get => _$1;
+	set
+	{
+		var old = _$1;
+		if (SetProperty(ref _$1, value))
+			old?.Dispose();
+	}
+}
+
+#endregion
 ${0}
 endsnippet
 
