@@ -30,6 +30,40 @@ endsnippet
 
 
 #####################################################################
+snippet dependency_property_framework "DependencyProperty (FrameworkPropertyMetadata)"
+#region ${1:property_name}
+
+public ${2:property_type} $1
+{
+	get => _$1;
+	set
+	{
+		if (value != _$1)
+			SetValue($1Property, value);
+	}
+}
+
+private $2 _$1 = default($2);
+
+public static readonly DependencyProperty $1Property =
+	DependencyProperty.Register(nameof($1), typeof($2), typeof(${3:owner_class}),
+		new FrameworkPropertyMetadata(
+			default($2),
+			FrameworkPropertyMetadataOptions.BindsTwoWayByDefault |
+			FrameworkPropertyMetadataOptions.AffectsRender |
+			FrameworkPropertyMetadataOptions.SubPropertiesDoNotAffectRender,
+			(s, e) =>
+			{
+				var self = ($3) s;
+				self._$1 = ($2)e.NewValue;
+			}));
+
+#endregion
+${0}
+endsnippet
+
+
+#####################################################################
 snippet prop "Property"
 #region ${1:property_name}
 
