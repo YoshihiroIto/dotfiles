@@ -1,94 +1,107 @@
-/*-------------------------------------------------------*/
-
-@font-face { font-family: '';                        src: local('gsgs'); }
-@font-face { font-family: '';                        src: local('gsgs'); }
-@font-face { font-family: '';                        src: local('gsgs'); }
-@font-face { font-family: '';                        src: local('gsgs'); }
-@font-face { font-family: '';                        src: local('gsgs'); }
-@font-face { font-family: '';                        src: local('gsgs'); }
-
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 100; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 100; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 100; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 100; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 100; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 100; }
-
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 200; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 200; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 200; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 200; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 200; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 200; }
-
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 300; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 300; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 300; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 300; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 300; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 300; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 300; }
-
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 400; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 400; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 400; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 400; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 400; }
-
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 500; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 500; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 500; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 500; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 500; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 500; }
-
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 600; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 600; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 600; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 600; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 600; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 600; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 600; } 
-
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 700; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 700; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 700; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 700; }
-
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 800; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 800; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 800; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 800; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 800; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 800; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 800; }
-
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 900; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 900; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 900; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 900; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 900; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: 900; }
-
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: bold; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: bold; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: bold; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: bold; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: bold; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: bold; }
-@font-face { font-family: '';                        src: local('gsgs'); font-weight: bold; }
-
-@font-face { font-family: '';                        src: local('gsgs'); font-style: italic; }
-@font-face { font-family: '';                        src: local('gsgs'); font-style: italic; }
-@font-face { font-family: '';                        src: local('gsgs'); font-style: italic; }
-@font-face { font-family: '';                        src: local('gsgs'); font-style: italic; }
-@font-face { font-family: '';                        src: local('gsgs'); font-style: italic; }
-@font-face { font-family: '';                        src: local('gsgs'); font-style: italic; }
-@font-face { font-family: '';                        src: local('gsgs'); font-style: italic; }
 
 /*-------------------------------------------------------*/
-@font-face { font-family: '';                        src: local('gsgst'); font-weight: 300; }
-@font-face { font-family: '';                        src: local('gsgst'); font-weight: 300; }
+@font-face { font-family: '';                        src: local('gsgs'); }
+@font-face { font-family: '';                        src: local('gsgs'); }
+@font-face { font-family: '';                        src: local('gsgs'); }
+
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 100; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 100; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 100; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 100; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 100; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 100; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 100; }
+
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 200; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 200; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 200; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 200; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 200; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 200; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 200; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 200; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 200; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 200; }
+
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 300; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 300; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 300; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 300; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 300; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 300; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 300; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 300; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 300; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 300; }
+
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 400; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 400; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 400; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 400; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 400; }
+
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 500; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 500; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 500; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 500; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 500; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 500; }
+
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 600; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 600; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 600; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 600; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 600; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 600; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 600; }
+
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 700; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 700; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 700; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 700; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 700; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 700; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 700; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 700; }
+
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 800; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 800; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 800; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 800; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 800; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 800; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 800; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 800; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 800; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 800; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 800; }
+
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 900; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 900; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 900; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 900; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 900; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 900; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 900; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: 900; }
+
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: bold; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: bold; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: bold; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: bold; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: bold; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: bold; }
+@font-face { font-family: '';                        src: local('gsgs'); font-weight: bold; }
+
+@font-face { font-family: '';                        src: local('gsgs'); font-style: italic; }
+@font-face { font-family: '';                        src: local('gsgs'); font-style: italic; }
+@font-face { font-family: '';                        src: local('gsgs'); font-style: italic; }
+@font-face { font-family: '';                        src: local('gsgs'); font-style: italic; }
+@font-face { font-family: '';                        src: local('gsgs'); font-style: italic; }
+@font-face { font-family: '';                        src: local('gsgs'); font-style: italic; }
+@font-face { font-family: '';                        src: local('gsgs'); font-style: italic; }
+
+/*-------------------------------------------------------*/
 @font-face { font-family: '';                        src: local('gsgst'); font-weight: 300; }
 @font-face { font-family: '';                        src: local('gsgst'); font-weight: 300; }
 @font-face { font-family: '';                        src: local('gsgst'); font-weight: 300; }
@@ -99,23 +112,23 @@
 @font-face { font-family: '';                        src: local('gsgst-bold'); font-weight: bold; }
 @font-face { font-family: '';                        src: local('gsgst-bold'); font-weight: bold; }
 
-@font-face { font-family: '';                        src: local('gsgst'); }
-@font-face { font-family: '';                        src: local('gsgst'); }
 @font-face { font-family: '';                        src: local('gsgst'); }
 @font-face { font-family: '';                        src: local('gsgst'); }
 @font-face { font-family: '';                        src: local('gsgst'); }
 
 /*-------------------------------------------------------*/
 
-@font-face { font-family: '-apple-system';                        src: local('bold'); font-weight: 700; }
-@font-face { font-family: '-apple-system';                        src: local('bold'); font-weight: 800; }
-@font-face { font-family: '-apple-system';                        src: local('bold'); font-weight: 900; }
 @font-face { font-family: '-apple-system';                        src: local('gsgs'); font-weight: 100; }
 @font-face { font-family: '-apple-system';                        src: local('gsgs'); font-weight: 200; }
 @font-face { font-family: '-apple-system';                        src: local('gsgs'); font-weight: 300; }
 @font-face { font-family: '-apple-system';                        src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: '-apple-system';                        src: local('gsgs'); font-weight: 500; }
 @font-face { font-family: '-apple-system';                        src: local('gsgs'); font-weight: 600; }
+@font-face { font-family: '-apple-system';                        src: local('gsgs'); font-weight: 700; }
+@font-face { font-family: '-apple-system';                        src: local('gsgs'); font-weight: 800; }
+@font-face { font-family: '-apple-system';                        src: local('gsgs'); font-weight: 900; }
+@font-face { font-family: 'A+mfCv-AXIS Font ベーシック L ProN';   src: local('gsgs'); }
+@font-face { font-family: 'A+mfCv-AXIS Font ベーシック M ProN';   src: local('gsgs'); }
 @font-face { font-family: 'A-OTF UD 新ゴ Pr6 L';                  src: local('gsgs'); }
 @font-face { font-family: 'A-OTF UD 新ゴ Pr6 M';                  src: local('gsgs'); }
 @font-face { font-family: 'A-OTF UD 新ゴ Pr6 R';                  src: local('gsgs'); }
@@ -123,6 +136,7 @@
 @font-face { font-family: 'a-otf-ud-shin-go-pr6n';                src: local('gsgs'); }
 @font-face { font-family: 'A1明朝';                               src: local('gsgs'); }
 @font-face { font-family: 'A1明朝';                               src: local('gsgs-bold'); font-weight: bold; }
+@font-face { font-family: 'ABBvoice';                             src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'Abel';                                 src: local('gsgs'); }
 @font-face { font-family: 'Abel';                                 src: local('gsgs-bold'); font-weight: bold; }
 @font-face { font-family: 'Abril Fatface';                        src: local('gsgs'); }
@@ -167,6 +181,7 @@
 @font-face { font-family: 'AG';                                   src: local('gsgs'); }
 @font-face { font-family: 'Akkurat';                              src: local('gsgs'); font-weight: 200; }
 @font-face { font-family: 'Akkurat';                              src: local('gsgs'); }
+@font-face { font-family: 'AkkuratTT';                            src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'Aktiv Grotesk W01 JP Light';           src: local('gsgs'); font-weight: 300; }
 @font-face { font-family: 'Aktiv Grotesk W01';                    src: local('gsgs'); font-weight: 200; }
 @font-face { font-family: 'aktiv-grotesk';                        src: local('gsgs'); font-weight: 300; }
@@ -178,25 +193,31 @@
 @font-face { font-family: 'Aldrich';                              src: local('gsgs'); }
 @font-face { font-family: 'Alegreya Sans SC';                     src: local('gsgs'); font-weight: 300; }
 @font-face { font-family: 'Alegreya Sans SC';                     src: local('gsgs'); }
+@font-face { font-family: 'Alegreya Sans';                        src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'Alegreya Sans';                        src: local('gsgs'); }
 @font-face { font-family: 'Alegreya Sans';                        src: local('gsgs-bold'); font-weight: 700; }
 @font-face { font-family: 'Alegreya Sans';                        src: local('gsgs-bold'); font-weight: 800; }
 @font-face { font-family: 'Alegreya Sans';                        src: local('gsgs-bold'); font-weight: 900; }
 @font-face { font-family: 'alesforceSansBold';                    src: local('gsgs-bold'); }
+@font-face { font-family: 'Aller';                                src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'allerbold';                            src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'AllerBold';                            src: local('gsgs-bold'); }
 @font-face { font-family: 'allerregular';                         src: local('gsgs'); }
 @font-face { font-family: 'Allerta Stencil';                      src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'alright_sansblack';                    src: local('gsgs'); }
 @font-face { font-family: 'alright_sansmedium';                   src: local('gsgs'); }
+@font-face { font-family: 'alrightRegular';                       src: local('gsgs'); font-weight: 300; }
+@font-face { font-family: 'alrightRegular';                       src: local('gsgs'); font-weight: 600; }
 @font-face { font-family: 'alt_got_normal';                       src: local('gsgs'); }
 @font-face { font-family: 'alternate-gothic-no-3-d';              src: local('gsgs'); font-weight: 300; }
 @font-face { font-family: 'alternate-gothic-no-3-d';              src: local('gsgs'); }
 @font-face { font-family: 'Amatic SC';                            src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'Amatic SC';                            src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'Amatic SC';                            src: local('gsgs'); }
+@font-face { font-family: 'Amazon Ember';                         src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'Amazon Ember';                         src: local('gsgs'); }
 @font-face { font-family: 'ambroise-francois-std';                src: local('gsgs'); }
+@font-face { font-family: 'America';                              src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'AmericanSans';                         src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'AmericanSansLight';                    src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'AmericanSansLight-ie';                 src: local('gsgs'); font-weight: 400; }
@@ -210,12 +231,16 @@
 @font-face { font-family: 'AnticCezannePro-DB';                   src: local('gsgs'); }
 @font-face { font-family: 'AnticCezannePro-DB';                   src: local('gsgs-bold'); font-weight: bold; }
 @font-face { font-family: 'Anton';                                src: local('gsgs'); font-weight: 100; }
+@font-face { font-family: 'Anton';                                src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'Anton';                                src: local('gsgs'); font-weight: 500; }
+@font-face { font-family: 'Anton';                                src: local('gsgs'); font-weight: 600; }
 @font-face { font-family: 'Apercu Bold';                          src: local('gsgs-bold'); }
 @font-face { font-family: 'Apercu Light';                         src: local('gsgs'); }
 @font-face { font-family: 'Apercu Medium';                        src: local('gsgs'); }
 @font-face { font-family: 'Apercu';                               src: local('gsgs'); }
 @font-face { font-family: 'apercu-regular';                       src: local('gsgs'); }
+@font-face { font-family: 'ApexNew';                              src: local('gsgs'); font-weight: 400; }
+@font-face { font-family: 'ApexNew';                              src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'Apple TP';                             src: local('gsgs'); font-weight: 200; }
 @font-face { font-family: 'Apple TP';                             src: local('gsgs'); font-weight: 300; }
 @font-face { font-family: 'Apple TP';                             src: local('gsgs'); font-weight: 600; }
@@ -224,6 +249,7 @@
 @font-face { font-family: 'Arboria-Book';                         src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'Arboria-Medium';                       src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'Arboria-Medium';                       src: local('gsgs'); font-weight: 700; }
+@font-face { font-family: 'Arbutus Slab';                         src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'Arbutus Slab';                         src: local('gsgs-bold'); font-weight: 700; }
 @font-face { font-family: 'Arbutus Slab';                         src: local('gsgs-bold'); font-weight: 800; }
 @font-face { font-family: 'Arbutus Slab';                         src: local('gsgs-bold'); font-weight: 900; }
@@ -254,6 +280,7 @@
 @font-face { font-family: 'ArticulatCF-Bold';                     src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'ArticulatCF-Light';                    src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'ArticulatCF-Text';                     src: local('gsgs'); font-weight: 400; }
+@font-face { font-family: 'Artifakt';                             src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'Artifakt';                             src: local('gsgs'); }
 @font-face { font-family: 'Artifakt';                             src: local('gsgs-bold'); font-weight: bold; }
 @font-face { font-family: 'Artifika';                             src: local('gsgs'); }
@@ -262,6 +289,7 @@
 @font-face { font-family: 'Arvo';                                 src: local('gsgs'); }
 @font-face { font-family: 'Arvo';                                 src: local('gsgs-bold'); font-weight: bold; }
 @font-face { font-family: 'arvoregular';                          src: local('gsgs'); }
+@font-face { font-family: 'Asap';                                 src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'ASAP';                                 src: local('gsgs'); }
 @font-face { font-family: 'ASAP';                                 src: local('gsgs-bold'); font-weight: bold; }
 @font-face { font-family: 'Assistant';                            src: local('gsgs'); }
@@ -279,11 +307,13 @@
 @font-face { font-family: 'AtlasGrotesk';                         src: local('gsgs-bold'); font-weight: 700; }
 @font-face { font-family: 'AtlasGrotesk';                         src: local('gsgs-bold'); font-weight: 800; }
 @font-face { font-family: 'AtlasGrotesk';                         src: local('gsgs-bold'); font-weight: 900; }
+@font-face { font-family: 'Audiowide';                            src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'Avalon';                               src: local('gsgs'); }
 @font-face { font-family: 'Avalon';                               src: local('gsgs-bold'); font-weight: bold; }
 @font-face { font-family: 'avalonbold';                           src: local('gsgs-bold'); font-weight: bold; }
 @font-face { font-family: 'avalonbold';                           src: local('gsgs-bold'); }
 @font-face { font-family: 'AvantGardeGothicITCW01B_731063';       src: local('gsgs'); }
+@font-face { font-family: 'AvantGardeGothicITCW02Bk';             src: local('gsgs'); }
 @font-face { font-family: 'AvantGardeGothicITCW02XLt';            src: local('gsgs'); }
 @font-face { font-family: 'Avenir LT W01 85 Heavy';               src: local('gsgs'); }
 @font-face { font-family: 'Avenir LT W01';                        src: local('gsgs'); font-weight: 400; }
@@ -415,6 +445,8 @@
 @font-face { font-family: 'Bitter';                               src: local('gsgs-bold'); font-weight: bold; }
 @font-face { font-family: 'BitterRegular';                        src: local('gsgs'); }
 @font-face { font-family: 'BitterRegular';                        src: local('gsgs-bold'); font-weight: bold; }
+@font-face { font-family: 'Black Han Sans';                       src: local('gsgs'); font-weight: 400; }
+@font-face { font-family: 'Black Han Sans';                       src: local('gsgs'); }
 @font-face { font-family: 'blender_promedium';                    src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'BlenditBold';                          src: local('gsgs-bold'); }
 @font-face { font-family: 'BlenditBook';                          src: local('gsgs'); }
@@ -453,7 +485,10 @@
 @font-face { font-family: 'BrandonText-Bold';                     src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'BrandonText-Regular';                  src: local('gsgs'); }
 @font-face { font-family: 'Brawler';                              src: local('gsgs'); }
+@font-face { font-family: 'Bree Serif';                           src: local('gsgs'); font-weight: 500; }
 @font-face { font-family: 'brevia';                               src: local('gsgs'); font-weight: 300; }
+@font-face { font-family: 'BrixSansLight';                        src: local('gsgs'); }
+@font-face { font-family: 'BrixSansMedium';                       src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'brothers';                             src: local('gsgs'); font-weight: 300; }
 @font-face { font-family: 'brothers';                             src: local('gsgs'); }
 @font-face { font-family: 'brothers';                             src: local('gsgs-bold'); font-weight: bold; }
@@ -476,6 +511,7 @@
 @font-face { font-family: 'Cabin Condensed';                      src: local('gsgs'); }
 @font-face { font-family: 'Cabin';                                src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'cabinregular';                         src: local('gsgs'); }
+@font-face { font-family: 'cabinsemibold';                        src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'cabinsemibold';                        src: local('gsgs-bold'); }
 @font-face { font-family: 'caflisch-script-pro';                  src: local('gsgs'); }
 @font-face { font-family: 'Calibri';                              src: local('gsgs'); }
@@ -504,6 +540,10 @@
 @font-face { font-family: 'CernUltraLight';                       src: local('gsgs'); }
 @font-face { font-family: 'Cervo-Light';                          src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'ChapRegular';                          src: local('gsgs'); }
+@font-face { font-family: 'Charlie Display';                      src: local('gsgs'); font-weight: 400; }
+@font-face { font-family: 'Charlie Display';                      src: local('gsgs'); font-weight: 500; }
+@font-face { font-family: 'Charlie Text';                         src: local('gsgs'); font-weight: 400; }
+@font-face { font-family: 'Charlie Text';                         src: local('gsgs'); font-weight: 500; }
 @font-face { font-family: 'Chatlio-Lato';                         src: local('gsgs'); font-weight: 500; }
 @font-face { font-family: 'Cherry Swash';                         src: local('gsgs'); }
 @font-face { font-family: 'Chronicle Cond A';                     src: local('gsgs'); }
@@ -543,6 +583,8 @@
 @font-face { font-family: 'Circular';                             src: local('gsgs-bold'); font-weight: bold; }
 @font-face { font-family: 'Circular-Pro-Medium';                  src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'CircularPro-bold';                     src: local('gsgs-bold'); }
+@font-face { font-family: 'circulartweeten';                      src: local('gsgs'); font-weight: 400; }
+@font-face { font-family: 'circulartweeten';                      src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'CL';                                   src: local('gsgs'); }
 @font-face { font-family: 'clan-narrow-ultra';                    src: local('gsgs'); }
 @font-face { font-family: 'ClanPro-Book';                         src: local('gsgs'); }
@@ -550,6 +592,7 @@
 @font-face { font-family: 'clarendon-w01-medium-692107';          src: local('gsgs'); }
 @font-face { font-family: 'Clear Sans';                           src: local('gsgs'); }
 @font-face { font-family: 'Clear Sans';                           src: local('gsgs-bold'); font-weight: bold; }
+@font-face { font-family: 'ClearSans-Thin';                       src: local('gsgs'); }
 @font-face { font-family: 'ClumsyRegular';                        src: local('gsgs'); }
 @font-face { font-family: 'Coda';                                 src: local('gsgs'); }
 @font-face { font-family: 'Coda';                                 src: local('gsgs-bold'); font-weight: bold; }
@@ -587,6 +630,7 @@
 @font-face { font-family: 'DIN Bold';                             src: local('gsgs-bold'); }
 @font-face { font-family: 'DIN Next W01 Light';                   src: local('gsgs'); }
 @font-face { font-family: 'DIN Next W01 Medium';                  src: local('gsgs'); }
+@font-face { font-family: 'DIN';                                  src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'DIN';                                  src: local('gsgs'); }
 @font-face { font-family: 'din-bold';                             src: local('gsgs'); }
 @font-face { font-family: 'din-next-w01-light';                   src: local('gsgs'); }
@@ -601,10 +645,12 @@
 @font-face { font-family: 'DINPro';                               src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'DINPro';                               src: local('gsgs'); font-weight: 500; }
 @font-face { font-family: 'DINPro';                               src: local('gsgs'); font-weight: 600; }
+@font-face { font-family: 'DINPro';                               src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'DINPro';                               src: local('gsgs'); }
 @font-face { font-family: 'DINPro';                               src: local('gsgs-bold'); font-weight: 700; }
 @font-face { font-family: 'DINPro';                               src: local('gsgs-bold'); font-weight: 800; }
 @font-face { font-family: 'DINPro';                               src: local('gsgs-bold'); font-weight: 900; }
+@font-face { font-family: 'DINPro-Regular';                       src: local('gsgs'); }
 @font-face { font-family: 'DINRegular';                           src: local('gsgs'); }
 @font-face { font-family: 'DINWebPro';                            src: local('gsgs'); font-weight: 100; }
 @font-face { font-family: 'DINWebPro';                            src: local('gsgs'); font-weight: 200; }
@@ -612,6 +658,9 @@
 @font-face { font-family: 'DINWebPro';                            src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'DINWebPro';                            src: local('gsgs'); font-weight: 500; }
 @font-face { font-family: 'DINWebPro';                            src: local('gsgs'); font-weight: 600; }
+@font-face { font-family: 'DINWebPro';                            src: local('gsgs'); font-weight: 700; }
+@font-face { font-family: 'DINWebPro';                            src: local('gsgs'); font-weight: 800; }
+@font-face { font-family: 'DINWebPro';                            src: local('gsgs'); font-weight: 900; }
 @font-face { font-family: 'DINWebPro';                            src: local('gsgs'); }
 @font-face { font-family: 'DINWebPro';                            src: local('gsgs-bold'); font-weight: 700; }
 @font-face { font-family: 'DINWebPro';                            src: local('gsgs-bold'); font-weight: 800; }
@@ -626,9 +675,11 @@
 @font-face { font-family: 'Dosis';                                src: local('gsgs'); }
 @font-face { font-family: 'Dosis';                                src: local('gsgs-bold'); font-weight: bold; }
 @font-face { font-family: 'DP';                                   src: local('gsgs'); }
+@font-face { font-family: 'Droid Sans';                           src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'Droid Sans';                           src: local('gsgs'); }
 @font-face { font-family: 'Droid Sans';                           src: local('gsgs-bold'); font-weight: bold; }
 @font-face { font-family: 'Droid Serif';                          src: local('gsgs'); font-style: italic; }
+@font-face { font-family: 'Droid Serif';                          src: local('gsgs'); font-weight: 300; }
 @font-face { font-family: 'Droid Serif';                          src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'Droid Serif';                          src: local('gsgs'); }
 @font-face { font-family: 'Droid Serif';                          src: local('gsgs-bold'); font-weight: bold; }
@@ -641,6 +692,7 @@
 @font-face { font-family: 'droid-sans-1';                         src: local('gsgs-bold'); font-weight: 700; }
 @font-face { font-family: 'droid-sans-1';                         src: local('gsgs-bold'); font-weight: 800; }
 @font-face { font-family: 'droid-sans-1';                         src: local('gsgs-bold'); font-weight: 900; }
+@font-face { font-family: 'DuplicateSlabLight';                   src: local('gsgs'); font-weight: 500; }
 @font-face { font-family: 'EB Garamond';                          src: local('gsgs'); }
 @font-face { font-family: 'economica';                            src: local('gsgs'); }
 @font-face { font-family: 'effra';                                src: local('gsgs'); font-weight: 300; }
@@ -668,12 +720,22 @@
 @font-face { font-family: 'EngraversGothicBT';                    src: local('gsgs'); }
 @font-face { font-family: 'enriqueta';                            src: local('gsgs'); }
 @font-face { font-family: 'enriqueta';                            src: local('gsgs-bold'); font-weight: bold; }
+@font-face { font-family: 'Escrow Condensed';                     src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'Ethnocentric';                         src: local('gsgs'); }
 @font-face { font-family: 'Eudald News';                          src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'eurostile';                            src: local('gsgs'); }
+@font-face { font-family: 'EurostileNext';                        src: local('gsgs'); font-weight: 100; }
+@font-face { font-family: 'EurostileNext';                        src: local('gsgs'); font-weight: 200; }
+@font-face { font-family: 'EurostileNext';                        src: local('gsgs'); font-weight: 600; }
+@font-face { font-family: 'EurostileNext';                        src: local('gsgs'); font-weight: 700; }
+@font-face { font-family: 'EurostileNext';                        src: local('gsgs'); }
+@font-face { font-family: 'EurostileNextExtended';                src: local('gsgs'); font-weight: 100; }
+@font-face { font-family: 'EurostileNextExtended';                src: local('gsgs'); font-weight: 400; }
+@font-face { font-family: 'EurostileNextExtended';                src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'EXCELSIOR SANS';                       src: local('gsgs'); }
 @font-face { font-family: 'Exchange SSm 4i';                      src: local('gsgs'); }
 @font-face { font-family: 'Exchange SSm 4r';                      src: local('gsgs'); }
+@font-face { font-family: 'Exchange';                             src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'Exo 2';                                src: local('gsgs'); font-weight: 100; }
 @font-face { font-family: 'Exo 2';                                src: local('gsgs'); font-weight: 200; }
 @font-face { font-family: 'Exo 2';                                src: local('gsgs'); font-weight: 300; }
@@ -709,6 +771,8 @@
 @font-face { font-family: 'FaktSlabPro';                          src: local('gsgs-bold'); font-weight: 900; }
 @font-face { font-family: 'Favorit Warp';                         src: local('gsgs'); }
 @font-face { font-family: 'FB Benton Sans Medium';                src: local('gsgs'); }
+@font-face { font-family: 'FBKisDisplay Bold';                    src: local('gsgs'); font-weight: 400; }
+@font-face { font-family: 'FBKisDisplay';                         src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'FCKaiser';                             src: local('gsgs'); font-weight: 500; }
 @font-face { font-family: 'FCKaiser';                             src: local('gsgs'); }
 @font-face { font-family: 'FCKaiser';                             src: local('gsgs-bold'); font-weight: bold; }
@@ -740,6 +804,8 @@
 @font-face { font-family: 'filson-pro';                           src: local('gsgs-bold'); font-weight: 700; }
 @font-face { font-family: 'filson-pro';                           src: local('gsgs-bold'); font-weight: 800; }
 @font-face { font-family: 'filson-pro';                           src: local('gsgs-bold'); font-weight: 900; }
+@font-face { font-family: 'filson-soft';                          src: local('gsgs'); font-weight: 300; }
+@font-face { font-family: 'filson-soft';                          src: local('gsgs'); font-weight: 600; }
 @font-face { font-family: 'fira sans';                            src: local('gsgs'); font-style: italic; }
 @font-face { font-family: 'Fira Sans';                            src: local('gsgs'); font-weight: 100; }
 @font-face { font-family: 'Fira Sans';                            src: local('gsgs'); font-weight: 200; }
@@ -765,6 +831,7 @@
 @font-face { font-family: 'FOT-ぶどう std L';                     src: local('gsgs'); }
 @font-face { font-family: 'FOT-クレー Pro M';                     src: local('gsgs'); }
 @font-face { font-family: 'FOT-ニューセザンヌ Pro M';             src: local('gsgs'); }
+@font-face { font-family: 'FOT-マティス Pro EB';                  src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'FOT-マティス ProN M';                  src: local('gsgs'); }
 @font-face { font-family: 'FOT-ロダン Pro L';                     src: local('gsgs'); }
 @font-face { font-family: 'FOT-ロダン Pro M';                     src: local('gsgs'); }
@@ -868,7 +935,9 @@
 @font-face { font-family: 'Garamond';                             src: local('gsgs'); }
 @font-face { font-family: 'garamond-premier-pro';                 src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'garamond-premier-pro';                 src: local('gsgs'); font-weight: 600; }
+@font-face { font-family: 'GBI';                                  src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'GD-HighwayGothicJA';                   src: local('gsgs'); }
+@font-face { font-family: 'GeForce';                              src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'GenEiGothicP';                         src: local('gsgs'); }
 @font-face { font-family: 'GenEiGothicP';                         src: local('gsgs-bold'); font-weight: bold; }
 @font-face { font-family: 'GenShinGothic-Light';                  src: local('gsgs'); font-weight: 100; }
@@ -905,6 +974,7 @@
 @font-face { font-family: 'GlyddonBold';                          src: local('gsgs'); }
 @font-face { font-family: 'GlyddonRegular';                       src: local('gsgs'); }
 @font-face { font-family: 'Google Sans';                          src: local('gsgs'); font-weight: 400; }
+@font-face { font-family: 'Google Sans';                          src: local('gsgs'); font-weight: 500; }
 @font-face { font-family: 'Google-Oswald';                        src: local('gsgs'); }
 @font-face { font-family: 'gordita';                              src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'gordita';                              src: local('gsgs'); font-weight: 500; }
@@ -932,10 +1002,13 @@
 @font-face { font-family: 'Gotham';                               src: local('gsgs'); font-weight: 300; }
 @font-face { font-family: 'Gotham';                               src: local('gsgs'); }
 @font-face { font-family: 'Gotham';                               src: local('gsgs-bold'); font-weight: bold; }
+@font-face { font-family: 'Gotham-Bold';                          src: local('gsgs'); }
 @font-face { font-family: 'Gotham-Bold';                          src: local('gsgs-bold'); font-weight: 100; }
 @font-face { font-family: 'Gotham-Bold';                          src: local('gsgs-bold'); }
 @font-face { font-family: 'gotham-book';                          src: local('gsgs'); }
 @font-face { font-family: 'gotham-medium';                        src: local('gsgs'); font-weight: 500; }
+@font-face { font-family: 'gotham-rounded-bold';                  src: local('gsgs'); font-weight: 400; }
+@font-face { font-family: 'gotham-rounded-light';                 src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'gotham_bold';                          src: local('gsgs'); font-weight: 600; }
 @font-face { font-family: 'GothamBook';                           src: local('gsgs'); }
 @font-face { font-family: 'GothamLightRegular';                   src: local('gsgs'); }
@@ -945,6 +1018,7 @@
 @font-face { font-family: 'Gothic Medium BBB JIS2004';            src: local('gsgs'); }
 @font-face { font-family: 'Gothic Medium BBB';                    src: local('gsgs'); }
 @font-face { font-family: 'grad';                                 src: local('gsgs'); }
+@font-face { font-family: 'Graduate';                             src: local('gsgs'); }
 @font-face { font-family: 'Graphik Meetup';                       src: local('gsgs'); font-weight: 500; }
 @font-face { font-family: 'Graphik Meetup';                       src: local('gsgs'); }
 @font-face { font-family: 'Graphik Web';                          src: local('gsgs'); font-weight: 300; font-style: italic; }
@@ -1000,6 +1074,7 @@
 @font-face { font-family: 'Harmonia Sans W01';                    src: local('gsgs'); }
 @font-face { font-family: 'HCo Verlag';                           src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'HCo Verlag';                           src: local('gsgs'); font-weight: 700; }
+@font-face { font-family: 'headline-semi';                        src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'headline-semi';                        src: local('gsgs'); }
 @font-face { font-family: 'headline-semi';                        src: local('gsgs-bold'); font-weight: bold; }
 @font-face { font-family: 'headline-semi-bold';                   src: local('gsgs'); }
@@ -1078,6 +1153,7 @@
 @font-face { font-family: 'HGS創英角ﾎﾟｯﾌﾟ体';                     src: local('gsgs-bold'); font-weight: bold; }
 @font-face { font-family: 'HGS明朝E';                             src: local('gsgs'); font-weight: 500; }
 @font-face { font-family: 'HG丸ｺﾞｼｯｸM-PRO';                       src: local('gsgs'); }
+@font-face { font-family: 'Hind';                                 src: local('gsgs'); font-weight: 600; }
 @font-face { font-family: 'Hind';                                 src: local('gsgs'); }
 @font-face { font-family: 'Hind';                                 src: local('gsgs-bold'); font-weight: 700; }
 @font-face { font-family: 'Hind';                                 src: local('gsgs-bold'); font-weight: 800; }
@@ -1149,6 +1225,10 @@
 @font-face { font-family: 'industry';                             src: local('gsgs'); font-weight: 300; }
 @font-face { font-family: 'industry';                             src: local('gsgs-bold'); font-weight: bold; }
 @font-face { font-family: 'Indy Serif';                           src: local('gsgs'); }
+@font-face { font-family: 'input-sans';                           src: local('gsgs'); font-weight: 300; }
+@font-face { font-family: 'input-sans-condensed';                 src: local('gsgs'); font-weight: 400; }
+@font-face { font-family: 'input-sans-condensed';                 src: local('gsgs'); font-weight: 500; }
+@font-face { font-family: 'input-sans-condensed';                 src: local('gsgs'); font-weight: 600; }
 @font-face { font-family: 'intel-clear';                          src: local('gsgs'); }
 @font-face { font-family: 'IntelClear-Bold';                      src: local('gsgs-bold'); }
 @font-face { font-family: 'IntelClear-Light';                     src: local('gsgs'); }
@@ -1194,6 +1274,7 @@
 @font-face { font-family: 'josefin_sansbold';                     src: local('gsgs'); }
 @font-face { font-family: 'josefin_sansbold';                     src: local('gsgs-bold'); font-weight: bold; }
 @font-face { font-family: 'jubilat';                              src: local('gsgs'); }
+@font-face { font-family: 'Julius Sans One';                      src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'julius';                               src: local('gsgs'); }
 @font-face { font-family: 'Jun 201';                              src: local('gsgs'); }
 @font-face { font-family: 'Kanit';                                src: local('gsgs'); font-weight: 300; }
@@ -1268,6 +1349,7 @@
 @font-face { font-family: 'Lato-Bold';                            src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'Lato-bold';                            src: local('gsgs-bold'); font-weight: 100; }
 @font-face { font-family: 'Lato-Bold';                            src: local('gsgs-bold'); }
+@font-face { font-family: 'Lato-Light';                           src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'latoBold';                             src: local('gsgs'); }
 @font-face { font-family: 'LatoLight';                            src: local('gsgs'); }
 @font-face { font-family: 'latolight_italic';                     src: local('gsgs'); }
@@ -1369,6 +1451,7 @@
 @font-face { font-family: 'maison-neue-for-tgd';                  src: local('gsgs-bold'); font-weight: 700; }
 @font-face { font-family: 'maison-neue-for-tgd';                  src: local('gsgs-bold'); font-weight: 800; }
 @font-face { font-family: 'maison-neue-for-tgd';                  src: local('gsgs-bold'); font-weight: 900; }
+@font-face { font-family: 'MaisonNeueLIG';                        src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'maki_r5';                              src: local('gsgs'); }
 @font-face { font-family: 'mallory';                              src: local('gsgs'); }
 @font-face { font-family: 'mallory';                              src: local('gsgs-bold'); font-weight: bold; }
@@ -1482,6 +1565,7 @@
 @font-face { font-family: 'MomentumSansDeck';                     src: local('gsgs-bold'); font-weight: bold; }
 @font-face { font-family: 'MomentumSansText';                     src: local('gsgs'); }
 @font-face { font-family: 'Mona1';                                src: local('gsgs'); }
+@font-face { font-family: 'mona2 bold';                           src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'Mona2';                                src: local('gsgs'); font-weight: 100; }
 @font-face { font-family: 'Mona2';                                src: local('gsgs'); font-weight: 200; }
 @font-face { font-family: 'Mona2';                                src: local('gsgs'); font-weight: 300; }
@@ -1539,6 +1623,7 @@
 @font-face { font-family: 'MS Pゴシック';                         src: local('gsgs'); }
 @font-face { font-family: 'MS UI Gothic';                         src: local('gsgs'); }
 @font-face { font-family: 'MS-Font-Segoe';                        src: local('gsgs'); }
+@font-face { font-family: 'MS-Font-Segoe-Bold';                   src: local('gsgs'); font-weight: 800; }
 @font-face { font-family: 'MS-Font-Segoe-Regular';                src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'Muli';                                 src: local('gsgs'); font-weight: 300; }
 @font-face { font-family: 'Muli';                                 src: local('gsgs'); font-weight: 400; }
@@ -1602,6 +1687,9 @@
 @font-face { font-family: 'MuseoSans-300';                        src: local('gsgs'); font-weight: 300; }
 @font-face { font-family: 'MuseoSans-300';                        src: local('gsgs'); font-weight: 600; }
 @font-face { font-family: 'MuseoSans-500';                        src: local('gsgs'); }
+@font-face { font-family: 'MuseoSans300';                         src: local('gsgs'); }
+@font-face { font-family: 'MuseoSans500';                         src: local('gsgs'); font-weight: 700; }
+@font-face { font-family: 'MuseoSans500';                         src: local('gsgs'); }
 @font-face { font-family: 'MuseoSansRounded';                     src: local('gsgs'); font-weight: 100; }
 @font-face { font-family: 'MuseoSansRounded';                     src: local('gsgs'); font-weight: 200; }
 @font-face { font-family: 'MuseoSansRounded';                     src: local('gsgs'); font-weight: 300; }
@@ -1614,6 +1702,8 @@
 @font-face { font-family: 'MuseoSansRounded-300';                 src: local('gsgs'); }
 @font-face { font-family: 'MuseoSansRounded-500';                 src: local('gsgs'); font-weight: 300; }
 @font-face { font-family: 'MuseoSansRounded-500';                 src: local('gsgs'); font-weight: 500; }
+@font-face { font-family: 'MuseoSlab500';                         src: local('gsgs'); font-weight: 400; }
+@font-face { font-family: 'MuseoSlab500';                         src: local('gsgs'); font-weight: 500; }
 @font-face { font-family: 'MuseoSlabLight';                       src: local('gsgs'); }
 @font-face { font-family: 'MuseoSlabRegular';                     src: local('gsgs'); }
 @font-face { font-family: 'MuseoSlabTumblr';                      src: local('gsgs'); }
@@ -1743,6 +1833,7 @@
 @font-face { font-family: 'NotoSansCJKjpLight';                   src: local('gsgs'); }
 @font-face { font-family: 'NotoSansJapanese';                     src: local('gsgs'); }
 @font-face { font-family: 'NotoSansJapanese';                     src: local('gsgs-bold'); font-weight: bold; }
+@font-face { font-family: 'NotoSansJP';                           src: local('gsgs'); }
 @font-face { font-family: 'NotoSansJP-Regular-subset';            src: local('gsgs'); }
 @font-face { font-family: 'Novacento Sans Wide';                  src: local('gsgs'); font-weight: 200; }
 @font-face { font-family: 'Novecento Wide Demi Bold';             src: local('gsgs'); font-weight: 300; }
@@ -1777,8 +1868,10 @@
 @font-face { font-family: 'nyt-cheltenham-sh';                    src: local('gsgs-bold'); font-weight: 800; }
 @font-face { font-family: 'nyt-cheltenham-sh';                    src: local('gsgs-bold'); font-weight: 900; }
 @font-face { font-family: 'nyt-franklin';                         src: local('gsgs'); font-weight: 300; }
+@font-face { font-family: 'nyt-franklin';                         src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'nyt-franklin';                         src: local('gsgs'); }
 @font-face { font-family: 'nyt-franklin';                         src: local('gsgs-bold'); font-weight: bold; }
+@font-face { font-family: 'nyt-imperial';                         src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'objektiv-mk1';                         src: local('gsgs'); font-weight: 300; }
 @font-face { font-family: 'objektiv-mk1';                         src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'OCRAMedium';                           src: local('gsgs'); }
@@ -1848,6 +1941,7 @@
 @font-face { font-family: 'Oswald';                               src: local('gsgs-bold'); font-weight: 800; }
 @font-face { font-family: 'Oswald';                               src: local('gsgs-bold'); font-weight: 900; }
 @font-face { font-family: 'Oswald';                               src: local('gsgs-bold'); font-weight: bold; }
+@font-face { font-family: 'oswaldbook';                           src: local('gsgs'); }
 @font-face { font-family: 'OutputSans';                           src: local('gsgs'); font-weight: 100; }
 @font-face { font-family: 'OutputSans';                           src: local('gsgs'); font-weight: 200; }
 @font-face { font-family: 'OutputSans';                           src: local('gsgs'); font-weight: 300; }
@@ -1887,6 +1981,7 @@
 @font-face { font-family: 'PingFang SC';                          src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'Pirulen';                              src: local('gsgs'); }
 @font-face { font-family: 'Pistilli';                             src: local('gsgs'); font-weight: 400; }
+@font-face { font-family: 'PixelMplus10-Regular';                 src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'Play';                                 src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'Play';                                 src: local('gsgs'); }
 @font-face { font-family: 'Play';                                 src: local('gsgs-bold'); font-weight: bold; }
@@ -1973,9 +2068,12 @@
 @font-face { font-family: 'proxima-nova-condensed';               src: local('gsgs-bold'); font-weight: bold; }
 @font-face { font-family: 'proxima-nova-extra-condensed';         src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'proxima-nova-light';                   src: local('gsgs'); }
+@font-face { font-family: 'proxima-nova-regular';                 src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'proxima-nova-sc';                      src: local('gsgs'); font-weight: 100; }
 @font-face { font-family: 'proxima-nova-soft';                    src: local('gsgs'); }
 @font-face { font-family: 'proxima-nova-soft';                    src: local('gsgs-bold'); font-weight: bold; }
+@font-face { font-family: 'proxima-regular1';                     src: local('gsgs'); font-weight: 400; }
+@font-face { font-family: 'proxima-semibold';                     src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'proxima_nova_cn_rgbold';               src: local('gsgs'); }
 @font-face { font-family: 'proxima_nova_condensedlight';          src: local('gsgs'); }
 @font-face { font-family: 'proxima_nova_rgbold';                  src: local('gsgs'); }
@@ -1985,6 +2083,7 @@
 @font-face { font-family: 'proxima_novasemibold';                 src: local('gsgs'); }
 @font-face { font-family: 'ProximaBold';                          src: local('gsgs'); }
 @font-face { font-family: 'ProximaBold';                          src: local('gsgs-bold'); font-weight: bold; }
+@font-face { font-family: 'Proximanova Regular';                  src: local('gsgs'); }
 @font-face { font-family: 'ProximaNova';                          src: local('gsgs'); font-style: italic; }
 @font-face { font-family: 'ProximaNova';                          src: local('gsgs'); font-weight: 100; }
 @font-face { font-family: 'ProximaNova';                          src: local('gsgs'); font-weight: 200; }
@@ -2011,9 +2110,11 @@
 @font-face { font-family: 'ProximaNovaCond-Extrabld';             src: local('gsgs-bold'); font-weight: 800; }
 @font-face { font-family: 'ProximaNovaCond-Extrabld';             src: local('gsgs-bold'); font-weight: 900; }
 @font-face { font-family: 'ProximaNovaCond-Medium';               src: local('gsgs'); }
+@font-face { font-family: 'ProximaNovaCond-Semibold';             src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'ProximaNovaExtraBold';                 src: local('gsgs'); font-weight: 500; }
 @font-face { font-family: 'ProximaNovaRegular';                   src: local('gsgs'); }
 @font-face { font-family: 'ProximaNovaRgBold';                    src: local('gsgs'); }
+@font-face { font-family: 'ProximaNovaS-Semibold';                src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'ProximaNovaSemibold';                  src: local('gsgs'); }
 @font-face { font-family: 'ProximaNovaSoft-Bold';                 src: local('gsgs-bold'); }
 @font-face { font-family: 'ProximaNovaSoft-Regular';              src: local('gsgs'); }
@@ -2041,6 +2142,7 @@
 @font-face { font-family: 'q_serif';                              src: local('gsgs-bold'); font-weight: bold; }
 @font-face { font-family: 'QualcommWeb';                          src: local('gsgs'); font-weight: 200; }
 @font-face { font-family: 'QualcommWeb';                          src: local('gsgs'); font-weight: 600; }
+@font-face { font-family: 'Quando';                               src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'Quarto A';                             src: local('gsgs'); font-weight: 300; }
 @font-face { font-family: 'Quarto A';                             src: local('gsgs'); font-weight: 500; }
 @font-face { font-family: 'Quarto A';                             src: local('gsgs'); }
@@ -2048,6 +2150,9 @@
 @font-face { font-family: 'Quattrocento Sans';                    src: local('gsgs-bold'); font-weight: bold; }
 @font-face { font-family: 'Quattrocento';                         src: local('gsgs'); }
 @font-face { font-family: 'Questrial';                            src: local('gsgs'); }
+@font-face { font-family: 'Quicksand';                            src: local('gsgs'); font-weight: 100; }
+@font-face { font-family: 'Quicksand';                            src: local('gsgs'); font-weight: 400; }
+@font-face { font-family: 'Quicksand';                            src: local('gsgs'); font-weight: 500; }
 @font-face { font-family: 'Quicksand';                            src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'Quicksand';                            src: local('gsgs'); }
 @font-face { font-family: 'quicksand';                            src: local('gsgs-bold'); font-weight: 700; }
@@ -2082,6 +2187,9 @@
 @font-face { font-family: 'Regular';                              src: local('gsgs-bold'); font-weight: 700; }
 @font-face { font-family: 'Regular';                              src: local('gsgs-bold'); font-weight: 800; }
 @font-face { font-family: 'Regular';                              src: local('gsgs-bold'); font-weight: 900; }
+@font-face { font-family: 'Reimin Bold';                          src: local('gsgs'); font-weight: 500; }
+@font-face { font-family: 'Reimin Light';                         src: local('gsgs'); font-weight: 500; }
+@font-face { font-family: 'Reimin Medium';                        src: local('gsgs'); font-weight: 500; }
 @font-face { font-family: 'Reimin Y10 Regular';                   src: local('gsgs'); }
 @font-face { font-family: 'Reimin Y20 Heavy';                     src: local('gsgs'); }
 @font-face { font-family: 'Reklame';                              src: local('gsgs'); }
@@ -2148,6 +2256,7 @@
 @font-face { font-family: 'RobotoSlab-Regular';                   src: local('gsgs'); }
 @font-face { font-family: 'Rockwell';                             src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'RodinNTLGPro-B';                       src: local('gsgs'); }
+@font-face { font-family: 'Rokkitt';                              src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'Rokkitt';                              src: local('gsgs'); }
 @font-face { font-family: 'Rounded Mplus 1c';                     src: local('gsgs'); font-weight: 300; }
 @font-face { font-family: 'Rounded Mplus 1c';                     src: local('gsgs'); font-weight: 500; }
@@ -2172,13 +2281,17 @@
 @font-face { font-family: 'SabonLTPro-Roman';                     src: local('gsgs'); }
 @font-face { font-family: 'SackersGothicStd-Light';               src: local('gsgs'); font-weight: 500; }
 @font-face { font-family: 'SackersGothicW01-Heavy';               src: local('gsgs'); }
+@font-face { font-family: 'Sailec-Bold';                          src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'Sailec-Light';                         src: local('gsgs'); }
+@font-face { font-family: 'Sailec-Medium';                        src: local('gsgs'); font-weight: 400; }
+@font-face { font-family: 'Saira Semi Condensed';                 src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'San Francisco';                        src: local('gsgs'); }
 @font-face { font-family: 'SanchezSlab Semibold';                 src: local('gsgs'); }
 @font-face { font-family: 'SanchezSlab';                          src: local('gsgs'); }
 @font-face { font-family: 'Sansita One';                          src: local('gsgs'); font-weight: 100; }
 @font-face { font-family: 'Sansita One';                          src: local('gsgs'); }
 @font-face { font-family: 'Satisfy';                              src: local('gsgs'); }
+@font-face { font-family: 'Sawarabi Gothic';                      src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'Sawarabi Mincho';                      src: local('gsgs'); }
 @font-face { font-family: 'schoolbook-web-condensed';             src: local('gsgs'); }
 @font-face { font-family: 'Segoe UI Light';                       src: local('gsgs'); }
@@ -2286,6 +2399,9 @@
 @font-face { font-family: 'Slack-Lato';                           src: local('gsgs-bold'); font-weight: 700; }
 @font-face { font-family: 'Slack-Lato';                           src: local('gsgs-bold'); font-weight: 800; }
 @font-face { font-family: 'Slack-Lato';                           src: local('gsgs-bold'); font-weight: 900; }
+@font-face { font-family: 'Slack-Tazugane';                       src: local('gsgs'); font-weight: 400; }
+@font-face { font-family: 'Slack-Tazugane';                       src: local('gsgs'); font-weight: 700; }
+@font-face { font-family: 'Slack-Tazugane';                       src: local('gsgs'); font-weight: 900; }
 @font-face { font-family: 'Slate W01 Bk Italic';                  src: local('gsgs'); }
 @font-face { font-family: 'Slate W01 Bk';                         src: local('gsgs'); }
 @font-face { font-family: 'Slate W01 Medium';                     src: local('gsgs'); font-weight: 400; }
@@ -2350,6 +2466,9 @@
 @font-face { font-family: 'Stem Text';                            src: local('gsgs-bold'); font-weight: 900; }
 @font-face { font-family: 'Stoke';                                src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'Stoke';                                src: local('gsgs'); }
+@font-face { font-family: 'stolzl';                               src: local('gsgs'); font-weight: 300; }
+@font-face { font-family: 'stolzl';                               src: local('gsgs'); font-weight: 500; }
+@font-face { font-family: 'stolzl';                               src: local('gsgs'); }
 @font-face { font-family: 'Strangelove';                          src: local('gsgs'); }
 @font-face { font-family: 'Stratum1';                             src: local('gsgs'); font-weight: 500; }
 @font-face { font-family: 'Stratum1';                             src: local('gsgs'); }
@@ -2404,6 +2523,7 @@
 @font-face { font-family: 'Texta Narrow Thin';                    src: local('gsgs'); }
 @font-face { font-family: 'Texta';                                src: local('gsgs'); font-weight: 100; }
 @font-face { font-family: 'Texta';                                src: local('gsgs'); }
+@font-face { font-family: 'textBounds.Left';                      src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'Theinhardt-web';                       src: local('gsgs'); font-weight: 500; }
 @font-face { font-family: 'Theinhardt-web';                       src: local('gsgs'); }
 @font-face { font-family: 'TheSansBold';                          src: local('gsgs'); }
@@ -2453,12 +2573,17 @@
 @font-face { font-family: 'Tondo';                                src: local('gsgs-bold'); font-weight: 800; }
 @font-face { font-family: 'Tondo';                                src: local('gsgs-bold'); font-weight: 900; }
 @font-face { font-family: 'TP Mincho StdN High B';                src: local('gsgs'); }
+@font-face { font-family: 'TPU-Body';                             src: local('gsgs'); font-weight: 700; }
+@font-face { font-family: 'TPU-Body';                             src: local('gsgs'); }
+@font-face { font-family: 'TPU-Pagetitle';                        src: local('gsgs'); font-weight: 400; }
+@font-face { font-family: 'TPU-Title';                            src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'trade';                                src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'TradeGothicLTPro-BdCn20';              src: local('gsgs'); }
 @font-face { font-family: 'TradeGothicPro';                       src: local('gsgs'); }
 @font-face { font-family: 'trajan-pro-3';                         src: local('gsgs'); }
 @font-face { font-family: 'TrashHand';                            src: local('gsgs'); }
 @font-face { font-family: 'Trebuchet MS';                         src: local('gsgs'); }
+@font-face { font-family: 'Trebuchet';                            src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'Trirong';                              src: local('gsgs'); }
 @font-face { font-family: 'Trirong';                              src: local('gsgs-bold'); font-weight: bold; }
 @font-face { font-family: 'TrumpGotEasBol';                       src: local('gsgs'); font-weight: 500; }
@@ -2468,6 +2593,7 @@
 @font-face { font-family: 'TsukuGoPr5-L';                         src: local('gsgs'); }
 @font-face { font-family: 'TsukuGoPr5-R';                         src: local('gsgs'); }
 @font-face { font-family: 'TsukuGoPro-B';                         src: local('gsgs'); }
+@font-face { font-family: 'TsukuMinPr6-D';                        src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'TsukuMinPr6-M';                        src: local('gsgs'); }
 @font-face { font-family: 'TsukuMinPro-M';                        src: local('gsgs'); font-weight: 300; }
 @font-face { font-family: 'type1451';                             src: local('gsgs'); }
@@ -2518,6 +2644,7 @@
 @font-face { font-family: 'UD新ゴ R';                             src: local('gsgs'); }
 @font-face { font-family: 'UD新ゴNT M';                           src: local('gsgs'); }
 @font-face { font-family: 'UD新丸ゴ DB JIS2004';                  src: local('gsgs'); font-weight: 700; }
+@font-face { font-family: 'Unica One';                            src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'UniformRndCond-Ultra';                 src: local('gsgs'); }
 @font-face { font-family: 'Univers LT W01 55 Roman';              src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'Univers LT W01 65 Bold';               src: local('gsgs'); font-weight: 400; }
@@ -2557,6 +2684,7 @@
 @font-face { font-family: 'WeblySleek UI';                        src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'WeblySleek UI';                        src: local('gsgs'); font-weight: 500; }
 @font-face { font-family: 'WeblySleek UI';                        src: local('gsgs'); font-weight: 600; }
+@font-face { font-family: 'WeblySleek UI';                        src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'WeblySleek UI';                        src: local('gsgs'); }
 @font-face { font-family: 'WeblySleek UI';                        src: local('gsgs-bold'); font-weight: 700; }
 @font-face { font-family: 'WeblySleek UI';                        src: local('gsgs-bold'); font-weight: 800; }
@@ -2582,6 +2710,7 @@
 @font-face { font-family: 'wf_segoe-ui_semibold';                 src: local('gsgs'); font-weight: 600; }
 @font-face { font-family: 'wf_segoe-ui_semibold';                 src: local('gsgs'); }
 @font-face { font-family: 'wf_segoe-ui_semilight';                src: local('gsgs'); }
+@font-face { font-family: 'wh-cond';                              src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'Whitney Cond A';                       src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'Whitney SSm A';                        src: local('gsgs'); font-weight: 600; }
 @font-face { font-family: 'Whitney SSm A';                        src: local('gsgs'); }
@@ -2605,6 +2734,7 @@
 @font-face { font-family: 'Work Sans';                            src: local('gsgs'); }
 @font-face { font-family: 'Work Sans';                            src: local('gsgs-bold'); font-weight: bold; }
 @font-face { font-family: 'worksans';                             src: local('gsgs'); }
+@font-face { font-family: 'x-locale-heading-primary';             src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'x-locale-heading-primary';             src: local('gsgs-bold'); font-weight: bold; }
 @font-face { font-family: 'YAAType';                              src: local('gsgs'); font-weight: 500; }
 @font-face { font-family: 'YAAType';                              src: local('gsgs'); }
@@ -2673,6 +2803,8 @@
 @font-face { font-family: 'ヒラギノ明朝 W4 JIS2004';              src: local('gsgs'); }
 @font-face { font-family: 'ヒラギノ明朝 W4 JIS2004';              src: local('gsgs-bold'); font-weight: bold; }
 @font-face { font-family: 'ヒラギノ角ゴ Pro W3';                  src: local('gsgs'); }
+@font-face { font-family: 'ヒラギノ角ゴ ProN W3';                 src: local('gsgs'); font-weight: 600; }
+@font-face { font-family: 'ヒラギノ角ゴ ProN W6';                 src: local('gsgs'); font-weight: 400; }
 @font-face { font-family: 'ヒラギノ角ゴ W2 JIS2004';              src: local('gsgs'); }
 @font-face { font-family: 'ヒラギノ角ゴ W2 JIS2004';              src: local('gsgs-bold'); font-weight: bold; }
 @font-face { font-family: 'ヒラギノ角ゴ W3 JIS2004';              src: local('gsgs'); }
@@ -2703,6 +2835,7 @@
 @font-face { font-family: '小塚ゴシック Pro L';                   src: local('gsgs'); }
 @font-face { font-family: '微软雅黑';                             src: local('gsgs'); }
 @font-face { font-family: '新ゴ B';                               src: local('gsgs'); font-weight: 300; }
+@font-face { font-family: '新ゴ DB';                              src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: '新ゴ DB';                              src: local('gsgs'); }
 @font-face { font-family: '新ゴ H';                               src: local('gsgs'); }
 @font-face { font-family: '新ゴ H';                               src: local('gsgs-bold'); font-weight: 700; }
@@ -2715,6 +2848,7 @@
 @font-face { font-family: '新ゴ L';                               src: local('gsgs-bold'); font-weight: 900; }
 @font-face { font-family: '新ゴ L';                               src: local('gsgs-bold'); font-weight: bold; }
 @font-face { font-family: '新ゴ M';                               src: local('gsgs'); }
+@font-face { font-family: '新ゴ R';                               src: local('gsgs'); font-weight: 600; }
 @font-face { font-family: '新ゴ R';                               src: local('gsgs'); }
 @font-face { font-family: '新ゴ R';                               src: local('gsgs-bold'); font-weight: bold; }
 @font-face { font-family: '新丸ゴ R';                             src: local('gsgs'); }
@@ -2750,6 +2884,8 @@
 
 @font-face { font-family: 'Akkurat-Mono';                         src: local('gsgst'); }
 @font-face { font-family: 'Akkurat-Mono';                         src: local('gsgst-bold'); font-weight: bold; }
+@font-face { font-family: 'Bitstream Vera Sans Mono';             src: local('gsgst'); font-weight: 400; }
+@font-face { font-family: 'Bitstream Vera Sans Mono';             src: local('gsgst'); font-weight: 700; }
 @font-face { font-family: 'Bitstream Vera Sans Mono';             src: local('gsgst'); }
 @font-face { font-family: 'Consolas';                             src: local('gsgst'); }
 @font-face { font-family: 'Courier New';                          src: local('gsgst'); }
@@ -2759,18 +2895,18 @@
 @font-face { font-family: 'Fira Mono';                            src: local('gsgst'); }
 @font-face { font-family: 'HG明朝E';                              src: local('gsgst'); }
 @font-face { font-family: 'Inconsolata';                          src: local('gsgst'); }
+@font-face { font-family: 'MS Gothic';                            src: local('gsgst'); }
+@font-face { font-family: 'MS Mincho';                            src: local('gsgst'); }
 @font-face { font-family: 'Maison Mono';                          src: local('gsgst'); }
 @font-face { font-family: 'Menlo';                                src: local('gsgst'); }
 @font-face { font-family: 'Monaco';                               src: local('gsgst'); }
-@font-face { font-family: 'MS Gothic';                            src: local('gsgst'); }
-@font-face { font-family: 'MS Mincho';                            src: local('gsgst'); }
-@font-face { font-family: 'range_mono';                           src: local('gsgst'); }
 @font-face { font-family: 'Roboto Mono';                          src: local('gsgst'); font-weight: 100; }
 @font-face { font-family: 'Roboto Mono';                          src: local('gsgst'); font-weight: 200; }
 @font-face { font-family: 'Roboto Mono';                          src: local('gsgst'); font-weight: 300; }
 @font-face { font-family: 'Roboto Mono';                          src: local('gsgst'); font-weight: 400; }
 @font-face { font-family: 'Roboto Mono';                          src: local('gsgst'); font-weight: 500; }
 @font-face { font-family: 'Roboto Mono';                          src: local('gsgst'); font-weight: 600; }
+@font-face { font-family: 'Roboto Mono';                          src: local('gsgst'); font-weight: 700; }
 @font-face { font-family: 'Roboto Mono';                          src: local('gsgst'); }
 @font-face { font-family: 'Roboto Mono';                          src: local('gsgst-bold'); font-weight: 700; }
 @font-face { font-family: 'Roboto Mono';                          src: local('gsgst-bold'); font-weight: 800; }
@@ -2782,10 +2918,13 @@
 @font-face { font-family: 'Source Code Pro';                      src: local('gsgst'); }
 @font-face { font-family: 'Source Code Pro';                      src: local('gsgst-bold'); font-weight: bold; }
 @font-face { font-family: 'Space Mono';                           src: local('gsgst'); }
+@font-face { font-family: 'UD Shin Go DemiBold';                  src: local('gsgs'); font-weight: 700; }
 @font-face { font-family: 'Ubuntu Mono';                          src: local('gsgst'); }
 @font-face { font-family: 'Ubuntu Mono';                          src: local('gsgst-bold'); font-weight: bold; }
-@font-face { font-family: 'UD Shin Go DemiBold';                  src: local('gsgs'); font-weight: 700; }
+@font-face { font-family: 'mplus-1m-regular';                     src: local('gsgst'); font-weight: 400; }
+@font-face { font-family: 'range_mono';                           src: local('gsgst'); }
 @font-face { font-family: '宋体';                                 src: local('gsgst'); }
+@font-face { font-family: '新宋体';                               src: local('gsgst'); }
 @font-face { font-family: 'ＭＳ ゴシック';                        src: local('gsgst'); }
 @font-face { font-family: 'ＭＳ 明朝';                            src: local('gsgst'); }
 

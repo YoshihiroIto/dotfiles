@@ -185,8 +185,8 @@ filetype plugin indent on
 " }}}
 " ファイルタイプごとの設定 {{{
 Autocmd BufEnter,WinEnter,BufWinEnter *                         call s:update_all()
-Autocmd BufWritePost                  *                         call s:update_numberwidth()
 Autocmd BufNewFile,BufRead            *.xaml                    setlocal filetype=xml
+Autocmd BufNewFile,BufRead            *.cake                    setlocal filetype=cs
 Autocmd BufNewFile,BufRead            *.json                    setlocal filetype=json
 Autocmd BufNewFile,BufRead            *.{fx,fxc,fxh,hlsl,hlsli} setlocal filetype=hlsl
 Autocmd BufNewFile,BufRead            *.{fsh,vsh}               setlocal filetype=glsl
@@ -224,23 +224,10 @@ function! s:update_all()
   setlocal formatoptions-=o
   setlocal textwidth=0
 
-  call s:update_numberwidth()
-
   " ファイルの場所をカレントにする
   if &filetype !=# 'vimfiler'
     silent! execute 'lcd' fnameescape(expand('%:p:h'))
   endif
-endfunction
-
-" 行番号表示幅を設定する
-" http://d.hatena.ne.jp/osyo-manga/20140303/1393854617
-function! s:update_numberwidth()
-  let w = len(line('$')) + 2
-  if w < 5
-    let w = 5
-  endif
-
-  let &l:numberwidth = w
 endfunction
 " }}}
 " 編集 {{{

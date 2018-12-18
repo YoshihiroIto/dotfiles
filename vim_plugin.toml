@@ -369,13 +369,7 @@ repo        = 'ctrlpvim/ctrlp.vim'
 lazy        = 0
 on_cmd      = ['CtrlPMRUFiles']
 hook_add    = '''
-nnoremap [CtrlP] <Nop>
-xnoremap [CtrlP] <Nop>
-nmap     <Space> [CtrlP]
-xmap     <Space> [CtrlP]
-
-nnoremap <silent> [CtrlP]m   :<C-u>CtrlPMRUFiles<CR>
-nnoremap <silent> [CtrlP]l   :<C-u>CtrlPLine<CR>
+nnoremap <silent> <Space>m   :<C-u>CtrlPMRUFiles<CR>
 
 let g:ctrlp_match_window = 'bottom,order:ttb,min:32,max:32'
 let g:ctrlp_regexp = 1
@@ -432,6 +426,27 @@ function! Function_Name_2(str)
   return lightline#statusline(0)
 endfunction
 '''
+
+[[plugins]]
+repo        = 'lambdalisue/lista.nvim'
+lazy        = 1
+depends     = 'vim-rplugin'
+hook_add    = '''
+  let $PATH = $USERPROFILE . '/AppData/Local/Programs/Python/Python35;' . $PATH
+
+  nnoremap <silent> <Space>l   :<C-u>Lista<CR>
+'''
+hook_source = '''
+  let g:lista#custom_mappings = [
+        \ ['<C-j>', '<Esc>'],
+        \ ['<C-p>', '<S-Tab>'],
+        \ ['<C-n>', '<Tab>'],
+        \]
+'''
+
+[[plugins]]
+repo        = 'lambdalisue/vim-rplugin'
+lazy        = 1
 
 [[plugins]]
 repo        = 'osyo-manga/vim-anzu'
@@ -635,15 +650,10 @@ call icondrag#enable()
 '''
 
 [[plugins]]
-repo        = 'beckorz/previm'
+repo        = 'previm/previm'
 lazy        = 1
 depends     = 'open-browser.vim'
 on_ft       = 'markdown'
-hook_add    = '''
-if has('win32')
-  let g:previm_open_cmd = 'C:\\Program\ Files\ (x86)\\Google\\Chrome\\Application\\chrome.exe'
-endif
-'''
 
 [[plugins]]
 repo        = 'tyru/open-browser.vim'
