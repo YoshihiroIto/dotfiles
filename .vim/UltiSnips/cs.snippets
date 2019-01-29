@@ -15,7 +15,10 @@ public ${2:property_type} $1
 private $2 _$1 = default($2);
 
 public static readonly DependencyProperty $1Property =
-	DependencyProperty.Register(nameof($1), typeof($2), typeof(${3:owner_class}),
+	DependencyProperty.Register(
+		nameof($1),
+		typeof($2),
+		typeof(${3:owner_class}),
 		new PropertyMetadata(
 			default($2),
 			(s, e) =>
@@ -46,7 +49,10 @@ public ${2:property_type} $1
 private $2 _$1 = default($2);
 
 public static readonly DependencyProperty $1Property =
-	DependencyProperty.Register(nameof($1), typeof($2), typeof(${3:owner_class}),
+	DependencyProperty.Register(
+		nameof($1),
+		typeof($2),
+		typeof(${3:owner_class}),
 		new FrameworkPropertyMetadata(
 			default($2),
 			FrameworkPropertyMetadataOptions.BindsTwoWayByDefault |
@@ -73,6 +79,23 @@ public $2 $1
 {
 	get => _$1;
 	set => SetProperty(ref _$1, value);
+}
+
+#endregion
+${0}
+endsnippet
+
+
+#####################################################################
+snippet prope "Property (EditableModelBase)"
+#region ${1:property_name}
+
+private ${2:property_type} _$1;
+
+public $2 $1
+{
+	get => _$1;
+	set => SetEditableProperty(v => _$1 = v, _$1, value);
 }
 
 #endregion
