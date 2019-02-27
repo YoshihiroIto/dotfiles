@@ -87,6 +87,19 @@ endsnippet
 
 
 #####################################################################
+snippet propf "FlagProperty"
+public bool $1
+{
+	get => (_flags & Flag_$1) != 0;
+	set => SetFlagProperty(ref _flags, Flag_$1, value);
+}
+private uint _flags;
+private const uint Flag_$1 = 1 << ***;
+${0}
+endsnippet
+
+
+#####################################################################
 snippet prope "Property (EditableModelBase)"
 #region ${1:property_name}
 
@@ -104,17 +117,14 @@ endsnippet
 
 
 #####################################################################
-snippet propf "Property (Flag)"
+snippet propef "FlagProperty (EditableModelBase)"
 public bool $1
 {
 	get => (_flags & Flag_$1) != 0;
-	set => SetFlagProperty(ref _flags, Flag_$1, value);
+	set => SetEditableFlagProperty(v => _flags = v, _flags, Flag_$1, value);
 }
-private uint _flags;
-private const uint Flag_$1 = 1 << ***;
 ${0}
 endsnippet
-
 
 #####################################################################
 snippet propd "Property (IDisposable)"

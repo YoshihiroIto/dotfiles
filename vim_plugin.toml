@@ -1,11 +1,4 @@
-﻿# プラグイン {{{
-[[plugins]]
-repo        = 'Shougo/dein.vim'
-lazy        = 0
-
-# }}}
-# ライブラリ {{{
-
+﻿# ライブラリ {{{
 [[plugins]]
 repo        = 'kana/vim-submode'
 lazy        = 1
@@ -432,7 +425,7 @@ repo        = 'lambdalisue/lista.nvim'
 lazy        = 1
 depends     = 'vim-rplugin'
 hook_add    = '''
-  let $PATH = $USERPROFILE . '/AppData/Local/Programs/Python/Python35;' . $PATH
+  let $PATH = 'c:\Python35\;' . $PATH
 
   nnoremap <silent> <Space>l   :<C-u>Lista<CR>
 '''
@@ -508,77 +501,15 @@ highlight default Clever_f_mark_char ctermfg=Green ctermbg=NONE cterm=underline
 # }}}
 # 補完 {{{
 [[plugins]]
-repo        = 'Shougo/neocomplete.vim'
-lazy        = 1
-on_i        = 1
-hook_source = '''
-let g:neocomplete#enable_at_startup       = 1
-let g:neocomplete#enable_ignore_case      = 1
-let g:neocomplete#enable_smart_case       = 1
-let g:neocomplete#enable_auto_delimiter   = 1
-let g:neocomplete#enable_fuzzy_completion = 0
-let g:neocomplete#enable_refresh_always   = 1
-let g:neocomplete#enable_prefetch         = 1
-
-let g:neocomplete#auto_completion_start_length      = 3
-let g:neocomplete#manual_completion_start_length    = 0
-let g:neocomplete#sources#syntax#min_keyword_length = 3
-let g:neocomplete#min_keyword_length                = 3
-let g:neocomplete#force_overwrite_completefunc      = 1
-let g:neocomplete#skip_auto_completion_time         = '0.2'
-
-let g:neocomplete#sources#dictionary#dictionaries = {
-      \   'default': ''
-      \ }
-
-" 日本語は収集しない
-let g:neocomplete#keyword_patterns = {
-      \   '_': '\h\w*'
-      \ }
-
-let g:neocomplete#sources#omni#input_patterns = {
-      \   'c':           '\%(\.\|->\)\h\w*',
-      \   'disable_cpp': '\h\w*\%(\.\|->\)\h\w*\|\h\w*::',
-      \   'cs':          '[a-zA-Z0-9.]\{2\}',
-      \   'typescript':  '\h\w*\|[^. \t]\.\w*',
-      \   'ruby':        '[^. *\t]\.\w*\|\h\w*::'
-      \ }
-
-let g:neocomplete#force_omni_input_patterns = {
-      \   'c':      '[^.[:digit:] *\t]\%(\.\|->\)\w*',
-      \   'disable_cpp':    '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*',
-      \   'objc':   '[^.[:digit:] *\t]\%(\.\|->\)\w*',
-      \   'objcpp': '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*',
-      \   'cs':     '[^.[:digit:] *\t]\%(\.\)\w*\|\h\w*::\w*'
-      \ }
-
-let g:neocomplete#delimiter_patterns = {
-      \   'c':   ['.', '->'],
-      \   'disable_cpp': [' ::', '.'],
-      \   'cs':  ['.'],
-      \   'vim': ['#', '.']
-      \ }
-
-let g:neocomplete#sources#file_include#exts = {
-      \   'c':   ['', 'h'],
-      \   'cpp': ['', 'h', 'hpp', 'hxx'],
-      \   'cs':  ['', 'Designer.cs']
-      \ }
-
-call neocomplete#custom#source('file', 'rank', 10)
-'''
-[[plugins]]
 repo        = 'SirVer/ultisnips'
 lazy        = 1
-depends     = 'neocomplete.vim'
 on_ft       = 'snippets'
 on_i        = 1
 hook_source = '''
 let g:UltiSnipsSnippetDirectories  = [g:YOI_dotvim_dir . '/UltiSnips']
 let g:UltiSnipsJumpForwardTrigger  = "<Tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<S-Tab>"
-
-call neocomplete#custom#source('US', 'rank', 1000)
+let g:UltiSnipsListSnippets        = "<S-Tab>"
 '''
 # }}}
 # 編集 {{{
@@ -689,7 +620,7 @@ let g:memolist_path         = g:YOI_dropbox_dir . '/memo'
 '''
 
 # }}}
-# C++ {{{
+# C++ {{
 [[plugins]]
 repo        = 'Mizuchi/STL-Syntax'
 lazy        = 1
@@ -802,11 +733,6 @@ let g:markdown_fenced_languages = [
       \   'xml',  'json', 'css'
       \ ]
 '''
-
-[[plugins]]
-repo        = 'vim-scripts/JSON.vim'
-lazy        = 1
-on_ft       = ['json', 'markdown']
 
 [[plugins]]
 repo        = 'PProvost/vim-ps1'
