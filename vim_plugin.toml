@@ -1,5 +1,16 @@
 ﻿# ライブラリ {{{
 [[plugins]]
+repo        = 'Shougo/vimproc'
+lazy        = 0
+hook_add    = '''
+let g:vimproc#download_windows_dll = 1
+'''
+
+[[plugins]]
+repo        = 'vim-jp/vimdoc-ja''
+lazy        = 0
+
+[[plugins]]
 repo        = 'kana/vim-submode'
 lazy        = 1
 on_map      = ['gh', 'gw', ',w']
@@ -620,7 +631,7 @@ let g:memolist_path         = g:YOI_dropbox_dir . '/memo'
 '''
 
 # }}}
-# C++ {{
+# C++ {{{
 [[plugins]]
 repo        = 'Mizuchi/STL-Syntax'
 lazy        = 1

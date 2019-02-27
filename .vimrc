@@ -8,7 +8,6 @@ let g:YOI_dropbox_dir  = expand('~/Dropbox')
 let s:is_windows       = has('win32')
 let s:has_vim_starting = has('vim_starting')
 let s:has_gui_running  = has('gui_running')
-let s:has_kaoriya      = has('kaoriya')
 let s:base_columns     = 120
 let g:mapleader        = ','
 
@@ -36,9 +35,6 @@ let g:did_menu_trans = 1
 " ヘルプ
 set helplang=ja,en
 set keywordprg=
-if s:has_kaoriya
-  set runtimepath+=$VIM/plugins/vimdoc-ja
-endif
 
 " Grep
 set grepprg=jvgrep
@@ -159,10 +155,6 @@ if s:has_vim_starting
   execute 'set runtimepath^=' . s:plugin_dir . '/repos/github.com/Shougo/dein.vim/'
   let g:dein#install_process_timeout = 10*60
   let g:dein#install_max_processes   = 16
-
-  if s:has_kaoriya
-    set runtimepath+=$VIM/plugins/vimproc
-  endif
 endif
 
 if dein#load_state(s:plugin_dir)
@@ -339,18 +331,6 @@ imap <3-MiddleMouse> <Nop>
 map  <4-MiddleMouse> <Nop>
 imap <4-MiddleMouse> <Nop>
 " }}}
-" インプットメソッド {{{
-" macvim kaoriya gvim で submode が正しく動作しなくなるため
-if !(s:is_mac && s:has_gui_running)
-  set noimdisable
-endif
-
-set imsearch=0
-set iminsert=0
-if exists('+imdisableactivate')
-  set imdisableactivate
-endif
-" }}}
 " タブ・インデント {{{
 set autoindent
 set cindent
@@ -367,12 +347,6 @@ set incsearch
 set ignorecase
 set smartcase
 set hlsearch
-
-" 日本語インクリメンタルサーチ
-if s:has_kaoriya
-  set migemo
-  set migemodict=$VIMRUNTIME/dict/migemo-dict
-endif
 
 " 複数Vimで検索を同期する
 if s:has_gui_running
@@ -492,11 +466,7 @@ endif
 set printfont=Ricty\ Regular\ for\ Powerline:h11
 set renderoptions=type:directx
 
-if s:is_windows && s:has_kaoriya
-  set ambiwidth=auto
-else
-  set ambiwidth=double
-endif
+set ambiwidth=double
 " }}}
 " 'cursorline' を必要な時にだけ有効にする {{{
 " http://d.hatena.ne.jp/thinca/20090530/1243615055
@@ -547,17 +517,10 @@ nnoremap <expr> zh foldlevel(line('.'))  >  0  ? 'zc' : '<C-h>'
 nnoremap <expr> zl foldclosed(line('.')) != -1 ? 'zo' : '<C-l>'
 " }}}
 " モード移行 {{{
-if !(s:is_mac && s:has_gui_running)
-  inoremap <C-j> <Esc>
-  nnoremap <C-j> <Esc>
-  vnoremap <C-j> <Esc>
-  cnoremap <C-j> <Esc>
-else
-  inoremap <silent> <C-j> <Esc>:<C-u>set noimdisable<CR>:set imdisable<CR>
-  nnoremap <silent> <C-j> <Esc>:<C-u>set noimdisable<CR>:set imdisable<CR>
-  vnoremap <silent> <C-j> <Esc>:<C-u>set noimdisable<CR>:set imdisable<CR>
-  cnoremap <silent> <C-j> <Esc>:<C-u>set noimdisable<CR>:set imdisable<CR>
-endif
+inoremap <C-j> <Esc>
+nnoremap <C-j> <Esc>
+vnoremap <C-j> <Esc>
+cnoremap <C-j> <Esc>
 " }}}
 " カーソル移動 {{{
 nnoremap <silent> j     gj
