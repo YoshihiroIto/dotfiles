@@ -6,7 +6,6 @@ let g:YOI_cache_dir    = expand('~/.cache')
 let g:YOI_dropbox_dir  = expand('~/Dropbox')
 
 let s:is_windows       = has('win32')
-let s:is_mac           = has('mac') || has('macunix')
 let s:has_vim_starting = has('vim_starting')
 let s:has_gui_running  = has('gui_running')
 let s:has_kaoriya      = has('kaoriya')
@@ -99,16 +98,8 @@ function! s:lazy_initialize()
     return
   endif
 
-  if s:is_mac
-    let $LUA_DLL = $VIM . '/../../Frameworks/libluajit-5.1.2.dylib'
-  endif
-
   " 実行ファイル位置を$PATHに最優先で含める
-  if s:is_windows
-    let $PATH = $VIM . ';' . $PATH
-  elseif s:is_mac
-    let $PATH = $VIM . '/../../MacOS:' . $PATH
-  endif
+  let $PATH = $VIM . ';' . $PATH
 
   if exists('+cryptmethod')
     set cryptmethod=blowfish2
