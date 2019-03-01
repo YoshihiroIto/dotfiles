@@ -117,13 +117,11 @@ function! s:lazy_initialize()
   Autocmd BufWinEnter,ColorScheme .vimrc syntax match vimAutoCmd /\<\(Autocmd\|AutocmdFT\)\>/
 
   call dein#source([
-        \ 'vim-textobj-ifdef',
         \ 'vim-textobj-comment',
         \ 'textobj-wiw',
         \ 'vim-textobj-entire',
         \ 'vim-textobj-indent',
         \ 'vim-textobj-line',
-        \ 'vim-textobj-anyblock',
         \ 'vim-textobj-word-column',
         \ 'vim-textobj-parameter',
         \ 'vim-textobj-xmlattr'])
