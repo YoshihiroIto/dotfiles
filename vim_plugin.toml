@@ -436,9 +436,7 @@ repo        = 'lambdalisue/lista.nvim'
 lazy        = 1
 depends     = 'vim-rplugin'
 hook_add    = '''
-  let $PATH = 'c:\Python35\;' . $PATH
-
-  nnoremap <silent> <Space>l   :<C-u>Lista<CR>
+nnoremap <silent> <Space>l   :<C-u>Lista<CR>
 '''
 hook_source = '''
   let g:lista#custom_mappings = [
@@ -631,37 +629,6 @@ let g:memolist_path         = g:YOI_dropbox_dir . '/memo'
 '''
 
 # }}}
-# C++ {{{
-[[plugins]]
-repo        = 'Mizuchi/STL-Syntax'
-lazy        = 1
-on_ft       = 'cpp'
-
-[[plugins]]
-repo        = 'vim-jp/vim-cpp'
-lazy        = 1
-on_ft       = 'cpp'
-
-[[plugins]]
-repo        = 'rhysd/vim-clang-format'
-lazy        = 1
-on_cmd      = 'ClangFormat'
-hook_source = '''
-let g:clang_format#style_options = {
-      \   'AccessModifierOffset':                           -4,
-      \   'AllowShortIfStatementsOnASingleLine':            'false',
-      \   'AlwaysBreakBeforeMultilineStrings':              'false',
-      \   'BreakBeforeBraces':                              'Allman',
-      \   'BreakConstructorInitializersBeforeComma':        'true',
-      \   'ColumnLimit':                                    0,
-      \   'ConstructorInitializerAllOnOneLineOrOnePerLine': 'false',
-      \   'IndentCaseLabels':                               'true',
-      \   'IndentWidth':                                    4,
-      \   'UseTab':                                         'Never'
-      \ }
-'''
-
-# }}}
 # Xml {{{
 [[plugins]]
 repo        = 'YoshihiroIto/vim-closetag'
@@ -670,7 +637,6 @@ on_func     = 'closetag'
 hook_add    = '''
 let g:closetag_filenames = '*.{html,xhtml,xml,xaml}'
 '''
-
 # }}}
 # Git {{{
 [[plugins]]
@@ -757,13 +723,6 @@ on_ft       = 'ps1'
 repo        = 'kana/vim-textobj-user'
 lazy        = 1
 
-# #
-[[plugins]]
-repo        = 'anyakichi/vim-textobj-ifdef'
-lazy        = 1
-depends     = 'vim-textobj-user'
-on_map      = [['xo', 'a#'], ['xo', 'i#']]
-
 # c
 [[plugins]]
 repo        = 'glts/vim-textobj-comment'
@@ -804,13 +763,6 @@ repo        = 'kana/vim-textobj-line'
 lazy        = 1
 depends     = 'vim-textobj-user'
 on_map      = [['xo', 'al'], ['xo', 'il']]
-
-# b
-[[plugins]]
-repo        = 'rhysd/vim-textobj-anyblock'
-lazy        = 1
-depends     = 'vim-textobj-user'
-on_map      = [['xo', 'ab'], ['xo', 'ib']]
 
 # v V
 [[plugins]]
