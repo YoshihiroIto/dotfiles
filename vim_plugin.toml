@@ -80,10 +80,10 @@ call submode#map(       'winsize', 'n', 's', 'k',   '4<C-w>+')
 let call_resize_appwin = ':<C-u>call YOI_submode_resize_appwin'
 let call_move_appwin   = ':<C-u>call YOI_submode_move_appwin'
 
-call submode#enter_with('appwinsize', 'n', 's', ',wH', call_resize_appwin . '(-1, 0)<CR>')
-call submode#enter_with('appwinsize', 'n', 's', ',wL', call_resize_appwin . '(+1, 0)<CR>')
-call submode#enter_with('appwinsize', 'n', 's', ',wJ', call_resize_appwin . '(0, +1)<CR>')
-call submode#enter_with('appwinsize', 'n', 's', ',wK', call_resize_appwin . '(0, -1)<CR>')
+call submode#enter_with('appwinsize', 'n', 's', '<leader>wH', call_resize_appwin . '(-1, 0)<CR>')
+call submode#enter_with('appwinsize', 'n', 's', '<leader>wL', call_resize_appwin . '(+1, 0)<CR>')
+call submode#enter_with('appwinsize', 'n', 's', '<leader>wJ', call_resize_appwin . '(0, +1)<CR>')
+call submode#enter_with('appwinsize', 'n', 's', '<leader>wK', call_resize_appwin . '(0, -1)<CR>')
 call submode#map(       'appwinsize', 'n', 's', 'H',   call_resize_appwin . '(-1, 0)<CR>')
 call submode#map(       'appwinsize', 'n', 's', 'L',   call_resize_appwin . '(+1, 0)<CR>')
 call submode#map(       'appwinsize', 'n', 's', 'J',   call_resize_appwin . '(0, +1)<CR>')
@@ -93,10 +93,10 @@ call submode#map(       'appwinsize', 'n', 's', 'l',   call_resize_appwin . '(+1
 call submode#map(       'appwinsize', 'n', 's', 'j',   call_resize_appwin . '(0, +1)<CR>')
 call submode#map(       'appwinsize', 'n', 's', 'k',   call_resize_appwin . '(0, -1)<CR>')
 
-call submode#enter_with('appwinpos',  'n', 's', ',wh', call_move_appwin   . '(-1, 0)<CR>')
-call submode#enter_with('appwinpos',  'n', 's', ',wl', call_move_appwin   . '(+1, 0)<CR>')
-call submode#enter_with('appwinpos',  'n', 's', ',wj', call_move_appwin   . '(0, +1)<CR>')
-call submode#enter_with('appwinpos',  'n', 's', ',wk', call_move_appwin   . '(0, -1)<CR>')
+call submode#enter_with('appwinpos',  'n', 's', '<leader>wh', call_move_appwin   . '(-1, 0)<CR>')
+call submode#enter_with('appwinpos',  'n', 's', '<leader>wl', call_move_appwin   . '(+1, 0)<CR>')
+call submode#enter_with('appwinpos',  'n', 's', '<leader>wj', call_move_appwin   . '(0, +1)<CR>')
+call submode#enter_with('appwinpos',  'n', 's', '<leader>wk', call_move_appwin   . '(0, -1)<CR>')
 call submode#map(       'appwinpos',  'n', 's', 'H',   call_move_appwin   . '(-1, 0)<CR>')
 call submode#map(       'appwinpos',  'n', 's', 'L',   call_move_appwin   . '(+1, 0)<CR>')
 call submode#map(       'appwinpos',  'n', 's', 'J',   call_move_appwin   . '(0, +1)<CR>')
@@ -373,7 +373,7 @@ repo        = 'ctrlpvim/ctrlp.vim'
 lazy        = 0
 on_cmd      = ['CtrlPMRUFiles']
 hook_add    = '''
-nnoremap <silent> <Space>m   :<C-u>CtrlPMRUFiles<CR>
+nnoremap <silent> <leader>m   :<C-u>CtrlPMRUFiles<CR>
 
 let g:ctrlp_match_window = 'bottom,order:ttb,min:32,max:32'
 let g:ctrlp_regexp = 1
@@ -436,7 +436,7 @@ repo        = 'lambdalisue/lista.nvim'
 lazy        = 1
 depends     = 'vim-rplugin'
 hook_add    = '''
-nnoremap <silent> <Space>l   :<C-u>Lista<CR>
+nnoremap <silent> <leader>l   :<C-u>Lista<CR>
 '''
 hook_source = '''
   let g:lista#custom_mappings = [
@@ -480,31 +480,6 @@ map *  <Plug>(asterisk-z*)<Plug>(is-nohl-1)
 map g* <Plug>(asterisk-gz*)<Plug>(is-nohl-1)
 map #  <Plug>(asterisk-z#)<Plug>(is-nohl-1)
 map g# <Plug>(asterisk-gz#)<Plug>(is-nohl-1)
-'''
-
-[[plugins]]
-repo        = 'rhysd/clever-f.vim'
-lazy        = 1
-on_map      = '<Plug>'
-hook_add    = '''
-nmap f <Plug>(clever-f-f)
-xmap f <Plug>(clever-f-f)
-omap f <Plug>(clever-f-f)
-nmap F <Plug>(clever-f-F)
-xmap F <Plug>(clever-f-F)
-omap F <Plug>(clever-f-F)
-'''
-hook_source = '''
-let g:clever_f_not_overwrites_standard_mappings = 1
-let g:clever_f_ignore_case                      = 1
-let g:clever_f_smart_case                       = 1
-let g:clever_f_across_no_line                   = 1
-let g:clever_f_use_migemo                       = 0
-let g:clever_f_chars_match_any_signs            = ';'
-let g:clever_f_mark_char_color                  = 'Clever_f_mark_char'
-
-highlight default Clever_f_mark_char ctermfg=Green ctermbg=NONE cterm=underline
-      \                              guifg=Green   guibg=NONE   gui=underline
 '''
 
 # }}}
@@ -613,7 +588,7 @@ on_map      = '<Plug>'
 on_path     = '.*'
 hook_add    = '''
 let g:vaffle_show_hidden_files = 1
-noremap <silent> [App]f :<C-u>Vaffle<CR>
+noremap <silent> <leader>f :<C-u>Vaffle<CR>
 '''
 
 [[plugins]]
@@ -621,8 +596,8 @@ repo        = 'glidenote/memolist.vim'
 lazy        = 1
 on_cmd      = ['MemoNew', 'MemoList']
 hook_add    = '''
-noremap <silent> [App]mn :<C-u>MemoNew<CR>
-noremap <silent> [App]ml :execute "CtrlP" g:memolist_path<cr>
+noremap <silent> <leader>n :<C-u>MemoNew<CR>
+noremap <silent> <leader>k :execute "CtrlP" g:memolist_path<cr>
 
 let g:memolist_memo_suffix  = 'md'
 let g:memolist_path         = g:YOI_dropbox_dir . '/memo'

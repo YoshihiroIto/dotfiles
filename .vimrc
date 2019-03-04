@@ -9,7 +9,7 @@ let s:is_windows       = has('win32')
 let s:has_vim_starting = has('vim_starting')
 let s:has_gui_running  = has('gui_running')
 let s:base_columns     = 120
-let g:mapleader        = ','
+let g:mapleader        = ' '
 
 let s:vim_plugin_toml  = expand('~/vim_plugin.toml')
 let s:plugin_dir       = g:YOI_cache_dir . '/plugin'
@@ -38,10 +38,6 @@ set keywordprg=
 
 " Grep
 set grepprg=jvgrep
-
-" キー
-nnoremap [App] <Nop>
-nmap     ;     [App]
 
 function! s:edit_vimrc()
   let dropbox_vimrc = g:YOI_dropbox_dir . '/dotfiles/.vimrc'
@@ -196,9 +192,9 @@ AutocmdFT xml,html   inoremap <silent><buffer> >  ><Esc>:call closetag#CloseTagF
 AutocmdFT typescript setlocal omnifunc=TSScompleteFunc
 
 AutocmdFT json       setlocal shiftwidth=2
-AutocmdFT godoc      nnoremap <silent><buffer> q      :<C-u>close<CR>
-AutocmdFT help       nnoremap <silent><buffer> q      :<C-u>close<CR>
-AutocmdFT markdown   nnoremap <silent><buffer> [App]v :<C-u>PrevimOpen<CR>
+AutocmdFT godoc      nnoremap <silent><buffer> q         :<C-u>close<CR>
+AutocmdFT help       nnoremap <silent><buffer> q         :<C-u>close<CR>
+AutocmdFT markdown   nnoremap <silent><buffer> <leader>v :<C-u>PrevimOpen<CR>
 
 function! s:update_all()
   setlocal formatoptions-=r
@@ -391,7 +387,7 @@ set display=lastline
 set conceallevel=2
 set concealcursor=i
 set signcolumn=yes
-execute "set colorcolumn=" . join(range(101, 999), ',')
+" execute "set colorcolumn=" . join(range(101, 999), ',')
 
 if s:has_gui_running
   set lines=100
@@ -557,8 +553,8 @@ tnoremap <C-j> <C-w>N
 "}}}
 " アプリウィンドウ操作 {{{
 if s:has_gui_running
-  noremap <silent> ,we :<C-u>call <SID>toggle_v_split_wide()<CR>
-  noremap <silent> ,wf :<C-u>call <SID>full_window()<CR>
+  noremap <silent> <leader>we :<C-u>call <SID>toggle_v_split_wide()<CR>
+  noremap <silent> <leader>wf :<C-u>call <SID>full_window()<CR>
 
   " アプリケーションウィンドウを最大高さにする {{{
   function! s:full_window()
@@ -603,19 +599,16 @@ if s:has_gui_running
 endif
 " }}}
 " Git {{{
-nnoremap [Git]     <Nop>
-nmap     <Leader>g [Git]
-
-nnoremap <silent> [Git]b  :<C-u>call YOI_execute_if_on_git_branch('Gblame w')<CR>
-nnoremap <silent> [Git]a  :<C-u>call YOI_execute_if_on_git_branch('Gwrite')<CR>:GitGutter<CR>
-nnoremap <silent> [Git]c  :<C-u>call YOI_execute_if_on_git_branch('Gcommit')<CR>:GitGutter<CR>
-nnoremap <silent> [Git]f  :<C-u>call YOI_execute_if_on_git_branch('GitiFetch')<CR>:GitGutter<CR>
-nnoremap <silent> [Git]d  :<C-u>call YOI_execute_if_on_git_branch('Gdiff')<CR>
-nnoremap <silent> [Git]s  :<C-u>call YOI_execute_if_on_git_branch('Gstatus')<CR>
-nnoremap <silent> [Git]ps :<C-u>call YOI_execute_if_on_git_branch('Gpush')<CR>:GitGutter<CR>
-nnoremap <silent> [Git]pl :<C-u>call YOI_execute_if_on_git_branch('Gpull')<CR>:GitGutter<CR>
-nnoremap <silent> [Git]g  :<C-u>call YOI_execute_if_on_git_branch('Agit')<CR>
-nnoremap <silent> [Git]h  :<C-u>call YOI_execute_if_on_git_branch('GitGutterPreviewHunk')<CR>
+nnoremap <silent> <leader>gb  :<C-u>call YOI_execute_if_on_git_branch('Gblame w')<CR>
+nnoremap <silent> <leader>ga  :<C-u>call YOI_execute_if_on_git_branch('Gwrite')<CR>:GitGutter<CR>
+nnoremap <silent> <leader>gc  :<C-u>call YOI_execute_if_on_git_branch('Gcommit')<CR>:GitGutter<CR>
+nnoremap <silent> <leader>gf  :<C-u>call YOI_execute_if_on_git_branch('GitiFetch')<CR>:GitGutter<CR>
+nnoremap <silent> <leader>gd  :<C-u>call YOI_execute_if_on_git_branch('Gdiff')<CR>
+nnoremap <silent> <leader>gs  :<C-u>call YOI_execute_if_on_git_branch('Gstatus')<CR>
+nnoremap <silent> <leader>gps :<C-u>call YOI_execute_if_on_git_branch('Gpush')<CR>:GitGutter<CR>
+nnoremap <silent> <leader>gpl :<C-u>call YOI_execute_if_on_git_branch('Gpull')<CR>:GitGutter<CR>
+nnoremap <silent> <leader>gg  :<C-u>call YOI_execute_if_on_git_branch('Agit')<CR>
+nnoremap <silent> <leader>gh  :<C-u>call YOI_execute_if_on_git_branch('GitGutterPreviewHunk')<CR>
 " }}}
 " 汎用関数 {{{
 " 画面リフレッシュ {{{
