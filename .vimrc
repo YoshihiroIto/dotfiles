@@ -455,10 +455,10 @@ endfunction
 " フォント {{{
 if s:has_gui_running
   set guifont=Ricty\ Regular\ for\ Powerline:h11
+  " set renderoptions=type:directx
 endif
 
 set printfont=Ricty\ Regular\ for\ Powerline:h11
-set renderoptions=type:directx
 
 set ambiwidth=double
 " }}}
