@@ -810,16 +810,3 @@ let g:operator#surround#blocks = {
       \ }
 '''
 
-# _
-[[plugins]]
-repo        = 'tyru/operator-camelize.vim'
-lazy        = 1
-depends     = 'vim-operator-user'
-on_map      = [['nx', '<Plug>']]
-hook_add    = '''
-nmap <silent> _ <Plug>(operator-camelize-toggle)
-xmap <silent> _ <Plug>(operator-camelize-toggle)
-'''
-
-# }}}
-
