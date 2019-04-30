@@ -18,6 +18,10 @@ SetTitleMatchMode, Regex
 
 vkF2:: MouseClick, Middle,  , , 1
 
+^#h:: Send,^#{Left}
+^#l:: Send,^#{Right}
+
+
 ; GVim ˆÈŠO
 #IfWinNotActive ahk_class Vim
     ^j:: Send,{Esc}
