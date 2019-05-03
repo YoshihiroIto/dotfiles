@@ -114,11 +114,6 @@ repo        = 'YoshihiroIto/molokai'
 lazy        = 0
 
 [[plugins]]
-repo        = 'mattn/benchvimrc-vim'
-lazy        = 0
-
-
-[[plugins]]
 repo        = 'itchyny/lightline.vim'
 lazy        = 0
 hook_add    = '''
