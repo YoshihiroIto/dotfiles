@@ -8,7 +8,7 @@ let g:YOI_dropbox_dir  = expand('~/Dropbox')
 let s:is_windows       = has('win32')
 let s:has_vim_starting = has('vim_starting')
 let s:has_gui_running  = has('gui_running')
-let s:base_columns     = 120
+let s:base_columns     = 140
 let g:mapleader        = ' '
 
 let s:vim_plugin_toml  = expand('~/vim_plugin.toml')
