@@ -598,18 +598,6 @@ if s:has_gui_running
   " }}}
 endif
 " }}}
-" Git {{{
-nnoremap <silent> <leader>gb  :<C-u>call YOI_execute_if_on_git_branch('Gblame w')<CR>
-nnoremap <silent> <leader>ga  :<C-u>call YOI_execute_if_on_git_branch('Gwrite')<CR>:GitGutterEnable<CR>:GitGutter<CR>
-nnoremap <silent> <leader>gc  :<C-u>call YOI_execute_if_on_git_branch('Gcommit')<CR>:GitGutterEnable<CR>:GitGutter<CR>
-nnoremap <silent> <leader>gf  :<C-u>call YOI_execute_if_on_git_branch('GitiFetch')<CR>:GitGutterEnable<CR>:GitGutter<CR>
-nnoremap <silent> <leader>gd  :<C-u>call YOI_execute_if_on_git_branch('Gdiff')<CR>
-nnoremap <silent> <leader>gs  :<C-u>call YOI_execute_if_on_git_branch('Gstatus')<CR>
-nnoremap <silent> <leader>gps :<C-u>call YOI_execute_if_on_git_branch('Gpush')<CR>:GitGutterEnable<CR>:GitGutter<CR>
-nnoremap <silent> <leader>gpl :<C-u>call YOI_execute_if_on_git_branch('Gpull')<CR>:GitGutterEnable<CR>:GitGutter<CR>
-nnoremap <silent> <leader>gg  :<C-u>call YOI_execute_if_on_git_branch('Agit')<CR>
-nnoremap <silent> <leader>gh  :<C-u>call YOI_execute_if_on_git_branch('GitGutterPreviewHunk')<CR>
-" }}}
 " 汎用関数 {{{
 " 画面リフレッシュ {{{
 function! YOI_refresh_screen()
@@ -625,21 +613,19 @@ endfunction
 " }}}
 " Gitブランチ上にいるか {{{
 function! YOI_is_in_git_branch()
-  try
-    return !empty(fugitive#head())
-  catch
+  if empty(expand("%:p"))
     return 0
-  endtry
-endfunction
-" }}}
-" Gitブランチ上であれば実行 {{{
-function! YOI_execute_if_on_git_branch(line)
-  if !YOI_is_in_git_branch()
-    echomsg 'not on git branch:' a:line
-    return
   endif
 
-  execute a:line
+  try
+    let git = gina#core#get()
+    if !empty(git)
+      return 1
+    endif
+  catch
+  endtry
+
+  return 0
 endfunction
 " }}}
 " 標準出力経由でフィルタリング処理を行う {{{

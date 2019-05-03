@@ -114,6 +114,11 @@ repo        = 'YoshihiroIto/molokai'
 lazy        = 0
 
 [[plugins]]
+repo        = 'mattn/benchvimrc-vim'
+lazy        = 0
+
+
+[[plugins]]
 repo        = 'itchyny/lightline.vim'
 lazy        = 0
 hook_add    = '''
@@ -272,13 +277,11 @@ function! YOI_lightline_current_branch()
   endif
 
   try
-    let branch = fugitive#head()
+    let branch = gina#component#repo#branch()
     return empty(branch) ? '' : '⭠ ' . branch
   catch
     return ''
   endtry
-
-  return ''
 endfunction
 
 function! YOI_lightline_fileformat()
@@ -610,19 +613,8 @@ let g:closetag_filenames = '*.{html,xhtml,xml,xaml}'
 # }}}
 # Git {{{
 [[plugins]]
-repo        = 'tpope/vim-fugitive'
-lazy        = 0
-hook_add    = '''
-function! YOI_update_fugitive()
-  try
-    call fugitive#detect(expand('<amatch>:p'))
-    call lightline#update()
-  catch
-  endtry
-endfunction
-
-Autocmd FocusGained,FocusLost * call YOI_update_fugitive()
-'''
+repo        = 'lambdalisue/gina.vim'
+lazy        = 1
 
 [[plugins]]
 repo        = 'airblade/vim-gitgutter'
