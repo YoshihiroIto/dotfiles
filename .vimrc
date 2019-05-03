@@ -600,13 +600,13 @@ endif
 " }}}
 " Git {{{
 nnoremap <silent> <leader>gb  :<C-u>call YOI_execute_if_on_git_branch('Gblame w')<CR>
-nnoremap <silent> <leader>ga  :<C-u>call YOI_execute_if_on_git_branch('Gwrite')<CR>:GitGutter<CR>
-nnoremap <silent> <leader>gc  :<C-u>call YOI_execute_if_on_git_branch('Gcommit')<CR>:GitGutter<CR>
-nnoremap <silent> <leader>gf  :<C-u>call YOI_execute_if_on_git_branch('GitiFetch')<CR>:GitGutter<CR>
+nnoremap <silent> <leader>ga  :<C-u>call YOI_execute_if_on_git_branch('Gwrite')<CR>:GitGutterEnable<CR>:GitGutter<CR>
+nnoremap <silent> <leader>gc  :<C-u>call YOI_execute_if_on_git_branch('Gcommit')<CR>:GitGutterEnable<CR>:GitGutter<CR>
+nnoremap <silent> <leader>gf  :<C-u>call YOI_execute_if_on_git_branch('GitiFetch')<CR>:GitGutterEnable<CR>:GitGutter<CR>
 nnoremap <silent> <leader>gd  :<C-u>call YOI_execute_if_on_git_branch('Gdiff')<CR>
 nnoremap <silent> <leader>gs  :<C-u>call YOI_execute_if_on_git_branch('Gstatus')<CR>
-nnoremap <silent> <leader>gps :<C-u>call YOI_execute_if_on_git_branch('Gpush')<CR>:GitGutter<CR>
-nnoremap <silent> <leader>gpl :<C-u>call YOI_execute_if_on_git_branch('Gpull')<CR>:GitGutter<CR>
+nnoremap <silent> <leader>gps :<C-u>call YOI_execute_if_on_git_branch('Gpush')<CR>:GitGutterEnable<CR>:GitGutter<CR>
+nnoremap <silent> <leader>gpl :<C-u>call YOI_execute_if_on_git_branch('Gpull')<CR>:GitGutterEnable<CR>:GitGutter<CR>
 nnoremap <silent> <leader>gg  :<C-u>call YOI_execute_if_on_git_branch('Agit')<CR>
 nnoremap <silent> <leader>gh  :<C-u>call YOI_execute_if_on_git_branch('GitGutterPreviewHunk')<CR>
 " }}}

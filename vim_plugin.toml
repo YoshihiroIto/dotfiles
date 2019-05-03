@@ -13,7 +13,7 @@ lazy        = 0
 [[plugins]]
 repo        = 'kana/vim-submode'
 lazy        = 1
-on_map      = ['gh', 'gw', ',w']
+on_map      = ['gh', 'gw', ',w', '<leader>w']
 hook_add    = '''
 function! YOI_submode_snap(value, scale)
   return a:value / a:scale * a:scale
@@ -63,10 +63,10 @@ hook_source = '''
 let g:submode_timeout          = 0
 let g:submode_keep_leaving_key = 1
 
-call submode#enter_with('git_hunk', 'n', 's', 'ghj', ':<C-u>GitGutterNextHunk<CR>zvzz')
-call submode#enter_with('git_hunk', 'n', 's', 'ghk', ':<C-u>GitGutterPrevHunk<CR>zvzz')
-call submode#map(       'git_hunk', 'n', 's', 'j',   ':<C-u>GitGutterNextHunk<CR>zvzz')
-call submode#map(       'git_hunk', 'n', 's', 'k',   ':<C-u>GitGutterPrevHunk<CR>zvzz')
+call submode#enter_with('git_hunk', 'n', 's', 'ghj', ':<C-u>GitGutterEnable<CR>:GitGutterNextHunk<CR>zvzz')
+call submode#enter_with('git_hunk', 'n', 's', 'ghk', ':<C-u>GitGutterEnable<CR>:GitGutterPrevHunk<CR>zvzz')
+call submode#map(       'git_hunk', 'n', 's', 'j',   ':<C-u>GitGutterEnable<CR>:GitGutterNextHunk<CR>zvzz')
+call submode#map(       'git_hunk', 'n', 's', 'k',   ':<C-u>GitGutterEnable<CR>:GitGutterPrevHunk<CR>zvzz')
 
 call submode#enter_with('winsize', 'n', 's', 'gwh', '8<C-w>>')
 call submode#enter_with('winsize', 'n', 's', 'gwl', '8<C-w><')
@@ -626,7 +626,8 @@ Autocmd FocusGained,FocusLost * call YOI_update_fugitive()
 
 [[plugins]]
 repo        = 'airblade/vim-gitgutter'
-lazy        = 0
+lazy        = 1
+on_cmd      = ['GitGutterEnable', 'GitGutter', 'GitGutterNextHunk', 'GitGutterPrevHunk']
 hook_add    = '''
 let g:gitgutter_map_keys = 0
 let g:gitgutter_grep     = ''
