@@ -202,9 +202,7 @@ function! s:update_all()
   setlocal textwidth=0
 
   " ファイルの場所をカレントにする
-  if &filetype !=# 'vimfiler'
-    silent! execute 'lcd' fnameescape(expand('%:p:h'))
-  endif
+  silent! execute 'lcd' fnameescape(expand('%:p:h'))
 endfunction
 " }}}
 " 編集 {{{

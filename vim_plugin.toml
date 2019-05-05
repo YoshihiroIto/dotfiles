@@ -7,7 +7,7 @@ let g:vimproc#download_windows_dll = 1
 '''
 
 [[plugins]]
-repo        = 'vim-jp/vimdoc-ja''
+repo        = 'vim-jp/vimdoc-ja'
 lazy        = 0
 
 [[plugins]]
