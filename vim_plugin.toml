@@ -351,13 +351,9 @@ Autocmd CursorHold,CursorHoldI * call lightline#update()
 '''
 
 [[plugins]]
-repo        = 'itchyny/vim-parenmatch'
+repo        = 'andymass/vim-matchup'
 lazy        = 1
 on_path     = '.*'
-hook_source = '''
-let g:parenmatch_highlight = 0
-highlight ParenMatch guifg=#000000 guibg=#FD971F gui=bold
-'''
 
 [[plugins]]
 repo        = 'Konfekt/FastFold'
@@ -457,14 +453,6 @@ on_map      = '<Plug>'
 repo        = 'haya14busa/vim-asterisk'
 lazy        = 1
 on_map      = '<Plug>'
-
-[[plugins]]
-repo        = 'k-takata/matchit.vim'
-lazy        = 1
-on_path     = '.*'
-hook_source = '''
-silent! execute 'doautocmd Filetype' &filetype
-'''
 
 [[plugins]]
 repo        = 'haya14busa/is.vim'
