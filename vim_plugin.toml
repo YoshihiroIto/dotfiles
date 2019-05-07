@@ -267,12 +267,8 @@ function! YOI_lightline_current_branch()
     return ''
   endif
 
-  if !YOI_is_in_git_branch()
-    return ''
-  endif
-
   try
-    let branch = gina#component#repo#branch()
+    let branch = gitbranch#name()
     return empty(branch) ? '' : '⭠ ' . branch
   catch
     return ''
@@ -305,10 +301,6 @@ endfunction
 
 function! YOI_lightline_git_summary()
   if s:is_lightline_no_disp_group()
-    return ''
-  endif
-
-  if !YOI_is_in_git_branch()
     return ''
   endif
 
@@ -596,7 +588,7 @@ let g:closetag_filenames = '*.{html,xhtml,xml,xaml}'
 # }}}
 # Git {{{
 [[plugins]]
-repo        = 'lambdalisue/gina.vim'
+repo        = 'itchyny/vim-gitbranch'
 lazy        = 1
 
 [[plugins]]

@@ -609,23 +609,6 @@ function! s:execute_keep_view(expr)
   call winrestview(wininfo)
 endfunction
 " }}}
-" Gitブランチ上にいるか {{{
-function! YOI_is_in_git_branch()
-  if empty(expand("%:p"))
-    return 0
-  endif
-
-  try
-    let git = gina#core#get()
-    if !empty(git)
-      return 1
-    endif
-  catch
-  endtry
-
-  return 0
-endfunction
-" }}}
 " 標準出力経由でフィルタリング処理を行う {{{
 function! s:filter_current_by_stdout(cmd, is_silent, is_auto_encoding)
   let retval = 255
