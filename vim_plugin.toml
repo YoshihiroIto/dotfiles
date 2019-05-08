@@ -175,7 +175,7 @@ let g:lightline = {
       \   'active': {
       \     'left': [
       \       ['mode',   'paste'],
-      \       ['branch', 'gitgutter', 'filename', 'anzu', 'submode']
+      \       ['branch', 'gitgutter', 'filename', 'submode']
       \     ],
       \     'right': [
       \       ['syntastic', 'lineinfo'],
@@ -192,7 +192,6 @@ let g:lightline = {
       \     'filename':     'YOI_lightline_filename',
       \     'mode':         'YOI_lightline_mode',
       \     'lineinfo':     'YOI_lightline_lineinfo',
-      \     'anzu':         'anzu#search_status',
       \     'submode':      'submode#current'
       \   },
       \   'component_expand': {
@@ -437,11 +436,6 @@ repo        = 'lambdalisue/vim-rplugin'
 lazy        = 1
 
 [[plugins]]
-repo        = 'osyo-manga/vim-anzu'
-lazy        = 1
-on_map      = '<Plug>'
-
-[[plugins]]
 repo        = 'haya14busa/vim-asterisk'
 lazy        = 1
 on_map      = '<Plug>'
@@ -451,9 +445,6 @@ repo        = 'haya14busa/is.vim'
 lazy        = 1
 on_map      = '<Plug>'
 hook_add    = '''
-nmap n <Plug>(is-nohl)<Plug>(anzu-n-with-echo)
-nmap N <Plug>(is-nohl)<Plug>(anzu-N-with-echo)
-
 map *  <Plug>(asterisk-z*)<Plug>(is-nohl-1)
 map g* <Plug>(asterisk-gz*)<Plug>(is-nohl-1)
 map #  <Plug>(asterisk-z#)<Plug>(is-nohl-1)
