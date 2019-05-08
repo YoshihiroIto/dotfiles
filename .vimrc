@@ -112,6 +112,8 @@ function! s:lazy_initialize()
   Autocmd BufWinEnter,ColorScheme .vimrc highlight def link myVimAutocmd vimAutoCmd
   Autocmd BufWinEnter,ColorScheme .vimrc syntax match vimAutoCmd /\<\(Autocmd\|AutocmdFT\)\>/
 
+  call gitgutter#enable()
+
   call dein#source([
         \ 'vim-textobj-comment',
         \ 'textobj-wiw',
@@ -366,6 +368,8 @@ set noshowmatch             " 括弧の対応をハイライト
 set wrap
 set noshowmode
 set shortmess+=I            " 起動時のメッセージを表示しない
+set shortmess-=S
+set shortmess+=s
 set lazyredraw
 set wildmenu
 set wildmode=list:full

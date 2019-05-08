@@ -266,6 +266,10 @@ function! YOI_lightline_current_branch()
     return ''
   endif
 
+  if empty(expand('%:p'))
+    return ''
+  endif
+
   try
     let branch = gitbranch#name()
     return empty(branch) ? '' : '⭠ ' . branch
@@ -300,6 +304,10 @@ endfunction
 
 function! YOI_lightline_git_summary()
   if s:is_lightline_no_disp_group()
+    return ''
+  endif
+
+  if empty(expand('%:p'))
     return ''
   endif
 
@@ -345,11 +353,14 @@ Autocmd CursorHold,CursorHoldI * call lightline#update()
 repo        = 'andymass/vim-matchup'
 lazy        = 1
 on_path     = '.*'
+hook_source = '''
+let g:matchup_matchparen_status_offscreen = 0
+'''
 
-[[plugins]]
-repo        = 'Konfekt/FastFold'
-lazy        = 1
-on_path     = '.*'
+# [[plugins]]
+# repo        = 'Konfekt/FastFold'
+# lazy        = 1
+# on_path     = '.*'
 
 # }}}
 # 検索 {{{
@@ -640,10 +651,10 @@ let g:markdown_fenced_languages = [
       \ ]
 '''
 
-[[plugins]]
-repo        = 'PProvost/vim-ps1'
-lazy        = 1
-on_ft       = 'ps1'
+# [[plugins]]
+# repo        = 'PProvost/vim-ps1'
+# lazy        = 1
+# on_ft       = 'ps1'
 # }}}
 # テキストオブジェクト {{{
 # https://github.com/kana/vim-textobj-user/wiki
