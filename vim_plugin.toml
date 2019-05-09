@@ -1,7 +1,7 @@
 ﻿# ライブラリ {{{
 [[plugins]]
 repo        = 'Shougo/vimproc'
-lazy        = 0
+lazy        = 1
 hook_add    = '''
 let g:vimproc#download_windows_dll = 1
 '''
@@ -312,6 +312,11 @@ function! YOI_lightline_git_summary()
   endif
 
   try
+    let branch = gitbranch#name()
+    if empty(branch)
+      return ''
+    endif
+
     let summary = GitGutterGetHunkSummary()
     return printf('%s%d %s%d %s%d',
           \ g:gitgutter_sign_added,    summary[0],
@@ -606,7 +611,8 @@ let g:gitgutter_grep     = ''
 # ファイルタイプ {{{
 [[plugins]]
 repo        = 'itchyny/vim-autoft'
-lazy        = 0
+lazy        = 1
+on_path     = '.*'
 hook_add    = '''
 let g:autoft_config = [
       \   {'filetype': 'cs',
@@ -638,18 +644,9 @@ lazy        = 1
 on_ft       = 'yaml'
 
 [[plugins]]
-repo        = 'tpope/vim-markdown'
+repo        = 'plasticboy/vim-markdown'
 lazy        = 1
-on_ft       = 'markdown'
-hook_add    = '''
-let g:markdown_fenced_languages = [
-      \   'c',    'cpp', 'cs', 'go',
-      \   'ruby', 'lua', 'python',
-      \   'vim',
-      \   'toml',
-      \   'xml',  'json', 'css'
-      \ ]
-'''
+on_ft       = 'md'
 
 # [[plugins]]
 # repo        = 'PProvost/vim-ps1'

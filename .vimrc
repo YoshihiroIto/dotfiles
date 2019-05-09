@@ -285,9 +285,12 @@ command! Guid call <SID>gen_guid()
 command! Reload execute 'edit!'
 
 function! s:gen_guid()
-  call setreg('g', vimproc#system('GuidGen'), 'v')
+  call setreg('g', vimproc#system('C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/2019/Community/Common7/Tools/GuidGen'), 'v')
   silent keepjumps normal! "gp
 endfunction
+
+command! -nargs=1 -complete=file Diff call <SID>toggle_v_wide() | vertical diffsplit <args>
+Autocmd WinEnter * if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) == 1 | diffoff | call <SID>toggle_v_wide() | endif
 
 nnoremap Y y$
 
@@ -382,7 +385,7 @@ set previewheight=24
 set cmdheight=4
 set laststatus=2
 set showtabline=2
-set diffopt=vertical,filler
+set diffopt=internal,filler,algorithm:histogram,indent-heuristic
 set noequalalways
 set cursorline
 set display=lastline
@@ -569,6 +572,16 @@ if s:has_gui_running
   let s:opend_left_vsp = 0
   let s:opend_top_vsp  = 0
 
+  function! s:toggle_v_wide()
+    if s:depth_vsp <= 1
+      let s:depth_vsp += 1
+    else
+      let s:depth_vsp -= 1
+    endif
+
+    let &columns = s:base_columns * s:depth_vsp
+  endfunction
+
   function! s:toggle_v_split_wide()
     if s:depth_vsp <= 1
       call s:open_v_split_wide()
@@ -583,14 +596,14 @@ if s:has_gui_running
       let s:opend_top_vsp  = getwinposy()
     endif
 
-    let s:depth_vsp += 1
-    let &columns = s:base_columns * s:depth_vsp
+    call s:toggle_v_wide()
+
     execute 'botright vertical' s:base_columns 'split'
   endfunction
 
   function! s:close_v_split_wide()
-    let s:depth_vsp -= 1
-    let &columns = s:base_columns * s:depth_vsp
+    call s:toggle_v_wide()
+
     only
 
     if s:depth_vsp == 1
