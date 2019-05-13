@@ -99,10 +99,6 @@ function! s:lazy_initialize()
 
   set iskeyword=@,48-57,_,128-167,224-235
 
-  if s:is_windows && !executable('MSBuild')
-    let $PATH .= ';C:/Windows/Microsoft.NET/Framework/v4.0.30319'
-  endif
-
   " ローカル設定
   let s:vimrc_local = expand('~/.vimrc_local')
   if filereadable(s:vimrc_local)

@@ -361,12 +361,6 @@ on_path     = '.*'
 hook_source = '''
 let g:matchup_matchparen_status_offscreen = 0
 '''
-
-# [[plugins]]
-# repo        = 'Konfekt/FastFold'
-# lazy        = 1
-# on_path     = '.*'
-
 # }}}
 # 検索 {{{
 [[plugins]]
@@ -647,11 +641,6 @@ on_ft       = 'yaml'
 repo        = 'plasticboy/vim-markdown'
 lazy        = 1
 on_ft       = 'md'
-
-# [[plugins]]
-# repo        = 'PProvost/vim-ps1'
-# lazy        = 1
-# on_ft       = 'ps1'
 # }}}
 # テキストオブジェクト {{{
 # https://github.com/kana/vim-textobj-user/wiki
