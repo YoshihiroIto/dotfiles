@@ -111,6 +111,12 @@ function! s:lazy_initialize()
   call gitgutter#enable()
 
   call dein#source([
+        \ 'vimdoc-ja',
+        \ 'vim-icondrag',
+        \ 'vim-autoft',
+        \ 'vim-auto-mirroring',
+        \ 'vim-matchup',
+        \ 'ctrlp.vim',
         \ 'vim-textobj-comment',
         \ 'textobj-wiw',
         \ 'vim-textobj-entire',
@@ -242,48 +248,9 @@ command! RemoveCr call s:execute_keep_view('silent! %substitute/\r$//g | nohlsea
 " 行末のスペースを取り除く
 command! RemoveEolSpace call s:execute_keep_view('silent! %substitute/ \+$//g | nohlsearch')
 
-" 整形
-command! Format call s:execute_keep_view('call s:format()')
-function! s:format()
-  if &filetype ==# 'c'
-    ClangFormat
-  elseif &filetype ==# 'cpp'
-    ClangFormat
-  elseif &filetype ==# 'go'
-    call s:filter_current_by_stdout('goimports %s', 0, 0)
-  elseif &filetype ==# 'json' && executable('jq')
-    call s:filter_current_by_stdout('jq . %s', 0, 0)
-  elseif &filetype ==# 'javascript' && executable('js-beautify')
-    call s:filter_current_by_stdout('js-beautify %s', 0, 0)
-  elseif &filetype ==# 'xml'
-    if expand('%:e') ==# 'xaml'
-      let xamlStylerCuiExe =
-            \ s:is_windows ? 'XamlStylerCui.exe' : 'mono ~/XamlStylerCui.exe'
-      call s:filter_current_by_tempfile(xamlStylerCuiExe . ' --input=%s --output=%s', 0, 1)
-    else
-      if executable('xmllint')
-        let $XMLLINT_INDENT = '    '
-        if !s:filter_current_by_stdout('xmllint --format --encode ' . &encoding . ' %s', 1, 0)
-          execute 'silent! %substitute/>\s*</>\r</g | normal! gg=G'
-        endif
-      endif
-    endif
-  else
-    echomsg 'Format: Not supported:' &filetype
-  endif
-endfunction
-
 " 現在のファイルパスをクリップボードへコピーする
 command! CopyFilepath     call setreg('*', expand('%:t'), 'v')
 command! CopyFullFilepath call setreg('*', expand('%:p'), 'v')
-
-command! Guid call <SID>gen_guid()
-command! Reload execute 'edit!'
-
-function! s:gen_guid()
-  call setreg('g', vimproc#system('C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/2019/Community/Common7/Tools/GuidGen'), 'v')
-  silent keepjumps normal! "gp
-endfunction
 
 command! -nargs=1 -complete=file Diff call <SID>toggle_v_wide() | vertical diffsplit <args>
 Autocmd WinEnter * if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) == 1 | diffoff | call <SID>toggle_v_wide() | endif
@@ -362,7 +329,7 @@ endif
 syntax enable               " 構文ごとに色分けをする
 set number
 set textwidth=0             " 一行に長い文章を書いていても自動折り返しをしない
-set showcmd                 " コマンドをステータス行に表示
+set noshowcmd
 set noshowmatch             " 括弧の対応をハイライト
 set wrap
 set noshowmode
@@ -620,78 +587,6 @@ function! s:execute_keep_view(expr)
   let wininfo = winsaveview()
   execute a:expr
   call winrestview(wininfo)
-endfunction
-" }}}
-" 標準出力経由でフィルタリング処理を行う {{{
-function! s:filter_current_by_stdout(cmd, is_silent, is_auto_encoding)
-  let retval = 255
-
-  try
-    let current_tempfile = tempname()
-    call writefile(getline(1, '$'), current_tempfile)
-
-    let normalized_current_tempfile = substitute(current_tempfile, '\', '/', 'g')
-
-    if a:is_auto_encoding
-      let formatted = vimproc#system2(printf(a:cmd, normalized_current_tempfile))
-    else
-      let formatted = vimproc#system(printf(a:cmd, normalized_current_tempfile))
-    endif
-
-    let retval = vimproc#get_last_status()
-
-    if retval == 0
-      call setreg('g', formatted, 'v')
-      silent keepjumps normal! ggVG"gp
-    else
-      if !a:is_silent
-        echo formatted
-      endif
-    endif
-  finally
-    call delete(current_tempfile)
-  endtry
-
-  return retval == 0
-endfunction
-" }}}
-" テンポラリファイル経由でフィルタリング処理を行う {{{
-function! s:filter_current_by_tempfile(cmd, is_silent, is_auto_encoding)
-  let retval = 255
-
-  try
-    let current_tempfile = tempname()
-    call writefile(getline(1, '$'), current_tempfile)
-
-    let output_tempfile = tempname()
-
-    let normalized_current_tempfile = substitute(current_tempfile, '\', '/', 'g')
-    let normalized_output_tempfile  = substitute(output_tempfile,  '\', '/', 'g')
-
-    if a:is_auto_encoding
-      let out = vimproc#system2(
-            \ printf(a:cmd, normalized_current_tempfile, normalized_output_tempfile))
-    else
-      let out = vimproc#system(
-            \ printf(a:cmd, normalized_current_tempfile, normalized_output_tempfile))
-    endif
-
-    let retval = vimproc#get_last_status()
-
-    if retval == 0
-      call setreg('g', readfile(output_tempfile), 'v')
-      silent keepjumps normal! ggVG"gp
-    else
-      if !a:is_silent
-        echo out
-      endif
-    endif
-  finally
-    call delete(current_tempfile)
-    call delete(output_tempfile)
-  endtry
-
-  return retval == 0
 endfunction
 " }}}
 " }}}
