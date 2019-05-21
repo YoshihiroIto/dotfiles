@@ -193,10 +193,7 @@ AutocmdFT xml,html   setlocal foldcolumn=5
 AutocmdFT xml,html   setlocal foldmethod=syntax
 AutocmdFT xml,html   inoremap <silent><buffer> >  ><Esc>:call closetag#CloseTagFun()<CR>
 
-AutocmdFT typescript setlocal omnifunc=TSScompleteFunc
-
 AutocmdFT json       setlocal shiftwidth=2
-AutocmdFT godoc      nnoremap <silent><buffer> q         :<C-u>close<CR>
 AutocmdFT help       nnoremap <silent><buffer> q         :<C-u>close<CR>
 AutocmdFT markdown   nnoremap <silent><buffer> <leader>v :<C-u>PrevimOpen<CR>
 
@@ -248,6 +245,12 @@ command! RemoveCr call s:execute_keep_view('silent! %substitute/\r$//g | nohlsea
 " 行末のスペースを取り除く
 command! RemoveEolSpace call s:execute_keep_view('silent! %substitute/ \+$//g | nohlsearch')
 
+function! s:execute_keep_view(expr)
+  let wininfo = winsaveview()
+  execute a:expr
+  call winrestview(wininfo)
+endfunction
+
 " 現在のファイルパスをクリップボードへコピーする
 command! CopyFilepath     call setreg('*', expand('%:t'), 'v')
 command! CopyFullFilepath call setreg('*', expand('%:p'), 'v')
@@ -280,16 +283,6 @@ function! s:copy_add_comment() range
   " ヤンクした物をペーストする
   normal! P
 endfunction
-
-" マウス中クリックペースト無効
-map  <MiddleMouse>   <Nop>
-imap <MiddleMouse>   <Nop>
-map  <2-MiddleMouse> <Nop>
-imap <2-MiddleMouse> <Nop>
-map  <3-MiddleMouse> <Nop>
-imap <3-MiddleMouse> <Nop>
-map  <4-MiddleMouse> <Nop>
-imap <4-MiddleMouse> <Nop>
 " }}}
 " タブ・インデント {{{
 set autoindent
@@ -355,7 +348,8 @@ set display=lastline
 set conceallevel=2
 set concealcursor=i
 set signcolumn=yes
-" execute "set colorcolumn=" . join(range(101, 999), ',')
+set splitbelow              " 縦分割したら新しいウィンドウは下に
+set splitright              " 横分割したら新しいウィンドウは右に
 
 if s:has_gui_running
   set lines=100
@@ -497,22 +491,16 @@ nnoremap <silent> 0     g0
 nnoremap <silent> g0    0
 nnoremap <silent> $     g$
 nnoremap <silent> g$    $
-nnoremap <silent> gg    ggzv:<C-u>call YOI_refresh_screen()<CR>
-nnoremap <silent> G     Gzv:<C-u>call  YOI_refresh_screen()<CR>
+nnoremap <silent> gg    ggzv:<C-u>call <SID>force_show_cursorline()<CR>
+nnoremap <silent> G     Gzv:<C-u>call  <SID>force_show_cursorline()<CR>
 
-noremap <expr> <C-b>
-      \ max([winheight(0) - 2, 1]) . "\<C-u>" . (line('.') < 1         + winheight(0) ? 'H' : 'L')
-noremap <expr> <C-f>
-      \ max([winheight(0) - 2, 1]) . "\<C-d>" . (line('.') > line('$') - winheight(0) ? 'L' : 'H')
-nmap <expr> <C-y> (line('w0') <= 1         ? 'k' : "\<C-y>k")
-nmap <expr> <C-e> (line('w$') >= line('$') ? 'j' : "\<C-e>j")
+noremap <expr> <C-b>    max([winheight(0) - 2, 1]) . "\<C-u>" . (line('.') < 1         + winheight(0) ? 'H' : 'L')
+noremap <expr> <C-f>    max([winheight(0) - 2, 1]) . "\<C-d>" . (line('.') > line('$') - winheight(0) ? 'L' : 'H')
+nmap    <expr> <C-y>    (line('w0') <= 1         ? 'k' : "\<C-y>k")
+nmap    <expr> <C-e>    (line('w$') >= line('$') ? 'j' : "\<C-e>j")
 
-nnoremap <silent> <C-i> <C-i>zz:<C-u>call YOI_refresh_screen()<CR>
-nnoremap <silent> <C-o> <C-o>zz:<C-u>call YOI_refresh_screen()<CR>
-" }}}
-" ウィンドウ操作 {{{
-set splitbelow    " 縦分割したら新しいウィンドウは下に
-set splitright    " 横分割したら新しいウィンドウは右に
+nnoremap <silent> <C-i> <C-i>zz:<C-u>call <SID>force_show_cursorline()<CR>
+nnoremap <silent> <C-o> <C-o>zz:<C-u>call <SID>force_show_cursorline()<CR>
 " }}}
 " ターミナル {{{
 command! Terminal terminal ++curwin
@@ -575,19 +563,5 @@ if s:has_gui_running
   endfunction
   " }}}
 endif
-" }}}
-" 汎用関数 {{{
-" 画面リフレッシュ {{{
-function! YOI_refresh_screen()
-  call s:force_show_cursorline()
-endfunction
-" }}}
-" コマンド実行後の表示状態を維持する {{{
-function! s:execute_keep_view(expr)
-  let wininfo = winsaveview()
-  execute a:expr
-  call winrestview(wininfo)
-endfunction
-" }}}
 " }}}
 " vim: tabstop=2 shiftwidth=2 softtabstop=2 expandtab
