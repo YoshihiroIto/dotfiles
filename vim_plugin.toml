@@ -349,7 +349,7 @@ Autocmd CursorHold,CursorHoldI * call lightline#update()
 
 [[plugins]]
 repo        = 'andymass/vim-matchup'
-lazy        = 1
+lazy        = 0
 hook_source = '''
 let g:matchup_matchparen_status_offscreen = 0
 '''

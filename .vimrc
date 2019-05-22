@@ -32,13 +32,6 @@ endif
 let g:did_install_default_menus = 1
 let g:did_menu_trans = 1
 
-" ヘルプ
-set helplang=ja,en
-set keywordprg=
-
-" Grep
-set grepprg=jvgrep
-
 function! s:edit_vimrc()
   let dropbox_vimrc = g:YOI_dropbox_dir . '/dotfiles/.vimrc'
   if filereadable(dropbox_vimrc)
@@ -61,13 +54,11 @@ nnoremap <silent> <F1> :<C-u>call <SID>edit_vimrc()<CR>
 nnoremap <silent> <F2> :<C-u>call <SID>edit_vim_plugin_toml()<CR>
 nnoremap          <F3> :<C-u>call dein#clear_state()<CR>:call dein#update()<CR>
 
-" 場所ごとに設定を用意する
-" http://vim-jp.org/vim-users-jp/2009/12/27/Hack-112.html
-Autocmd BufNewFile,BufReadPost * let s:files =
-      \  findfile('.vimrc.local', escape(expand('<afile>:p:h'), ' ') . ';', -1)
-      \| for s:i in reverse(filter(s:files, 'filereadable(v:val)'))
-      \|   source `=s:i`
-      \| endfor
+" ローカル設定
+let s:vimrc_local = expand('~/.vimrc.local')
+if filereadable(s:vimrc_local)
+  execute 'source' s:vimrc_local
+endif
 
 " 遅延初期化
 " ※なぜaugroupを使わないか
@@ -291,15 +282,17 @@ set tabstop=4       " ファイル内の <Tab> が対応する空白の数
 set softtabstop=4   " <Tab> の挿入や <BS> の使用等の編集操作をするときに <Tab> が対応する空白の数
 set shiftwidth=4    " インデントの各段階に使われる空白の数
 set expandtab       " Insertモードで <Tab> を挿入するとき、代わりに適切な数の空白を使う
-set list
-set listchars=tab:\»\ ,eol:↲,extends:»,precedes:«,nbsp:%
-set breakindent
 " }}}
 " 検索 {{{
 set incsearch
 set ignorecase
 set smartcase
 set hlsearch
+set grepprg=jvgrep
+
+" ヘルプ
+set helplang=ja,en
+set keywordprg=
 
 " 複数Vimで検索を同期する
 if s:has_gui_running
@@ -350,6 +343,9 @@ set concealcursor=i
 set signcolumn=yes
 set splitbelow              " 縦分割したら新しいウィンドウは下に
 set splitright              " 横分割したら新しいウィンドウは右に
+set list
+set listchars=tab:\»\ ,eol:↲,extends:»,precedes:«,nbsp:%
+set breakindent
 
 if s:has_gui_running
   set lines=100
