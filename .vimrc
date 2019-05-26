@@ -2,7 +2,6 @@ set encoding=utf-8
 scriptencoding utf-8
 " 基本 {{{
 let g:YOI_dotvim_dir   = expand('~/.vim')
-let g:YOI_cache_dir    = expand('~/.cache')
 let g:YOI_dropbox_dir  = expand('~/Dropbox')
 
 let s:has_vim_starting = has('vim_starting')
@@ -10,7 +9,7 @@ let s:has_gui_running  = has('gui_running')
 let s:base_columns     = 140
 
 let s:vim_plugin_toml  = expand('~/vim_plugin.toml')
-let s:plugin_dir       = g:YOI_cache_dir . '/plugin'
+let s:plugin_dir       = expand('~/.cache/plugin')
 
 let g:mapleader        = ' '
 
@@ -37,8 +36,6 @@ endif
 " プラグイン {{{
 if s:has_vim_starting
   execute 'set runtimepath^=' . s:plugin_dir . '/repos/github.com/Shougo/dein.vim/'
-  let g:dein#install_process_timeout = 10*60
-  let g:dein#install_max_processes   = 16
 endif
 
 if dein#load_state(s:plugin_dir)
@@ -209,12 +206,6 @@ function! s:lazy_initialize()
 
   " 実行ファイル位置を$PATHに最優先で含める
   let $PATH = $VIM . ';' . $PATH
-
-  " ローカル設定
-  let s:vimrc_local = expand('~/.vimrc_local')
-  if filereadable(s:vimrc_local)
-    execute 'source' s:vimrc_local
-  endif
 
   Autocmd BufWinEnter,ColorScheme .vimrc highlight def link myVimAutocmd vimAutoCmd
   Autocmd BufWinEnter,ColorScheme .vimrc syntax match vimAutoCmd /\<\(Autocmd\|AutocmdFT\)\>/
