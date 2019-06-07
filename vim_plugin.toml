@@ -353,6 +353,14 @@ lazy        = 0
 hook_add    = '''
 let g:matchup_matchparen_status_offscreen = 0
 '''
+
+[[plugins]]
+repo        = 'delphinus/vim-auto-cursorline'
+lazy        = 1
+hook_add    = '''
+let g:auto_cursorline_wait_ms = 250
+'''
+
 # }}}
 # 検索 {{{
 [[plugins]]

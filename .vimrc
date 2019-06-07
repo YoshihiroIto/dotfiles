@@ -218,6 +218,7 @@ function! s:lazy_initialize()
         \ 'vim-autoft',
         \ 'vim-auto-mirroring',
         \ 'vim-matchup',
+        \ 'vim-auto-cursorline',
         \ 'ctrlp.vim',
         \ 'vim-textobj-comment',
         \ 'textobj-wiw',
@@ -407,43 +408,6 @@ function! s:lazy_initialize()
     let pattern = printf('\<%s\>', expand('<cword>'))
     silent! let b:highlight_cursor_word_id = matchadd('CursorWord', pattern)
     let b:highlight_cursor_word = word
-  endfunction
-  " }}}
-  " 'cursorline' を必要な時にだけ有効にする {{{
-  " http://d.hatena.ne.jp/thinca/20090530/1243615055
-  Autocmd CursorMoved,CursorMovedI * call s:auto_cursorline('CursorMoved')
-  Autocmd CursorHold,CursorHoldI   * call s:auto_cursorline('CursorHold')
-  Autocmd WinEnter                 * call s:auto_cursorline('WinEnter')
-  Autocmd WinLeave                 * call s:auto_cursorline('WinLeave')
-
-  let s:cursorline_lock = 0
-  function! s:auto_cursorline(event)
-    if a:event ==# 'WinEnter'
-      setlocal cursorline
-      let s:cursorline_lock = 2
-
-    elseif a:event ==# 'WinLeave'
-      setlocal nocursorline
-
-    elseif a:event ==# 'CursorMoved'
-      if s:cursorline_lock
-        if 1 < s:cursorline_lock
-          let s:cursorline_lock = 1
-        else
-          setlocal nocursorline
-          let s:cursorline_lock = 0
-        endif
-      endif
-
-    elseif a:event ==# 'CursorHold'
-      setlocal cursorline
-      let s:cursorline_lock = 1
-    endif
-  endfunction
-
-  function! s:force_show_cursorline()
-    setlocal cursorline
-    let s:cursorline_lock = 1
   endfunction
   " }}}
   " モード移行 {{{
