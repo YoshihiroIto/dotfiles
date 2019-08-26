@@ -60,6 +60,10 @@ AutocmdFT ruby       setlocal tabstop=2
 AutocmdFT ruby       setlocal shiftwidth=2
 AutocmdFT ruby       setlocal softtabstop=2
 
+AutocmdFT vue        setlocal tabstop=2
+AutocmdFT vue        setlocal shiftwidth=2
+AutocmdFT vue        setlocal softtabstop=2
+
 AutocmdFT vim        setlocal foldmethod=marker
 AutocmdFT vim        setlocal foldlevel=0
 AutocmdFT vim        setlocal foldcolumn=5

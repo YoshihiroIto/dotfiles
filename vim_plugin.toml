@@ -614,6 +614,11 @@ lazy        = 1
 on_ft       = 'hlsl'
 
 [[plugins]]
+repo        = 'posva/vim-vue'
+lazy        = 1
+on_ft       = 'vue'
+
+[[plugins]]
 repo        = 'cespare/vim-toml'
 lazy        = 1
 on_ft       = 'toml'
