@@ -482,6 +482,7 @@ lazy        = 1
 on_ft       = 'cs'
 hook_add    = '''
 let g:OmniSharp_server_stdio = 1
+let g:OmniSharp_highlight_types = 3
 '''
 
 [[plugins]]
