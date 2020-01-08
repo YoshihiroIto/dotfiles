@@ -473,6 +473,91 @@ let g:UltiSnipsSnippetDirectories  = [g:YOI_dotvim_dir . '/UltiSnips']
 let g:UltiSnipsJumpForwardTrigger  = "<Tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<S-Tab>"
 let g:UltiSnipsListSnippets        = "<S-Tab>"
+let g:UltiSnipsExpandTrigger       = "<C-e>"
+'''
+
+[[plugins]]
+repo        = 'OmniSharp/omnisharp-vim'
+lazy        = 1
+on_ft       = 'cs'
+hook_add    = '''
+let g:OmniSharp_server_stdio = 1
+'''
+
+[[plugins]]
+repo        = 'prabirshrestha/asyncomplete.vim'
+lazy        = 0
+
+[[plugins]]
+repo        = 'prabirshrestha/asyncomplete-lsp.vim'
+depends     = ['vim-lsp', 'asyncomplete.vim']
+lazy        = 0
+
+[[plugins]]
+repo        = 'prabirshrestha/asyncomplete-ultisnips.vim'
+lazy        = 0
+on_i        = 1
+depends     = 'asyncomplete.vim'
+hook_add    = '''
+call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
+    \ 'name': 'ultisnips',
+    \ 'whitelist': ['*'],
+    \ 'priority': 10,
+    \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
+    \ }))
+'''
+
+[[plugins]]
+repo        = 'prabirshrestha/asyncomplete-file.vim'
+lazy        = 0
+depends     = 'asyncomplete.vim'
+hook_add    = '''
+call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
+    \ 'name': 'file',
+    \ 'whitelist': ['*'],
+    \ 'priority': 20,
+    \ 'completor': function('asyncomplete#sources#file#completor')
+    \ }))
+'''
+
+[[plugins]]
+repo        = 'prabirshrestha/asyncomplete-buffer.vim'
+lazy        = 0
+depends     = 'asyncomplete.vim'
+hook_add    = '''
+call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+    \ 'name': 'buffer',
+    \ 'whitelist': ['*'],
+    \ 'priority': 30,
+    \ 'completor': function('asyncomplete#sources#buffer#completor'),
+    \ 'config': {
+    \    'max_buffer_size': 5000000,
+    \  },
+    \ }))
+'''
+
+[[plugins]]
+repo        = 'prabirshrestha/vim-lsp'
+lazy        = 1
+depends     = ['async.vim', 'vim-lsp-settings']
+hook_add    = '''
+let g:lsp_async_completion = 1
+let g:lsp_signs_enabled = 1
+let g:lsp_diagnostics_echo_cursor = 1
+
+nmap <silent> <C-]> <plug>(lsp-definition)
+nmap <silent> ;e    <plug>(lsp-rename)
+'''
+
+[[plugins]]
+repo        = 'prabirshrestha/async.vim'
+lazy        = 1
+
+[[plugins]]
+repo        = 'mattn/vim-lsp-settings'
+lazy        = 1
+hook_add    = '''
+let g:lsp_settings_servers_dir = expand("~/lsp_server")
 '''
 # }}}
 # 編集 {{{
@@ -587,6 +672,7 @@ hook_add    = '''
 let g:gitgutter_map_keys = 0
 let g:gitgutter_grep     = ''
 '''
+rev         = '92deed378d1e4c73f193e408c556a95195c1bc95'
 
 # }}}
 # ファイルタイプ {{{

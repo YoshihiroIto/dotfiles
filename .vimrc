@@ -80,6 +80,9 @@ AutocmdFT xml,html   setlocal foldcolumn=5
 AutocmdFT xml,html   setlocal foldmethod=syntax
 AutocmdFT xml,html   inoremap <silent><buffer> >  ><Esc>:call closetag#CloseTagFun()<CR>
 
+AutocmdFT cs         nmap <silent><buffer> <C-]> <Plug>(omnisharp_go_to_definition)
+AutocmdFT cs         nmap <silent><buffer> ;e    <Plug>(omnisharp_rename)
+
 AutocmdFT json       setlocal shiftwidth=2
 AutocmdFT help       nnoremap <silent><buffer> q         :<C-u>close<CR>
 AutocmdFT markdown   nnoremap <silent><buffer> <leader>v :<C-u>PrevimOpen<CR>
