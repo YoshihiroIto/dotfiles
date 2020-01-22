@@ -1,0 +1,42 @@
+set backspace=indent,eol,start
+set clipboard=unnamedplus,unnamed
+set whichwrap=b,s,h,l,<,>,[,]
+
+set incsearch
+set ignorecase
+set smartcase
+set hlsearch
+
+nnoremap n nzvzz
+nnoremap N Nzvzz
+
+nnoremap j  gj
+nnoremap k  gk
+nnoremap 0  g0
+nnoremap g0 0
+nnoremap $  g$
+nnoremap g$ $
+nnoremap gg ggzvzz
+nnoremap G  Gzvzz
+
+
+nnoremap t         :<C-u>action CommentByLineComment<CR>
+vnoremap t         :<C-u>action CommentByLineComment<CR>
+nnoremap gcc       :<C-u>action CommentByLineComment<CR>
+
+nnoremap ;e        :<C-u>action RenameElement<CR>
+nnoremap ;f        :<C-u>action ReformatCode<CR>
+
+nnoremap ;r        :<C-u>action Debug<CR>
+nnoremap ;b        :<C-u>action BuildSolutionAction<CR>
+
+nnoremap ;i        :<C-u>action RiderShowIlViewerAction<CR>
+
+nnoremap <Space>gg :<C-u>action FindInPath<CR>
+nnoremap <Space>b  :<C-u>action ToggleLineBreakpoint<CR>
+
+
+nnoremap <Space>i  :<C-u>action GotoImplementation<CR>
+
+
+
