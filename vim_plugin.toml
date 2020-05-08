@@ -476,14 +476,14 @@ let g:UltiSnipsListSnippets        = "<S-Tab>"
 let g:UltiSnipsExpandTrigger       = "<C-e>"
 '''
 
-[[plugins]]
-repo        = 'OmniSharp/omnisharp-vim'
-lazy        = 1
-on_ft       = 'cs'
-hook_add    = '''
-let g:OmniSharp_server_stdio = 1
-let g:OmniSharp_highlight_types = 3
-'''
+# [[plugins]]
+# repo        = 'OmniSharp/omnisharp-vim'
+# lazy        = 1
+# on_ft       = 'cs'
+# hook_add    = '''
+# let g:OmniSharp_server_stdio = 1
+# let g:OmniSharp_highlight_types = 3
+# '''
 
 [[plugins]]
 repo        = 'prabirshrestha/asyncomplete.vim'

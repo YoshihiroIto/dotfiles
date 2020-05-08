@@ -83,7 +83,10 @@ AutocmdFT xml,html   inoremap <silent><buffer> >  ><Esc>:call closetag#CloseTagF
 AutocmdFT cs         nmap <silent><buffer> <C-]> <Plug>(omnisharp_go_to_definition)
 AutocmdFT cs         nmap <silent><buffer> ;e    <Plug>(omnisharp_rename)
 
+AutocmdFT json       setlocal foldmethod=syntax
 AutocmdFT json       setlocal shiftwidth=2
+AutocmdFT json       noremap  <silent><buffer><expr> <leader>p jsonpath#echo()
+
 AutocmdFT help       nnoremap <silent><buffer> q         :<C-u>close<CR>
 AutocmdFT markdown   nnoremap <silent><buffer> <leader>v :<C-u>PrevimOpen<CR>
 
@@ -143,7 +146,7 @@ set showtabline=2
 set noequalalways
 set cursorline
 set display=lastline
-set conceallevel=2
+" set conceallevel=2
 set concealcursor=i
 set signcolumn=yes
 set list
@@ -187,7 +190,7 @@ endfunction
 " フォント {{{
 if s:has_gui_running
   set guifont=Ricty\ Regular\ for\ Powerline:h11
-  " set renderoptions=type:directx
+  set renderoptions=type:directx
 endif
 
 set printfont=Ricty\ Regular\ for\ Powerline:h11
