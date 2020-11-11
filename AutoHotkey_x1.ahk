@@ -25,6 +25,7 @@ Insert:: Send,{PrintScreen}
 !Insert:: Send,!{PrintScreen}
 
 ^Space::Send, {vkF3sc029}
+vk1C::Send, {vkF3sc029}
 
 vk1D & 1::Send,{Blind}{F1}
 vk1D & 2::Send,{Blind}{F2}
@@ -47,6 +48,7 @@ vk1D & n::Send,{Blind}{PgDn}
 vk1D & p::Send,{Blind}{PgUp}
 
 vk1D & g::Run,"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+vk1D & b::Run,"C:\Program Files (x86)\BraveSoftware\Brave-Browser\Application\brave.exe"
 vk1D & v::Run,"C:\Program Files\vim\vim82\gvim.exe"
 vk1D & i::Run,"C:\Program Files\IrfanView\i_view64.exe"
 

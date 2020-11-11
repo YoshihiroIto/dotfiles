@@ -86,6 +86,7 @@ AutocmdFT cs         nmap <silent><buffer> ;e    <Plug>(omnisharp_rename)
 AutocmdFT json       setlocal foldmethod=syntax
 AutocmdFT json       setlocal shiftwidth=2
 AutocmdFT json       noremap  <silent><buffer><expr> <leader>p jsonpath#echo()
+AutocmdFT json       command! Format %!jq
 
 AutocmdFT help       nnoremap <silent><buffer> q         :<C-u>close<CR>
 AutocmdFT markdown   nnoremap <silent><buffer> <leader>v :<C-u>PrevimOpen<CR>

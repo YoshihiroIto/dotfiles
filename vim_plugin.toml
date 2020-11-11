@@ -476,14 +476,14 @@ let g:UltiSnipsListSnippets        = "<S-Tab>"
 let g:UltiSnipsExpandTrigger       = "<C-e>"
 '''
 
-# [[plugins]]
-# repo        = 'OmniSharp/omnisharp-vim'
-# lazy        = 1
-# on_ft       = 'cs'
-# hook_add    = '''
-# let g:OmniSharp_server_stdio = 1
-# let g:OmniSharp_highlight_types = 3
-# '''
+[[plugins]]
+repo        = 'OmniSharp/omnisharp-vim'
+lazy        = 1
+on_ft       = 'cs'
+hook_add    = '''
+let g:OmniSharp_server_stdio = 1
+let g:OmniSharp_highlight_types = 3
+'''
 
 [[plugins]]
 repo        = 'prabirshrestha/asyncomplete.vim'
@@ -508,18 +508,19 @@ call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_opti
     \ }))
 '''
 
-[[plugins]]
-repo        = 'prabirshrestha/asyncomplete-file.vim'
-lazy        = 0
-depends     = 'asyncomplete.vim'
-hook_add    = '''
-call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
-    \ 'name': 'file',
-    \ 'whitelist': ['*'],
-    \ 'priority': 20,
-    \ 'completor': function('asyncomplete#sources#file#completor')
-    \ }))
-'''
+# https://github.com/prabirshrestha/asyncomplete-file.vim/issues/4
+# [[plugins]]
+# repo        = 'prabirshrestha/asyncomplete-file.vim'
+# lazy        = 0
+# depends     = 'asyncomplete.vim'
+# hook_add    = '''
+# call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
+#     \ 'name': 'file',
+#     \ 'whitelist': ['*'],
+#     \ 'priority': 20,
+#     \ 'completor': function('asyncomplete#sources#file#completor')
+#     \ }))
+# '''
 
 [[plugins]]
 repo        = 'prabirshrestha/asyncomplete-buffer.vim'
@@ -540,7 +541,7 @@ call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options
 [[plugins]]
 repo        = 'prabirshrestha/vim-lsp'
 lazy        = 1
-depends     = ['async.vim', 'vim-lsp-settings']
+depends     = 'vim-lsp-settings'
 hook_add    = '''
 let g:lsp_async_completion = 1
 let g:lsp_signs_enabled = 1
@@ -549,10 +550,6 @@ let g:lsp_diagnostics_echo_cursor = 1
 nmap <silent> <C-]> <plug>(lsp-definition)
 nmap <silent> ;e    <plug>(lsp-rename)
 '''
-
-[[plugins]]
-repo        = 'prabirshrestha/async.vim'
-lazy        = 1
 
 [[plugins]]
 repo        = 'mattn/vim-lsp-settings'
