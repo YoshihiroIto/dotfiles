@@ -4,7 +4,6 @@ scriptencoding utf-8
 let g:YOI_dotvim_dir   = expand('~/.vim')
 let g:YOI_dropbox_dir  = expand('~/Dropbox')
 
-let s:has_vim_starting = has('vim_starting')
 let s:has_gui_running  = has('gui_running')
 let s:base_columns     = 140
 
@@ -20,13 +19,6 @@ augroup END
 command! -nargs=* Autocmd   autocmd MyAutoCmd <args>
 command! -nargs=* AutocmdFT autocmd MyAutoCmd FileType <args>
 
-" スタートアップ時間表示
-if s:has_vim_starting
-  let s:startuptime = reltime()
-  Autocmd VimEnter * let s:startuptime = reltime(s:startuptime)
-        \| echomsg 'startuptime:' reltimestr(s:startuptime)
-endif
-
 " ローカル設定
 let s:vimrc_local = expand('~/.vimrc.local')
 if filereadable(s:vimrc_local)
@@ -34,9 +26,7 @@ if filereadable(s:vimrc_local)
 endif
 " }}}
 " プラグイン {{{
-if s:has_vim_starting
-  execute 'set runtimepath^=' . s:plugin_dir . '/repos/github.com/Shougo/dein.vim/'
-endif
+execute 'set runtimepath^=' . s:plugin_dir . '/repos/github.com/Shougo/dein.vim/'
 
 if dein#load_state(s:plugin_dir)
   call dein#begin(s:plugin_dir)
@@ -198,23 +188,10 @@ set printfont=Ricty\ Regular\ for\ Powerline:h11
 
 set ambiwidth=double
 " }}}
-" 遅延初期化 {{{
-if s:has_vim_starting
-  let s:lazy_initialized = 0
-  autocmd VimEnter,FocusLost,CursorHold,CursorHoldI * call s:lazy_initialize()
-endif
+" 初期化 {{{
+autocmd VimEnter,FocusLost,CursorHold,CursorHoldI * call s:initialize()
 
-let s:lazy_initialize = 2*1
-function! s:lazy_initialize()
-  if s:lazy_initialized
-    return
-  endif
-
-  let s:lazy_initialize -= 1
-  if s:lazy_initialize > 0
-    return
-  endif
-
+function! s:initialize()
   " 実行ファイル位置を$PATHに最優先で含める
   let $PATH = $VIM . ';' . $PATH
 
