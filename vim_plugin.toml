@@ -670,7 +670,7 @@ hook_add    = '''
 let g:gitgutter_map_keys = 0
 let g:gitgutter_grep     = ''
 '''
-rev         = '92deed378d1e4c73f193e408c556a95195c1bc95'
+# rev         = '92deed378d1e4c73f193e408c556a95195c1bc95'
 
 # }}}
 # ファイルタイプ {{{
