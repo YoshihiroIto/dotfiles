@@ -7,11 +7,11 @@ let g:YOI_dropbox_dir  = expand('~/Dropbox')
 let s:has_gui_running  = has('gui_running')
 let s:base_columns     = 140
 
-let s:vim_plugin_toml  = expand('~/vim_plugin.toml')
-let s:plugin_dir       = expand('~/.cache/plugin')
-
 let g:mapleader        = ' '
 
+if !exists('g:vscode')
+  let g:python3_host_prog = 'C:/Users/yoi/AppData/Local/Programs/Python/Python310/python.exe'
+endif
 " 自動コマンド
 augroup MyAutoCmd
   autocmd!
@@ -26,13 +26,184 @@ if filereadable(s:vimrc_local)
 endif
 " }}}
 " プラグイン {{{
-execute 'set runtimepath^=' . s:plugin_dir . '/repos/github.com/Shougo/dein.vim/'
+call plug#begin('~/.vim_plugged')
 
-if dein#load_state(s:plugin_dir)
-  call dein#begin(s:plugin_dir)
-  call dein#load_toml(s:vim_plugin_toml)
-  call dein#end()
-  call dein#save_state()
+if !exists('g:vscode')
+  Plug 'vim-jp/vimdoc-ja'
+
+  Plug 'YoshihiroIto/molokai'
+  Plug 'YoshihiroIto/vim-icondrag'
+
+  Plug 'itchyny/vim-gitbranch'
+  Plug 'airblade/vim-gitgutter'
+  let g:gitgutter_map_keys = 0
+  let g:gitgutter_grep     = ''
+
+  Plug 'lambdalisue/vim-rplugin'
+  Plug 'lambdalisue/lista.nvim', {'on': 'Lista'}
+  nnoremap <silent> <leader>l   :<C-u>Lista<CR>
+    let g:lista#custom_mappings = [
+          \ ['<C-j>', '<Esc>'],
+          \ ['<C-p>', '<S-Tab>'],
+          \ ['<C-n>', '<Tab>'],
+          \]
+
+  Plug 'cocopon/vaffle.vim', {'on':  'Vaffle'}
+  let g:vaffle_show_hidden_files = 1
+  noremap <silent> <leader>f :<C-u>Vaffle<CR>
+
+  Plug 'itchyny/vim-autoft'
+  let g:autoft_config = [
+        \   {'filetype': 'cs',
+        \    'pattern': '^\s*using'},
+        \   {'filetype': 'cpp',
+        \    'pattern': '^\s*#\s*\%(include\|define\)\>'},
+        \   {'filetype': 'go',
+        \    'pattern': '^import ('},
+        \   {'filetype': 'html',
+        \    'pattern': '<\%(!DOCTYPE\|html\|head\|script\|meta\|link|div\|span\)\>\|^html:5\s*$'},
+        \   {'filetype': 'xml',
+        \    'pattern': '<[0-9a-zA-Z]\+'},
+        \ ]
+
+  " Plug 'beyondmarc/hlsl.vim', {'for': 'hlsl'}
+  " Plug 'posva/vim-vue', {'for': 'vue'}
+
+  Plug 'glidenote/memolist.vim', {'on': ['MemoNew', 'MemoList'] }
+  noremap <silent> <leader>n :<C-u>MemoNew<CR>
+  noremap <silent> <leader>k :execute "CtrlP" g:memolist_path<CR>
+  let g:memolist_memo_suffix  = 'md'
+  let g:memolist_path         = g:YOI_dropbox_dir . '/memo'
+
+  Plug 'mattn/vim-lsp-settings'
+  let g:lsp_settings_servers_dir = expand("~/lsp_server")
+
+  Plug 'prabirshrestha/vim-lsp'
+  let g:lsp_async_completion = 1
+  let g:lsp_signs_enabled = 1
+  let g:lsp_diagnostics_echo_cursor = 1
+  nmap <silent> <C-]> :<C-u>LspDefinition<CR>
+  nmap <silent> ;e    :<C-u>LspRename<CR>
+
+  Plug 'ctrlpvim/ctrlp.vim', {'on':  ['CtrlP', 'CtrlPMRUFiles']}
+  execute 'source' expand('~/.vim/ctrlp.settings.vim')
+
+  Plug 'itchyny/lightline.vim'
+  execute 'source' expand('~/.vim/lightline.settings.vim')
+
+  Plug 'kana/vim-submode'
+
+  Plug 'prabirshrestha/asyncomplete.vim'
+  Plug 'prabirshrestha/asyncomplete-lsp.vim'
+  Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
+  Plug 'prabirshrestha/asyncomplete-buffer.vim'
+
+  Plug 'SirVer/ultisnips'
+  let g:UltiSnipsSnippetDirectories  = [g:YOI_dotvim_dir . '/UltiSnips']
+  let g:UltiSnipsJumpForwardTrigger  = "<Tab>"
+  let g:UltiSnipsJumpBackwardTrigger = "<S-Tab>"
+  let g:UltiSnipsListSnippets        = "<S-Tab>"
+  let g:UltiSnipsExpandTrigger       = "<C-e>"
+endif
+
+Plug 'andymass/vim-matchup'
+let g:matchup_matchparen_status_offscreen = 0
+
+Plug 'haya14busa/vim-asterisk'
+
+Plug 'tomtom/tcomment_vim'
+Plug 'cohama/lexima.vim'
+
+Plug 'kana/vim-textobj-user'
+Plug 'kana/vim-operator-user'
+
+Plug 'glts/vim-textobj-comment'
+Plug 'kana/vim-textobj-indent'
+Plug 'kana/vim-textobj-entire'
+Plug 'kana/vim-textobj-line'
+Plug 'rhysd/vim-textobj-word-column'
+Plug 'whatyouhide/vim-textobj-xmlattr'
+
+Plug 'sgur/vim-textobj-parameter', {'on': ['<Plug>(textobj-parameter-a)', '<Plug>(textobj-parameter-i)']}
+xmap aa <Plug>(textobj-parameter-a)
+xmap ia <Plug>(textobj-parameter-i)
+omap aa <Plug>(textobj-parameter-a)
+omap ia <Plug>(textobj-parameter-i)
+
+Plug 'rhysd/textobj-wiw', {'on': ['<Plug>(textobj-wiw-a)', '<Plug>(textobj-wiw-i)']}
+xmap a. <Plug>(textobj-wiw-a)
+xmap i. <Plug>(textobj-wiw-i)
+omap a. <Plug>(textobj-wiw-a)
+omap i. <Plug>(textobj-wiw-i)
+
+Plug 'YoshihiroIto/vim-operator-tcomment', {'on': '<Plug>(operator-tcomment)'}
+nmap t  <Plug>(operator-tcomment)
+xmap t  <Plug>(operator-tcomment)
+
+Plug 'kana/vim-operator-replace', {'on': '<Plug>(operator-replace)'}
+map R  <Plug>(operator-replace)
+
+Plug 'rhysd/vim-operator-surround', {'on': ['<Plug>(operator-surround-append)', '<Plug>(operator-surround-delete)', '<Plug>(operator-surround-replace)']}
+map  S  <Plug>(operator-surround-append)
+nmap Sd <Plug>(operator-surround-delete)ab
+nmap Sr <Plug>(operator-surround-replace)ab
+let g:operator#surround#blocks = {
+      \   '-': [
+      \     {
+      \       'block':      ["{\<CR>", "\<CR>}"],
+      \       'motionwise': ['line'            ],
+      \       'keys':       ['{', '}'          ]
+      \     }
+      \   ]
+      \ }
+
+Plug 'junegunn/vim-easy-align'
+nmap <silent> <Leader>a=       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)=
+nmap <silent> <Leader>a:       v<Plug>(extobj-indent-i)<Plug>(EasyAlign):
+nmap <silent> <Leader>a,       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*,
+nmap <silent> <Leader>a<Space> v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*<Space>
+nmap <silent> <Leader>a\|      v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*\|
+xmap <silent> <Leader>a=       <Plug>(EasyAlign)=
+xmap <silent> <Leader>a:       <Plug>(EasyAlign):
+xmap <silent> <Leader>a,       <Plug>(EasyAlign)*,
+xmap <silent> <Leader>a<Space> <Plug>(EasyAlign)*<Space>
+xmap <silent> <Leader>a\|      <Plug>(EasyAlign)*\|
+
+Plug 'tyru/open-browser.vim', {'on': '<Plug>(openbrowser-smart-search)'}
+let g:openbrowser_no_default_menus = 1
+let g:netrw_nogx = 1
+nmap gx <Plug>(openbrowser-smart-search)
+vmap gx <Plug>(openbrowser-smart-search)
+
+Plug 'YoshihiroIto/vim-closetag', {'on': '<Plug>closetag'}
+let g:closetag_filenames = '*.{html,xhtml,xml,xaml}'
+
+Plug 'haya14busa/is.vim' , {'on': ['<Plug>(asterisk-z*)', '<Plug>(asterisk-gz*)', '<Plug>(asterisk-z#)', '<Plug>(asterisk-gz#)'] }
+map *  <Plug>(asterisk-z*)<Plug>(is-nohl-1)
+map g* <Plug>(asterisk-gz*)<Plug>(is-nohl-1)
+map #  <Plug>(asterisk-z#)<Plug>(is-nohl-1)
+map g# <Plug>(asterisk-gz#)<Plug>(is-nohl-1)
+
+call plug#end()
+
+if !exists('g:vscode')
+  execute 'source' expand('~/.vim/submode.settings.vim')
+
+  call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
+      \ 'name': 'ultisnips',
+      \ 'whitelist': ['*'],
+      \ 'priority': 10,
+      \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
+      \ }))
+  call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+      \ 'name': 'buffer',
+      \ 'whitelist': ['*'],
+      \ 'priority': 30,
+      \ 'completor': function('asyncomplete#sources#buffer#completor'),
+      \ 'config': {
+      \    'max_buffer_size': 5000000,
+      \  },
+      \ }))
 endif
 
 filetype plugin indent on
@@ -61,25 +232,17 @@ AutocmdFT vim        setlocal tabstop=2
 AutocmdFT vim        setlocal shiftwidth=2
 AutocmdFT vim        setlocal softtabstop=2
 
-AutocmdFT toml       setlocal foldmethod=marker
-AutocmdFT toml       setlocal foldlevel=0
-AutocmdFT toml       setlocal foldcolumn=5
-
 AutocmdFT xml,html   setlocal foldlevel=99
 AutocmdFT xml,html   setlocal foldcolumn=5
 AutocmdFT xml,html   setlocal foldmethod=syntax
 AutocmdFT xml,html   inoremap <silent><buffer> >  ><Esc>:call closetag#CloseTagFun()<CR>
-
-AutocmdFT cs         nmap <silent><buffer> <C-]> <Plug>(omnisharp_go_to_definition)
-AutocmdFT cs         nmap <silent><buffer> ;e    <Plug>(omnisharp_rename)
 
 AutocmdFT json       setlocal foldmethod=syntax
 AutocmdFT json       setlocal shiftwidth=2
 AutocmdFT json       noremap  <silent><buffer><expr> <leader>p jsonpath#echo()
 AutocmdFT json       command! Format %!jq
 
-AutocmdFT help       nnoremap <silent><buffer> q         :<C-u>close<CR>
-AutocmdFT markdown   nnoremap <silent><buffer> <leader>v :<C-u>PrevimOpen<CR>
+AutocmdFT help       nnoremap <silent><buffer> q  :<C-u>close<CR>
 
 function! s:update_all()
   setlocal formatoptions-=r
@@ -91,102 +254,102 @@ function! s:update_all()
 endfunction
 " }}}
 " 表示 {{{
-syntax enable               " 構文ごとに色分けをする
+if !exists('g:vscode')
+  syntax enable               " 構文ごとに色分けをする
 
-" メニューを読み込まない
-let g:did_install_default_menus = 1
-let g:did_menu_trans            = 1
-set guioptions+=M
+  " メニューを読み込まない
+  let g:did_install_default_menus = 1
+  let g:did_menu_trans            = 1
+  set guioptions+=M
 
-" ツールバー削除
-set guioptions-=T
+  " ツールバー削除
+  set guioptions-=T
 
-" メニューバー削除
-set guioptions-=m
+  " メニューバー削除
+  set guioptions-=m
 
-" スクロールバー削除
-set guioptions-=r
-set guioptions-=l
-set guioptions-=R
-set guioptions-=L
+  " スクロールバー削除
+  set guioptions-=r
+  set guioptions-=l
+  set guioptions-=R
+  set guioptions-=L
 
-" テキストベースタブ
-set guioptions-=e
+  " テキストベースタブ
+  set guioptions-=e
 
-set number
-set textwidth=0             " 一行に長い文章を書いていても自動折り返しをしない
-set noshowcmd
-set noshowmatch             " 括弧の対応をハイライト
-set wrap
-set noshowmode
-set shortmess+=I            " 起動時のメッセージを表示しない
-set shortmess-=S
-set shortmess+=s
-set lazyredraw
-set wildmenu
-set wildmode=list:full
-set showfulltag
-set wildoptions=tagfile
-set fillchars=vert:\        " 縦分割の境界線
-set synmaxcol=2000          " ハイライトする文字数を制限する
-set updatetime=250
-set previewheight=24
-set cmdheight=4
-set laststatus=2
-set showtabline=2
-set noequalalways
-set cursorline
-set display=lastline
-" set conceallevel=2
-set concealcursor=i
-set signcolumn=yes
-set list
-set listchars=tab:\»\ ,eol:↲,extends:»,precedes:«,nbsp:%
-set breakindent
-set foldcolumn=0
-set foldlevel=99
+  set number
+  set textwidth=0             " 一行に長い文章を書いていても自動折り返しをしない
+  set noshowcmd
+  set noshowmatch             " 括弧の対応をハイライト
+  set wrap
+  set noshowmode
+  set shortmess+=I            " 起動時のメッセージを表示しない
+  set shortmess-=S
+  set shortmess+=s
+  set lazyredraw
+  set wildmenu
+  set wildmode=list:full
+  set showfulltag
+  set wildoptions=tagfile
+  set fillchars=vert:\        " 縦分割の境界線
+  set synmaxcol=2000          " ハイライトする文字数を制限する
+  set updatetime=250
+  set previewheight=24
+  set cmdheight=4
+  set laststatus=2
+  set showtabline=2
+  set noequalalways
+  set cursorline
+  set display=lastline
+  " set conceallevel=2
+  set concealcursor=i
+  set signcolumn=yes
+  set list
+  set listchars=tab:\»\ ,eol:↲,extends:»,precedes:«,nbsp:%
+  set breakindent
+  set foldcolumn=0
+  set foldlevel=99
 
-let g:vimsyn_folding     = 'af'
-let g:xml_syntax_folding = 1
+  let g:vimsyn_folding     = 'af'
+  let g:xml_syntax_folding = 1
 
-if s:has_gui_running
-  set lines=100
-  let &columns = s:base_columns
-endif
-
-Autocmd VimEnter * set t_vb=
-Autocmd VimEnter * set visualbell
-Autocmd VimEnter * set errorbells
-Autocmd VimEnter * filetype detect
-" }}}
-" カラースキーマ {{{
-colorscheme molokai
-
-Autocmd BufWinEnter,ColorScheme * call s:set_color()
-
-function! s:set_color()
-  " ^M を非表示
-  syntax match HideCtrlM containedin=ALL /\r$/ conceal
-
-  " 日本語入力時カーソル色を変更する
-  highlight CursorIM guifg=NONE guibg=Red
-
-  if !&readonly
-    " 全角スペースとタブ文字の可視化
-    syntax match InvisibleJISX0208Space '　' display containedin=ALL
-    highlight InvisibleJISX0208Space guibg=#112233
+  if s:has_gui_running
+    set lines=100
+    let &columns = s:base_columns
   endif
-endfunction
-" }}}
-" フォント {{{
-if s:has_gui_running
-  set guifont=Ricty\ Regular\ for\ Powerline:h11
-  set renderoptions=type:directx
+
+  Autocmd VimEnter * set t_vb=
+  Autocmd VimEnter * set visualbell
+  Autocmd VimEnter * set errorbells
+  Autocmd VimEnter * filetype detect
+
+  colorscheme molokai
+
+  Autocmd BufWinEnter,ColorScheme * call s:set_color()
+
+  function! s:set_color()
+    " ^M を非表示
+    syntax match HideCtrlM containedin=ALL /\r$/ conceal
+
+    " 日本語入力時カーソル色を変更する
+    highlight CursorIM guifg=NONE guibg=Red
+
+    if !&readonly
+        " 全角スペースとタブ文字の可視化
+        syntax match InvisibleJISX0208Space '　' display containedin=ALL
+        highlight InvisibleJISX0208Space guibg=#112233
+    endif
+  endfunction
+
+  if s:has_gui_running
+    set guifont=Ricty\ Regular\ for\ Powerline:h11
+    set renderoptions=type:directx
+  endif
+
+  set printfont=Ricty\ Regular\ for\ Powerline:h11
+
+  set ambiwidth=double
 endif
-
-set printfont=Ricty\ Regular\ for\ Powerline:h11
-
-set ambiwidth=double
 " }}}
 " 初期化 {{{
 autocmd VimEnter,FocusLost,CursorHold,CursorHoldI * call s:initialize()
@@ -198,24 +361,9 @@ function! s:initialize()
   Autocmd BufWinEnter,ColorScheme .vimrc highlight def link myVimAutocmd vimAutoCmd
   Autocmd BufWinEnter,ColorScheme .vimrc syntax match vimAutoCmd /\<\(Autocmd\|AutocmdFT\)\>/
 
-  call gitgutter#enable()
-
-  call dein#source([
-        \ 'vimdoc-ja',
-        \ 'vim-icondrag',
-        \ 'vim-autoft',
-        \ 'vim-auto-mirroring',
-        \ 'vim-matchup',
-        \ 'vim-auto-cursorline',
-        \ 'ctrlp.vim',
-        \ 'vim-textobj-comment',
-        \ 'textobj-wiw',
-        \ 'vim-textobj-entire',
-        \ 'vim-textobj-indent',
-        \ 'vim-textobj-line',
-        \ 'vim-textobj-word-column',
-        \ 'vim-textobj-parameter',
-        \ 'vim-textobj-xmlattr'])
+  if !exists('g:vscode')
+    call gitgutter#enable()
+  endif
 
   " .vimrc {{{
   function! s:edit_vimrc()
@@ -227,18 +375,7 @@ function! s:initialize()
     endif
   endfunction
 
-  function! s:edit_vim_plugin_toml()
-    let dropbox_vim_plugin_toml = g:YOI_dropbox_dir . '/dotfiles/vim_plugin.toml'
-    if filereadable(dropbox_vim_plugin_toml)
-      execute 'edit' dropbox_vim_plugin_toml
-    else
-      execute 'edit' s:vim_plugin_toml
-    endif
-  endfunction
-
   nnoremap <silent> <F1> :<C-u>call <SID>edit_vimrc()<CR>
-  nnoremap <silent> <F2> :<C-u>call <SID>edit_vim_plugin_toml()<CR>
-  nnoremap          <F3> :<C-u>call dein#clear_state()<CR>:call dein#update()<CR>
   " }}}
   " 検索 {{{
   set incsearch
@@ -291,6 +428,11 @@ function! s:initialize()
   set diffopt=internal,filler,algorithm:histogram,indent-heuristic
   set splitbelow              " 縦分割したら新しいウィンドウは下に
   set splitright              " 横分割したら新しいウィンドウは右に
+
+  if exists('g:vscode')
+    nnoremap <silent> u :<C-u>call VSCodeNotify('undo')<CR>
+    nnoremap <silent> <C-r> :<C-u>call VSCodeNotify('redo')<CR>
+  endif
 
   " タブ・インデント
   set autoindent
@@ -362,41 +504,43 @@ function! s:initialize()
     normal! P
   endfunction
   " }}}
-  " カーソル下の単語を移動するたびにハイライトする {{{
-  " http://d.hatena.ne.jp/osyo-manga/20140121/1390309901
-  Autocmd CursorHold                                * call s:hl_cword()
-  Autocmd CursorMoved,BufLeave,WinLeave,InsertEnter * call s:hl_clear()
-  Autocmd ColorScheme                               * highlight CursorWord guifg=Red
+  if !exists('g:vscode')
+    " カーソル下の単語を移動するたびにハイライトする {{{
+    " http://d.hatena.ne.jp/osyo-manga/20140121/1390309901
+    Autocmd CursorHold                                * call s:hl_cword()
+    Autocmd CursorMoved,BufLeave,WinLeave,InsertEnter * call s:hl_clear()
+    Autocmd ColorScheme                               * highlight CursorWord guifg=Red
 
-  highlight CursorWord guifg=Red
+    highlight CursorWord guifg=Red
 
-  function! s:hl_clear()
-    if exists('b:highlight_cursor_word_id') && exists('b:highlight_cursor_word')
-      silent! call matchdelete(b:highlight_cursor_word_id)
-      unlet b:highlight_cursor_word_id
-      unlet b:highlight_cursor_word
-    endif
-  endfunction
+    function! s:hl_clear()
+      if exists('b:highlight_cursor_word_id') && exists('b:highlight_cursor_word')
+        silent! call matchdelete(b:highlight_cursor_word_id)
+        unlet b:highlight_cursor_word_id
+        unlet b:highlight_cursor_word
+      endif
+    endfunction
 
-  function! s:hl_cword()
-    let word = expand('<cword>')
-    if empty(word)
-      return
-    endif
-    if get(b:, 'highlight_cursor_word', '') ==# word
-      return
-    endif
+    function! s:hl_cword()
+      let word = expand('<cword>')
+      if empty(word)
+        return
+      endif
+      if get(b:, 'highlight_cursor_word', '') ==# word
+        return
+      endif
 
-    call s:hl_clear()
+      call s:hl_clear()
 
-    if !empty(filter(split(word, '\zs'), 'strlen(v:val) > 1'))
-      return
-    endif
+      if !empty(filter(split(word, '\zs'), 'strlen(v:val) > 1'))
+        return
+      endif
 
-    let pattern = printf('\<%s\>', expand('<cword>'))
-    silent! let b:highlight_cursor_word_id = matchadd('CursorWord', pattern)
-    let b:highlight_cursor_word = word
-  endfunction
+      let pattern = printf('\<%s\>', expand('<cword>'))
+      silent! let b:highlight_cursor_word_id = matchadd('CursorWord', pattern)
+      let b:highlight_cursor_word = word
+    endfunction
+  endif
   " }}}
   " モード移行 {{{
   inoremap <C-j> <Esc>
@@ -433,12 +577,16 @@ function! s:initialize()
   nnoremap <expr> zl foldclosed(line('.')) != -1 ? 'zo' : '<C-l>'
   " }}}
   " ターミナル {{{
-  command! Terminal terminal ++curwin
-  tnoremap <Esc> <C-w>N
-  tnoremap <C-j> <C-w>N
+  if !exists('g:vscode')
+    command! Terminal terminal ++curwin
+    tnoremap <Esc> <C-w>N
+    tnoremap <C-j> <C-w>N
+  endif
   "}}}
   " アプリウィンドウ操作 {{{
-  if s:has_gui_running
+  if s:has_gui_running && !exists('g:vscode')
+    call icondrag#enable()
+
     noremap <silent> <leader>we :<C-u>call <SID>toggle_v_split_wide()<CR>
     noremap <silent> <leader>wf :<C-u>call <SID>full_window()<CR>
 
@@ -494,8 +642,6 @@ function! s:initialize()
     " }}}
   endif
   " }}}
-
-  let s:lazy_initialized = 1
 endfunction
 " }}}
 " vim: tabstop=2 shiftwidth=2 softtabstop=2 expandtab
