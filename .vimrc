@@ -6,10 +6,11 @@ let g:YOI_dropbox_dir  = expand('~/Dropbox')
 
 let s:has_gui_running  = has('gui_running')
 let s:base_columns     = 140
+let s:is_vscode        = exists('g:vscode')
 
 let g:mapleader        = ' '
 
-if !exists('g:vscode')
+if !s:is_vscode
   let g:python3_host_prog = 'C:/Users/yoi/AppData/Local/Programs/Python/Python310/python.exe'
 endif
 " 自動コマンド
@@ -28,7 +29,7 @@ endif
 " プラグイン {{{
 call plug#begin('~/.vim_plugged')
 
-if !exists('g:vscode')
+if !s:is_vscode
   Plug 'vim-jp/vimdoc-ja'
 
   Plug 'YoshihiroIto/molokai'
@@ -178,7 +179,7 @@ vmap gx <Plug>(openbrowser-smart-search)
 Plug 'YoshihiroIto/vim-closetag', {'on': '<Plug>closetag'}
 let g:closetag_filenames = '*.{html,xhtml,xml,xaml}'
 
-Plug 'haya14busa/is.vim' , {'on': ['<Plug>(asterisk-z*)', '<Plug>(asterisk-gz*)', '<Plug>(asterisk-z#)', '<Plug>(asterisk-gz#)'] }
+Plug 'haya14busa/is.vim'
 map *  <Plug>(asterisk-z*)<Plug>(is-nohl-1)
 map g* <Plug>(asterisk-gz*)<Plug>(is-nohl-1)
 map #  <Plug>(asterisk-z#)<Plug>(is-nohl-1)
@@ -186,7 +187,7 @@ map g# <Plug>(asterisk-gz#)<Plug>(is-nohl-1)
 
 call plug#end()
 
-if !exists('g:vscode')
+if !s:is_vscode
   execute 'source' expand('~/.vim/submode.settings.vim')
 
   call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
@@ -254,7 +255,7 @@ function! s:update_all()
 endfunction
 " }}}
 " 表示 {{{
-if !exists('g:vscode')
+if !s:is_vscode
   syntax enable               " 構文ごとに色分けをする
 
   " メニューを読み込まない
@@ -361,7 +362,7 @@ function! s:initialize()
   Autocmd BufWinEnter,ColorScheme .vimrc highlight def link myVimAutocmd vimAutoCmd
   Autocmd BufWinEnter,ColorScheme .vimrc syntax match vimAutoCmd /\<\(Autocmd\|AutocmdFT\)\>/
 
-  if !exists('g:vscode')
+  if !s:is_vscode
     call gitgutter#enable()
   endif
 
@@ -429,7 +430,7 @@ function! s:initialize()
   set splitbelow              " 縦分割したら新しいウィンドウは下に
   set splitright              " 横分割したら新しいウィンドウは右に
 
-  if exists('g:vscode')
+  if s:is_vscode
     nnoremap <silent> u :<C-u>call VSCodeNotify('undo')<CR>
     nnoremap <silent> <C-r> :<C-u>call VSCodeNotify('redo')<CR>
   endif
@@ -504,7 +505,7 @@ function! s:initialize()
     normal! P
   endfunction
   " }}}
-  if !exists('g:vscode')
+  if !s:is_vscode
     " カーソル下の単語を移動するたびにハイライトする {{{
     " http://d.hatena.ne.jp/osyo-manga/20140121/1390309901
     Autocmd CursorHold                                * call s:hl_cword()
@@ -577,14 +578,14 @@ function! s:initialize()
   nnoremap <expr> zl foldclosed(line('.')) != -1 ? 'zo' : '<C-l>'
   " }}}
   " ターミナル {{{
-  if !exists('g:vscode')
+  if !s:is_vscode
     command! Terminal terminal ++curwin
     tnoremap <Esc> <C-w>N
     tnoremap <C-j> <C-w>N
   endif
   "}}}
   " アプリウィンドウ操作 {{{
-  if s:has_gui_running && !exists('g:vscode')
+  if s:has_gui_running && !s:is_vscode
     call icondrag#enable()
 
     noremap <silent> <leader>we :<C-u>call <SID>toggle_v_split_wide()<CR>
