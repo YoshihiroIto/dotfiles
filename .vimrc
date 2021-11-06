@@ -30,17 +30,17 @@ endif
 call plug#begin('~/.vim_plugged')
 
 if !s:is_vscode
-  Plug 'vim-jp/vimdoc-ja'
+  Plug 'vim-jp/vimdoc-ja', { 'on': [] }
 
   Plug 'YoshihiroIto/molokai'
-  Plug 'YoshihiroIto/vim-icondrag'
+  Plug 'YoshihiroIto/vim-icondrag', { 'on': [] }
 
-  Plug 'itchyny/vim-gitbranch'
-  Plug 'airblade/vim-gitgutter'
+  Plug 'itchyny/vim-gitbranch', { 'on': [] }
+  Plug 'airblade/vim-gitgutter', { 'on': [] }
   let g:gitgutter_map_keys = 0
   let g:gitgutter_grep     = ''
 
-  Plug 'lambdalisue/vim-rplugin'
+  Plug 'lambdalisue/vim-rplugin', { 'on': [] }
   Plug 'lambdalisue/lista.nvim', {'on': 'Lista'}
   nnoremap <silent> <leader>l   :<C-u>Lista<CR>
     let g:lista#custom_mappings = [
@@ -49,7 +49,7 @@ if !s:is_vscode
           \ ['<C-n>', '<Tab>'],
           \]
 
-  Plug 'cocopon/vaffle.vim', {'on':  'Vaffle'}
+  Plug 'cocopon/vaffle.vim', {'on': 'Vaffle'}
   let g:vaffle_show_hidden_files = 1
   noremap <silent> <leader>f :<C-u>Vaffle<CR>
 
@@ -87,19 +87,18 @@ if !s:is_vscode
   nmap <silent> ;e    :<C-u>LspRename<CR>
 
   Plug 'ctrlpvim/ctrlp.vim', {'on':  ['CtrlP', 'CtrlPMRUFiles']}
-  execute 'source' expand('~/.vim/ctrlp.settings.vim')
 
   Plug 'itchyny/lightline.vim'
   execute 'source' expand('~/.vim/lightline.settings.vim')
 
-  Plug 'kana/vim-submode'
+  Plug 'kana/vim-submode', { 'on': [] }
 
-  Plug 'prabirshrestha/asyncomplete.vim'
-  Plug 'prabirshrestha/asyncomplete-lsp.vim'
-  Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
-  Plug 'prabirshrestha/asyncomplete-buffer.vim'
+  Plug 'prabirshrestha/asyncomplete.vim', { 'on': [] }
+  Plug 'prabirshrestha/asyncomplete-lsp.vim', { 'on': [] }
+  Plug 'prabirshrestha/asyncomplete-ultisnips.vim', { 'on': [] }
+  Plug 'prabirshrestha/asyncomplete-buffer.vim', { 'on': [] }
 
-  Plug 'SirVer/ultisnips'
+  Plug 'SirVer/ultisnips', { 'on': [] }
   let g:UltiSnipsSnippetDirectories  = [g:YOI_dotvim_dir . '/UltiSnips']
   let g:UltiSnipsJumpForwardTrigger  = "<Tab>"
   let g:UltiSnipsJumpBackwardTrigger = "<S-Tab>"
@@ -107,23 +106,23 @@ if !s:is_vscode
   let g:UltiSnipsExpandTrigger       = "<C-e>"
 endif
 
-Plug 'andymass/vim-matchup'
+Plug 'andymass/vim-matchup', { 'on': [] }
 let g:matchup_matchparen_status_offscreen = 0
 
-Plug 'haya14busa/vim-asterisk'
+Plug 'haya14busa/vim-asterisk', { 'on': [] }
 
-Plug 'tomtom/tcomment_vim'
-Plug 'cohama/lexima.vim'
+Plug 'tomtom/tcomment_vim', { 'on': [] }
+Plug 'cohama/lexima.vim', { 'on': [] }
 
-Plug 'kana/vim-textobj-user'
-Plug 'kana/vim-operator-user'
+Plug 'kana/vim-textobj-user', { 'on': [] }
+Plug 'kana/vim-operator-user', { 'on': [] }
 
-Plug 'glts/vim-textobj-comment'
-Plug 'kana/vim-textobj-indent'
-Plug 'kana/vim-textobj-entire'
-Plug 'kana/vim-textobj-line'
-Plug 'rhysd/vim-textobj-word-column'
-Plug 'whatyouhide/vim-textobj-xmlattr'
+Plug 'glts/vim-textobj-comment', { 'on': [] }
+Plug 'kana/vim-textobj-indent', { 'on': [] }
+Plug 'kana/vim-textobj-entire', { 'on': [] }
+Plug 'kana/vim-textobj-line', { 'on': [] }
+Plug 'rhysd/vim-textobj-word-column', { 'on': [] }
+Plug 'whatyouhide/vim-textobj-xmlattr', { 'on': [] }
 
 Plug 'sgur/vim-textobj-parameter', {'on': ['<Plug>(textobj-parameter-a)', '<Plug>(textobj-parameter-i)']}
 xmap aa <Plug>(textobj-parameter-a)
@@ -131,7 +130,7 @@ xmap ia <Plug>(textobj-parameter-i)
 omap aa <Plug>(textobj-parameter-a)
 omap ia <Plug>(textobj-parameter-i)
 
-Plug 'rhysd/textobj-wiw', {'on': ['<Plug>(textobj-wiw-a)', '<Plug>(textobj-wiw-i)']}
+Plug 'rhysd/vim-textobj-wiw', {'on': ['<Plug>(textobj-wiw-a)', '<Plug>(textobj-wiw-i)']}
 xmap a. <Plug>(textobj-wiw-a)
 xmap i. <Plug>(textobj-wiw-i)
 omap a. <Plug>(textobj-wiw-a)
@@ -158,7 +157,7 @@ let g:operator#surround#blocks = {
       \   ]
       \ }
 
-Plug 'junegunn/vim-easy-align'
+Plug 'junegunn/vim-easy-align', { 'on': [] }
 nmap <silent> <Leader>a=       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)=
 nmap <silent> <Leader>a:       v<Plug>(extobj-indent-i)<Plug>(EasyAlign):
 nmap <silent> <Leader>a,       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*,
@@ -179,7 +178,7 @@ vmap gx <Plug>(openbrowser-smart-search)
 Plug 'YoshihiroIto/vim-closetag', {'on': '<Plug>closetag'}
 let g:closetag_filenames = '*.{html,xhtml,xml,xaml}'
 
-Plug 'haya14busa/is.vim'
+Plug 'haya14busa/is.vim', { 'on': [] }
 map *  <Plug>(asterisk-z*)<Plug>(is-nohl-1)
 map g* <Plug>(asterisk-gz*)<Plug>(is-nohl-1)
 map #  <Plug>(asterisk-z#)<Plug>(is-nohl-1)
@@ -187,25 +186,68 @@ map g# <Plug>(asterisk-gz#)<Plug>(is-nohl-1)
 
 call plug#end()
 
-if !s:is_vscode
-  execute 'source' expand('~/.vim/submode.settings.vim')
+" Load Event
+function! s:load_plug(timer)
+    if !s:is_vscode
+        call plug#load(
+                    \ 'vimdoc-ja',
+                    \ 'vim-icondrag',
+                    \ 'vim-submode',
+                    \ 'vim-gitbranch',
+                    \ 'vim-gitgutter',
+                    \ 'vim-rplugin',
+                    \ 'vim-lsp-settings',
+                    \ 'vim-lsp',
+                    \ 'asyncomplete.vim',
+                    \ 'asyncomplete-lsp.vim',
+                    \ 'asyncomplete-ultisnips.vim',
+                    \ 'asyncomplete-buffer.vim',
+                    \ 'ultisnips',
+                    \ )
 
-  call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
-      \ 'name': 'ultisnips',
-      \ 'whitelist': ['*'],
-      \ 'priority': 10,
-      \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
-      \ }))
-  call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
-      \ 'name': 'buffer',
-      \ 'whitelist': ['*'],
-      \ 'priority': 30,
-      \ 'completor': function('asyncomplete#sources#buffer#completor'),
-      \ 'config': {
-      \    'max_buffer_size': 5000000,
-      \  },
-      \ }))
-endif
+        execute 'source' expand('~/.vim/ctrlp.settings.vim')
+        execute 'source' expand('~/.vim/submode.settings.vim')
+
+        call icondrag#enable()
+        call gitgutter#enable()
+
+        call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
+                    \ 'name': 'ultisnips',
+                    \ 'whitelist': ['*'],
+                    \ 'priority': 10,
+                    \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
+                    \ }))
+        call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+                    \ 'name': 'buffer',
+                    \ 'whitelist': ['*'],
+                    \ 'priority': 30,
+                    \ 'completor': function('asyncomplete#sources#buffer#completor'),
+                    \ 'config': {
+                        \    'max_buffer_size': 5000000,
+                        \  },
+                        \ }))
+    endif
+
+    call plug#load(
+                \ 'vim-matchup',
+                \ 'vim-asterisk',
+                \ 'tcomment_vim',
+                \ 'lexima.vim',
+                \ 'is.vim',
+                \ 'vim-easy-align',
+                \ 'vim-textobj-user',
+                \ 'vim-operator-user',
+                \ 'vim-textobj-comment',
+                \ 'vim-textobj-indent',
+                \ 'vim-textobj-entire',
+                \ 'vim-textobj-line',
+                \ 'vim-textobj-word-column',
+                \ 'vim-textobj-xmlattr',
+                \ )
+endfunction
+
+" 500ミリ秒後にプラグインを読み込む
+call timer_start(500, function("s:load_plug"))
 
 filetype plugin indent on
 " }}}
@@ -362,10 +404,6 @@ function! s:initialize()
   Autocmd BufWinEnter,ColorScheme .vimrc highlight def link myVimAutocmd vimAutoCmd
   Autocmd BufWinEnter,ColorScheme .vimrc syntax match vimAutoCmd /\<\(Autocmd\|AutocmdFT\)\>/
 
-  if !s:is_vscode
-    call gitgutter#enable()
-  endif
-
   " .vimrc {{{
   function! s:edit_vimrc()
     let dropbox_vimrc = g:YOI_dropbox_dir . '/dotfiles/.vimrc'
@@ -504,7 +542,7 @@ function! s:initialize()
     " ヤンクした物をペーストする
     normal! P
   endfunction
-  " }}}
+
   if !s:is_vscode
     " カーソル下の単語を移動するたびにハイライトする {{{
     " http://d.hatena.ne.jp/osyo-manga/20140121/1390309901
@@ -542,7 +580,6 @@ function! s:initialize()
       let b:highlight_cursor_word = word
     endfunction
   endif
-  " }}}
   " モード移行 {{{
   inoremap <C-j> <Esc>
   nnoremap <C-j> <Esc>
@@ -586,8 +623,6 @@ function! s:initialize()
   "}}}
   " アプリウィンドウ操作 {{{
   if s:has_gui_running && !s:is_vscode
-    call icondrag#enable()
-
     noremap <silent> <leader>we :<C-u>call <SID>toggle_v_split_wide()<CR>
     noremap <silent> <leader>wf :<C-u>call <SID>full_window()<CR>
 
