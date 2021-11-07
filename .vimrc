@@ -168,28 +168,6 @@ xmap <silent> <Leader>a,       <Plug>(EasyAlign)*,
 xmap <silent> <Leader>a<Space> <Plug>(EasyAlign)*<Space>
 xmap <silent> <Leader>a\|      <Plug>(EasyAlign)*\|
 
-" function! Cond(Cond, ...)
-"   let opts = get(a:000, 0, {})
-"   return a:Cond ? opts : extend(opts, { 'on': [], 'for': [] })
-" endfunction
-" Plug 'easymotion/vim-easymotion', Cond(!exists('g:vscode'))
-" Plug 'asvetliakov/vim-easymotion', Cond(!exists('g:vscode'), { 'as': 'vsc-easymotion' })
-
-if !s:is_vscode
-  Plug 'easymotion/vim-easymotion'
-else
-  Plug 'asvetliakov/vim-easymotion'
-endif
-
-let g:EasyMotion_do_mapping       = 0
-let g:EasyMotion_smartcase        = 1
-let g:EasyMotion_use_smartsign_jp = 1
-let g:EasyMotion_keys             = 'asdghklqwertyuiopzxcvbnmfj'
-Autocmd ColorScheme * highlight EasyMotionTarget guifg=Lime ctermfg=LightGreen
-
-map  s <Plug>(easymotion-s2)
-nmap s <Plug>(easymotion-s2)
-
 Plug 'tyru/open-browser.vim', {'on': '<Plug>(openbrowser-smart-search)'}
 let g:openbrowser_no_default_menus = 1
 let g:netrw_nogx = 1
