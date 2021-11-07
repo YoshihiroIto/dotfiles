@@ -570,7 +570,7 @@ function! s:initialize()
     Autocmd CursorMoved,BufLeave,WinLeave,InsertEnter * call s:hl_clear()
     Autocmd ColorScheme                               * highlight CursorWord guifg=Red
 
-    highlight CursorWord guifg=Red
+    highlight CursorWord guifg=Red ctermfg=Red
 
     function! s:hl_clear()
       if exists('b:highlight_cursor_word_id') && exists('b:highlight_cursor_word')
