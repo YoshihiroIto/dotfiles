@@ -80,8 +80,7 @@ if !s:is_vscode
   let g:lsp_settings_servers_dir = expand("~/lsp_server")
 
   Plug 'prabirshrestha/vim-lsp'
-  " let g:lsp_async_completion = 1
-  let g:lsp_signs_enabled = 1
+  let g:lsp_diagnostics_enabled = 1
   let g:lsp_diagnostics_echo_cursor = 1
   nmap <silent> <C-]> :<C-u>LspDefinition<CR>
   nmap <silent> ;e    :<C-u>LspRename<CR>
@@ -97,12 +96,6 @@ if !s:is_vscode
   Plug 'prabirshrestha/asyncomplete-lsp.vim', { 'on': [] }
   Plug 'prabirshrestha/asyncomplete-ultisnips.vim', { 'on': [] }
   Plug 'prabirshrestha/asyncomplete-buffer.vim', { 'on': [] }
-
-
-  let g:lsp_diagnostics_enabled = 1
-  let g:lsp_diagnostics_echo_cursor = 1
-  " let g:asyncomplete_auto_completeopt = 0
-  " let g:asyncomplete_popup_delay = 200
 
   Plug 'SirVer/ultisnips', { 'on': [] }
   let g:UltiSnipsSnippetDirectories  = [g:YOI_dotvim_dir . '/UltiSnips']
@@ -482,7 +475,6 @@ function! s:initialize()
   set timeoutlen=2000
   set nrformats-=octal
   set nrformats+=alpha
-  set completeopt=longest,menuone
   set backspace=indent,eol,start
   set noswapfile
   set nobackup
