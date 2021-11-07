@@ -80,7 +80,7 @@ if !s:is_vscode
   let g:lsp_settings_servers_dir = expand("~/lsp_server")
 
   Plug 'prabirshrestha/vim-lsp'
-  let g:lsp_async_completion = 1
+  " let g:lsp_async_completion = 1
   let g:lsp_signs_enabled = 1
   let g:lsp_diagnostics_echo_cursor = 1
   nmap <silent> <C-]> :<C-u>LspDefinition<CR>
@@ -97,6 +97,12 @@ if !s:is_vscode
   Plug 'prabirshrestha/asyncomplete-lsp.vim', { 'on': [] }
   Plug 'prabirshrestha/asyncomplete-ultisnips.vim', { 'on': [] }
   Plug 'prabirshrestha/asyncomplete-buffer.vim', { 'on': [] }
+
+
+  let g:lsp_diagnostics_enabled = 1
+  let g:lsp_diagnostics_echo_cursor = 1
+  " let g:asyncomplete_auto_completeopt = 0
+  " let g:asyncomplete_popup_delay = 200
 
   Plug 'SirVer/ultisnips', { 'on': [] }
   let g:UltiSnipsSnippetDirectories  = [g:YOI_dotvim_dir . '/UltiSnips']
@@ -168,6 +174,25 @@ xmap <silent> <Leader>a:       <Plug>(EasyAlign):
 xmap <silent> <Leader>a,       <Plug>(EasyAlign)*,
 xmap <silent> <Leader>a<Space> <Plug>(EasyAlign)*<Space>
 xmap <silent> <Leader>a\|      <Plug>(EasyAlign)*\|
+
+" function! Cond(Cond, ...)
+"   let opts = get(a:000, 0, {})
+"   return a:Cond ? opts : extend(opts, { 'on': [], 'for': [] })
+" endfunction
+" Plug 'easymotion/vim-easymotion', Cond(!exists('g:vscode'))
+" Plug 'asvetliakov/vim-easymotion', Cond(!exists('g:vscode'), { 'as': 'vsc-easymotion' })
+
+if !s:is_vscode
+  Plug 'easymotion/vim-easymotion'
+else
+  Plug 'asvetliakov/vim-easymotion'
+endif
+
+let g:EasyMotion_do_mapping = 0
+let g:EasyMotion_smartcase  = 1
+let g:EasyMotion_keys       = 'asdghklqwertyuiopzxcvbnmfj'
+map  s <Plug>(easymotion-s2)
+nmap s <Plug>(easymotion-s2)
 
 Plug 'tyru/open-browser.vim', {'on': '<Plug>(openbrowser-smart-search)'}
 let g:openbrowser_no_default_menus = 1
