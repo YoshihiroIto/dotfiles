@@ -44,6 +44,7 @@ let g:ctrlp_status_func = {
   \ 'main': 'Function_Name_1',
   \ 'prog': 'Function_Name_2',
   \ }
+
 function! Function_Name_1(focus, byfname, regex, prev, item, next, marked)
   let g:lightline.ctrlp_prev = a:prev
   let g:lightline.ctrlp_item = a:item
@@ -51,6 +52,7 @@ function! Function_Name_1(focus, byfname, regex, prev, item, next, marked)
   let g:lightline.ctrlp_marked = a:marked
   return lightline#statusline(0)
 endfunction
+
 function! Function_Name_2(str)
   return lightline#statusline(0)
 endfunction
