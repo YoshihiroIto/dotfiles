@@ -58,6 +58,7 @@ function! s:edit_vimrc()
 endfunction
 
 nnoremap <silent> <F1> :<C-u>call <SID>edit_vimrc()<CR>
+nnoremap <silent> <F2> :<C-u>PlugUpdate<CR>
 
 " スタートアップ時間表示
 if has('vim_starting')
@@ -84,14 +85,13 @@ if !s:is_vscode
   Plug 'lambdalisue/lista.nvim', {'on': 'Lista'}
   nnoremap <silent> <leader>l   :<C-u>Lista<CR>
   let g:lista#custom_mappings = [
-        \ ['<C-j>', '<Esc>'],
-        \ ['<C-p>', '<S-Tab>'],
-        \ ['<C-n>', '<Tab>'],
-        \]
+        \  ['<C-j>', '<Esc>'],
+        \  ['<C-p>', '<S-Tab>'],
+        \  ['<C-n>', '<Tab>'],
+        \ ]
 
   Plug 'cocopon/vaffle.vim', {'on': 'Vaffle'}
   let g:vaffle_show_hidden_files = 1
-  noremap <silent> <leader>f :<C-u>Vaffle<CR>
 
   Plug 'itchyny/vim-autoft'
   let g:autoft_config = [
@@ -132,7 +132,7 @@ if !s:is_vscode
 
   Plug 'kana/vim-submode', { 'on': [] }
 
-  Plug 'prabirshrestha/asyncomplete.vim', { 'on': [] }
+  Plug 'prabirshrestha/asyncomplete.vim'
   Plug 'prabirshrestha/asyncomplete-lsp.vim', { 'on': [] }
   Plug 'prabirshrestha/asyncomplete-ultisnips.vim', { 'on': [] }
   Plug 'prabirshrestha/asyncomplete-buffer.vim', { 'on': [] }
@@ -144,10 +144,24 @@ if !s:is_vscode
   let g:UltiSnipsListSnippets        = "<S-Tab>"
   let g:UltiSnipsExpandTrigger       = "<C-e>"
 
+  Plug 'editorconfig/editorconfig-vim'
+
+  Plug 'prettier/vim-prettier', {
+        \   'do': 'yarn install',
+        \   'for': [
+          \    'javascript', 'typescript', 'css',     'less',
+          \    'scss',       'json',       'graphql', 'markdown',
+          \    'vue',        'svelte',     'yaml',    'html']
+          \ }
+  let g:prettier#exec_cmd_async            = 1
+  let g:prettier#autoformat                = 1
+  let g:prettier#autoformat_require_pragma = 0
+  let g:prettier#quickfix_enabled          = 0
+
   Plug 'vim-jp/vimdoc-ja', { 'on': [] }
 endif
 
-Plug 'andymass/vim-matchup', { 'on': [] }
+Plug 'andymass/vim-matchup'
 let g:matchup_matchparen_status_offscreen = 0
 
 Plug 'haya14busa/vim-asterisk', { 'on': [] }
@@ -200,7 +214,7 @@ let g:operator#surround#blocks = {
 
 Plug 'junegunn/vim-easy-align', { 'on': [] }
 nmap <silent> <Leader>a=       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)=
-nmap <silent> <Leader>a:       v<Plug>(extobj-indent-i)<Plug>(EasyAlign):
+nmap <silent> <Leader>a:       v<Plug>(textobj-indent-i)<Plug>(EasyAlign):
 nmap <silent> <Leader>a,       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*,
 nmap <silent> <Leader>a<Space> v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*<Space>
 nmap <silent> <Leader>a\|      v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*\|
@@ -227,11 +241,9 @@ map g# <Plug>(asterisk-gz#)<Plug>(is-nohl-1)
 
 call plug#end()
 
-" Load Event
 function! s:load_plug(timer)
   if !s:is_vscode
     call plug#load(
-          \ 'vimdoc-ja',
           \ 'vim-icondrag',
           \ 'vim-submode',
           \ 'vim-gitbranch',
@@ -239,11 +251,11 @@ function! s:load_plug(timer)
           \ 'vim-rplugin',
           \ 'vim-lsp-settings',
           \ 'vim-lsp',
-          \ 'asyncomplete.vim',
           \ 'asyncomplete-lsp.vim',
           \ 'asyncomplete-ultisnips.vim',
           \ 'asyncomplete-buffer.vim',
           \ 'ultisnips',
+          \ 'vimdoc-ja',
           \ )
 
     execute 'source' expand('~/.vim/ctrlp.settings.vim')
@@ -270,7 +282,6 @@ function! s:load_plug(timer)
   endif
 
   call plug#load(
-        \ 'vim-matchup',
         \ 'vim-asterisk',
         \ 'tcomment_vim',
         \ 'lexima.vim',
@@ -287,7 +298,6 @@ function! s:load_plug(timer)
         \ )
 endfunction
 
-" 500ミリ秒後にプラグインを読み込む
 call timer_start(500, function("s:load_plug"))
 
 filetype plugin indent on
@@ -323,7 +333,6 @@ AutocmdFT xml,html inoremap <silent><buffer> >  ><Esc>:call closetag#CloseTagFun
 
 AutocmdFT json     setlocal foldmethod=syntax
 AutocmdFT json     setlocal shiftwidth=2
-AutocmdFT json     noremap  <silent><buffer><expr> <leader>p jsonpath#echo()
 AutocmdFT json     command! Format %!jq
 
 AutocmdFT help     nnoremap <silent><buffer> q  :<C-u>close<CR>
@@ -433,6 +442,21 @@ if !s:is_vscode
   set printfont=Ricty\ Regular\ for\ Powerline:h11
 
   set ambiwidth=double
+endif
+" }}}
+" 開発 {{{
+if s:is_vscode
+  nnoremap ;e  :<C-u>call VSCodeNotify('editor.action.rename')<CR>
+  nnoremap ;r  :<C-u>call VSCodeNotify('workbench.action.debug.start')<CR>
+
+  " nnoremap <silent> <leader>t :<C-u>call VSCodeNotify('workbench.action.terminal.toggleTerminal')<CR>
+  nnoremap <silent> <leader>f :<C-u>call VSCodeNotify('workbench.view.explorer')<CR>
+else
+  " nnoremap <silent> <leader>t :<C-u>terminal<CR>
+  nnoremap <silent> <leader>f :<C-u>Vaffle<CR>
+
+  tnoremap <Esc> <C-w>N
+  tnoremap <C-j> <C-w>N
 endif
 " }}}
 " 検索 {{{
@@ -632,13 +656,6 @@ nnoremap <silent> <C-o> <C-o>zz
 " 折り畳み
 nnoremap <expr> zh foldlevel(line('.'))  >  0  ? 'zc' : '<C-h>'
 nnoremap <expr> zl foldclosed(line('.')) != -1 ? 'zo' : '<C-l>'
-
-" ターミナル
-if !s:is_vscode
-  command! Terminal terminal ++curwin
-  tnoremap <Esc> <C-w>N
-  tnoremap <C-j> <C-w>N
-endif
 
 " アプリウィンドウ操作
 if s:has_gui_running && !s:is_vscode
