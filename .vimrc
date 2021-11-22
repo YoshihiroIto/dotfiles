@@ -335,6 +335,8 @@ AutocmdFT json     setlocal foldmethod=syntax
 AutocmdFT json     setlocal shiftwidth=2
 AutocmdFT json     command! Format %!jq
 
+AutocmdFT dosbatch setlocal fileencoding=sjis
+
 AutocmdFT help     nnoremap <silent><buffer> q  :<C-u>close<CR>
 
 function! s:update_all()
