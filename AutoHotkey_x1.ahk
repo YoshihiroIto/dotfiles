@@ -24,8 +24,11 @@ vkF2:: MouseClick, Middle,  , , 1
 Insert:: Send,{PrintScreen}
 !Insert:: Send,!{PrintScreen}
 
-; ^Space::Send, {vkF3sc029}
+; 変換キー
 vk1C::Send, {vkF3sc029}
+
+; 無変換キー
+vk1D::Send, ^+{Space}
 
 vk1D & 1::Send,{Blind}{F1}
 vk1D & 2::Send,{Blind}{F2}
