@@ -437,7 +437,7 @@ if !s:is_vscode
   endfunction
 
   if s:has_gui_running
-    set guifont=Ricty\ Regular\ for\ Powerline:h11
+    set guifont=HackGen\ Console:h11
     set renderoptions=type:directx
   endif
 
