@@ -79,7 +79,7 @@ let g:mapleader        = ' '
 call plug#begin('~/.vim_plugged')
 
 if !s:is_vscode
-  Plug 'YoshihiroIto/molokai'
+  Plug 'haishanh/night-owl.vim'
   Plug 'YoshihiroIto/vim-icondrag', { 'on': [] }
 
   Plug 'itchyny/vim-gitbranch', { 'on': [] }
@@ -422,7 +422,7 @@ if !s:is_vscode
   Autocmd VimEnter * set errorbells
   Autocmd VimEnter * filetype detect
 
-  colorscheme molokai
+  colorscheme night-owl
 
   Autocmd BufWinEnter,ColorScheme * call s:set_color()
 
