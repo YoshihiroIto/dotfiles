@@ -1,6 +1,9 @@
 set encoding=utf-8
 scriptencoding utf-8
-" 基本 {{{
+
+" --------------------------------------------------------------------------------
+" 基本
+" --------------------------------------------------------------------------------
 let s:dotvim_dir      = expand('~/.vim')
 let s:dropbox_dir     = expand('~/Dropbox')
 let s:has_gui_running = has('gui_running')
@@ -37,6 +40,7 @@ endif
 augroup MyAutoCmd
   autocmd!
 augroup END
+
 command! -nargs=* Autocmd   autocmd MyAutoCmd <args>
 command! -nargs=* AutocmdFT autocmd MyAutoCmd FileType <args>
 Autocmd BufWinEnter,ColorScheme .vimrc highlight def link myVimAutocmd vimAutoCmd
@@ -68,8 +72,10 @@ if has('vim_starting')
 endif
 
 let g:mapleader        = ' '
-" }}}
-" プラグイン {{{
+
+" --------------------------------------------------------------------------------
+" プラグイン
+" --------------------------------------------------------------------------------
 call plug#begin('~/.vim_plugged')
 
 if !s:is_vscode
@@ -112,12 +118,12 @@ if !s:is_vscode
 
   Plug 'glidenote/memolist.vim', {'on': ['MemoNew', 'MemoList'] }
   noremap <silent> <leader>n :<C-u>MemoNew<CR>
-  noremap <silent> <leader>k :execute "CtrlP" g:memolist_path<CR>
-  let g:memolist_memo_suffix  = 'md'
-  let g:memolist_path         = s:dropbox_dir . '/memo'
+  noremap <silent> <leader>k :execute 'CtrlP' g:memolist_path<CR>
+  let g:memolist_memo_suffix = 'md'
+  let g:memolist_path        = s:dropbox_dir . '/memo'
 
   Plug 'mattn/vim-lsp-settings'
-  let g:lsp_settings_servers_dir = expand("~/lsp_server")
+  let g:lsp_settings_servers_dir = expand('~/lsp_server')
 
   Plug 'prabirshrestha/vim-lsp'
   let g:lsp_diagnostics_enabled = 1
@@ -125,7 +131,7 @@ if !s:is_vscode
   nmap <silent> <C-]> :<C-u>LspDefinition<CR>
   nmap <silent> ;e    :<C-u>LspRename<CR>
 
-  Plug 'ctrlpvim/ctrlp.vim', {'on':  ['CtrlP', 'CtrlPMRUFiles']}
+  Plug 'ctrlpvim/ctrlp.vim', {'on': ['CtrlP', 'CtrlPMRUFiles']}
 
   Plug 'itchyny/lightline.vim'
   execute 'source' expand('~/.vim/lightline.settings.vim')
@@ -177,6 +183,7 @@ Plug 'kana/vim-textobj-indent', { 'on': [] }
 Plug 'kana/vim-textobj-entire', { 'on': [] }
 Plug 'kana/vim-textobj-line', { 'on': [] }
 Plug 'rhysd/vim-textobj-word-column', { 'on': [] }
+Plug 'rhysd/vim-textobj-anyblock', { 'on': [] }
 Plug 'whatyouhide/vim-textobj-xmlattr', { 'on': [] }
 
 Plug 'sgur/vim-textobj-parameter', {'on': ['<Plug>(textobj-parameter-a)', '<Plug>(textobj-parameter-i)']}
@@ -199,18 +206,11 @@ Plug 'kana/vim-operator-replace', {'on': '<Plug>(operator-replace)'}
 map R  <Plug>(operator-replace)
 
 Plug 'rhysd/vim-operator-surround', {'on': ['<Plug>(operator-surround-append)', '<Plug>(operator-surround-delete)', '<Plug>(operator-surround-replace)']}
-map  S  <Plug>(operator-surround-append)
-nmap Sd <Plug>(operator-surround-delete)ab
-nmap Sr <Plug>(operator-surround-replace)ab
-let g:operator#surround#blocks = {
-      \   '-': [
-        \     {
-          \       'block':      ["{\<CR>", "\<CR>}"],
-          \       'motionwise': ['line'            ],
-          \       'keys':       ['{', '}'          ]
-          \     }
-          \   ]
-          \ }
+map <silent> S <Plug>(operator-surround-append)
+map <silent> Sd <Plug>(operator-surround-delete)
+map <silent> Sr <Plug>(operator-surround-replace)
+nmap <silent>Sdd <Plug>(operator-surround-delete)<Plug>(textobj-anyblock-a)
+nmap <silent>Srr <Plug>(operator-surround-replace)<Plug>(textobj-anyblock-a)
 
 Plug 'junegunn/vim-easy-align', { 'on': [] }
 nmap <silent> <Leader>a=       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)=
@@ -293,16 +293,19 @@ function! s:load_plug(timer)
         \ 'vim-textobj-entire',
         \ 'vim-textobj-line',
         \ 'vim-textobj-word-column',
+        \ 'vim-textobj-anyblock',
         \ 'vim-textobj-xmlattr',
         \ 'vim-operator-user',
         \ )
 endfunction
 
-call timer_start(500, function("s:load_plug"))
+call timer_start(500, function('s:load_plug'))
 
 filetype plugin indent on
-" }}}
-" ファイルタイプごとの設定 {{{
+
+" --------------------------------------------------------------------------------
+" ファイルタイプごとの設定
+" --------------------------------------------------------------------------------
 Autocmd BufEnter,WinEnter,BufWinEnter *                         call s:update_all()
 Autocmd BufNewFile,BufRead            *.xaml                    setlocal filetype=xml
 Autocmd BufNewFile,BufRead            *.cake                    setlocal filetype=cs
@@ -347,8 +350,10 @@ function! s:update_all()
   " ファイルの場所をカレントにする
   silent! execute 'lcd' fnameescape(expand('%:p:h'))
 endfunction
-" }}}
-" 表示 {{{
+
+" --------------------------------------------------------------------------------
+" 表示
+" --------------------------------------------------------------------------------
 if !s:is_vscode
   syntax enable               " 構文ごとに色分けをする
 
@@ -396,7 +401,6 @@ if !s:is_vscode
   set noequalalways
   set cursorline
   set display=lastline
-  " set conceallevel=2
   set concealcursor=i
   set signcolumn=yes
   set list
@@ -445,23 +449,25 @@ if !s:is_vscode
 
   set ambiwidth=double
 endif
-" }}}
-" 開発 {{{
+
+" --------------------------------------------------------------------------------
+" 開発
+" --------------------------------------------------------------------------------
 if s:is_vscode
   nnoremap ;e  :<C-u>call VSCodeNotify('editor.action.rename')<CR>
   nnoremap ;r  :<C-u>call VSCodeNotify('workbench.action.debug.start')<CR>
 
-  " nnoremap <silent> <leader>t :<C-u>call VSCodeNotify('workbench.action.terminal.toggleTerminal')<CR>
   nnoremap <silent> <leader>f :<C-u>call VSCodeNotify('workbench.view.explorer')<CR>
 else
-  " nnoremap <silent> <leader>t :<C-u>terminal<CR>
   nnoremap <silent> <leader>f :<C-u>Vaffle<CR>
 
   tnoremap <Esc> <C-w>N
   tnoremap <C-j> <C-w>N
 endif
-" }}}
-" 検索 {{{
+
+" --------------------------------------------------------------------------------
+" 検索
+" --------------------------------------------------------------------------------
 set incsearch
 set ignorecase
 set smartcase
@@ -489,8 +495,10 @@ if s:has_gui_running
   Autocmd CursorHold,CursorHoldI,FocusLost * silent! call s:save_reg('/', s:vimreg_search)
   Autocmd FocusGained                      * silent! call s:load_reg('/', s:vimreg_search)
 endif
-" }}}
-" 編集 {{{
+
+" --------------------------------------------------------------------------------
+" 編集
+" --------------------------------------------------------------------------------
 set browsedir=buffer              " バッファで開いているファイルのディレクトリ
 set clipboard=unnamedplus,unnamed " クリップボードを使う
 set modeline
@@ -714,4 +722,4 @@ if s:has_gui_running && !s:is_vscode
     endif
   endfunction
 endif
-" }}}
+
