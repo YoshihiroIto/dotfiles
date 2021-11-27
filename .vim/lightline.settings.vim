@@ -63,7 +63,7 @@ let g:lightline = {
       \       ['percent']
       \     ]
       \   },
-      \   'component': {'percent': 'Line:%3p%%'},
+      \   'component': {'percent': '⭡%3p%%'},
       \   'component_function': {
       \     'fileformat':   'YOI_lightline_fileformat',
       \     'filetype':     'YOI_lightline_filetype',
@@ -85,12 +85,14 @@ let g:lightline = {
       \     'branch':       'branch',
       \     'gitgutter':    'branch'
       \   },
-      \   'subseparator': {'left': ':', 'right': ':'},
+      \   'separator': {   'left': '⮀', 'right': '⮂'},
+      \   'subseparator': {'left': '⮁', 'right': '⮃'},
       \   'tabline': {
       \     'left':  [['tabs']],
       \     'right': [['filetype', 'fileformat', 'fileencoding']]
       \   },
-      \   'tabline_subseparator': {'left': ':', 'right': ':'},
+      \   'tabline_separator': {   'left': '⮀', 'right': '⮂'},
+      \   'tabline_subseparator': {'left': '⮁', 'right': '⮃'},
       \   'mode_map': {
       \     'n':      'N',
       \     'i':      'I',
@@ -126,7 +128,7 @@ function! YOI_lightline_readonly()
     return ''
   endif
 
-  return &readonly ? 'R/O' : ''
+  return &readonly ? '⭤' : ''
 endfunction
 
 function! YOI_lightline_filename()
@@ -150,7 +152,8 @@ function! YOI_lightline_current_branch()
   endif
 
   try
-    return gitbranch#name()
+    let branch = gitbranch#name()
+    return empty(branch) ? '' : '⭠ ' . branch
   catch
     return ''
   endtry
