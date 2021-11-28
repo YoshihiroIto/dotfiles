@@ -63,7 +63,7 @@ let g:lightline = {
       \       ['percent']
       \     ]
       \   },
-      \   'component': {'percent': '⭡%3p%%'},
+      \   'component': {'percent': '%3p%%'},
       \   'component_function': {
       \     'fileformat':   'YOI_lightline_fileformat',
       \     'filetype':     'YOI_lightline_filetype',
@@ -85,14 +85,14 @@ let g:lightline = {
       \     'branch':       'branch',
       \     'gitgutter':    'branch'
       \   },
-      \   'separator': {   'left': '⮀', 'right': '⮂'},
-      \   'subseparator': {'left': '⮁', 'right': '⮃'},
+      \   'separator': {   'left': '', 'right': ''},
+      \   'subseparator': {'left': '', 'right': ''},
       \   'tabline': {
       \     'left':  [['tabs']],
       \     'right': [['filetype', 'fileformat', 'fileencoding']]
       \   },
-      \   'tabline_separator': {   'left': '⮀', 'right': '⮂'},
-      \   'tabline_subseparator': {'left': '⮁', 'right': '⮃'},
+      \   'tabline_separator': {   'left': '', 'right': ''},
+      \   'tabline_subseparator': {'left': '︱', 'right': '︱'},
       \   'mode_map': {
       \     'n':      'N',
       \     'i':      'I',
@@ -111,7 +111,6 @@ let g:lightline = {
 
 function! YOI_lightline_mode()
   return  &filetype ==# 'quickrun' ? 'Quickrun' :
-        \ &filetype ==# 'agit'     ? 'Agit'     :
         \ winwidth(0) > 50 ? lightline#mode() : ''
 endfunction
 
@@ -128,7 +127,7 @@ function! YOI_lightline_readonly()
     return ''
   endif
 
-  return &readonly ? '⭤' : ''
+  return &readonly ? '' : ''
 endfunction
 
 function! YOI_lightline_filename()
@@ -153,7 +152,7 @@ function! YOI_lightline_current_branch()
 
   try
     let branch = gitbranch#name()
-    return empty(branch) ? '' : '⭠ ' . branch
+    return empty(branch) ? '' : '' . branch
   catch
     return ''
   endtry
@@ -217,7 +216,7 @@ function! YOI_lightline_lineinfo()
 endfunction
 
 function! s:is_lightline_no_disp_filetype()
-  return &filetype =~# 'quickrun\|agit'
+  return &filetype =~# 'quickrun'
 endfunction
 
 function! s:is_lightline_no_disp_group()

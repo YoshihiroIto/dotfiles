@@ -424,6 +424,10 @@ if !s:is_vscode
 
   colorscheme night-owl
 
+  if (has("termguicolors"))
+    set termguicolors
+  endif
+
   Autocmd BufWinEnter,ColorScheme * call s:set_color()
 
   function! s:set_color()
@@ -441,11 +445,11 @@ if !s:is_vscode
   endfunction
 
   if s:has_gui_running
-    set guifont=Ricty\ Regular\ for\ Powerline:h11
+    set guifont=HackGenNerd\ Console:h10
     set renderoptions=type:directx
   endif
 
-  set printfont=Ricty\ Regular\ for\ Powerline:h11
+  set printfont=HackGenNerd\ Console:h10
 
   set ambiwidth=double
 endif
