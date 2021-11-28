@@ -176,7 +176,6 @@ Plug 'tomtom/tcomment_vim', { 'on': [] }
 Plug 'cohama/lexima.vim', { 'on': [] }
 
 Plug 'kana/vim-textobj-user', { 'on': [] }
-Plug 'kana/vim-operator-user', { 'on': [] }
 
 Plug 'glts/vim-textobj-comment', { 'on': [] }
 Plug 'kana/vim-textobj-indent', { 'on': [] }
@@ -186,26 +185,28 @@ Plug 'rhysd/vim-textobj-word-column', { 'on': [] }
 Plug 'rhysd/vim-textobj-anyblock', { 'on': [] }
 Plug 'whatyouhide/vim-textobj-xmlattr', { 'on': [] }
 
-Plug 'sgur/vim-textobj-parameter', {'on': ['<Plug>(textobj-parameter-a)', '<Plug>(textobj-parameter-i)']}
+Plug 'sgur/vim-textobj-parameter', { 'on': [] }
 xmap aa <Plug>(textobj-parameter-a)
 xmap ia <Plug>(textobj-parameter-i)
 omap aa <Plug>(textobj-parameter-a)
 omap ia <Plug>(textobj-parameter-i)
 
-Plug 'rhysd/vim-textobj-wiw', {'on': ['<Plug>(textobj-wiw-a)', '<Plug>(textobj-wiw-i)']}
+Plug 'rhysd/vim-textobj-wiw', { 'on': [] }
 xmap a. <Plug>(textobj-wiw-a)
 xmap i. <Plug>(textobj-wiw-i)
 omap a. <Plug>(textobj-wiw-a)
 omap i. <Plug>(textobj-wiw-i)
 
-Plug 'YoshihiroIto/vim-operator-tcomment', {'on': '<Plug>(operator-tcomment)'}
+Plug 'kana/vim-operator-user', { 'on': [] }
+
+Plug 'YoshihiroIto/vim-operator-tcomment', { 'on': [] }
 nmap t  <Plug>(operator-tcomment)
 xmap t  <Plug>(operator-tcomment)
 
-Plug 'kana/vim-operator-replace', {'on': '<Plug>(operator-replace)'}
+Plug 'kana/vim-operator-replace', { 'on': [] }
 map R  <Plug>(operator-replace)
 
-Plug 'rhysd/vim-operator-surround', {'on': ['<Plug>(operator-surround-append)', '<Plug>(operator-surround-delete)', '<Plug>(operator-surround-replace)']}
+Plug 'rhysd/vim-operator-surround', { 'on': [] }
 map <silent> S <Plug>(operator-surround-append)
 map <silent> Sd <Plug>(operator-surround-delete)
 map <silent> Sr <Plug>(operator-surround-replace)
@@ -295,7 +296,12 @@ function! s:load_plug(timer)
         \ 'vim-textobj-word-column',
         \ 'vim-textobj-anyblock',
         \ 'vim-textobj-xmlattr',
+        \ 'vim-textobj-parameter',
+        \ 'vim-textobj-wiw',
         \ 'vim-operator-user',
+        \ 'vim-operator-tcomment',
+        \ 'vim-operator-replace',
+        \ 'vim-operator-surround',
         \ )
 endfunction
 
