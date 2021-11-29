@@ -79,7 +79,7 @@ let g:mapleader        = ' '
 call plug#begin('~/.vim_plugged')
 
 if !s:is_vscode
-  Plug 'haishanh/night-owl.vim'
+  Plug 'YoshihiroIto/night-owl.vim'
   Plug 'YoshihiroIto/vim-icondrag', { 'on': [] }
 
   Plug 'itchyny/vim-gitbranch', { 'on': [] }
