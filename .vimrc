@@ -182,7 +182,6 @@ Plug 'kana/vim-textobj-indent', { 'on': [] }
 Plug 'kana/vim-textobj-entire', { 'on': [] }
 Plug 'kana/vim-textobj-line', { 'on': [] }
 Plug 'rhysd/vim-textobj-word-column', { 'on': [] }
-Plug 'rhysd/vim-textobj-anyblock', { 'on': [] }
 Plug 'whatyouhide/vim-textobj-xmlattr', { 'on': [] }
 
 Plug 'sgur/vim-textobj-parameter', { 'on': [] }
@@ -206,13 +205,6 @@ xmap t  <Plug>(operator-tcomment)
 Plug 'kana/vim-operator-replace', { 'on': [] }
 map R  <Plug>(operator-replace)
 
-Plug 'rhysd/vim-operator-surround', { 'on': [] }
-map <silent> S <Plug>(operator-surround-append)
-map <silent> Sd <Plug>(operator-surround-delete)
-map <silent> Sr <Plug>(operator-surround-replace)
-nmap <silent>Sdd <Plug>(operator-surround-delete)<Plug>(textobj-anyblock-a)
-nmap <silent>Srr <Plug>(operator-surround-replace)<Plug>(textobj-anyblock-a)
-
 Plug 'junegunn/vim-easy-align', { 'on': [] }
 nmap <silent> <Leader>a=       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)=
 nmap <silent> <Leader>a:       v<Plug>(textobj-indent-i)<Plug>(EasyAlign):
@@ -224,6 +216,15 @@ xmap <silent> <Leader>a:       <Plug>(EasyAlign):
 xmap <silent> <Leader>a,       <Plug>(EasyAlign)*,
 xmap <silent> <Leader>a<Space> <Plug>(EasyAlign)*<Space>
 xmap <silent> <Leader>a\|      <Plug>(EasyAlign)*\|
+
+Plug 'machakann/vim-sandwich', { 'on': [] }
+let g:sandwich_no_default_key_mappings          = 1
+let g:operator_sandwich_no_default_key_mappings = 1
+map  <silent> S   <Plug>(operator-sandwich-add)
+map  <silent> Sd  <Plug>(operator-sandwich-delete)
+map  <silent> Sr  <Plug>(operator-sandwich-replace)
+nmap <silent> Sdd <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
+nmap <silent> Srr <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
 
 Plug 'tyru/open-browser.vim', {'on': '<Plug>(openbrowser-smart-search)'}
 let g:openbrowser_no_default_menus = 1
@@ -288,21 +289,22 @@ function! s:load_plug(timer)
         \ 'lexima.vim',
         \ 'is.vim',
         \ 'vim-easy-align',
+        \ 'vim-sandwich',
         \ 'vim-textobj-user',
         \ 'vim-textobj-comment',
         \ 'vim-textobj-indent',
         \ 'vim-textobj-entire',
         \ 'vim-textobj-line',
         \ 'vim-textobj-word-column',
-        \ 'vim-textobj-anyblock',
         \ 'vim-textobj-xmlattr',
         \ 'vim-textobj-parameter',
         \ 'vim-textobj-wiw',
         \ 'vim-operator-user',
         \ 'vim-operator-tcomment',
-        \ 'vim-operator-replace',
-        \ 'vim-operator-surround',
+        \ 'vim-operator-replace'
         \ )
+
+  call operator#sandwich#set('delete', 'all', 'highlight', 0)
 endfunction
 
 call timer_start(500, function('s:load_plug'))
