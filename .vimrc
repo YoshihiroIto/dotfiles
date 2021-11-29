@@ -126,8 +126,9 @@ if !s:is_vscode
   let g:lsp_settings_servers_dir = expand('~/lsp_server')
 
   Plug 'prabirshrestha/vim-lsp'
-  let g:lsp_diagnostics_enabled = 1
-  let g:lsp_diagnostics_echo_cursor = 1
+  let g:lsp_diagnostics_enabled        = 1
+  let g:lsp_diagnostics_echo_cursor    = 1
+  let g:lsp_document_highlight_enabled = 0
   nmap <silent> <C-]> :<C-u>LspDefinition<CR>
   nmap <silent> ;e    :<C-u>LspRename<CR>
 
@@ -251,8 +252,6 @@ function! s:load_plug(timer)
           \ 'vim-gitbranch',
           \ 'vim-gitgutter',
           \ 'vim-rplugin',
-          \ 'vim-lsp-settings',
-          \ 'vim-lsp',
           \ 'asyncomplete-lsp.vim',
           \ 'asyncomplete-ultisnips.vim',
           \ 'asyncomplete-buffer.vim',
