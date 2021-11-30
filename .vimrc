@@ -576,24 +576,26 @@ if !s:is_vscode
   let g:UltiSnipsExpandTrigger       = "<C-e>"
   " }}}
 
-  Plug 'prettier/vim-prettier', {
-        \   'do': 'yarn install',
-        \   'for': [
-          \    'javascript', 'typescript', 'css',     'less',
-          \    'scss',       'json',       'graphql', 'markdown',
-          \    'vue',        'svelte',     'yaml',    'html']
-          \ }
-  " vim-prettier {{{
-  let g:prettier#exec_cmd_async            = 1
-  let g:prettier#autoformat                = 1
-  let g:prettier#autoformat_require_pragma = 0
-  let g:prettier#quickfix_enabled          = 0
-  "}}}
+  " Plug 'prettier/vim-prettier', {
+  "       \   'do': 'yarn install',
+  "       \   'for': [
+  "         \    'javascript', 'typescript', 'css',     'less',
+  "         \    'scss',       'json',       'graphql', 'markdown',
+  "         \    'vue',        'svelte',     'yaml',    'html']
+  "         \ }
+  " " vim-prettier {{{
+  " let g:prettier#exec_cmd_async            = 1
+  " let g:prettier#autoformat                = 1
+  " let g:prettier#autoformat_require_pragma = 0
+  " let g:prettier#quickfix_enabled          = 0
+  " "}}}
+
+  " Plug 'editorconfig/editorconfig-vim'
 
   Plug 'vim-jp/vimdoc-ja', {'on': []}
 endif
 
-Plug 'andymass/vim-matchup'
+Plug 'andymass/vim-matchup', {'on': []}
 " vim-matchup {{{
 let g:matchup_matchparen_status_offscreen = 0
 " }}}
@@ -714,6 +716,7 @@ function! s:load_plug(timer)
   endif
 
   call plug#load(
+        \ 'vim-matchup',
         \ 'vim-asterisk',
         \ 'tcomment_vim',
         \ 'lexima.vim',
@@ -721,7 +724,10 @@ function! s:load_plug(timer)
         \ 'is.vim',
         \ 'vim-easy-align',
         \ 'vim-sandwich',
-        \ 'open-browser.vim',
+        \ 'open-browser.vim'
+        \ )
+
+  call plug#load(
         \ 'vim-textobj-user',
         \ 'vim-textobj-comment',
         \ 'vim-textobj-indent',
