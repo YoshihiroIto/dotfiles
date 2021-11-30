@@ -118,6 +118,15 @@ if !s:is_vscode
   Autocmd ColorScheme * highlight CursorWord1 guifg=Red ctermfg=Red
   " }}}
 
+  Plug 'itchyny/vim-autoft', {'on': []}
+  let g:autoft_config = [
+        \   {'filetype': 'cs',   'pattern': '^\s*using'},
+        \   {'filetype': 'cpp',  'pattern': '^\s*#\s*\%(include\|define\)\>'},
+        \   {'filetype': 'go',   'pattern': '^import ('},
+        \   {'filetype': 'html', 'pattern': '<\%(!DOCTYPE\|html\|head\|script\|meta\|link|div\|span\)\>\|^html:5\s*$'},
+        \   {'filetype': 'xml',  'pattern': '<[0-9a-zA-Z]\+'},
+        \ ]
+
   " Plug 'beyondmarc/hlsl.vim', {'for': 'hlsl'}
   " Plug 'posva/vim-vue', {'for': 'vue'}
 
@@ -140,13 +149,13 @@ if !s:is_vscode
   let g:lsp_auto_enable = 0
 
   function s:init_lsp()
-    call lsp#enable()
-
     let g:lsp_diagnostics_enabled        = 1
     let g:lsp_diagnostics_echo_cursor    = 1
     let g:lsp_document_highlight_enabled = 0
     nmap <silent> <C-]> :<C-u>LspDefinition<CR>
     nmap <silent> ;e    :<C-u>LspRename<CR>
+
+    call lsp#enable()
   endfunction
   " }}}
 
@@ -668,15 +677,20 @@ xmap <silent> <Leader>a\|      <Plug>(EasyAlign)*\|
 
 Plug 'machakann/vim-sandwich', {'on': []}
 " vim-sandwich {{{
-let g:sandwich_no_default_key_mappings          = 1
-let g:operator_sandwich_no_default_key_mappings = 1
-map  <silent> Sa  <Plug>(sandwich-add)
-nmap <silent> Sd  <Plug>(sandwich-delete)
-xmap <silent> Sd  <Plug>(sandwich-delete)
-nmap <silent> Sr  <Plug>(sandwich-replace)
-xmap <silent> Sr  <Plug>(sandwich-replace)
-nmap <silent> Sdd <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
-nmap <silent> Srr <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
+autocmd! User vim-sandwich call s:init_sandwich()
+function s:init_sandwich()
+  let g:sandwich_no_default_key_mappings          = 1
+  let g:operator_sandwich_no_default_key_mappings = 1
+  map  <silent> Sa  <Plug>(sandwich-add)
+  nmap <silent> Sd  <Plug>(sandwich-delete)
+  xmap <silent> Sd  <Plug>(sandwich-delete)
+  nmap <silent> Sr  <Plug>(sandwich-replace)
+  xmap <silent> Sr  <Plug>(sandwich-replace)
+  nmap <silent> Sdd <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
+  nmap <silent> Srr <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
+
+  call operator#sandwich#set('delete', 'all', 'highlight', 0)
+endfunction
 " }}}
 
 Plug 'tyru/open-browser.vim', {'on': []}
@@ -713,6 +727,7 @@ function! s:load_plug(timer)
           \ 'lista.nvim',
           \ 'vaffle.vim',
           \ 'vim-cursorword',
+          \ 'vim-autoft',
           \ 'memolist.vim',
           \ 'vim-lsp-settings',
           \ 'vim-lsp',
@@ -752,11 +767,9 @@ function! s:load_plug(timer)
         \ 'vim-operator-tcomment',
         \ 'vim-operator-replace'
         \ )
-
-  call operator#sandwich#set('delete', 'all', 'highlight', 0)
 endfunction
 
-call timer_start(500, function('s:load_plug'))
+call timer_start(200, function('s:load_plug'))
 
 filetype plugin indent on
 
