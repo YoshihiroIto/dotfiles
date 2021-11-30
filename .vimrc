@@ -119,6 +119,7 @@ if !s:is_vscode
   " }}}
 
   Plug 'itchyny/vim-autoft', {'on': []}
+  " vim-autoft {{{
   let g:autoft_config = [
         \   {'filetype': 'cs',   'pattern': '^\s*using'},
         \   {'filetype': 'cpp',  'pattern': '^\s*#\s*\%(include\|define\)\>'},
@@ -126,6 +127,7 @@ if !s:is_vscode
         \   {'filetype': 'html', 'pattern': '<\%(!DOCTYPE\|html\|head\|script\|meta\|link|div\|span\)\>\|^html:5\s*$'},
         \   {'filetype': 'xml',  'pattern': '<[0-9a-zA-Z]\+'},
         \ ]
+  " }}}
 
   " Plug 'beyondmarc/hlsl.vim', {'for': 'hlsl'}
   " Plug 'posva/vim-vue', {'for': 'vue'}
@@ -678,9 +680,9 @@ xmap <silent> <Leader>a\|      <Plug>(EasyAlign)*\|
 Plug 'machakann/vim-sandwich', {'on': []}
 " vim-sandwich {{{
 autocmd! User vim-sandwich call s:init_sandwich()
+let g:sandwich_no_default_key_mappings          = 1
+let g:operator_sandwich_no_default_key_mappings = 1
 function s:init_sandwich()
-  let g:sandwich_no_default_key_mappings          = 1
-  let g:operator_sandwich_no_default_key_mappings = 1
   map  <silent> Sa  <Plug>(sandwich-add)
   nmap <silent> Sd  <Plug>(sandwich-delete)
   xmap <silent> Sd  <Plug>(sandwich-delete)
@@ -784,33 +786,37 @@ Autocmd BufNewFile,BufRead            *.{fx,fxc,fxh,hlsl,hlsli} setlocal filetyp
 Autocmd BufNewFile,BufRead            *.{fsh,vsh}               setlocal filetype=glsl
 Autocmd BufNewFile,BufRead            *.{md,mkd,markdown}       setlocal filetype=markdown
 
-AutocmdFT ruby     setlocal tabstop=2
-AutocmdFT ruby     setlocal shiftwidth=2
-AutocmdFT ruby     setlocal softtabstop=2
+AutocmdFT typescript setlocal tabstop=2
+AutocmdFT typescript setlocal shiftwidth=2
+AutocmdFT typescript setlocal softtabstop=2
 
-AutocmdFT vue      setlocal tabstop=2
-AutocmdFT vue      setlocal shiftwidth=2
-AutocmdFT vue      setlocal softtabstop=2
+AutocmdFT ruby       setlocal tabstop=2
+AutocmdFT ruby       setlocal shiftwidth=2
+AutocmdFT ruby       setlocal softtabstop=2
 
-AutocmdFT vim      setlocal foldmethod=marker
-AutocmdFT vim      setlocal foldlevel=0
-AutocmdFT vim      setlocal foldcolumn=5
-AutocmdFT vim      setlocal tabstop=2
-AutocmdFT vim      setlocal shiftwidth=2
-AutocmdFT vim      setlocal softtabstop=2
+AutocmdFT vue        setlocal tabstop=2
+AutocmdFT vue        setlocal shiftwidth=2
+AutocmdFT vue        setlocal softtabstop=2
 
-AutocmdFT xml,html setlocal foldlevel=99
-AutocmdFT xml,html setlocal foldcolumn=5
-AutocmdFT xml,html setlocal foldmethod=syntax
-AutocmdFT xml,html inoremap <silent><buffer> >  ><Esc>:call closetag#CloseTagFun()<CR>
+AutocmdFT vim        setlocal foldmethod=marker
+AutocmdFT vim        setlocal foldlevel=0
+AutocmdFT vim        setlocal foldcolumn=5
+AutocmdFT vim        setlocal tabstop=2
+AutocmdFT vim        setlocal shiftwidth=2
+AutocmdFT vim        setlocal softtabstop=2
 
-AutocmdFT json     setlocal foldmethod=syntax
-AutocmdFT json     setlocal shiftwidth=2
-AutocmdFT json     command! Format %!jq
+AutocmdFT xml,html   setlocal foldlevel=99
+AutocmdFT xml,html   setlocal foldcolumn=5
+AutocmdFT xml,html   setlocal foldmethod=syntax
+AutocmdFT xml,html   inoremap <silent><buffer> >  ><Esc>:call closetag#CloseTagFun()<CR>
 
-AutocmdFT dosbatch setlocal fileencoding=sjis
+AutocmdFT json       setlocal foldmethod=syntax
+AutocmdFT json       setlocal shiftwidth=2
+AutocmdFT json       command! Format %!jq
 
-AutocmdFT help     nnoremap <silent><buffer> q  :<C-u>close<CR>
+AutocmdFT dosbatch   setlocal fileencoding=sjis
+
+AutocmdFT help       nnoremap <silent><buffer> q  :<C-u>close<CR>
 
 function! s:update_all()
   setlocal formatoptions-=r
