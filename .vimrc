@@ -71,7 +71,7 @@ if has('vim_starting')
         \| echomsg 'startuptime:' reltimestr(s:startuptime)
 endif
 
-let g:mapleader = ' '
+let g:mapleader = "\<Space>"
 
 " --------------------------------------------------------------------------------
 " プラグイン
@@ -80,14 +80,14 @@ call plug#begin('~/.vim_plugged')
 
 if !s:is_vscode
   Plug 'YoshihiroIto/night-owl.vim'
-  Plug 'YoshihiroIto/vim-icondrag', { 'on': [] }
+  Plug 'YoshihiroIto/vim-icondrag', {'on': []}
 
-  Plug 'itchyny/vim-gitbranch', { 'on': [] }
-  Plug 'airblade/vim-gitgutter', { 'on': [] }
+  Plug 'itchyny/vim-gitbranch', {'on': []}
+  Plug 'airblade/vim-gitgutter', {'on': []}
   let g:gitgutter_map_keys = 0
   let g:gitgutter_grep     = ''
 
-  Plug 'lambdalisue/vim-rplugin', { 'on': [] }
+  Plug 'lambdalisue/vim-rplugin', {'on': []}
   Plug 'lambdalisue/lista.nvim', {'on': 'Lista'}
   nnoremap <silent> <leader>l   :<C-u>Lista<CR>
   let g:lista#custom_mappings = [
@@ -105,24 +105,10 @@ if !s:is_vscode
   Autocmd ColorScheme * highlight CursorWord0 guifg=Red ctermfg=Red
   Autocmd ColorScheme * highlight CursorWord1 guifg=Red ctermfg=Red
 
-  Plug 'itchyny/vim-autoft'
-  let g:autoft_config = [
-        \   {'filetype': 'cs',
-        \    'pattern': '^\s*using'},
-        \   {'filetype': 'cpp',
-        \    'pattern': '^\s*#\s*\%(include\|define\)\>'},
-        \   {'filetype': 'go',
-        \    'pattern': '^import ('},
-        \   {'filetype': 'html',
-        \    'pattern': '<\%(!DOCTYPE\|html\|head\|script\|meta\|link|div\|span\)\>\|^html:5\s*$'},
-        \   {'filetype': 'xml',
-        \    'pattern': '<[0-9a-zA-Z]\+'},
-        \ ]
-
   " Plug 'beyondmarc/hlsl.vim', {'for': 'hlsl'}
   " Plug 'posva/vim-vue', {'for': 'vue'}
 
-  Plug 'glidenote/memolist.vim', {'on': ['MemoNew', 'MemoList'] }
+  Plug 'glidenote/memolist.vim', {'on': ['MemoNew', 'MemoList']}
   noremap <silent> <leader>n :<C-u>MemoNew<CR>
   noremap <silent> <leader>k :execute 'CtrlP' g:memolist_path<CR>
   let g:memolist_memo_suffix = 'md'
@@ -143,14 +129,14 @@ if !s:is_vscode
   Plug 'itchyny/lightline.vim'
   execute 'source' expand('~/.vim/lightline.settings.vim')
 
-  Plug 'kana/vim-submode', { 'on': [] }
+  Plug 'kana/vim-submode', {'on': []}
 
   Plug 'prabirshrestha/asyncomplete.vim'
-  Plug 'prabirshrestha/asyncomplete-lsp.vim', { 'on': [] }
-  Plug 'prabirshrestha/asyncomplete-ultisnips.vim', { 'on': [] }
-  Plug 'prabirshrestha/asyncomplete-buffer.vim', { 'on': [] }
+  Plug 'prabirshrestha/asyncomplete-lsp.vim', {'on': []}
+  Plug 'prabirshrestha/asyncomplete-ultisnips.vim', {'on': []}
+  Plug 'prabirshrestha/asyncomplete-buffer.vim', {'on': []}
 
-  Plug 'SirVer/ultisnips', { 'on': [] }
+  Plug 'SirVer/ultisnips', {'on': []}
   let g:UltiSnipsSnippetDirectories  = [s:dotvim_dir . '/UltiSnips']
   let g:UltiSnipsJumpForwardTrigger  = "<Tab>"
   let g:UltiSnipsJumpBackwardTrigger = "<S-Tab>"
@@ -171,48 +157,48 @@ if !s:is_vscode
   let g:prettier#autoformat_require_pragma = 0
   let g:prettier#quickfix_enabled          = 0
 
-  Plug 'vim-jp/vimdoc-ja', { 'on': [] }
+  Plug 'vim-jp/vimdoc-ja', {'on': []}
 endif
 
 Plug 'andymass/vim-matchup'
 let g:matchup_matchparen_status_offscreen = 0
 
-Plug 'haya14busa/vim-asterisk', { 'on': [] }
+Plug 'haya14busa/vim-asterisk', {'on': []}
 
-Plug 'tomtom/tcomment_vim', { 'on': [] }
-Plug 'cohama/lexima.vim', { 'on': [] }
+Plug 'tomtom/tcomment_vim', {'on': []}
+Plug 'cohama/lexima.vim', {'on': []}
 
-Plug 'kana/vim-textobj-user', { 'on': [] }
+Plug 'kana/vim-textobj-user', {'on': []}
 
-Plug 'glts/vim-textobj-comment', { 'on': [] }
-Plug 'kana/vim-textobj-indent', { 'on': [] }
-Plug 'kana/vim-textobj-entire', { 'on': [] }
-Plug 'kana/vim-textobj-line', { 'on': [] }
-Plug 'rhysd/vim-textobj-word-column', { 'on': [] }
-Plug 'whatyouhide/vim-textobj-xmlattr', { 'on': [] }
+Plug 'glts/vim-textobj-comment', {'on': []}
+Plug 'kana/vim-textobj-indent', {'on': []}
+Plug 'kana/vim-textobj-entire', {'on': []}
+Plug 'kana/vim-textobj-line', {'on': []}
+Plug 'rhysd/vim-textobj-word-column', {'on': []}
+Plug 'whatyouhide/vim-textobj-xmlattr', {'on': []}
 
-Plug 'sgur/vim-textobj-parameter', { 'on': [] }
+Plug 'sgur/vim-textobj-parameter', {'on': []}
 xmap aa <Plug>(textobj-parameter-a)
 xmap ia <Plug>(textobj-parameter-i)
 omap aa <Plug>(textobj-parameter-a)
 omap ia <Plug>(textobj-parameter-i)
 
-Plug 'rhysd/vim-textobj-wiw', { 'on': [] }
+Plug 'rhysd/vim-textobj-wiw', {'on': []}
 xmap a. <Plug>(textobj-wiw-a)
 xmap i. <Plug>(textobj-wiw-i)
 omap a. <Plug>(textobj-wiw-a)
 omap i. <Plug>(textobj-wiw-i)
 
-Plug 'kana/vim-operator-user', { 'on': [] }
+Plug 'kana/vim-operator-user', {'on': []}
 
-Plug 'YoshihiroIto/vim-operator-tcomment', { 'on': [] }
+Plug 'YoshihiroIto/vim-operator-tcomment', {'on': []}
 nmap t  <Plug>(operator-tcomment)
 xmap t  <Plug>(operator-tcomment)
 
-Plug 'kana/vim-operator-replace', { 'on': [] }
+Plug 'kana/vim-operator-replace', {'on': []}
 map R  <Plug>(operator-replace)
 
-Plug 'junegunn/vim-easy-align', { 'on': [] }
+Plug 'junegunn/vim-easy-align', {'on': []}
 nmap <silent> <Leader>a=       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)=
 nmap <silent> <Leader>a:       v<Plug>(textobj-indent-i)<Plug>(EasyAlign):
 nmap <silent> <Leader>a,       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*,
@@ -224,7 +210,7 @@ xmap <silent> <Leader>a,       <Plug>(EasyAlign)*,
 xmap <silent> <Leader>a<Space> <Plug>(EasyAlign)*<Space>
 xmap <silent> <Leader>a\|      <Plug>(EasyAlign)*\|
 
-Plug 'machakann/vim-sandwich', { 'on': [] }
+Plug 'machakann/vim-sandwich', {'on': []}
 let g:sandwich_no_default_key_mappings          = 1
 let g:operator_sandwich_no_default_key_mappings = 1
 map  <silent> Sa  <Plug>(sandwich-add)
@@ -244,7 +230,7 @@ vmap gx <Plug>(openbrowser-smart-search)
 Plug 'YoshihiroIto/vim-closetag', {'on': '<Plug>closetag'}
 let g:closetag_filenames = '*.{html,xhtml,xml,xaml}'
 
-Plug 'haya14busa/is.vim', { 'on': [] }
+Plug 'haya14busa/is.vim', {'on': []}
 map *  <Plug>(asterisk-z*)<Plug>(is-nohl-1)
 map g* <Plug>(asterisk-gz*)<Plug>(is-nohl-1)
 map #  <Plug>(asterisk-z#)<Plug>(is-nohl-1)
