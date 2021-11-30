@@ -71,7 +71,7 @@ if has('vim_starting')
         \| echomsg 'startuptime:' reltimestr(s:startuptime)
 endif
 
-let g:mapleader        = ' '
+let g:mapleader = ' '
 
 " --------------------------------------------------------------------------------
 " プラグイン
@@ -98,6 +98,12 @@ if !s:is_vscode
 
   Plug 'cocopon/vaffle.vim', {'on': 'Vaffle'}
   let g:vaffle_show_hidden_files = 1
+
+  Plug 'itchyny/vim-cursorword'
+  let g:cursorword_delay     = 270
+  let g:cursorword_highlight = 0
+  Autocmd ColorScheme * highlight CursorWord0 guifg=Red ctermfg=Red
+  Autocmd ColorScheme * highlight CursorWord1 guifg=Red ctermfg=Red
 
   Plug 'itchyny/vim-autoft'
   let g:autoft_config = [
@@ -467,8 +473,8 @@ endif
 " 開発
 " --------------------------------------------------------------------------------
 if s:is_vscode
-  nnoremap ;e  :<C-u>call VSCodeNotify('editor.action.rename')<CR>
-  nnoremap ;r  :<C-u>call VSCodeNotify('workbench.action.debug.start')<CR>
+  nnoremap ;e :<C-u>call VSCodeNotify('editor.action.rename')<CR>
+  nnoremap ;r :<C-u>call VSCodeNotify('workbench.action.debug.start')<CR>
 
   nnoremap <silent> <leader>f :<C-u>call VSCodeNotify('workbench.view.explorer')<CR>
 else
@@ -534,7 +540,7 @@ set splitbelow              " 縦分割したら新しいウィンドウは下�
 set splitright              " 横分割したら新しいウィンドウは右に
 
 if s:is_vscode
-  nnoremap <silent> u :<C-u>call VSCodeNotify('undo')<CR>
+  nnoremap <silent> u     :<C-u>call VSCodeNotify('undo')<CR>
   nnoremap <silent> <C-r> :<C-u>call VSCodeNotify('redo')<CR>
 endif
 
@@ -555,13 +561,6 @@ augroup vimrc-incsearch-highlight
   autocmd CmdlineEnter [/\?] :set hlsearch
   autocmd CmdlineLeave [/\?] :set nohlsearch
 augroup END
-
-" 文字コード自動判断
-if has('guess_encode')
-  set fileencodings=guess,iso-2022-jp,cp932,euc-jp,ucs-bom
-else
-  set fileencodings=iso-2022-jp,cp932,euc-jp,ucs-bom
-endif
 
 " ^Mを取り除く
 command! RemoveCr call s:execute_keep_view('silent! %substitute/\r$//g | nohlsearch')
@@ -607,44 +606,6 @@ function! s:copy_add_comment() range
   " ヤンクした物をペーストする
   normal! P
 endfunction
-
-if !s:is_vscode
-  " カーソル下の単語を移動するたびにハイライトする
-  " http://d.hatena.ne.jp/osyo-manga/20140121/1390309901
-  Autocmd CursorHold                                * call s:hl_cword()
-  Autocmd CursorMoved,BufLeave,WinLeave,InsertEnter * call s:hl_clear()
-  Autocmd ColorScheme                               * highlight CursorWord guifg=Red
-
-  highlight CursorWord guifg=Red ctermfg=Red
-
-  function! s:hl_clear()
-    if exists('b:highlight_cursor_word_id') && exists('b:highlight_cursor_word')
-      silent! call matchdelete(b:highlight_cursor_word_id)
-      unlet b:highlight_cursor_word_id
-      unlet b:highlight_cursor_word
-    endif
-  endfunction
-
-  function! s:hl_cword()
-    let word = expand('<cword>')
-    if empty(word)
-      return
-    endif
-    if get(b:, 'highlight_cursor_word', '') ==# word
-      return
-    endif
-
-    call s:hl_clear()
-
-    if !empty(filter(split(word, '\zs'), 'strlen(v:val) > 1'))
-      return
-    endif
-
-    let pattern = printf('\<%s\>', expand('<cword>'))
-    silent! let b:highlight_cursor_word_id = matchadd('CursorWord', pattern)
-    let b:highlight_cursor_word = word
-  endfunction
-endif
 
 " モード移行
 inoremap <C-j> <Esc>
