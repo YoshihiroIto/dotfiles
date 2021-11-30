@@ -221,9 +221,11 @@ xmap <silent> <Leader>a\|      <Plug>(EasyAlign)*\|
 Plug 'machakann/vim-sandwich', { 'on': [] }
 let g:sandwich_no_default_key_mappings          = 1
 let g:operator_sandwich_no_default_key_mappings = 1
-map  <silent> S   <Plug>(operator-sandwich-add)
-map  <silent> Sd  <Plug>(operator-sandwich-delete)
-map  <silent> Sr  <Plug>(operator-sandwich-replace)
+map  <silent> Sa  <Plug>(sandwich-add)
+nmap <silent> Sd  <Plug>(sandwich-delete)
+xmap <silent> Sd  <Plug>(sandwich-delete)
+nmap <silent> Sr  <Plug>(sandwich-replace)
+xmap <silent> Sr  <Plug>(sandwich-replace)
 nmap <silent> Sdd <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
 nmap <silent> Srr <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
 
@@ -452,11 +454,11 @@ if !s:is_vscode
   endfunction
 
   if s:has_gui_running
-    set guifont=HackGenNerd\ Console:h10
+    set guifont=HackGenNerd\ Console:h11
     set renderoptions=type:directx
   endif
 
-  set printfont=HackGenNerd\ Console:h10
+  set printfont=HackGenNerd\ Console:h11
 
   set ambiwidth=double
 endif
