@@ -4,6 +4,7 @@ scriptencoding utf-8
 " --------------------------------------------------------------------------------
 " 基本
 " --------------------------------------------------------------------------------
+let s:sid             = expand('<SID>')
 let s:dotvim_dir      = expand('~/.vim')
 let s:dropbox_dir     = expand('~/Dropbox')
 let s:has_gui_running = has('gui_running')
@@ -81,69 +82,499 @@ call plug#begin('~/.vim_plugged')
 if !s:is_vscode
   Plug 'YoshihiroIto/night-owl.vim'
   Plug 'YoshihiroIto/vim-icondrag', {'on': []}
+  " vim-icondrag {{{
+  autocmd! User vim-icondrag call icondrag#enable()
+  " }}}
 
   Plug 'itchyny/vim-gitbranch', {'on': []}
   Plug 'airblade/vim-gitgutter', {'on': []}
-  let g:gitgutter_map_keys = 0
-  let g:gitgutter_grep     = ''
+  " vim-gitgutter {{{
+  autocmd! User vim-gitgutter call gitgutter#enable()
+        \| let g:gitgutter_map_keys = 0  
+        \| let g:gitgutter_grep     = '' 
+  " }}}
 
   Plug 'lambdalisue/vim-rplugin', {'on': []}
-  Plug 'lambdalisue/lista.nvim', {'on': 'Lista'}
+  Plug 'lambdalisue/lista.nvim', {'on': []}
+  " lista.nvim {{{
   nnoremap <silent> <leader>l   :<C-u>Lista<CR>
   let g:lista#custom_mappings = [
         \  ['<C-j>', '<Esc>'],
         \  ['<C-p>', '<S-Tab>'],
         \  ['<C-n>', '<Tab>'],
         \ ]
+  " }}}
 
-  Plug 'cocopon/vaffle.vim', {'on': 'Vaffle'}
+  Plug 'cocopon/vaffle.vim', {'on': []}
+  " vaffle.vim {{{
   let g:vaffle_show_hidden_files = 1
+  " }}}
 
-  Plug 'itchyny/vim-cursorword'
+  Plug 'itchyny/vim-cursorword', {'on': []}
+  " vim-cursorword {{{
   let g:cursorword_delay     = 270
   let g:cursorword_highlight = 0
   Autocmd ColorScheme * highlight CursorWord0 guifg=Red ctermfg=Red
   Autocmd ColorScheme * highlight CursorWord1 guifg=Red ctermfg=Red
+  " }}}
 
   " Plug 'beyondmarc/hlsl.vim', {'for': 'hlsl'}
   " Plug 'posva/vim-vue', {'for': 'vue'}
 
-  Plug 'glidenote/memolist.vim', {'on': ['MemoNew', 'MemoList']}
+  Plug 'glidenote/memolist.vim', {'on': []}
+  " memolist.vim {{{
   noremap <silent> <leader>n :<C-u>MemoNew<CR>
   noremap <silent> <leader>k :execute 'CtrlP' g:memolist_path<CR>
   let g:memolist_memo_suffix = 'md'
   let g:memolist_path        = s:dropbox_dir . '/memo'
+  " }}}
 
   Plug 'mattn/vim-lsp-settings'
+  " vim-lsp-settings {{{
   let g:lsp_settings_servers_dir = expand('~/lsp_server')
+  " }}}
 
   Plug 'prabirshrestha/vim-lsp'
+  " vim-lsp {{{
   let g:lsp_diagnostics_enabled        = 1
   let g:lsp_diagnostics_echo_cursor    = 1
   let g:lsp_document_highlight_enabled = 0
   nmap <silent> <C-]> :<C-u>LspDefinition<CR>
   nmap <silent> ;e    :<C-u>LspRename<CR>
+  " }}}
 
-  Plug 'ctrlpvim/ctrlp.vim', {'on': ['CtrlP', 'CtrlPMRUFiles']}
+  Plug 'ctrlpvim/ctrlp.vim', {'on': []}
+  " ctrlp {{{
+  nnoremap <silent> <leader>m   :<C-u>CtrlPMRUFiles<CR>
+
+  let g:ctrlp_match_window = 'bottom,order:ttb,min:32,max:32'
+  let g:ctrlp_regexp       = 1
+
+  let g:ctrlp_prompt_mappings = {
+        \ 'PrtBS()':              ['<bs>', '<c-]>', '<c-h>'],
+        \ 'PrtDelete()':          ['<del>'],
+        \ 'PrtDeleteWord()':      ['<c-w>'],
+        \ 'PrtClear()':           ['<c-u>'],
+        \ 'PrtSelectMove("j")':   ['<c-n>'],
+        \ 'PrtSelectMove("k")':   ['<c-p>'],
+        \ 'PrtSelectMove("t")':   ['<Home>', '<kHome>'],
+        \ 'PrtSelectMove("b")':   ['<End>', '<kEnd>'],
+        \ 'PrtSelectMove("u")':   ['<PageUp>', '<kPageUp>'],
+        \ 'PrtSelectMove("d")':   ['<PageDown>', '<kPageDown>'],
+        \ 'PrtHistory(-1)':       ['<down>'],
+        \ 'PrtHistory(1)':        ['<up>'],
+        \ 'AcceptSelection("e")': ['<cr>', '<2-LeftMouse>'],
+        \ 'AcceptSelection("h")': ['<c-x>', '<c-cr>', '<c-s>'],
+        \ 'AcceptSelection("t")': ['<c-t>'],
+        \ 'AcceptSelection("v")': ['<c-v>', '<RightMouse>'],
+        \ 'ToggleFocus()':        ['<s-tab>'],
+        \ 'ToggleRegex()':        ['<c-r>'],
+        \ 'ToggleByFname()':      ['<c-d>'],
+        \ 'ToggleType(1)':        ['<c-f>', '<c-up>'],
+        \ 'ToggleType(-1)':       ['<c-b>', '<c-down>'],
+        \ 'PrtExpandDir()':       ['<tab>'],
+        \ 'PrtInsert("c")':       ['<MiddleMouse>', '<insert>'],
+        \ 'PrtInsert()':          ['<c-\>'],
+        \ 'PrtCurStart()':        ['<c-a>'],
+        \ 'PrtCurEnd()':          ['<c-e>'],
+        \ 'PrtCurLeft()':         ['<left>', '<c-^>'],
+        \ 'PrtCurRight()':        ['<c-l>', '<right>'],
+        \ 'PrtClearCache()':      ['<F5>'],
+        \ 'PrtDeleteEnt()':       ['<F7>'],
+        \ 'CreateNewFile()':      ['<c-y>'],
+        \ 'MarkToOpen()':         ['<c-z>'],
+        \ 'OpenMulti()':          ['<c-o>'],
+        \ 'PrtExit()':            ['<esc>', '<c-c>', '<c-g>', '<c-j>'],
+        \ }
+
+  let g:ctrlp_status_func = {
+        \ 'main': s:sid . 'ctrlp_Name_1',
+        \ 'prog': s:sid . 'ctrlp_Name_2',
+        \ }
+
+  function! s:ctrlp_Name_1(focus, byfname, regex, prev, item, next, marked)
+    let g:lightline.ctrlp_prev = a:prev
+    let g:lightline.ctrlp_item = a:item
+    let g:lightline.ctrlp_next = a:next
+    let g:lightline.ctrlp_marked = a:marked
+    return lightline#statusline(0)
+  endfunction
+
+  function! s:ctrlp_Name_2(str)
+    return lightline#statusline(0)
+  endfunction
+  " }}}
 
   Plug 'itchyny/lightline.vim'
-  execute 'source' expand('~/.vim/lightline.settings.vim')
+  " lightline.vim {{{
+  let g:lightline#colorscheme#yoi#palette = {
+        \   'inactive': {
+        \     'left':     [['#585858', '#262626', 240, 235],
+        \                  ['#585858', '#121212', 240, 233]],
+        \     'right':    [['#262626', '#606060', 235, 241],
+        \                  ['#585858', '#262626', 240, 235],
+        \                  ['#585858', '#121212', 240, 233]]
+        \   },
+        \   'insert':   {
+        \     'branch':   [['#FFFFFF', '#0087AF', 231,  31]],
+        \     'left':     [['#005F5F', '#FFFFFF',  23, 231],
+        \                  ['#87DFFF', '#005F87', 117,  24]],
+        \     'middle':   [['#87DFFF', '#005F87', 117,  24]],
+        \     'right':    [['#005F5F', '#87DFFF',  23, 117],
+        \                  ['#87DFFF', '#0087AF', 117,  31],
+        \                  ['#87DFFF', '#005F87', 117,  24]]
+        \   },
+        \   'normal':   {
+        \     'branch':   [['#FFFFFF', '#585858', 231, 240]],
+        \     'error':    [['#BCBCBC', '#FF0000', 250, 196]],
+        \     'left':     [['#195E00', '#07AF00',  22,  34],
+        \                  ['#8A8A8A', '#303030', 245, 236]],
+        \     'middle':   [['#8A8A8A', '#303030', 245, 236]],
+        \     'right':    [['#606060', '#D0D0D0', 241, 252],
+        \                  ['#BCBCBC', '#585858', 250, 240],
+        \                  ['#9E9E9E', '#303030', 247, 236]],
+        \     'warning':  [['#262626', '#B58900', 235, 136]]
+        \   },
+        \   'replace':  {
+        \     'left':     [['#FFFFFF', '#DF0000', 231, 160],
+        \                  ['#FFFFFF', '#585858', 231, 240]],
+        \     'middle':   [['#8A8A8A', '#303030', 245, 236]],
+        \     'right':    [['#606060', '#D0D0D0', 241, 252],
+        \                  ['#BCBCBC', '#585858', 250, 240],
+        \                  ['#9E9E9E', '#303030', 247, 236]]
+        \   },
+        \   'tabline':  {
+        \     'left':     [['#BCBCBC', '#585858', 250, 240]],
+        \     'middle':   [['#303030', '#9E9E9E', 236, 247]],
+        \     'right':    [['#BCBCBC', '#4E4E4E', 250, 239]],
+        \     'tabsel':   [['#BCBCBC', '#262626', 250, 235]]
+        \   },
+        \   'visual':   {
+        \     'branch':   [['#FFFFFF', '#AF0053', 231, 125]],
+        \     'left':     [['#AB2362', '#FFFFFF', 125, 231],
+        \                  ['#FF84BA', '#870036', 211,  89]],
+        \     'middle':   [['#FF84BA', '#870036', 211,  89]],
+        \     'right':    [['#75003D', '#FF87BB',  89, 211],
+        \                  ['#FE86BB', '#AF0053', 211, 125],
+        \                  ['#FF84BA', '#870036', 211,  89]]
+        \   }
+        \ }
+
+  let g:lightline = {
+        \   'colorscheme': 'yoi',
+        \   'active': {
+        \     'left': [
+        \       ['mode',   'paste'],
+        \       ['branch', 'gitgutter', 'filename', 'submode']
+        \     ],
+        \     'right': [
+        \       ['syntastic', 'lineinfo'],
+        \       ['percent']
+        \     ]
+        \   },
+        \   'component': {'percent': '%3p%%'},
+        \   'component_function': {
+        \     'fileformat':   s:sid . 'lightline_fileformat',
+        \     'filetype':     s:sid . 'lightline_filetype',
+        \     'fileencoding': s:sid . 'lightline_fileencoding',
+        \     'modified':     s:sid . 'lightline_modified',
+        \     'readonly':     s:sid . 'lightline_readonly',
+        \     'filename':     s:sid . 'lightline_filename',
+        \     'mode':         s:sid . 'lightline_mode',
+        \     'lineinfo':     s:sid . 'lightline_lineinfo',
+        \     'submode':      'submode#current'
+        \   },
+        \   'component_expand': {
+        \     'syntastic':    'SyntasticStatuslineFlag',
+        \     'branch':       s:sid . 'lightline_current_branch',
+        \     'gitgutter':    s:sid . 'lightline_git_summary'
+        \   },
+        \   'component_type': {
+        \     'syntastic':    'error',
+        \     'branch':       'branch',
+        \     'gitgutter':    'branch'
+        \   },
+        \   'separator': {   'left': '', 'right': ''},
+        \   'subseparator': {'left': '', 'right': ''},
+        \   'tabline': {
+        \     'left':  [['tabs']],
+        \     'right': [['filetype', 'fileformat', 'fileencoding']]
+        \   },
+        \   'tabline_separator': {   'left': '', 'right': ''},
+        \   'tabline_subseparator': {'left': '︱', 'right': '︱'},
+        \   'mode_map': {
+        \     'n':      'N',
+        \     'i':      'I',
+        \     'R':      'R',
+        \     'v':      'V',
+        \     'V':      'VL',
+        \     'c':      'C',
+        \     "\<C-v>": 'VB',
+        \     's':      'S',
+        \     'S':      'SL',
+        \     "\<C-s>": 'SB',
+        \     't':      'T',
+        \     '?':      ' '
+        \   }
+        \ }
+
+  function! s:lightline_mode()
+    return  &filetype ==# 'quickrun' ? 'Quickrun' :
+          \ winwidth(0) > 50 ? lightline#mode() : ''
+  endfunction
+
+  function! s:lightline_modified()
+    if s:is_lightline_no_disp_group()
+      return ''
+    endif
+
+    return &modified ? '+' : &modifiable ? '' : '-'
+  endfunction
+
+  function! s:lightline_readonly()
+    if s:is_lightline_no_disp_filetype()
+      return ''
+    endif
+
+    return &readonly ? '' : ''
+  endfunction
+
+  function! s:lightline_filename()
+    try
+      return (empty(s:lightline_readonly()) ? '' : s:lightline_readonly() . ' ') .
+            \ (&filetype ==# 'quickrun' ? ''      :
+            \  empty(expand('%:t')) ? '[No Name]' : expand('%:t')) .
+            \ (empty(s:lightline_modified()) ? '' : ' ' . s:lightline_modified())
+    catch
+      return ''
+    endtry
+  endfunction
+
+  function! s:lightline_current_branch()
+    if s:is_lightline_no_disp_filetype()
+      return ''
+    endif
+
+    if empty(expand('%:p'))
+      return ''
+    endif
+
+    try
+      let branch = gitbranch#name()
+      return empty(branch) ? '' : '' . branch
+    catch
+      return ''
+    endtry
+  endfunction
+
+  function! s:lightline_fileformat()
+    if s:is_lightline_no_disp_group()
+      return ''
+    endif
+
+    return &fileformat
+  endfunction
+
+  function! s:lightline_filetype()
+    if s:is_lightline_no_disp_group()
+      return ''
+    endif
+
+    return empty(&filetype) ? 'no filetype' : &filetype
+  endfunction
+
+  function! s:lightline_fileencoding()
+    if s:is_lightline_no_disp_group()
+      return ''
+    endif
+
+    return empty(&fileencoding) ? &encoding : &fileencoding
+  endfunction
+
+  function! s:lightline_git_summary()
+    if s:is_lightline_no_disp_group()
+      return ''
+    endif
+
+    if empty(expand('%:p'))
+      return ''
+    endif
+
+    try
+      let branch = gitbranch#name()
+      if empty(branch)
+        return ''
+      endif
+
+      let summary = GitGutterGetHunkSummary()
+      return printf('%s%d %s%d %s%d',
+            \ g:gitgutter_sign_added,    summary[0],
+            \ g:gitgutter_sign_modified, summary[1],
+            \ g:gitgutter_sign_removed,  summary[2])
+    catch
+      return ''
+    endtry
+  endfunction
+
+  function! s:lightline_lineinfo()
+    if winwidth(0) <= 50
+      return ''
+    endif
+
+    return printf('%4d/%d : %-3d', line('.'), line('$'), col('.'))
+  endfunction
+
+  function! s:is_lightline_no_disp_filetype()
+    return &filetype =~# 'quickrun'
+  endfunction
+
+  function! s:is_lightline_no_disp_group()
+    if winwidth(0) <= 50
+      return 1
+    endif
+
+    if s:is_lightline_no_disp_filetype()
+      return 1
+    endif
+
+    return 0
+  endfunction
+
+  Autocmd CursorHold,CursorHoldI * call lightline#update()
+  " }}}
 
   Plug 'kana/vim-submode', {'on': []}
+  " submode {{{
+  autocmd! User vim-submode call s:init_submode()
 
-  Plug 'prabirshrestha/asyncomplete.vim'
+  function! s:submode_snap(value, scale)
+    return a:value / a:scale * a:scale
+  endfunction
+
+  function! s:submode_resize_appwin(x, y)
+    let scale = get(g:, 'yoi_resize_appwin_size', 8)
+
+    if a:x != 0
+      let &columns = s:submode_snap(&columns, scale) + a:x * scale
+    endif
+
+    if a:y != 0
+      let &lines   = s:submode_snap(&lines,   scale) + a:y * scale
+    endif
+  endfunction
+
+  function! s:submode_move_appwin(x, y)
+    let scale = get(g:, 'yoi_move_appwin_size', 64)
+    let win_x = getwinposx()
+    let win_y = getwinposy()
+
+    if a:x == 0
+      let x = win_x
+    else
+      let x = win_x + a:x * scale
+
+      if win_x != s:submode_snap(win_x, scale)
+        let x = s:submode_snap(x, scale)
+      endif
+    endif
+
+    if a:y == 0
+      let y = win_y
+    else
+      let y = win_y + a:y * scale
+
+      if win_y != s:submode_snap(win_y, scale)
+        let y = s:submode_snap(y, scale)
+      endif
+    endif
+
+    execute 'winpos' x y
+  endfunction
+
+  function s:init_submode()
+    let g:submode_timeout          = 0
+    let g:submode_keep_leaving_key = 1
+
+    call submode#enter_with('git_hunk', 'n', 's', 'ghj', ':<C-u>GitGutterEnable<CR>:GitGutterNextHunk<CR>zvzz')
+    call submode#enter_with('git_hunk', 'n', 's', 'ghk', ':<C-u>GitGutterEnable<CR>:GitGutterPrevHunk<CR>zvzz')
+    call submode#map(       'git_hunk', 'n', 's', 'j',   ':<C-u>GitGutterEnable<CR>:GitGutterNextHunk<CR>zvzz')
+    call submode#map(       'git_hunk', 'n', 's', 'k',   ':<C-u>GitGutterEnable<CR>:GitGutterPrevHunk<CR>zvzz')
+
+    call submode#enter_with('winsize', 'n', 's', 'gwh', '8<C-w>>')
+    call submode#enter_with('winsize', 'n', 's', 'gwl', '8<C-w><')
+    call submode#enter_with('winsize', 'n', 's', 'gwj', '4<C-w>-')
+    call submode#enter_with('winsize', 'n', 's', 'gwk', '4<C-w>+')
+    call submode#map(       'winsize', 'n', 's', 'h',   '8<C-w>>')
+    call submode#map(       'winsize', 'n', 's', 'l',   '8<C-w><')
+    call submode#map(       'winsize', 'n', 's', 'j',   '4<C-w>-')
+    call submode#map(       'winsize', 'n', 's', 'k',   '4<C-w>+')
+
+    let call_resize_appwin = ':<C-u>call ' . s:sid . 'submode_resize_appwin'
+    let call_move_appwin   = ':<C-u>call ' . s:sid . 'submode_move_appwin'
+
+    call submode#enter_with('appwinsize', 'n', 's', '<leader>wH', call_resize_appwin . '(-1, 0)<CR>')
+    call submode#enter_with('appwinsize', 'n', 's', '<leader>wL', call_resize_appwin . '(+1, 0)<CR>')
+    call submode#enter_with('appwinsize', 'n', 's', '<leader>wJ', call_resize_appwin . '(0, +1)<CR>')
+    call submode#enter_with('appwinsize', 'n', 's', '<leader>wK', call_resize_appwin . '(0, -1)<CR>')
+    call submode#map(       'appwinsize', 'n', 's', 'H',          call_resize_appwin . '(-1, 0)<CR>')
+    call submode#map(       'appwinsize', 'n', 's', 'L',          call_resize_appwin . '(+1, 0)<CR>')
+    call submode#map(       'appwinsize', 'n', 's', 'J',          call_resize_appwin . '(0, +1)<CR>')
+    call submode#map(       'appwinsize', 'n', 's', 'K',          call_resize_appwin . '(0, -1)<CR>')
+    call submode#map(       'appwinsize', 'n', 's', 'h',          call_resize_appwin . '(-1, 0)<CR>')
+    call submode#map(       'appwinsize', 'n', 's', 'l',          call_resize_appwin . '(+1, 0)<CR>')
+    call submode#map(       'appwinsize', 'n', 's', 'j',          call_resize_appwin . '(0, +1)<CR>')
+    call submode#map(       'appwinsize', 'n', 's', 'k',          call_resize_appwin . '(0, -1)<CR>')
+
+    call submode#enter_with('appwinpos', 'n', 's', '<leader>wh', call_move_appwin . '(-1, 0)<CR>')
+    call submode#enter_with('appwinpos', 'n', 's', '<leader>wl', call_move_appwin . '(+1, 0)<CR>')
+    call submode#enter_with('appwinpos', 'n', 's', '<leader>wj', call_move_appwin . '(0, +1)<CR>')
+    call submode#enter_with('appwinpos', 'n', 's', '<leader>wk', call_move_appwin . '(0, -1)<CR>')
+    call submode#map(       'appwinpos', 'n', 's', 'H',          call_move_appwin . '(-1, 0)<CR>')
+    call submode#map(       'appwinpos', 'n', 's', 'L',          call_move_appwin . '(+1, 0)<CR>')
+    call submode#map(       'appwinpos', 'n', 's', 'J',          call_move_appwin . '(0, +1)<CR>')
+    call submode#map(       'appwinpos', 'n', 's', 'K',          call_move_appwin . '(0, -1)<CR>')
+    call submode#map(       'appwinpos', 'n', 's', 'h',          call_move_appwin . '(-1, 0)<CR>')
+    call submode#map(       'appwinpos', 'n', 's', 'l',          call_move_appwin . '(+1, 0)<CR>')
+    call submode#map(       'appwinpos', 'n', 's', 'j',          call_move_appwin . '(0, +1)<CR>')
+    call submode#map(       'appwinpos', 'n', 's', 'k',          call_move_appwin . '(0, -1)<CR>')
+  endfunction
+  " }}}
+
   Plug 'prabirshrestha/asyncomplete-lsp.vim', {'on': []}
   Plug 'prabirshrestha/asyncomplete-ultisnips.vim', {'on': []}
   Plug 'prabirshrestha/asyncomplete-buffer.vim', {'on': []}
+  Plug 'prabirshrestha/asyncomplete.vim', {'on': []}
+  " asyncomplete.vim {{{
+  autocmd! User asyncomplete.vim call s:init_asyncomplete()
+
+  function s:init_asyncomplete()
+    call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
+          \ 'name': 'ultisnips',
+          \ 'whitelist': ['*'],
+          \ 'priority': 10,
+          \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
+          \ }))
+
+    call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+          \ 'name': 'buffer',
+          \ 'whitelist': ['*'],
+          \ 'priority': 30,
+          \ 'completor': function('asyncomplete#sources#buffer#completor'),
+          \ 'config': {
+            \    'max_buffer_size': 5000000,
+            \  },
+            \ }))
+  endfunction
+  " }}}
 
   Plug 'SirVer/ultisnips', {'on': []}
+  " ultisnips {{{
   let g:UltiSnipsSnippetDirectories  = [s:dotvim_dir . '/UltiSnips']
   let g:UltiSnipsJumpForwardTrigger  = "<Tab>"
   let g:UltiSnipsJumpBackwardTrigger = "<S-Tab>"
   let g:UltiSnipsListSnippets        = "<S-Tab>"
   let g:UltiSnipsExpandTrigger       = "<C-e>"
-
-  Plug 'editorconfig/editorconfig-vim'
+  " }}}
 
   Plug 'prettier/vim-prettier', {
         \   'do': 'yarn install',
@@ -152,16 +583,20 @@ if !s:is_vscode
           \    'scss',       'json',       'graphql', 'markdown',
           \    'vue',        'svelte',     'yaml',    'html']
           \ }
+  " vim-prettier {{{
   let g:prettier#exec_cmd_async            = 1
   let g:prettier#autoformat                = 1
   let g:prettier#autoformat_require_pragma = 0
   let g:prettier#quickfix_enabled          = 0
+  "}}}
 
   Plug 'vim-jp/vimdoc-ja', {'on': []}
 endif
 
 Plug 'andymass/vim-matchup'
+" vim-matchup {{{
 let g:matchup_matchparen_status_offscreen = 0
+" }}}
 
 Plug 'haya14busa/vim-asterisk', {'on': []}
 
@@ -178,27 +613,36 @@ Plug 'rhysd/vim-textobj-word-column', {'on': []}
 Plug 'whatyouhide/vim-textobj-xmlattr', {'on': []}
 
 Plug 'sgur/vim-textobj-parameter', {'on': []}
+" vim-textobj-parameter {{{
 xmap aa <Plug>(textobj-parameter-a)
 xmap ia <Plug>(textobj-parameter-i)
 omap aa <Plug>(textobj-parameter-a)
 omap ia <Plug>(textobj-parameter-i)
+" }}}
 
 Plug 'rhysd/vim-textobj-wiw', {'on': []}
+" vim-textobj-wiw {{{
 xmap a. <Plug>(textobj-wiw-a)
 xmap i. <Plug>(textobj-wiw-i)
 omap a. <Plug>(textobj-wiw-a)
 omap i. <Plug>(textobj-wiw-i)
+" }}}
 
 Plug 'kana/vim-operator-user', {'on': []}
 
 Plug 'YoshihiroIto/vim-operator-tcomment', {'on': []}
+" vim-operator-tcomment {{{
 nmap t  <Plug>(operator-tcomment)
 xmap t  <Plug>(operator-tcomment)
+" }}}
 
 Plug 'kana/vim-operator-replace', {'on': []}
+" vim-operator-replace {{{
 map R  <Plug>(operator-replace)
+" }}}
 
 Plug 'junegunn/vim-easy-align', {'on': []}
+" vim-easy-align {{{
 nmap <silent> <Leader>a=       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)=
 nmap <silent> <Leader>a:       v<Plug>(textobj-indent-i)<Plug>(EasyAlign):
 nmap <silent> <Leader>a,       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*,
@@ -209,8 +653,10 @@ xmap <silent> <Leader>a:       <Plug>(EasyAlign):
 xmap <silent> <Leader>a,       <Plug>(EasyAlign)*,
 xmap <silent> <Leader>a<Space> <Plug>(EasyAlign)*<Space>
 xmap <silent> <Leader>a\|      <Plug>(EasyAlign)*\|
+" }}}
 
 Plug 'machakann/vim-sandwich', {'on': []}
+" vim-sandwich {{{
 let g:sandwich_no_default_key_mappings          = 1
 let g:operator_sandwich_no_default_key_mappings = 1
 map  <silent> Sa  <Plug>(sandwich-add)
@@ -220,21 +666,28 @@ nmap <silent> Sr  <Plug>(sandwich-replace)
 xmap <silent> Sr  <Plug>(sandwich-replace)
 nmap <silent> Sdd <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
 nmap <silent> Srr <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
+" }}}
 
-Plug 'tyru/open-browser.vim', {'on': '<Plug>(openbrowser-smart-search)'}
+Plug 'tyru/open-browser.vim', {'on': []}
+" open-browser.vim {{{
 let g:openbrowser_no_default_menus = 1
 let g:netrw_nogx = 1
 nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
+" }}}
 
-Plug 'YoshihiroIto/vim-closetag', {'on': '<Plug>closetag'}
+Plug 'YoshihiroIto/vim-closetag', {'on': []}
+" vim-closetag {{{
 let g:closetag_filenames = '*.{html,xhtml,xml,xaml}'
+" }}}
 
 Plug 'haya14busa/is.vim', {'on': []}
+" is.vim {{{
 map *  <Plug>(asterisk-z*)<Plug>(is-nohl-1)
 map g* <Plug>(asterisk-gz*)<Plug>(is-nohl-1)
 map #  <Plug>(asterisk-z#)<Plug>(is-nohl-1)
 map g# <Plug>(asterisk-gz#)<Plug>(is-nohl-1)
+" }}}
 
 call plug#end()
 
@@ -246,43 +699,29 @@ function! s:load_plug(timer)
           \ 'vim-gitbranch',
           \ 'vim-gitgutter',
           \ 'vim-rplugin',
+          \ 'lista.nvim',
+          \ 'vaffle.vim',
+          \ 'vim-cursorword',
+          \ 'memolist.vim',
+          \ 'ctrlp.vim',
           \ 'asyncomplete-lsp.vim',
           \ 'asyncomplete-ultisnips.vim',
           \ 'asyncomplete-buffer.vim',
+          \ 'asyncomplete.vim',
           \ 'ultisnips',
           \ 'vimdoc-ja',
           \ )
-
-    execute 'source' expand('~/.vim/ctrlp.settings.vim')
-    execute 'source' expand('~/.vim/submode.settings.vim')
-
-    call icondrag#enable()
-    call gitgutter#enable()
-
-    call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
-          \ 'name': 'ultisnips',
-          \ 'whitelist': ['*'],
-          \ 'priority': 10,
-          \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
-          \ }))
-    call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
-          \ 'name': 'buffer',
-          \ 'whitelist': ['*'],
-          \ 'priority': 30,
-          \ 'completor': function('asyncomplete#sources#buffer#completor'),
-          \ 'config': {
-            \    'max_buffer_size': 5000000,
-            \  },
-            \ }))
   endif
 
   call plug#load(
         \ 'vim-asterisk',
         \ 'tcomment_vim',
         \ 'lexima.vim',
+        \ 'vim-closetag',
         \ 'is.vim',
         \ 'vim-easy-align',
         \ 'vim-sandwich',
+        \ 'open-browser.vim',
         \ 'vim-textobj-user',
         \ 'vim-textobj-comment',
         \ 'vim-textobj-indent',
