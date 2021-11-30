@@ -129,18 +129,25 @@ if !s:is_vscode
   let g:memolist_path        = s:dropbox_dir . '/memo'
   " }}}
 
-  Plug 'mattn/vim-lsp-settings'
+  Plug 'mattn/vim-lsp-settings', {'on': []}
   " vim-lsp-settings {{{
   let g:lsp_settings_servers_dir = expand('~/lsp_server')
   " }}}
 
-  Plug 'prabirshrestha/vim-lsp'
+  Plug 'prabirshrestha/vim-lsp', {'on': []}
   " vim-lsp {{{
-  let g:lsp_diagnostics_enabled        = 1
-  let g:lsp_diagnostics_echo_cursor    = 1
-  let g:lsp_document_highlight_enabled = 0
-  nmap <silent> <C-]> :<C-u>LspDefinition<CR>
-  nmap <silent> ;e    :<C-u>LspRename<CR>
+  autocmd! User vim-lsp call s:init_lsp()
+  let g:lsp_auto_enable = 0
+
+  function s:init_lsp()
+    call lsp#enable()
+
+    let g:lsp_diagnostics_enabled        = 1
+    let g:lsp_diagnostics_echo_cursor    = 1
+    let g:lsp_document_highlight_enabled = 0
+    nmap <silent> <C-]> :<C-u>LspDefinition<CR>
+    nmap <silent> ;e    :<C-u>LspRename<CR>
+  endfunction
   " }}}
 
   Plug 'ctrlpvim/ctrlp.vim', {'on': []}
@@ -548,6 +555,8 @@ if !s:is_vscode
   autocmd! User asyncomplete.vim call s:init_asyncomplete()
 
   function s:init_asyncomplete()
+    call asyncomplete#enable_for_buffer()
+
     call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
           \ 'name': 'ultisnips',
           \ 'whitelist': ['*'],
@@ -705,6 +714,8 @@ function! s:load_plug(timer)
           \ 'vaffle.vim',
           \ 'vim-cursorword',
           \ 'memolist.vim',
+          \ 'vim-lsp-settings',
+          \ 'vim-lsp',
           \ 'ctrlp.vim',
           \ 'asyncomplete-lsp.vim',
           \ 'asyncomplete-ultisnips.vim',
