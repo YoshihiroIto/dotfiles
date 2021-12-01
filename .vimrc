@@ -4,12 +4,12 @@ scriptencoding utf-8
 " --------------------------------------------------------------------------------
 " 基本
 " --------------------------------------------------------------------------------
-let s:sid             = expand('<SID>')
-let s:dotvim_dir      = expand('~/.vim')
-let s:dropbox_dir     = expand('~/Dropbox')
-let s:has_gui_running = has('gui_running')
-let s:is_vscode       = exists('g:vscode')
-let s:base_columns    = 140
+let s:sid          = expand('<SID>')
+let s:dotvim_dir   = expand('~/.vim')
+let s:dropbox_dir  = expand('~/Dropbox')
+let s:is_vscode    = exists('g:vscode')
+let s:is_gui       = has('gui_running')
+let s:base_columns = 140
 
 let g:no_gvimrc_example        = 1
 let g:no_vimrc_example         = 1
@@ -32,10 +32,6 @@ let g:loaded_zipPlugin         = 1
 let g:loaded_spellfile_plugin  = 1
 let g:skip_loading_mswin       = 1
 let g:did_install_syntax_menu  = 1
-
-if !s:is_vscode
-  let g:python3_host_prog = 'C:/Users/yoi/AppData/Local/Programs/Python/Python310/python.exe'
-endif
 
 " 自動コマンド
 augroup MyAutoCmd
@@ -72,7 +68,8 @@ if has('vim_starting')
         \| echomsg 'startuptime:' reltimestr(s:startuptime)
 endif
 
-let g:mapleader = "\<Space>"
+let g:mapleader         = "\<Space>"
+let g:python3_host_prog = 'C:/Users/yoi/AppData/Local/Programs/Python/Python310/python.exe'
 
 " --------------------------------------------------------------------------------
 " プラグイン
@@ -527,34 +524,36 @@ if !s:is_vscode
     call submode#map(       'winsize', 'n', 's', 'j',   '4<C-w>-')
     call submode#map(       'winsize', 'n', 's', 'k',   '4<C-w>+')
 
-    let call_resize_appwin = ':<C-u>call ' . s:sid . 'submode_resize_appwin'
-    let call_move_appwin   = ':<C-u>call ' . s:sid . 'submode_move_appwin'
+    if s:is_gui
+      let call_resize_appwin = ':<C-u>call ' . s:sid . 'submode_resize_appwin'
+      let call_move_appwin   = ':<C-u>call ' . s:sid . 'submode_move_appwin'
 
-    call submode#enter_with('appwinsize', 'n', 's', '<leader>wH', call_resize_appwin . '(-1, 0)<CR>')
-    call submode#enter_with('appwinsize', 'n', 's', '<leader>wL', call_resize_appwin . '(+1, 0)<CR>')
-    call submode#enter_with('appwinsize', 'n', 's', '<leader>wJ', call_resize_appwin . '(0, +1)<CR>')
-    call submode#enter_with('appwinsize', 'n', 's', '<leader>wK', call_resize_appwin . '(0, -1)<CR>')
-    call submode#map(       'appwinsize', 'n', 's', 'H',          call_resize_appwin . '(-1, 0)<CR>')
-    call submode#map(       'appwinsize', 'n', 's', 'L',          call_resize_appwin . '(+1, 0)<CR>')
-    call submode#map(       'appwinsize', 'n', 's', 'J',          call_resize_appwin . '(0, +1)<CR>')
-    call submode#map(       'appwinsize', 'n', 's', 'K',          call_resize_appwin . '(0, -1)<CR>')
-    call submode#map(       'appwinsize', 'n', 's', 'h',          call_resize_appwin . '(-1, 0)<CR>')
-    call submode#map(       'appwinsize', 'n', 's', 'l',          call_resize_appwin . '(+1, 0)<CR>')
-    call submode#map(       'appwinsize', 'n', 's', 'j',          call_resize_appwin . '(0, +1)<CR>')
-    call submode#map(       'appwinsize', 'n', 's', 'k',          call_resize_appwin . '(0, -1)<CR>')
+      call submode#enter_with('appwinsize', 'n', 's', '<leader>wH', call_resize_appwin . '(-1, 0)<CR>')
+      call submode#enter_with('appwinsize', 'n', 's', '<leader>wL', call_resize_appwin . '(+1, 0)<CR>')
+      call submode#enter_with('appwinsize', 'n', 's', '<leader>wJ', call_resize_appwin . '(0, +1)<CR>')
+      call submode#enter_with('appwinsize', 'n', 's', '<leader>wK', call_resize_appwin . '(0, -1)<CR>')
+      call submode#map(       'appwinsize', 'n', 's', 'H',          call_resize_appwin . '(-1, 0)<CR>')
+      call submode#map(       'appwinsize', 'n', 's', 'L',          call_resize_appwin . '(+1, 0)<CR>')
+      call submode#map(       'appwinsize', 'n', 's', 'J',          call_resize_appwin . '(0, +1)<CR>')
+      call submode#map(       'appwinsize', 'n', 's', 'K',          call_resize_appwin . '(0, -1)<CR>')
+      call submode#map(       'appwinsize', 'n', 's', 'h',          call_resize_appwin . '(-1, 0)<CR>')
+      call submode#map(       'appwinsize', 'n', 's', 'l',          call_resize_appwin . '(+1, 0)<CR>')
+      call submode#map(       'appwinsize', 'n', 's', 'j',          call_resize_appwin . '(0, +1)<CR>')
+      call submode#map(       'appwinsize', 'n', 's', 'k',          call_resize_appwin . '(0, -1)<CR>')
 
-    call submode#enter_with('appwinpos', 'n', 's', '<leader>wh', call_move_appwin . '(-1, 0)<CR>')
-    call submode#enter_with('appwinpos', 'n', 's', '<leader>wl', call_move_appwin . '(+1, 0)<CR>')
-    call submode#enter_with('appwinpos', 'n', 's', '<leader>wj', call_move_appwin . '(0, +1)<CR>')
-    call submode#enter_with('appwinpos', 'n', 's', '<leader>wk', call_move_appwin . '(0, -1)<CR>')
-    call submode#map(       'appwinpos', 'n', 's', 'H',          call_move_appwin . '(-1, 0)<CR>')
-    call submode#map(       'appwinpos', 'n', 's', 'L',          call_move_appwin . '(+1, 0)<CR>')
-    call submode#map(       'appwinpos', 'n', 's', 'J',          call_move_appwin . '(0, +1)<CR>')
-    call submode#map(       'appwinpos', 'n', 's', 'K',          call_move_appwin . '(0, -1)<CR>')
-    call submode#map(       'appwinpos', 'n', 's', 'h',          call_move_appwin . '(-1, 0)<CR>')
-    call submode#map(       'appwinpos', 'n', 's', 'l',          call_move_appwin . '(+1, 0)<CR>')
-    call submode#map(       'appwinpos', 'n', 's', 'j',          call_move_appwin . '(0, +1)<CR>')
-    call submode#map(       'appwinpos', 'n', 's', 'k',          call_move_appwin . '(0, -1)<CR>')
+      call submode#enter_with('appwinpos', 'n', 's', '<leader>wh', call_move_appwin . '(-1, 0)<CR>')
+      call submode#enter_with('appwinpos', 'n', 's', '<leader>wl', call_move_appwin . '(+1, 0)<CR>')
+      call submode#enter_with('appwinpos', 'n', 's', '<leader>wj', call_move_appwin . '(0, +1)<CR>')
+      call submode#enter_with('appwinpos', 'n', 's', '<leader>wk', call_move_appwin . '(0, -1)<CR>')
+      call submode#map(       'appwinpos', 'n', 's', 'H',          call_move_appwin . '(-1, 0)<CR>')
+      call submode#map(       'appwinpos', 'n', 's', 'L',          call_move_appwin . '(+1, 0)<CR>')
+      call submode#map(       'appwinpos', 'n', 's', 'J',          call_move_appwin . '(0, +1)<CR>')
+      call submode#map(       'appwinpos', 'n', 's', 'K',          call_move_appwin . '(0, -1)<CR>')
+      call submode#map(       'appwinpos', 'n', 's', 'h',          call_move_appwin . '(-1, 0)<CR>')
+      call submode#map(       'appwinpos', 'n', 's', 'l',          call_move_appwin . '(+1, 0)<CR>')
+      call submode#map(       'appwinpos', 'n', 's', 'j',          call_move_appwin . '(0, +1)<CR>')
+      call submode#map(       'appwinpos', 'n', 's', 'k',          call_move_appwin . '(0, -1)<CR>')
+    endif
   endfunction
   " }}}
 
@@ -682,7 +681,7 @@ Plug 'machakann/vim-sandwich', {'on': []}
 autocmd! User vim-sandwich call s:init_sandwich()
 let g:operator_sandwich_no_default_key_mappings = 1
 function s:init_sandwich()
-  map  <silent> Sa  <Plug>(sandwich-add)
+  map  <silent> S   <Plug>(sandwich-add)
   nmap <silent> Sd  <Plug>(sandwich-delete)
   xmap <silent> Sd  <Plug>(sandwich-delete)
   nmap <silent> Sr  <Plug>(sandwich-replace)
@@ -887,7 +886,7 @@ if !s:is_vscode
   let g:vimsyn_folding     = 'af'
   let g:xml_syntax_folding = 1
 
-  if s:has_gui_running
+  if s:is_gui
     set lines=100
     let &columns = s:base_columns
   endif
@@ -899,7 +898,7 @@ if !s:is_vscode
 
   colorscheme night-owl
 
-  if (has("termguicolors"))
+  if !s:is_gui
     set termguicolors
   endif
 
@@ -919,7 +918,7 @@ if !s:is_vscode
     endif
   endfunction
 
-  if s:has_gui_running
+  if s:is_gui
     set guifont=HackGenNerd\ Console:h11
     set renderoptions=type:directx
   endif
@@ -959,7 +958,7 @@ set helplang=ja,en
 set keywordprg=
 
 " 複数Vimで検索を同期する
-if s:has_gui_running
+if s:is_gui
   function! s:save_reg(reg, filename)
     call writefile([getreg(a:reg)], a:filename)
   endfunction
@@ -1102,7 +1101,7 @@ nnoremap <expr> zh foldlevel(line('.'))  >  0  ? 'zc' : '<C-h>'
 nnoremap <expr> zl foldclosed(line('.')) != -1 ? 'zo' : '<C-l>'
 
 " アプリウィンドウ操作
-if s:has_gui_running && !s:is_vscode
+if s:is_gui
   noremap <silent> <leader>we :<C-u>call <SID>toggle_v_split_wide()<CR>
   noremap <silent> <leader>wf :<C-u>call <SID>full_window()<CR>
 
