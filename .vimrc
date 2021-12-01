@@ -680,7 +680,6 @@ xmap <silent> <Leader>a\|      <Plug>(EasyAlign)*\|
 Plug 'machakann/vim-sandwich', {'on': []}
 " vim-sandwich {{{
 autocmd! User vim-sandwich call s:init_sandwich()
-let g:sandwich_no_default_key_mappings          = 1
 let g:operator_sandwich_no_default_key_mappings = 1
 function s:init_sandwich()
   map  <silent> Sa  <Plug>(sandwich-add)
