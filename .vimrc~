@@ -620,9 +620,7 @@ let g:matchup_matchparen_status_offscreen = 0
 " }}}
 
 Plug 'markonm/traces.vim', {'on': []}
-" traces.vim {{{
-let g:traces_preview_window = 'botright 10new'
-" }}}
+let g:traces_preview_window = "botright 10new"
 
 Plug 'haya14busa/vim-asterisk', {'on': []}
 
