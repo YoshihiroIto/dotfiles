@@ -33,15 +33,8 @@ let g:loaded_spellfile_plugin  = 1
 let g:skip_loading_mswin       = 1
 let g:did_install_syntax_menu  = 1
 
-" 自動コマンド
-augroup MyAutoCmd
-  autocmd!
-augroup END
-
-command! -nargs=* Autocmd   autocmd MyAutoCmd <args>
-command! -nargs=* AutocmdFT autocmd MyAutoCmd FileType <args>
-Autocmd BufWinEnter,ColorScheme .vimrc highlight def link myVimAutocmd vimAutoCmd
-Autocmd BufWinEnter,ColorScheme .vimrc syntax match vimAutoCmd /\<\(Autocmd\|AutocmdFT\)\>/
+let g:mapleader         = "\<Space>"
+let g:python3_host_prog = 'C:/Users/yoi/AppData/Local/Programs/Python/Python310/python.exe'
 
 " ローカル設定
 let s:vimrc_local = expand('~/.vimrc.local')
@@ -49,27 +42,38 @@ if filereadable(s:vimrc_local)
   execute 'source' s:vimrc_local
 endif
 
-function! s:edit_vimrc()
-  let dropbox_vimrc = s:dropbox_dir . '/dotfiles/.vimrc'
-  if filereadable(dropbox_vimrc)
-    execute 'edit' dropbox_vimrc
-  else
-    execute 'edit' $MYVIMRC
+if !s:is_vscode
+  " 自動コマンド
+  augroup MyAutoCmd
+    autocmd!
+  augroup END
+
+  command! -nargs=* Autocmd   autocmd MyAutoCmd <args>
+  command! -nargs=* AutocmdFT autocmd MyAutoCmd FileType <args>
+  Autocmd BufWinEnter,ColorScheme .vimrc
+        \  highlight def link myVimAutocmd vimAutoCmd
+        \| syntax match vimAutoCmd /\<\(Autocmd\|AutocmdFT\)\>/
+
+  function! s:edit_vimrc()
+    let dropbox_vimrc = s:dropbox_dir . '/dotfiles/.vimrc'
+    if filereadable(dropbox_vimrc)
+      execute 'edit' dropbox_vimrc
+    else
+      execute 'edit' $MYVIMRC
+    endif
+  endfunction
+
+  nnoremap <silent> <F1> :<C-u>call <SID>edit_vimrc()<CR>
+  nnoremap <silent> <F2> :<C-u>PlugUpdate<CR>
+
+  " スタートアップ時間表示
+  if has('vim_starting')
+    let s:startuptime = reltime()
+    Autocmd VimEnter *
+          \  let s:startuptime = reltime(s:startuptime)
+          \| echomsg 'startuptime:' reltimestr(s:startuptime)
   endif
-endfunction
-
-nnoremap <silent> <F1> :<C-u>call <SID>edit_vimrc()<CR>
-nnoremap <silent> <F2> :<C-u>PlugUpdate<CR>
-
-" スタートアップ時間表示
-if has('vim_starting')
-  let s:startuptime = reltime()
-  Autocmd VimEnter * let s:startuptime = reltime(s:startuptime)
-        \| echomsg 'startuptime:' reltimestr(s:startuptime)
 endif
-
-let g:mapleader         = "\<Space>"
-let g:python3_host_prog = 'C:/Users/yoi/AppData/Local/Programs/Python/Python310/python.exe'
 
 " --------------------------------------------------------------------------------
 " プラグイン
@@ -86,9 +90,10 @@ if !s:is_vscode
   Plug 'itchyny/vim-gitbranch', {'on': []}
   Plug 'airblade/vim-gitgutter', {'on': []}
   " vim-gitgutter {{{
-  autocmd! User vim-gitgutter call gitgutter#enable()
-        \| let g:gitgutter_map_keys = 0  
-        \| let g:gitgutter_grep     = '' 
+  autocmd! User vim-gitgutter
+        \  call gitgutter#enable()
+        \| let g:gitgutter_map_keys = 0
+        \| let g:gitgutter_grep     = ''
   " }}}
 
   Plug 'lambdalisue/vim-rplugin', {'on': []}
@@ -102,6 +107,11 @@ if !s:is_vscode
         \ ]
   " }}}
 
+  Plug 'previm/previm', {'on': []}
+  " previm {{{
+  nnoremap <silent> <leader>p :<C-u>PrevimOpen<CR>
+  " }}}
+
   Plug 'cocopon/vaffle.vim', {'on': []}
   " vaffle.vim {{{
   let g:vaffle_show_hidden_files = 1
@@ -111,8 +121,9 @@ if !s:is_vscode
   " vim-cursorword {{{
   let g:cursorword_delay     = 270
   let g:cursorword_highlight = 0
-  Autocmd ColorScheme * highlight CursorWord0 guifg=Red ctermfg=Red
-  Autocmd ColorScheme * highlight CursorWord1 guifg=Red ctermfg=Red
+  Autocmd ColorScheme *
+        \  highlight CursorWord0 guifg=Red ctermfg=Red
+        \| highlight CursorWord1 guifg=Red ctermfg=Red
   " }}}
 
   Plug 'itchyny/vim-autoft', {'on': []}
@@ -730,6 +741,7 @@ function! s:load_plug(timer)
           \ 'vim-gitgutter',
           \ 'vim-rplugin',
           \ 'lista.nvim',
+          \ 'previm',
           \ 'vaffle.vim',
           \ 'vim-cursorword',
           \ 'vim-autoft',
@@ -737,12 +749,15 @@ function! s:load_plug(timer)
           \ 'vim-lsp-settings',
           \ 'vim-lsp',
           \ 'ctrlp.vim',
+          \ 'ultisnips',
+          \ 'vimdoc-ja',
+          \ )
+
+    call plug#load(
           \ 'asyncomplete-lsp.vim',
           \ 'asyncomplete-ultisnips.vim',
           \ 'asyncomplete-buffer.vim',
-          \ 'asyncomplete.vim',
-          \ 'ultisnips',
-          \ 'vimdoc-ja',
+          \ 'asyncomplete.vim'
           \ )
   endif
 
@@ -790,37 +805,45 @@ Autocmd BufNewFile,BufRead            *.{fx,fxc,fxh,hlsl,hlsli} setlocal filetyp
 Autocmd BufNewFile,BufRead            *.{fsh,vsh}               setlocal filetype=glsl
 Autocmd BufNewFile,BufRead            *.{md,mkd,markdown}       setlocal filetype=markdown
 
-AutocmdFT typescript setlocal tabstop=2
-AutocmdFT typescript setlocal shiftwidth=2
-AutocmdFT typescript setlocal softtabstop=2
+AutocmdFT typescript
+      \  setlocal tabstop=2
+      \| setlocal shiftwidth=2
+      \| setlocal softtabstop=2
 
-AutocmdFT ruby       setlocal tabstop=2
-AutocmdFT ruby       setlocal shiftwidth=2
-AutocmdFT ruby       setlocal softtabstop=2
+AutocmdFT ruby
+      \  setlocal tabstop=2
+      \| setlocal shiftwidth=2
+      \| setlocal softtabstop=2
 
-AutocmdFT vue        setlocal tabstop=2
-AutocmdFT vue        setlocal shiftwidth=2
-AutocmdFT vue        setlocal softtabstop=2
+AutocmdFT vue
+      \  setlocal tabstop=2
+      \| setlocal shiftwidth=2
+      \| setlocal softtabstop=2
 
-AutocmdFT vim        setlocal foldmethod=marker
-AutocmdFT vim        setlocal foldlevel=0
-AutocmdFT vim        setlocal foldcolumn=5
-AutocmdFT vim        setlocal tabstop=2
-AutocmdFT vim        setlocal shiftwidth=2
-AutocmdFT vim        setlocal softtabstop=2
+AutocmdFT vim
+      \  setlocal foldmethod=marker
+      \| setlocal foldlevel=0
+      \| setlocal foldcolumn=5
+      \| setlocal tabstop=2
+      \| setlocal shiftwidth=2
+      \| setlocal softtabstop=2
 
-AutocmdFT xml,html   setlocal foldlevel=99
-AutocmdFT xml,html   setlocal foldcolumn=5
-AutocmdFT xml,html   setlocal foldmethod=syntax
-AutocmdFT xml,html   inoremap <silent><buffer> >  ><Esc>:call closetag#CloseTagFun()<CR>
+AutocmdFT xml,html
+      \  setlocal foldlevel=99
+      \| setlocal foldcolumn=5
+      \| setlocal foldmethod=syntax
+      \| inoremap <silent><buffer> >  ><Esc>:call closetag#CloseTagFun()<CR>
 
-AutocmdFT json       setlocal foldmethod=syntax
-AutocmdFT json       setlocal shiftwidth=2
-AutocmdFT json       command! Format %!jq
+AutocmdFT json
+      \  setlocal foldmethod=syntax
+      \| setlocal shiftwidth=2
+      \| command! Format %!jq
 
-AutocmdFT dosbatch   setlocal fileencoding=sjis
+AutocmdFT dosbatch
+      \  setlocal fileencoding=sjis
 
-AutocmdFT help       nnoremap <silent><buffer> q  :<C-u>close<CR>
+AutocmdFT help
+      \  nnoremap <silent><buffer> q  :<C-u>close<CR>
 
 function! s:update_all()
   setlocal formatoptions-=r
@@ -888,6 +911,8 @@ if !s:is_vscode
   set breakindent
   set foldcolumn=0
   set foldlevel=99
+  set belloff=all
+  set ambiwidth=double
 
   let g:vimsyn_folding     = 'af'
   let g:xml_syntax_folding = 1
@@ -896,11 +921,6 @@ if !s:is_vscode
     set lines=100
     let &columns = s:base_columns
   endif
-
-  Autocmd VimEnter * set t_vb=
-  Autocmd VimEnter * set visualbell
-  Autocmd VimEnter * set errorbells
-  Autocmd VimEnter * filetype detect
 
   colorscheme night-owl
 
@@ -924,6 +944,12 @@ if !s:is_vscode
     endif
   endfunction
 
+  augroup vimrc-incsearch-highlight
+    autocmd!
+    autocmd CmdlineEnter [/\?] :set hlsearch
+    autocmd CmdlineLeave [/\?] :set nohlsearch
+  augroup END
+
   if s:is_gui
     set guifont=HackGenNerd\ Console:h11
     set renderoptions=type:directx
@@ -931,7 +957,72 @@ if !s:is_vscode
 
   set printfont=HackGenNerd\ Console:h11
 
-  set ambiwidth=double
+  " 折り畳み
+  nnoremap <expr> zh foldlevel(line('.'))  >  0  ? 'zc' : '<C-h>'
+  nnoremap <expr> zl foldclosed(line('.')) != -1 ? 'zo' : '<C-l>'
+
+  " アプリウィンドウ操作
+  if s:is_gui
+    noremap <silent> <leader>we :<C-u>call <SID>toggle_v_split_wide()<CR>
+    noremap <silent> <leader>wf :<C-u>call <SID>full_window()<CR>
+
+    " アプリケーションウィンドウを最大高さにする
+    function! s:full_window()
+      execute 'winpos' getwinposx() '0'
+      set lines=9999
+    endfunction
+
+    command! -nargs=1 -complete=file Diff call <SID>toggle_v_wide() | vertical diffsplit <args>
+    Autocmd WinEnter *
+          \  if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) == 1
+          \|   diffoff
+          \|   call <SID>toggle_v_wide()
+          \| endif
+
+    " 縦分割する
+    let s:depth_vsp      = 1
+    let s:opend_left_vsp = 0
+    let s:opend_top_vsp  = 0
+
+    function! s:toggle_v_wide()
+      if s:depth_vsp <= 1
+        let s:depth_vsp += 1
+      else
+        let s:depth_vsp -= 1
+      endif
+
+      let &columns = s:base_columns * s:depth_vsp
+    endfunction
+
+    function! s:toggle_v_split_wide()
+      if s:depth_vsp <= 1
+        call s:open_v_split_wide()
+      else
+        call s:close_v_split_wide()
+      endif
+    endfunction
+
+    function! s:open_v_split_wide()
+      if s:depth_vsp == 1
+        let s:opend_left_vsp = getwinposx()
+        let s:opend_top_vsp  = getwinposy()
+      endif
+
+      call s:toggle_v_wide()
+
+      execute 'botright vertical' s:base_columns 'split'
+    endfunction
+
+    function! s:close_v_split_wide()
+      call s:toggle_v_wide()
+
+      only
+
+      if s:depth_vsp == 1
+        execute 'winpos' s:opend_left_vsp s:opend_top_vsp
+      endif
+    endfunction
+  endif
 endif
 
 " --------------------------------------------------------------------------------
@@ -1004,6 +1095,10 @@ set diffopt=internal,filler,algorithm:histogram,indent-heuristic
 set splitbelow              " 縦分割したら新しいウィンドウは下に
 set splitright              " 横分割したら新しいウィンドウは右に
 
+if exists('+cryptmethod')
+  set cryptmethod=blowfish2
+endif
+
 if s:is_vscode
   nnoremap <silent> u     :<C-u>call VSCodeNotify('undo')<CR>
   nnoremap <silent> <C-r> :<C-u>call VSCodeNotify('redo')<CR>
@@ -1016,16 +1111,6 @@ set tabstop=4       " ファイル内の <Tab> が対応する空白の数
 set softtabstop=4   " <Tab> の挿入や <BS> の使用等の編集操作をするときに <Tab> が対応する空白の数
 set shiftwidth=4    " インデントの各段階に使われる空白の数
 set expandtab       " Insertモードで <Tab> を挿入するとき、代わりに適切な数の空白を使う
-
-if exists('+cryptmethod')
-  set cryptmethod=blowfish2
-endif
-
-augroup vimrc-incsearch-highlight
-  autocmd!
-  autocmd CmdlineEnter [/\?] :set hlsearch
-  autocmd CmdlineLeave [/\?] :set nohlsearch
-augroup END
 
 " ^Mを取り除く
 command! RemoveCr call s:execute_keep_view('silent! %substitute/\r$//g | nohlsearch')
@@ -1043,9 +1128,6 @@ endfunction
 command! CopyFilepath     call setreg('*', expand('%:t'), 'v')
 command! CopyFullFilepath call setreg('*', expand('%:p'), 'v')
 
-command! -nargs=1 -complete=file Diff call <SID>toggle_v_wide() | vertical diffsplit <args>
-Autocmd WinEnter * if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) == 1 | diffoff | call <SID>toggle_v_wide() | endif
-
 nnoremap Y y$
 
 vnoremap <C-a> <C-a>gv
@@ -1056,8 +1138,6 @@ xnoremap <expr> r {'v': "\<C-v>r", 'V': "\<C-v>0o$r", "\<C-v>": 'r'}[mode()]
 
 nmap     <silent> <C-CR> V<C-CR>
 vnoremap <silent> <C-CR> :<C-u>call <SID>copy_add_comment()<CR>
-
-" http://qiita.com/akira-hamada/items/2417d0bcb563475deddb をもとに調整
 function! s:copy_add_comment() range
   " 選択中の行をヤンクする
   normal! ""gvy
@@ -1101,64 +1181,4 @@ nmap    <expr> <C-e>    (line('w$') >= line('$') ? 'j' : "\<C-e>j")
 
 nnoremap <silent> <C-i> <C-i>zz
 nnoremap <silent> <C-o> <C-o>zz
-
-" 折り畳み
-nnoremap <expr> zh foldlevel(line('.'))  >  0  ? 'zc' : '<C-h>'
-nnoremap <expr> zl foldclosed(line('.')) != -1 ? 'zo' : '<C-l>'
-
-" アプリウィンドウ操作
-if s:is_gui
-  noremap <silent> <leader>we :<C-u>call <SID>toggle_v_split_wide()<CR>
-  noremap <silent> <leader>wf :<C-u>call <SID>full_window()<CR>
-
-  " アプリケーションウィンドウを最大高さにする
-  function! s:full_window()
-    execute 'winpos' getwinposx() '0'
-    set lines=9999
-  endfunction
-
-  " 縦分割する
-  let s:depth_vsp      = 1
-  let s:opend_left_vsp = 0
-  let s:opend_top_vsp  = 0
-
-  function! s:toggle_v_wide()
-    if s:depth_vsp <= 1
-      let s:depth_vsp += 1
-    else
-      let s:depth_vsp -= 1
-    endif
-
-    let &columns = s:base_columns * s:depth_vsp
-  endfunction
-
-  function! s:toggle_v_split_wide()
-    if s:depth_vsp <= 1
-      call s:open_v_split_wide()
-    else
-      call s:close_v_split_wide()
-    endif
-  endfunction
-
-  function! s:open_v_split_wide()
-    if s:depth_vsp == 1
-      let s:opend_left_vsp = getwinposx()
-      let s:opend_top_vsp  = getwinposy()
-    endif
-
-    call s:toggle_v_wide()
-
-    execute 'botright vertical' s:base_columns 'split'
-  endfunction
-
-  function! s:close_v_split_wide()
-    call s:toggle_v_wide()
-
-    only
-
-    if s:depth_vsp == 1
-      execute 'winpos' s:opend_left_vsp s:opend_top_vsp
-    endif
-  endfunction
-endif
 
