@@ -96,15 +96,13 @@ if !s:is_vscode
         \| let g:gitgutter_grep     = ''
   " }}}
 
-  Plug 'lambdalisue/vim-rplugin', {'on': []}
-  Plug 'lambdalisue/lista.nvim', {'on': []}
-  " lista.nvim {{{
-  nnoremap <silent> <leader>l   :<C-u>Lista<CR>
-  let g:lista#custom_mappings = [
-        \  ['<C-j>', '<Esc>'],
-        \  ['<C-p>', '<S-Tab>'],
-        \  ['<C-n>', '<Tab>'],
-        \ ]
+  Plug 'osyo-manga/vim-hopping', {'on': []}
+  " vim-hopping {{{
+  nnoremap <silent> <leader>l   :<C-u>HoppingStart<CR>
+  let g:hopping#keymapping = {
+        \   "\<C-n>" : '<Over>(hopping-next)',
+        \   "\<C-p>" : '<Over>(hopping-prev)',
+        \ }
   " }}}
 
   Plug 'previm/previm', {'on': []}
@@ -169,12 +167,14 @@ if !s:is_vscode
   endfunction
   " }}}
 
+  Plug 'mattn/ctrlp-matchfuzzy', {'on': []}
   Plug 'ctrlpvim/ctrlp.vim', {'on': []}
   " ctrlp {{{
   nnoremap <silent> <leader>m   :<C-u>CtrlPMRUFiles<CR>
 
   let g:ctrlp_match_window = 'bottom,order:ttb,min:32,max:32'
   let g:ctrlp_regexp       = 1
+  let g:ctrlp_match_func   = {'match': 'ctrlp_matchfuzzy#matcher'}
 
   let g:ctrlp_prompt_mappings = {
         \ 'PrtBS()':              ['<bs>', '<c-]>', '<c-h>'],
@@ -739,8 +739,7 @@ function! s:load_plug(timer)
           \ 'vim-submode',
           \ 'vim-gitbranch',
           \ 'vim-gitgutter',
-          \ 'vim-rplugin',
-          \ 'lista.nvim',
+          \ 'vim-hopping',
           \ 'previm',
           \ 'vaffle.vim',
           \ 'vim-cursorword',
@@ -749,6 +748,7 @@ function! s:load_plug(timer)
           \ 'vim-lsp-settings',
           \ 'vim-lsp',
           \ 'ctrlp.vim',
+          \ 'ctrlp-matchfuzzy',
           \ 'ultisnips',
           \ 'vimdoc-ja',
           \ )
