@@ -733,34 +733,6 @@ map g# <Plug>(asterisk-gz#)<Plug>(is-nohl-1)
 call plug#end()
 
 function! s:load_plug(timer)
-  if !s:is_vscode
-    call plug#load(
-          \ 'vim-icondrag',
-          \ 'vim-submode',
-          \ 'vim-gitbranch',
-          \ 'vim-gitgutter',
-          \ 'vim-hopping',
-          \ 'previm',
-          \ 'vaffle.vim',
-          \ 'vim-cursorword',
-          \ 'vim-autoft',
-          \ 'memolist.vim',
-          \ 'vim-lsp-settings',
-          \ 'vim-lsp',
-          \ 'ctrlp.vim',
-          \ 'ctrlp-matchfuzzy',
-          \ 'ultisnips',
-          \ 'vimdoc-ja',
-          \ )
-
-    call plug#load(
-          \ 'asyncomplete-lsp.vim',
-          \ 'asyncomplete-ultisnips.vim',
-          \ 'asyncomplete-buffer.vim',
-          \ 'asyncomplete.vim'
-          \ )
-  endif
-
   call plug#load(
         \ 'vim-matchup',
         \ 'traces.vim',
@@ -790,7 +762,39 @@ function! s:load_plug(timer)
         \ )
 endfunction
 
+function! s:load_plug_low(timer)
+  if !s:is_vscode
+    call plug#load(
+          \ 'vim-icondrag',
+          \ 'vim-submode',
+          \ 'vim-gitbranch',
+          \ 'vim-gitgutter',
+          \ 'vim-hopping',
+          \ 'previm',
+          \ 'vaffle.vim',
+          \ 'vim-cursorword',
+          \ 'vim-autoft',
+          \ 'memolist.vim',
+          \ 'vim-lsp-settings',
+          \ 'vim-lsp',
+          \ 'ctrlp.vim',
+          \ 'ctrlp-matchfuzzy',
+          \ 'ultisnips',
+          \ 'vimdoc-ja',
+          \ )
+
+    call plug#load(
+          \ 'asyncomplete-lsp.vim',
+          \ 'asyncomplete-ultisnips.vim',
+          \ 'asyncomplete-buffer.vim',
+          \ 'asyncomplete.vim'
+          \ )
+endif
+
+endfunction
+
 call timer_start(200, function('s:load_plug'))
+call timer_start(900, function('s:load_plug_low'))
 
 filetype plugin indent on
 
@@ -896,7 +900,7 @@ if !s:is_vscode
   set wildoptions=tagfile
   set fillchars=vert:\        " 縦分割の境界線
   set synmaxcol=2000          " ハイライトする文字数を制限する
-  set updatetime=250
+  set updatetime=100
   set previewheight=24
   set cmdheight=4
   set laststatus=2
@@ -972,7 +976,10 @@ if !s:is_vscode
       set lines=9999
     endfunction
 
-    command! -nargs=1 -complete=file Diff call <SID>toggle_v_wide() | vertical diffsplit <args>
+    command! -nargs=1 -complete=file Diff
+          \  call <SID>toggle_v_wide()
+          \| vertical diffsplit <args>
+
     Autocmd WinEnter *
           \  if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) == 1
           \|   diffoff
