@@ -136,7 +136,7 @@ if !s:is_vscode
   " }}}
 
   " Plug 'beyondmarc/hlsl.vim', {'for': 'hlsl'}
-  Plug 'posva/vim-vue', {'for': 'vue'}
+  " Plug 'posva/vim-vue', {'for': 'vue'}
 
   Plug 'glidenote/memolist.vim', {'on': []}
   " memolist.vim {{{
@@ -172,51 +172,22 @@ if !s:is_vscode
   " ctrlp {{{
   nnoremap <silent> <leader>m   :<C-u>CtrlPMRUFiles<CR>
 
-  let g:ctrlp_match_window = 'bottom,order:ttb,min:32,max:32'
-  let g:ctrlp_map          = ''
-  let g:ctrlp_regexp       = 1
-  let g:ctrlp_match_func   = {'match': 'ctrlp_matchfuzzy#matcher'}
-  let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
-  let g:ctrlp_use_caching  = 0
-
+  let g:ctrlp_match_window    = 'bottom,order:ttb,min:48,max:48'
+  let g:ctrlp_map             = ''
+  let g:ctrlp_match_func      = {'match': 'ctrlp_matchfuzzy#matcher'}
+  let g:ctrlp_user_command    = 'rg %s --files --color=never --glob ""'
+  let g:ctrlp_use_caching     = 0
   let g:ctrlp_prompt_mappings = {
-        \   'PrtBS()':              ['<bs>', '<c-]>', '<c-h>'],
-        \   'PrtDelete()':          ['<del>'],
-        \   'PrtDeleteWord()':      ['<c-w>'],
-        \   'PrtClear()':           ['<c-u>'],
-        \   'PrtSelectMove("j")':   ['<c-n>'],
-        \   'PrtSelectMove("k")':   ['<c-p>'],
-        \   'PrtSelectMove("t")':   ['<Home>', '<kHome>'],
-        \   'PrtSelectMove("b")':   ['<End>', '<kEnd>'],
-        \   'PrtSelectMove("u")':   ['<PageUp>', '<kPageUp>'],
-        \   'PrtSelectMove("d")':   ['<PageDown>', '<kPageDown>'],
-        \   'PrtHistory(-1)':       ['<down>'],
-        \   'PrtHistory(1)':        ['<up>'],
-        \   'AcceptSelection("e")': ['<cr>', '<2-LeftMouse>'],
-        \   'AcceptSelection("h")': ['<c-x>', '<c-cr>', '<c-s>'],
-        \   'AcceptSelection("t")': ['<c-t>'],
-        \   'AcceptSelection("v")': ['<c-v>', '<RightMouse>'],
-        \   'ToggleFocus()':        ['<s-tab>'],
-        \   'ToggleRegex()':        ['<c-r>'],
-        \   'ToggleByFname()':      ['<c-d>'],
-        \   'ToggleType(1)':        ['<c-f>', '<c-up>'],
-        \   'ToggleType(-1)':       ['<c-b>', '<c-down>'],
-        \   'PrtExpandDir()':       ['<tab>'],
-        \   'PrtInsert("c")':       ['<MiddleMouse>', '<insert>'],
-        \   'PrtInsert()':          ['<c-\>'],
-        \   'PrtCurStart()':        ['<c-a>'],
-        \   'PrtCurEnd()':          ['<c-e>'],
-        \   'PrtCurLeft()':         ['<left>', '<c-^>'],
-        \   'PrtCurRight()':        ['<c-l>', '<right>'],
-        \   'PrtClearCache()':      ['<F5>'],
-        \   'PrtDeleteEnt()':       ['<F7>'],
-        \   'CreateNewFile()':      ['<c-y>'],
-        \   'MarkToOpen()':         ['<c-z>'],
-        \   'OpenMulti()':          ['<c-o>'],
-        \   'PrtExit()':            ['<esc>', '<c-c>', '<c-g>', '<c-j>'],
+        \   'PrtBS()':            ['<BS>', '<C-h>'],
+        \   'PrtSelectMove("j")': ['<C-n>'],
+        \   'PrtSelectMove("k")': ['<C-p>'],
+        \   'PrtHistory(-1)':     ['<Down>'],
+        \   'PrtHistory(1)':      ['<Up>'],
+        \   'PrtCurLeft()':       ['<Left>'],
+        \   'PrtCurRight()':      ['<Right>'],
+        \   'PrtExit()':          ['<Esc>', '<C-j>'],
         \ }
-
-  let g:ctrlp_status_func = {
+  let g:ctrlp_status_func     = {
         \   'main': s:sid . 'ctrlp_Name_1',
         \   'prog': s:sid . 'ctrlp_Name_2',
         \ }
@@ -809,8 +780,7 @@ Autocmd BufNewFile,BufRead            *.{fsh,vsh}               setlocal filetyp
 Autocmd BufNewFile,BufRead            *.{md,mkd,markdown}       setlocal filetype=markdown
 
 AutocmdFT qf
-      \  nnoremap <silent><buffer> <C-l> :<C-u>cclose<CR>:CtrlPQuickfix<CR>
-      \| nnoremap <silent><buffer> q     :<C-u>cclose<CR>
+      \  nnoremap <silent><buffer> q :<C-u>cclose<CR>
 
 AutocmdFT typescript
       \  setlocal tabstop=2
@@ -1082,9 +1052,11 @@ if s:is_gui
 endif
 
 if !s:is_vscode
+  nnoremap <silent> <leader>q :<C-u>CtrlPQuickfix<CR>
+
   command! -nargs=1 Grep call <SID>grep(<q-args>)
 
-  AutocmdFT qf nnoremap <silent><buffer> q     :<C-u>call <SID>grep_cancel()<CR>
+  AutocmdFT qf nnoremap <silent><buffer> q :<C-u>call <SID>grep_cancel()<CR>
 
   let s:grep_job_id = ''
 
@@ -1190,10 +1162,6 @@ set diffopt=internal,filler,algorithm:histogram,indent-heuristic
 set splitbelow              " 縦分割したら新しいウィンドウは下に
 set splitright              " 横分割したら新しいウィンドウは右に
 
-if exists('+cryptmethod')
-  set cryptmethod=blowfish2
-endif
-
 if s:is_vscode
   nnoremap <silent> u     :<C-u>call VSCodeNotify('undo')<CR>
   nnoremap <silent> <C-r> :<C-u>call VSCodeNotify('redo')<CR>
@@ -1276,4 +1244,14 @@ nmap    <expr> <C-e>    (line('w$') >= line('$') ? 'j' : "\<C-e>j")
 
 nnoremap <silent> <C-i> <C-i>zz
 nnoremap <silent> <C-o> <C-o>zz
+
+" --------------------------------------------------------------------------------
+" 遅延設定
+" --------------------------------------------------------------------------------
+function! s:lazy_setting(timer)
+  if exists('+cryptmethod')
+    set cryptmethod=blowfish2
+  endif
+endfunction
+call timer_start(50, function('s:lazy_setting'))
 
