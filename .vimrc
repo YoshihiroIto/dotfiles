@@ -1082,17 +1082,88 @@ if s:is_gui
 endif
 
 if !s:is_vscode
+  command! -nargs=1 Grep call <SID>grep(<q-args>)
+
+  AutocmdFT qf nnoremap <silent><buffer> q     :<C-u>call <SID>grep_cancel()<CR>
+
+  let s:grep_job_id = ''
+
   function! s:grep(word) abort
     call setqflist([])
 
-    cgetexpr system(printf(&grepprg . ' "%s"', a:word))
-
-    execute 'cwindow'
-    execute 'cclose'
-    execute 'CtrlPQuickfix'
+    let s:grep_job_id = job_start('rg --smart-case --vimgrep --no-heading ' . a:word . ' ' . s:projectRoot('.'), {
+          \   'callback' : function('s:grep_add'),
+          \   'exit_cb'  : function('s:grep_close')
+          \ })
   endfunction
 
-  command! -nargs=1 Grep call <SID>grep(<q-args>)
+  function! s:grep_add(ch, msg)
+    if s:grep_job_id ==# ''
+      return
+    endif
+
+    caddexpr a:msg
+    cwindow
+  endfunction
+
+  function! s:grep_close(ch, msg)
+    if s:grep_job_id ==# ''
+      return
+    endif
+
+    cclose
+    CtrlPQuickfix
+
+    let s:grep_job_id = ''
+  endfunction
+
+  function! s:grep_cancel()
+    if s:grep_job_id !=# ''
+      call job_stop(s:grep_job_id)
+      let s:grep_job_id = ''
+    endif
+
+    cclose
+  endfunction
+
+  " https://github.com/mattn/vim-findroot
+  function! s:goup(path, patterns) abort
+    let l:path = a:path
+    while 1
+      for l:pattern in a:patterns
+        let l:current = l:path . '/' . l:pattern
+        if stridx(l:pattern, '*') != -1 && !empty(glob(l:current, 1))
+          return l:path
+        elseif l:pattern =~# '/$'
+          if isdirectory(l:current)
+            return l:path
+          endif
+        elseif filereadable(l:current)
+          return l:path
+        endif
+      endfor
+      let l:next = fnamemodify(l:path, ':h')
+      if l:next == l:path || (has('win32') && l:next =~# '^//[^/]\+$')
+        break
+      endif
+      let l:path = l:next
+    endwhile
+    return ''
+  endfunction
+
+  function! s:projectRoot(default) abort
+    let l:bufname = expand('%:p')
+    if &buftype !=# '' || empty(l:bufname) || stridx(l:bufname, '://') !=# -1
+      return a:default
+    endif
+    let l:dir = escape(fnamemodify(l:bufname, ':p:h:gs!\!/!:gs!//!/!'), ' ')
+    let l:dir = s:goup(l:dir, ['.git/', '*.sln'])
+    if empty(l:dir)
+      return a:default
+    else
+      return l:dir
+    endif
+  endfunction
 endif
 
 " --------------------------------------------------------------------------------
