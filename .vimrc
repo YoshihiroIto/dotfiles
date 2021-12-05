@@ -136,7 +136,7 @@ if !s:is_vscode
   " }}}
 
   " Plug 'beyondmarc/hlsl.vim', {'for': 'hlsl'}
-  " Plug 'posva/vim-vue', {'for': 'vue'}
+  Plug 'posva/vim-vue', {'for': 'vue'}
 
   Plug 'glidenote/memolist.vim', {'on': []}
   " memolist.vim {{{
@@ -173,49 +173,52 @@ if !s:is_vscode
   nnoremap <silent> <leader>m   :<C-u>CtrlPMRUFiles<CR>
 
   let g:ctrlp_match_window = 'bottom,order:ttb,min:32,max:32'
+  let g:ctrlp_map          = ''
   let g:ctrlp_regexp       = 1
   let g:ctrlp_match_func   = {'match': 'ctrlp_matchfuzzy#matcher'}
+  let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
+  let g:ctrlp_use_caching  = 0
 
   let g:ctrlp_prompt_mappings = {
-        \ 'PrtBS()':              ['<bs>', '<c-]>', '<c-h>'],
-        \ 'PrtDelete()':          ['<del>'],
-        \ 'PrtDeleteWord()':      ['<c-w>'],
-        \ 'PrtClear()':           ['<c-u>'],
-        \ 'PrtSelectMove("j")':   ['<c-n>'],
-        \ 'PrtSelectMove("k")':   ['<c-p>'],
-        \ 'PrtSelectMove("t")':   ['<Home>', '<kHome>'],
-        \ 'PrtSelectMove("b")':   ['<End>', '<kEnd>'],
-        \ 'PrtSelectMove("u")':   ['<PageUp>', '<kPageUp>'],
-        \ 'PrtSelectMove("d")':   ['<PageDown>', '<kPageDown>'],
-        \ 'PrtHistory(-1)':       ['<down>'],
-        \ 'PrtHistory(1)':        ['<up>'],
-        \ 'AcceptSelection("e")': ['<cr>', '<2-LeftMouse>'],
-        \ 'AcceptSelection("h")': ['<c-x>', '<c-cr>', '<c-s>'],
-        \ 'AcceptSelection("t")': ['<c-t>'],
-        \ 'AcceptSelection("v")': ['<c-v>', '<RightMouse>'],
-        \ 'ToggleFocus()':        ['<s-tab>'],
-        \ 'ToggleRegex()':        ['<c-r>'],
-        \ 'ToggleByFname()':      ['<c-d>'],
-        \ 'ToggleType(1)':        ['<c-f>', '<c-up>'],
-        \ 'ToggleType(-1)':       ['<c-b>', '<c-down>'],
-        \ 'PrtExpandDir()':       ['<tab>'],
-        \ 'PrtInsert("c")':       ['<MiddleMouse>', '<insert>'],
-        \ 'PrtInsert()':          ['<c-\>'],
-        \ 'PrtCurStart()':        ['<c-a>'],
-        \ 'PrtCurEnd()':          ['<c-e>'],
-        \ 'PrtCurLeft()':         ['<left>', '<c-^>'],
-        \ 'PrtCurRight()':        ['<c-l>', '<right>'],
-        \ 'PrtClearCache()':      ['<F5>'],
-        \ 'PrtDeleteEnt()':       ['<F7>'],
-        \ 'CreateNewFile()':      ['<c-y>'],
-        \ 'MarkToOpen()':         ['<c-z>'],
-        \ 'OpenMulti()':          ['<c-o>'],
-        \ 'PrtExit()':            ['<esc>', '<c-c>', '<c-g>', '<c-j>'],
+        \   'PrtBS()':              ['<bs>', '<c-]>', '<c-h>'],
+        \   'PrtDelete()':          ['<del>'],
+        \   'PrtDeleteWord()':      ['<c-w>'],
+        \   'PrtClear()':           ['<c-u>'],
+        \   'PrtSelectMove("j")':   ['<c-n>'],
+        \   'PrtSelectMove("k")':   ['<c-p>'],
+        \   'PrtSelectMove("t")':   ['<Home>', '<kHome>'],
+        \   'PrtSelectMove("b")':   ['<End>', '<kEnd>'],
+        \   'PrtSelectMove("u")':   ['<PageUp>', '<kPageUp>'],
+        \   'PrtSelectMove("d")':   ['<PageDown>', '<kPageDown>'],
+        \   'PrtHistory(-1)':       ['<down>'],
+        \   'PrtHistory(1)':        ['<up>'],
+        \   'AcceptSelection("e")': ['<cr>', '<2-LeftMouse>'],
+        \   'AcceptSelection("h")': ['<c-x>', '<c-cr>', '<c-s>'],
+        \   'AcceptSelection("t")': ['<c-t>'],
+        \   'AcceptSelection("v")': ['<c-v>', '<RightMouse>'],
+        \   'ToggleFocus()':        ['<s-tab>'],
+        \   'ToggleRegex()':        ['<c-r>'],
+        \   'ToggleByFname()':      ['<c-d>'],
+        \   'ToggleType(1)':        ['<c-f>', '<c-up>'],
+        \   'ToggleType(-1)':       ['<c-b>', '<c-down>'],
+        \   'PrtExpandDir()':       ['<tab>'],
+        \   'PrtInsert("c")':       ['<MiddleMouse>', '<insert>'],
+        \   'PrtInsert()':          ['<c-\>'],
+        \   'PrtCurStart()':        ['<c-a>'],
+        \   'PrtCurEnd()':          ['<c-e>'],
+        \   'PrtCurLeft()':         ['<left>', '<c-^>'],
+        \   'PrtCurRight()':        ['<c-l>', '<right>'],
+        \   'PrtClearCache()':      ['<F5>'],
+        \   'PrtDeleteEnt()':       ['<F7>'],
+        \   'CreateNewFile()':      ['<c-y>'],
+        \   'MarkToOpen()':         ['<c-z>'],
+        \   'OpenMulti()':          ['<c-o>'],
+        \   'PrtExit()':            ['<esc>', '<c-c>', '<c-g>', '<c-j>'],
         \ }
 
   let g:ctrlp_status_func = {
-        \ 'main': s:sid . 'ctrlp_Name_1',
-        \ 'prog': s:sid . 'ctrlp_Name_2',
+        \   'main': s:sid . 'ctrlp_Name_1',
+        \   'prog': s:sid . 'ctrlp_Name_2',
         \ }
 
   function! s:ctrlp_Name_1(focus, byfname, regex, prev, item, next, marked)
@@ -579,21 +582,21 @@ if !s:is_vscode
     call asyncomplete#enable_for_buffer()
 
     call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
-          \ 'name': 'ultisnips',
-          \ 'whitelist': ['*'],
-          \ 'priority': 10,
-          \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
+          \   'name': 'ultisnips',
+          \   'whitelist': ['*'],
+          \   'priority': 10,
+          \   'completor': function('asyncomplete#sources#ultisnips#completor'),
           \ }))
 
     call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
-          \ 'name': 'buffer',
-          \ 'whitelist': ['*'],
-          \ 'priority': 30,
-          \ 'completor': function('asyncomplete#sources#buffer#completor'),
-          \ 'config': {
-            \    'max_buffer_size': 5000000,
-            \  },
-            \ }))
+          \   'name': 'buffer',
+          \   'whitelist': ['*'],
+          \   'priority': 30,
+          \   'completor': function('asyncomplete#sources#buffer#completor'),
+          \   'config': {
+          \     'max_buffer_size': 5000000,
+          \   },
+          \ }))
   endfunction
   " }}}
 
@@ -733,68 +736,64 @@ map g# <Plug>(asterisk-gz#)<Plug>(is-nohl-1)
 call plug#end()
 
 function! s:load_plug(timer)
-  call plug#load(
-        \ 'vim-matchup',
-        \ 'traces.vim',
-        \ 'vim-asterisk',
-        \ 'tcomment_vim',
-        \ 'lexima.vim',
-        \ 'vim-closetag',
-        \ 'is.vim',
-        \ 'vim-easy-align',
-        \ 'vim-sandwich',
-        \ 'open-browser.vim'
-        \ )
-
-  call plug#load(
-        \ 'vim-textobj-user',
-        \ 'vim-textobj-comment',
-        \ 'vim-textobj-indent',
-        \ 'vim-textobj-entire',
-        \ 'vim-textobj-line',
-        \ 'vim-textobj-word-column',
-        \ 'vim-textobj-xmlattr',
-        \ 'vim-textobj-parameter',
-        \ 'vim-textobj-wiw',
-        \ 'vim-operator-user',
-        \ 'vim-operator-tcomment',
-        \ 'vim-operator-replace'
-        \ )
-endfunction
-
-function! s:load_plug_low(timer)
   if !s:is_vscode
     call plug#load(
-          \ 'vim-icondrag',
-          \ 'vim-submode',
-          \ 'vim-gitbranch',
-          \ 'vim-gitgutter',
-          \ 'vim-hopping',
-          \ 'previm',
-          \ 'vaffle.vim',
-          \ 'vim-cursorword',
-          \ 'vim-autoft',
-          \ 'memolist.vim',
-          \ 'vim-lsp-settings',
-          \ 'vim-lsp',
-          \ 'ctrlp.vim',
-          \ 'ctrlp-matchfuzzy',
-          \ 'ultisnips',
-          \ 'vimdoc-ja',
+          \   'vim-icondrag',
+          \   'vim-submode',
+          \   'vim-gitbranch',
+          \   'vim-gitgutter',
+          \   'vim-hopping',
+          \   'previm',
+          \   'vaffle.vim',
+          \   'vim-cursorword',
+          \   'vim-autoft',
+          \   'memolist.vim',
+          \   'vim-lsp-settings',
+          \   'vim-lsp',
+          \   'ctrlp.vim',
+          \   'ctrlp-matchfuzzy',
+          \   'ultisnips',
+          \   'vimdoc-ja',
           \ )
 
     call plug#load(
-          \ 'asyncomplete-lsp.vim',
-          \ 'asyncomplete-ultisnips.vim',
-          \ 'asyncomplete-buffer.vim',
-          \ 'asyncomplete.vim'
+          \   'asyncomplete-lsp.vim',
+          \   'asyncomplete-ultisnips.vim',
+          \   'asyncomplete-buffer.vim',
+          \   'asyncomplete.vim'
           \ )
-endif
+  endif
 
+  call plug#load(
+        \   'vim-matchup',
+        \   'traces.vim',
+        \   'vim-asterisk',
+        \   'tcomment_vim',
+        \   'lexima.vim',
+        \   'vim-closetag',
+        \   'is.vim',
+        \   'vim-easy-align',
+        \   'vim-sandwich',
+        \   'open-browser.vim'
+        \ )
+
+  call plug#load(
+        \   'vim-textobj-user',
+        \   'vim-textobj-comment',
+        \   'vim-textobj-indent',
+        \   'vim-textobj-entire',
+        \   'vim-textobj-line',
+        \   'vim-textobj-word-column',
+        \   'vim-textobj-xmlattr',
+        \   'vim-textobj-parameter',
+        \   'vim-textobj-wiw',
+        \   'vim-operator-user',
+        \   'vim-operator-tcomment',
+        \   'vim-operator-replace'
+        \ )
 endfunction
 
-call timer_start(200, function('s:load_plug'))
-call timer_start(900, function('s:load_plug_low'))
+call timer_start(100, function('s:load_plug'))
 
 filetype plugin indent on
 
@@ -808,6 +807,10 @@ Autocmd BufNewFile,BufRead            *.json                    setlocal filetyp
 Autocmd BufNewFile,BufRead            *.{fx,fxc,fxh,hlsl,hlsli} setlocal filetype=hlsl
 Autocmd BufNewFile,BufRead            *.{fsh,vsh}               setlocal filetype=glsl
 Autocmd BufNewFile,BufRead            *.{md,mkd,markdown}       setlocal filetype=markdown
+
+AutocmdFT qf
+      \  nnoremap <silent><buffer> <C-l> :<C-u>cclose<CR>:CtrlPQuickfix<CR>
+      \| nnoremap <silent><buffer> q     :<C-u>cclose<CR>
 
 AutocmdFT typescript
       \  setlocal tabstop=2
@@ -1054,8 +1057,8 @@ set incsearch
 set ignorecase
 set smartcase
 set hlsearch
-set grepprg=jvgrep
-set iskeyword=@,48-57,_,128-167,224-235
+set grepprg=rg\ --smart-case\ --vimgrep\ --no-heading
+set grepformat=%f:%l:%c:%m,%f:%l:%m
 
 " ヘルプ
 set helplang=ja,en
@@ -1076,6 +1079,20 @@ if s:is_gui
   let s:vimreg_search = expand('~/vimreg_search.txt')
   Autocmd CursorHold,CursorHoldI,FocusLost * silent! call s:save_reg('/', s:vimreg_search)
   Autocmd FocusGained                      * silent! call s:load_reg('/', s:vimreg_search)
+endif
+
+if !s:is_vscode
+  function! s:grep(word) abort
+    call setqflist([])
+
+    cgetexpr system(printf(&grepprg . ' "%s"', a:word))
+
+    execute 'cwindow'
+    execute 'cclose'
+    execute 'CtrlPQuickfix'
+  endfunction
+
+  command! -nargs=1 Grep call <SID>grep(<q-args>)
 endif
 
 " --------------------------------------------------------------------------------
