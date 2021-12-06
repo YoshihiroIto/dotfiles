@@ -94,7 +94,7 @@ if !s:is_vscode
         \ }
   " }}}
 
-  Plug 'previm/previm', {'on': []}
+  " Plug 'previm/previm'
   " previm {{{
   nnoremap <silent> <leader>p :<C-u>PrevimOpen<CR>
   " }}}
@@ -598,8 +598,6 @@ Plug 'markonm/traces.vim', {'on': []}
 let g:traces_preview_window = 'botright 10new'
 " }}}
 
-Plug 'haya14busa/vim-asterisk', {'on': []}
-
 Plug 'tomtom/tcomment_vim', {'on': []}
 Plug 'cohama/lexima.vim', {'on': []}
 
@@ -685,6 +683,7 @@ Plug 'YoshihiroIto/vim-closetag', {'on': []}
 let g:closetag_filenames = '*.{html,xhtml,xml,xaml}'
 " }}}
 
+Plug 'haya14busa/vim-asterisk', {'on': []}
 Plug 'haya14busa/is.vim', {'on': []}
 " is.vim {{{
 map *  <Plug>(asterisk-z*)<Plug>(is-nohl-1)
@@ -703,7 +702,6 @@ function! s:load_plug(timer)
           \   'vim-gitbranch',
           \   'vim-gitgutter',
           \   'vim-hopping',
-          \   'previm',
           \   'vaffle.vim',
           \   'vim-cursorword',
           \   'vim-autoft',
@@ -910,11 +908,11 @@ if !s:is_vscode
     endif
   endfunction
 
-  augroup vimrc-incsearch-highlight
-    autocmd!
-    autocmd CmdlineEnter [/\?] :set hlsearch
-    autocmd CmdlineLeave [/\?] :set nohlsearch
-  augroup END
+  " augroup vimrc-incsearch-highlight
+  "   autocmd!
+  "   autocmd CmdlineEnter [/\?] :set hlsearch
+  "   autocmd CmdlineLeave [/\?] :set nohlsearch
+  " augroup END
 
   if s:is_gui
     set guifont=HackGenNerd\ Console:h11
