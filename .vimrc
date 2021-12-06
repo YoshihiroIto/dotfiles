@@ -918,7 +918,7 @@ if !s:is_vscode
 
   if s:is_gui
     set guifont=HackGenNerd\ Console:h11
-    set renderoptions=type:directx
+    " set renderoptions=type:directx
   endif
 
   set printfont=HackGenNerd\ Console:h11
