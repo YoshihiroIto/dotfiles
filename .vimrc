@@ -938,6 +938,10 @@ if !s:is_vscode
 
   " アプリウィンドウ操作
   if s:is_gui
+    command! -nargs=1 -complete=file Diff
+          \  call <SID>toggle_v_wide()
+          \| vertical diffsplit <args>
+
     noremap <silent> <leader>we :<C-u>call <SID>toggle_v_split_wide()<CR>
     noremap <silent> <leader>wf :<C-u>call <SID>full_window()<CR>
 
@@ -946,10 +950,6 @@ if !s:is_vscode
       execute 'winpos' getwinposx() '0'
       set lines=9999
     endfunction
-
-    command! -nargs=1 -complete=file Diff
-          \  call <SID>toggle_v_wide()
-          \| vertical diffsplit <args>
 
     Autocmd WinEnter *
           \  if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) == 1
@@ -1014,6 +1014,7 @@ if s:is_vscode
 else
   nnoremap <silent> <leader>f :<C-u>Vaffle<CR>
 
+  " ターミナル
   tnoremap <Esc> <C-w>N
   tnoremap <C-j> <C-w>N
 endif
@@ -1051,17 +1052,33 @@ endif
 
 if !s:is_vscode
   nnoremap <silent> <leader>q :<C-u>CtrlPQuickfix<CR>
+  nnoremap <silent> <leader>g :<C-u>Grep<CR>
 
-  command! -nargs=1 Grep call <SID>grep(<q-args>)
+  command! -nargs=? Grep call <SID>grep(<f-args>)
 
   AutocmdFT qf nnoremap <silent><buffer> q :<C-u>call <SID>grep_cancel()<CR>
 
   let s:grep_job_id = ''
 
-  function! s:grep(word) abort
+  function! s:grep(...) abort
+    let l:word = ''
+
+    if a:0 >= 1
+      let l:word = a:1
+    else
+      let l:word = input('Search pattern: ')
+    endif
+
+    redraw
+    echo ''
+
+    if l:word == ''
+      return
+    endif
+
     call setqflist([])
 
-    let s:grep_job_id = job_start('rg --smart-case --vimgrep --no-heading ' . a:word . ' ' . s:projectRoot('.'), {
+    let s:grep_job_id = job_start('rg --smart-case --vimgrep --no-heading ' . l:word . ' ' . s:projectRoot('.'), {
           \   'callback' : function('s:grep_add'),
           \   'exit_cb'  : function('s:grep_close')
           \ })
@@ -1234,11 +1251,6 @@ nnoremap <silent> $     g$
 nnoremap <silent> g$    $
 nnoremap <silent> gg    ggzv
 nnoremap <silent> G     Gzv
-
-noremap <expr> <C-b>    max([winheight(0) - 2, 1]) . "\<C-u>" . (line('.') < 1         + winheight(0) ? 'H' : 'L')
-noremap <expr> <C-f>    max([winheight(0) - 2, 1]) . "\<C-d>" . (line('.') > line('$') - winheight(0) ? 'L' : 'H')
-nmap    <expr> <C-y>    (line('w0') <= 1         ? 'k' : "\<C-y>k")
-nmap    <expr> <C-e>    (line('w$') >= line('$') ? 'j' : "\<C-e>j")
 
 nnoremap <silent> <C-i> <C-i>zz
 nnoremap <silent> <C-o> <C-o>zz
