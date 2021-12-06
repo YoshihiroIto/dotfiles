@@ -43,6 +43,17 @@ if filereadable(s:vimrc_local)
 endif
 
 if !s:is_vscode
+  augroup MyAutoCmd
+    autocmd!
+  augroup END
+
+  command! -nargs=* Autocmd     autocmd MyAutoCmd <args>
+  command! -nargs=* AutocmdFT   autocmd MyAutoCmd FileType <args>
+  command! -nargs=* AutocmdUser autocmd MyAutoCmd User     <args>
+  Autocmd BufWinEnter,ColorScheme .vimrc
+        \  highlight def link myVimAutocmd vimAutoCmd
+        \| syntax match vimAutoCmd /\<\(Autocmd\|AutocmdFT\|AutocmdUser\)\>/
+
   function! s:edit_vimrc()
     let dropbox_vimrc = s:dropbox_dir . '/dotfiles/.vimrc'
     if filereadable(dropbox_vimrc)
@@ -58,7 +69,7 @@ if !s:is_vscode
   " スタートアップ時間表示
   if has('vim_starting')
     let s:startuptime = reltime()
-    autocmd! VimEnter *
+    Autocmd VimEnter *
           \  let s:startuptime = reltime(s:startuptime)
           \| echomsg 'startuptime:' reltimestr(s:startuptime)
   endif
@@ -73,13 +84,13 @@ if !s:is_vscode
   Plug 'YoshihiroIto/night-owl.vim'
   Plug 'YoshihiroIto/vim-icondrag', {'on': []}
   " vim-icondrag {{{
-  autocmd! User vim-icondrag call icondrag#enable()
+  AutocmdUser vim-icondrag call icondrag#enable()
   " }}}
 
   Plug 'itchyny/vim-gitbranch', {'on': []}
   Plug 'airblade/vim-gitgutter', {'on': []}
   " vim-gitgutter {{{
-  autocmd! User vim-gitgutter
+  AutocmdUser vim-gitgutter
         \  call gitgutter#enable()
         \| let g:gitgutter_map_keys = 0
         \| let g:gitgutter_grep     = ''
@@ -108,7 +119,7 @@ if !s:is_vscode
   " vim-cursorword {{{
   let g:cursorword_delay     = 270
   let g:cursorword_highlight = 0
-  autocmd! ColorScheme *
+  Autocmd ColorScheme *
         \  highlight CursorWord0 guifg=Red ctermfg=Red
         \| highlight CursorWord1 guifg=Red ctermfg=Red
   " }}}
@@ -142,7 +153,7 @@ if !s:is_vscode
 
   Plug 'prabirshrestha/vim-lsp', {'on': []}
   " vim-lsp {{{
-  autocmd! User vim-lsp call s:init_lsp()
+  AutocmdUser vim-lsp call s:init_lsp()
   let g:lsp_auto_enable = 0
 
   function s:init_lsp()
@@ -429,12 +440,12 @@ if !s:is_vscode
     return 0
   endfunction
 
-  autocmd! CursorHold,CursorHoldI * call lightline#update()
+  Autocmd CursorHold,CursorHoldI * call lightline#update()
   " }}}
 
   Plug 'kana/vim-submode', {'on': []}
   " submode {{{
-  autocmd! User vim-submode call s:init_submode()
+  AutocmdUser vim-submode call s:init_submode()
 
   function! s:submode_snap(value, scale)
     return a:value / a:scale * a:scale
@@ -536,7 +547,7 @@ if !s:is_vscode
   Plug 'prabirshrestha/asyncomplete-buffer.vim', {'on': []}
   Plug 'prabirshrestha/asyncomplete.vim', {'on': []}
   " asyncomplete.vim {{{
-  autocmd! User asyncomplete.vim call s:init_asyncomplete()
+  AutocmdUser asyncomplete.vim call s:init_asyncomplete()
 
   function s:init_asyncomplete()
     call asyncomplete#enable_for_buffer()
@@ -655,7 +666,7 @@ xmap <silent> <Leader>a\|      <Plug>(EasyAlign)*\|
 
 Plug 'machakann/vim-sandwich', {'on': []}
 " vim-sandwich {{{
-autocmd! User vim-sandwich call s:init_sandwich()
+AutocmdUser vim-sandwich call s:init_sandwich()
 let g:operator_sandwich_no_default_key_mappings = 1
 function s:init_sandwich()
   map  <silent> S   <Plug>(sandwich-add)
@@ -758,33 +769,33 @@ filetype plugin indent on
 " --------------------------------------------------------------------------------
 " ファイルタイプごとの設定
 " --------------------------------------------------------------------------------
-autocmd! BufEnter,WinEnter,BufWinEnter *                         call s:update_all()
-autocmd! BufNewFile,BufRead            *.xaml                    setlocal filetype=xml
-autocmd! BufNewFile,BufRead            *.cake                    setlocal filetype=cs
-autocmd! BufNewFile,BufRead            *.json                    setlocal filetype=json
-autocmd! BufNewFile,BufRead            *.{fx,fxc,fxh,hlsl,hlsli} setlocal filetype=hlsl
-autocmd! BufNewFile,BufRead            *.{fsh,vsh}               setlocal filetype=glsl
-autocmd! BufNewFile,BufRead            *.{md,mkd,markdown}       setlocal filetype=markdown
+Autocmd BufEnter,WinEnter,BufWinEnter *                         call s:update_all()
+Autocmd BufNewFile,BufRead            *.xaml                    setlocal filetype=xml
+Autocmd BufNewFile,BufRead            *.cake                    setlocal filetype=cs
+Autocmd BufNewFile,BufRead            *.json                    setlocal filetype=json
+Autocmd BufNewFile,BufRead            *.{fx,fxc,fxh,hlsl,hlsli} setlocal filetype=hlsl
+Autocmd BufNewFile,BufRead            *.{fsh,vsh}               setlocal filetype=glsl
+Autocmd BufNewFile,BufRead            *.{md,mkd,markdown}       setlocal filetype=markdown
 
-autocmd! FileType qf
+AutocmdFT qf
       \  nnoremap <silent><buffer> q :<C-u>cclose<CR>
 
-autocmd! FileType typescript
+AutocmdFT typescript
       \  setlocal tabstop=2
       \| setlocal shiftwidth=2
       \| setlocal softtabstop=2
 
-autocmd! FileType ruby
+AutocmdFT ruby
       \  setlocal tabstop=2
       \| setlocal shiftwidth=2
       \| setlocal softtabstop=2
 
-autocmd! FileType vue
+AutocmdFT vue
       \  setlocal tabstop=2
       \| setlocal shiftwidth=2
       \| setlocal softtabstop=2
 
-autocmd! FileType vim
+AutocmdFT vim
       \  setlocal foldmethod=marker
       \| setlocal foldlevel=0
       \| setlocal foldcolumn=5
@@ -792,21 +803,21 @@ autocmd! FileType vim
       \| setlocal shiftwidth=2
       \| setlocal softtabstop=2
 
-autocmd! FileType xml,html
+AutocmdFT xml,html
       \  setlocal foldlevel=99
       \| setlocal foldcolumn=5
       \| setlocal foldmethod=syntax
       \| inoremap <silent><buffer> >  ><Esc>:call closetag#CloseTagFun()<CR>
 
-autocmd! FileType json
+AutocmdFT json
       \  setlocal foldmethod=syntax
       \| setlocal shiftwidth=2
       \| command! Format %!jq
 
-autocmd! FileType dosbatch
+AutocmdFT dosbatch
       \  setlocal fileencoding=sjis
 
-autocmd! FileType help
+AutocmdFT help
       \  nnoremap <silent><buffer> q  :<C-u>close<CR>
 
 function! s:update_all()
@@ -892,7 +903,7 @@ if !s:is_vscode
     set termguicolors
   endif
 
-  autocmd! BufWinEnter,ColorScheme * call s:set_color()
+  Autocmd BufWinEnter,ColorScheme * call s:set_color()
 
   function! s:set_color()
     " ^M を非表示
@@ -940,7 +951,7 @@ if !s:is_vscode
           \  call <SID>toggle_v_wide()
           \| vertical diffsplit <args>
 
-    autocmd! WinEnter *
+    Autocmd WinEnter *
           \  if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) == 1
           \|   diffoff
           \|   call <SID>toggle_v_wide()
@@ -1034,8 +1045,8 @@ if s:is_gui
   endfunction
 
   let s:vimreg_search = expand('~/vimreg_search.txt')
-  autocmd! CursorHold,CursorHoldI,FocusLost * silent! call s:save_reg('/', s:vimreg_search)
-  autocmd! FocusGained                      * silent! call s:load_reg('/', s:vimreg_search)
+  Autocmd CursorHold,CursorHoldI,FocusLost * silent! call s:save_reg('/', s:vimreg_search)
+  Autocmd FocusGained                      * silent! call s:load_reg('/', s:vimreg_search)
 endif
 
 if !s:is_vscode
@@ -1043,7 +1054,7 @@ if !s:is_vscode
 
   command! -nargs=1 Grep call <SID>grep(<q-args>)
 
-  autocmd! FileType qf nnoremap <silent><buffer> q :<C-u>call <SID>grep_cancel()<CR>
+  AutocmdFT qf nnoremap <silent><buffer> q :<C-u>call <SID>grep_cancel()<CR>
 
   let s:grep_job_id = ''
 
