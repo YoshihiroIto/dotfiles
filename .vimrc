@@ -707,7 +707,6 @@ Autocmd BufNewFile,BufRead            *.{fx,fxc,fxh,hlsl,hlsli} setlocal filetyp
 Autocmd BufNewFile,BufRead            *.{fsh,vsh}               setlocal filetype=glsl
 Autocmd BufNewFile,BufRead            *.{md,mkd,markdown}       setlocal filetype=markdown
 
-" git commit ではインサートモードに入る
 Autocmd VimEnter COMMIT_EDITMSG
       \  if getline(1) == ''
       \|   startinsert
