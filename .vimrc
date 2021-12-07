@@ -11,30 +11,34 @@ let s:is_vscode    = exists('g:vscode')
 let s:is_gui       = has('gui_running')
 let s:base_columns = 140
 
-let g:no_gvimrc_example        = 1
-let g:no_vimrc_example         = 1
-let g:loaded_getscriptPlugin   = 1
-let g:loaded_gzip              = 1
-let g:loaded_matchparen        = 1
-let g:loaded_logiPat           = 1
-let g:loaded_netrw             = 1
-let g:loaded_netrwFileHandlers = 1
-let g:loaded_netrwPlugin       = 1
-let g:loaded_netrwSettings     = 1
-let g:loaded_rrhelper          = 1
-let g:loaded_tar               = 1
-let g:loaded_tarPlugin         = 1
-let g:loaded_tohtml            = 1
-let g:loaded_vimball           = 1
-let g:loaded_vimballPlugin     = 1
-let g:loaded_zip               = 1
-let g:loaded_zipPlugin         = 1
-let g:loaded_spellfile_plugin  = 1
-let g:skip_loading_mswin       = 1
-let g:did_install_syntax_menu  = 1
+let g:no_gvimrc_example         = 1
+let g:no_vimrc_example          = 1
+let g:loaded_getscriptPlugin    = 1
+let g:loaded_gzip               = 1
+let g:loaded_matchparen         = 1
+let g:loaded_logiPat            = 1
+let g:loaded_netrw              = 1
+let g:loaded_netrwFileHandlers  = 1
+let g:loaded_netrwPlugin        = 1
+let g:loaded_netrwSettings      = 1
+let g:loaded_rrhelper           = 1
+let g:loaded_tar                = 1
+let g:loaded_tarPlugin          = 1
+let g:loaded_tohtml             = 1
+let g:loaded_vimball            = 1
+let g:loaded_vimballPlugin      = 1
+let g:loaded_zip                = 1
+let g:loaded_zipPlugin          = 1
+let g:loaded_spellfile_plugin   = 1
+let g:skip_loading_mswin        = 1
+let g:did_install_syntax_menu   = 1
+let g:did_install_default_menus = 1
+let g:did_menu_trans            = 1
 
-let g:mapleader         = "\<Space>"
-let g:python3_host_prog = 'C:/Users/yoi/AppData/Local/Programs/Python/Python310/python.exe'
+let g:mapleader          = "\<Space>"
+let g:vimsyn_folding     = 'af'
+let g:xml_syntax_folding = 1
+let g:python3_host_prog  = 'C:/Users/yoi/AppData/Local/Programs/Python/Python310/python.exe'
 
 " ローカル設定
 let s:vimrc_local = expand('~/.vimrc.local')
@@ -276,10 +280,6 @@ if !s:is_vscode
   endfunction
 
   function! s:lightline_readonly()
-    if s:is_lightline_no_disp_filetype()
-      return ''
-    endif
-
     return &readonly ? '' : ''
   endfunction
 
@@ -295,10 +295,6 @@ if !s:is_vscode
   endfunction
 
   function! s:lightline_current_branch()
-    if s:is_lightline_no_disp_filetype()
-      return ''
-    endif
-
     if empty(expand('%:p'))
       return ''
     endif
@@ -368,16 +364,8 @@ if !s:is_vscode
     return printf('%4d/%d : %-3d', line('.'), line('$'), col('.'))
   endfunction
 
-  function! s:is_lightline_no_disp_filetype()
-    return &filetype =~# 'quickrun'
-  endfunction
-
   function! s:is_lightline_no_disp_group()
     if winwidth(0) <= 50
-      return 1
-    endif
-
-    if s:is_lightline_no_disp_filetype()
       return 1
     endif
 
@@ -396,7 +384,7 @@ if !s:is_vscode
   endfunction
 
   function! s:submode_resize_appwin(x, y)
-    let scale = get(g:, 'yoi_resize_appwin_size', 8)
+    let scale = 8
 
     if a:x != 0
       let &columns = s:submode_snap(&columns, scale) + a:x * scale
@@ -408,7 +396,7 @@ if !s:is_vscode
   endfunction
 
   function! s:submode_move_appwin(x, y)
-    let scale = get(g:, 'yoi_move_appwin_size', 64)
+    let scale = 64
     let win_x = getwinposx()
     let win_y = getwinposy()
 
@@ -708,18 +696,18 @@ endfunction
 
 call timer_start(100, function('s:load_plug'))
 
-filetype plugin indent on
-
 " --------------------------------------------------------------------------------
 " ファイルタイプごとの設定
 " --------------------------------------------------------------------------------
 Autocmd BufEnter,WinEnter,BufWinEnter *                         call s:update_all()
 Autocmd BufNewFile,BufRead            *.xaml                    setlocal filetype=xml
 Autocmd BufNewFile,BufRead            *.cake                    setlocal filetype=cs
-Autocmd BufNewFile,BufRead            *.json                    setlocal filetype=json
 Autocmd BufNewFile,BufRead            *.{fx,fxc,fxh,hlsl,hlsli} setlocal filetype=hlsl
 Autocmd BufNewFile,BufRead            *.{fsh,vsh}               setlocal filetype=glsl
 Autocmd BufNewFile,BufRead            *.{md,mkd,markdown}       setlocal filetype=markdown
+
+" git commit ではインサートモードに入る
+Autocmd VimEnter COMMIT_EDITMSG if getline(1) == '' | execute 1 | startinsert | endif
 
 AutocmdFT qf
       \  nnoremap <silent><buffer> q :<C-u>cclose<CR>
@@ -777,35 +765,13 @@ endfunction
 " 表示
 " --------------------------------------------------------------------------------
 if !s:is_vscode
-  syntax enable               " 構文ごとに色分けをする
-
-  " メニューを読み込まない
-  let g:did_install_default_menus = 1
-  let g:did_menu_trans            = 1
-  set guioptions+=M
-
-  " ツールバー削除
-  set guioptions-=T
-
-  " メニューバー削除
-  set guioptions-=m
-
-  " スクロールバー削除
-  set guioptions-=r
-  set guioptions-=l
-  set guioptions-=R
-  set guioptions-=L
-
-  " テキストベースタブ
-  set guioptions-=e
-
   set number
-  set textwidth=0             " 一行に長い文章を書いていても自動折り返しをしない
+  set textwidth=0
   set noshowcmd
-  set noshowmatch             " 括弧の対応をハイライト
+  set noshowmatch
   set wrap
   set noshowmode
-  set shortmess+=I            " 起動時のメッセージを表示しない
+  set shortmess+=I
   set shortmess-=S
   set shortmess+=s
   set lazyredraw
@@ -813,8 +779,8 @@ if !s:is_vscode
   set wildmode=list:full
   set showfulltag
   set wildoptions=tagfile
-  set fillchars=vert:\        " 縦分割の境界線
-  set synmaxcol=2000          " ハイライトする文字数を制限する
+  set fillchars=vert:\ "
+  set synmaxcol=2000
   set updatetime=100
   set previewheight=24
   set cmdheight=4
@@ -833,17 +799,18 @@ if !s:is_vscode
   set belloff=all
   set ambiwidth=double
 
-  let g:vimsyn_folding     = 'af'
-  let g:xml_syntax_folding = 1
-
   if s:is_gui
+    set guioptions=gtM
+    set winaltkeys=no
+
     set lines=100
     let &columns = s:base_columns
-  endif
 
-  colorscheme night-owl
+    set guifont=HackGenNerd\ Console:h11
+    " set renderoptions=type:directx
+    " set printfont=HackGenNerd\ Console:h11
 
-  if !s:is_gui
+  else
     set termguicolors
   endif
 
@@ -856,21 +823,15 @@ if !s:is_vscode
     " 日本語入力時カーソル色を変更する
     highlight CursorIM guifg=NONE guibg=Red
 
-    " タブなど
-    highlight SpecialKey guifg=#444444
-
     " if !&readonly
     "   syntax match InvisibleJISX0208Space '　' display containedin=ALL
     "   highlight InvisibleJISX0208Space guibg=#112233
     " endif
   endfunction
 
-  if s:is_gui
-    set guifont=HackGenNerd\ Console:h11
-    " set renderoptions=type:directx
-  endif
-
-  set printfont=HackGenNerd\ Console:h11
+  colorscheme night-owl
+  filetype plugin indent on
+  syntax enable
 
   " 折り畳み
   nnoremap <expr> zh foldlevel(line('.'))  >  0  ? 'zc' : '<C-h>'
@@ -968,8 +929,6 @@ set smartcase
 set hlsearch
 set grepprg=rg\ --smart-case\ --vimgrep\ --no-heading
 set grepformat=%f:%l:%c:%m,%f:%l:%m
-
-" ヘルプ
 set helplang=ja,en
 set keywordprg=
 
@@ -992,8 +951,8 @@ endif
 
 if !s:is_vscode
   " grep {{{
-  nnoremap <silent> <leader>q :<C-u>CtrlPQuickfix<CR>
   nnoremap <silent> <leader>g :<C-u>Grep<CR>
+  nnoremap <silent> <leader>q :<C-u>CtrlPQuickfix<CR>
 
   command! -nargs=? Grep call <SID>grep(<f-args>)
 
@@ -1098,14 +1057,14 @@ endif
 " --------------------------------------------------------------------------------
 " 編集
 " --------------------------------------------------------------------------------
-set browsedir=buffer              " バッファで開いているファイルのディレクトリ
-set clipboard=unnamedplus,unnamed " クリップボードを使う
+set browsedir=buffer
+set clipboard=unnamedplus,unnamed
 set modeline
 set virtualedit=block
 set autoread
-set whichwrap=b,s,h,l,<,>,[,]     " カーソルを行頭、行末で止まらないようにする
-set mouse=a                       " 全モードでマウスを有効化
-set hidden                        " 変更中のファイルでも、保存しないで他のファイルを表示
+set whichwrap=b,s,h,l,<,>,[,]
+set mouse=a
+set hidden
 set timeoutlen=2000
 set nrformats-=octal
 set nrformats+=alpha
@@ -1116,21 +1075,19 @@ set formatoptions+=j
 set nofixeol
 set tags=tags,./tags,../tags,../../tags,../../../tags,../../../../tags,../../../../../tags
 set diffopt=internal,filler,algorithm:histogram,indent-heuristic
-set splitbelow              " 縦分割したら新しいウィンドウは下に
-set splitright              " 横分割したら新しいウィンドウは右に
+set splitbelow
+set splitright
+set autoindent
+set cindent
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set expandtab
 
 if s:is_vscode
   nnoremap <silent> u     :<C-u>call VSCodeNotify('undo')<CR>
   nnoremap <silent> <C-r> :<C-u>call VSCodeNotify('redo')<CR>
 endif
-
-" タブ・インデント
-set autoindent
-set cindent
-set tabstop=4       " ファイル内の <Tab> が対応する空白の数
-set softtabstop=4   " <Tab> の挿入や <BS> の使用等の編集操作をするときに <Tab> が対応する空白の数
-set shiftwidth=4    " インデントの各段階に使われる空白の数
-set expandtab       " Insertモードで <Tab> を挿入するとき、代わりに適切な数の空白を使う
 
 " ^Mを取り除く
 command! RemoveCr call s:execute_keep_view('silent! %substitute/\r$//g | nohlsearch')
