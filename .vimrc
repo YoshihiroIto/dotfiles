@@ -58,9 +58,9 @@ if !s:is_vscode
         \ syntax match vimAutoCmd /\<\(Autocmd\|AutocmdFT\|AutocmdUser\)\>/
 
   function! s:edit_vimrc()
-    let dropbox_vimrc = s:dropbox_dir . '/dotfiles/.vimrc'
-    if filereadable(dropbox_vimrc)
-      execute 'edit' dropbox_vimrc
+    let l:dropbox_vimrc = s:dropbox_dir . '/dotfiles/.vimrc'
+    if filereadable(l:dropbox_vimrc)
+      execute 'edit' l:dropbox_vimrc
     else
       execute 'edit' $MYVIMRC
     endif
@@ -159,7 +159,7 @@ if !s:is_vscode
   AutocmdUser vim-lsp call s:init_lsp()
   let g:lsp_auto_enable = 0
 
-  function s:init_lsp()
+  function! s:init_lsp()
     let g:lsp_diagnostics_enabled        = 1
     let g:lsp_diagnostics_echo_cursor    = 1
     let g:lsp_document_highlight_enabled = 0
@@ -384,46 +384,46 @@ if !s:is_vscode
   endfunction
 
   function! s:submode_resize_appwin(x, y)
-    let scale = 8
+    let l:scale = 8
 
     if a:x != 0
-      let &columns = s:submode_snap(&columns, scale) + a:x * scale
+      let &columns = s:submode_snap(&columns, l:scale) + a:x * l:scale
     endif
 
     if a:y != 0
-      let &lines   = s:submode_snap(&lines,   scale) + a:y * scale
+      let &lines   = s:submode_snap(&lines,   l:scale) + a:y * l:scale
     endif
   endfunction
 
   function! s:submode_move_appwin(x, y)
-    let scale = 64
-    let win_x = getwinposx()
-    let win_y = getwinposy()
+    let l:scale = 64
+    let l:win_x = getwinposx()
+    let l:win_y = getwinposy()
 
     if a:x == 0
-      let x = win_x
+      let x = l:win_x
     else
-      let x = win_x + a:x * scale
+      let x = l:win_x + a:x * l:scale
 
-      if win_x != s:submode_snap(win_x, scale)
-        let x = s:submode_snap(x, scale)
+      if l:win_x != s:submode_snap(l:win_x, l:scale)
+        let x = s:submode_snap(x, l:scale)
       endif
     endif
 
     if a:y == 0
-      let y = win_y
+      let y = l:win_y
     else
-      let y = win_y + a:y * scale
+      let y = l:win_y + a:y * l:scale
 
-      if win_y != s:submode_snap(win_y, scale)
-        let y = s:submode_snap(y, scale)
+      if l:win_y != s:submode_snap(l:win_y, l:scale)
+        let y = s:submode_snap(y, l:scale)
       endif
     endif
 
     execute 'winpos' x y
   endfunction
 
-  function s:init_submode()
+  function! s:init_submode()
     let g:submode_timeout          = 0
     let g:submode_keep_leaving_key = 1
 
@@ -481,7 +481,7 @@ if !s:is_vscode
   " asyncomplete.vim {{{
   AutocmdUser asyncomplete.vim call s:init_asyncomplete()
 
-  function s:init_asyncomplete()
+  function! s:init_asyncomplete()
     call asyncomplete#enable_for_buffer()
 
     call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
@@ -600,7 +600,7 @@ Plug 'machakann/vim-sandwich', {'on': []}
 " vim-sandwich {{{
 AutocmdUser vim-sandwich call s:init_sandwich()
 let g:operator_sandwich_no_default_key_mappings = 1
-function s:init_sandwich()
+function! s:init_sandwich()
   map  <silent> S   <Plug>(sandwich-add)
   nmap <silent> Sd  <Plug>(sandwich-delete)
   xmap <silent> Sd  <Plug>(sandwich-delete)
@@ -809,7 +809,6 @@ if !s:is_vscode
     set guifont=HackGenNerd\ Console:h11
     " set renderoptions=type:directx
     " set printfont=HackGenNerd\ Console:h11
-
   else
     set termguicolors
   endif
@@ -1096,9 +1095,9 @@ command! RemoveCr call s:execute_keep_view('silent! %substitute/\r$//g | nohlsea
 command! RemoveEolSpace call s:execute_keep_view('silent! %substitute/ \+$//g | nohlsearch')
 
 function! s:execute_keep_view(expr)
-  let wininfo = winsaveview()
+  let l:wininfo = winsaveview()
   execute a:expr
-  call winrestview(wininfo)
+  call winrestview(l:wininfo)
 endfunction
 
 " 現在のファイルパスをクリップボードへコピーする
