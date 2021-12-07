@@ -5,8 +5,9 @@ scriptencoding utf-8
 " 基本
 " --------------------------------------------------------------------------------
 let s:sid          = expand('<SID>')
-let s:dotvim_dir   = expand('~/.vim')
-let s:dropbox_dir  = expand('~/Dropbox')
+let s:home_dir     = expand('~/')
+let s:dotvim_dir   = s:home_dir . '.vim'
+let s:dropbox_dir  = s:home_dir . 'Dropbox'
 let s:is_vscode    = exists('g:vscode')
 let s:is_gui       = has('gui_running')
 let s:base_columns = 140
@@ -41,7 +42,7 @@ let g:xml_syntax_folding = 1
 let g:python3_host_prog  = 'C:/Users/yoi/AppData/Local/Programs/Python/Python310/python.exe'
 
 " ローカル設定
-let s:vimrc_local = expand('~/.vimrc.local')
+let s:vimrc_local = s:home_dir . '.vimrc.local'
 if filereadable(s:vimrc_local)
   execute 'source' s:vimrc_local
 endif
@@ -81,7 +82,7 @@ endif
 " --------------------------------------------------------------------------------
 " プラグイン
 " --------------------------------------------------------------------------------
-call plug#begin('~/.vim_plugged')
+call plug#begin(s:home_dir . '.vim_plugged')
 
 if !s:is_vscode
   Plug 'YoshihiroIto/night-owl.vim'
@@ -151,7 +152,7 @@ if !s:is_vscode
 
   Plug 'mattn/vim-lsp-settings', {'on': []}
   " vim-lsp-settings {{{
-  let g:lsp_settings_servers_dir = expand('~/lsp_server')
+  let g:lsp_settings_servers_dir = s:home_dir . 'lsp_server'
   " }}}
 
   Plug 'prabirshrestha/vim-lsp', {'on': []}
@@ -707,7 +708,11 @@ Autocmd BufNewFile,BufRead            *.{fsh,vsh}               setlocal filetyp
 Autocmd BufNewFile,BufRead            *.{md,mkd,markdown}       setlocal filetype=markdown
 
 " git commit ではインサートモードに入る
-Autocmd VimEnter COMMIT_EDITMSG if getline(1) == '' | execute 1 | startinsert | endif
+Autocmd VimEnter COMMIT_EDITMSG
+      \  if getline(1) == ''
+      \|   execute 1
+      \|   startinsert
+      \| endif
 
 AutocmdFT qf
       \  nnoremap <silent><buffer> q :<C-u>cclose<CR>
@@ -943,7 +948,7 @@ if s:is_gui
     endif
   endfunction
 
-  let s:vimreg_search = expand('~/vimreg_search.txt')
+  let s:vimreg_search = s:home_dir . 'vimreg_search.txt'
   Autocmd CursorHold,CursorHoldI,FocusLost * silent! call s:save_reg('/', s:vimreg_search)
   Autocmd FocusGained                      * silent! call s:load_reg('/', s:vimreg_search)
 endif
