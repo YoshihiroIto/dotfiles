@@ -6,8 +6,9 @@ scriptencoding utf-8
 " --------------------------------------------------------------------------------
 let s:sid          = expand('<SID>')
 let s:home_dir     = expand('~/')
-let s:dotvim_dir   = s:home_dir . '.vim'
-let s:dropbox_dir  = s:home_dir . 'Dropbox'
+let s:dotvim_dir   = s:home_dir . '.vim/'
+let s:plugin_dir   = s:home_dir . '.vim_plugged/'
+let s:dropbox_dir  = s:home_dir . 'Dropbox/'
 let s:is_vscode    = exists('g:vscode')
 let s:is_gui       = has('gui_running')
 let s:base_columns = 140
@@ -39,27 +40,28 @@ let g:did_menu_trans            = 1
 let g:mapleader          = "\<Space>"
 let g:vimsyn_folding     = 'af'
 let g:xml_syntax_folding = 1
-let g:python3_host_prog  = 'C:/Users/yoi/AppData/Local/Programs/Python/Python310/python.exe'
+let g:python3_host_prog  = s:home_dir . 'AppData/Local/Programs/Python/Python310/python.exe'
 
 " ローカル設定
-let s:vimrc_local = s:home_dir . '.vimrc.local'
-if filereadable(s:vimrc_local)
-  execute 'source' s:vimrc_local
-endif
+" let s:vimrc_local = s:home_dir . '.vimrc.local'
+" if filereadable(s:vimrc_local)
+"   execute 'source' s:vimrc_local
+" endif
+
+augroup MyAutoCmd
+  autocmd!
+augroup END
+
+command! -nargs=* Autocmd     autocmd MyAutoCmd <args>
+command! -nargs=* AutocmdFT   autocmd MyAutoCmd FileType <args>
+command! -nargs=* AutocmdUser autocmd MyAutoCmd User     <args>
 
 if !s:is_vscode
-  augroup MyAutoCmd
-    autocmd!
-  augroup END
-
-  command! -nargs=* Autocmd     autocmd MyAutoCmd <args>
-  command! -nargs=* AutocmdFT   autocmd MyAutoCmd FileType <args>
-  command! -nargs=* AutocmdUser autocmd MyAutoCmd User     <args>
   Autocmd BufWinEnter,ColorScheme .vimrc
         \ syntax match vimAutoCmd /\<\(Autocmd\|AutocmdFT\|AutocmdUser\)\>/
 
   function! s:edit_vimrc()
-    let l:dropbox_vimrc = s:dropbox_dir . '/dotfiles/.vimrc'
+    let l:dropbox_vimrc = s:dropbox_dir . 'dotfiles/.vimrc'
     if filereadable(l:dropbox_vimrc)
       execute 'edit' l:dropbox_vimrc
     else
@@ -82,34 +84,46 @@ endif
 " --------------------------------------------------------------------------------
 " プラグイン
 " --------------------------------------------------------------------------------
-call plug#begin(s:home_dir . '.vim_plugged')
+call plug#begin(s:home_dir . '.vim_plugged/')
+
+function! s:is_installed(name)
+  return isdirectory(s:home_dir . '.vim_plugged/' . a:name)
+endfunction
+
+function! s:execute_if_installed(name, func_name)
+  if s:is_installed(a:name)
+    call function(a:func_name)()
+  endif
+endfunction
 
 if !s:is_vscode
   Plug 'YoshihiroIto/night-owl.vim'
   Plug 'YoshihiroIto/vim-icondrag', {'on': []}
   " vim-icondrag {{{
-  AutocmdUser vim-icondrag call icondrag#enable()
+  AutocmdUser vim-icondrag call s:execute_if_installed('vim-icondrag', 'icondrag#enable')
   " }}}
 
   Plug 'itchyny/vim-gitbranch', {'on': []}
   Plug 'airblade/vim-gitgutter', {'on': []}
   " vim-gitgutter {{{
-  AutocmdUser vim-gitgutter
-        \  call gitgutter#enable()
-        \| let g:gitgutter_map_keys = 0
-        \| let g:gitgutter_grep     = ''
+  AutocmdUser vim-gitgutter call s:execute_if_installed('vim-gitgutter', 'gitgutter#enable')
+
+  let g:gitgutter_map_keys = 0
+  let g:gitgutter_grep     = ''
   " }}}
 
-  Plug 'osyo-manga/vim-hopping', {'on': []}
-  " vim-hopping {{{
-  nnoremap <silent> <leader>l   :<C-u>HoppingStart<CR>
-  let g:hopping#keymapping = {
-        \   "\<C-n>" : '<Over>(hopping-next)',
-        \   "\<C-p>" : '<Over>(hopping-prev)',
-        \ }
+  Plug 'lambdalisue/vim-rplugin', {'on': []}
+  Plug 'YoshihiroIto/lista.nvim', {'on': []}
+  nnoremap <silent> <leader>l   :<C-u>Lista<CR>
+  " lista {{{
+  let g:lista#custom_mappings = [
+        \  ['<C-j>', '<Esc>'],
+        \  ['<C-p>', '<S-Tab>'],
+        \  ['<C-n>', '<Tab>'],
+        \ ]
   " }}}
 
-  " Plug 'previm/previm'
+  Plug 'previm/previm'
   " previm {{{
   nnoremap <silent> <leader>p :<C-u>PrevimOpen<CR>
   " }}}
@@ -147,7 +161,7 @@ if !s:is_vscode
   noremap <silent> <leader>n :<C-u>MemoNew<CR>
   noremap <silent> <leader>k :execute 'CtrlP' g:memolist_path<CR>
   let g:memolist_memo_suffix = 'md'
-  let g:memolist_path        = s:dropbox_dir . '/memo'
+  let g:memolist_path        = s:dropbox_dir . 'memo/'
   " }}}
 
   Plug 'mattn/vim-lsp-settings', {'on': []}
@@ -157,7 +171,8 @@ if !s:is_vscode
 
   Plug 'prabirshrestha/vim-lsp', {'on': []}
   " vim-lsp {{{
-  AutocmdUser vim-lsp call s:init_lsp()
+  AutocmdUser vim-lsp call s:execute_if_installed('vim-lsp', 's:init_lsp')
+
   let g:lsp_auto_enable = 0
 
   function! s:init_lsp()
@@ -373,12 +388,14 @@ if !s:is_vscode
     return 0
   endfunction
 
-  Autocmd CursorHold,CursorHoldI * call lightline#update()
+  if s:is_installed('lightline.vim')
+    Autocmd CursorHold,CursorHoldI * call lightline#update()
+  endif
   " }}}
 
   Plug 'kana/vim-submode', {'on': []}
   " submode {{{
-  AutocmdUser vim-submode call s:init_submode()
+  AutocmdUser vim-submode call s:execute_if_installed('vim-submode', 's:init_submode')
 
   function! s:submode_snap(value, scale)
     return a:value / a:scale * a:scale
@@ -480,7 +497,7 @@ if !s:is_vscode
   Plug 'prabirshrestha/asyncomplete-buffer.vim', {'on': []}
   Plug 'prabirshrestha/asyncomplete.vim', {'on': []}
   " asyncomplete.vim {{{
-  AutocmdUser asyncomplete.vim call s:init_asyncomplete()
+  AutocmdUser asyncomplete.vim call s:execute_if_installed('asyncomplete.vim', 's:init_asyncomplete')
 
   function! s:init_asyncomplete()
     call asyncomplete#enable_for_buffer()
@@ -506,7 +523,7 @@ if !s:is_vscode
 
   Plug 'SirVer/ultisnips', {'on': []}
   " ultisnips {{{
-  let g:UltiSnipsSnippetDirectories  = [s:dotvim_dir . '/UltiSnips']
+  let g:UltiSnipsSnippetDirectories  = [s:dotvim_dir . 'UltiSnips']
   let g:UltiSnipsJumpForwardTrigger  = "<Tab>"
   let g:UltiSnipsJumpBackwardTrigger = "<S-Tab>"
   let g:UltiSnipsListSnippets        = "<S-Tab>"
@@ -599,8 +616,10 @@ xmap <silent> <Leader>a\|      <Plug>(EasyAlign)*\|
 
 Plug 'machakann/vim-sandwich', {'on': []}
 " vim-sandwich {{{
-AutocmdUser vim-sandwich call s:init_sandwich()
+AutocmdUser vim-sandwich call s:execute_if_installed('vim-sandwich', 's:init_sandwich')
+
 let g:operator_sandwich_no_default_key_mappings = 1
+
 function! s:init_sandwich()
   map  <silent> S   <Plug>(sandwich-add)
   nmap <silent> Sd  <Plug>(sandwich-delete)
@@ -645,7 +664,9 @@ function! s:load_plug(timer)
           \   'vim-submode',
           \   'vim-gitbranch',
           \   'vim-gitgutter',
-          \   'vim-hopping',
+          \   'vim-rplugin',
+          \   'lista.nvim',
+          \   'previm',
           \   'vaffle.vim',
           \   'vim-cursorword',
           \   'vim-autoft',
@@ -824,14 +845,12 @@ if !s:is_vscode
 
     " 日本語入力時カーソル色を変更する
     highlight CursorIM guifg=NONE guibg=Red
-
-    " if !&readonly
-    "   syntax match InvisibleJISX0208Space '　' display containedin=ALL
-    "   highlight InvisibleJISX0208Space guibg=#112233
-    " endif
   endfunction
 
-  colorscheme night-owl
+  if s:is_installed('night-owl.vim')
+    colorscheme night-owl
+  endif
+
   filetype plugin indent on
   syntax enable
 
@@ -934,8 +953,8 @@ set grepformat=%f:%l:%c:%m,%f:%l:%m
 set helplang=ja,en
 set keywordprg=
 
-" 複数Vimで検索を同期する
-if s:is_gui
+if !s:is_vscode
+  " 複数Vimで検索を同期する
   function! s:save_reg(reg, filename)
     call writefile([getreg(a:reg)], a:filename)
   endfunction
@@ -949,9 +968,7 @@ if s:is_gui
   let s:vimreg_search = s:home_dir . 'vimreg_search.txt'
   Autocmd CursorHold,CursorHoldI,FocusLost * silent! call s:save_reg('/', s:vimreg_search)
   Autocmd FocusGained                      * silent! call s:load_reg('/', s:vimreg_search)
-endif
 
-if !s:is_vscode
   " grep {{{
   nnoremap <silent> <leader>g :<C-u>Grep<CR>
   nnoremap <silent> <leader>q :<C-u>CtrlPQuickfix<CR>
@@ -1152,9 +1169,12 @@ nnoremap <silent> $     g$
 nnoremap <silent> g$    $
 nnoremap <silent> gg    ggzv
 nnoremap <silent> G     Gzv
-
 nnoremap <silent> <C-i> <C-i>zz
 nnoremap <silent> <C-o> <C-o>zz
+
+" キーボードマクロ
+nnoremap          q     qq<ESC>
+nnoremap <expr>   @     reg_recording() == '' ? '@q' : ''
 
 " --------------------------------------------------------------------------------
 " 遅延設定
