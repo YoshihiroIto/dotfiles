@@ -450,15 +450,6 @@ if !s:is_vscode
     call submode#map(       'git_hunk', 'n', 's', 'j',   ':<C-u>GitGutterEnable<CR>:GitGutterNextHunk<CR>zvzz')
     call submode#map(       'git_hunk', 'n', 's', 'k',   ':<C-u>GitGutterEnable<CR>:GitGutterPrevHunk<CR>zvzz')
 
-    call submode#enter_with('winsize', 'n', 's', 'gwh', '8<C-w>>')
-    call submode#enter_with('winsize', 'n', 's', 'gwl', '8<C-w><')
-    call submode#enter_with('winsize', 'n', 's', 'gwj', '4<C-w>-')
-    call submode#enter_with('winsize', 'n', 's', 'gwk', '4<C-w>+')
-    call submode#map(       'winsize', 'n', 's', 'h',   '8<C-w>>')
-    call submode#map(       'winsize', 'n', 's', 'l',   '8<C-w><')
-    call submode#map(       'winsize', 'n', 's', 'j',   '4<C-w>-')
-    call submode#map(       'winsize', 'n', 's', 'k',   '4<C-w>+')
-
     if s:is_gui
       let call_resize_appwin = ':<C-u>call ' . s:sid . 'submode_resize_appwin'
       let call_move_appwin   = ':<C-u>call ' . s:sid . 'submode_move_appwin'
@@ -716,7 +707,7 @@ function! s:load_plug(timer)
         \ )
 endfunction
 
-call timer_start(100, function('s:load_plug'))
+call timer_start(30, function('s:load_plug'))
 
 " --------------------------------------------------------------------------------
 " ファイルタイプごとの設定
