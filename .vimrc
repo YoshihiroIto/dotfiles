@@ -509,8 +509,6 @@ if !s:is_vscode
   endfunction
   " }}}
 
-  Plug 'lambdalisue/gina.vim', {'on': []}
-
   Plug 'SirVer/ultisnips', {'on': []}
   " ultisnips {{{
   let g:UltiSnipsSnippetDirectories  = [s:dotvim_dir . 'UltiSnips']
@@ -695,7 +693,6 @@ function! s:load_plug(timer)
           \   'ctrlp.vim',
           \   'ctrlp-matchfuzzy',
           \   'ultisnips',
-          \   'gina.vim',
           \   'vimdoc-ja',
           \ )
 
