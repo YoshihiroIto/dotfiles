@@ -9,6 +9,7 @@ let s:home_dir     = expand('~/')
 let s:dotvim_dir   = s:home_dir . '.vim/'
 let s:plugin_dir   = s:home_dir . '.vim_plugged/'
 let s:dropbox_dir  = s:home_dir . 'Dropbox/'
+let s:is_installed = isdirectory(s:home_dir . '.vim_plugged/')
 let s:is_vscode    = exists('g:vscode')
 let s:is_gui       = has('gui_running')
 let s:base_columns = 140
@@ -86,12 +87,8 @@ endif
 " --------------------------------------------------------------------------------
 call plug#begin(s:home_dir . '.vim_plugged/')
 
-function! s:is_installed(name)
-  return isdirectory(s:home_dir . '.vim_plugged/' . a:name)
-endfunction
-
-function! s:execute_if_installed(name, func_name)
-  if s:is_installed(a:name)
+function! s:execute_if_installed(func_name)
+  if s:is_installed
     call function(a:func_name)()
   endif
 endfunction
@@ -100,13 +97,13 @@ if !s:is_vscode
   Plug 'YoshihiroIto/night-owl.vim'
   Plug 'YoshihiroIto/vim-icondrag', {'on': []}
   " vim-icondrag {{{
-  AutocmdUser vim-icondrag call s:execute_if_installed('vim-icondrag', 'icondrag#enable')
+  AutocmdUser vim-icondrag call s:execute_if_installed('icondrag#enable')
   " }}}
 
   Plug 'itchyny/vim-gitbranch', {'on': []}
   Plug 'airblade/vim-gitgutter', {'on': []}
   " vim-gitgutter {{{
-  AutocmdUser vim-gitgutter call s:execute_if_installed('vim-gitgutter', 'gitgutter#enable')
+  AutocmdUser vim-gitgutter call s:execute_if_installed('gitgutter#enable')
 
   let g:gitgutter_map_keys = 0
   let g:gitgutter_grep     = ''
@@ -123,7 +120,7 @@ if !s:is_vscode
         \ ]
   " }}}
 
-  Plug 'previm/previm'
+  Plug 'previm/previm', {'on': []}
   " previm {{{
   nnoremap <silent> <leader>p :<C-u>PrevimOpen<CR>
   " }}}
@@ -171,7 +168,7 @@ if !s:is_vscode
 
   Plug 'prabirshrestha/vim-lsp', {'on': []}
   " vim-lsp {{{
-  AutocmdUser vim-lsp call s:execute_if_installed('vim-lsp', 's:init_lsp')
+  AutocmdUser vim-lsp call s:execute_if_installed('s:init_lsp')
 
   let g:lsp_auto_enable = 0
 
@@ -179,8 +176,8 @@ if !s:is_vscode
     let g:lsp_diagnostics_enabled        = 1
     let g:lsp_diagnostics_echo_cursor    = 1
     let g:lsp_document_highlight_enabled = 0
-    nmap <silent> <C-]> :<C-u>LspDefinition<CR>zz
-    nmap <silent> ;e    :<C-u>LspRename<CR>
+    nnoremap <silent> <C-]> :<C-u>LspDefinition<CR>zz
+    nnoremap <silent> ;e    :<C-u>LspRename<CR>
 
     call lsp#enable()
   endfunction
@@ -301,7 +298,7 @@ if !s:is_vscode
 
   function! s:lightline_filename()
     try
-      return (empty(s:lightline_readonly()) ? '' : s:lightline_readonly() . ' ') .
+      return  (empty(s:lightline_readonly()) ? '' : s:lightline_readonly() . ' ') .
             \ (&filetype ==# 'quickrun' ? ''      :
             \  empty(expand('%:t')) ? '[No Name]' : expand('%:t')) .
             \ (empty(s:lightline_modified()) ? '' : ' ' . s:lightline_modified())
@@ -316,8 +313,8 @@ if !s:is_vscode
     endif
 
     try
-      let branch = gitbranch#name()
-      return empty(branch) ? '' : '' . branch
+      let l:branch = gitbranch#name()
+      return empty(l:branch) ? '' : '' . l:branch
     catch
       return ''
     endtry
@@ -357,16 +354,16 @@ if !s:is_vscode
     endif
 
     try
-      let branch = gitbranch#name()
-      if empty(branch)
+      let l:branch = gitbranch#name()
+      if empty(l:branch)
         return ''
       endif
 
-      let summary = GitGutterGetHunkSummary()
+      let l:summary = GitGutterGetHunkSummary()
       return printf('%s%d %s%d %s%d',
-            \ g:gitgutter_sign_added,    summary[0],
-            \ g:gitgutter_sign_modified, summary[1],
-            \ g:gitgutter_sign_removed,  summary[2])
+            \ g:gitgutter_sign_added,    l:summary[0],
+            \ g:gitgutter_sign_modified, l:summary[1],
+            \ g:gitgutter_sign_removed,  l:summary[2])
     catch
       return ''
     endtry
@@ -388,14 +385,14 @@ if !s:is_vscode
     return 0
   endfunction
 
-  if s:is_installed('lightline.vim')
+  if s:is_installed
     Autocmd CursorHold,CursorHoldI * call lightline#update()
   endif
   " }}}
 
   Plug 'kana/vim-submode', {'on': []}
   " submode {{{
-  AutocmdUser vim-submode call s:execute_if_installed('vim-submode', 's:init_submode')
+  AutocmdUser vim-submode call s:execute_if_installed('s:init_submode')
 
   function! s:submode_snap(value, scale)
     return a:value / a:scale * a:scale
@@ -419,26 +416,26 @@ if !s:is_vscode
     let l:win_y = getwinposy()
 
     if a:x == 0
-      let x = l:win_x
+      let l:x = l:win_x
     else
-      let x = l:win_x + a:x * l:scale
+      let l:x = l:win_x + a:x * l:scale
 
       if l:win_x != s:submode_snap(l:win_x, l:scale)
-        let x = s:submode_snap(x, l:scale)
+        let l:x = s:submode_snap(l:x, l:scale)
       endif
     endif
 
     if a:y == 0
-      let y = l:win_y
+      let l:y = l:win_y
     else
-      let y = l:win_y + a:y * l:scale
+      let l:y = l:win_y + a:y * l:scale
 
       if l:win_y != s:submode_snap(l:win_y, l:scale)
-        let y = s:submode_snap(y, l:scale)
+        let l:y = s:submode_snap(y, l:scale)
       endif
     endif
 
-    execute 'winpos' x y
+    execute 'winpos' l:x l:y
   endfunction
 
   function! s:init_submode()
@@ -451,34 +448,34 @@ if !s:is_vscode
     call submode#map(       'git_hunk', 'n', 's', 'k',   ':<C-u>GitGutterEnable<CR>:GitGutterPrevHunk<CR>zvzz')
 
     if s:is_gui
-      let call_resize_appwin = ':<C-u>call ' . s:sid . 'submode_resize_appwin'
-      let call_move_appwin   = ':<C-u>call ' . s:sid . 'submode_move_appwin'
+      let l:call_resize_appwin = ':<C-u>call ' . s:sid . 'submode_resize_appwin'
+      let l:call_move_appwin   = ':<C-u>call ' . s:sid . 'submode_move_appwin'
 
-      call submode#enter_with('appwinsize', 'n', 's', '<leader>wH', call_resize_appwin . '(-1, 0)<CR>')
-      call submode#enter_with('appwinsize', 'n', 's', '<leader>wL', call_resize_appwin . '(+1, 0)<CR>')
-      call submode#enter_with('appwinsize', 'n', 's', '<leader>wJ', call_resize_appwin . '(0, +1)<CR>')
-      call submode#enter_with('appwinsize', 'n', 's', '<leader>wK', call_resize_appwin . '(0, -1)<CR>')
-      call submode#map(       'appwinsize', 'n', 's', 'H',          call_resize_appwin . '(-1, 0)<CR>')
-      call submode#map(       'appwinsize', 'n', 's', 'L',          call_resize_appwin . '(+1, 0)<CR>')
-      call submode#map(       'appwinsize', 'n', 's', 'J',          call_resize_appwin . '(0, +1)<CR>')
-      call submode#map(       'appwinsize', 'n', 's', 'K',          call_resize_appwin . '(0, -1)<CR>')
-      call submode#map(       'appwinsize', 'n', 's', 'h',          call_resize_appwin . '(-1, 0)<CR>')
-      call submode#map(       'appwinsize', 'n', 's', 'l',          call_resize_appwin . '(+1, 0)<CR>')
-      call submode#map(       'appwinsize', 'n', 's', 'j',          call_resize_appwin . '(0, +1)<CR>')
-      call submode#map(       'appwinsize', 'n', 's', 'k',          call_resize_appwin . '(0, -1)<CR>')
+      call submode#enter_with('appwinsize', 'n', 's', '<leader>wH', l:call_resize_appwin . '(-1, 0)<CR>')
+      call submode#enter_with('appwinsize', 'n', 's', '<leader>wL', l:call_resize_appwin . '(+1, 0)<CR>')
+      call submode#enter_with('appwinsize', 'n', 's', '<leader>wJ', l:call_resize_appwin . '(0, +1)<CR>')
+      call submode#enter_with('appwinsize', 'n', 's', '<leader>wK', l:call_resize_appwin . '(0, -1)<CR>')
+      call submode#map(       'appwinsize', 'n', 's', 'H',          l:call_resize_appwin . '(-1, 0)<CR>')
+      call submode#map(       'appwinsize', 'n', 's', 'L',          l:call_resize_appwin . '(+1, 0)<CR>')
+      call submode#map(       'appwinsize', 'n', 's', 'J',          l:call_resize_appwin . '(0, +1)<CR>')
+      call submode#map(       'appwinsize', 'n', 's', 'K',          l:call_resize_appwin . '(0, -1)<CR>')
+      call submode#map(       'appwinsize', 'n', 's', 'h',          l:call_resize_appwin . '(-1, 0)<CR>')
+      call submode#map(       'appwinsize', 'n', 's', 'l',          l:call_resize_appwin . '(+1, 0)<CR>')
+      call submode#map(       'appwinsize', 'n', 's', 'j',          l:call_resize_appwin . '(0, +1)<CR>')
+      call submode#map(       'appwinsize', 'n', 's', 'k',          l:call_resize_appwin . '(0, -1)<CR>')
 
-      call submode#enter_with('appwinpos', 'n', 's', '<leader>wh', call_move_appwin . '(-1, 0)<CR>')
-      call submode#enter_with('appwinpos', 'n', 's', '<leader>wl', call_move_appwin . '(+1, 0)<CR>')
-      call submode#enter_with('appwinpos', 'n', 's', '<leader>wj', call_move_appwin . '(0, +1)<CR>')
-      call submode#enter_with('appwinpos', 'n', 's', '<leader>wk', call_move_appwin . '(0, -1)<CR>')
-      call submode#map(       'appwinpos', 'n', 's', 'H',          call_move_appwin . '(-1, 0)<CR>')
-      call submode#map(       'appwinpos', 'n', 's', 'L',          call_move_appwin . '(+1, 0)<CR>')
-      call submode#map(       'appwinpos', 'n', 's', 'J',          call_move_appwin . '(0, +1)<CR>')
-      call submode#map(       'appwinpos', 'n', 's', 'K',          call_move_appwin . '(0, -1)<CR>')
-      call submode#map(       'appwinpos', 'n', 's', 'h',          call_move_appwin . '(-1, 0)<CR>')
-      call submode#map(       'appwinpos', 'n', 's', 'l',          call_move_appwin . '(+1, 0)<CR>')
-      call submode#map(       'appwinpos', 'n', 's', 'j',          call_move_appwin . '(0, +1)<CR>')
-      call submode#map(       'appwinpos', 'n', 's', 'k',          call_move_appwin . '(0, -1)<CR>')
+      call submode#enter_with('appwinpos', 'n', 's', '<leader>wh', l:call_move_appwin . '(-1, 0)<CR>')
+      call submode#enter_with('appwinpos', 'n', 's', '<leader>wl', l:call_move_appwin . '(+1, 0)<CR>')
+      call submode#enter_with('appwinpos', 'n', 's', '<leader>wj', l:call_move_appwin . '(0, +1)<CR>')
+      call submode#enter_with('appwinpos', 'n', 's', '<leader>wk', l:call_move_appwin . '(0, -1)<CR>')
+      call submode#map(       'appwinpos', 'n', 's', 'H',          l:call_move_appwin . '(-1, 0)<CR>')
+      call submode#map(       'appwinpos', 'n', 's', 'L',          l:call_move_appwin . '(+1, 0)<CR>')
+      call submode#map(       'appwinpos', 'n', 's', 'J',          l:call_move_appwin . '(0, +1)<CR>')
+      call submode#map(       'appwinpos', 'n', 's', 'K',          l:call_move_appwin . '(0, -1)<CR>')
+      call submode#map(       'appwinpos', 'n', 's', 'h',          l:call_move_appwin . '(-1, 0)<CR>')
+      call submode#map(       'appwinpos', 'n', 's', 'l',          l:call_move_appwin . '(+1, 0)<CR>')
+      call submode#map(       'appwinpos', 'n', 's', 'j',          l:call_move_appwin . '(0, +1)<CR>')
+      call submode#map(       'appwinpos', 'n', 's', 'k',          l:call_move_appwin . '(0, -1)<CR>')
     endif
   endfunction
   " }}}
@@ -488,29 +485,31 @@ if !s:is_vscode
   Plug 'prabirshrestha/asyncomplete-buffer.vim', {'on': []}
   Plug 'prabirshrestha/asyncomplete.vim', {'on': []}
   " asyncomplete.vim {{{
-  AutocmdUser asyncomplete.vim call s:execute_if_installed('asyncomplete.vim', 's:init_asyncomplete')
+  AutocmdUser asyncomplete.vim call s:execute_if_installed('s:init_asyncomplete')
 
   function! s:init_asyncomplete()
     call asyncomplete#enable_for_buffer()
 
     call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
-          \   'name': 'ultisnips',
+          \   'name':      'ultisnips',
           \   'whitelist': ['*'],
-          \   'priority': 10,
+          \   'priority':  10,
           \   'completor': function('asyncomplete#sources#ultisnips#completor'),
           \ }))
 
     call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
-          \   'name': 'buffer',
+          \   'name':      'buffer',
           \   'whitelist': ['*'],
-          \   'priority': 30,
+          \   'priority':  30,
           \   'completor': function('asyncomplete#sources#buffer#completor'),
-          \   'config': {
+          \   'config':    {
           \     'max_buffer_size': 5000000,
           \   },
           \ }))
   endfunction
   " }}}
+
+  Plug 'lambdalisue/gina.vim', {'on': []}
 
   Plug 'SirVer/ultisnips', {'on': []}
   " ultisnips {{{
@@ -607,7 +606,7 @@ xmap <silent> <Leader>a\|      <Plug>(EasyAlign)*\|
 
 Plug 'machakann/vim-sandwich', {'on': []}
 " vim-sandwich {{{
-AutocmdUser vim-sandwich call s:execute_if_installed('vim-sandwich', 's:init_sandwich')
+AutocmdUser vim-sandwich call s:execute_if_installed('s:init_sandwich')
 
 let g:operator_sandwich_no_default_key_mappings = 1
 
@@ -646,6 +645,35 @@ map #  <Plug>(asterisk-z#)<Plug>(is-nohl-1)
 map g# <Plug>(asterisk-gz#)<Plug>(is-nohl-1)
 " }}}
 
+Plug 'rhysd/clever-f.vim', {'on': []}
+" clever-f.vim {{{
+let g:clever_f_smart_case                       = 1
+let g:clever_f_fix_key_direction                = 1
+let g:clever_f_not_overwrites_standard_mappings = 1
+let g:clever_f_across_no_line                   = 1
+
+nmap f     <Plug>(clever-f-f)
+xmap f     <Plug>(clever-f-f)
+omap f     <Plug>(clever-f-f)
+nmap F     <Plug>(clever-f-F)
+xmap F     <Plug>(clever-f-F)
+omap F     <Plug>(clever-f-F)
+nmap <Esc> <Plug>(clever-f-reset)
+xmap <Esc> <Plug>(clever-f-reset)
+omap <Esc> <Plug>(clever-f-reset)
+" }}}
+
+Plug 'unblevable/quick-scope', {'on': []}
+" quick-scope {{{
+let g:qs_ignorecase = 1
+
+augroup qs_colors
+  autocmd!
+  autocmd ColorScheme * highlight QuickScopePrimary   guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
+  autocmd ColorScheme * highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81  cterm=underline
+augroup END
+" }}}
+
 call plug#end()
 
 function! s:load_plug(timer)
@@ -667,6 +695,7 @@ function! s:load_plug(timer)
           \   'ctrlp.vim',
           \   'ctrlp-matchfuzzy',
           \   'ultisnips',
+          \   'gina.vim',
           \   'vimdoc-ja',
           \ )
 
@@ -686,6 +715,8 @@ function! s:load_plug(timer)
         \   'lexima.vim',
         \   'vim-closetag',
         \   'is.vim',
+        \   'clever-f.vim',
+        \   'quick-scope',
         \   'vim-easy-align',
         \   'vim-sandwich',
         \   'open-browser.vim'
@@ -838,7 +869,7 @@ if !s:is_vscode
     highlight CursorIM guifg=NONE guibg=Red
   endfunction
 
-  if s:is_installed('night-owl.vim')
+  if s:is_installed
     colorscheme night-owl
   endif
 
@@ -971,8 +1002,6 @@ if !s:is_vscode
   let s:grep_job_id = ''
 
   function! s:grep(...) abort
-    let l:word = ''
-
     if a:0 >= 1
       let l:word = a:1
     else
@@ -1115,8 +1144,6 @@ endfunction
 command! CopyFilepath     call setreg('*', expand('%:t'), 'v')
 command! CopyFullFilepath call setreg('*', expand('%:p'), 'v')
 
-nnoremap Y y$
-
 vnoremap <C-a> <C-a>gv
 vnoremap <C-x> <C-x>gv
 
@@ -1141,7 +1168,7 @@ endfunction
 
 " モード移行
 inoremap <C-j> <Esc>
-nnoremap <C-j> <Esc>
+nmap     <C-j> <Esc>
 vnoremap <C-j> <Esc>
 cnoremap <C-j> <Esc>
 
@@ -1166,6 +1193,33 @@ nnoremap <silent> <C-o> <C-o>zz
 " キーボードマクロ
 nnoremap          q     qq<ESC>
 nnoremap <expr>   @     reg_recording() == '' ? '@q' : ''
+
+" マーク
+nnoremap <silent> m     :<C-u>call <SID>AutoMarkrement()<CR>
+nnoremap <silent> <C-k> ]`zz
+nnoremap <silent> <C-l> [`zz
+
+Autocmd BufReadPost * delmarks!
+
+function! s:AutoMarkrement()
+  let l:markrement_char = [
+        \   'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+        \   'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+        \ ]
+
+  if !exists('b:markrement_pos')
+    let b:markrement_pos = 0
+  else
+    let b:markrement_pos = (b:markrement_pos + 1) % len(l:markrement_char)
+  endif
+
+  execute 'mark' l:markrement_char[b:markrement_pos]
+endfunction
+
+" Nop
+nnoremap ZZ <Nop>
+nnoremap ZQ <Nop>
+nnoremap Q  <Nop>
 
 " --------------------------------------------------------------------------------
 " 遅延設定
