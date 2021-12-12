@@ -62,23 +62,6 @@ command! -nargs=* Autocmd     autocmd MyAutoCmd <args>
 command! -nargs=* AutocmdFT   autocmd MyAutoCmd FileType <args>
 command! -nargs=* AutocmdUser autocmd MyAutoCmd User     <args>
 
-if !s:is_vscode
-  Autocmd BufWinEnter,ColorScheme .vimrc
-        \ syntax match vimAutoCmd /\<\(Autocmd\|AutocmdFT\|AutocmdUser\)\>/
-
-  function! s:edit_vimrc()
-    let l:dropbox_vimrc = s:dropbox_dir . 'dotfiles/.vimrc'
-    if filereadable(l:dropbox_vimrc)
-      execute 'edit' l:dropbox_vimrc
-    else
-      execute 'edit' $MYVIMRC
-    endif
-  endfunction
-
-  nnoremap <silent> <F1> :<C-u>call <SID>edit_vimrc()<CR>
-  nnoremap <silent> <F2> :<C-u>PlugUpdate<CR>
-endif
-
 " --------------------------------------------------------------------------------
 " プラグイン
 " --------------------------------------------------------------------------------
@@ -130,6 +113,8 @@ if !s:is_vscode
   Plug 'cocopon/vaffle.vim', {'on': []}
   " vaffle.vim {{{
   let g:vaffle_show_hidden_files = 1
+
+  AutocmdFT vaffle nmap <silent><buffer> <Esc> <Plug>(vaffle-quit)
   " }}}
 
   Plug 'itchyny/vim-cursorword', {'on': []}
@@ -741,12 +726,11 @@ call timer_start(30, function('s:load_plug'))
 " --------------------------------------------------------------------------------
 " ファイルタイプごとの設定
 " --------------------------------------------------------------------------------
-Autocmd BufEnter,WinEnter,BufWinEnter *                         call s:update_all()
-Autocmd BufNewFile,BufRead            *.xaml                    setlocal filetype=xml
-Autocmd BufNewFile,BufRead            *.cake                    setlocal filetype=cs
-Autocmd BufNewFile,BufRead            *.{fx,fxc,fxh,hlsl,hlsli} setlocal filetype=hlsl
-Autocmd BufNewFile,BufRead            *.{fsh,vsh}               setlocal filetype=glsl
-Autocmd BufNewFile,BufRead            *.{md,mkd,markdown}       setlocal filetype=markdown
+Autocmd BufEnter           *                         call s:update_all()
+Autocmd BufNewFile,BufRead *.xaml                    setlocal filetype=xml
+Autocmd BufNewFile,BufRead *.cake                    setlocal filetype=cs
+Autocmd BufNewFile,BufRead *.{fx,fxc,fxh,hlsl,hlsli} setlocal filetype=hlsl
+Autocmd BufNewFile,BufRead *.{fsh,vsh}               setlocal filetype=glsl
 
 Autocmd VimEnter COMMIT_EDITMSG
       \  if getline(1) == ''
@@ -799,9 +783,6 @@ AutocmdFT help
 function! s:update_all()
   setlocal formatoptions-=ro
   setlocal textwidth=0
-
-  " ファイルの場所をカレントにする
-  silent! execute 'lcd' fnameescape(expand('%:p:h'))
 endfunction
 
 " --------------------------------------------------------------------------------
@@ -1115,6 +1096,7 @@ set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 set expandtab
+set autochdir
 
 if s:is_vscode
   nnoremap <silent> u     :<C-u>call VSCodeNotify('undo')<CR>
@@ -1217,6 +1199,23 @@ nnoremap Q  <Nop>
 function! s:lazy_setting(timer)
   if exists('+cryptmethod')
     set cryptmethod=blowfish2
+  endif
+
+  if !s:is_vscode
+    Autocmd BufWinEnter,ColorScheme .vimrc
+          \ syntax match vimAutoCmd /\<\(Autocmd\|AutocmdFT\|AutocmdUser\)\>/
+
+    function! s:edit_vimrc()
+      let l:dropbox_vimrc = s:dropbox_dir . 'dotfiles/.vimrc'
+      if filereadable(l:dropbox_vimrc)
+        execute 'edit' l:dropbox_vimrc
+      else
+        execute 'edit' $MYVIMRC
+      endif
+    endfunction
+
+    nnoremap <silent> <F1> :<C-u>call <SID>edit_vimrc()<CR>
+    nnoremap <silent> <F2> :<C-u>PlugUpdate<CR>
   endif
 endfunction
 call timer_start(50, function('s:lazy_setting'))
