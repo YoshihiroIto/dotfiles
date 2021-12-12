@@ -1,5 +1,10 @@
-set encoding=utf-8
-scriptencoding utf-8
+if has('vim_starting')
+  let s:startuptime = reltime()
+  augroup startuptime
+    autocmd!
+    autocmd startuptime VimEnter * echomsg 'startuptime:' reltimestr(reltime(s:startuptime))
+  augroup END
+endif
 
 " --------------------------------------------------------------------------------
 " 基本
@@ -72,20 +77,12 @@ if !s:is_vscode
 
   nnoremap <silent> <F1> :<C-u>call <SID>edit_vimrc()<CR>
   nnoremap <silent> <F2> :<C-u>PlugUpdate<CR>
-
-  " スタートアップ時間表示
-  if has('vim_starting')
-    let s:startuptime = reltime()
-    Autocmd VimEnter *
-          \  let s:startuptime = reltime(s:startuptime)
-          \| echomsg 'startuptime:' reltimestr(s:startuptime)
-  endif
 endif
 
 " --------------------------------------------------------------------------------
 " プラグイン
 " --------------------------------------------------------------------------------
-call plug#begin(s:home_dir . '.vim_plugged/')
+call plug#begin(s:home_dir . '.vim_plugged/') "{
 
 function! s:execute_if_installed(func_name)
   if s:is_installed
@@ -103,10 +100,15 @@ if !s:is_vscode
   Plug 'itchyny/vim-gitbranch', {'on': []}
   Plug 'airblade/vim-gitgutter', {'on': []}
   " vim-gitgutter {{{
-  AutocmdUser vim-gitgutter call s:execute_if_installed('gitgutter#enable')
+  AutocmdUser vim-gitgutter call s:execute_if_installed('s:init_gitgutter')
 
   let g:gitgutter_map_keys = 0
   let g:gitgutter_grep     = ''
+
+  function! s:init_gitgutter()
+    call gitgutter#enable()
+    Autocmd WinEnter * GitGutter
+  endfunction
   " }}}
 
   Plug 'lambdalisue/vim-rplugin', {'on': []}
@@ -120,9 +122,9 @@ if !s:is_vscode
         \ ]
   " }}}
 
-  Plug 'previm/previm', {'on': []}
-  " previm {{{
-  nnoremap <silent> <leader>p :<C-u>PrevimOpen<CR>
+  Plug 'iamcco/markdown-preview.nvim', {'on': [], 'do': 'cd app & yarn install'}
+  " markdown-preview.nvim {{{
+  nnoremap <silent> <leader>p :<C-u>MarkdownPreview<CR>
   " }}}
 
   Plug 'cocopon/vaffle.vim', {'on': []}
@@ -228,7 +230,7 @@ if !s:is_vscode
         \   'active': {
         \     'left': [
         \       ['mode'],
-        \       ['branch', 'gitgutter', 'filename', 'submode']
+        \       ['branch', 'gitgutter', 'filename']
         \     ],
         \     'right': [
         \       ['lineinfo'],
@@ -244,8 +246,7 @@ if !s:is_vscode
         \     'readonly':     s:sid . 'lightline_readonly',
         \     'filename':     s:sid . 'lightline_filename',
         \     'mode':         s:sid . 'lightline_mode',
-        \     'lineinfo':     s:sid . 'lightline_lineinfo',
-        \     'submode':      'submode#current'
+        \     'lineinfo':     s:sid . 'lightline_lineinfo'
         \   },
         \   'component_expand': {
         \     'branch':       s:sid . 'lightline_current_branch',
@@ -683,7 +684,7 @@ function! s:load_plug(timer)
           \   'vim-gitgutter',
           \   'vim-rplugin',
           \   'lista.nvim',
-          \   'previm',
+          \   'markdown-preview.nvim',
           \   'vaffle.vim',
           \   'vim-cursorword',
           \   'vim-autoft',
@@ -733,7 +734,7 @@ function! s:load_plug(timer)
         \   'vim-operator-tcomment',
         \   'vim-operator-replace'
         \ )
-endfunction
+endfunction "}
 
 call timer_start(30, function('s:load_plug'))
 
@@ -771,17 +772,17 @@ AutocmdFT vue
       \| setlocal softtabstop=2
 
 AutocmdFT vim
-      \  setlocal foldmethod=marker
-      \| setlocal foldlevel=0
-      \| setlocal foldcolumn=5
-      \| setlocal tabstop=2
+      \  setlocal tabstop=2
       \| setlocal shiftwidth=2
       \| setlocal softtabstop=2
+      \| setlocal foldmethod=marker
+      \| setlocal foldlevel=0
+      \| setlocal foldcolumn=5
 
 AutocmdFT xml,html
-      \  setlocal foldlevel=99
+      \  setlocal foldmethod=syntax
+      \| setlocal foldlevel=99
       \| setlocal foldcolumn=5
-      \| setlocal foldmethod=syntax
       \| inoremap <silent><buffer> >  ><Esc>:call closetag#CloseTagFun()<CR>
 
 AutocmdFT json
@@ -796,8 +797,7 @@ AutocmdFT help
       \  nnoremap <silent><buffer> q  :<C-u>close<CR>
 
 function! s:update_all()
-  setlocal formatoptions-=r
-  setlocal formatoptions-=o
+  setlocal formatoptions-=ro
   setlocal textwidth=0
 
   " ファイルの場所をカレントにする
@@ -814,16 +814,14 @@ if !s:is_vscode
   set noshowmatch
   set wrap
   set noshowmode
-  set shortmess+=I
-  set shortmess-=S
-  set shortmess+=s
+  set shortmess=filnxtToOIs
   set lazyredraw
   set wildmenu
   set wildmode=list:full
   set showfulltag
   set wildoptions=tagfile
   set fillchars=vert:\ "
-  set synmaxcol=2000
+  set synmaxcol=500
   set updatetime=100
   set previewheight=24
   set cmdheight=4
@@ -841,9 +839,13 @@ if !s:is_vscode
   set foldlevel=99
   set belloff=all
   set ambiwidth=double
+  set diffopt=internal,filler,algorithm:histogram,indent-heuristic
+  set splitbelow
+  set splitright
+  set browsedir=buffer
 
   if s:is_gui
-    set guioptions=gtM
+    set guioptions=M
     set winaltkeys=no
 
     set lines=100
@@ -856,7 +858,7 @@ if !s:is_vscode
     set termguicolors
   endif
 
-  Autocmd BufWinEnter,ColorScheme * call s:set_color()
+  Autocmd ColorScheme * call s:set_color()
 
   function! s:set_color()
     " ^M を非表示
@@ -955,7 +957,6 @@ if s:is_vscode
 else
   nnoremap <silent> <leader>f :<C-u>Vaffle<CR>
 
-  " ターミナル
   tnoremap <Esc> <C-w>N
   tnoremap <C-j> <C-w>N
 endif
@@ -1093,7 +1094,6 @@ endif
 " --------------------------------------------------------------------------------
 " 編集
 " --------------------------------------------------------------------------------
-set browsedir=buffer
 set clipboard=unnamedplus,unnamed
 set modeline
 set virtualedit=block
@@ -1102,17 +1102,13 @@ set whichwrap=b,s,h,l,<,>,[,]
 set mouse=a
 set hidden
 set timeoutlen=2000
-set nrformats-=octal
-set nrformats+=alpha
+set nrformats=alpha,bin,hex
 set backspace=indent,eol,start
 set noswapfile
 set nobackup
-set formatoptions+=j
+set formatoptions=tcj
 set nofixeol
 set tags=tags,./tags,../tags,../../tags,../../../tags,../../../../tags,../../../../../tags
-set diffopt=internal,filler,algorithm:histogram,indent-heuristic
-set splitbelow
-set splitright
 set autoindent
 set cindent
 set tabstop=4
@@ -1170,22 +1166,20 @@ vnoremap <C-j> <Esc>
 cnoremap <C-j> <Esc>
 
 " カーソル移動
-nnoremap <silent> j     gj
-nnoremap <silent> k     gk
-nnoremap <silent> gj    j
-nnoremap <silent> gk    k
-vnoremap <silent> k     gk
-vnoremap <silent> j     gj
-vnoremap <silent> gj    j
-vnoremap <silent> gk    k
-nnoremap <silent> 0     g0
-nnoremap <silent> g0    0
-nnoremap <silent> $     g$
-nnoremap <silent> g$    $
-nnoremap <silent> gg    ggzv
-nnoremap <silent> G     Gzv
-nnoremap <silent> <C-i> <C-i>zz
-nnoremap <silent> <C-o> <C-o>zz
+noremap <silent> j     gj
+noremap <silent> k     gk
+noremap <silent> gj    j
+noremap <silent> gk    k
+noremap <silent> 0     g0
+noremap <silent> g0    0
+noremap <silent> $     g$
+noremap <silent> g$    $
+noremap <silent> gg    ggzv
+noremap <silent> G     Gzv
+noremap <silent> n     nzv
+noremap <silent> N     Nzv
+noremap <silent> <C-i> <C-i>
+noremap <silent> <C-o> <C-o>
 
 " キーボードマクロ
 nnoremap          q     qq<ESC>
@@ -1193,24 +1187,23 @@ nnoremap <expr>   @     reg_recording() == '' ? '@q' : ''
 
 " マーク
 nnoremap <silent> m     :<C-u>call <SID>AutoMarkrement()<CR>
-nnoremap <silent> <C-k> ]`zz
-nnoremap <silent> <C-l> [`zz
+nnoremap <silent> <C-k> ]`
+nnoremap <silent> <C-l> [`
 
 Autocmd BufReadPost * delmarks!
 
 function! s:AutoMarkrement()
-  let l:markrement_char = [
-        \   'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-        \   'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
-        \ ]
+  let l:begin  = char2nr('a')
+  let l:end    = char2nr('z')
+  let l:length = l:end - l:begin + 1
 
   if !exists('b:markrement_pos')
     let b:markrement_pos = 0
   else
-    let b:markrement_pos = (b:markrement_pos + 1) % len(l:markrement_char)
+    let b:markrement_pos = (b:markrement_pos + 1) % l:length
   endif
 
-  execute 'mark' l:markrement_char[b:markrement_pos]
+  execute 'mark' nr2char(l:begin + b:markrement_pos)
 endfunction
 
 " Nop
