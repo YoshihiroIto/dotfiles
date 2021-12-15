@@ -58,7 +58,7 @@ augroup MyAutoCmd
   autocmd!
 augroup END
 
-command! -nargs=* Autocmd     autocmd MyAutoCmd <args>
+command! -nargs=* Autocmd     autocmd MyAutoCmd          <args>
 command! -nargs=* AutocmdFT   autocmd MyAutoCmd FileType <args>
 command! -nargs=* AutocmdUser autocmd MyAutoCmd User     <args>
 
@@ -219,7 +219,7 @@ if !s:is_vscode
         \     ],
         \     'right': [
         \       ['lineinfo'],
-        \       ['percent']
+        \       ['seachcount', 'percent']
         \     ]
         \   },
         \   'component': {'percent': '%3p%%'},
@@ -231,24 +231,30 @@ if !s:is_vscode
         \     'readonly':     s:sid . 'lightline_readonly',
         \     'filename':     s:sid . 'lightline_filename',
         \     'mode':         s:sid . 'lightline_mode',
-        \     'lineinfo':     s:sid . 'lightline_lineinfo'
+        \     'lineinfo':     s:sid . 'lightline_lineinfo',
+        \     'seachcount':   s:sid . 'lightline_searchcount'
         \   },
         \   'component_expand': {
-        \     'branch':       s:sid . 'lightline_current_branch',
-        \     'gitgutter':    s:sid . 'lightline_git_summary'
+        \     'branch':    s:sid . 'lightline_current_branch',
+        \     'gitgutter': s:sid . 'lightline_git_summary'
         \   },
         \   'component_type': {
-        \     'branch':       'branch',
-        \     'gitgutter':    'branch'
+        \     'branch':    'branch',
+        \     'gitgutter': 'branch'
         \   },
-        \   'separator': {   'left': '', 'right': ''},
-        \   'subseparator': {'left': '', 'right': ''},
+        \   'separator':    {'left': '', 'right': ''},
+        \   'subseparator': {'left': '', 'right': ''},
         \   'tabline': {
         \     'left':  [['tabs']],
         \     'right': [['filetype', 'fileformat', 'fileencoding']]
         \   },
-        \   'tabline_separator': {   'left': '', 'right': ''},
-        \   'tabline_subseparator': {'left': '︱', 'right': '︱'},
+        \   'tabline_separator':    {'left': '', 'right': ''},
+        \   'tabline_subseparator': {'left': '', 'right': ''},
+        \   'tab_component_function': {
+        \     'modified': s:sid . 'lightline_tab_component',
+        \     'readonly': s:sid . 'lightline_tab_component',
+        \     'tabnum':   s:sid . 'lightline_tab_component',
+        \   },
         \   'mode_map': {
         \     'n':      'N',
         \     'i':      'I',
@@ -266,12 +272,19 @@ if !s:is_vscode
         \ }
 
   function! s:lightline_mode()
-    return  &filetype ==# 'quickrun' ? 'Quickrun' :
-          \ winwidth(0) > 50 ? lightline#mode() : ''
+    if s:is_lightline_no_disp_group()
+      return ''
+    endif
+
+    return lightline#mode()
   endfunction
 
   function! s:lightline_modified()
     if s:is_lightline_no_disp_group()
+      return ''
+    endif
+
+    if mode() ==# 't'
       return ''
     endif
 
@@ -284,13 +297,20 @@ if !s:is_vscode
 
   function! s:lightline_filename()
     try
-      return  (empty(s:lightline_readonly()) ? '' : s:lightline_readonly() . ' ') .
-            \ (&filetype ==# 'quickrun' ? ''      :
-            \  empty(expand('%:t')) ? '[No Name]' : expand('%:t')) .
-            \ (empty(s:lightline_modified()) ? '' : ' ' . s:lightline_modified())
+      let l:readonly = s:lightline_readonly()
+      let l:modified = s:lightline_modified()
+      let l:filename = expand('%:t')
+
+      return  (empty(l:readonly) ? '' : l:readonly . ' ') .
+            \ (empty(l:filename) ? '[No Name]' : l:filename) .
+            \ (empty(l:modified) ? '' : ' ' . l:modified)
     catch
       return ''
     endtry
+  endfunction
+
+  function! s:lightline_tab_component(_)
+    return ''
   endfunction
 
   function! s:lightline_current_branch()
@@ -319,7 +339,7 @@ if !s:is_vscode
       return ''
     endif
 
-    return ' ' . (empty(&filetype) ? 'no filetype' : &filetype)
+    return (empty(&filetype) ? 'no filetype' : &filetype)
   endfunction
 
   function! s:lightline_fileencoding()
@@ -327,7 +347,7 @@ if !s:is_vscode
       return ''
     endif
 
-    return (empty(&fileencoding) ? &encoding : &fileencoding) . ' '
+    return (empty(&fileencoding) ? &encoding : &fileencoding)
   endfunction
 
   function! s:lightline_git_summary()
@@ -356,19 +376,39 @@ if !s:is_vscode
   endfunction
 
   function! s:lightline_lineinfo()
-    if winwidth(0) <= 50
+    if s:is_lightline_no_disp_group()
       return ''
     endif
 
     return printf('%4d/%d : %-3d', line('.'), line('$'), col('.'))
   endfunction
 
-  function! s:is_lightline_no_disp_group()
-    if winwidth(0) <= 50
-      return 1
+  function! s:lightline_searchcount()
+    if !v:hlsearch
+      return ''
     endif
 
-    return 0
+    let result = searchcount()
+    if empty(result)
+      return ''
+    endif
+
+    if result.incomplete ==# 1
+      return '[?/??]'
+
+    elseif result.incomplete ==# 2
+      if result.total > result.maxcount && result.current > result.maxcount
+        return printf('[>%d/>%d]', result.current, result.total)
+
+      elseif result.total > result.maxcount
+        return printf('[%d/>%d]', result.current, result.total)
+      endif
+    endif
+    return printf('[%d/%d]', result.current, result.total)
+  endfunction
+
+  function! s:is_lightline_no_disp_group()
+    return winwidth(0) <= 50
   endfunction
 
   if s:is_installed
@@ -469,28 +509,29 @@ if !s:is_vscode
   Plug 'prabirshrestha/asyncomplete-lsp.vim', {'on': []}
   Plug 'prabirshrestha/asyncomplete-ultisnips.vim', {'on': []}
   Plug 'prabirshrestha/asyncomplete-buffer.vim', {'on': []}
+  Plug 'machakann/asyncomplete-ezfilter.vim', {'on': []}
   Plug 'prabirshrestha/asyncomplete.vim', {'on': []}
   " asyncomplete.vim {{{
   AutocmdUser asyncomplete.vim call s:execute_if_installed('s:init_asyncomplete')
 
   function! s:init_asyncomplete()
+    let g:asyncomplete_preprocessor                      = [function('asyncomplete#preprocessor#ezfilter#filter')]
+    let g:asyncomplete#preprocessor#ezfilter#config      = {}
+    let g:asyncomplete#preprocessor#ezfilter#config['*'] = {ctx, items -> ctx.filter(items)}
+
     call asyncomplete#enable_for_buffer()
 
     call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
           \   'name':      'ultisnips',
-          \   'whitelist': ['*'],
-          \   'priority':  10,
+          \   'allowlist': ['*'],
           \   'completor': function('asyncomplete#sources#ultisnips#completor'),
           \ }))
 
     call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
           \   'name':      'buffer',
           \   'whitelist': ['*'],
-          \   'priority':  30,
           \   'completor': function('asyncomplete#sources#buffer#completor'),
-          \   'config':    {
-          \     'max_buffer_size': 5000000,
-          \   },
+          \   'config':    { 'max_buffer_size': 5000000, },
           \ }))
   endfunction
   " }}}
@@ -498,10 +539,10 @@ if !s:is_vscode
   Plug 'SirVer/ultisnips', {'on': []}
   " ultisnips {{{
   let g:UltiSnipsSnippetDirectories  = [s:dotvim_dir . 'UltiSnips']
-  let g:UltiSnipsJumpForwardTrigger  = "<Tab>"
-  let g:UltiSnipsJumpBackwardTrigger = "<S-Tab>"
-  let g:UltiSnipsListSnippets        = "<S-Tab>"
-  let g:UltiSnipsExpandTrigger       = "<C-e>"
+  let g:UltiSnipsJumpForwardTrigger  = '<Tab>'
+  let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
+  let g:UltiSnipsListSnippets        = '<S-Tab>'
+  let g:UltiSnipsExpandTrigger       = '<C-e>'
   " }}}
 
   " Plug 'prettier/vim-prettier', {
@@ -526,6 +567,7 @@ endif
 Plug 'andymass/vim-matchup', {'on': []}
 " vim-matchup {{{
 let g:matchup_matchparen_status_offscreen = 0
+let g:matchup_matchparen_deferred         = 1
 " }}}
 
 Plug 'markonm/traces.vim', {'on': []}
@@ -686,6 +728,7 @@ function! s:load_plug(timer)
           \   'asyncomplete-lsp.vim',
           \   'asyncomplete-ultisnips.vim',
           \   'asyncomplete-buffer.vim',
+          \   'asyncomplete-ezfilter.vim',
           \   'asyncomplete.vim'
           \ )
   endif
@@ -720,7 +763,6 @@ function! s:load_plug(timer)
         \   'vim-operator-replace'
         \ )
 endfunction "}
-
 call timer_start(30, function('s:load_plug'))
 
 " --------------------------------------------------------------------------------
@@ -795,7 +837,7 @@ if !s:is_vscode
   set noshowmatch
   set wrap
   set noshowmode
-  set shortmess=filnxtToOIs
+  set shortmess=filnxtToOIsS
   set lazyredraw
   set wildmenu
   set wildmode=list:full
@@ -805,7 +847,7 @@ if !s:is_vscode
   set synmaxcol=500
   set updatetime=100
   set previewheight=24
-  set cmdheight=4
+  set cmdheight=1
   set laststatus=2
   set showtabline=2
   set noequalalways
@@ -819,11 +861,16 @@ if !s:is_vscode
   set foldcolumn=0
   set foldlevel=99
   set belloff=all
-  set ambiwidth=double
   set diffopt=internal,filler,algorithm:histogram,indent-heuristic
   set splitbelow
   set splitright
   set browsedir=buffer
+  set scrolloff=4
+
+  set ambiwidth=double
+  if exists('*setcellwidths')
+    call setcellwidths([[0x2500, 0x257f, 1], [0xE0A0, 0xE0B7, 1]])
+  endif
 
   if s:is_gui
     set guioptions=M
@@ -840,7 +887,6 @@ if !s:is_vscode
   endif
 
   Autocmd ColorScheme * call s:set_color()
-
   function! s:set_color()
     " ^M を非表示
     syntax match HideCtrlM containedin=ALL /\r$/ conceal
@@ -1158,8 +1204,6 @@ noremap <silent> $     g$
 noremap <silent> g$    $
 noremap <silent> gg    ggzv
 noremap <silent> G     Gzv
-noremap <silent> n     nzv
-noremap <silent> N     Nzv
 noremap <silent> <C-i> <C-i>
 noremap <silent> <C-o> <C-o>
 
