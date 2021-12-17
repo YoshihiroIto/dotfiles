@@ -80,6 +80,44 @@ if !s:is_vscode
   AutocmdUser vim-icondrag call s:execute_if_installed('icondrag#enable')
   " }}}
 
+  Plug 'neoclide/coc.nvim', {'branch': 'release', 'on': []}
+  " coc.nvim {{{
+  AutocmdUser coc.nvim call s:execute_if_installed('s:init_coc')
+
+  let g:coc_global_extensions = [
+        \   'coc-css',
+        \   'coc-html',
+        \   'coc-json',
+        \   'coc-markdownlint',
+        \   'coc-omnisharp',
+        \   'coc-powershell',
+        \   'coc-tsserver',
+        \   'coc-ultisnips',
+        \   'coc-vimlsp',
+        \   'coc-yaml',
+        \ ]
+
+  function! s:init_coc()
+    nnoremap <silent> <C-]>     :<C-u>call CocActionAsync('jumpDefinition')<CR>
+    nnoremap <silent> ;e        :<C-u>call CocActionAsync('rename')<CR>
+    nnoremap <silent> <leader>e :<C-u>call CocActionAsync('doQuickfix')<CR>
+    nnoremap <silent> <M-CR>    :<C-u>call CocActionAsync('codeAction', 'cursor')<CR>
+    nnoremap <silent> K         :<C-u>call <SID>show_documentation()<CR>
+
+    Autocmd CursorHold * silent call CocActionAsync('highlight')
+
+    function! s:show_documentation()
+      if (index(['vim', 'help'], &filetype) >= 0)
+        execute 'h '.expand('<cword>')
+      elseif (coc#rpc#ready())
+        call CocActionAsync('doHover')
+      else
+        execute '!' . &keywordprg . ' ' . expand('<cword>')
+      endif
+    endfunction
+  endfunction
+  " }}}
+
   Plug 'itchyny/vim-gitbranch', {'on': []}
   Plug 'airblade/vim-gitgutter', {'on': []}
   " vim-gitgutter {{{
@@ -99,9 +137,9 @@ if !s:is_vscode
   nnoremap <silent> <leader>l   :<C-u>Lista<CR>
   " lista {{{
   let g:lista#custom_mappings = [
-        \  ['<C-j>', '<Esc>'],
-        \  ['<C-p>', '<S-Tab>'],
-        \  ['<C-n>', '<Tab>'],
+        \   ['<C-j>', '<Esc>'],
+        \   ['<C-p>', '<S-Tab>'],
+        \   ['<C-n>', '<Tab>'],
         \ ]
   " }}}
 
@@ -146,28 +184,6 @@ if !s:is_vscode
   noremap <silent> <leader>k :execute 'CtrlP' g:memolist_path<CR>
   let g:memolist_memo_suffix = 'md'
   let g:memolist_path        = s:dropbox_dir . 'memo/'
-  " }}}
-
-  Plug 'mattn/vim-lsp-settings', {'on': []}
-  " vim-lsp-settings {{{
-  let g:lsp_settings_servers_dir = s:home_dir . 'lsp_server'
-  " }}}
-
-  Plug 'prabirshrestha/vim-lsp', {'on': []}
-  " vim-lsp {{{
-  AutocmdUser vim-lsp call s:execute_if_installed('s:init_lsp')
-
-  let g:lsp_auto_enable = 0
-
-  function! s:init_lsp()
-    let g:lsp_diagnostics_enabled        = 1
-    let g:lsp_diagnostics_echo_cursor    = 1
-    let g:lsp_document_highlight_enabled = 0
-    nnoremap <silent> <C-]> :<C-u>LspDefinition<CR>zz
-    nnoremap <silent> ;e    :<C-u>LspRename<CR>
-
-    call lsp#enable()
-  endfunction
   " }}}
 
   Plug 'mattn/ctrlp-matchfuzzy', {'on': []}
@@ -232,7 +248,8 @@ if !s:is_vscode
         \     'filename':     s:sid . 'lightline_filename',
         \     'mode':         s:sid . 'lightline_mode',
         \     'lineinfo':     s:sid . 'lightline_lineinfo',
-        \     'seachcount':   s:sid . 'lightline_searchcount'
+        \     'seachcount':   s:sid . 'lightline_searchcount',
+        \     'cocstatus':   'coc#status',
         \   },
         \   'component_expand': {
         \     'branch':    s:sid . 'lightline_current_branch',
@@ -246,7 +263,7 @@ if !s:is_vscode
         \   'subseparator': {'left': '', 'right': ''},
         \   'tabline': {
         \     'left':  [['tabs']],
-        \     'right': [['filetype', 'fileformat', 'fileencoding']]
+        \     'right': [['cocstatus', 'filetype', 'fileformat', 'fileencoding']]
         \   },
         \   'tabline_separator':    {'left': '', 'right': ''},
         \   'tabline_subseparator': {'left': '', 'right': ''},
@@ -413,6 +430,7 @@ if !s:is_vscode
 
   if s:is_installed
     Autocmd CursorHold,CursorHoldI * call lightline#update()
+    AutocmdUser CocStatusChange,CocDiagnosticChange call lightline#update()
   endif
   " }}}
 
@@ -473,6 +491,11 @@ if !s:is_vscode
     call submode#map(       'git_hunk', 'n', 's', 'j',   ':<C-u>GitGutterEnable<CR>:GitGutterNextHunk<CR>zvzz')
     call submode#map(       'git_hunk', 'n', 's', 'k',   ':<C-u>GitGutterEnable<CR>:GitGutterPrevHunk<CR>zvzz')
 
+    call submode#enter_with('diagnostic', 'n', 's', 'gbj', ':<C-u>call CocActionAsync("diagnosticNext")<CR>')
+    call submode#enter_with('diagnostic', 'n', 's', 'gbk', ':<C-u>call CocActionAsync("diagnosticPrevious")<CR>')
+    call submode#map(       'diagnostic', 'n', 's', 'j',   ':<C-u>call CocActionAsync("diagnosticNext")<CR>')
+    call submode#map(       'diagnostic', 'n', 's', 'k',   ':<C-u>call CocActionAsync("diagnosticPrevious")<CR>')
+
     if s:is_gui
       let l:call_resize_appwin = ':<C-u>call ' . s:sid . 'submode_resize_appwin'
       let l:call_move_appwin   = ':<C-u>call ' . s:sid . 'submode_move_appwin'
@@ -503,31 +526,6 @@ if !s:is_vscode
       call submode#map(       'appwinpos', 'n', 's', 'j',          l:call_move_appwin . '(0, +1)<CR>')
       call submode#map(       'appwinpos', 'n', 's', 'k',          l:call_move_appwin . '(0, -1)<CR>')
     endif
-  endfunction
-  " }}}
-
-  Plug 'prabirshrestha/asyncomplete-lsp.vim', {'on': []}
-  Plug 'prabirshrestha/asyncomplete-ultisnips.vim', {'on': []}
-  Plug 'akaimo/asyncomplete-around.vim', {'on': []}
-  Plug 'prabirshrestha/asyncomplete.vim', {'on': []}
-  " asyncomplete.vim {{{
-  AutocmdUser asyncomplete.vim call s:execute_if_installed('s:init_asyncomplete')
-  let g:asyncomplete_around_range = 120
-
-  function! s:init_asyncomplete()
-    call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
-          \   'name':      'ultisnips',
-          \   'allowlist': ['*'],
-          \   'completor': function('asyncomplete#sources#ultisnips#completor'),
-          \ }))
-
-    call asyncomplete#register_source(asyncomplete#sources#around#get_source_options({
-          \   'name':      'around',
-          \   'allowlist': ['*'],
-          \   'completor': function('asyncomplete#sources#around#completor'),
-          \ }))
-
-    call asyncomplete#enable_for_buffer()
   endfunction
   " }}}
 
@@ -703,6 +701,7 @@ call plug#end()
 function! s:load_plug(timer)
   if !s:is_vscode
     call plug#load(
+          \   'coc.nvim',
           \   'vim-icondrag',
           \   'vim-submode',
           \   'vim-gitbranch',
@@ -714,19 +713,10 @@ function! s:load_plug(timer)
           \   'vim-cursorword',
           \   'vim-autoft',
           \   'memolist.vim',
-          \   'vim-lsp-settings',
-          \   'vim-lsp',
           \   'ctrlp.vim',
           \   'ctrlp-matchfuzzy',
           \   'ultisnips',
           \   'vimdoc-ja',
-          \ )
-
-    call plug#load(
-          \   'asyncomplete-lsp.vim',
-          \   'asyncomplete-ultisnips.vim',
-          \   'asyncomplete-around.vim',
-          \   'asyncomplete.vim'
           \ )
   endif
 
@@ -844,7 +834,7 @@ if !s:is_vscode
   set synmaxcol=500
   set updatetime=100
   set previewheight=24
-  set cmdheight=1
+  set cmdheight=2
   set laststatus=2
   set showtabline=2
   set noequalalways
@@ -1209,13 +1199,13 @@ nnoremap          q     qq<ESC>
 nnoremap <expr>   @     reg_recording() == '' ? '@q' : ''
 
 " マーク
-nnoremap <silent> m     :<C-u>call <SID>AutoMarkrement()<CR>
+nnoremap <silent> m     :<C-u>call s:auto_markrement()<CR>
 nnoremap <silent> <C-k> ]`
 nnoremap <silent> <C-l> [`
 
 Autocmd BufReadPost * delmarks!
 
-function! s:AutoMarkrement()
+function! s:auto_markrement()
   let l:begin  = char2nr('a')
   let l:end    = char2nr('z')
   let l:length = l:end - l:begin + 1
@@ -1237,7 +1227,7 @@ nnoremap Q  <Nop>
 " --------------------------------------------------------------------------------
 " 遅延設定
 " --------------------------------------------------------------------------------
-function! s:lazy_setting(timer)
+function! s:lazy_settings(timer)
   if exists('+cryptmethod')
     set cryptmethod=blowfish2
   endif
@@ -1259,5 +1249,5 @@ function! s:lazy_setting(timer)
     nnoremap <silent> <F2> :<C-u>PlugUpdate<CR>
   endif
 endfunction
-call timer_start(50, function('s:lazy_setting'))
+call timer_start(50, function('s:lazy_settings'))
 
