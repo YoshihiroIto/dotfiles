@@ -91,6 +91,7 @@ if !s:is_vscode
         \   'coc-markdownlint',
         \   'coc-omnisharp',
         \   'coc-powershell',
+        \   'coc-prettier',
         \   'coc-tsserver',
         \   'coc-ultisnips',
         \   'coc-vimlsp',
@@ -98,13 +99,22 @@ if !s:is_vscode
         \ ]
 
   function! s:init_coc()
+    Autocmd CursorHold * silent call CocActionAsync('highlight')
+
     nnoremap <silent> <C-]>     :<C-u>call CocActionAsync('jumpDefinition')<CR>
     nnoremap <silent> ;e        :<C-u>call CocActionAsync('rename')<CR>
     nnoremap <silent> <leader>e :<C-u>call CocActionAsync('doQuickfix')<CR>
     nnoremap <silent> <M-CR>    :<C-u>call CocActionAsync('codeAction', 'cursor')<CR>
     nnoremap <silent> K         :<C-u>call <SID>show_documentation()<CR>
 
-    Autocmd CursorHold * silent call CocActionAsync('highlight')
+    command! -nargs=* -range Format call <SID>format(<range>)
+    function! s:format(range)
+      if a:range == 0
+        CocCommand prettier.formatFile
+      else
+        call CocActionAsync('formatSelected', visualmode())
+      endif
+    endfunction
 
     function! s:show_documentation()
       if (index(['vim', 'help'], &filetype) >= 0)
@@ -174,9 +184,6 @@ if !s:is_vscode
         \   {'filetype': 'xml',  'pattern': '<[0-9a-zA-Z]\+'},
         \ ]
   " }}}
-
-  " Plug 'beyondmarc/hlsl.vim', {'for': 'hlsl'}
-  " Plug 'posva/vim-vue', {'for': 'vue'}
 
   Plug 'glidenote/memolist.vim', {'on': []}
   " memolist.vim {{{
@@ -405,23 +412,28 @@ if !s:is_vscode
       return ''
     endif
 
-    let result = searchcount()
-    if empty(result)
+    try
+      let l:result = searchcount()
+      if empty(l:result)
+        return ''
+      endif
+    catch
       return ''
-    endif
+    endtry
 
-    if result.incomplete ==# 1
+    if l:result.incomplete ==# 1
       return '[?/??]'
 
-    elseif result.incomplete ==# 2
-      if result.total > result.maxcount && result.current > result.maxcount
-        return printf('[>%d/>%d]', result.current, result.total)
+    elseif l:result.incomplete ==# 2
+      if l:result.total > l:result.maxcount && l:result.current > l:result.maxcount
+        return printf('[>%d/>%d]', l:result.current, l:result.total)
 
-      elseif result.total > result.maxcount
-        return printf('[%d/>%d]', result.current, result.total)
+      elseif l:result.total > l:result.maxcount
+        return printf('[%d/>%d]', l:result.current, l:result.total)
       endif
     endif
-    return printf('[%d/%d]', result.current, result.total)
+
+    return printf('[%d/%d]', l:result.current, l:result.total)
   endfunction
 
   function! s:is_lightline_no_disp_group()
@@ -486,15 +498,20 @@ if !s:is_vscode
     let g:submode_timeout          = 0
     let g:submode_keep_leaving_key = 1
 
-    call submode#enter_with('git_hunk', 'n', 's', 'ghj', ':<C-u>GitGutterEnable<CR>:GitGutterNextHunk<CR>zvzz')
-    call submode#enter_with('git_hunk', 'n', 's', 'ghk', ':<C-u>GitGutterEnable<CR>:GitGutterPrevHunk<CR>zvzz')
-    call submode#map(       'git_hunk', 'n', 's', 'j',   ':<C-u>GitGutterEnable<CR>:GitGutterNextHunk<CR>zvzz')
-    call submode#map(       'git_hunk', 'n', 's', 'k',   ':<C-u>GitGutterEnable<CR>:GitGutterPrevHunk<CR>zvzz')
+    call submode#enter_with('git_hunk', 'n', 's', 'ghj', ':<C-u>GitGutterEnable<CR>:GitGutterNextHunk<CR>zv')
+    call submode#enter_with('git_hunk', 'n', 's', 'ghk', ':<C-u>GitGutterEnable<CR>:GitGutterPrevHunk<CR>zv')
+    call submode#map(       'git_hunk', 'n', 's', 'j',   ':<C-u>GitGutterEnable<CR>:GitGutterNextHunk<CR>zv')
+    call submode#map(       'git_hunk', 'n', 's', 'k',   ':<C-u>GitGutterEnable<CR>:GitGutterPrevHunk<CR>zv')
 
     call submode#enter_with('diagnostic', 'n', 's', 'gbj', ':<C-u>call CocActionAsync("diagnosticNext")<CR>')
     call submode#enter_with('diagnostic', 'n', 's', 'gbk', ':<C-u>call CocActionAsync("diagnosticPrevious")<CR>')
     call submode#map(       'diagnostic', 'n', 's', 'j',   ':<C-u>call CocActionAsync("diagnosticNext")<CR>')
     call submode#map(       'diagnostic', 'n', 's', 'k',   ':<C-u>call CocActionAsync("diagnosticPrevious")<CR>')
+
+    call submode#enter_with('mark', 'n', 's', 'gmj', ']`')
+    call submode#enter_with('mark', 'n', 's', 'gmk', '[`')
+    call submode#map(       'mark', 'n', 's', 'j',   ']`')
+    call submode#map(       'mark', 'n', 's', 'k',   '[`')
 
     if s:is_gui
       let l:call_resize_appwin = ':<C-u>call ' . s:sid . 'submode_resize_appwin'
@@ -540,22 +557,9 @@ if !s:is_vscode
 
   Plug 'vim-jp/vimdoc-ja', {'on': []}
 
-  " Plug 'prettier/vim-prettier', {
-  "       \   'do': 'yarn install',
-  "       \   'for': [
-  "         \    'javascript', 'typescript', 'css',     'less',
-  "         \    'scss',       'json',       'graphql', 'markdown',
-  "         \    'vue',        'svelte',     'yaml',    'html']
-  "         \ }
-  " " vim-prettier {{{
-  " let g:prettier#exec_cmd_async            = 1
-  " let g:prettier#autoformat                = 1
-  " let g:prettier#autoformat_require_pragma = 0
-  " let g:prettier#quickfix_enabled          = 0
-  " "}}}
-
+  " Plug 'beyondmarc/hlsl.vim', {'for': 'hlsl'}
+  " Plug 'posva/vim-vue', {'for': 'vue'}
   " Plug 'editorconfig/editorconfig-vim'
-
   " Plug 'tyru/capture.vim'
   " Plug 'thinca/vim-prettyprint'
 endif
@@ -801,13 +805,12 @@ AutocmdFT xml,html
 AutocmdFT json
       \  setlocal foldmethod=syntax
       \| setlocal shiftwidth=2
-      \| command! Format %!jq
 
 AutocmdFT dosbatch
       \  setlocal fileencoding=sjis
 
 AutocmdFT help
-      \  nnoremap <silent><buffer> q  :<C-u>close<CR>
+      \  nnoremap <silent><buffer> q :<C-u>close<CR>
 
 function! s:update_all()
   setlocal formatoptions-=ro
@@ -824,7 +827,7 @@ if !s:is_vscode
   set noshowmatch
   set wrap
   set noshowmode
-  set shortmess=filnxtToOIsS
+  set shortmess=filnxtToOIsScq
   set lazyredraw
   set wildmenu
   set wildmode=list:full
@@ -834,7 +837,7 @@ if !s:is_vscode
   set synmaxcol=500
   set updatetime=100
   set previewheight=24
-  set cmdheight=2
+  set cmdheight=3
   set laststatus=2
   set showtabline=2
   set noequalalways
@@ -872,15 +875,6 @@ if !s:is_vscode
   else
     set termguicolors
   endif
-
-  Autocmd ColorScheme * call s:set_color()
-  function! s:set_color()
-    " ^M を非表示
-    syntax match HideCtrlM containedin=ALL /\r$/ conceal
-
-    " 日本語入力時カーソル色を変更する
-    highlight CursorIM guifg=NONE guibg=Red
-  endfunction
 
   if s:is_installed
     colorscheme night-owl
@@ -1191,32 +1185,28 @@ noremap <silent> $     g$
 noremap <silent> g$    $
 noremap <silent> gg    ggzv
 noremap <silent> G     Gzv
-noremap <silent> <C-i> <C-i>
-noremap <silent> <C-o> <C-o>
 
 " キーボードマクロ
-nnoremap          q     qq<ESC>
+nnoremap          q     qq<ESC>:echo''<CR>
 nnoremap <expr>   @     reg_recording() == '' ? '@q' : ''
 
 " マーク
-nnoremap <silent> m     :<C-u>call s:auto_markrement()<CR>
-nnoremap <silent> <C-k> ]`
-nnoremap <silent> <C-l> [`
+nnoremap <silent> m     :<C-u>call <SID>put_mark()<CR>
 
 Autocmd BufReadPost * delmarks!
 
-function! s:auto_markrement()
+function! s:put_mark()
   let l:begin  = char2nr('a')
   let l:end    = char2nr('z')
   let l:length = l:end - l:begin + 1
 
-  if !exists('b:markrement_pos')
-    let b:markrement_pos = 0
+  if !exists('b:mark_index')
+    let b:mark_index = 0
   else
-    let b:markrement_pos = (b:markrement_pos + 1) % l:length
+    let b:mark_index = (b:mark_index + 1) % l:length
   endif
 
-  execute 'mark' nr2char(l:begin + b:markrement_pos)
+  execute 'mark' nr2char(l:begin + b:mark_index)
 endfunction
 
 " Nop
