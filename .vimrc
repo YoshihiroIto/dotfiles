@@ -508,31 +508,26 @@ if !s:is_vscode
 
   Plug 'prabirshrestha/asyncomplete-lsp.vim', {'on': []}
   Plug 'prabirshrestha/asyncomplete-ultisnips.vim', {'on': []}
-  Plug 'prabirshrestha/asyncomplete-buffer.vim', {'on': []}
-  Plug 'machakann/asyncomplete-ezfilter.vim', {'on': []}
+  Plug 'akaimo/asyncomplete-around.vim', {'on': []}
   Plug 'prabirshrestha/asyncomplete.vim', {'on': []}
   " asyncomplete.vim {{{
   AutocmdUser asyncomplete.vim call s:execute_if_installed('s:init_asyncomplete')
+  let g:asyncomplete_around_range = 120
 
   function! s:init_asyncomplete()
-    let g:asyncomplete_preprocessor                      = [function('asyncomplete#preprocessor#ezfilter#filter')]
-    let g:asyncomplete#preprocessor#ezfilter#config      = {}
-    let g:asyncomplete#preprocessor#ezfilter#config['*'] = {ctx, items -> ctx.filter(items)}
-
-    call asyncomplete#enable_for_buffer()
-
     call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
           \   'name':      'ultisnips',
           \   'allowlist': ['*'],
           \   'completor': function('asyncomplete#sources#ultisnips#completor'),
           \ }))
 
-    call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
-          \   'name':      'buffer',
-          \   'whitelist': ['*'],
-          \   'completor': function('asyncomplete#sources#buffer#completor'),
-          \   'config':    { 'max_buffer_size': 5000000, },
+    call asyncomplete#register_source(asyncomplete#sources#around#get_source_options({
+          \   'name':      'around',
+          \   'allowlist': ['*'],
+          \   'completor': function('asyncomplete#sources#around#completor'),
           \ }))
+
+    call asyncomplete#enable_for_buffer()
   endfunction
   " }}}
 
@@ -544,6 +539,8 @@ if !s:is_vscode
   let g:UltiSnipsListSnippets        = '<S-Tab>'
   let g:UltiSnipsExpandTrigger       = '<C-e>'
   " }}}
+
+  Plug 'vim-jp/vimdoc-ja', {'on': []}
 
   " Plug 'prettier/vim-prettier', {
   "       \   'do': 'yarn install',
@@ -561,7 +558,8 @@ if !s:is_vscode
 
   " Plug 'editorconfig/editorconfig-vim'
 
-  Plug 'vim-jp/vimdoc-ja', {'on': []}
+  " Plug 'tyru/capture.vim'
+  " Plug 'thinca/vim-prettyprint'
 endif
 
 Plug 'andymass/vim-matchup', {'on': []}
@@ -727,8 +725,7 @@ function! s:load_plug(timer)
     call plug#load(
           \   'asyncomplete-lsp.vim',
           \   'asyncomplete-ultisnips.vim',
-          \   'asyncomplete-buffer.vim',
-          \   'asyncomplete-ezfilter.vim',
+          \   'asyncomplete-around.vim',
           \   'asyncomplete.vim'
           \ )
   endif
@@ -768,7 +765,7 @@ call timer_start(30, function('s:load_plug'))
 " --------------------------------------------------------------------------------
 " ファイルタイプごとの設定
 " --------------------------------------------------------------------------------
-Autocmd BufEnter           *                         call s:update_all()
+Autocmd FileType           *                         call s:update_all()
 Autocmd BufNewFile,BufRead *.xaml                    setlocal filetype=xml
 Autocmd BufNewFile,BufRead *.cake                    setlocal filetype=cs
 Autocmd BufNewFile,BufRead *.{fx,fxc,fxh,hlsl,hlsli} setlocal filetype=hlsl
