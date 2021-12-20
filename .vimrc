@@ -85,6 +85,7 @@ if !s:is_vscode
   AutocmdUser coc.nvim call s:execute_if_installed('s:init_coc')
 
   let g:coc_global_extensions = [
+        \   'coc-clangd',
         \   'coc-css',
         \   'coc-html',
         \   'coc-json',
@@ -135,6 +136,12 @@ if !s:is_vscode
     imap <C-e> <Plug>(coc-snippets-expand)
     let g:coc_snippet_next = '<C-j>'
     let g:coc_snippet_prev = '<C-k>'
+
+    " :CocCommand clangd.install
+    let l:clangdPath = expand('~/AppData/Local/coc/extensions/coc-clangd-data/install/13.0.0/clangd_13.0.0/bin/clangd')
+    if executable(l:clangdPath)
+      call coc#config('clangd.path', l:clangdPath)
+    endif
 
     Autocmd CursorHold * silent call CocActionAsync('highlight')
 
