@@ -99,6 +99,38 @@ if !s:is_vscode
         \ ]
 
   function! s:init_coc()
+    call coc#config('diagnostic.warningSign', '!!')
+    call coc#config('coc.source.around.firstMatch', 0)
+    call coc#config('coc.source.buffer.firstMatch', 0)
+    call coc#config('suggest.completionItemKindLabels', {
+          \    "keyword":       "\uf1de",
+          \    "variable":      "\ue79b",
+          \    "value":         "\uf89f",
+          \    "operator":      "\u03a8",
+          \    "constructor":   "\uf0ad",
+          \    "function":      "\u0192",
+          \    "reference":     "\ufa46",
+          \    "constant":      "\uf8fe",
+          \    "method":        "\uf09a",
+          \    "struct":        "\ufb44",
+          \    "class":         "\uf0e8",
+          \    "interface":     "\uf417",
+          \    "text":          "\ue612",
+          \    "enum":          "\uf435",
+          \    "enumMember":    "\uf02b",
+          \    "module":        "\uf40d",
+          \    "color":         "\ue22b",
+          \    "property":      "\ue624",
+          \    "field":         "\uf9be",
+          \    "unit":          "\uf475",
+          \    "event":         "\ufacd",
+          \    "file":          "\uf723",
+          \    "folder":        "\uf114",
+          \    "snippet":       "\ue60b",
+          \    "typeParameter": "\uf728",
+          \    "default":       "\uf29c"
+          \ })
+
     Autocmd CursorHold * silent call CocActionAsync('highlight')
 
     nnoremap <silent> <C-]>     :<C-u>call CocActionAsync('jumpDefinition')<CR>
@@ -107,7 +139,7 @@ if !s:is_vscode
     nnoremap <silent> <M-CR>    :<C-u>call CocActionAsync('codeAction', 'cursor')<CR>
     nnoremap <silent> K         :<C-u>call <SID>show_documentation()<CR>
 
-    command! -nargs=* -range Format call <SID>format(<range>)
+    command! -nargs=* -range Format call s:format(<range>)
     function! s:format(range)
       if a:range == 0
         CocCommand prettier.formatFile
@@ -144,8 +176,8 @@ if !s:is_vscode
 
   Plug 'lambdalisue/vim-rplugin', {'on': []}
   Plug 'YoshihiroIto/lista.nvim', {'on': []}
-  nnoremap <silent> <leader>l   :<C-u>Lista<CR>
   " lista {{{
+  nnoremap <silent> <leader>l   :<C-u>Lista<CR>
   let g:lista#custom_mappings = [
         \   ['<C-j>', '<Esc>'],
         \   ['<C-p>', '<S-Tab>'],
@@ -557,8 +589,10 @@ if !s:is_vscode
 
   Plug 'vim-jp/vimdoc-ja', {'on': []}
 
-  " Plug 'beyondmarc/hlsl.vim', {'for': 'hlsl'}
-  " Plug 'posva/vim-vue', {'for': 'vue'}
+  Plug 'posva/vim-vue',       {'for': 'vue',  'on': []}
+  Plug 'beyondmarc/hlsl.vim', {'for': 'hlsl', 'on': []}
+  Plug 'tikhomirov/vim-glsl', {'for': 'glsl', 'on': []}
+
   " Plug 'editorconfig/editorconfig-vim'
   " Plug 'tyru/capture.vim'
   " Plug 'thinca/vim-prettyprint'
@@ -759,11 +793,11 @@ call timer_start(30, function('s:load_plug'))
 " --------------------------------------------------------------------------------
 " ファイルタイプごとの設定
 " --------------------------------------------------------------------------------
-Autocmd FileType           *                         call s:update_all()
-Autocmd BufNewFile,BufRead *.xaml                    setlocal filetype=xml
-Autocmd BufNewFile,BufRead *.cake                    setlocal filetype=cs
-Autocmd BufNewFile,BufRead *.{fx,fxc,fxh,hlsl,hlsli} setlocal filetype=hlsl
-Autocmd BufNewFile,BufRead *.{fsh,vsh}               setlocal filetype=glsl
+Autocmd FileType           *           call     s:update_all()
+Autocmd BufNewFile,BufRead *.xaml      setlocal filetype=xml
+Autocmd BufNewFile,BufRead *.cake      setlocal filetype=cs
+Autocmd BufNewFile,BufRead *.hlsli     setlocal filetype=hlsl
+Autocmd BufNewFile,BufRead *.{fsh,vsh} setlocal filetype=glsl
 
 Autocmd VimEnter COMMIT_EDITMSG
       \  if getline(1) == ''
@@ -800,7 +834,7 @@ AutocmdFT xml,html
       \  setlocal foldmethod=syntax
       \| setlocal foldlevel=99
       \| setlocal foldcolumn=5
-      \| inoremap <silent><buffer> >  ><Esc>:call closetag#CloseTagFun()<CR>
+      \| inoremap <silent><buffer> > ><Esc>:call closetag#CloseTagFun()<CR>
 
 AutocmdFT json
       \  setlocal foldmethod=syntax
@@ -890,7 +924,7 @@ if !s:is_vscode
   " アプリウィンドウ操作
   if s:is_gui
     command! -nargs=1 -complete=file Diff
-          \  call <SID>toggle_v_wide()
+          \  call s:toggle_v_wide()
           \| vertical diffsplit <args>
 
     noremap <silent> <leader>we :<C-u>call <SID>toggle_v_split_wide()<CR>
@@ -905,7 +939,7 @@ if !s:is_vscode
     Autocmd WinEnter *
           \  if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) == 1
           \|   diffoff
-          \|   call <SID>toggle_v_wide()
+          \|   call s:toggle_v_wide()
           \| endif
 
     " 縦分割する
@@ -1001,7 +1035,7 @@ if !s:is_vscode
   nnoremap <silent> <leader>g :<C-u>Grep<CR>
   nnoremap <silent> <leader>q :<C-u>CtrlPQuickfix<CR>
 
-  command! -nargs=? Grep call <SID>grep(<f-args>)
+  command! -nargs=? Grep call s:grep(<f-args>)
 
   AutocmdFT qf nnoremap <silent><buffer> q :<C-u>call <SID>grep_cancel()<CR>
 
@@ -1175,23 +1209,23 @@ vnoremap <C-j> <Esc>
 cnoremap <C-j> <Esc>
 
 " カーソル移動
-noremap <silent> j     gj
-noremap <silent> k     gk
-noremap <silent> gj    j
-noremap <silent> gk    k
-noremap <silent> 0     g0
-noremap <silent> g0    0
-noremap <silent> $     g$
-noremap <silent> g$    $
-noremap <silent> gg    ggzv
-noremap <silent> G     Gzv
+noremap <silent> j  gj
+noremap <silent> k  gk
+noremap <silent> gj j
+noremap <silent> gk k
+noremap <silent> 0  g0
+noremap <silent> g0 0
+noremap <silent> $  g$
+noremap <silent> g$ $
+noremap <silent> gg ggzv
+noremap <silent> G  Gzv
 
 " キーボードマクロ
-nnoremap          q     qq<ESC>:echo''<CR>
-nnoremap <expr>   @     reg_recording() == '' ? '@q' : ''
+nnoremap        q qq<ESC>:echo''<CR>
+nnoremap <expr> @ reg_recording() == '' ? '@q' : ''
 
 " マーク
-nnoremap <silent> m     :<C-u>call <SID>put_mark()<CR>
+nnoremap <silent> m :<C-u>call <SID>put_mark()<CR>
 
 Autocmd BufReadPost * delmarks!
 
