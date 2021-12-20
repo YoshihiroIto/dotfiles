@@ -92,8 +92,8 @@ if !s:is_vscode
         \   'coc-omnisharp',
         \   'coc-powershell',
         \   'coc-prettier',
+        \   'coc-snippets',
         \   'coc-tsserver',
-        \   'coc-ultisnips',
         \   'coc-vimlsp',
         \   'coc-yaml',
         \ ]
@@ -130,6 +130,11 @@ if !s:is_vscode
           \    "typeParameter": "\uf728",
           \    "default":       "\uf29c"
           \ })
+
+    call coc#config('snippets.ultisnips.directories', ['UltiSnips', '~/.vim/UltiSnips'])
+    imap <C-e> <Plug>(coc-snippets-expand)
+    let g:coc_snippet_next = '<C-j>'
+    let g:coc_snippet_prev = '<C-k>'
 
     Autocmd CursorHold * silent call CocActionAsync('highlight')
 
@@ -578,15 +583,6 @@ if !s:is_vscode
   endfunction
   " }}}
 
-  Plug 'SirVer/ultisnips', {'on': []}
-  " ultisnips {{{
-  let g:UltiSnipsSnippetDirectories  = [s:dotvim_dir . 'UltiSnips']
-  let g:UltiSnipsJumpForwardTrigger  = '<Tab>'
-  let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
-  let g:UltiSnipsListSnippets        = '<S-Tab>'
-  let g:UltiSnipsExpandTrigger       = '<C-e>'
-  " }}}
-
   Plug 'vim-jp/vimdoc-ja', {'on': []}
 
   Plug 'posva/vim-vue',       {'for': 'vue',  'on': []}
@@ -753,7 +749,6 @@ function! s:load_plug(timer)
           \   'memolist.vim',
           \   'ctrlp.vim',
           \   'ctrlp-matchfuzzy',
-          \   'ultisnips',
           \   'vimdoc-ja',
           \ )
   endif
