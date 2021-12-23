@@ -237,10 +237,12 @@ if !s:is_vscode
   let g:memolist_path        = s:dropbox_dir . 'memo/'
   " }}}
 
+  Plug 'YoshihiroIto/ctrlp-sessions'
   Plug 'mattn/ctrlp-matchfuzzy', {'on': []}
   Plug 'ctrlpvim/ctrlp.vim', {'on': []}
   " ctrlp {{{
-  nnoremap <silent> <leader>m   :<C-u>CtrlPMRUFiles<CR>
+  nnoremap <silent> <leader>m :<C-u>CtrlPMRUFiles<CR>
+  nnoremap <silent> <leader>s :<C-u>CtrlPSessions<CR>
 
   let g:ctrlp_match_window    = 'bottom,order:ttb,min:48,max:48'
   let g:ctrlp_map             = ''
@@ -839,8 +841,8 @@ AutocmdFT xml,html
       \| inoremap <silent><buffer> > ><Esc>:call closetag#CloseTagFun()<CR>
 
 AutocmdFT json
-      \  setlocal foldmethod=syntax
-      \| setlocal shiftwidth=2
+      \  setlocal shiftwidth=2
+      \| setlocal foldmethod=syntax
 
 AutocmdFT dosbatch
       \  setlocal fileencoding=sjis
@@ -871,7 +873,7 @@ if !s:is_vscode
   set wildoptions=tagfile
   set fillchars=vert:\ "
   set synmaxcol=500
-  set updatetime=100
+  set updatetime=300
   set previewheight=24
   set cmdheight=3
   set laststatus=2
@@ -937,6 +939,10 @@ if !s:is_vscode
       execute 'winpos' getwinposx() '0'
       set lines=9999
     endfunction
+
+    Autocmd TerminalOpen *
+          \  call term_setkill('%', '++kill=term')
+          \| call term_setrestore('%', '++kill=term')
 
     Autocmd WinEnter *
           \  if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) == 1
@@ -1166,17 +1172,14 @@ if s:is_vscode
   nnoremap <silent> <C-r> :<C-u>call VSCodeNotify('redo')<CR>
 endif
 
+" 自動リロード
+Autocmd WinEnter,CursorHold * call s:execute_keep_view('checktime')
+
 " ^Mを取り除く
 command! RemoveCr call s:execute_keep_view('silent! %substitute/\r$//g | nohlsearch')
 
 " 行末のスペースを取り除く
 command! RemoveEolSpace call s:execute_keep_view('silent! %substitute/ \+$//g | nohlsearch')
-
-function! s:execute_keep_view(expr)
-  let l:wininfo = winsaveview()
-  execute a:expr
-  call winrestview(l:wininfo)
-endfunction
 
 " 現在のファイルパスをクリップボードへコピーする
 command! CopyFilepath     call setreg('*', expand('%:t'), 'v')
@@ -1249,6 +1252,12 @@ endfunction
 nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
 nnoremap Q  <Nop>
+
+function! s:execute_keep_view(expr)
+  let l:wininfo = winsaveview()
+  execute a:expr
+  call winrestview(l:wininfo)
+endfunction
 
 " --------------------------------------------------------------------------------
 " 遅延設定
