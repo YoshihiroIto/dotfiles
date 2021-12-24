@@ -63,8 +63,8 @@ vk1D & g::Run,"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
     ^d:: Send,^+i
 #IfWinActive
 
-; GVim, ConEmu ˆÈŠO
-#IfWinNotActive ahk_class Vim|VirtualConsoleClass
+; GVim, Window Terminal ˆÈŠO
+#IfWinNotActive ahk_class Vim|CASCADIA_HOSTING_WINDOW_CLASS
     ^h:: Send,{BackSpace}
 ;    ^w:: Send,^{BackSpace}
     ^m:: Send,{Enter}

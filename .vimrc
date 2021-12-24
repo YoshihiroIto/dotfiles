@@ -16,6 +16,7 @@ let s:plugin_dir   = s:home_dir . '.vim_plugged/'
 let s:dropbox_dir  = s:home_dir . 'Dropbox/'
 let s:is_installed = isdirectory(s:home_dir . '.vim_plugged/')
 let s:is_vscode    = exists('g:vscode')
+let s:is_neovim    = has('nvim')
 let s:is_gui       = has('gui_running')
 let s:base_columns = 140
 
@@ -91,6 +92,7 @@ if !s:is_vscode
         \   'coc-json',
         \   'coc-markdownlint',
         \   'coc-omnisharp',
+        \   'coc-pairs',
         \   'coc-powershell',
         \   'coc-prettier',
         \   'coc-snippets',
@@ -104,6 +106,7 @@ if !s:is_vscode
     call coc#config('diagnostic.warningSign', '!!')
     call coc#config('coc.source.around.firstMatch', 0)
     call coc#config('coc.source.buffer.firstMatch', 0)
+    call coc#config('coc.preferences.formatOnType', 1)
     call coc#config('coc.preferences.formatOnSaveFiletypes', [
           \   'css',
           \   'html',
@@ -143,17 +146,22 @@ if !s:is_vscode
           \   'default':       "\uf29c",
           \ })
 
+    " coc-snippets
     call coc#config('snippets.ultisnips.directories', ['UltiSnips', '~/.vim/UltiSnips'])
     imap <C-e> <Plug>(coc-snippets-expand)
     let g:coc_snippet_next = '<C-j>'
     let g:coc_snippet_prev = '<C-k>'
 
+    " coc-pairs
+    inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+    imap <C-h> <BS>
+
     Autocmd CursorHold * silent call CocActionAsync('highlight')
 
-    nnoremap <silent> <C-]>     :<C-u>call CocActionAsync('jumpDefinition')<CR>
-    nnoremap <silent> ;e        :<C-u>call CocActionAsync('rename')<CR>
-    nnoremap <silent> <leader>e :<C-u>call CocActionAsync('doQuickfix')<CR>
-    nnoremap <silent> <M-CR>    :<C-u>call CocActionAsync('codeAction', 'cursor')<CR>
+    nmap     <silent> <C-]>     <Plug>(coc-definition)
+    nmap     <silent> ;e        <Plug>(coc-rename)
+    nmap     <silent> <leader>e <Plug>(coc-fix-current)
+    nmap     <silent> <M-CR>    <Plug>(coc-codeaction-cursor)
     nnoremap <silent> K         :<C-u>call <SID>show_documentation()<CR>
 
     command! -nargs=* -range Format call s:format(<range>)
@@ -242,7 +250,7 @@ if !s:is_vscode
   let g:memolist_path        = s:dropbox_dir . 'memo/'
   " }}}
 
-  Plug 'YoshihiroIto/ctrlp-sessions'
+  Plug 'YoshihiroIto/ctrlp-sessions', {'on': []}
   Plug 'mattn/ctrlp-matchfuzzy', {'on': []}
   Plug 'ctrlpvim/ctrlp.vim', {'on': []}
   " ctrlp {{{
@@ -549,15 +557,15 @@ if !s:is_vscode
     let g:submode_timeout          = 0
     let g:submode_keep_leaving_key = 1
 
-    call submode#enter_with('git_hunk', 'n', 's', 'ghj', ':<C-u>GitGutterEnable<CR>:GitGutterNextHunk<CR>zv')
-    call submode#enter_with('git_hunk', 'n', 's', 'ghk', ':<C-u>GitGutterEnable<CR>:GitGutterPrevHunk<CR>zv')
-    call submode#map(       'git_hunk', 'n', 's', 'j',   ':<C-u>GitGutterEnable<CR>:GitGutterNextHunk<CR>zv')
-    call submode#map(       'git_hunk', 'n', 's', 'k',   ':<C-u>GitGutterEnable<CR>:GitGutterPrevHunk<CR>zv')
+    call submode#enter_with('git_hunk', 'n', 'sr', 'ghj', '<Plug>(GitGutterNextHunk)zv')
+    call submode#enter_with('git_hunk', 'n', 'sr', 'ghk', '<Plug>(GitGutterPrevHunk)zv')
+    call submode#map(       'git_hunk', 'n', 'sr', 'j',   '<Plug>(GitGutterNextHunk)zv')
+    call submode#map(       'git_hunk', 'n', 'sr', 'k',   '<Plug>(GitGutterPrevHunk)zv')
 
-    call submode#enter_with('diagnostic', 'n', 's', 'gbj', ':<C-u>call CocActionAsync("diagnosticNext")<CR>zv')
-    call submode#enter_with('diagnostic', 'n', 's', 'gbk', ':<C-u>call CocActionAsync("diagnosticPrevious")<CR>zv')
-    call submode#map(       'diagnostic', 'n', 's', 'j',   ':<C-u>call CocActionAsync("diagnosticNext")<CR>zv')
-    call submode#map(       'diagnostic', 'n', 's', 'k',   ':<C-u>call CocActionAsync("diagnosticPrevious")<CR>zv')
+    call submode#enter_with('diagnostic', 'n', 'sr', 'gbj', '<Plug>(coc-diagnostic-next)zv')
+    call submode#enter_with('diagnostic', 'n', 'sr', 'gbk', '<Plug>(coc-diagnostic-prev)zv')
+    call submode#map(       'diagnostic', 'n', 'sr', 'j',   '<Plug>(coc-diagnostic-next)zv')
+    call submode#map(       'diagnostic', 'n', 'sr', 'k',   '<Plug>(coc-diagnostic-prev)zv')
 
     call submode#enter_with('mark', 'n', 's', 'gmj', ']`zv')
     call submode#enter_with('mark', 'n', 's', 'gmk', '[`zv')
@@ -629,10 +637,8 @@ let g:traces_preview_window = 'botright 10new'
 " }}}
 
 Plug 'tomtom/tcomment_vim', {'on': []}
-Plug 'cohama/lexima.vim', {'on': []}
 
 Plug 'kana/vim-textobj-user', {'on': []}
-
 Plug 'glts/vim-textobj-comment', {'on': []}
 Plug 'kana/vim-textobj-indent', {'on': []}
 Plug 'kana/vim-textobj-entire', {'on': []}
@@ -746,11 +752,8 @@ Plug 'unblevable/quick-scope', {'on': []}
 " quick-scope {{{
 let g:qs_ignorecase = 1
 
-augroup qs_colors
-  autocmd!
-  autocmd ColorScheme * highlight QuickScopePrimary   guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
-  autocmd ColorScheme * highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81  cterm=underline
-augroup END
+Autocmd ColorScheme * highlight QuickScopePrimary   guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
+Autocmd ColorScheme * highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81  cterm=underline
 " }}}
 
 call plug#end()
@@ -772,6 +775,7 @@ function! s:load_plug(timer)
           \   'memolist.vim',
           \   'ctrlp.vim',
           \   'ctrlp-matchfuzzy',
+          \   'ctrlp-sessions',
           \   'vimdoc-ja',
           \ )
   endif
@@ -781,7 +785,6 @@ function! s:load_plug(timer)
         \   'traces.vim',
         \   'vim-asterisk',
         \   'tcomment_vim',
-        \   'lexima.vim',
         \   'vim-closetag',
         \   'is.vim',
         \   'clever-f.vim',
@@ -850,6 +853,7 @@ AutocmdFT qf
 function! s:update_all()
   setlocal formatoptions-=ro
   setlocal textwidth=0
+  setlocal iskeyword=@,48-57,_,192-255
 endfunction
 
 " --------------------------------------------------------------------------------
@@ -913,10 +917,10 @@ if !s:is_vscode
     colorscheme night-owl
   endif
 
-  if exists('wincolor')
-    Autocmd ColorScheme          * highlight NormalNC guifg=#a0a0a0 guibg=#121212
-    Autocmd WinEnter,BufWinEnter * setlocal  wincolor=
-    Autocmd WinLeave             * setlocal  wincolor=NormalNC
+  if exists('&wincolor')
+    Autocmd ColorScheme                      * highlight NormalNC guifg=#a0a0a0 guibg=#121212
+    Autocmd WinEnter,BufWinEnter,FocusGained * setlocal  wincolor=
+    Autocmd WinLeave,FocusLost               * setlocal  wincolor=NormalNC
   endif
 
   filetype plugin indent on
@@ -957,12 +961,7 @@ if !s:is_vscode
     let s:opened_top_vsp  = 0
 
     function! s:toggle_v_wide()
-      if s:depth_vsp <= 1
-        let s:depth_vsp += 1
-      else
-        let s:depth_vsp -= 1
-      endif
-
+      let s:depth_vsp += s:depth_vsp <= 1 ? +1 : -1
       let &columns = s:base_columns * s:depth_vsp
     endfunction
 
@@ -1025,7 +1024,7 @@ set helplang=ja,en
 set keywordprg=
 
 if !s:is_vscode
-  " 複数Vimで検索を同期する
+  " 複数Vimで検索を同期する {{{
   function! s:save_reg(reg, filename)
     call writefile([getreg(a:reg)], a:filename)
   endfunction
@@ -1039,6 +1038,7 @@ if !s:is_vscode
   let s:vimreg_search = s:home_dir . 'vimreg_search.txt'
   Autocmd CursorHold,CursorHoldI,FocusLost * silent! call s:save_reg('/', s:vimreg_search)
   Autocmd FocusGained                      * silent! call s:load_reg('/', s:vimreg_search)
+  " }}}
 
   " grep {{{
   nnoremap <silent> <leader>g :<C-u>Grep<CR>
@@ -1051,11 +1051,7 @@ if !s:is_vscode
   let s:grep_job_id = ''
 
   function! s:grep(...) abort
-    if a:0 >= 1
-      let l:word = a:1
-    else
-      let l:word = input('Search pattern: ')
-    endif
+    let l:word = a:0 >= 1 ? a:1 : input('Search pattern: ')
 
     redraw
     echo ''
@@ -1066,10 +1062,20 @@ if !s:is_vscode
 
     call setqflist([])
 
-    let s:grep_job_id = job_start('rg --smart-case --vimgrep --no-heading ' . l:word . ' ' . s:projectRoot('.'), {
-          \   'callback' : function('s:grep_add'),
-          \   'exit_cb'  : function('s:grep_close')
-          \ })
+    let l:cmd = printf('%s "%s" "%s"', &grepprg, l:word, s:projectRoot('.'))
+    let l:is_async = !s:is_neovim
+
+    if l:is_async
+      let s:grep_job_id = job_start(l:cmd, {
+            \   'callback' : function('s:grep_add'),
+            \   'exit_cb'  : function('s:grep_close')
+            \ })
+    else
+      cgetexpr system(l:cmd)
+      cwindow
+      cclose
+      CtrlPQuickfix
+    endif
   endfunction
 
   function! s:grep_add(ch, msg)
@@ -1227,7 +1233,11 @@ noremap <silent> gg ggzv
 noremap <silent> G  Gzv
 
 " キーボードマクロ
-nnoremap        q qq<ESC>:echo''<CR>
+if s:is_neovim
+  nnoremap q qq<ESC>
+else
+  nnoremap q qq<ESC>:echo''<CR>
+endif
 nnoremap <expr> @ reg_recording() == '' ? '@q' : ''
 
 " マーク
@@ -1240,11 +1250,7 @@ function! s:put_mark()
   let l:end    = char2nr('z')
   let l:length = l:end - l:begin + 1
 
-  if !exists('b:mark_index')
-    let b:mark_index = 0
-  else
-    let b:mark_index = (b:mark_index + 1) % l:length
-  endif
+  let b:mark_index = exists('b:mark_index') ? (b:mark_index + 1) % l:length : 0
 
   execute 'mark' nr2char(l:begin + b:mark_index)
 endfunction
@@ -1264,7 +1270,7 @@ endfunction
 " 遅延設定
 " --------------------------------------------------------------------------------
 function! s:lazy_settings(timer)
-  if exists('+cryptmethod')
+  if exists('&cryptmethod')
     set cryptmethod=blowfish2
   endif
 
@@ -1274,11 +1280,8 @@ function! s:lazy_settings(timer)
 
     function! s:edit_vimrc()
       let l:dropbox_vimrc = s:dropbox_dir . 'dotfiles/.vimrc'
-      if filereadable(l:dropbox_vimrc)
-        execute 'edit' l:dropbox_vimrc
-      else
-        execute 'edit' $MYVIMRC
-      endif
+
+      execute 'edit' filereadable(l:dropbox_vimrc) ? l:dropbox_vimrc : $MYVIMRC
     endfunction
 
     nnoremap <silent> <F1> :<C-u>call <SID>edit_vimrc()<CR>
