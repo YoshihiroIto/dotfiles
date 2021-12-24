@@ -94,6 +94,7 @@ if !s:is_vscode
         \   'coc-powershell',
         \   'coc-prettier',
         \   'coc-snippets',
+        \   'coc-spell-checker',
         \   'coc-tsserver',
         \   'coc-vimlsp',
         \   'coc-yaml',
@@ -103,45 +104,49 @@ if !s:is_vscode
     call coc#config('diagnostic.warningSign', '!!')
     call coc#config('coc.source.around.firstMatch', 0)
     call coc#config('coc.source.buffer.firstMatch', 0)
+    call coc#config('coc.preferences.formatOnSaveFiletypes', [
+          \   'css',
+          \   'html',
+          \   'javascript',
+          \   'json',
+          \   'scss',
+          \   'typescript',
+          \   'vue',
+          \   'yaml',
+          \ ])
     call coc#config('suggest.completionItemKindLabels', {
-          \    "keyword":       "\uf1de",
-          \    "variable":      "\ue79b",
-          \    "value":         "\uf89f",
-          \    "operator":      "\u03a8",
-          \    "constructor":   "\uf0ad",
-          \    "function":      "\u0192",
-          \    "reference":     "\ufa46",
-          \    "constant":      "\uf8fe",
-          \    "method":        "\uf09a",
-          \    "struct":        "\ufb44",
-          \    "class":         "\uf0e8",
-          \    "interface":     "\uf417",
-          \    "text":          "\ue612",
-          \    "enum":          "\uf435",
-          \    "enumMember":    "\uf02b",
-          \    "module":        "\uf40d",
-          \    "color":         "\ue22b",
-          \    "property":      "\ue624",
-          \    "field":         "\uf9be",
-          \    "unit":          "\uf475",
-          \    "event":         "\ufacd",
-          \    "file":          "\uf723",
-          \    "folder":        "\uf114",
-          \    "snippet":       "\ue60b",
-          \    "typeParameter": "\uf728",
-          \    "default":       "\uf29c"
+          \   'keyword':       "\uf1de",
+          \   'variable':      "\ue79b",
+          \   'value':         "\uf89f",
+          \   'operator':      "\u03a8",
+          \   'constructor':   "\uf0ad",
+          \   'function':      "\u0192",
+          \   'reference':     "\ufa46",
+          \   'constant':      "\uf8fe",
+          \   'method':        "\uf09a",
+          \   'struct':        "\ufb44",
+          \   'class':         "\uf0e8",
+          \   'interface':     "\uf417",
+          \   'text':          "\ue612",
+          \   'enum':          "\uf435",
+          \   'enumMember':    "\uf02b",
+          \   'module':        "\uf40d",
+          \   'color':         "\ue22b",
+          \   'property':      "\ue624",
+          \   'field':         "\uf9be",
+          \   'unit':          "\uf475",
+          \   'event':         "\ufacd",
+          \   'file':          "\uf723",
+          \   'folder':        "\uf114",
+          \   'snippet':       "\ue60b",
+          \   'typeParameter': "\uf728",
+          \   'default':       "\uf29c",
           \ })
 
     call coc#config('snippets.ultisnips.directories', ['UltiSnips', '~/.vim/UltiSnips'])
     imap <C-e> <Plug>(coc-snippets-expand)
     let g:coc_snippet_next = '<C-j>'
     let g:coc_snippet_prev = '<C-k>'
-
-    " :CocCommand clangd.install
-    let l:clangdPath = expand('~/AppData/Local/coc/extensions/coc-clangd-data/install/13.0.0/clangd_13.0.0/bin/clangd')
-    if executable(l:clangdPath)
-      call coc#config('clangd.path', l:clangdPath)
-    endif
 
     Autocmd CursorHold * silent call CocActionAsync('highlight')
 
@@ -154,7 +159,7 @@ if !s:is_vscode
     command! -nargs=* -range Format call s:format(<range>)
     function! s:format(range)
       if a:range == 0
-        CocCommand prettier.formatFile
+        call CocActionAsync('format')
       else
         call CocActionAsync('formatSelected', visualmode())
       endif
@@ -162,11 +167,11 @@ if !s:is_vscode
 
     function! s:show_documentation()
       if (index(['vim', 'help'], &filetype) >= 0)
-        execute 'h '.expand('<cword>')
+        execute 'help' expand('<cword>')
       elseif (coc#rpc#ready())
         call CocActionAsync('doHover')
       else
-        execute '!' . &keywordprg . ' ' . expand('<cword>')
+        execute '!' . &keywordprg expand('<cword>')
       endif
     endfunction
   endfunction
@@ -549,45 +554,54 @@ if !s:is_vscode
     call submode#map(       'git_hunk', 'n', 's', 'j',   ':<C-u>GitGutterEnable<CR>:GitGutterNextHunk<CR>zv')
     call submode#map(       'git_hunk', 'n', 's', 'k',   ':<C-u>GitGutterEnable<CR>:GitGutterPrevHunk<CR>zv')
 
-    call submode#enter_with('diagnostic', 'n', 's', 'gbj', ':<C-u>call CocActionAsync("diagnosticNext")<CR>')
-    call submode#enter_with('diagnostic', 'n', 's', 'gbk', ':<C-u>call CocActionAsync("diagnosticPrevious")<CR>')
-    call submode#map(       'diagnostic', 'n', 's', 'j',   ':<C-u>call CocActionAsync("diagnosticNext")<CR>')
-    call submode#map(       'diagnostic', 'n', 's', 'k',   ':<C-u>call CocActionAsync("diagnosticPrevious")<CR>')
+    call submode#enter_with('diagnostic', 'n', 's', 'gbj', ':<C-u>call CocActionAsync("diagnosticNext")<CR>zv')
+    call submode#enter_with('diagnostic', 'n', 's', 'gbk', ':<C-u>call CocActionAsync("diagnosticPrevious")<CR>zv')
+    call submode#map(       'diagnostic', 'n', 's', 'j',   ':<C-u>call CocActionAsync("diagnosticNext")<CR>zv')
+    call submode#map(       'diagnostic', 'n', 's', 'k',   ':<C-u>call CocActionAsync("diagnosticPrevious")<CR>zv')
 
-    call submode#enter_with('mark', 'n', 's', 'gmj', ']`')
-    call submode#enter_with('mark', 'n', 's', 'gmk', '[`')
-    call submode#map(       'mark', 'n', 's', 'j',   ']`')
-    call submode#map(       'mark', 'n', 's', 'k',   '[`')
+    call submode#enter_with('mark', 'n', 's', 'gmj', ']`zv')
+    call submode#enter_with('mark', 'n', 's', 'gmk', '[`zv')
+    call submode#map(       'mark', 'n', 's', 'j',   ']`zv')
+    call submode#map(       'mark', 'n', 's', 'k',   '[`zv')
+
+    call submode#enter_with('window', 'n', 's', 'gwh', '<C-w>hzv')
+    call submode#enter_with('window', 'n', 's', 'gwl', '<C-w>lzv')
+    call submode#enter_with('window', 'n', 's', 'gwj', '<C-w>jzv')
+    call submode#enter_with('window', 'n', 's', 'gwk', '<C-w>kzv')
+    call submode#map(       'window', 'n', 's', 'h',   '<C-w>hzv')
+    call submode#map(       'window', 'n', 's', 'l',   '<C-w>lzv')
+    call submode#map(       'window', 'n', 's', 'j',   '<C-w>jzv')
+    call submode#map(       'window', 'n', 's', 'k',   '<C-w>kzv')
 
     if s:is_gui
       let l:call_resize_appwin = ':<C-u>call ' . s:sid . 'submode_resize_appwin'
       let l:call_move_appwin   = ':<C-u>call ' . s:sid . 'submode_move_appwin'
 
-      call submode#enter_with('appwinsize', 'n', 's', '<leader>wH', l:call_resize_appwin . '(-1, 0)<CR>')
-      call submode#enter_with('appwinsize', 'n', 's', '<leader>wL', l:call_resize_appwin . '(+1, 0)<CR>')
-      call submode#enter_with('appwinsize', 'n', 's', '<leader>wJ', l:call_resize_appwin . '(0, +1)<CR>')
-      call submode#enter_with('appwinsize', 'n', 's', '<leader>wK', l:call_resize_appwin . '(0, -1)<CR>')
-      call submode#map(       'appwinsize', 'n', 's', 'H',          l:call_resize_appwin . '(-1, 0)<CR>')
-      call submode#map(       'appwinsize', 'n', 's', 'L',          l:call_resize_appwin . '(+1, 0)<CR>')
-      call submode#map(       'appwinsize', 'n', 's', 'J',          l:call_resize_appwin . '(0, +1)<CR>')
-      call submode#map(       'appwinsize', 'n', 's', 'K',          l:call_resize_appwin . '(0, -1)<CR>')
-      call submode#map(       'appwinsize', 'n', 's', 'h',          l:call_resize_appwin . '(-1, 0)<CR>')
-      call submode#map(       'appwinsize', 'n', 's', 'l',          l:call_resize_appwin . '(+1, 0)<CR>')
-      call submode#map(       'appwinsize', 'n', 's', 'j',          l:call_resize_appwin . '(0, +1)<CR>')
-      call submode#map(       'appwinsize', 'n', 's', 'k',          l:call_resize_appwin . '(0, -1)<CR>')
+      call submode#enter_with('appwinsize', 'n', 's', '<leader>wH', l:call_resize_appwin . '(-1,  0)<CR>')
+      call submode#enter_with('appwinsize', 'n', 's', '<leader>wL', l:call_resize_appwin . '(+1,  0)<CR>')
+      call submode#enter_with('appwinsize', 'n', 's', '<leader>wJ', l:call_resize_appwin . '( 0, +1)<CR>')
+      call submode#enter_with('appwinsize', 'n', 's', '<leader>wK', l:call_resize_appwin . '( 0, -1)<CR>')
+      call submode#map(       'appwinsize', 'n', 's', 'H',          l:call_resize_appwin . '(-1,  0)<CR>')
+      call submode#map(       'appwinsize', 'n', 's', 'L',          l:call_resize_appwin . '(+1,  0)<CR>')
+      call submode#map(       'appwinsize', 'n', 's', 'J',          l:call_resize_appwin . '( 0, +1)<CR>')
+      call submode#map(       'appwinsize', 'n', 's', 'K',          l:call_resize_appwin . '( 0, -1)<CR>')
+      call submode#map(       'appwinsize', 'n', 's', 'h',          l:call_resize_appwin . '(-1,  0)<CR>')
+      call submode#map(       'appwinsize', 'n', 's', 'l',          l:call_resize_appwin . '(+1,  0)<CR>')
+      call submode#map(       'appwinsize', 'n', 's', 'j',          l:call_resize_appwin . '( 0, +1)<CR>')
+      call submode#map(       'appwinsize', 'n', 's', 'k',          l:call_resize_appwin . '( 0, -1)<CR>')
 
-      call submode#enter_with('appwinpos', 'n', 's', '<leader>wh', l:call_move_appwin . '(-1, 0)<CR>')
-      call submode#enter_with('appwinpos', 'n', 's', '<leader>wl', l:call_move_appwin . '(+1, 0)<CR>')
-      call submode#enter_with('appwinpos', 'n', 's', '<leader>wj', l:call_move_appwin . '(0, +1)<CR>')
-      call submode#enter_with('appwinpos', 'n', 's', '<leader>wk', l:call_move_appwin . '(0, -1)<CR>')
-      call submode#map(       'appwinpos', 'n', 's', 'H',          l:call_move_appwin . '(-1, 0)<CR>')
-      call submode#map(       'appwinpos', 'n', 's', 'L',          l:call_move_appwin . '(+1, 0)<CR>')
-      call submode#map(       'appwinpos', 'n', 's', 'J',          l:call_move_appwin . '(0, +1)<CR>')
-      call submode#map(       'appwinpos', 'n', 's', 'K',          l:call_move_appwin . '(0, -1)<CR>')
-      call submode#map(       'appwinpos', 'n', 's', 'h',          l:call_move_appwin . '(-1, 0)<CR>')
-      call submode#map(       'appwinpos', 'n', 's', 'l',          l:call_move_appwin . '(+1, 0)<CR>')
-      call submode#map(       'appwinpos', 'n', 's', 'j',          l:call_move_appwin . '(0, +1)<CR>')
-      call submode#map(       'appwinpos', 'n', 's', 'k',          l:call_move_appwin . '(0, -1)<CR>')
+      call submode#enter_with('appwinpos', 'n', 's', '<leader>wh', l:call_move_appwin . '(-1,  0)<CR>')
+      call submode#enter_with('appwinpos', 'n', 's', '<leader>wl', l:call_move_appwin . '(+1,  0)<CR>')
+      call submode#enter_with('appwinpos', 'n', 's', '<leader>wj', l:call_move_appwin . '( 0, +1)<CR>')
+      call submode#enter_with('appwinpos', 'n', 's', '<leader>wk', l:call_move_appwin . '( 0, -1)<CR>')
+      call submode#map(       'appwinpos', 'n', 's', 'H',          l:call_move_appwin . '(-1,  0)<CR>')
+      call submode#map(       'appwinpos', 'n', 's', 'L',          l:call_move_appwin . '(+1,  0)<CR>')
+      call submode#map(       'appwinpos', 'n', 's', 'J',          l:call_move_appwin . '( 0, +1)<CR>')
+      call submode#map(       'appwinpos', 'n', 's', 'K',          l:call_move_appwin . '( 0, -1)<CR>')
+      call submode#map(       'appwinpos', 'n', 's', 'h',          l:call_move_appwin . '(-1,  0)<CR>')
+      call submode#map(       'appwinpos', 'n', 's', 'l',          l:call_move_appwin . '(+1,  0)<CR>')
+      call submode#map(       'appwinpos', 'n', 's', 'j',          l:call_move_appwin . '( 0, +1)<CR>')
+      call submode#map(       'appwinpos', 'n', 's', 'k',          l:call_move_appwin . '( 0, -1)<CR>')
     endif
   endfunction
   " }}}
@@ -808,29 +822,13 @@ Autocmd VimEnter COMMIT_EDITMSG
       \|   startinsert
       \| endif
 
-AutocmdFT qf
-      \  nnoremap <silent><buffer> q :<C-u>cclose<CR>
-
-AutocmdFT typescript
-      \  setlocal tabstop=2
-      \| setlocal shiftwidth=2
-      \| setlocal softtabstop=2
-
-AutocmdFT ruby
-      \  setlocal tabstop=2
-      \| setlocal shiftwidth=2
-      \| setlocal softtabstop=2
-
-AutocmdFT vue
+AutocmdFT typescript,ruby,vue,json,yaml,vim
       \  setlocal tabstop=2
       \| setlocal shiftwidth=2
       \| setlocal softtabstop=2
 
 AutocmdFT vim
-      \  setlocal tabstop=2
-      \| setlocal shiftwidth=2
-      \| setlocal softtabstop=2
-      \| setlocal foldmethod=marker
+      \  setlocal foldmethod=marker
       \| setlocal foldlevel=0
       \| setlocal foldcolumn=5
 
@@ -840,15 +838,14 @@ AutocmdFT xml,html
       \| setlocal foldcolumn=5
       \| inoremap <silent><buffer> > ><Esc>:call closetag#CloseTagFun()<CR>
 
-AutocmdFT json
-      \  setlocal shiftwidth=2
-      \| setlocal foldmethod=syntax
-
 AutocmdFT dosbatch
       \  setlocal fileencoding=sjis
 
 AutocmdFT help
       \  nnoremap <silent><buffer> q :<C-u>close<CR>
+
+AutocmdFT qf
+      \  nnoremap <silent><buffer> q :<C-u>cclose<CR>
 
 function! s:update_all()
   setlocal formatoptions-=ro
@@ -908,8 +905,6 @@ if !s:is_vscode
     let &columns = s:base_columns
 
     set guifont=HackGenNerd\ Console:h11
-    " set renderoptions=type:directx
-    " set printfont=HackGenNerd\ Console:h11
   else
     set termguicolors
   endif
@@ -918,11 +913,17 @@ if !s:is_vscode
     colorscheme night-owl
   endif
 
+  if exists('wincolor')
+    Autocmd ColorScheme          * highlight NormalNC guifg=#a0a0a0 guibg=#121212
+    Autocmd WinEnter,BufWinEnter * setlocal  wincolor=
+    Autocmd WinLeave             * setlocal  wincolor=NormalNC
+  endif
+
   filetype plugin indent on
   syntax enable
 
   " 折り畳み
-  nnoremap <expr> zh foldlevel(line('.'))  >  0  ? 'zc' : '<C-h>'
+  nnoremap <expr> zh foldlevel(line('.'))  >   0 ? 'zc' : '<C-h>'
   nnoremap <expr> zl foldclosed(line('.')) != -1 ? 'zo' : '<C-l>'
 
   " アプリウィンドウ操作
@@ -951,9 +952,9 @@ if !s:is_vscode
           \| endif
 
     " 縦分割する
-    let s:depth_vsp      = 1
-    let s:opend_left_vsp = 0
-    let s:opend_top_vsp  = 0
+    let s:depth_vsp       = 1
+    let s:opened_left_vsp = 0
+    let s:opened_top_vsp  = 0
 
     function! s:toggle_v_wide()
       if s:depth_vsp <= 1
@@ -975,8 +976,8 @@ if !s:is_vscode
 
     function! s:open_v_split_wide()
       if s:depth_vsp == 1
-        let s:opend_left_vsp = getwinposx()
-        let s:opend_top_vsp  = getwinposy()
+        let s:opened_left_vsp = getwinposx()
+        let s:opened_top_vsp  = getwinposy()
       endif
 
       call s:toggle_v_wide()
@@ -990,7 +991,7 @@ if !s:is_vscode
       only
 
       if s:depth_vsp == 1
-        execute 'winpos' s:opend_left_vsp s:opend_top_vsp
+        execute 'winpos' s:opened_left_vsp s:opened_top_vsp
       endif
     endfunction
   endif
