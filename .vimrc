@@ -11,10 +11,9 @@ endif
 " --------------------------------------------------------------------------------
 let s:sid          = expand('<SID>')
 let s:home_dir     = expand('~/')
-let s:dotvim_dir   = s:home_dir . '.vim/'
 let s:plugin_dir   = s:home_dir . '.vim_plugged/'
 let s:dropbox_dir  = s:home_dir . 'Dropbox/'
-let s:is_installed = isdirectory(s:home_dir . '.vim_plugged/')
+let s:is_installed = isdirectory(s:plugin_dir)
 let s:is_vscode    = exists('g:vscode')
 let s:is_neovim    = has('nvim')
 let s:is_gui       = has('gui_running')
@@ -66,7 +65,7 @@ command! -nargs=* AutocmdUser autocmd MyAutoCmd User     <args>
 " --------------------------------------------------------------------------------
 " プラグイン
 " --------------------------------------------------------------------------------
-call plug#begin(s:home_dir . '.vim_plugged/') "{
+call plug#begin(s:plugin_dir) "{
 
 function! s:execute_if_installed(func_name)
   if s:is_installed
@@ -86,13 +85,13 @@ if !s:is_vscode
   AutocmdUser coc.nvim call s:execute_if_installed('s:init_coc')
 
   let g:coc_global_extensions = [
+        \   'coc-calc',
         \   'coc-clangd',
         \   'coc-css',
         \   'coc-html',
         \   'coc-json',
         \   'coc-markdownlint',
         \   'coc-omnisharp',
-        \   'coc-pairs',
         \   'coc-powershell',
         \   'coc-prettier',
         \   'coc-snippets',
@@ -147,14 +146,10 @@ if !s:is_vscode
           \ })
 
     " coc-snippets
-    call coc#config('snippets.ultisnips.directories', ['UltiSnips', '~/.vim/UltiSnips'])
+    call coc#config('snippets.ultisnips.directories', ['~/.vim/UltiSnips'])
     imap <C-e> <Plug>(coc-snippets-expand)
     let g:coc_snippet_next = '<C-j>'
     let g:coc_snippet_prev = '<C-k>'
-
-    " coc-pairs
-    inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-    imap <C-h> <BS>
 
     Autocmd CursorHold * silent call CocActionAsync('highlight')
 
@@ -162,7 +157,7 @@ if !s:is_vscode
     nmap     <silent> ;e        <Plug>(coc-rename)
     nmap     <silent> <leader>e <Plug>(coc-fix-current)
     nmap     <silent> <M-CR>    <Plug>(coc-codeaction-cursor)
-    nnoremap <silent> K         :<C-u>call <SID>show_documentation()<CR>
+    nnoremap <silent> K         <Cmd>call <SID>show_documentation()<CR>
 
     command! -nargs=* -range Format call s:format(<range>)
     function! s:format(range)
@@ -202,7 +197,7 @@ if !s:is_vscode
   Plug 'lambdalisue/vim-rplugin', {'on': []}
   Plug 'YoshihiroIto/lista.nvim', {'on': []}
   " lista {{{
-  nnoremap <silent> <leader>l   :<C-u>Lista<CR>
+  nnoremap <silent> <leader>l <Cmd>Lista<CR>
   let g:lista#custom_mappings = [
         \   ['<C-j>', '<Esc>'],
         \   ['<C-p>', '<S-Tab>'],
@@ -212,7 +207,7 @@ if !s:is_vscode
 
   Plug 'iamcco/markdown-preview.nvim', {'on': [], 'do': 'cd app & yarn install'}
   " markdown-preview.nvim {{{
-  nnoremap <silent> <leader>p :<C-u>MarkdownPreview<CR>
+  nnoremap <silent> <leader>p <Cmd>MarkdownPreview<CR>
   " }}}
 
   Plug 'cocopon/vaffle.vim', {'on': []}
@@ -244,8 +239,7 @@ if !s:is_vscode
 
   Plug 'glidenote/memolist.vim', {'on': []}
   " memolist.vim {{{
-  noremap <silent> <leader>n :<C-u>MemoNew<CR>
-  noremap <silent> <leader>k :execute 'CtrlP' g:memolist_path<CR>
+  noremap <silent> <leader>k <Cmd>execute 'CtrlP' g:memolist_path<CR>
   let g:memolist_memo_suffix = 'md'
   let g:memolist_path        = s:dropbox_dir . 'memo/'
   " }}}
@@ -254,12 +248,11 @@ if !s:is_vscode
   Plug 'mattn/ctrlp-matchfuzzy', {'on': []}
   Plug 'ctrlpvim/ctrlp.vim', {'on': []}
   " ctrlp {{{
-  nnoremap <silent> <leader>m :<C-u>CtrlPMRUFiles<CR>
-  nnoremap <silent> <leader>s :<C-u>CtrlPSessions<CR>
+  nnoremap <silent> <leader>m <Cmd>CtrlPMRUFiles<CR>
+  nnoremap <silent> <leader>s <Cmd>CtrlPSessions<CR>
 
   let g:ctrlp_match_window    = 'bottom,order:ttb,min:48,max:48'
   let g:ctrlp_map             = ''
-  let g:ctrlp_match_func      = {'match': 'ctrlp_matchfuzzy#matcher'}
   let g:ctrlp_user_command    = 'rg %s --files --color=never --glob ""'
   let g:ctrlp_use_caching     = 0
   let g:ctrlp_prompt_mappings = {
@@ -276,6 +269,10 @@ if !s:is_vscode
         \   'main': s:sid . 'ctrlp_Name_1',
         \   'prog': s:sid . 'ctrlp_Name_2',
         \ }
+
+  if exists('?matchfuzzy')
+    let g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
+  endif
 
   function! s:ctrlp_Name_1(focus, byfname, regex, prev, item, next, marked)
     let g:lightline.ctrlp_prev = a:prev
@@ -582,8 +579,8 @@ if !s:is_vscode
     call submode#map(       'window', 'n', 's', 'k',   '<C-w>kzv')
 
     if s:is_gui
-      let l:call_resize_appwin = ':<C-u>call ' . s:sid . 'submode_resize_appwin'
-      let l:call_move_appwin   = ':<C-u>call ' . s:sid . 'submode_move_appwin'
+      let l:call_resize_appwin = '<Cmd>call ' . s:sid . 'submode_resize_appwin'
+      let l:call_move_appwin   = '<Cmd>call ' . s:sid . 'submode_move_appwin'
 
       call submode#enter_with('appwinsize', 'n', 's', '<leader>wH', l:call_resize_appwin . '(-1,  0)<CR>')
       call submode#enter_with('appwinsize', 'n', 's', '<leader>wL', l:call_resize_appwin . '(+1,  0)<CR>')
@@ -637,6 +634,7 @@ let g:traces_preview_window = 'botright 10new'
 " }}}
 
 Plug 'tomtom/tcomment_vim', {'on': []}
+Plug 'cohama/lexima.vim', {'on': []}
 
 Plug 'kana/vim-textobj-user', {'on': []}
 Plug 'glts/vim-textobj-comment', {'on': []}
@@ -705,6 +703,13 @@ function! s:init_sandwich()
   nmap <silent> Srr <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
 
   call operator#sandwich#set('delete', 'all', 'highlight', 0)
+
+  let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
+  let g:sandwich#recipes += [{
+        \   'buns':     ['${', '}'],
+        \   'input':    ['$'],
+        \   'filetype': ['typescript'],
+        \ }]
 endfunction
 " }}}
 
@@ -758,7 +763,7 @@ Autocmd ColorScheme * highlight QuickScopeSecondary guifg='#5fffff' gui=underlin
 
 call plug#end()
 
-function! s:load_plug(timer)
+function! s:load_plug(_)
   if !s:is_vscode
     call plug#load(
           \   'coc.nvim',
@@ -774,8 +779,8 @@ function! s:load_plug(timer)
           \   'vim-autoft',
           \   'memolist.vim',
           \   'ctrlp.vim',
-          \   'ctrlp-matchfuzzy',
           \   'ctrlp-sessions',
+          \   'ctrlp-matchfuzzy',
           \   'vimdoc-ja',
           \ )
   endif
@@ -784,6 +789,7 @@ function! s:load_plug(timer)
         \   'vim-matchup',
         \   'traces.vim',
         \   'vim-asterisk',
+        \   'lexima.vim',
         \   'tcomment_vim',
         \   'vim-closetag',
         \   'is.vim',
@@ -833,22 +839,22 @@ AutocmdFT typescript,ruby,vue,json,yaml,vim
 AutocmdFT vim
       \  setlocal foldmethod=marker
       \| setlocal foldlevel=0
-      \| setlocal foldcolumn=5
+      \| setlocal foldcolumn=2
 
 AutocmdFT xml,html
       \  setlocal foldmethod=syntax
       \| setlocal foldlevel=99
-      \| setlocal foldcolumn=5
+      \| setlocal foldcolumn=2
       \| inoremap <silent><buffer> > ><Esc>:call closetag#CloseTagFun()<CR>
 
 AutocmdFT dosbatch
       \  setlocal fileencoding=sjis
 
 AutocmdFT help
-      \  nnoremap <silent><buffer> q :<C-u>close<CR>
+      \  nnoremap <silent><buffer> q <Cmd>close<CR>
 
 AutocmdFT qf
-      \  nnoremap <silent><buffer> q :<C-u>cclose<CR>
+      \  nnoremap <silent><buffer> q <Cmd>cclose<CR>
 
 function! s:update_all()
   setlocal formatoptions-=ro
@@ -872,7 +878,6 @@ if !s:is_vscode
   set wildmode=list:full
   set showfulltag
   set wildoptions=tagfile
-  set fillchars=vert:\ "
   set synmaxcol=500
   set updatetime=300
   set previewheight=24
@@ -885,6 +890,7 @@ if !s:is_vscode
   set concealcursor=i
   set signcolumn=yes
   set list
+  set fillchars=vert:\ ,eob:\ "
   set listchars=tab:\»\ ,eol:↲,extends:»,precedes:«,nbsp:%
   set breakindent
   set foldcolumn=0
@@ -936,8 +942,8 @@ if !s:is_vscode
           \  call s:toggle_v_wide()
           \| vertical diffsplit <args>
 
-    noremap <silent> <leader>we :<C-u>call <SID>toggle_v_split_wide()<CR>
-    noremap <silent> <leader>wf :<C-u>call <SID>full_window()<CR>
+    noremap <silent> <leader>we <Cmd>call <SID>toggle_v_split_wide()<CR>
+    noremap <silent> <leader>wf <Cmd>call <SID>full_window()<CR>
 
     " アプリケーションウィンドウを最大高さにする
     function! s:full_window()
@@ -1000,12 +1006,12 @@ endif
 " 開発
 " --------------------------------------------------------------------------------
 if s:is_vscode
-  nnoremap ;e :<C-u>call VSCodeNotify('editor.action.rename')<CR>
-  nnoremap ;r :<C-u>call VSCodeNotify('workbench.action.debug.start')<CR>
+  nnoremap ;e <Cmd>call VSCodeNotify('editor.action.rename')<CR>
+  nnoremap ;r <Cmd>call VSCodeNotify('workbench.action.debug.start')<CR>
 
-  nnoremap <silent> <leader>f :<C-u>call VSCodeNotify('workbench.view.explorer')<CR>
+  nnoremap <silent> <leader>f <Cmd>call VSCodeNotify('workbench.view.explorer')<CR>
 else
-  nnoremap <silent> <leader>f :<C-u>Vaffle<CR>
+  nnoremap <silent> <leader>f <Cmd>Vaffle<CR>
 
   tnoremap <Esc> <C-w>N
   tnoremap <C-j> <C-w>N
@@ -1041,12 +1047,12 @@ if !s:is_vscode
   " }}}
 
   " grep {{{
-  nnoremap <silent> <leader>g :<C-u>Grep<CR>
-  nnoremap <silent> <leader>q :<C-u>CtrlPQuickfix<CR>
+  nnoremap <silent> <leader>g <Cmd>Grep<CR>
+  nnoremap <silent> <leader>q <Cmd>CtrlPQuickfix<CR>
 
   command! -nargs=? Grep call s:grep(<f-args>)
 
-  AutocmdFT qf nnoremap <silent><buffer> q :<C-u>call <SID>grep_cancel()<CR>
+  AutocmdFT qf nnoremap <silent><buffer> q <Cmd>call <SID>grep_cancel()<CR>
 
   let s:grep_job_id = ''
 
@@ -1063,12 +1069,11 @@ if !s:is_vscode
     call setqflist([])
 
     let l:cmd = printf('%s "%s" "%s"', &grepprg, l:word, s:projectRoot('.'))
-    let l:is_async = !s:is_neovim
 
-    if l:is_async
+    if exists('?job_start')
       let s:grep_job_id = job_start(l:cmd, {
-            \   'callback' : function('s:grep_add'),
-            \   'exit_cb'  : function('s:grep_close')
+            \   'callback': function('s:grep_add'),
+            \   'exit_cb':  function('s:grep_close'),
             \ })
     else
       cgetexpr system(l:cmd)
@@ -1078,7 +1083,7 @@ if !s:is_vscode
     endif
   endfunction
 
-  function! s:grep_add(ch, msg)
+  function! s:grep_add(_, msg)
     if s:grep_job_id ==# ''
       return
     endif
@@ -1087,7 +1092,7 @@ if !s:is_vscode
     cwindow
   endfunction
 
-  function! s:grep_close(ch, msg)
+  function! s:grep_close(_, __)
     if s:grep_job_id ==# ''
       return
     endif
@@ -1175,8 +1180,8 @@ set expandtab
 set autochdir
 
 if s:is_vscode
-  nnoremap <silent> u     :<C-u>call VSCodeNotify('undo')<CR>
-  nnoremap <silent> <C-r> :<C-u>call VSCodeNotify('redo')<CR>
+  nnoremap <silent> u     <Cmd>call VSCodeNotify('undo')<CR>
+  nnoremap <silent> <C-r> <Cmd>call VSCodeNotify('redo')<CR>
 endif
 
 " 自動リロード
@@ -1198,19 +1203,15 @@ vnoremap <C-x> <C-x>gv
 " 全角考慮r
 xnoremap <expr> r {'v': "\<C-v>r", 'V': "\<C-v>0o$r", "\<C-v>": 'r'}[mode()]
 
-nmap     <silent> <C-CR> V<C-CR>
-vnoremap <silent> <C-CR> :<C-u>call <SID>copy_add_comment()<CR>
+" コピー＆コメント
+nmap     <silent> <C-CR>    <leader>t
+vmap     <silent> <C-CR>    <leader>t
+nmap     <silent> <leader>t V<leader>t
+vnoremap <silent> <leader>t :<C-u>call <SID>copy_add_comment()<CR>
 function! s:copy_add_comment() range
-  " 選択中の行をヤンクする
   normal! ""gvy
-
-  " コメントアウトする
-  call tcomment#Comment(line("'<"), line("'>"), 'i', '<bang>', '')
-
-  " 元の位置に戻る
+  call tcomment#Comment(line("'<"), line("'>"))
   execute 'normal!' (line("'>") - line("'<") + 1) . 'j'
-
-  " ヤンクした物をペーストする
   normal! P
 endfunction
 
@@ -1241,7 +1242,7 @@ endif
 nnoremap <expr> @ reg_recording() == '' ? '@q' : ''
 
 " マーク
-nnoremap <silent> m :<C-u>call <SID>put_mark()<CR>
+nnoremap <silent> m <Cmd>call <SID>put_mark()<CR>
 
 Autocmd BufReadPost * delmarks!
 
@@ -1269,7 +1270,7 @@ endfunction
 " --------------------------------------------------------------------------------
 " 遅延設定
 " --------------------------------------------------------------------------------
-function! s:lazy_settings(timer)
+function! s:lazy_settings(_)
   if exists('&cryptmethod')
     set cryptmethod=blowfish2
   endif
@@ -1284,8 +1285,8 @@ function! s:lazy_settings(timer)
       execute 'edit' filereadable(l:dropbox_vimrc) ? l:dropbox_vimrc : $MYVIMRC
     endfunction
 
-    nnoremap <silent> <F1> :<C-u>call <SID>edit_vimrc()<CR>
-    nnoremap <silent> <F2> :<C-u>PlugUpdate<CR>
+    nnoremap <silent> <F1> <Cmd>call <SID>edit_vimrc()<CR>
+    nnoremap <silent> <F2> <Cmd>PlugUpdate<CR>
   endif
 endfunction
 call timer_start(50, function('s:lazy_settings'))
