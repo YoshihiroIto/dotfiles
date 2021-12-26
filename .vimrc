@@ -569,44 +569,44 @@ if !s:is_vscode
     call submode#map(       'mark', 'n', 's', 'j',   ']`zv')
     call submode#map(       'mark', 'n', 's', 'k',   '[`zv')
 
-    call submode#enter_with('window', 'n', 's', 'gwh', '<C-w>hzv')
-    call submode#enter_with('window', 'n', 's', 'gwl', '<C-w>lzv')
-    call submode#enter_with('window', 'n', 's', 'gwj', '<C-w>jzv')
-    call submode#enter_with('window', 'n', 's', 'gwk', '<C-w>kzv')
-    call submode#map(       'window', 'n', 's', 'h',   '<C-w>hzv')
-    call submode#map(       'window', 'n', 's', 'l',   '<C-w>lzv')
-    call submode#map(       'window', 'n', 's', 'j',   '<C-w>jzv')
-    call submode#map(       'window', 'n', 's', 'k',   '<C-w>kzv')
+    call submode#enter_with('window', 'nt', 's', 'gwh', '<C-w>h')
+    call submode#enter_with('window', 'nt', 's', 'gwl', '<C-w>l')
+    call submode#enter_with('window', 'nt', 's', 'gwj', '<C-w>j')
+    call submode#enter_with('window', 'nt', 's', 'gwk', '<C-w>k')
+    call submode#map(       'window', 'nt', 's', 'h',   '<C-w>h')
+    call submode#map(       'window', 'nt', 's', 'l',   '<C-w>l')
+    call submode#map(       'window', 'nt', 's', 'j',   '<C-w>j')
+    call submode#map(       'window', 'nt', 's', 'k',   '<C-w>k')
 
     if s:is_gui
       let l:call_resize_appwin = '<Cmd>call ' . s:sid . 'submode_resize_appwin'
       let l:call_move_appwin   = '<Cmd>call ' . s:sid . 'submode_move_appwin'
 
-      call submode#enter_with('appwinsize', 'n', 's', '<leader>wH', l:call_resize_appwin . '(-1,  0)<CR>')
-      call submode#enter_with('appwinsize', 'n', 's', '<leader>wL', l:call_resize_appwin . '(+1,  0)<CR>')
-      call submode#enter_with('appwinsize', 'n', 's', '<leader>wJ', l:call_resize_appwin . '( 0, +1)<CR>')
-      call submode#enter_with('appwinsize', 'n', 's', '<leader>wK', l:call_resize_appwin . '( 0, -1)<CR>')
-      call submode#map(       'appwinsize', 'n', 's', 'H',          l:call_resize_appwin . '(-1,  0)<CR>')
-      call submode#map(       'appwinsize', 'n', 's', 'L',          l:call_resize_appwin . '(+1,  0)<CR>')
-      call submode#map(       'appwinsize', 'n', 's', 'J',          l:call_resize_appwin . '( 0, +1)<CR>')
-      call submode#map(       'appwinsize', 'n', 's', 'K',          l:call_resize_appwin . '( 0, -1)<CR>')
-      call submode#map(       'appwinsize', 'n', 's', 'h',          l:call_resize_appwin . '(-1,  0)<CR>')
-      call submode#map(       'appwinsize', 'n', 's', 'l',          l:call_resize_appwin . '(+1,  0)<CR>')
-      call submode#map(       'appwinsize', 'n', 's', 'j',          l:call_resize_appwin . '( 0, +1)<CR>')
-      call submode#map(       'appwinsize', 'n', 's', 'k',          l:call_resize_appwin . '( 0, -1)<CR>')
+      call submode#enter_with('appwinsize', 'nt', 's', '<leader>wH', l:call_resize_appwin . '(-1,  0)<CR>')
+      call submode#enter_with('appwinsize', 'nt', 's', '<leader>wL', l:call_resize_appwin . '(+1,  0)<CR>')
+      call submode#enter_with('appwinsize', 'nt', 's', '<leader>wJ', l:call_resize_appwin . '( 0, +1)<CR>')
+      call submode#enter_with('appwinsize', 'nt', 's', '<leader>wK', l:call_resize_appwin . '( 0, -1)<CR>')
+      call submode#map(       'appwinsize', 'nt', 's', 'H',          l:call_resize_appwin . '(-1,  0)<CR>')
+      call submode#map(       'appwinsize', 'nt', 's', 'L',          l:call_resize_appwin . '(+1,  0)<CR>')
+      call submode#map(       'appwinsize', 'nt', 's', 'J',          l:call_resize_appwin . '( 0, +1)<CR>')
+      call submode#map(       'appwinsize', 'nt', 's', 'K',          l:call_resize_appwin . '( 0, -1)<CR>')
+      call submode#map(       'appwinsize', 'nt', 's', 'h',          l:call_resize_appwin . '(-1,  0)<CR>')
+      call submode#map(       'appwinsize', 'nt', 's', 'l',          l:call_resize_appwin . '(+1,  0)<CR>')
+      call submode#map(       'appwinsize', 'nt', 's', 'j',          l:call_resize_appwin . '( 0, +1)<CR>')
+      call submode#map(       'appwinsize', 'nt', 's', 'k',          l:call_resize_appwin . '( 0, -1)<CR>')
 
-      call submode#enter_with('appwinpos', 'n', 's', '<leader>wh', l:call_move_appwin . '(-1,  0)<CR>')
-      call submode#enter_with('appwinpos', 'n', 's', '<leader>wl', l:call_move_appwin . '(+1,  0)<CR>')
-      call submode#enter_with('appwinpos', 'n', 's', '<leader>wj', l:call_move_appwin . '( 0, +1)<CR>')
-      call submode#enter_with('appwinpos', 'n', 's', '<leader>wk', l:call_move_appwin . '( 0, -1)<CR>')
-      call submode#map(       'appwinpos', 'n', 's', 'H',          l:call_move_appwin . '(-1,  0)<CR>')
-      call submode#map(       'appwinpos', 'n', 's', 'L',          l:call_move_appwin . '(+1,  0)<CR>')
-      call submode#map(       'appwinpos', 'n', 's', 'J',          l:call_move_appwin . '( 0, +1)<CR>')
-      call submode#map(       'appwinpos', 'n', 's', 'K',          l:call_move_appwin . '( 0, -1)<CR>')
-      call submode#map(       'appwinpos', 'n', 's', 'h',          l:call_move_appwin . '(-1,  0)<CR>')
-      call submode#map(       'appwinpos', 'n', 's', 'l',          l:call_move_appwin . '(+1,  0)<CR>')
-      call submode#map(       'appwinpos', 'n', 's', 'j',          l:call_move_appwin . '( 0, +1)<CR>')
-      call submode#map(       'appwinpos', 'n', 's', 'k',          l:call_move_appwin . '( 0, -1)<CR>')
+      call submode#enter_with('appwinpos', 'nt', 's', '<leader>wh', l:call_move_appwin . '(-1,  0)<CR>')
+      call submode#enter_with('appwinpos', 'nt', 's', '<leader>wl', l:call_move_appwin . '(+1,  0)<CR>')
+      call submode#enter_with('appwinpos', 'nt', 's', '<leader>wj', l:call_move_appwin . '( 0, +1)<CR>')
+      call submode#enter_with('appwinpos', 'nt', 's', '<leader>wk', l:call_move_appwin . '( 0, -1)<CR>')
+      call submode#map(       'appwinpos', 'nt', 's', 'H',          l:call_move_appwin . '(-1,  0)<CR>')
+      call submode#map(       'appwinpos', 'nt', 's', 'L',          l:call_move_appwin . '(+1,  0)<CR>')
+      call submode#map(       'appwinpos', 'nt', 's', 'J',          l:call_move_appwin . '( 0, +1)<CR>')
+      call submode#map(       'appwinpos', 'nt', 's', 'K',          l:call_move_appwin . '( 0, -1)<CR>')
+      call submode#map(       'appwinpos', 'nt', 's', 'h',          l:call_move_appwin . '(-1,  0)<CR>')
+      call submode#map(       'appwinpos', 'nt', 's', 'l',          l:call_move_appwin . '(+1,  0)<CR>')
+      call submode#map(       'appwinpos', 'nt', 's', 'j',          l:call_move_appwin . '( 0, +1)<CR>')
+      call submode#map(       'appwinpos', 'nt', 's', 'k',          l:call_move_appwin . '( 0, -1)<CR>')
     endif
   endfunction
   " }}}
@@ -735,24 +735,6 @@ map #  <Plug>(asterisk-z#)<Plug>(is-nohl-1)
 map g# <Plug>(asterisk-gz#)<Plug>(is-nohl-1)
 " }}}
 
-Plug 'rhysd/clever-f.vim', {'on': []}
-" clever-f.vim {{{
-let g:clever_f_smart_case                       = 1
-let g:clever_f_fix_key_direction                = 1
-let g:clever_f_not_overwrites_standard_mappings = 1
-let g:clever_f_across_no_line                   = 1
-
-nmap f     <Plug>(clever-f-f)
-xmap f     <Plug>(clever-f-f)
-omap f     <Plug>(clever-f-f)
-nmap F     <Plug>(clever-f-F)
-xmap F     <Plug>(clever-f-F)
-omap F     <Plug>(clever-f-F)
-nmap <Esc> <Plug>(clever-f-reset)
-xmap <Esc> <Plug>(clever-f-reset)
-omap <Esc> <Plug>(clever-f-reset)
-" }}}
-
 Plug 'unblevable/quick-scope', {'on': []}
 " quick-scope {{{
 let g:qs_ignorecase = 1
@@ -793,7 +775,6 @@ function! s:load_plug(_)
         \   'tcomment_vim',
         \   'vim-closetag',
         \   'is.vim',
-        \   'clever-f.vim',
         \   'quick-scope',
         \   'vim-easy-align',
         \   'vim-sandwich',
