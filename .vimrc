@@ -74,221 +74,9 @@ function! s:execute_if_installed(func_name)
 endfunction
 
 if !s:is_vscode
-  Plug 'YoshihiroIto/night-owl.vim'
-  Plug 'YoshihiroIto/vim-icondrag', {'on': []}
-  " vim-icondrag {{{
-  AutocmdUser vim-icondrag call s:execute_if_installed('icondrag#enable')
+  Plug 'YoshihiroIto/night-owl.vim' " {{{
   " }}}
-
-  Plug 'neoclide/coc.nvim', {'branch': 'release', 'on': []}
-  " coc.nvim {{{
-  AutocmdUser coc.nvim call s:execute_if_installed('s:init_coc')
-
-  let g:coc_global_extensions = [
-        \   'coc-calc',
-        \   'coc-clangd',
-        \   'coc-css',
-        \   'coc-html',
-        \   'coc-json',
-        \   'coc-markdownlint',
-        \   'coc-omnisharp',
-        \   'coc-powershell',
-        \   'coc-prettier',
-        \   'coc-snippets',
-        \   'coc-spell-checker',
-        \   'coc-tsserver',
-        \   'coc-vimlsp',
-        \   'coc-yaml',
-        \ ]
-
-  function! s:init_coc()
-    call coc#config('diagnostic.warningSign', '!!')
-    call coc#config('coc.source.around.firstMatch', 0)
-    call coc#config('coc.source.buffer.firstMatch', 0)
-    call coc#config('coc.preferences.formatOnType', 1)
-    call coc#config('coc.preferences.formatOnSaveFiletypes', [
-          \   'css',
-          \   'html',
-          \   'javascript',
-          \   'json',
-          \   'scss',
-          \   'typescript',
-          \   'vue',
-          \   'yaml',
-          \ ])
-    call coc#config('suggest.completionItemKindLabels', {
-          \   'keyword':       "\uf1de",
-          \   'variable':      "\ue79b",
-          \   'value':         "\uf89f",
-          \   'operator':      "\u03a8",
-          \   'constructor':   "\uf0ad",
-          \   'function':      "\u0192",
-          \   'reference':     "\ufa46",
-          \   'constant':      "\uf8fe",
-          \   'method':        "\uf09a",
-          \   'struct':        "\ufb44",
-          \   'class':         "\uf0e8",
-          \   'interface':     "\uf417",
-          \   'text':          "\ue612",
-          \   'enum':          "\uf435",
-          \   'enumMember':    "\uf02b",
-          \   'module':        "\uf40d",
-          \   'color':         "\ue22b",
-          \   'property':      "\ue624",
-          \   'field':         "\uf9be",
-          \   'unit':          "\uf475",
-          \   'event':         "\ufacd",
-          \   'file':          "\uf723",
-          \   'folder':        "\uf114",
-          \   'snippet':       "\ue60b",
-          \   'typeParameter': "\uf728",
-          \   'default':       "\uf29c",
-          \ })
-
-    " coc-snippets
-    call coc#config('snippets.ultisnips.directories', ['~/.vim/UltiSnips'])
-    imap <C-e> <Plug>(coc-snippets-expand)
-    let g:coc_snippet_next = '<C-j>'
-    let g:coc_snippet_prev = '<C-k>'
-
-    Autocmd CursorHold * silent call CocActionAsync('highlight')
-
-    nmap     <silent> <C-]>     <Plug>(coc-definition)
-    nmap     <silent> ;e        <Plug>(coc-rename)
-    nmap     <silent> <leader>e <Plug>(coc-fix-current)
-    nmap     <silent> <M-CR>    <Plug>(coc-codeaction-cursor)
-    nnoremap <silent> K         <Cmd>call <SID>show_documentation()<CR>
-
-    command! -nargs=* -range Format call s:format(<range>)
-    function! s:format(range)
-      if a:range == 0
-        call CocActionAsync('format')
-      else
-        call CocActionAsync('formatSelected', visualmode())
-      endif
-    endfunction
-
-    function! s:show_documentation()
-      if (index(['vim', 'help'], &filetype) >= 0)
-        execute 'help' expand('<cword>')
-      elseif (coc#rpc#ready())
-        call CocActionAsync('doHover')
-      else
-        execute '!' . &keywordprg expand('<cword>')
-      endif
-    endfunction
-  endfunction
-  " }}}
-
-  Plug 'itchyny/vim-gitbranch', {'on': []}
-  Plug 'airblade/vim-gitgutter', {'on': []}
-  " vim-gitgutter {{{
-  AutocmdUser vim-gitgutter call s:execute_if_installed('s:init_gitgutter')
-
-  let g:gitgutter_map_keys = 0
-  let g:gitgutter_grep     = ''
-
-  function! s:init_gitgutter()
-    call gitgutter#enable()
-    Autocmd WinEnter * GitGutter
-  endfunction
-  " }}}
-
-  Plug 'lambdalisue/vim-rplugin', {'on': []}
-  Plug 'YoshihiroIto/lista.nvim', {'on': []}
-  " lista {{{
-  nnoremap <silent> <leader>l <Cmd>Lista<CR>
-  let g:lista#custom_mappings = [
-        \   ['<C-j>', '<Esc>'],
-        \   ['<C-p>', '<S-Tab>'],
-        \   ['<C-n>', '<Tab>'],
-        \ ]
-  " }}}
-
-  Plug 'iamcco/markdown-preview.nvim', {'on': [], 'do': 'cd app & yarn install'}
-  " markdown-preview.nvim {{{
-  nnoremap <silent> <leader>p <Cmd>MarkdownPreview<CR>
-  " }}}
-
-  Plug 'cocopon/vaffle.vim', {'on': []}
-  " vaffle.vim {{{
-  let g:vaffle_show_hidden_files = 1
-
-  AutocmdFT vaffle nmap <silent><buffer> <Esc> <Plug>(vaffle-quit)
-  " }}}
-
-  Plug 'itchyny/vim-cursorword', {'on': []}
-  " vim-cursorword {{{
-  let g:cursorword_delay     = 270
-  let g:cursorword_highlight = 0
-  Autocmd ColorScheme *
-        \  highlight CursorWord0 guifg=Red ctermfg=Red
-        \| highlight CursorWord1 guifg=Red ctermfg=Red
-  " }}}
-
-  Plug 'itchyny/vim-autoft', {'on': []}
-  " vim-autoft {{{
-  let g:autoft_config = [
-        \   {'filetype': 'cs',   'pattern': '^\s*using'},
-        \   {'filetype': 'cpp',  'pattern': '^\s*#\s*\%(include\|define\)\>'},
-        \   {'filetype': 'go',   'pattern': '^import ('},
-        \   {'filetype': 'html', 'pattern': '<\%(!DOCTYPE\|html\|head\|script\|meta\|link|div\|span\)\>\|^html:5\s*$'},
-        \   {'filetype': 'xml',  'pattern': '<[0-9a-zA-Z]\+'},
-        \ ]
-  " }}}
-
-  Plug 'glidenote/memolist.vim', {'on': []}
-  " memolist.vim {{{
-  noremap <silent> <leader>k <Cmd>execute 'CtrlP' g:memolist_path<CR>
-  let g:memolist_memo_suffix = 'md'
-  let g:memolist_path        = s:dropbox_dir . 'memo/'
-  " }}}
-
-  Plug 'YoshihiroIto/ctrlp-sessions', {'on': []}
-  Plug 'mattn/ctrlp-matchfuzzy', {'on': []}
-  Plug 'ctrlpvim/ctrlp.vim', {'on': []}
-  " ctrlp {{{
-  nnoremap <silent> <leader>m <Cmd>CtrlPMRUFiles<CR>
-  nnoremap <silent> <leader>s <Cmd>CtrlPSessions<CR>
-
-  let g:ctrlp_match_window    = 'bottom,order:ttb,min:48,max:48'
-  let g:ctrlp_map             = ''
-  let g:ctrlp_user_command    = 'rg %s --files --color=never --glob ""'
-  let g:ctrlp_use_caching     = 0
-  let g:ctrlp_prompt_mappings = {
-        \   'PrtBS()':            ['<BS>', '<C-h>'],
-        \   'PrtSelectMove("j")': ['<C-n>'],
-        \   'PrtSelectMove("k")': ['<C-p>'],
-        \   'PrtHistory(-1)':     ['<Down>'],
-        \   'PrtHistory(1)':      ['<Up>'],
-        \   'PrtCurLeft()':       ['<Left>'],
-        \   'PrtCurRight()':      ['<Right>'],
-        \   'PrtExit()':          ['<Esc>', '<C-j>'],
-        \ }
-  let g:ctrlp_status_func     = {
-        \   'main': s:sid . 'ctrlp_Name_1',
-        \   'prog': s:sid . 'ctrlp_Name_2',
-        \ }
-
-  if exists('?matchfuzzy')
-    let g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
-  endif
-
-  function! s:ctrlp_Name_1(focus, byfname, regex, prev, item, next, marked)
-    let g:lightline.ctrlp_prev = a:prev
-    let g:lightline.ctrlp_item = a:item
-    let g:lightline.ctrlp_next = a:next
-    let g:lightline.ctrlp_marked = a:marked
-    return lightline#statusline(0)
-  endfunction
-
-  function! s:ctrlp_Name_2(str)
-    return lightline#statusline(0)
-  endfunction
-  " }}}
-
-  Plug 'itchyny/lightline.vim'
-  " lightline.vim {{{
+  Plug 'itchyny/lightline.vim' " {{{
   let g:lightline = {
         \   'colorscheme': 'nightowl',
         \   'active': {
@@ -501,9 +289,164 @@ if !s:is_vscode
     AutocmdUser CocStatusChange,CocDiagnosticChange call lightline#update()
   endif
   " }}}
+  Plug 'YoshihiroIto/vim-icondrag', {'on': []} " {{{
+  AutocmdUser vim-icondrag call s:execute_if_installed('icondrag#enable')
+  " }}}
+  Plug 'neoclide/coc.nvim', {'on': [], 'branch': 'release'} " {{{
+  AutocmdUser coc.nvim call s:execute_if_installed('s:init_coc')
 
-  Plug 'kana/vim-submode', {'on': []}
-  " submode {{{
+  let g:coc_global_extensions = [
+        \   'coc-calc',
+        \   'coc-clangd',
+        \   'coc-css',
+        \   'coc-html',
+        \   'coc-json',
+        \   'coc-markdownlint',
+        \   'coc-omnisharp',
+        \   'coc-powershell',
+        \   'coc-prettier',
+        \   'coc-snippets',
+        \   'coc-spell-checker',
+        \   'coc-tsserver',
+        \   'coc-vimlsp',
+        \   'coc-yaml',
+        \ ]
+
+  function! s:init_coc()
+    call coc#config('diagnostic.warningSign', '!!')
+    call coc#config('coc.source.around.firstMatch', 0)
+    call coc#config('coc.source.buffer.firstMatch', 0)
+    call coc#config('coc.preferences.formatOnType', 1)
+    call coc#config('coc.preferences.formatOnSaveFiletypes', [
+          \   'css',
+          \   'html',
+          \   'javascript',
+          \   'json',
+          \   'scss',
+          \   'typescript',
+          \   'vue',
+          \   'yaml',
+          \ ])
+    call coc#config('suggest.completionItemKindLabels', {
+          \   'keyword':       "\uf1de",
+          \   'variable':      "\ue79b",
+          \   'value':         "\uf89f",
+          \   'operator':      "\u03a8",
+          \   'constructor':   "\uf0ad",
+          \   'function':      "\u0192",
+          \   'reference':     "\ufa46",
+          \   'constant':      "\uf8fe",
+          \   'method':        "\uf09a",
+          \   'struct':        "\ufb44",
+          \   'class':         "\uf0e8",
+          \   'interface':     "\uf417",
+          \   'text':          "\ue612",
+          \   'enum':          "\uf435",
+          \   'enumMember':    "\uf02b",
+          \   'module':        "\uf40d",
+          \   'color':         "\ue22b",
+          \   'property':      "\ue624",
+          \   'field':         "\uf9be",
+          \   'unit':          "\uf475",
+          \   'event':         "\ufacd",
+          \   'file':          "\uf723",
+          \   'folder':        "\uf114",
+          \   'snippet':       "\ue60b",
+          \   'typeParameter': "\uf728",
+          \   'default':       "\uf29c",
+          \ })
+
+    " coc-snippets
+    call coc#config('snippets.ultisnips.directories', ['~/.vim/UltiSnips'])
+    imap <C-e> <Plug>(coc-snippets-expand)
+    let g:coc_snippet_next = '<C-j>'
+    let g:coc_snippet_prev = '<C-k>'
+
+    Autocmd CursorHold * silent call CocActionAsync('highlight')
+
+    nmap     <silent> <C-]>  <Plug>(coc-definition)
+    nmap     <silent> ]e     <Plug>(coc-rename)
+    nmap     <silent> ]f     <Plug>(coc-fix-current)
+    nmap     <silent> <M-CR> <Plug>(coc-codeaction-cursor)
+    nnoremap <silent> K      <Cmd>call <SID>show_documentation()<CR>
+
+    command! -nargs=* -range Format call s:format(<range>)
+    function! s:format(range)
+      if a:range == 0
+        call CocActionAsync('format')
+      else
+        call CocActionAsync('formatSelected', visualmode())
+      endif
+    endfunction
+
+    function! s:show_documentation()
+      if (index(['vim', 'help'], &filetype) >= 0)
+        execute 'help' expand('<cword>')
+      elseif (coc#rpc#ready())
+        call CocActionAsync('doHover')
+      else
+        execute '!' . &keywordprg expand('<cword>')
+      endif
+    endfunction
+  endfunction
+  " }}}
+  Plug 'itchyny/vim-gitbranch', {'on': []} " {{{
+  " }}}
+  Plug 'airblade/vim-gitgutter', {'on': []} " {{{
+  AutocmdUser vim-gitgutter call s:execute_if_installed('s:init_gitgutter')
+
+  let g:gitgutter_map_keys = 0
+  let g:gitgutter_grep     = ''
+
+  function! s:init_gitgutter()
+    call gitgutter#enable()
+    Autocmd WinEnter * GitGutter
+  endfunction
+  " }}}
+  Plug 'lambdalisue/vim-rplugin', {'on': []} " {{{
+  " }}}
+  Plug 'YoshihiroIto/lista.nvim', {'on': []} " {{{
+  nnoremap <silent> <leader>l <Cmd>Lista<CR>
+  let g:lista#custom_mappings = [
+        \   ['<C-j>', '<Esc>'],
+        \   ['<C-p>', '<S-Tab>'],
+        \   ['<C-n>', '<Tab>'],
+        \ ]
+  " }}}
+  Plug 'iamcco/markdown-preview.nvim', {'on': [], 'do': 'cd app & yarn install'} " {{{
+  nnoremap <silent> <leader>p <Cmd>MarkdownPreview<CR>
+  " }}}
+  Plug 'cocopon/vaffle.vim', {'on': []} " {{{
+  let g:vaffle_show_hidden_files = 1
+
+  AutocmdFT vaffle nmap <silent><buffer> <Esc> <Plug>(vaffle-quit)
+  " }}}
+  Plug 'itchyny/vim-cursorword', {'on': []} " {{{
+  let g:cursorword_delay     = 270
+  let g:cursorword_highlight = 0
+  Autocmd ColorScheme *
+        \  highlight CursorWord0 guifg=Red ctermfg=Red
+        \| highlight CursorWord1 guifg=Red ctermfg=Red
+  " }}}
+  Plug 'itchyny/vim-autoft', {'on': []} " {{{
+  let g:autoft_config = [
+        \   {'filetype': 'cs',   'pattern': '^\s*using'},
+        \   {'filetype': 'cpp',  'pattern': '^\s*#\s*\%(include\|define\)\>'},
+        \   {'filetype': 'go',   'pattern': '^import ('},
+        \   {'filetype': 'html', 'pattern': '<\%(!DOCTYPE\|html\|head\|script\|meta\|link|div\|span\)\>\|^html:5\s*$'},
+        \   {'filetype': 'xml',  'pattern': '<[0-9a-zA-Z]\+'},
+        \ ]
+  " }}}
+  Plug 'glidenote/memolist.vim', {'on': []} " {{{
+  noremap <silent> <leader>k <Cmd>execute 'CtrlP' g:memolist_path<CR>
+  let g:memolist_memo_suffix = 'md'
+  let g:memolist_path        = s:dropbox_dir . 'memo/'
+  " }}}
+  Plug 'YoshihiroIto/vim-closetag', {'on': []} " {{{
+  AutocmdFT xml,html,xhtml
+        \  inoremap <silent><buffer> > ><Esc><Cmd>call closetag#CloseIt()<CR>
+  "}}}
+  Plug 'kana/vim-submode', {'on': []} " {{{
   AutocmdUser vim-submode call s:execute_if_installed('s:init_submode')
 
   function! s:submode_snap(value, scale)
@@ -610,71 +553,75 @@ if !s:is_vscode
     endif
   endfunction
   " }}}
+  Plug 'ctrlpvim/ctrlp.vim', {'on': []} "{{{
+  nnoremap <silent> <leader>m <Cmd>CtrlPMRUFiles<CR>
 
-  Plug 'vim-jp/vimdoc-ja', {'on': []}
+  let g:ctrlp_match_window    = 'bottom,order:ttb,min:48,max:48'
+  let g:ctrlp_map             = ''
+  let g:ctrlp_user_command    = 'rg %s --files --color=never --glob ""'
+  let g:ctrlp_use_caching     = 0
+  let g:ctrlp_prompt_mappings = {
+        \   'PrtBS()':            ['<BS>', '<C-h>'],
+        \   'PrtSelectMove("j")': ['<C-n>'],
+        \   'PrtSelectMove("k")': ['<C-p>'],
+        \   'PrtHistory(-1)':     ['<Down>'],
+        \   'PrtHistory(1)':      ['<Up>'],
+        \   'PrtCurLeft()':       ['<Left>'],
+        \   'PrtCurRight()':      ['<Right>'],
+        \   'PrtExit()':          ['<Esc>', '<C-j>'],
+        \ }
+  let g:ctrlp_status_func     = {
+        \   'main': s:sid . 'ctrlp_Name_1',
+        \   'prog': s:sid . 'ctrlp_Name_2',
+        \ }
 
-  Plug 'posva/vim-vue',       {'for': 'vue',  'on': []}
-  Plug 'beyondmarc/hlsl.vim', {'for': 'hlsl', 'on': []}
-  Plug 'tikhomirov/vim-glsl', {'for': 'glsl', 'on': []}
+  function! s:ctrlp_Name_1(focus, byfname, regex, prev, item, next, marked)
+    let g:lightline.ctrlp_prev = a:prev
+    let g:lightline.ctrlp_item = a:item
+    let g:lightline.ctrlp_next = a:next
+    let g:lightline.ctrlp_marked = a:marked
+    return lightline#statusline(0)
+  endfunction
+
+  function! s:ctrlp_Name_2(str)
+    return lightline#statusline(0)
+  endfunction
+
+  " }}}
+  Plug 'mattn/ctrlp-matchfuzzy', {'on': []} "{{{
+  if exists('?matchfuzzy')
+    let g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
+  endif
+  " }}}
+  Plug 'YoshihiroIto/ctrlp-sessions', {'on': []} " {{{
+  nnoremap <silent> <leader>s <Cmd>CtrlPSessions<CR>
+  " }}}
+  Plug 'vim-jp/vimdoc-ja', {'on': []} " {{{
+  " }}}
+  Plug 'posva/vim-vue', {'on': [], 'for': 'vue'} " {{{
+  " }}}
+  Plug 'beyondmarc/hlsl.vim', {'on': [], 'for': 'hlsl'} " {{{
+  " }}}
+  Plug 'tikhomirov/vim-glsl', {'on': [], 'for': 'glsl'} "{{{
+  " }}}
 
   " Plug 'editorconfig/editorconfig-vim'
   " Plug 'tyru/capture.vim'
   " Plug 'thinca/vim-prettyprint'
 endif
 
-Plug 'andymass/vim-matchup', {'on': []}
-" vim-matchup {{{
+Plug 'andymass/vim-matchup', {'on': []} " {{{
 let g:matchup_matchparen_status_offscreen = 0
 let g:matchup_matchparen_deferred         = 1
 " }}}
-
-Plug 'markonm/traces.vim', {'on': []}
-" traces.vim {{{
+Plug 'markonm/traces.vim', {'on': []} " {{{
 let g:traces_preview_window = 'botright 10new'
 " }}}
-
-Plug 'tomtom/tcomment_vim', {'on': []}
-Plug 'cohama/lexima.vim', {'on': []}
-
-Plug 'kana/vim-textobj-user', {'on': []}
-Plug 'glts/vim-textobj-comment', {'on': []}
-Plug 'kana/vim-textobj-indent', {'on': []}
-Plug 'kana/vim-textobj-entire', {'on': []}
-Plug 'kana/vim-textobj-line', {'on': []}
-Plug 'rhysd/vim-textobj-word-column', {'on': []}
-Plug 'whatyouhide/vim-textobj-xmlattr', {'on': []}
-
-Plug 'sgur/vim-textobj-parameter', {'on': []}
-" vim-textobj-parameter {{{
-xmap aa <Plug>(textobj-parameter-a)
-xmap ia <Plug>(textobj-parameter-i)
-omap aa <Plug>(textobj-parameter-a)
-omap ia <Plug>(textobj-parameter-i)
+Plug 'tomtom/tcomment_vim', {'on': []} " {{{
 " }}}
-
-Plug 'rhysd/vim-textobj-wiw', {'on': []}
-" vim-textobj-wiw {{{
-xmap a. <Plug>(textobj-wiw-a)
-xmap i. <Plug>(textobj-wiw-i)
-omap a. <Plug>(textobj-wiw-a)
-omap i. <Plug>(textobj-wiw-i)
+Plug 'cohama/lexima.vim', {'on': []} "{{{
 " }}}
-
-Plug 'kana/vim-operator-user', {'on': []}
-
-Plug 'YoshihiroIto/vim-operator-tcomment', {'on': []}
-" vim-operator-tcomment {{{
-nmap t  <Plug>(operator-tcomment)
-xmap t  <Plug>(operator-tcomment)
-" }}}
-
-Plug 'kana/vim-operator-replace', {'on': []}
-" vim-operator-replace {{{
-map R  <Plug>(operator-replace)
-" }}}
-
-Plug 'junegunn/vim-easy-align', {'on': []}
-" vim-easy-align {{{
+Plug 'junegunn/vim-easy-align', {'on': []} " {{{
 nmap <silent> <Leader>a=       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)=
 nmap <silent> <Leader>a:       v<Plug>(textobj-indent-i)<Plug>(EasyAlign):
 nmap <silent> <Leader>a,       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*,
@@ -686,9 +633,7 @@ xmap <silent> <Leader>a,       <Plug>(EasyAlign)*,
 xmap <silent> <Leader>a<Space> <Plug>(EasyAlign)*<Space>
 xmap <silent> <Leader>a\|      <Plug>(EasyAlign)*\|
 " }}}
-
-Plug 'machakann/vim-sandwich', {'on': []}
-" vim-sandwich {{{
+Plug 'machakann/vim-sandwich', {'on': []} " {{{
 AutocmdUser vim-sandwich call s:execute_if_installed('s:init_sandwich')
 
 let g:operator_sandwich_no_default_key_mappings = 1
@@ -712,45 +657,67 @@ function! s:init_sandwich()
         \ }]
 endfunction
 " }}}
-
-Plug 'tyru/open-browser.vim', {'on': []}
-" open-browser.vim {{{
-let g:openbrowser_no_default_menus = 1
-let g:netrw_nogx = 1
-nmap gx <Plug>(openbrowser-smart-search)
-vmap gx <Plug>(openbrowser-smart-search)
+Plug 'haya14busa/vim-asterisk', {'on': []} " {{{
 " }}}
-
-Plug 'YoshihiroIto/vim-closetag', {'on': []}
-" vim-closetag {{{
-let g:closetag_filenames = '*.{html,xhtml,xml,xaml}'
-" }}}
-
-Plug 'haya14busa/vim-asterisk', {'on': []}
-Plug 'haya14busa/is.vim', {'on': []}
-" is.vim {{{
+Plug 'haya14busa/is.vim', {'on': []} " {{{
 map *  <Plug>(asterisk-z*)<Plug>(is-nohl-1)
 map g* <Plug>(asterisk-gz*)<Plug>(is-nohl-1)
 map #  <Plug>(asterisk-z#)<Plug>(is-nohl-1)
 map g# <Plug>(asterisk-gz#)<Plug>(is-nohl-1)
 " }}}
-
-Plug 'unblevable/quick-scope', {'on': []}
-" quick-scope {{{
-let g:qs_ignorecase = 1
-
-Autocmd ColorScheme * highlight QuickScopePrimary   guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
-Autocmd ColorScheme * highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81  cterm=underline
+Plug 'unblevable/quick-scope', {'on': []} " {{{
+Autocmd ColorScheme *
+      \  highlight QuickScopePrimary   guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
+      \| highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81  cterm=underline
 " }}}
-
-call plug#end()
+Plug 'tyru/open-browser.vim', {'on': []} " {{{
+let g:openbrowser_no_default_menus = 1
+let g:netrw_nogx = 1
+nmap gx <Plug>(openbrowser-smart-search)
+vmap gx <Plug>(openbrowser-smart-search)
+" }}}
+Plug 'kana/vim-textobj-user', {'on': []} " {{{
+" }}}
+Plug 'glts/vim-textobj-comment', {'on': []} " {{{
+" }}}
+Plug 'kana/vim-textobj-indent', {'on': []} " {{{
+" }}}
+Plug 'kana/vim-textobj-entire', {'on': []} " {{{
+" }}}
+Plug 'kana/vim-textobj-line', {'on': []} " {{{
+" }}}
+Plug 'rhysd/vim-textobj-word-column', {'on': []} " {{{
+" }}}
+Plug 'whatyouhide/vim-textobj-xmlattr', {'on': []} " {{{
+" }}}
+Plug 'sgur/vim-textobj-parameter', {'on': []} " {{{
+xmap aa <Plug>(textobj-parameter-a)
+xmap ia <Plug>(textobj-parameter-i)
+omap aa <Plug>(textobj-parameter-a)
+omap ia <Plug>(textobj-parameter-i)
+" }}}
+Plug 'rhysd/vim-textobj-wiw', {'on': []} " {{{
+xmap a. <Plug>(textobj-wiw-a)
+xmap i. <Plug>(textobj-wiw-i)
+omap a. <Plug>(textobj-wiw-a)
+omap i. <Plug>(textobj-wiw-i)
+" }}}
+Plug 'kana/vim-operator-user', {'on': []} " {{{
+" }}}
+Plug 'YoshihiroIto/vim-operator-tcomment', {'on': []} " {{{
+nmap t  <Plug>(operator-tcomment)
+xmap t  <Plug>(operator-tcomment)
+" }}}
+Plug 'kana/vim-operator-replace', {'on': []} " {{{
+map R  <Plug>(operator-replace)
+" }}}
+call plug#end() "}
 
 function! s:load_plug(_)
   if !s:is_vscode
     call plug#load(
-          \   'coc.nvim',
           \   'vim-icondrag',
-          \   'vim-submode',
+          \   'coc.nvim',
           \   'vim-gitbranch',
           \   'vim-gitgutter',
           \   'vim-rplugin',
@@ -760,6 +727,8 @@ function! s:load_plug(_)
           \   'vim-cursorword',
           \   'vim-autoft',
           \   'memolist.vim',
+          \   'vim-closetag',
+          \   'vim-submode',
           \   'ctrlp.vim',
           \   'ctrlp-sessions',
           \   'ctrlp-matchfuzzy',
@@ -770,14 +739,13 @@ function! s:load_plug(_)
   call plug#load(
         \   'vim-matchup',
         \   'traces.vim',
-        \   'vim-asterisk',
-        \   'lexima.vim',
         \   'tcomment_vim',
-        \   'vim-closetag',
-        \   'is.vim',
-        \   'quick-scope',
+        \   'lexima.vim',
         \   'vim-easy-align',
         \   'vim-sandwich',
+        \   'vim-asterisk',
+        \   'is.vim',
+        \   'quick-scope',
         \   'open-browser.vim'
         \ )
 
@@ -795,7 +763,7 @@ function! s:load_plug(_)
         \   'vim-operator-tcomment',
         \   'vim-operator-replace'
         \ )
-endfunction "}
+endfunction
 call timer_start(30, function('s:load_plug'))
 
 " --------------------------------------------------------------------------------
@@ -812,7 +780,7 @@ Autocmd VimEnter COMMIT_EDITMSG
       \|   startinsert
       \| endif
 
-AutocmdFT typescript,ruby,vue,json,yaml,vim
+AutocmdFT typescript,ruby,vue,json,yaml,vim,xml,html,xhtml
       \  setlocal tabstop=2
       \| setlocal shiftwidth=2
       \| setlocal softtabstop=2
@@ -822,11 +790,10 @@ AutocmdFT vim
       \| setlocal foldlevel=0
       \| setlocal foldcolumn=2
 
-AutocmdFT xml,html
+AutocmdFT xml,html,xhtml
       \  setlocal foldmethod=syntax
       \| setlocal foldlevel=99
       \| setlocal foldcolumn=2
-      \| inoremap <silent><buffer> > ><Esc>:call closetag#CloseTagFun()<CR>
 
 AutocmdFT dosbatch
       \  setlocal fileencoding=sjis
@@ -987,8 +954,8 @@ endif
 " 開発
 " --------------------------------------------------------------------------------
 if s:is_vscode
-  nnoremap ;e <Cmd>call VSCodeNotify('editor.action.rename')<CR>
-  nnoremap ;r <Cmd>call VSCodeNotify('workbench.action.debug.start')<CR>
+  nnoremap ]e <Cmd>call VSCodeNotify('editor.action.rename')<CR>
+  nnoremap ]r <Cmd>call VSCodeNotify('workbench.action.debug.start')<CR>
 
   nnoremap <silent> <leader>f <Cmd>call VSCodeNotify('workbench.view.explorer')<CR>
 else
@@ -1272,3 +1239,4 @@ function! s:lazy_settings(_)
 endfunction
 call timer_start(50, function('s:lazy_settings'))
 
+" vim: set foldmethod=marker foldlevel=0 foldcolumn=2:
