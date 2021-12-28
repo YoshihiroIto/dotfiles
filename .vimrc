@@ -48,12 +48,6 @@ let g:vimsyn_folding     = 'af'
 let g:xml_syntax_folding = 1
 let g:python3_host_prog  = s:home_dir . 'AppData/Local/Programs/Python/Python310/python.exe'
 
-" ローカル設定
-" let s:vimrc_local = s:home_dir . '.vimrc.local'
-" if filereadable(s:vimrc_local)
-"   execute 'source' s:vimrc_local
-" endif
-
 augroup MyAutoCmd
   autocmd!
 augroup END
@@ -764,7 +758,7 @@ function! s:load_plug(_)
         \   'vim-operator-replace'
         \ )
 endfunction
-call timer_start(30, function('s:load_plug'))
+call timer_start(0, function('s:load_plug'))
 
 " --------------------------------------------------------------------------------
 " ファイルタイプごとの設定
@@ -879,10 +873,300 @@ if !s:is_vscode
 
   filetype plugin indent on
   syntax enable
+endif
 
-  " 折り畳み
-  nnoremap <expr> zh foldlevel(line('.'))  >   0 ? 'zc' : '<C-h>'
-  nnoremap <expr> zl foldclosed(line('.')) != -1 ? 'zo' : '<C-l>'
+" --------------------------------------------------------------------------------
+" 設定
+" --------------------------------------------------------------------------------
+function! s:settings(_)
+  " ローカル設定
+  let s:vimrc_local = s:home_dir . '.vimrc.local'
+  if filereadable(s:vimrc_local)
+    execute 'source' s:vimrc_local
+  endif
+
+  if !s:is_vscode
+    Autocmd BufWinEnter,ColorScheme .vimrc
+          \ syntax match vimAutoCmd /\<\(Autocmd\|AutocmdFT\|AutocmdUser\)\>/
+
+    function! s:edit_vimrc()
+      let l:dropbox_vimrc = s:dropbox_dir . 'dotfiles/.vimrc'
+
+      execute 'edit' filereadable(l:dropbox_vimrc) ? l:dropbox_vimrc : $MYVIMRC
+    endfunction
+
+    nnoremap <silent> <F1> <Cmd>call <SID>edit_vimrc()<CR>
+    nnoremap <silent> <F2> <Cmd>PlugUpdate<CR>
+  endif
+
+  " --------------------------------------------------------------------------------
+  " 開発
+  " --------------------------------------------------------------------------------
+  if s:is_vscode
+    nnoremap ]e <Cmd>call VSCodeNotify('editor.action.rename')<CR>
+    nnoremap ]r <Cmd>call VSCodeNotify('workbench.action.debug.start')<CR>
+
+    nnoremap <silent> <leader>f <Cmd>call VSCodeNotify('workbench.view.explorer')<CR>
+  else
+    nnoremap <silent> <leader>f <Cmd>Vaffle<CR>
+
+    tnoremap <Esc> <C-w>N
+    tnoremap <C-j> <C-w>N
+  endif
+
+  " --------------------------------------------------------------------------------
+  " 検索
+  " --------------------------------------------------------------------------------
+  set incsearch
+  set ignorecase
+  set smartcase
+  set hlsearch
+  set grepprg=rg\ --smart-case\ --vimgrep\ --no-heading
+  set grepformat=%f:%l:%c:%m,%f:%l:%m
+  set helplang=ja,en
+  set keywordprg=
+
+  if !s:is_vscode
+    " 複数Vimで検索を同期する {{{
+    function! s:save_reg(reg, filename)
+      call writefile([getreg(a:reg)], a:filename)
+    endfunction
+
+    function! s:load_reg(reg, filename)
+      if filereadable(a:filename)
+        call setreg(a:reg, readfile(a:filename), 'v')
+      endif
+    endfunction
+
+    let s:vimreg_search = s:home_dir . 'vimreg_search.txt'
+    Autocmd CursorHold,CursorHoldI,FocusLost * silent! call s:save_reg('/', s:vimreg_search)
+    Autocmd FocusGained                      * silent! call s:load_reg('/', s:vimreg_search)
+    " }}}
+
+    " grep {{{
+    nnoremap <silent> <leader>g <Cmd>Grep<CR>
+    nnoremap <silent> <leader>q <Cmd>CtrlPQuickfix<CR>
+
+    command! -nargs=? Grep call s:grep(<f-args>)
+
+    AutocmdFT qf nnoremap <silent><buffer> q <Cmd>call <SID>grep_cancel()<CR>
+
+    let s:grep_job_id = ''
+
+    function! s:grep(...) abort
+      let l:word = a:0 >= 1 ? a:1 : input('Search pattern: ')
+
+      redraw
+      echo ''
+
+      if l:word == ''
+        return
+      endif
+
+      call setqflist([])
+
+      let l:cmd = printf('%s "%s" "%s"', &grepprg, l:word, s:projectRoot('.'))
+
+      if exists('?job_start')
+        let s:grep_job_id = job_start(l:cmd, {
+              \   'callback': function('s:grep_add'),
+              \   'exit_cb':  function('s:grep_close'),
+              \ })
+      else
+        cgetexpr system(l:cmd)
+        cwindow
+        cclose
+        CtrlPQuickfix
+      endif
+    endfunction
+
+    function! s:grep_add(_, msg)
+      if s:grep_job_id ==# ''
+        return
+      endif
+
+      caddexpr a:msg
+      cwindow
+    endfunction
+
+    function! s:grep_close(_, __)
+      if s:grep_job_id ==# ''
+        return
+      endif
+
+      cclose
+      CtrlPQuickfix
+
+      let s:grep_job_id = ''
+    endfunction
+
+    function! s:grep_cancel()
+      if s:grep_job_id !=# ''
+        call job_stop(s:grep_job_id)
+        let s:grep_job_id = ''
+      endif
+
+      cclose
+    endfunction
+
+    " https://github.com/mattn/vim-findroot
+    function! s:goup(path, patterns) abort
+      let l:path = a:path
+      while 1
+        for l:pattern in a:patterns
+          let l:current = l:path . '/' . l:pattern
+          if stridx(l:pattern, '*') != -1 && !empty(glob(l:current, 1))
+            return l:path
+          elseif l:pattern =~# '/$'
+            if isdirectory(l:current)
+              return l:path
+            endif
+          elseif filereadable(l:current)
+            return l:path
+          endif
+        endfor
+        let l:next = fnamemodify(l:path, ':h')
+        if l:next == l:path || (has('win32') && l:next =~# '^//[^/]\+$')
+          break
+        endif
+        let l:path = l:next
+      endwhile
+      return ''
+    endfunction
+
+    function! s:projectRoot(default) abort
+      let l:bufname = expand('%:p')
+      if &buftype !=# '' || empty(l:bufname) || stridx(l:bufname, '://') !=# -1
+        return a:default
+      endif
+      let l:dir = escape(fnamemodify(l:bufname, ':p:h:gs!\!/!:gs!//!/!'), ' ')
+      let l:dir = s:goup(l:dir, ['.git/', '*.sln'])
+      if empty(l:dir)
+        return a:default
+      else
+        return l:dir
+      endif
+    endfunction
+    " }}}
+  endif
+
+  " --------------------------------------------------------------------------------
+  " 編集
+  " --------------------------------------------------------------------------------
+  set clipboard=unnamedplus,unnamed
+  set modeline
+  set virtualedit=block
+  set autoread
+  set whichwrap=b,s,h,l,<,>,[,]
+  set mouse=a
+  set hidden
+  set timeoutlen=2000
+  set nrformats=alpha,bin,hex
+  set backspace=indent,eol,start
+  set noswapfile
+  set nobackup
+  set formatoptions=tcj
+  set nofixeol
+  set tags=tags,./tags,../tags,../../tags,../../../tags,../../../../tags,../../../../../tags
+  set autoindent
+  set cindent
+  set tabstop=4
+  set softtabstop=4
+  set shiftwidth=4
+  set expandtab
+  set autochdir
+
+  if exists('&cryptmethod')
+    set cryptmethod=blowfish2
+  endif
+
+  if s:is_vscode
+    nnoremap <silent> u     <Cmd>call VSCodeNotify('undo')<CR>
+    nnoremap <silent> <C-r> <Cmd>call VSCodeNotify('redo')<CR>
+  endif
+
+  " 自動リロード
+  Autocmd WinEnter,CursorHold * call s:execute_keep_view('checktime')
+
+  " ^Mを取り除く
+  command! RemoveCr call s:execute_keep_view('silent! %substitute/\r$//g | nohlsearch')
+
+  " 行末のスペースを取り除く
+  command! RemoveEolSpace call s:execute_keep_view('silent! %substitute/ \+$//g | nohlsearch')
+
+  " 現在のファイルパスをクリップボードへコピーする
+  command! CopyFilepath     call setreg('*', expand('%:t'), 'v')
+  command! CopyFullFilepath call setreg('*', expand('%:p'), 'v')
+
+  vnoremap <C-a> <C-a>gv
+  vnoremap <C-x> <C-x>gv
+
+  " 全角考慮r
+  xnoremap <expr> r {'v': "\<C-v>r", 'V': "\<C-v>0o$r", "\<C-v>": 'r'}[mode()]
+
+  " コピー＆コメント
+  nmap     <silent> <C-CR>    <leader>t
+  vmap     <silent> <C-CR>    <leader>t
+  nmap     <silent> <leader>t V<leader>t
+  vnoremap <silent> <leader>t :<C-u>call <SID>copy_add_comment()<CR>
+  function! s:copy_add_comment() range
+    normal! ""gvy
+    call tcomment#Comment(line("'<"), line("'>"))
+    execute 'normal!' (line("'>") - line("'<") + 1) . 'j'
+    normal! P
+  endfunction
+
+  " モード移行
+  inoremap <C-j> <Esc>
+  nmap     <C-j> <Esc>
+  vnoremap <C-j> <Esc>
+  cnoremap <C-j> <Esc>
+
+  " カーソル移動
+  noremap <silent> j  gj
+  noremap <silent> k  gk
+  noremap <silent> gj j
+  noremap <silent> gk k
+  noremap <silent> 0  g0
+  noremap <silent> g0 0
+  noremap <silent> $  g$
+  noremap <silent> g$ $
+  noremap <silent> gg ggzv
+  noremap <silent> G  Gzv
+
+  " キーボードマクロ
+  if s:is_neovim
+    nnoremap q qq<ESC>
+  else
+    nnoremap q qq<ESC>:echo''<CR>
+  endif
+  nnoremap <expr> @ reg_recording() == '' ? '@q' : ''
+
+  " マーク
+  nnoremap <silent> m <Cmd>call <SID>put_mark()<CR>
+
+  Autocmd BufReadPost * delmarks!
+
+  function! s:put_mark()
+    let l:begin  = char2nr('a')
+    let l:end    = char2nr('z')
+    let l:length = l:end - l:begin + 1
+
+    let b:mark_index = exists('b:mark_index') ? (b:mark_index + 1) % l:length : 0
+
+    execute 'mark' nr2char(l:begin + b:mark_index)
+  endfunction
+
+  " Nop
+  nnoremap ZZ <Nop>
+  nnoremap ZQ <Nop>
+  nnoremap Q  <Nop>
+
+  function! s:execute_keep_view(expr)
+    let l:wininfo = winsaveview()
+    execute a:expr
+    call winrestview(l:wininfo)
+  endfunction
 
   " アプリウィンドウ操作
   if s:is_gui
@@ -948,295 +1232,11 @@ if !s:is_vscode
       endif
     endfunction
   endif
-endif
 
-" --------------------------------------------------------------------------------
-" 開発
-" --------------------------------------------------------------------------------
-if s:is_vscode
-  nnoremap ]e <Cmd>call VSCodeNotify('editor.action.rename')<CR>
-  nnoremap ]r <Cmd>call VSCodeNotify('workbench.action.debug.start')<CR>
-
-  nnoremap <silent> <leader>f <Cmd>call VSCodeNotify('workbench.view.explorer')<CR>
-else
-  nnoremap <silent> <leader>f <Cmd>Vaffle<CR>
-
-  tnoremap <Esc> <C-w>N
-  tnoremap <C-j> <C-w>N
-endif
-
-" --------------------------------------------------------------------------------
-" 検索
-" --------------------------------------------------------------------------------
-set incsearch
-set ignorecase
-set smartcase
-set hlsearch
-set grepprg=rg\ --smart-case\ --vimgrep\ --no-heading
-set grepformat=%f:%l:%c:%m,%f:%l:%m
-set helplang=ja,en
-set keywordprg=
-
-if !s:is_vscode
-  " 複数Vimで検索を同期する {{{
-  function! s:save_reg(reg, filename)
-    call writefile([getreg(a:reg)], a:filename)
-  endfunction
-
-  function! s:load_reg(reg, filename)
-    if filereadable(a:filename)
-      call setreg(a:reg, readfile(a:filename), 'v')
-    endif
-  endfunction
-
-  let s:vimreg_search = s:home_dir . 'vimreg_search.txt'
-  Autocmd CursorHold,CursorHoldI,FocusLost * silent! call s:save_reg('/', s:vimreg_search)
-  Autocmd FocusGained                      * silent! call s:load_reg('/', s:vimreg_search)
-  " }}}
-
-  " grep {{{
-  nnoremap <silent> <leader>g <Cmd>Grep<CR>
-  nnoremap <silent> <leader>q <Cmd>CtrlPQuickfix<CR>
-
-  command! -nargs=? Grep call s:grep(<f-args>)
-
-  AutocmdFT qf nnoremap <silent><buffer> q <Cmd>call <SID>grep_cancel()<CR>
-
-  let s:grep_job_id = ''
-
-  function! s:grep(...) abort
-    let l:word = a:0 >= 1 ? a:1 : input('Search pattern: ')
-
-    redraw
-    echo ''
-
-    if l:word == ''
-      return
-    endif
-
-    call setqflist([])
-
-    let l:cmd = printf('%s "%s" "%s"', &grepprg, l:word, s:projectRoot('.'))
-
-    if exists('?job_start')
-      let s:grep_job_id = job_start(l:cmd, {
-            \   'callback': function('s:grep_add'),
-            \   'exit_cb':  function('s:grep_close'),
-            \ })
-    else
-      cgetexpr system(l:cmd)
-      cwindow
-      cclose
-      CtrlPQuickfix
-    endif
-  endfunction
-
-  function! s:grep_add(_, msg)
-    if s:grep_job_id ==# ''
-      return
-    endif
-
-    caddexpr a:msg
-    cwindow
-  endfunction
-
-  function! s:grep_close(_, __)
-    if s:grep_job_id ==# ''
-      return
-    endif
-
-    cclose
-    CtrlPQuickfix
-
-    let s:grep_job_id = ''
-  endfunction
-
-  function! s:grep_cancel()
-    if s:grep_job_id !=# ''
-      call job_stop(s:grep_job_id)
-      let s:grep_job_id = ''
-    endif
-
-    cclose
-  endfunction
-
-  " https://github.com/mattn/vim-findroot
-  function! s:goup(path, patterns) abort
-    let l:path = a:path
-    while 1
-      for l:pattern in a:patterns
-        let l:current = l:path . '/' . l:pattern
-        if stridx(l:pattern, '*') != -1 && !empty(glob(l:current, 1))
-          return l:path
-        elseif l:pattern =~# '/$'
-          if isdirectory(l:current)
-            return l:path
-          endif
-        elseif filereadable(l:current)
-          return l:path
-        endif
-      endfor
-      let l:next = fnamemodify(l:path, ':h')
-      if l:next == l:path || (has('win32') && l:next =~# '^//[^/]\+$')
-        break
-      endif
-      let l:path = l:next
-    endwhile
-    return ''
-  endfunction
-
-  function! s:projectRoot(default) abort
-    let l:bufname = expand('%:p')
-    if &buftype !=# '' || empty(l:bufname) || stridx(l:bufname, '://') !=# -1
-      return a:default
-    endif
-    let l:dir = escape(fnamemodify(l:bufname, ':p:h:gs!\!/!:gs!//!/!'), ' ')
-    let l:dir = s:goup(l:dir, ['.git/', '*.sln'])
-    if empty(l:dir)
-      return a:default
-    else
-      return l:dir
-    endif
-  endfunction
-  " }}}
-endif
-
-" --------------------------------------------------------------------------------
-" 編集
-" --------------------------------------------------------------------------------
-set clipboard=unnamedplus,unnamed
-set modeline
-set virtualedit=block
-set autoread
-set whichwrap=b,s,h,l,<,>,[,]
-set mouse=a
-set hidden
-set timeoutlen=2000
-set nrformats=alpha,bin,hex
-set backspace=indent,eol,start
-set noswapfile
-set nobackup
-set formatoptions=tcj
-set nofixeol
-set tags=tags,./tags,../tags,../../tags,../../../tags,../../../../tags,../../../../../tags
-set autoindent
-set cindent
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
-set expandtab
-set autochdir
-
-if s:is_vscode
-  nnoremap <silent> u     <Cmd>call VSCodeNotify('undo')<CR>
-  nnoremap <silent> <C-r> <Cmd>call VSCodeNotify('redo')<CR>
-endif
-
-" 自動リロード
-Autocmd WinEnter,CursorHold * call s:execute_keep_view('checktime')
-
-" ^Mを取り除く
-command! RemoveCr call s:execute_keep_view('silent! %substitute/\r$//g | nohlsearch')
-
-" 行末のスペースを取り除く
-command! RemoveEolSpace call s:execute_keep_view('silent! %substitute/ \+$//g | nohlsearch')
-
-" 現在のファイルパスをクリップボードへコピーする
-command! CopyFilepath     call setreg('*', expand('%:t'), 'v')
-command! CopyFullFilepath call setreg('*', expand('%:p'), 'v')
-
-vnoremap <C-a> <C-a>gv
-vnoremap <C-x> <C-x>gv
-
-" 全角考慮r
-xnoremap <expr> r {'v': "\<C-v>r", 'V': "\<C-v>0o$r", "\<C-v>": 'r'}[mode()]
-
-" コピー＆コメント
-nmap     <silent> <C-CR>    <leader>t
-vmap     <silent> <C-CR>    <leader>t
-nmap     <silent> <leader>t V<leader>t
-vnoremap <silent> <leader>t :<C-u>call <SID>copy_add_comment()<CR>
-function! s:copy_add_comment() range
-  normal! ""gvy
-  call tcomment#Comment(line("'<"), line("'>"))
-  execute 'normal!' (line("'>") - line("'<") + 1) . 'j'
-  normal! P
+  " 折り畳み
+  nnoremap <expr> zh foldlevel(line('.'))  >   0 ? 'zc' : '<C-h>'
+  nnoremap <expr> zl foldclosed(line('.')) != -1 ? 'zo' : '<C-l>'
 endfunction
-
-" モード移行
-inoremap <C-j> <Esc>
-nmap     <C-j> <Esc>
-vnoremap <C-j> <Esc>
-cnoremap <C-j> <Esc>
-
-" カーソル移動
-noremap <silent> j  gj
-noremap <silent> k  gk
-noremap <silent> gj j
-noremap <silent> gk k
-noremap <silent> 0  g0
-noremap <silent> g0 0
-noremap <silent> $  g$
-noremap <silent> g$ $
-noremap <silent> gg ggzv
-noremap <silent> G  Gzv
-
-" キーボードマクロ
-if s:is_neovim
-  nnoremap q qq<ESC>
-else
-  nnoremap q qq<ESC>:echo''<CR>
-endif
-nnoremap <expr> @ reg_recording() == '' ? '@q' : ''
-
-" マーク
-nnoremap <silent> m <Cmd>call <SID>put_mark()<CR>
-
-Autocmd BufReadPost * delmarks!
-
-function! s:put_mark()
-  let l:begin  = char2nr('a')
-  let l:end    = char2nr('z')
-  let l:length = l:end - l:begin + 1
-
-  let b:mark_index = exists('b:mark_index') ? (b:mark_index + 1) % l:length : 0
-
-  execute 'mark' nr2char(l:begin + b:mark_index)
-endfunction
-
-" Nop
-nnoremap ZZ <Nop>
-nnoremap ZQ <Nop>
-nnoremap Q  <Nop>
-
-function! s:execute_keep_view(expr)
-  let l:wininfo = winsaveview()
-  execute a:expr
-  call winrestview(l:wininfo)
-endfunction
-
-" --------------------------------------------------------------------------------
-" 遅延設定
-" --------------------------------------------------------------------------------
-function! s:lazy_settings(_)
-  if exists('&cryptmethod')
-    set cryptmethod=blowfish2
-  endif
-
-  if !s:is_vscode
-    Autocmd BufWinEnter,ColorScheme .vimrc
-          \ syntax match vimAutoCmd /\<\(Autocmd\|AutocmdFT\|AutocmdUser\)\>/
-
-    function! s:edit_vimrc()
-      let l:dropbox_vimrc = s:dropbox_dir . 'dotfiles/.vimrc'
-
-      execute 'edit' filereadable(l:dropbox_vimrc) ? l:dropbox_vimrc : $MYVIMRC
-    endfunction
-
-    nnoremap <silent> <F1> <Cmd>call <SID>edit_vimrc()<CR>
-    nnoremap <silent> <F2> <Cmd>PlugUpdate<CR>
-  endif
-endfunction
-call timer_start(50, function('s:lazy_settings'))
+call timer_start(0, function('s:settings'))
 
 " vim: set foldmethod=marker foldlevel=0 foldcolumn=2:
