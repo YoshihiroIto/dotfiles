@@ -722,11 +722,6 @@ Autocmd BufNewFile,BufRead *.cake      setlocal filetype=cs
 Autocmd BufNewFile,BufRead *.hlsli     setlocal filetype=hlsl
 Autocmd BufNewFile,BufRead *.{fsh,vsh} setlocal filetype=glsl
 
-Autocmd VimEnter COMMIT_EDITMSG
-      \  if getline(1) == ''
-      \|   startinsert
-      \| endif
-
 AutocmdFT typescript,ruby,vue,json,yaml,vim,xml,html,xhtml
       \  setlocal tabstop=2
       \| setlocal shiftwidth=2
@@ -846,7 +841,6 @@ function! s:settings(_)
 
     function! s:edit_vimrc()
       let l:dropbox_vimrc = s:dropbox_dir . 'dotfiles/.vimrc'
-
       execute 'edit' filereadable(l:dropbox_vimrc) ? l:dropbox_vimrc : $MYVIMRC
     endfunction
 
@@ -1134,13 +1128,23 @@ function! s:settings(_)
     call winrestview(l:wininfo)
   endfunction
 
+  Autocmd TerminalOpen *
+        \  call term_setkill('%', '++kill=term')
+        \| call term_setrestore('%', '++kill=term')
+
   " アプリウィンドウ操作
   if s:is_gui
+    Autocmd WinEnter *
+          \  if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) == 1
+          \|   diffoff
+          \|   call s:set_wode(1)
+          \| endif
+
     command! -nargs=1 -complete=file Diff
-          \  call s:toggle_v_wide()
+          \  call s:set_wode(1)
           \| vertical diffsplit <args>
 
-    noremap <silent> <leader>we <Cmd>call <SID>toggle_v_split_wide()<CR>
+    noremap <silent> <leader>we <Cmd>call <SID>toggle_wide_window()<CR>
     noremap <silent> <leader>wf <Cmd>call <SID>full_window()<CR>
 
     " アプリケーションウィンドウを最大高さにする
@@ -1149,53 +1153,30 @@ function! s:settings(_)
       set lines=9999
     endfunction
 
-    Autocmd TerminalOpen *
-          \  call term_setkill('%', '++kill=term')
-          \| call term_setrestore('%', '++kill=term')
-
-    Autocmd WinEnter *
-          \  if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) == 1
-          \|   diffoff
-          \|   call s:toggle_v_wide()
-          \| endif
-
     " 縦分割する
-    let s:depth_vsp       = 1
-    let s:opened_left_vsp = 0
-    let s:opened_top_vsp  = 0
+    function! s:toggle_wide_window()
+      if !exists("s:is_wide")
+        let s:is_wide  = 0
+        let s:opened_x = 0
+        let s:opened_y = 0
+      endif
 
-    function! s:toggle_v_wide()
-      let s:depth_vsp += s:depth_vsp <= 1 ? +1 : -1
-      let &columns = s:base_columns * s:depth_vsp
-    endfunction
+      let s:is_wide = xor(s:is_wide, 1)
+      call s:set_wode(s:is_wide)
 
-    function! s:toggle_v_split_wide()
-      if s:depth_vsp <= 1
-        call s:open_v_split_wide()
+      if s:is_wide == 1
+        let s:opened_x = getwinposx()
+        let s:opened_y = getwinposy()
+
+        execute 'botright vertical' s:base_columns 'split'
       else
-        call s:close_v_split_wide()
+        only
+        execute 'winpos' s:opened_x s:opened_y
       endif
     endfunction
 
-    function! s:open_v_split_wide()
-      if s:depth_vsp == 1
-        let s:opened_left_vsp = getwinposx()
-        let s:opened_top_vsp  = getwinposy()
-      endif
-
-      call s:toggle_v_wide()
-
-      execute 'botright vertical' s:base_columns 'split'
-    endfunction
-
-    function! s:close_v_split_wide()
-      call s:toggle_v_wide()
-
-      only
-
-      if s:depth_vsp == 1
-        execute 'winpos' s:opened_left_vsp s:opened_top_vsp
-      endif
+    function! s:set_wode(is_wide)
+      let &columns = s:base_columns * (a:is_wide + 1)
     endfunction
   endif
 
