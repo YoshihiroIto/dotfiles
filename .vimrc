@@ -560,7 +560,7 @@ function! s:plugin_display_lazy(...)
         \  highlight QuickScopePrimary   guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
         \| highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81  cterm=underline
   " }}}
-  Plug 'ctrlpvim/ctrlp.vim', {'on': []} "{{{
+  Plug 'ctrlpvim/ctrlp.vim', {'on': []} " {{{
   nnoremap <silent> <leader>m <Cmd>CtrlPMRUFiles<CR>
 
   let g:ctrlp_match_window    = 'bottom,order:ttb,min:48,max:48'
@@ -595,7 +595,7 @@ function! s:plugin_display_lazy(...)
   endfunction
 
   " }}}
-  Plug 'mattn/ctrlp-matchfuzzy', {'on': []} "{{{
+  Plug 'mattn/ctrlp-matchfuzzy', {'on': []} " {{{
   if exists('?matchfuzzy')
     let g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
   endif
@@ -609,7 +609,11 @@ function! s:plugin_display_lazy(...)
   " }}}
   Plug 'beyondmarc/hlsl.vim', {'on': []} " {{{
   " }}}
-  Plug 'tikhomirov/vim-glsl', {'on': []} "{{{
+  Plug 'tikhomirov/vim-glsl', {'on': []} " {{{
+  " }}}
+  Plug 'plasticboy/vim-markdown', {'on': []} " {{{
+  let g:vim_markdown_folding_disabled        = 1
+  let g:vim_markdown_no_default_key_mappings = 1
   " }}}
 endfunction
 
@@ -620,7 +624,7 @@ function! s:plugin_editing_lazy()
   " }}}
   Plug 'tomtom/tcomment_vim', {'on': []} " {{{
   " }}}
-  Plug 'cohama/lexima.vim', {'on': []} "{{{
+  Plug 'cohama/lexima.vim', {'on': []} " {{{
   " }}}
   Plug 'junegunn/vim-easy-align', {'on': []} " {{{
   nmap <silent> <Leader>a=       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)=
@@ -698,6 +702,8 @@ function! s:plugin_editing_lazy()
   omap a. <Plug>(textobj-wiw-a)
   omap i. <Plug>(textobj-wiw-i)
   " }}}
+  Plug 'thinca/vim-textobj-between', {'on': []} " {{{
+  " }}}
   Plug 'kana/vim-operator-user', {'on': []} " {{{
   " }}}
   Plug 'YoshihiroIto/vim-operator-tcomment', {'on': []} " {{{
@@ -716,11 +722,15 @@ call plug#end()
 " --------------------------------------------------------------------------------
 " ファイルタイプごとの設定
 " --------------------------------------------------------------------------------
-Autocmd FileType           *           call     s:update_all()
 Autocmd BufNewFile,BufRead *.xaml      setlocal filetype=xml
 Autocmd BufNewFile,BufRead *.cake      setlocal filetype=cs
 Autocmd BufNewFile,BufRead *.hlsli     setlocal filetype=hlsl
 Autocmd BufNewFile,BufRead *.{fsh,vsh} setlocal filetype=glsl
+
+AutocmdFT *
+      \  setlocal formatoptions-=ro
+      \| setlocal textwidth=0
+      \| setlocal iskeyword=@,48-57,_,192-255
 
 AutocmdFT typescript,ruby,vue,json,yaml,vim,xml,html,xhtml
       \  setlocal tabstop=2
@@ -745,12 +755,6 @@ AutocmdFT help
 
 AutocmdFT qf
       \  nnoremap <silent><buffer> q <Cmd>cclose<CR>
-
-function! s:update_all()
-  setlocal formatoptions-=ro
-  setlocal textwidth=0
-  setlocal iskeyword=@,48-57,_,192-255
-endfunction
 
 " --------------------------------------------------------------------------------
 " 表示
@@ -859,9 +863,9 @@ function! s:settings(_)
   endif
 
   " ローカル設定
-  let s:vimrc_local = s:home_dir . '.vimrc.local'
-  if filereadable(s:vimrc_local)
-    execute 'source' s:vimrc_local
+  let l:vimrc_local = s:home_dir . '.vimrc.local'
+  if filereadable(l:vimrc_local)
+    execute 'source' l:vimrc_local
   endif
 
   " 開発
@@ -899,9 +903,8 @@ function! s:settings(_)
       endif
     endfunction
 
-    let s:vimreg_search = s:home_dir . 'vimreg_search.txt'
-    Autocmd CursorHold,CursorHoldI,FocusLost * silent! call s:save_reg('/', s:vimreg_search)
-    Autocmd FocusGained                      * silent! call s:load_reg('/', s:vimreg_search)
+    Autocmd CursorHold,FocusLost * silent! call s:save_reg('/', s:home_dir . 'vimreg_search.txt')
+    Autocmd FocusGained          * silent! call s:load_reg('/', s:home_dir . 'vimreg_search.txt')
     " }}}
     " grep {{{
     nnoremap <silent> <leader>g <Cmd>Grep<CR>
@@ -911,15 +914,13 @@ function! s:settings(_)
 
     AutocmdFT qf nnoremap <silent><buffer> q <Cmd>call <SID>grep_cancel()<CR>
 
-    let s:grep_job_id = ''
-
     function! s:grep(...) abort
       let l:word = a:0 >= 1 ? a:1 : input('Search pattern: ')
 
       redraw
       echo ''
 
-      if l:word == ''
+      if empty(l:word)
         return
       endif
 
@@ -941,29 +942,21 @@ function! s:settings(_)
     endfunction
 
     function! s:grep_add(_, msg)
-      if s:grep_job_id ==# ''
-        return
-      endif
-
       caddexpr a:msg
       cwindow
     endfunction
 
     function! s:grep_close(_, __)
-      if s:grep_job_id ==# ''
-        return
-      endif
-
       cclose
       CtrlPQuickfix
 
-      let s:grep_job_id = ''
+      unlet s:grep_job_id
     endfunction
 
     function! s:grep_cancel()
-      if s:grep_job_id !=# ''
+      if exists('s:grep_job_id')
         call job_stop(s:grep_job_id)
-        let s:grep_job_id = ''
+        unlet s:grep_job_id
       endif
 
       cclose
@@ -996,7 +989,7 @@ function! s:settings(_)
 
     function! s:projectRoot(default) abort
       let l:bufname = expand('%:p')
-      if &buftype !=# '' || empty(l:bufname) || stridx(l:bufname, '://') !=# -1
+      if !empty(&buftype) || empty(l:bufname) || stridx(l:bufname, '://') !=# -1
         return a:default
       endif
       let l:dir = escape(fnamemodify(l:bufname, ':p:h:gs!\!/!:gs!//!/!'), ' ')
@@ -1100,7 +1093,7 @@ function! s:settings(_)
   else
     nnoremap q qq<ESC>:echo''<CR>
   endif
-  nnoremap <expr> @ reg_recording() == '' ? '@q' : ''
+  nnoremap <expr> @ empty(reg_recording()) ? '@q' : ''
 
   " マーク
   nnoremap <silent> m <Cmd>call <SID>put_mark()<CR>
@@ -1137,11 +1130,11 @@ function! s:settings(_)
     Autocmd WinEnter *
           \  if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) == 1
           \|   diffoff
-          \|   call s:set_wode(1)
+          \|   call s:set_wide(1)
           \| endif
 
     command! -nargs=1 -complete=file Diff
-          \  call s:set_wode(1)
+          \  call s:set_wide(1)
           \| vertical diffsplit <args>
 
     noremap <silent> <leader>we <Cmd>call <SID>toggle_wide_window()<CR>
@@ -1156,26 +1149,26 @@ function! s:settings(_)
     " 縦分割する
     function! s:toggle_wide_window()
       if !exists("s:is_wide")
-        let s:is_wide  = 0
-        let s:opened_x = 0
-        let s:opened_y = 0
+        let s:is_wide = 0
+        let s:org_x   = 0
+        let s:org_y   = 0
       endif
 
       let s:is_wide = xor(s:is_wide, 1)
-      call s:set_wode(s:is_wide)
+      call s:set_wide(s:is_wide)
 
       if s:is_wide == 1
-        let s:opened_x = getwinposx()
-        let s:opened_y = getwinposy()
+        let s:org_x = getwinposx()
+        let s:org_y = getwinposy()
 
         execute 'botright vertical' s:base_columns 'split'
       else
         only
-        execute 'winpos' s:opened_x s:opened_y
+        execute 'winpos' s:org_x s:org_y
       endif
     endfunction
 
-    function! s:set_wode(is_wide)
+    function! s:set_wide(is_wide)
       let &columns = s:base_columns * (a:is_wide + 1)
     endfunction
   endif
@@ -1186,4 +1179,3 @@ function! s:settings(_)
 endfunction
 call timer_start(0, function('s:settings'))
 
-" vim: set foldmethod=marker foldlevel=0 foldcolumn=2:
