@@ -59,15 +59,15 @@ command! -nargs=* AutocmdUser autocmd MyAutoCmd User     <args>
 " --------------------------------------------------------------------------------
 " プラグイン
 " --------------------------------------------------------------------------------
-call plug#begin(s:plugin_dir) "{
-
 function! s:execute_if_installed(func_name)
   if s:is_installed
     call function(a:func_name)()
   endif
 endfunction
 
-if !s:is_vscode
+function! s:plugin_display(...)
+  if !(a:0 >= 1 ? a:1 : 1) | return | endif
+
   Plug 'YoshihiroIto/night-owl.vim' " {{{
   " }}}
   Plug 'itchyny/lightline.vim' " {{{
@@ -283,6 +283,11 @@ if !s:is_vscode
     AutocmdUser CocStatusChange,CocDiagnosticChange call lightline#update()
   endif
   " }}}
+endfunction
+
+function! s:plugin_display_lazy(...)
+  if !(a:0 >= 1 ? a:1 : 1) | return | endif
+
   Plug 'YoshihiroIto/vim-icondrag', {'on': []} " {{{
   AutocmdUser vim-icondrag call s:execute_if_installed('icondrag#enable')
   " }}}
@@ -418,7 +423,7 @@ if !s:is_vscode
   Plug 'itchyny/vim-cursorword', {'on': []} " {{{
   let g:cursorword_delay     = 270
   let g:cursorword_highlight = 0
-  Autocmd ColorScheme *
+  Autocmd BufNewFile,BufRead,ColorScheme *
         \  highlight CursorWord0 guifg=Red ctermfg=Red
         \| highlight CursorWord1 guifg=Red ctermfg=Red
   " }}}
@@ -547,14 +552,14 @@ if !s:is_vscode
     endif
   endfunction
   " }}}
-Plug 'markonm/traces.vim', {'on': []} " {{{
-let g:traces_preview_window = 'botright 10new'
-" }}}
-Plug 'unblevable/quick-scope', {'on': []} " {{{
-Autocmd ColorScheme *
-      \  highlight QuickScopePrimary   guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
-      \| highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81  cterm=underline
-" }}}
+  Plug 'markonm/traces.vim', {'on': []} " {{{
+  let g:traces_preview_window = 'botright 10new'
+  " }}}
+  Plug 'unblevable/quick-scope', {'on': []} " {{{
+  Autocmd BufNewFile,BufRead,ColorScheme *
+        \  highlight QuickScopePrimary   guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
+        \| highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81  cterm=underline
+  " }}}
   Plug 'ctrlpvim/ctrlp.vim', {'on': []} "{{{
   nnoremap <silent> <leader>m <Cmd>CtrlPMRUFiles<CR>
 
@@ -600,165 +605,113 @@ Autocmd ColorScheme *
   " }}}
   Plug 'vim-jp/vimdoc-ja', {'on': []} " {{{
   " }}}
-  Plug 'posva/vim-vue', {'on': [], 'for': 'vue'} " {{{
+  Plug 'posva/vim-vue', {'on': []} " {{{
   " }}}
-  Plug 'beyondmarc/hlsl.vim', {'on': [], 'for': 'hlsl'} " {{{
+  Plug 'beyondmarc/hlsl.vim', {'on': []} " {{{
   " }}}
-  Plug 'tikhomirov/vim-glsl', {'on': [], 'for': 'glsl'} "{{{
+  Plug 'tikhomirov/vim-glsl', {'on': []} "{{{
   " }}}
-
-  " Plug 'editorconfig/editorconfig-vim'
-  " Plug 'tyru/capture.vim'
-  " Plug 'thinca/vim-prettyprint'
-endif
-
-Plug 'andymass/vim-matchup', {'on': []} " {{{
-let g:matchup_matchparen_status_offscreen = 0
-let g:matchup_matchparen_deferred         = 1
-" }}}
-Plug 'tomtom/tcomment_vim', {'on': []} " {{{
-" }}}
-Plug 'cohama/lexima.vim', {'on': []} "{{{
-" }}}
-Plug 'junegunn/vim-easy-align', {'on': []} " {{{
-nmap <silent> <Leader>a=       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)=
-nmap <silent> <Leader>a:       v<Plug>(textobj-indent-i)<Plug>(EasyAlign):
-nmap <silent> <Leader>a,       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*,
-nmap <silent> <Leader>a<Space> v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*<Space>
-nmap <silent> <Leader>a\|      v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*\|
-xmap <silent> <Leader>a=       <Plug>(EasyAlign)=
-xmap <silent> <Leader>a:       <Plug>(EasyAlign):
-xmap <silent> <Leader>a,       <Plug>(EasyAlign)*,
-xmap <silent> <Leader>a<Space> <Plug>(EasyAlign)*<Space>
-xmap <silent> <Leader>a\|      <Plug>(EasyAlign)*\|
-" }}}
-Plug 'machakann/vim-sandwich', {'on': []} " {{{
-AutocmdUser vim-sandwich call s:execute_if_installed('s:init_sandwich')
-
-let g:operator_sandwich_no_default_key_mappings = 1
-
-function! s:init_sandwich()
-  map  <silent> S   <Plug>(sandwich-add)
-  nmap <silent> Sd  <Plug>(sandwich-delete)
-  xmap <silent> Sd  <Plug>(sandwich-delete)
-  nmap <silent> Sr  <Plug>(sandwich-replace)
-  xmap <silent> Sr  <Plug>(sandwich-replace)
-  nmap <silent> Sdd <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
-  nmap <silent> Srr <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
-
-  call operator#sandwich#set('delete', 'all', 'highlight', 0)
-
-  let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
-  let g:sandwich#recipes += [{
-        \   'buns':     ['${', '}'],
-        \   'input':    ['$'],
-        \   'filetype': ['typescript'],
-        \ }]
 endfunction
-" }}}
-Plug 'haya14busa/vim-asterisk', {'on': []} " {{{
-" }}}
-Plug 'haya14busa/is.vim', {'on': []} " {{{
-map *  <Plug>(asterisk-z*)<Plug>(is-nohl-1)
-map g* <Plug>(asterisk-gz*)<Plug>(is-nohl-1)
-map #  <Plug>(asterisk-z#)<Plug>(is-nohl-1)
-map g# <Plug>(asterisk-gz#)<Plug>(is-nohl-1)
-" }}}
-Plug 'tyru/open-browser.vim', {'on': []} " {{{
-let g:openbrowser_no_default_menus = 1
-let g:netrw_nogx = 1
-nmap gx <Plug>(openbrowser-smart-search)
-vmap gx <Plug>(openbrowser-smart-search)
-" }}}
-Plug 'kana/vim-textobj-user', {'on': []} " {{{
-" }}}
-Plug 'glts/vim-textobj-comment', {'on': []} " {{{
-" }}}
-Plug 'kana/vim-textobj-indent', {'on': []} " {{{
-" }}}
-Plug 'kana/vim-textobj-entire', {'on': []} " {{{
-" }}}
-Plug 'kana/vim-textobj-line', {'on': []} " {{{
-" }}}
-Plug 'rhysd/vim-textobj-word-column', {'on': []} " {{{
-" }}}
-Plug 'whatyouhide/vim-textobj-xmlattr', {'on': []} " {{{
-" }}}
-Plug 'sgur/vim-textobj-parameter', {'on': []} " {{{
-xmap aa <Plug>(textobj-parameter-a)
-xmap ia <Plug>(textobj-parameter-i)
-omap aa <Plug>(textobj-parameter-a)
-omap ia <Plug>(textobj-parameter-i)
-" }}}
-Plug 'rhysd/vim-textobj-wiw', {'on': []} " {{{
-xmap a. <Plug>(textobj-wiw-a)
-xmap i. <Plug>(textobj-wiw-i)
-omap a. <Plug>(textobj-wiw-a)
-omap i. <Plug>(textobj-wiw-i)
-" }}}
-Plug 'kana/vim-operator-user', {'on': []} " {{{
-" }}}
-Plug 'YoshihiroIto/vim-operator-tcomment', {'on': []} " {{{
-nmap t  <Plug>(operator-tcomment)
-xmap t  <Plug>(operator-tcomment)
-" }}}
-Plug 'kana/vim-operator-replace', {'on': []} " {{{
-map R  <Plug>(operator-replace)
-" }}}
-call plug#end() "}
 
-function! s:load_plug(_)
-  if !s:is_vscode
-    call plug#load(
-          \   'vim-icondrag',
-          \   'coc.nvim',
-          \   'vim-gitbranch',
-          \   'vim-gitgutter',
-          \   'vim-rplugin',
-          \   'lista.nvim',
-          \   'markdown-preview.nvim',
-          \   'vaffle.vim',
-          \   'vim-cursorword',
-          \   'vim-autoft',
-          \   'memolist.vim',
-          \   'vim-closetag',
-          \   'vim-submode',
-          \   'traces.vim',
-          \   'quick-scope',
-          \   'ctrlp.vim',
-          \   'ctrlp-sessions',
-          \   'ctrlp-matchfuzzy',
-          \   'vimdoc-ja',
-          \ )
-  endif
+function! s:plugin_editing_lazy()
+  Plug 'andymass/vim-matchup', {'on': []} " {{{
+  let g:matchup_matchparen_status_offscreen = 0
+  let g:matchup_matchparen_deferred         = 1
+  " }}}
+  Plug 'tomtom/tcomment_vim', {'on': []} " {{{
+  " }}}
+  Plug 'cohama/lexima.vim', {'on': []} "{{{
+  " }}}
+  Plug 'junegunn/vim-easy-align', {'on': []} " {{{
+  nmap <silent> <Leader>a=       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)=
+  nmap <silent> <Leader>a:       v<Plug>(textobj-indent-i)<Plug>(EasyAlign):
+  nmap <silent> <Leader>a,       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*,
+  nmap <silent> <Leader>a<Space> v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*<Space>
+  nmap <silent> <Leader>a\|      v<Plug>(textobj-indent-i)<Plug>(EasyAlign)*\|
+  xmap <silent> <Leader>a=       <Plug>(EasyAlign)=
+  xmap <silent> <Leader>a:       <Plug>(EasyAlign):
+  xmap <silent> <Leader>a,       <Plug>(EasyAlign)*,
+  xmap <silent> <Leader>a<Space> <Plug>(EasyAlign)*<Space>
+  xmap <silent> <Leader>a\|      <Plug>(EasyAlign)*\|
+  " }}}
+  Plug 'machakann/vim-sandwich', {'on': []} " {{{
+  AutocmdUser vim-sandwich call s:execute_if_installed('s:init_sandwich')
 
-  call plug#load(
-        \   'vim-matchup',
-        \   'tcomment_vim',
-        \   'lexima.vim',
-        \   'vim-easy-align',
-        \   'vim-sandwich',
-        \   'vim-asterisk',
-        \   'is.vim',
-        \   'open-browser.vim'
-        \ )
+  let g:operator_sandwich_no_default_key_mappings = 1
 
-  call plug#load(
-        \   'vim-textobj-user',
-        \   'vim-textobj-comment',
-        \   'vim-textobj-indent',
-        \   'vim-textobj-entire',
-        \   'vim-textobj-line',
-        \   'vim-textobj-word-column',
-        \   'vim-textobj-xmlattr',
-        \   'vim-textobj-parameter',
-        \   'vim-textobj-wiw',
-        \   'vim-operator-user',
-        \   'vim-operator-tcomment',
-        \   'vim-operator-replace'
-        \ )
+  function! s:init_sandwich()
+    map  <silent> S   <Plug>(sandwich-add)
+    nmap <silent> Sd  <Plug>(sandwich-delete)
+    xmap <silent> Sd  <Plug>(sandwich-delete)
+    nmap <silent> Sr  <Plug>(sandwich-replace)
+    xmap <silent> Sr  <Plug>(sandwich-replace)
+    nmap <silent> Sdd <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
+    nmap <silent> Srr <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
+
+    call operator#sandwich#set('delete', 'all', 'highlight', 0)
+
+    let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
+    let g:sandwich#recipes += [{
+          \   'buns':     ['${', '}'],
+          \   'input':    ['$'],
+          \   'filetype': ['typescript'],
+          \ }]
+  endfunction
+  " }}}
+  Plug 'haya14busa/vim-asterisk', {'on': []} " {{{
+  " }}}
+  Plug 'haya14busa/is.vim', {'on': []} " {{{
+  map *  <Plug>(asterisk-z*)<Plug>(is-nohl-1)
+  map g* <Plug>(asterisk-gz*)<Plug>(is-nohl-1)
+  map #  <Plug>(asterisk-z#)<Plug>(is-nohl-1)
+  map g# <Plug>(asterisk-gz#)<Plug>(is-nohl-1)
+  " }}}
+  Plug 'tyru/open-browser.vim', {'on': []} " {{{
+  let g:openbrowser_no_default_menus = 1
+  let g:netrw_nogx = 1
+  nmap gx <Plug>(openbrowser-smart-search)
+  vmap gx <Plug>(openbrowser-smart-search)
+  " }}}
+  Plug 'kana/vim-textobj-user', {'on': []} " {{{
+  " }}}
+  Plug 'glts/vim-textobj-comment', {'on': []} " {{{
+  " }}}
+  Plug 'kana/vim-textobj-indent', {'on': []} " {{{
+  " }}}
+  Plug 'kana/vim-textobj-entire', {'on': []} " {{{
+  " }}}
+  Plug 'kana/vim-textobj-line', {'on': []} " {{{
+  " }}}
+  Plug 'rhysd/vim-textobj-word-column', {'on': []} " {{{
+  " }}}
+  Plug 'whatyouhide/vim-textobj-xmlattr', {'on': []} " {{{
+  " }}}
+  Plug 'sgur/vim-textobj-parameter', {'on': []} " {{{
+  xmap aa <Plug>(textobj-parameter-a)
+  xmap ia <Plug>(textobj-parameter-i)
+  omap aa <Plug>(textobj-parameter-a)
+  omap ia <Plug>(textobj-parameter-i)
+  " }}}
+  Plug 'rhysd/vim-textobj-wiw', {'on': []} " {{{
+  xmap a. <Plug>(textobj-wiw-a)
+  xmap i. <Plug>(textobj-wiw-i)
+  omap a. <Plug>(textobj-wiw-a)
+  omap i. <Plug>(textobj-wiw-i)
+  " }}}
+  Plug 'kana/vim-operator-user', {'on': []} " {{{
+  " }}}
+  Plug 'YoshihiroIto/vim-operator-tcomment', {'on': []} " {{{
+  nmap t  <Plug>(operator-tcomment)
+  xmap t  <Plug>(operator-tcomment)
+  " }}}
+  Plug 'kana/vim-operator-replace', {'on': []} " {{{
+  map R  <Plug>(operator-replace)
+  " }}}
 endfunction
-call timer_start(0, function('s:load_plug'))
+
+call plug#begin(s:plugin_dir)
+call s:plugin_display(!s:is_vscode)
+call plug#end()
 
 " --------------------------------------------------------------------------------
 " ファイルタイプごとの設定
@@ -879,11 +832,13 @@ endif
 " 設定
 " --------------------------------------------------------------------------------
 function! s:settings(_)
-  " ローカル設定
-  let s:vimrc_local = s:home_dir . '.vimrc.local'
-  if filereadable(s:vimrc_local)
-    execute 'source' s:vimrc_local
-  endif
+  " プラグイン
+  call plug#begin(s:plugin_dir)
+  call s:plugin_display_lazy(!s:is_vscode)
+  call s:plugin_editing_lazy()
+  call plug#end()
+
+  call plug#load(g:plugs_order)
 
   if !s:is_vscode
     Autocmd BufWinEnter,ColorScheme .vimrc
@@ -895,13 +850,27 @@ function! s:settings(_)
       execute 'edit' filereadable(l:dropbox_vimrc) ? l:dropbox_vimrc : $MYVIMRC
     endfunction
 
+    function! s:update_all_plugins()
+      call plug#begin(s:plugin_dir)
+      call s:plugin_display()
+      call s:plugin_display_lazy()
+      call s:plugin_editing_lazy()
+      call plug#end()
+
+      PlugUpdate
+    endfunction
+
     nnoremap <silent> <F1> <Cmd>call <SID>edit_vimrc()<CR>
-    nnoremap <silent> <F2> <Cmd>PlugUpdate<CR>
+    nnoremap <silent> <F2> <Cmd>call <SID>update_all_plugins()<CR>
   endif
 
-  " --------------------------------------------------------------------------------
+  " ローカル設定
+  let s:vimrc_local = s:home_dir . '.vimrc.local'
+  if filereadable(s:vimrc_local)
+    execute 'source' s:vimrc_local
+  endif
+
   " 開発
-  " --------------------------------------------------------------------------------
   if s:is_vscode
     nnoremap ]e <Cmd>call VSCodeNotify('editor.action.rename')<CR>
     nnoremap ]r <Cmd>call VSCodeNotify('workbench.action.debug.start')<CR>
@@ -914,9 +883,7 @@ function! s:settings(_)
     tnoremap <C-j> <C-w>N
   endif
 
-  " --------------------------------------------------------------------------------
   " 検索
-  " --------------------------------------------------------------------------------
   set incsearch
   set ignorecase
   set smartcase
@@ -942,7 +909,6 @@ function! s:settings(_)
     Autocmd CursorHold,CursorHoldI,FocusLost * silent! call s:save_reg('/', s:vimreg_search)
     Autocmd FocusGained                      * silent! call s:load_reg('/', s:vimreg_search)
     " }}}
-
     " grep {{{
     nnoremap <silent> <leader>g <Cmd>Grep<CR>
     nnoremap <silent> <leader>q <Cmd>CtrlPQuickfix<CR>
@@ -1050,9 +1016,7 @@ function! s:settings(_)
     " }}}
   endif
 
-  " --------------------------------------------------------------------------------
   " 編集
-  " --------------------------------------------------------------------------------
   set clipboard=unnamedplus,unnamed
   set modeline
   set virtualedit=block
