@@ -547,6 +547,14 @@ if !s:is_vscode
     endif
   endfunction
   " }}}
+Plug 'markonm/traces.vim', {'on': []} " {{{
+let g:traces_preview_window = 'botright 10new'
+" }}}
+Plug 'unblevable/quick-scope', {'on': []} " {{{
+Autocmd ColorScheme *
+      \  highlight QuickScopePrimary   guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
+      \| highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81  cterm=underline
+" }}}
   Plug 'ctrlpvim/ctrlp.vim', {'on': []} "{{{
   nnoremap <silent> <leader>m <Cmd>CtrlPMRUFiles<CR>
 
@@ -608,9 +616,6 @@ Plug 'andymass/vim-matchup', {'on': []} " {{{
 let g:matchup_matchparen_status_offscreen = 0
 let g:matchup_matchparen_deferred         = 1
 " }}}
-Plug 'markonm/traces.vim', {'on': []} " {{{
-let g:traces_preview_window = 'botright 10new'
-" }}}
 Plug 'tomtom/tcomment_vim', {'on': []} " {{{
 " }}}
 Plug 'cohama/lexima.vim', {'on': []} "{{{
@@ -658,11 +663,6 @@ map *  <Plug>(asterisk-z*)<Plug>(is-nohl-1)
 map g* <Plug>(asterisk-gz*)<Plug>(is-nohl-1)
 map #  <Plug>(asterisk-z#)<Plug>(is-nohl-1)
 map g# <Plug>(asterisk-gz#)<Plug>(is-nohl-1)
-" }}}
-Plug 'unblevable/quick-scope', {'on': []} " {{{
-Autocmd ColorScheme *
-      \  highlight QuickScopePrimary   guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
-      \| highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81  cterm=underline
 " }}}
 Plug 'tyru/open-browser.vim', {'on': []} " {{{
 let g:openbrowser_no_default_menus = 1
@@ -723,6 +723,8 @@ function! s:load_plug(_)
           \   'memolist.vim',
           \   'vim-closetag',
           \   'vim-submode',
+          \   'traces.vim',
+          \   'quick-scope',
           \   'ctrlp.vim',
           \   'ctrlp-sessions',
           \   'ctrlp-matchfuzzy',
@@ -732,14 +734,12 @@ function! s:load_plug(_)
 
   call plug#load(
         \   'vim-matchup',
-        \   'traces.vim',
         \   'tcomment_vim',
         \   'lexima.vim',
         \   'vim-easy-align',
         \   'vim-sandwich',
         \   'vim-asterisk',
         \   'is.vim',
-        \   'quick-scope',
         \   'open-browser.vim'
         \ )
 
@@ -1100,6 +1100,8 @@ function! s:settings(_)
 
   vnoremap <C-a> <C-a>gv
   vnoremap <C-x> <C-x>gv
+
+  imap <C-h> <BS>
 
   " 全角考慮r
   xnoremap <expr> r {'v': "\<C-v>r", 'V': "\<C-v>0o$r", "\<C-v>": 'r'}[mode()]
