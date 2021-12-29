@@ -9,15 +9,16 @@ endif
 " --------------------------------------------------------------------------------
 " 基本
 " --------------------------------------------------------------------------------
-let s:sid          = expand('<SID>')
-let s:home_dir     = expand('~/')
-let s:plugin_dir   = s:home_dir . '.vim_plugged/'
-let s:dropbox_dir  = s:home_dir . 'Dropbox/'
-let s:is_installed = isdirectory(s:plugin_dir)
-let s:is_vscode    = exists('g:vscode')
-let s:is_neovim    = has('nvim')
-let s:is_gui       = has('gui_running')
-let s:base_columns = 140
+let s:sid              = expand('<SID>')
+let s:home_dir         = expand('~/')
+let s:plugin_dir       = s:home_dir . '.vim_plugged/'
+let s:dropbox_dir      = s:home_dir . 'Dropbox/'
+let s:vim_winrect_file = s:home_dir . 'vim_winrect.vim'
+let s:is_installed     = isdirectory(s:plugin_dir)
+let s:is_vscode        = exists('g:vscode')
+let s:is_neovim        = has('nvim')
+let s:is_gui           = has('gui_running')
+let s:base_columns     = 140
 
 let g:no_gvimrc_example         = 1
 let g:no_vimrc_example          = 1
@@ -623,6 +624,11 @@ function! s:plugin_editing_lazy()
   let g:matchup_matchparen_deferred         = 1
   " }}}
   Plug 'tomtom/tcomment_vim', {'on': []} " {{{
+  let g:tcomment_mapleader1                 = ''
+  let g:tcomment_mapleader2                 = ''
+  let g:tcomment_mapleader_uncomment_anyway = ''
+  let g:tcomment_mapleader_comment_anyway   = ''
+  let g:tcomment_textobject_inlinecomment   = ''
   " }}}
   Plug 'cohama/lexima.vim', {'on': []} " {{{
   " }}}
@@ -678,8 +684,6 @@ function! s:plugin_editing_lazy()
   " }}}
   Plug 'kana/vim-textobj-user', {'on': []} " {{{
   " }}}
-  Plug 'glts/vim-textobj-comment', {'on': []} " {{{
-  " }}}
   Plug 'kana/vim-textobj-indent', {'on': []} " {{{
   " }}}
   Plug 'kana/vim-textobj-entire', {'on': []} " {{{
@@ -703,15 +707,26 @@ function! s:plugin_editing_lazy()
   omap i. <Plug>(textobj-wiw-i)
   " }}}
   Plug 'thinca/vim-textobj-between', {'on': []} " {{{
+  let g:textobj_between_no_default_key_mappings = 1
+  xmap ac <Plug>(textobj-between-a)
+  xmap ic <Plug>(textobj-between-i)
+  omap ac <Plug>(textobj-between-a)
+  omap ic <Plug>(textobj-between-i)
   " }}}
   Plug 'kana/vim-operator-user', {'on': []} " {{{
   " }}}
   Plug 'YoshihiroIto/vim-operator-tcomment', {'on': []} " {{{
-  nmap t  <Plug>(operator-tcomment)
-  xmap t  <Plug>(operator-tcomment)
+  nmap t <Plug>(operator-tcomment)
+  xmap t <Plug>(operator-tcomment)
   " }}}
   Plug 'kana/vim-operator-replace', {'on': []} " {{{
-  map R  <Plug>(operator-replace)
+  map R <Plug>(operator-replace)
+  " }}}
+  Plug 'tyru/operator-camelize.vim', {'on': []} " {{{
+  map <Leader>c <Plug>(operator-camelize-toggle)
+  " }}}
+  Plug 'emonkak/vim-operator-sort', {'on': []} " {{{
+  map so <Plug>(operator-sort)
   " }}}
 endfunction
 
@@ -802,13 +817,18 @@ if !s:is_vscode
   endif
 
   if s:is_gui
+    " ウィンドウ矩形復元する
+    if filereadable(s:vim_winrect_file)
+      execute 'source' s:vim_winrect_file
+    endif
+
     set guioptions=M
     set winaltkeys=no
 
-    set lines=100
     let &columns = s:base_columns
 
     set guifont=HackGenNerd\ Console:h11
+    set linespace=0
   else
     set termguicolors
   endif
@@ -858,8 +878,8 @@ function! s:settings(_)
       PlugUpdate
     endfunction
 
-    nnoremap <silent> <F1> <Cmd>call <SID>edit_vimrc()<CR>
-    nnoremap <silent> <F2> <Cmd>call <SID>update_all_plugins()<CR>
+    nnoremap <silent> <leader>1 <Cmd>call <SID>edit_vimrc()<CR>
+    nnoremap <silent> <leader>2 <Cmd>call <SID>update_all_plugins()<CR>
   endif
 
   " ローカル設定
@@ -879,6 +899,7 @@ function! s:settings(_)
 
     tnoremap <Esc> <C-w>N
     tnoremap <C-j> <C-w>N
+    tnoremap <C-v> <C-w>"*
   endif
 
   " 検索
@@ -905,6 +926,18 @@ function! s:settings(_)
 
     Autocmd CursorHold,FocusLost * silent! call s:save_reg('/', s:home_dir . 'vimreg_search.txt')
     Autocmd FocusGained          * silent! call s:load_reg('/', s:home_dir . 'vimreg_search.txt')
+    " }}}
+    " ウィンドウ矩形を記憶する {{{
+    Autocmd VimLeavePre * call s:save_window_rect()
+
+    function! s:save_window_rect()
+      let l:options = [
+            \   'set columns=' . &columns,
+            \   'set lines=' . &lines,
+            \   'winpos ' . getwinposx() . ' ' . getwinposy(),
+            \ ]
+      call writefile(l:options, s:vim_winrect_file)
+    endfunction
     " }}}
     " grep {{{
     nnoremap <silent> <leader>g <Cmd>Grep<CR>
