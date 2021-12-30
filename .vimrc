@@ -2,7 +2,9 @@ if has('vim_starting')
   let s:startuptime = reltime()
   augroup startuptime
     autocmd!
-    autocmd startuptime VimEnter * echomsg 'startuptime:' reltimestr(reltime(s:startuptime))
+    autocmd startuptime VimEnter *
+      \  echomsg 'startuptime:' reltimestr(reltime(s:startuptime))
+      \| unlet s:startuptime
   augroup END
 endif
 
@@ -301,7 +303,6 @@ function! s:plugin_display_lazy(...)
         \   'coc-css',
         \   'coc-html',
         \   'coc-json',
-        \   'coc-markdownlint',
         \   'coc-omnisharp',
         \   'coc-powershell',
         \   'coc-prettier',
@@ -316,7 +317,6 @@ function! s:plugin_display_lazy(...)
     call coc#config('diagnostic.warningSign', '!!')
     call coc#config('coc.source.around.firstMatch', 0)
     call coc#config('coc.source.buffer.firstMatch', 0)
-    call coc#config('coc.preferences.formatOnType', 1)
     call coc#config('coc.preferences.formatOnSaveFiletypes', [
           \   'css',
           \   'html',
@@ -725,9 +725,6 @@ function! s:plugin_editing_lazy()
   Plug 'tyru/operator-camelize.vim', {'on': []} " {{{
   map <Leader>c <Plug>(operator-camelize-toggle)
   " }}}
-  Plug 'emonkak/vim-operator-sort', {'on': []} " {{{
-  map so <Plug>(operator-sort)
-  " }}}
 endfunction
 
 call plug#begin(s:plugin_dir)
@@ -778,17 +775,11 @@ if !s:is_vscode
   set number
   set textwidth=0
   set noshowcmd
-  set noshowmatch
   set wrap
   set noshowmode
   set shortmess=filnxtToOIsScq
   set lazyredraw
-  set wildmenu
-  set wildmode=list:full
-  set showfulltag
-  set wildoptions=tagfile
   set synmaxcol=500
-  set updatetime=300
   set previewheight=24
   set cmdheight=3
   set laststatus=2
@@ -802,16 +793,13 @@ if !s:is_vscode
   set fillchars=vert:\ ,eob:\ "
   set listchars=tab:\»\ ,eol:↲,extends:»,precedes:«,nbsp:%
   set breakindent
-  set foldcolumn=0
-  set foldlevel=99
   set belloff=all
   set diffopt=internal,filler,algorithm:histogram,indent-heuristic
   set splitbelow
   set splitright
-  set browsedir=buffer
   set scrolloff=4
-
   set ambiwidth=double
+
   if exists('*setcellwidths')
     call setcellwidths([[0x2500, 0x257f, 1], [0xE0A0, 0xE0B7, 1]])
   endif
@@ -822,25 +810,24 @@ if !s:is_vscode
       execute 'source' s:vim_winrect_file
     endif
 
-    set guioptions=M
-    set winaltkeys=no
-
     let &columns = s:base_columns
 
+    set guioptions=M
+    set winaltkeys=no
     set guifont=HackGenNerd\ Console:h11
     set linespace=0
   else
     set termguicolors
   endif
 
-  if s:is_installed
-    colorscheme night-owl
-  endif
-
   if exists('&wincolor')
     Autocmd ColorScheme                      * highlight NormalNC guifg=#a0a0a0 guibg=#121212
     Autocmd WinEnter,BufWinEnter,FocusGained * setlocal  wincolor=
     Autocmd WinLeave,FocusLost               * setlocal  wincolor=NormalNC
+  endif
+
+  if s:is_installed
+    colorscheme night-owl
   endif
 
   filetype plugin indent on
@@ -900,6 +887,8 @@ function! s:settings(_)
     tnoremap <Esc> <C-w>N
     tnoremap <C-j> <C-w>N
     tnoremap <C-v> <C-w>"*
+    tnoremap <C-n> <Down>
+    tnoremap <C-p> <Up>
   endif
 
   " 検索
@@ -1059,6 +1048,13 @@ function! s:settings(_)
   set shiftwidth=4
   set expandtab
   set autochdir
+  set noshowmatch
+  set wildmenu
+  set wildmode=list:full
+  set wildoptions=tagfile
+  set showfulltag
+  set updatetime=300
+  set browsedir=buffer
 
   if exists('&cryptmethod')
     set cryptmethod=blowfish2
@@ -1154,9 +1150,11 @@ function! s:settings(_)
     call winrestview(l:wininfo)
   endfunction
 
-  Autocmd TerminalOpen *
-        \  call term_setkill('%', '++kill=term')
-        \| call term_setrestore('%', '++kill=term')
+  if exists('##TerminalOpen')
+    Autocmd TerminalOpen *
+          \  call term_setkill(   '%', '++kill=term')
+          \| call term_setrestore('%', '++kill=term')
+  endif
 
   " アプリウィンドウ操作
   if s:is_gui
@@ -1181,7 +1179,7 @@ function! s:settings(_)
 
     " 縦分割する
     function! s:toggle_wide_window()
-      if !exists("s:is_wide")
+      if !exists('s:is_wide')
         let s:is_wide = 0
         let s:org_x   = 0
         let s:org_y   = 0
