@@ -556,11 +556,6 @@ function! s:plugin_display_lazy(...)
   Plug 'markonm/traces.vim', {'on': []} " {{{
   let g:traces_preview_window = 'botright 10new'
   " }}}
-  Plug 'unblevable/quick-scope', {'on': []} " {{{
-  Autocmd BufNewFile,BufRead,ColorScheme *
-        \  highlight QuickScopePrimary   guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
-        \| highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81  cterm=underline
-  " }}}
   Plug 'ctrlpvim/ctrlp.vim', {'on': []} " {{{
   nnoremap <silent> <leader>m <Cmd>CtrlPMRUFiles<CR>
 
@@ -624,6 +619,7 @@ function! s:plugin_editing_lazy()
   let g:matchup_matchparen_deferred         = 1
   " }}}
   Plug 'tomtom/tcomment_vim', {'on': []} " {{{
+  let g:tcomment_maps                       = !s:is_neovim
   let g:tcomment_mapleader1                 = ''
   let g:tcomment_mapleader2                 = ''
   let g:tcomment_mapleader_uncomment_anyway = ''
@@ -682,6 +678,11 @@ function! s:plugin_editing_lazy()
   nmap gx <Plug>(openbrowser-smart-search)
   vmap gx <Plug>(openbrowser-smart-search)
   " }}}
+  Plug 'unblevable/quick-scope', {'on': []} " {{{
+  Autocmd BufNewFile,BufRead,ColorScheme *
+        \  highlight QuickScopePrimary   guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
+        \| highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81  cterm=underline
+  " }}}
   Plug 'kana/vim-textobj-user', {'on': []} " {{{
   " }}}
   Plug 'kana/vim-textobj-indent', {'on': []} " {{{
@@ -714,10 +715,6 @@ function! s:plugin_editing_lazy()
   omap ic <Plug>(textobj-between-i)
   " }}}
   Plug 'kana/vim-operator-user', {'on': []} " {{{
-  " }}}
-  Plug 'YoshihiroIto/vim-operator-tcomment', {'on': []} " {{{
-  nmap t <Plug>(operator-tcomment)
-  xmap t <Plug>(operator-tcomment)
   " }}}
   Plug 'kana/vim-operator-replace', {'on': []} " {{{
   map R <Plug>(operator-replace)
@@ -971,14 +968,11 @@ function! s:settings(_)
     function! s:grep_close(_, __)
       cclose
       CtrlPQuickfix
-
-      unlet s:grep_job_id
     endfunction
 
     function! s:grep_cancel()
       if exists('s:grep_job_id')
         call job_stop(s:grep_job_id)
-        unlet s:grep_job_id
       endif
 
       cclose
@@ -1092,10 +1086,11 @@ function! s:settings(_)
   nmap     <silent> <leader>t V<leader>t
   vnoremap <silent> <leader>t :<C-u>call <SID>copy_add_comment()<CR>
   function! s:copy_add_comment() range
-    normal! ""gvy
-    call tcomment#Comment(line("'<"), line("'>"))
+    normal! gvy
     execute 'normal!' (line("'>") - line("'<") + 1) . 'j'
-    normal! P
+    normal! Pgv
+    normal  gc
+    execute 'normal!' (line("'>") - line("'<") + 1) . 'j'
   endfunction
 
   " モード移行
@@ -1139,6 +1134,13 @@ function! s:settings(_)
     execute 'mark' nr2char(l:begin + b:mark_index)
   endfunction
 
+  if s:is_neovim
+    xmap gc  <Plug>VSCodeCommentary
+    nmap gc  <Plug>VSCodeCommentary
+    omap gc  <Plug>VSCodeCommentary
+    nmap gcc <Plug>VSCodeCommentaryLine
+  endif
+
   " Nop
   nnoremap ZZ <Nop>
   nnoremap ZQ <Nop>
@@ -1159,7 +1161,7 @@ function! s:settings(_)
   " アプリウィンドウ操作
   if s:is_gui
     Autocmd WinEnter *
-          \  if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff')) == 1
+          \  if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&diff') == 1)
           \|   diffoff
           \|   call s:set_wide(1)
           \| endif
@@ -1173,7 +1175,7 @@ function! s:settings(_)
 
     " アプリケーションウィンドウを最大高さにする
     function! s:full_window()
-      execute 'winpos' getwinposx() '0'
+      execute 'winpos' getwinposx() 0
       set lines=9999
     endfunction
 
