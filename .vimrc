@@ -1181,21 +1181,17 @@ function! s:settings(_)
     function! s:toggle_wide_window()
       if !exists('s:is_wide')
         let s:is_wide = 0
-        let s:org_x   = 0
-        let s:org_y   = 0
       endif
 
       let s:is_wide = xor(s:is_wide, 1)
       call s:set_wide(s:is_wide)
 
       if s:is_wide == 1
-        let s:org_x = getwinposx()
-        let s:org_y = getwinposy()
-
+        let s:org_pos = [getwinposx(), getwinposy()]
         execute 'botright vertical' s:base_columns 'split'
       else
         only
-        execute 'winpos' s:org_x s:org_y
+        execute 'winpos' s:org_pos[0] s:org_pos[1]
       endif
     endfunction
 
