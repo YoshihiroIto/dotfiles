@@ -1017,6 +1017,8 @@ function! s:settings(_)
       endif
     endfunction
     " }}}
+  else
+    nnoremap <silent> <leader>g <Cmd>call VSCodeNotify('workbench.view.search')<CR>
   endif
 
   " 編集
@@ -1054,11 +1056,6 @@ function! s:settings(_)
     set cryptmethod=blowfish2
   endif
 
-  if s:is_vscode
-    nnoremap <silent> u     <Cmd>call VSCodeNotify('undo')<CR>
-    nnoremap <silent> <C-r> <Cmd>call VSCodeNotify('redo')<CR>
-  endif
-
   " 自動リロード
   Autocmd WinEnter,CursorHold * call s:execute_keep_view('checktime')
 
@@ -1080,18 +1077,28 @@ function! s:settings(_)
   " 全角考慮r
   xnoremap <expr> r {'v': "\<C-v>r", 'V': "\<C-v>0o$r", "\<C-v>": 'r'}[mode()]
 
-  " コピー＆コメント
-  nmap     <silent> <C-CR>    <leader>t
-  vmap     <silent> <C-CR>    <leader>t
-  nmap     <silent> <leader>t V<leader>t
-  vnoremap <silent> <leader>t :<C-u>call <SID>copy_add_comment()<CR>
-  function! s:copy_add_comment() range
-    normal! gvy
-    execute 'normal!' (line("'>") - line("'<") + 1) . 'j'
-    normal! Pgv
-    normal  gc
-    execute 'normal!' (line("'>") - line("'<") + 1) . 'j'
-  endfunction
+  if s:is_vscode
+    nnoremap <silent> u     <Cmd>call VSCodeNotify('undo')<CR>
+    nnoremap <silent> <C-r> <Cmd>call VSCodeNotify('redo')<CR>
+
+    xmap gc  <Plug>VSCodeCommentary
+    nmap gc  <Plug>VSCodeCommentary
+    omap gc  <Plug>VSCodeCommentary
+    nmap gcc <Plug>VSCodeCommentaryLine
+  else
+    " コピー＆コメント
+    nmap     <silent> <C-CR>    <leader>t
+    vmap     <silent> <C-CR>    <leader>t
+    nmap     <silent> <leader>t V<leader>t
+    vnoremap <silent> <leader>t :<C-u>call <SID>copy_add_comment()<CR>
+    function! s:copy_add_comment() range
+      normal! gvy
+      execute 'normal!' (line("'>") - line("'<") + 1) . 'j'
+      normal! Pgv
+      normal  gc
+      execute 'normal!' (line("'>") - line("'<") + 1) . 'j'
+    endfunction
+  endif
 
   " モード移行
   inoremap <C-j> <Esc>
@@ -1133,13 +1140,6 @@ function! s:settings(_)
 
     execute 'mark' nr2char(l:begin + b:mark_index)
   endfunction
-
-  if s:is_neovim
-    xmap gc  <Plug>VSCodeCommentary
-    nmap gc  <Plug>VSCodeCommentary
-    omap gc  <Plug>VSCodeCommentary
-    nmap gcc <Plug>VSCodeCommentaryLine
-  endif
 
   " Nop
   nnoremap ZZ <Nop>
