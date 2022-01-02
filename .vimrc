@@ -679,9 +679,22 @@ function! s:plugin_editing_lazy()
   vmap gx <Plug>(openbrowser-smart-search)
   " }}}
   Plug 'unblevable/quick-scope', {'on': []} " {{{
+  let g:qs_ignorecase = 1
+
   Autocmd BufNewFile,BufRead,ColorScheme *
         \  highlight QuickScopePrimary   guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
         \| highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81  cterm=underline
+  " }}}
+  Plug 'rhysd/clever-f.vim', {'on': []} " {{{
+  let g:clever_f_across_no_line = 1
+  let g:clever_f_ignore_case    = 1
+
+  nmap f <Plug>(clever-f-f)
+  xmap f <Plug>(clever-f-f)
+  omap f <Plug>(clever-f-f)
+  nmap F <Plug>(clever-f-F)
+  xmap F <Plug>(clever-f-F)
+  omap F <Plug>(clever-f-F)
   " }}}
   Plug 'kana/vim-textobj-user', {'on': []} " {{{
   " }}}
