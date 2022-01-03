@@ -62,9 +62,9 @@ command! -nargs=* AutocmdUser autocmd MyAutoCmd User     <args>
 " --------------------------------------------------------------------------------
 " プラグイン
 " --------------------------------------------------------------------------------
-function! s:execute_if_installed(func_name)
+function! s:execute_if_installed(proc)
   if s:is_installed
-    call function(a:func_name)()
+    call a:proc()
   endif
 endfunction
 
@@ -292,10 +292,10 @@ function! s:plugin_display_lazy(...)
   if !(a:0 >= 1 ? a:1 : 1) | return | endif
 
   Plug 'YoshihiroIto/vim-icondrag', {'on': []} " {{{
-  AutocmdUser vim-icondrag call s:execute_if_installed('icondrag#enable')
+  AutocmdUser vim-icondrag call s:execute_if_installed({-> icondrag#enable()})
   " }}}
   Plug 'neoclide/coc.nvim', {'on': [], 'branch': 'release'} " {{{
-  AutocmdUser coc.nvim call s:execute_if_installed('s:init_coc')
+  AutocmdUser coc.nvim call s:execute_if_installed({-> s:init_coc()})
 
   let g:coc_global_extensions = [
         \   'coc-calc',
@@ -393,7 +393,7 @@ function! s:plugin_display_lazy(...)
   Plug 'itchyny/vim-gitbranch', {'on': []} " {{{
   " }}}
   Plug 'airblade/vim-gitgutter', {'on': []} " {{{
-  AutocmdUser vim-gitgutter call s:execute_if_installed('s:init_gitgutter')
+  AutocmdUser vim-gitgutter call s:execute_if_installed({-> s:init_gitgutter()})
 
   let g:gitgutter_map_keys = 0
   let g:gitgutter_grep     = ''
@@ -447,7 +447,7 @@ function! s:plugin_display_lazy(...)
         \  inoremap <silent><buffer> > ><Esc><Cmd>call closetag#CloseIt()<CR>
   "}}}
   Plug 'kana/vim-submode', {'on': []} " {{{
-  AutocmdUser vim-submode call s:execute_if_installed('s:init_submode')
+  AutocmdUser vim-submode call s:execute_if_installed({-> s:init_submode()})
 
   function! s:submode_snap(value, scale)
     return a:value / a:scale * a:scale
@@ -641,7 +641,7 @@ function! s:plugin_editing_lazy()
   xmap <silent> <Leader>a\|      <Plug>(EasyAlign)*\|
   " }}}
   Plug 'machakann/vim-sandwich', {'on': []} " {{{
-  AutocmdUser vim-sandwich call s:execute_if_installed('s:init_sandwich')
+  AutocmdUser vim-sandwich call s:execute_if_installed({-> s:init_sandwich()})
 
   let g:operator_sandwich_no_default_key_mappings = 1
 
@@ -847,7 +847,7 @@ endif
 " --------------------------------------------------------------------------------
 " 設定
 " --------------------------------------------------------------------------------
-function! s:settings(_)
+function! s:settings()
   " プラグイン
   call plug#begin(s:plugin_dir)
   call s:plugin_display_lazy(!s:is_vscode)
@@ -962,8 +962,8 @@ function! s:settings(_)
 
       if exists('?job_start')
         let s:grep_job_id = job_start(l:cmd, {
-              \   'callback': function('s:grep_add'),
-              \   'exit_cb':  function('s:grep_close'),
+              \   'callback': {_, msg -> execute('caddexpr msg | cwindow')},
+              \   'exit_cb':  {_, __  -> execute('cclose | CtrlPQuickfix | unlet s:grep_job_id')},
               \ })
       else
         cgetexpr system(l:cmd)
@@ -973,19 +973,10 @@ function! s:settings(_)
       endif
     endfunction
 
-    function! s:grep_add(_, msg)
-      caddexpr a:msg
-      cwindow
-    endfunction
-
-    function! s:grep_close(_, __)
-      cclose
-      CtrlPQuickfix
-    endfunction
-
     function! s:grep_cancel()
       if exists('s:grep_job_id')
         call job_stop(s:grep_job_id)
+        unlet s:grep_job_id
       endif
 
       cclose
@@ -1219,5 +1210,5 @@ function! s:settings(_)
   nnoremap <expr> zh foldlevel(line('.'))  >   0 ? 'zc' : '<C-h>'
   nnoremap <expr> zl foldclosed(line('.')) != -1 ? 'zo' : '<C-l>'
 endfunction
-call timer_start(0, function('s:settings'))
+call timer_start(0, {-> s:settings()})
 
