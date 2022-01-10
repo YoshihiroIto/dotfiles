@@ -601,7 +601,7 @@ function! s:plugin_display_lazy(...)
   " }}}
   Plug 'vim-jp/vimdoc-ja', {'on': []} " {{{
   " }}}
-  Plug 'posva/vim-vue', {'on': []} " {{{
+  Plug 'leafOfTree/vim-vue-plugin', {'on': []} " {{{
   " }}}
   Plug 'beyondmarc/hlsl.vim', {'on': []} " {{{
   " }}}
@@ -619,7 +619,7 @@ function! s:plugin_editing_lazy()
   let g:matchup_matchparen_deferred         = 1
   " }}}
   Plug 'tomtom/tcomment_vim', {'on': []} " {{{
-  let g:tcomment_maps                       = !s:is_neovim
+  let g:tcomment_maps                       = !s:is_vscode
   let g:tcomment_mapleader1                 = ''
   let g:tcomment_mapleader2                 = ''
   let g:tcomment_mapleader_uncomment_anyway = ''
