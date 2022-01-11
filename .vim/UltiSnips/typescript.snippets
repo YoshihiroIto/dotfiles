@@ -1,0 +1,14 @@
+snippet enumUnion "enum union"
+export const ${1:name} = {
+  PropA: 'PropA',
+  PropB: 'PropB',
+  PropC: 'PropC',
+} as const;
+export type $1 = typeof $1[keyof typeof $1];
+
+[${2:ppp}]
+[$2]
+
+${0}
+
+endsnippet

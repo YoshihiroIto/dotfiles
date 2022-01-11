@@ -359,8 +359,8 @@ function! s:plugin_display_lazy(...)
     " coc-snippets
     call coc#config('snippets.ultisnips.directories', ['~/.vim/UltiSnips'])
     imap <C-e> <Plug>(coc-snippets-expand)
-    let g:coc_snippet_next = '<C-j>'
-    let g:coc_snippet_prev = '<C-k>'
+    let g:coc_snippet_next = '<Tab>'
+    let g:coc_snippet_prev = '<S-Tab>'
 
     Autocmd CursorHold * silent call CocActionAsync('highlight')
 
