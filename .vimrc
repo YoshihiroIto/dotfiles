@@ -1078,6 +1078,33 @@ function! s:settings()
 
   imap <C-h> <BS>
 
+  " モード移行
+  inoremap <C-j> <Esc>
+  nmap     <C-j> <Esc>
+  vnoremap <C-j> <Esc>
+  cnoremap <C-j> <Esc>
+
+  " カーソル移動
+  noremap <silent> j  gj
+  noremap <silent> k  gk
+  noremap <silent> gj j
+  noremap <silent> gk k
+  noremap <silent> 0  g0
+  noremap <silent> g0 0
+  noremap <silent> $  g$
+  noremap <silent> g$ $
+  noremap <silent> gg ggzv
+  noremap <silent> G  Gzv
+
+  " 折り畳み
+  nnoremap <expr> zh foldlevel(line('.'))  >   0 ? 'zc' : '<C-h>'
+  nnoremap <expr> zl foldclosed(line('.')) != -1 ? 'zo' : '<C-l>'
+
+  " Nop
+  nnoremap ZZ <Nop>
+  nnoremap ZQ <Nop>
+  nnoremap Q  <Nop>
+
   " 全角考慮r
   xnoremap <expr> r {'v': "\<C-v>r", 'V': "\<C-v>0o$r", "\<C-v>": 'r'}[mode()]
 
@@ -1104,24 +1131,6 @@ function! s:settings()
     endfunction
   endif
 
-  " モード移行
-  inoremap <C-j> <Esc>
-  nmap     <C-j> <Esc>
-  vnoremap <C-j> <Esc>
-  cnoremap <C-j> <Esc>
-
-  " カーソル移動
-  noremap <silent> j  gj
-  noremap <silent> k  gk
-  noremap <silent> gj j
-  noremap <silent> gk k
-  noremap <silent> 0  g0
-  noremap <silent> g0 0
-  noremap <silent> $  g$
-  noremap <silent> g$ $
-  noremap <silent> gg ggzv
-  noremap <silent> G  Gzv
-
   " キーボードマクロ
   if s:is_neovim
     nnoremap q qq<ESC>
@@ -1144,11 +1153,6 @@ function! s:settings()
 
     execute 'mark' nr2char(l:begin + b:mark_index)
   endfunction
-
-  " Nop
-  nnoremap ZZ <Nop>
-  nnoremap ZQ <Nop>
-  nnoremap Q  <Nop>
 
   function! s:execute_keep_view(expr)
     let l:wininfo = winsaveview()
@@ -1205,10 +1209,6 @@ function! s:settings()
       let &columns = s:base_columns * (a:is_wide + 1)
     endfunction
   endif
-
-  " 折り畳み
-  nnoremap <expr> zh foldlevel(line('.'))  >   0 ? 'zc' : '<C-h>'
-  nnoremap <expr> zl foldclosed(line('.')) != -1 ? 'zo' : '<C-l>'
 endfunction
 call timer_start(0, {-> s:settings()})
 
