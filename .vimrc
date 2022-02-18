@@ -1078,6 +1078,8 @@ function! s:settings()
 
   imap <C-h> <BS>
 
+  nnoremap Y y$
+
   " モード移行
   inoremap <C-j> <Esc>
   nmap     <C-j> <Esc>
