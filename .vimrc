@@ -20,6 +20,7 @@ let s:is_installed     = isdirectory(s:plugin_dir)
 let s:is_vscode        = exists('g:vscode')
 let s:is_neovim        = has('nvim')
 let s:is_gui           = has('gui_running')
+let s:is_windows       = has('win32')
 let s:base_columns     = 140
 
 let g:no_gvimrc_example         = 1
@@ -49,7 +50,10 @@ let g:did_menu_trans            = 1
 let g:mapleader          = "\<Space>"
 let g:vimsyn_folding     = 'af'
 let g:xml_syntax_folding = 1
-let g:python3_host_prog  = s:home_dir . 'AppData/Local/Programs/Python/Python310/python.exe'
+
+if s:is_windows
+  let g:python3_host_prog  = s:home_dir . 'AppData/Local/Programs/Python/Python310/python.exe'
+endif
 
 augroup MyAutoCmd
   autocmd!
@@ -596,9 +600,9 @@ function! s:plugin_display_lazy(...)
     let g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
   endif
   " }}}
-  Plug 'YoshihiroIto/ctrlp-sessions', {'on': []} " {{{
-  nnoremap <silent> <leader>s <Cmd>CtrlPSessions<CR>
-  " }}}
+  " Plug 'YoshihiroIto/ctrlp-sessions', {'on': []} " {{{
+  " nnoremap <silent> <leader>s <Cmd>CtrlPSessions<CR>
+  " " }}}
   Plug 'vim-jp/vimdoc-ja', {'on': []} " {{{
   " }}}
   Plug 'leafOfTree/vim-vue-plugin', {'on': []} " {{{
@@ -1212,5 +1216,5 @@ function! s:settings()
     endfunction
   endif
 endfunction
-call timer_start(0, {-> s:settings()})
+call timer_start(100, {-> s:settings()})
 
