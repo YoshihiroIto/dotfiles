@@ -1,0 +1,48 @@
+{
+  "title": "My settings",
+  "rules": [
+    {
+      "description": "「かな」で半角・全角",
+      "manipulators": [
+        {
+          "conditions": [
+            {
+              "type": "input_source_if",
+              "input_sources": [
+                {
+                  "language": "ja"
+                }
+              ]
+            }
+          ],
+          "type": "basic",
+          "from": {
+            "key_code": "japanese_kana"
+          },
+          "to": [
+            {
+              "key_code": "japanese_eisuu"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "「英数」でSpotlightを起動",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "japanese_eisuu"
+          },
+          "to": [
+            {
+              "key_code": "spacebar",
+              "modifiers": ["command"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
