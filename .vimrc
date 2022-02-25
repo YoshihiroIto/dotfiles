@@ -600,9 +600,9 @@ function! s:plugin_display_lazy(...)
     let g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
   endif
   " }}}
-  " Plug 'YoshihiroIto/ctrlp-sessions', {'on': []} " {{{
-  " nnoremap <silent> <leader>s <Cmd>CtrlPSessions<CR>
-  " " }}}
+  Plug 'YoshihiroIto/ctrlp-sessions', {'on': []} " {{{
+  nnoremap <silent> <leader>s <Cmd>CtrlPSessions<CR>
+  " }}}
   Plug 'vim-jp/vimdoc-ja', {'on': []} " {{{
   " }}}
   Plug 'leafOfTree/vim-vue-plugin', {'on': []} " {{{
