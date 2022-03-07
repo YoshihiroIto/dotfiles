@@ -366,6 +366,8 @@ function! s:plugin_display_lazy(...)
     let g:coc_snippet_next = '<Tab>'
     let g:coc_snippet_prev = '<S-Tab>'
 
+    call coc#rpc#start_server()
+
     Autocmd CursorHold * silent call CocActionAsync('highlight')
 
     nmap     <silent> <C-]>  <Plug>(coc-definition)
