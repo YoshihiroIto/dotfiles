@@ -617,6 +617,9 @@ function! s:plugin_display_lazy(...)
   let g:vim_markdown_folding_disabled        = 1
   let g:vim_markdown_no_default_key_mappings = 1
   " }}}
+  Plug 'rbtnn/vim-ambiwidth', {'on': []} " {{{
+  let g:ambiwidth_cica_enabled = v:false
+  " }}}
 endfunction
 
 function! s:plugin_editing_lazy()
@@ -814,11 +817,6 @@ if !s:is_vscode
   set splitbelow
   set splitright
   set scrolloff=4
-  set ambiwidth=double
-
-  if exists('*setcellwidths')
-    call setcellwidths([[0x2500, 0x257f, 1], [0xE0A0, 0xE0B7, 1]])
-  endif
 
   if s:is_gui
     " ウィンドウ矩形復元する
