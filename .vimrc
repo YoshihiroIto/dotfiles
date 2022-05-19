@@ -830,7 +830,7 @@ if !s:is_vscode
 
     set guioptions=M
     set winaltkeys=no
-    set guifont=HackGenNerd\ Console:h11
+    set guifont=UDEV\ Gothic\ NFLG:h11
     set linespace=0
   else
     set termguicolors
