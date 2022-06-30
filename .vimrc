@@ -52,7 +52,7 @@ let g:vimsyn_folding     = 'af'
 let g:xml_syntax_folding = 1
 
 if s:is_windows
-  let g:python3_host_prog  = s:home_dir . 'AppData/Local/Programs/Python/Python310/python.exe'
+  let g:python3_host_prog  = s:home_dir . 'AppData/Local/Microsoft/WindowsApps/python.exe'
 endif
 
 augroup MyAutoCmd
@@ -617,9 +617,6 @@ function! s:plugin_display_lazy(...)
   let g:vim_markdown_folding_disabled        = 1
   let g:vim_markdown_no_default_key_mappings = 1
   " }}}
-  Plug 'rbtnn/vim-ambiwidth', {'on': []} " {{{
-  let g:ambiwidth_cica_enabled = v:false
-  " }}}
 endfunction
 
 function! s:plugin_editing_lazy()
@@ -842,6 +839,45 @@ if !s:is_vscode
 
   if s:is_installed
     colorscheme night-owl
+  endif
+
+  if exists('*setcellwidths')
+    call setcellwidths([
+          \ [0x2030, 0x203f, 2],
+          \ [0x2103, 0x2103, 2],
+          \ [0x2160, 0x2169, 2],
+          \ [0x2170, 0x2179, 2],
+          \ [0x2190, 0x2193, 2],
+          \ [0x21d2, 0x21d2, 2],
+          \ [0x21d4, 0x21d4, 2],
+          \ [0x2266, 0x2267, 2],
+          \ [0x2460, 0x24ff, 2],
+          \ [0x25a0, 0x25a1, 2],
+          \ [0x25b2, 0x25b3, 2],
+          \ [0x25bc, 0x25bd, 2],
+          \ [0x25c6, 0x25c7, 2],
+          \ [0x25cb, 0x25cb, 2],
+          \ [0x25cf, 0x25cf, 2],
+          \ [0x2600, 0x267f, 2],
+          \ [0x2690, 0x269c, 2],
+          \ [0x26a0, 0x26ad, 2],
+          \ [0x26b0, 0x26b1, 2],
+          \ [0x26b9, 0x26b9, 2],
+          \ [0x2701, 0x2709, 2],
+          \ [0x270c, 0x2727, 2],
+          \ [0x2729, 0x274d, 2],
+          \ [0x274f, 0x2752, 2],
+          \ [0x2756, 0x2756, 2],
+          \ [0x2758, 0x275e, 2],
+          \ [0x2761, 0x2794, 2],
+          \ [0x2798, 0x279f, 2],
+          \ [0x27f5, 0x27f7, 2],
+          \ [0x2b05, 0x2b0d, 2],
+          \ [0x303f, 0x303f, 2],
+          \ [0xe62e, 0xe62e, 2],
+          \ [0xf315, 0xf316, 2],
+          \ [0xf31b, 0xf31c, 2]
+          \ ])
   endif
 
   filetype plugin indent on
@@ -1144,21 +1180,6 @@ function! s:settings()
     nnoremap q qq<ESC>:echo''<CR>
   endif
   nnoremap <expr> @ empty(reg_recording()) ? '@q' : ''
-
-  " マーク
-  nnoremap <silent> m <Cmd>call <SID>put_mark()<CR>
-
-  Autocmd BufReadPost * delmarks!
-
-  function! s:put_mark()
-    let l:begin  = char2nr('a')
-    let l:end    = char2nr('z')
-    let l:length = l:end - l:begin + 1
-
-    let b:mark_index = exists('b:mark_index') ? (b:mark_index + 1) % l:length : 0
-
-    execute 'mark' nr2char(l:begin + b:mark_index)
-  endfunction
 
   function! s:execute_keep_view(expr)
     let l:wininfo = winsaveview()
