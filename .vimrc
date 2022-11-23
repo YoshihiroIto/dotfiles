@@ -427,13 +427,11 @@ function! s:plugin_display_lazy(...)
 
   AutocmdFT vaffle nmap <silent><buffer> <Esc> <Plug>(vaffle-quit)
   " }}}
-  Plug 'itchyny/vim-cursorword', {'on': []} " {{{
-  let g:cursorword_delay     = 270
-  let g:cursorword_highlight = 0
-  Autocmd BufNewFile,BufRead,ColorScheme *
-        \  highlight CursorWord0 guifg=Red ctermfg=Red
-        \| highlight CursorWord1 guifg=Red ctermfg=Red
-  " }}}
+ Plug 'itchyny/vim-cursorword', {'on': []} " {{{
+ let g:cursorword_delay     = 270
+ let g:cursorword_highlight = 0
+ Autocmd BufNewFile,BufRead,ColorScheme * highlight CursorWord guifg=Red ctermfg=Red
+ " }}}
   Plug 'itchyny/vim-autoft', {'on': []} " {{{
   let g:autoft_config = [
         \   {'filetype': 'cs',   'pattern': '^\s*using'},
@@ -814,6 +812,8 @@ if !s:is_vscode
   set splitbelow
   set splitright
   set scrolloff=4
+  silent! set nosplitscroll
+  silent! set smoothscroll
 
   if s:is_gui
     " ウィンドウ矩形復元する
@@ -825,7 +825,7 @@ if !s:is_vscode
 
     set guioptions=M
     set winaltkeys=no
-    set guifont=UDEV\ Gothic\ NFLG:h11
+    set guifont=UDEV\ Gothic\ NFLG:h10.5
     set linespace=0
   else
     set termguicolors
