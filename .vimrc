@@ -631,6 +631,8 @@ function! s:plugin_editing_lazy()
   let g:tcomment_textobject_inlinecomment   = ''
   " }}}
   Plug 'cohama/lexima.vim', {'on': []} " {{{
+  inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() :
+        \ "\<C-g>u\<C-r>=lexima#expand('<LT>CR>', 'i')\<CR><C-r>=coc#on_enter()\<CR>"
   " }}}
   Plug 'junegunn/vim-easy-align', {'on': []} " {{{
   nmap <silent> <Leader>a=       v<Plug>(textobj-indent-i)<Plug>(EasyAlign)=
@@ -748,10 +750,10 @@ call plug#end()
 " --------------------------------------------------------------------------------
 " ファイルタイプごとの設定
 " --------------------------------------------------------------------------------
-Autocmd BufNewFile,BufRead *.xaml      setlocal filetype=xml
-Autocmd BufNewFile,BufRead *.cake      setlocal filetype=cs
-Autocmd BufNewFile,BufRead *.hlsli     setlocal filetype=hlsl
-Autocmd BufNewFile,BufRead *.{fsh,vsh} setlocal filetype=glsl
+Autocmd BufNewFile,BufRead *.{xaml,axaml} setlocal filetype=xml
+Autocmd BufNewFile,BufRead *.cake         setlocal filetype=cs
+Autocmd BufNewFile,BufRead *.hlsli        setlocal filetype=hlsl
+Autocmd BufNewFile,BufRead *.{fsh,vsh}    setlocal filetype=glsl
 
 AutocmdFT *
       \  setlocal formatoptions-=ro
