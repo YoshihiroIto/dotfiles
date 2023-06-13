@@ -430,8 +430,8 @@ function! s:plugin_display_lazy(...)
   nnoremap <silent> <leader>l <Cmd>Lista<CR>
   let g:lista#custom_mappings = [
         \   ['<C-j>', '<Esc>'],
-        \   ['<C-p>', '<S-Tab>'],
-        \   ['<C-n>', '<Tab>'],
+        \   ['<Up>', '<S-Tab>'],
+        \   ['<Down>', '<Tab>'],
         \ ]
   " }}}
   Plug 'iamcco/markdown-preview.nvim', {'on': [], 'do': 'cd app & yarn install'} " {{{
