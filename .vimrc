@@ -376,6 +376,21 @@ function! s:plugin_display_lazy(...)
     nmap     <silent> <M-CR> <Plug>(coc-codeaction-cursor)
     nnoremap <silent> K      <Cmd>call <SID>show_documentation()<CR>
 
+    function! s:check_back_space() abort
+      let col = col('.') - 1
+      return !col || getline('.')[col - 1]  =~ '\s'
+    endfunction
+
+    inoremap <silent><expr> <Down>
+      \ coc#pum#visible() ? coc#pum#next(1):
+      \ <SID>check_back_space() ? "\<Down>" :
+      \ coc#refresh()
+
+    inoremap <silent><expr> <Up>
+      \ coc#pum#visible() ? coc#pum#prev(1):
+      \ <SID>check_back_space() ? "\<Down>" :
+      \ coc#refresh()
+
     command! -nargs=* -range Format call s:format(<range>)
     function! s:format(range)
       if a:range == 0
@@ -569,10 +584,8 @@ function! s:plugin_display_lazy(...)
   let g:ctrlp_use_caching     = 0
   let g:ctrlp_prompt_mappings = {
         \   'PrtBS()':            ['<BS>', '<C-h>'],
-        \   'PrtSelectMove("j")': ['<C-n>'],
-        \   'PrtSelectMove("k")': ['<C-p>'],
-        \   'PrtHistory(-1)':     ['<Down>'],
-        \   'PrtHistory(1)':      ['<Up>'],
+        \   'PrtSelectMove("j")': ['<Down>'],
+        \   'PrtSelectMove("k")': ['<Up>'],
         \   'PrtCurLeft()':       ['<Left>'],
         \   'PrtCurRight()':      ['<Right>'],
         \   'PrtExit()':          ['<Esc>', '<C-j>'],
