@@ -75,11 +75,11 @@ endfunction
 function! s:plugin_display(...)
   if !(a:0 >= 1 ? a:1 : 1) | return | endif
 
-  Plug 'YoshihiroIto/night-owl.vim' " {{{
+  Plug 'joshdick/onedark.vim' " {{{
   " }}}
   Plug 'itchyny/lightline.vim' " {{{
   let g:lightline = {
-        \   'colorscheme': 'nightowl',
+        \   'colorscheme': 'onedark',
         \   'active': {
         \     'left': [
         \       ['mode'],
@@ -363,7 +363,6 @@ function! s:plugin_display_lazy(...)
 
     " coc-snippets
     call coc#config('snippets.ultisnips.directories', ['~/.vim/UltiSnips'])
-    imap <C-e> <Plug>(coc-snippets-expand)
     let g:coc_snippet_next = '<Tab>'
     let g:coc_snippet_prev = '<S-Tab>'
 
@@ -849,18 +848,39 @@ if !s:is_vscode
     set termguicolors
   endif
 
-  if exists('&wincolor')
-    Autocmd ColorScheme                      * highlight NormalNC guifg=#a0a0a0 guibg=#121212
-    Autocmd WinEnter,BufWinEnter,FocusGained * setlocal  wincolor=
-    Autocmd WinLeave,FocusLost               * setlocal  wincolor=NormalNC
-  endif
-
   if s:is_installed
-    colorscheme night-owl
+    colorscheme onedark
   endif
 
   if exists('*setcellwidths')
     call setcellwidths([
+          \ [0xf1de, 0xf1de, 2],
+          \ [0xe79b, 0xe79b, 2],
+          \ [0xf89f, 0xf89f, 2],
+          \ [0x03a8, 0x03a8, 2],
+          \ [0xf0ad, 0xf0ad, 2],
+          \ [0x0192, 0x0192, 2],
+          \ [0xfa46, 0xfa46, 2],
+          \ [0xf8fe, 0xf8fe, 2],
+          \ [0xf09a, 0xf09a, 2],
+          \ [0xfb44, 0xfb44, 2],
+          \ [0xf0e8, 0xf0e8, 2],
+          \ [0xf417, 0xf417, 2],
+          \ [0xe612, 0xe612, 2],
+          \ [0xf435, 0xf435, 2],
+          \ [0xf02b, 0xf02b, 2],
+          \ [0xf40d, 0xf40d, 2],
+          \ [0xe22b, 0xe22b, 2],
+          \ [0xe624, 0xe624, 2],
+          \ [0xf9be, 0xf9be, 2],
+          \ [0xf475, 0xf475, 2],
+          \ [0xfacd, 0xfacd, 2],
+          \ [0xf723, 0xf723, 2],
+          \ [0xf114, 0xf114, 2],
+          \ [0xe60b, 0xe60b, 2],
+          \ [0xf728, 0xf728, 2],
+          \ [0xf29c, 0xf29c, 2],
+          \
           \ [0x2030, 0x203f, 2],
           \ [0x2103, 0x2103, 2],
           \ [0x2160, 0x2169, 2],
